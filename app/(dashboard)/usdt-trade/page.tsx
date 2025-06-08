@@ -1,10 +1,9 @@
 "use client"
 
-import { useState, useEffect, useCallback, useMemo } from "react"
-import { flushSync } from "react-dom"
+import { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import { Search, Star } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
-import InstantButton from "@/components/instant-button"
+import NativeButton from "@/components/native-button"
 
 const VerifiedIcon = () => (
   <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
@@ -94,16 +93,48 @@ export default function UsdtTradePage() {
     setSearchTerm(e.target.value)
   }, [])
 
+  const mainTabsRef = useRef<HTMLDivElement>(null)
+  const subTabsRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+
   const handleMainTabClick = useCallback((tab: string) => {
-    flushSync(() => {
-      setActiveMainTab(tab)
-    })
+    // Immediate DOM update for visual feedback
+    if (mainTabsRef.current) {
+      const buttons = mainTabsRef.current.querySelectorAll('button')
+      buttons.forEach((btn, index) => {
+        const tabText = ['买入', '卖出'][index]
+        if (tabText === tab) {
+          btn.className = btn.className.replace(/bg-gray-200|bg-gray-700/, 'bg-[#00D4AA]')
+          btn.className = btn.className.replace(/text-gray-800|text-gray-300/, 'text-white')
+        } else {
+          btn.className = btn.className.replace(/bg-\[#00D4AA\]/, 'bg-gray-200 dark:bg-gray-700')
+          btn.className = btn.className.replace(/text-white/, 'text-gray-800 dark:text-gray-300')
+        }
+      })
+    }
+    
+    // Update state after visual feedback
+    setActiveMainTab(tab)
   }, [])
 
   const handleSubTabClick = useCallback((tab: string) => {
-    flushSync(() => {
-      setActiveSubTab(tab)
-    })
+    // Immediate DOM update for visual feedback
+    if (subTabsRef.current) {
+      const buttons = subTabsRef.current.querySelectorAll('button')
+      const subTabsArray = ["全部", "支付宝", "微信", "银行卡"]
+      buttons.forEach((btn, index) => {
+        const tabText = subTabsArray[index]
+        if (tabText === tab) {
+          btn.className = btn.className.replace(/text-gray-600|text-gray-400/, 'bg-[#00D4AA] text-white')
+        } else {
+          btn.className = btn.className.replace(/bg-\[#00D4AA\]/, '')
+          btn.className = btn.className.replace(/text-white/, 'text-gray-600 dark:text-gray-400')
+        }
+      })
+    }
+    
+    // Update state after visual feedback
+    setActiveSubTab(tab)
   }, [])
 
   const filteredAds = useMemo(() => {
@@ -150,16 +181,16 @@ export default function UsdtTradePage() {
           </div>
           
           {/* 主要标签 */}
-          <div className="flex space-x-2">
+          <div ref={mainTabsRef} className="flex space-x-2">
             {mainTabs.map((tab) => (
-              <InstantButton
+              <NativeButton
                 key={tab}
                 onClick={() => handleMainTabClick(tab)}
                 variant={activeMainTab === tab ? "primary" : "secondary"}
                 size="sm"
               >
                 {tab}
-              </InstantButton>
+              </NativeButton>
             ))}
           </div>
         </div>
@@ -168,9 +199,9 @@ export default function UsdtTradePage() {
       {/* 交易表格 */}
       <div className={`${cardStyle} rounded-lg p-4`}>
         {/* 次级标签 */}
-        <div className="flex items-center space-x-1 mb-4 overflow-x-auto">
+        <div ref={subTabsRef} className="flex items-center space-x-1 mb-4 overflow-x-auto">
           {subTabs.map((tab) => (
-            <InstantButton
+            <NativeButton
               key={tab}
               onClick={() => handleSubTabClick(tab)}
               variant={activeSubTab === tab ? "primary" : "ghost"}
@@ -178,7 +209,7 @@ export default function UsdtTradePage() {
               className="whitespace-nowrap"
             >
               {tab}
-            </InstantButton>
+            </NativeButton>
           ))}
         </div>
 
@@ -203,7 +234,7 @@ export default function UsdtTradePage() {
             >
               {/* 商家信息 */}
               <div className="flex items-center space-x-3">
-                <InstantButton
+                <NativeButton
                   onClick={() => toggleFavorite(ad.user)}
                   variant="ghost"
                   size="sm"
@@ -216,7 +247,7 @@ export default function UsdtTradePage() {
                         : "text-gray-400"
                     }`} 
                   />
-                </InstantButton>
+                </NativeButton>
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
@@ -270,13 +301,13 @@ export default function UsdtTradePage() {
 
               {/* 交易按钮 */}
               <div className="flex items-center">
-                <InstantButton
+                <NativeButton
                   onClick={() => {/* Handle trade action */}}
                   variant="primary"
                   size="sm"
                 >
                   {activeMainTab}
-                </InstantButton>
+                </NativeButton>
               </div>
             </div>
           ))}
