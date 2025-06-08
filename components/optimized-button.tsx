@@ -19,7 +19,8 @@ const OptimizedButton = memo(({
   variant = 'primary',
   size = 'md'
 }: OptimizedButtonProps) => {
-  const handleClick = useCallback((e: React.MouseEvent) => {
+  // Use onMouseDown for immediate response
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     if (!disabled) {
@@ -27,7 +28,7 @@ const OptimizedButton = memo(({
     }
   }, [onClick, disabled])
 
-  const baseStyles = 'font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2 btn-optimized no-delay transform-optimized'
+  const baseStyles = 'font-medium rounded focus:outline-none select-none user-select-none pointer-events-auto transition-none'
   
   const variantStyles = {
     primary: 'bg-[#00D4AA] hover:bg-[#00D4AA]/80 text-white focus:ring-[#00D4AA]',
@@ -44,9 +45,15 @@ const OptimizedButton = memo(({
   return (
     <button
       className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-      onClick={handleClick}
+      onMouseDown={handleMouseDown}
       disabled={disabled}
       type="button"
+      style={{
+        WebkitTapHighlightColor: 'transparent',
+        WebkitTouchCallout: 'none',
+        WebkitUserSelect: 'none',
+        touchAction: 'manipulation'
+      }}
     >
       {children}
     </button>

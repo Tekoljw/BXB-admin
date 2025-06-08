@@ -24,6 +24,27 @@ export default function UsdtTradePage() {
   const [favorites, setFavorites] = useState<string[]>(["币友168", "交易达人"])
   const [mounted, setMounted] = useState(false)
 
+  // All hooks must be before any early returns
+  const toggleFavorite = useCallback((user: string) => {
+    setFavorites(prev => 
+      prev.includes(user) 
+        ? prev.filter(fav => fav !== user)
+        : [...prev, user]
+    )
+  }, [])
+
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value)
+  }, [])
+
+  const handleMainTabClick = useCallback((tab: string) => {
+    setActiveMainTab(tab)
+  }, [])
+
+  const handleSubTabClick = useCallback((tab: string) => {
+    setActiveSubTab(tab)
+  }, [])
+
   useEffect(() => {
     setMounted(true)
   }, [])
