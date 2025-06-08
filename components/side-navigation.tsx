@@ -2,12 +2,12 @@
 
 import {
   BarChart2,
-  BarChart3,
   Settings,
   MessageSquare,
   User,
   Bell,
   TrendingUp,
+  TrendingDown,
   Coins,
   Globe,
 } from "lucide-react"
@@ -192,7 +192,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
               }`}
               title={t.futures}
             >
-              <BarChart3 className="h-5 w-5 md:h-6 md:w-6" />
+              <TrendingDown className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.futures}</span>
             </button>
           </li>
