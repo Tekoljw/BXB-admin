@@ -1,16 +1,13 @@
 "use client"
 
 import {
-  Wallet,
   BarChart2,
   Settings,
   MessageSquare,
   User,
   Bell,
   TrendingUp,
-  Activity,
   Coins,
-  FileText,
   Globe,
 } from "lucide-react"
 import { usePathname } from "next/navigation"
@@ -170,22 +167,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
             </Link>
           </li>
 
-          {/* 动态 */}
-          <li className="flex justify-center md:justify-center">
-            <Link
-              href="/dashboard"
-              onClick={() => handleNavClick("/dashboard")}
-              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
-                isActive("/dashboard") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
-              }`}
-              title={t.dashboard}
-            >
-              <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6">
-                <Activity className="h-5 w-5 md:h-6 md:w-6 transition-transform duration-200 group-hover:scale-110 group-active:scale-95" />
-              </div>
-              <span className="ml-3 md:hidden">{t.dashboard}</span>
-            </Link>
-          </li>
+
 
           {/* 行情 */}
           <li className="flex justify-center md:justify-center">
@@ -218,40 +200,6 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
                 <Coins className="h-5 w-5 md:h-6 md:w-6 transition-transform duration-200 group-hover:scale-110 group-active:scale-95" />
               </div>
               <span className="ml-3 md:hidden">{t.spot}</span>
-            </Link>
-          </li>
-
-          {/* 合约 */}
-          <li className="flex justify-center md:justify-center">
-            <Link
-              href="/futures"
-              onClick={() => handleNavClick("/futures")}
-              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
-                isActive("/futures") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
-              }`}
-              title={t.futures}
-            >
-              <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6">
-                <FileText className="h-5 w-5 md:h-6 md:w-6 transition-transform duration-200 group-hover:scale-110 group-active:scale-95" />
-              </div>
-              <span className="ml-3 md:hidden">{t.futures}</span>
-            </Link>
-          </li>
-
-          {/* 钱包 */}
-          <li className="flex justify-center md:justify-center">
-            <Link
-              href="/wallet"
-              onClick={() => handleNavClick("/wallet")}
-              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
-                isActive("/wallet") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
-              }`}
-              title={t.wallet}
-            >
-              <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6">
-                <Wallet className="h-5 w-5 md:h-6 md:w-6 transition-transform duration-200 group-hover:scale-110 group-active:scale-95" />
-              </div>
-              <span className="ml-3 md:hidden">{t.wallet}</span>
             </Link>
           </li>
         </ul>
