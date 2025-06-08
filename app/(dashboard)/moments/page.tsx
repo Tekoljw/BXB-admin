@@ -291,32 +291,43 @@ export default function MomentsPage() {
                   </div>
                 ) : (
                   /* 圈子内容 */
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {circles.map((circle, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between hover:bg-muted/50 p-2 rounded cursor-pointer"
+                        className="p-3 hover:bg-muted/30 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
                       >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+                        <div className="flex items-start space-x-3">
+                          <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-sm flex-shrink-0">
                             {circle.avatar}
                           </div>
-                          <div>
-                            <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium block`}>
-                              {circle.name}
-                            </span>
-                            <span className="text-gray-400 text-xs">{circle.members} 成员　{circle.posts} 条动态</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-1">
+                              <h4 className={`font-semibold text-sm truncate ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {circle.name}
+                              </h4>
+                              <button 
+                                className={`text-xs px-2 py-1 rounded transition-colors flex-shrink-0 ${
+                                  circle.isJoined
+                                    ? "bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300"
+                                    : "bg-black text-white hover:bg-gray-800"
+                                }`}
+                              >
+                                {circle.isJoined ? "已加入" : "加入"}
+                              </button>
+                            </div>
+                            <div className="flex items-center space-x-3 text-xs text-gray-400">
+                              <span className="flex items-center">
+                                <span className="w-1 h-1 bg-gray-400 rounded-full mr-1"></span>
+                                {circle.members} 成员
+                              </span>
+                              <span className="flex items-center">
+                                <span className="w-1 h-1 bg-gray-400 rounded-full mr-1"></span>
+                                {circle.posts} 条动态
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <button 
-                          className={`text-xs px-3 py-1 rounded-full transition-colors ${
-                            circle.isJoined
-                              ? "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                              : "bg-[#00D4AA] text-white hover:bg-[#00D4AA]/80"
-                          }`}
-                        >
-                          {circle.isJoined ? "已加入" : "加入"}
-                        </button>
                       </div>
                     ))}
                   </div>
