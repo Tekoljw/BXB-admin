@@ -565,15 +565,15 @@ export default function MomentsPage() {
                 ) : (
                   /* 交易员排行榜内容 */
                   <div>
-                    {/* 时间筛选器 - 黑色方形小按钮 */}
+                    {/* 时间筛选器 - 黑色方形小页签 */}
                     <div className="flex items-center space-x-1 mb-4 overflow-x-auto">
                       {["单日", "本周", "本月", "总收益", "胜率"].map((period) => (
                         <button
                           key={period}
                           onClick={() => setLeaderboardPeriod(period)}
-                          className={`px-2 py-1 text-xs font-medium rounded whitespace-nowrap transition-colors ${
+                          className={`px-3 py-1.5 text-xs font-medium rounded whitespace-nowrap transition-colors ${
                             leaderboardPeriod === period
-                              ? "bg-blue-500 text-white"
+                              ? "bg-black text-white"
                               : isDark
                                 ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
                                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
