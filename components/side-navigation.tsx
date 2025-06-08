@@ -152,11 +152,11 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
       <nav className="py-4 flex-1">
         <ul className="space-y-2">
           {/* 聊天 */}
-          <li className="px-3">
+          <li className="flex justify-center md:justify-center">
             <Link
               href="/chat"
               onClick={handleClick}
-              className={`group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
+              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/chat") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
               title={t.chat}
@@ -169,11 +169,11 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           </li>
 
           {/* 朋友圈 */}
-          <li className="px-3">
+          <li className="flex justify-center md:justify-center">
             <Link
               href="/moments"
               onClick={handleClick}
-              className={`group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
+              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/moments") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
               title={t.moments}
@@ -186,11 +186,11 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           </li>
 
           {/* 动态 */}
-          <li className="px-3">
+          <li className="flex justify-center md:justify-center">
             <Link
               href="/dashboard"
               onClick={handleClick}
-              className={`group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
+              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/dashboard") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
               title={t.dashboard}
@@ -203,11 +203,11 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           </li>
 
           {/* 行情 */}
-          <li className="px-3">
+          <li className="flex justify-center md:justify-center">
             <Link
               href="/market"
               onClick={handleClick}
-              className={`group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
+              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/market") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
               title={t.statistics}
@@ -220,11 +220,11 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           </li>
 
           {/* 现货 */}
-          <li className="px-3">
+          <li className="flex justify-center md:justify-center">
             <Link
               href="/spot"
               onClick={handleClick}
-              className={`group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
+              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/spot") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
               title={t.spot}
@@ -237,11 +237,11 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           </li>
 
           {/* 合约 */}
-          <li className="px-3">
+          <li className="flex justify-center md:justify-center">
             <Link
               href="/futures"
               onClick={handleClick}
-              className={`group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
+              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/futures") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
               title={t.futures}
@@ -254,11 +254,11 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           </li>
 
           {/* 钱包 */}
-          <li className="px-3">
+          <li className="flex justify-center md:justify-center">
             <Link
               href="/wallet"
               onClick={handleClick}
-              className={`group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
+              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/wallet") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
               title={t.wallet}
