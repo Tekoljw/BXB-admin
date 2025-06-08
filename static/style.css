@@ -1,0 +1,186 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.console-output {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    padding: 15px;
+    border-radius: 4px;
+    height: 400px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.console-line {
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.console-error {
+    color: #ff6b6b;
+}
+
+.console-success {
+    color: #4ecdc4;
+}
+
+.console-info {
+    color: #45aaf2;
+}
+
+.console-warning {
+    color: #feca57;
+}
+
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: none;
+}
+
+.card-header {
+    background-color: #343a40;
+    color: white;
+    border-bottom: none;
+}
+
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.navbar-brand {
+    font-weight: 600;
+}
+
+#status-indicator {
+    font-size: 12px;
+    padding: 6px 12px;
+}
+
+.file-tree {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+.file-tree-item {
+    padding: 2px 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+.file-tree-item:hover {
+    background-color: #f8f9fa;
+}
+
+.file-tree-directory {
+    font-weight: 600;
+    color: #007bff;
+}
+
+.file-tree-file {
+    color: #6c757d;
+}
+
+.file-tree-icon {
+    margin-right: 5px;
+    width: 16px;
+    text-align: center;
+}
+
+.analysis-section {
+    margin-bottom: 20px;
+}
+
+.analysis-section h6 {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.analysis-item {
+    background-color: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    border-left: 3px solid #007bff;
+}
+
+.progress-container {
+    margin: 10px 0;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+.loading-text {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Scrollbar styling for console */
+.console-output::-webkit-scrollbar {
+    width: 8px;
+}
+
+.console-output::-webkit-scrollbar-track {
+    background: #2d2d2d;
+}
+
+.console-output::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.console-output::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* Animation for status updates */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.pulsing {
+    animation: pulse 1.5s infinite;
+}
+
+/* File explorer styling */
+.file-explorer-container {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: white;
+}
+
+.directory-toggle {
+    background: none;
+    border: none;
+    color: #007bff;
+    padding: 0;
+    margin-right: 5px;
+}
+
+.directory-toggle:hover {
+    text-decoration: underline;
+}
+
+.file-size {
+    color: #6c757d;
+    font-size: 0.8em;
+    margin-left: auto;
+}
+
+.file-tree-level-1 { margin-left: 20px; }
+.file-tree-level-2 { margin-left: 40px; }
+.file-tree-level-3 { margin-left: 60px; }
