@@ -1,8 +1,8 @@
 "use client"
 
-import { memo, useCallback } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 
-interface OptimizedButtonProps {
+interface InstantButtonProps {
   children: React.ReactNode
   onClick: () => void
   className?: string
@@ -11,27 +11,40 @@ interface OptimizedButtonProps {
   size?: 'sm' | 'md' | 'lg'
 }
 
-const OptimizedButton = memo(({ 
-  children, 
-  onClick, 
-  className = '', 
+export default function InstantButton({
+  children,
+  onClick,
+  className = '',
   disabled = false,
   variant = 'primary',
   size = 'md'
-}: OptimizedButtonProps) => {
-  // Immediate response with DOM manipulation
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (!disabled) {
-      // Force immediate execution using flushSync
-      ;(window as any).React?.flushSync(() => {
+}: InstantButtonProps) {
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  // Bypass React's synthetic events for instant response
+  useEffect(() => {
+    const button = buttonRef.current
+    if (!button) return
+
+    const handleNativeClick = (e: Event) => {
+      e.preventDefault()
+      e.stopPropagation()
+      if (!disabled) {
         onClick()
-      }) || onClick()
+      }
+    }
+
+    // Use native DOM events instead of React events
+    button.addEventListener('mousedown', handleNativeClick, { passive: false })
+    button.addEventListener('touchstart', handleNativeClick, { passive: false })
+
+    return () => {
+      button.removeEventListener('mousedown', handleNativeClick)
+      button.removeEventListener('touchstart', handleNativeClick)
     }
   }, [onClick, disabled])
 
-  const baseStyles = 'font-medium rounded focus:outline-none select-none user-select-none pointer-events-auto'
+  const baseStyles = 'font-medium rounded focus:outline-none select-none cursor-pointer'
   
   const variantStyles = {
     primary: 'bg-[#00D4AA] hover:bg-[#00D4AA]/80 text-white focus:ring-[#00D4AA]',
@@ -47,22 +60,18 @@ const OptimizedButton = memo(({
 
   return (
     <button
+      ref={buttonRef}
       className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-      onMouseDown={handleMouseDown}
       disabled={disabled}
       type="button"
       style={{
         WebkitTapHighlightColor: 'transparent',
-        WebkitTouchCallout: 'none',
-        WebkitUserSelect: 'none',
-        touchAction: 'manipulation'
+        touchAction: 'manipulation',
+        transition: 'none',
+        animation: 'none'
       }}
     >
       {children}
     </button>
   )
-})
-
-OptimizedButton.displayName = 'OptimizedButton'
-
-export default OptimizedButton
+}

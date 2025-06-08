@@ -1,9 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
+import { flushSync } from "react-dom"
 import { Search, Star } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
-import OptimizedButton from "@/components/optimized-button"
+import InstantButton from "@/components/instant-button"
 
 const VerifiedIcon = () => (
   <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
@@ -94,11 +95,15 @@ export default function UsdtTradePage() {
   }, [])
 
   const handleMainTabClick = useCallback((tab: string) => {
-    setActiveMainTab(tab)
+    flushSync(() => {
+      setActiveMainTab(tab)
+    })
   }, [])
 
   const handleSubTabClick = useCallback((tab: string) => {
-    setActiveSubTab(tab)
+    flushSync(() => {
+      setActiveSubTab(tab)
+    })
   }, [])
 
   const filteredAds = useMemo(() => {
@@ -147,14 +152,14 @@ export default function UsdtTradePage() {
           {/* 主要标签 */}
           <div className="flex space-x-2">
             {mainTabs.map((tab) => (
-              <OptimizedButton
+              <InstantButton
                 key={tab}
                 onClick={() => handleMainTabClick(tab)}
                 variant={activeMainTab === tab ? "primary" : "secondary"}
                 size="sm"
               >
                 {tab}
-              </OptimizedButton>
+              </InstantButton>
             ))}
           </div>
         </div>
@@ -165,7 +170,7 @@ export default function UsdtTradePage() {
         {/* 次级标签 */}
         <div className="flex items-center space-x-1 mb-4 overflow-x-auto">
           {subTabs.map((tab) => (
-            <OptimizedButton
+            <InstantButton
               key={tab}
               onClick={() => handleSubTabClick(tab)}
               variant={activeSubTab === tab ? "primary" : "ghost"}
@@ -173,7 +178,7 @@ export default function UsdtTradePage() {
               className="whitespace-nowrap"
             >
               {tab}
-            </OptimizedButton>
+            </InstantButton>
           ))}
         </div>
 
@@ -198,7 +203,7 @@ export default function UsdtTradePage() {
             >
               {/* 商家信息 */}
               <div className="flex items-center space-x-3">
-                <OptimizedButton
+                <InstantButton
                   onClick={() => toggleFavorite(ad.user)}
                   variant="ghost"
                   size="sm"
@@ -211,7 +216,7 @@ export default function UsdtTradePage() {
                         : "text-gray-400"
                     }`} 
                   />
-                </OptimizedButton>
+                </InstantButton>
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
@@ -265,13 +270,13 @@ export default function UsdtTradePage() {
 
               {/* 交易按钮 */}
               <div className="flex items-center">
-                <OptimizedButton
+                <InstantButton
                   onClick={() => {/* Handle trade action */}}
                   variant="primary"
                   size="sm"
                 >
                   {activeMainTab}
-                </OptimizedButton>
+                </InstantButton>
               </div>
             </div>
           ))}
