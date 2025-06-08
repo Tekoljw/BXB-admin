@@ -7,8 +7,8 @@ import {
   User,
   Bell,
   LineChart,
-  Coins,
-  Zap,
+  ArrowLeftRight,
+  FileText,
   Globe2,
   Heart,
 } from "lucide-react"
@@ -179,7 +179,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
               }`}
               title={t.spot}
             >
-              <Coins className="h-5 w-5 md:h-6 md:w-6" />
+              <ArrowLeftRight className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.spot}</span>
             </button>
           </li>
@@ -193,7 +193,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
               }`}
               title={t.futures}
             >
-              <Zap className="h-5 w-5 md:h-6 md:w-6" />
+              <FileText className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.futures}</span>
             </button>
           </li>
