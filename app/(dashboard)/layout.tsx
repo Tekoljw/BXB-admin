@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <NavigationLoader />
       <div className="h-full w-full">
         <div className="bg-card shadow-lg h-full">
-          <div className="flex h-screen">
+          <div className="flex min-h-screen">
             {/* Mobile Sidebar Toggle - 只在移动端显示 */}
             <div className="md:hidden fixed top-4 left-4 z-40">
               <div id="mobile-sidebar-toggle">
@@ -89,7 +89,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 overflow-hidden w-full">
+            <div className="flex-1 overflow-auto w-full">
               {children}
             </div>
           </div>
