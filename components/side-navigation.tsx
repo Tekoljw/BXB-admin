@@ -71,7 +71,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
 
   // 预加载所有路由以减少首次访问延迟
   useEffect(() => {
-    const routes = ['/chat', '/moments', '/market', '/spot', '/dashboard']
+    const routes = ['/dashboard', '/chat', '/moments', '/market', '/settings']
     routes.forEach(route => {
       router.prefetch(route)
     })
@@ -166,17 +166,17 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
             </button>
           </li>
 
-          {/* 现货 */}
+          {/* 开始 */}
           <li className="flex justify-center md:justify-center">
             <button
-              onClick={() => handleNavClick("/spot")}
+              onClick={() => handleNavClick("/dashboard")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
-                isActive("/spot") ? "bg-white/20" : "text-white/70 hover:text-white"
+                isActive("/dashboard") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={t.spot}
+              title="开始"
             >
-              <Coins className="h-5 w-5 md:h-6 md:w-6" />
-              <span className="ml-3 md:hidden">{t.spot}</span>
+              <BarChart2 className="h-5 w-5 md:h-6 md:w-6" />
+              <span className="ml-3 md:hidden">开始</span>
             </button>
           </li>
         </ul>
