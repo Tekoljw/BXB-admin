@@ -78,29 +78,13 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
   }
 
   const isActive = (path: string) => {
-    if (path === "/dashboard" && pathname === "/dashboard") {
-      return true
-    }
-    if (path === "/moments" && pathname === "/moments") {
-      return true
-    }
-    if (path === "/market" && pathname === "/market") {
-      return true
-    }
-    if (path === "/settings" && pathname === "/settings") {
-      return true
-    }
-    if (path === "/chat" && pathname === "/chat") {
-      return true
-    }
-    if (path === "/spot" && pathname === "/spot") {
-      return true
-    }
-    if (path === "/futures" && pathname === "/futures") {
-      return true
-    }
     return pathname === path
   }
+
+  // Debug: Log current pathname
+  useEffect(() => {
+    console.log("Current pathname:", pathname)
+  }, [pathname])
 
   // Close dropdowns when clicking outside
   useEffect(() => {
