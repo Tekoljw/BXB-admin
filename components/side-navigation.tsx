@@ -81,10 +81,17 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
     return pathname === path
   }
 
-  // Debug: Log current pathname
+  // Debug: Log current pathname and clicks
   useEffect(() => {
     console.log("Current pathname:", pathname)
   }, [pathname])
+
+  const handleNavClick = (path: string) => {
+    console.log("Navigation clicked:", path)
+    if (onCloseMobile) {
+      onCloseMobile()
+    }
+  }
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -139,7 +146,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           <li className="flex justify-center md:justify-center">
             <Link
               href="/chat"
-              onClick={handleClick}
+              onClick={() => handleNavClick("/chat")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/chat") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
@@ -156,7 +163,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           <li className="flex justify-center md:justify-center">
             <Link
               href="/moments"
-              onClick={handleClick}
+              onClick={() => handleNavClick("/moments")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/moments") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
@@ -173,7 +180,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           <li className="flex justify-center md:justify-center">
             <Link
               href="/dashboard"
-              onClick={handleClick}
+              onClick={() => handleNavClick("/dashboard")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/dashboard") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
@@ -190,7 +197,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           <li className="flex justify-center md:justify-center">
             <Link
               href="/market"
-              onClick={handleClick}
+              onClick={() => handleNavClick("/market")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/market") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
@@ -207,7 +214,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           <li className="flex justify-center md:justify-center">
             <Link
               href="/spot"
-              onClick={handleClick}
+              onClick={() => handleNavClick("/spot")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/spot") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
@@ -224,7 +231,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           <li className="flex justify-center md:justify-center">
             <Link
               href="/futures"
-              onClick={handleClick}
+              onClick={() => handleNavClick("/futures")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/futures") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
@@ -241,7 +248,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
           <li className="flex justify-center md:justify-center">
             <Link
               href="/wallet"
-              onClick={handleClick}
+              onClick={() => handleNavClick("/wallet")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
                 isActive("/wallet") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
               }`}
