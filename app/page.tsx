@@ -17,15 +17,15 @@ export default function HomePage() {
             management.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/login">
+            <Link href="/dashboard">
               <Button size="lg" className="bg-black text-white hover:bg-black/90">
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/register">
+            <Link href="/chat">
               <Button size="lg" variant="outline">
-                Create Account
+                Start Trading
               </Button>
             </Link>
           </div>
