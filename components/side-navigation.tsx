@@ -10,7 +10,8 @@ import {
   ArrowLeftRight,
   FileText,
   Globe2,
-  Heart,
+  Users,
+  DollarSign,
 } from "lucide-react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
@@ -37,6 +38,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
     en: {
       chat: "Chat",
       moments: "Moments",
+      usdtTrade: "USDT Trade",
       statistics: "Market",
       spot: "Spot",
       futures: "Futures",
@@ -49,6 +51,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
     zh: {
       chat: "聊天",
       moments: "朋友圈",
+      usdtTrade: "USDT买卖",
       statistics: "行情",
       spot: "现货",
       futures: "合约",
@@ -75,7 +78,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
 
   // 预加载所有路由以减少首次访问延迟
   useEffect(() => {
-    const routes = ['/chat', '/moments', '/market', '/spot', '/futures', '/settings']
+    const routes = ['/chat', '/moments', '/usdt-trade', '/market', '/spot', '/futures', '/settings']
     routes.forEach(route => {
       router.prefetch(route)
     })
@@ -151,8 +154,22 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
               }`}
               title={t.moments}
             >
-              <Heart className="h-5 w-5 md:h-6 md:w-6" />
+              <Users className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.moments}</span>
+            </button>
+          </li>
+
+          {/* USDT买卖 */}
+          <li className="flex justify-center md:justify-center">
+            <button
+              onClick={() => handleNavClick("/usdt-trade")}
+              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
+                isActive("/usdt-trade") ? "bg-white/20" : "text-white/70 hover:text-white"
+              }`}
+              title={t.usdtTrade}
+            >
+              <DollarSign className="h-5 w-5 md:h-6 md:w-6" />
+              <span className="ml-3 md:hidden">{t.usdtTrade}</span>
             </button>
           </li>
 
