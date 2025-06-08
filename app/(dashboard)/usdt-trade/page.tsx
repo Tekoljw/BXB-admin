@@ -158,8 +158,8 @@ export default function UsdtTradePage() {
               <input
                 type="text"
                 placeholder="搜索商家名称"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                defaultValue={searchTerm}
+                onChange={handleSearchChange}
                 className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm transition-colors ${
                   isDark
                     ? "bg-background border-gray-700 text-white placeholder-gray-500 focus:border-[#00D4AA]"
@@ -174,7 +174,7 @@ export default function UsdtTradePage() {
             {mainTabs.map((tab) => (
               <button
                 key={tab}
-                onClick={() => setActiveMainTab(tab)}
+                onClick={() => handleMainTabClick(tab)}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   activeMainTab === tab
                     ? "bg-[#00D4AA] text-white"
@@ -197,7 +197,7 @@ export default function UsdtTradePage() {
           {subTabs.map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveSubTab(tab)}
+              onClick={() => handleSubTabClick(tab)}
               className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap transition-colors ${
                 activeSubTab === tab
                   ? "bg-[#00D4AA] text-white"
