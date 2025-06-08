@@ -353,98 +353,136 @@ export default function MomentsPage() {
               </div>
             </div>
 
-            {/* 动态列表横条卡片 */}
-            <div className="space-y-3">
+            {/* 动态列表 - 重新设计的卡片布局 */}
+            <div className="space-y-6">
               {filteredPosts.map((post) => {
                 const isFavorite = favorites.includes(post.id)
 
                 return (
                   <div
                     key={post.id}
-                    className={`${cardStyle} rounded-lg transition-all duration-200 hover:${
-                      isDark ? "bg-[#252842]" : "bg-gray-50"
+                    className={`${cardStyle} rounded-xl p-6 transition-all duration-200 hover:shadow-lg hover:${
+                      isDark ? "bg-[#1e2332]" : "bg-gray-50"
                     }`}
                   >
-                    <div className="grid grid-cols-10 gap-4 p-4 items-start">
-                      {/* 作者信息 */}
-                      <div className="col-span-3 flex items-center space-x-3">
-                        <button
-                          onClick={() => toggleFavorite(post.id)}
-                          className={`${
-                            isFavorite ? "text-yellow-500" : "text-gray-300"
-                          } hover:text-yellow-500 transition-colors`}
-                        >
-                          <Star className="h-4 w-4" fill={isFavorite ? "currentColor" : "none"} />
-                        </button>
-                        <span className="text-2xl">{post.avatar}</span>
+                    {/* 头部 - 用户信息和操作 */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold shadow-lg">
+                          {post.avatar}
+                        </div>
                         <div>
-                          <div className="flex items-center">
-                            <span className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                          <div className="flex items-center space-x-2">
+                            <span className={`font-bold text-base ${isDark ? "text-white" : "text-gray-900"}`}>
                               {post.author}
                             </span>
-                            {post.verified && <span className="ml-1 text-blue-500">✓</span>}
+                            {post.verified && (
+                              <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              </div>
+                            )}
                           </div>
-                          <div className="text-xs text-gray-400">{post.timestamp}</div>
+                          <div className="text-sm text-gray-500">{post.timestamp}</div>
                         </div>
                       </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => toggleFavorite(post.id)}
+                          className={`p-2 rounded-full transition-all duration-200 ${
+                            isFavorite 
+                              ? "text-yellow-500 bg-yellow-50 hover:bg-yellow-100" 
+                              : "text-gray-400 hover:text-yellow-500 hover:bg-gray-50"
+                          }`}
+                        >
+                          <Star className="h-5 w-5" fill={isFavorite ? "currentColor" : "none"} />
+                        </button>
+                        <button className="p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all duration-200">
+                          <MoreHorizontal className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </div>
 
-                      {/* 内容 */}
-                      <div className="col-span-4">
-                        <p className={`text-sm mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>{post.content}</p>
-                        {post.tags && (
-                          <div className="flex flex-wrap gap-1">
-                            {post.tags.map((tag, index) => (
-                              <span key={index} className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                        {post.images && (
-                          <div className="mt-2 grid grid-cols-2 gap-2">
-                            {post.images.slice(0, 2).map((image, index) => (
+                    {/* 内容 */}
+                    <div className="mb-4">
+                      <p className={`text-base leading-relaxed ${isDark ? "text-gray-100" : "text-gray-800"}`}>
+                        {post.content}
+                      </p>
+                    </div>
+
+                    {/* 标签 */}
+                    {post.tags && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {post.tags.map((tag, index) => (
+                          <span 
+                            key={index} 
+                            className={`px-3 py-1 text-sm font-medium rounded-full cursor-pointer transition-all duration-200 ${
+                              isDark 
+                                ? "bg-blue-900/30 text-blue-300 hover:bg-blue-900/50" 
+                                : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                            }`}
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* 图片 */}
+                    {post.images && (
+                      <div className="mb-4">
+                        {post.images.length === 1 ? (
+                          <img
+                            src={post.images[0] || "/placeholder.svg"}
+                            alt="Post image"
+                            className="w-full max-h-96 object-cover rounded-lg shadow-sm"
+                          />
+                        ) : (
+                          <div className="grid grid-cols-2 gap-3">
+                            {post.images.slice(0, 4).map((image, index) => (
                               <img
                                 key={index}
                                 src={image || "/placeholder.svg"}
                                 alt={`Post image ${index + 1}`}
-                                className="w-full h-20 object-cover rounded"
+                                className="w-full h-48 object-cover rounded-lg shadow-sm"
                               />
                             ))}
                           </div>
                         )}
                       </div>
+                    )}
 
-                      {/* 点赞数 */}
-                      <div className="col-span-1 text-center">
+                    {/* 底部操作栏 */}
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                      <div className="flex items-center space-x-6">
                         <button
                           onClick={() => handleLike(post.id)}
-                          className={`flex items-center justify-center space-x-1 ${
-                            post.isLiked ? "text-red-500" : "text-gray-400"
-                          } hover:text-red-500 transition-colors`}
+                          className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200 ${
+                            post.isLiked 
+                              ? "text-red-500 bg-red-50 hover:bg-red-100" 
+                              : "text-gray-500 hover:text-red-500 hover:bg-red-50"
+                          }`}
                         >
-                          <Heart className={`h-4 w-4 ${post.isLiked ? "fill-current" : ""}`} />
-                          <span className="text-sm">{post.likes}</span>
+                          <Heart className={`h-5 w-5 ${post.isLiked ? "fill-current" : ""}`} />
+                          <span className="text-sm font-medium">{post.likes}</span>
+                        </button>
+
+                        <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-gray-500 hover:text-blue-500 hover:bg-blue-50 transition-all duration-200">
+                          <MessageCircle className="h-5 w-5" />
+                          <span className="text-sm font-medium">{post.comments}</span>
+                        </button>
+
+                        <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-gray-500 hover:text-green-500 hover:bg-green-50 transition-all duration-200">
+                          <Share className="h-5 w-5" />
+                          <span className="text-sm font-medium">{post.shares}</span>
                         </button>
                       </div>
 
-                      {/* 评论数 */}
-                      <div className="col-span-1 text-center">
-                        <button className="flex items-center justify-center space-x-1 text-gray-400 hover:text-blue-500 transition-colors">
-                          <MessageCircle className="h-4 w-4" />
-                          <span className="text-sm">{post.comments}</span>
-                        </button>
-                      </div>
-
-                      {/* 操作按钮 */}
-                      <div className="col-span-1 text-right">
-                        <div className="flex items-center justify-end space-x-2">
-                          <button className="p-1 text-gray-400 hover:text-blue-500 transition-colors">
-                            <Share className="h-4 w-4" />
-                          </button>
-                          <button className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </button>
-                        </div>
+                      {/* 数据统计 */}
+                      <div className="text-sm text-gray-400">
+                        {(post.likes + post.comments + post.shares).toLocaleString()} 次互动
                       </div>
                     </div>
                   </div>
