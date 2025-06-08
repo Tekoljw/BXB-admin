@@ -13,12 +13,13 @@ export default function MomentsPage() {
   const [activeMainTab, setActiveMainTab] = useState("推荐")
   const [activeSubTab, setActiveSubTab] = useState("全部")
   const [mounted, setMounted] = useState(false)
-  const isDark = theme === "dark"
-
   const [isDragging, setIsDragging] = useState(false)
   const [startX, setStartX] = useState(0)
   const [scrollLeft, setScrollLeft] = useState(0)
+  const [rightSidebarTab, setRightSidebarTab] = useState("推荐关注")
+  const [leaderboardPeriod, setLeaderboardPeriod] = useState("单日")
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const isDark = theme === "dark"
 
   // 解决闪烁问题
   useEffect(() => {
@@ -70,9 +71,18 @@ export default function MomentsPage() {
     { name: "加密女王", avatar: "👸", posts: "156", change: "+12.87%" },
     { name: "区块链教授", avatar: "👨‍🏫", posts: "143", change: "+11.45%" },
     { name: "DeFi专家", avatar: "💎", posts: "128", change: "+10.23%" },
-    { name: "技术大牛", avatar: "🤖", posts: "112", change: "+9.87%" },
-    { name: "投资顾问", avatar: "📊", posts: "98", change: "+8.54%" },
-    { name: "链上分析师", avatar: "🔍", posts: "87", change: "+7.32%" },
+  ]
+
+  // 交易员排行榜数据
+  const traderLeaderboard = [
+    { rank: 1, name: "量化大师", avatar: "#FFD700", followers: "12.8K", trades: "1,234", return: "+158.7%", color: "bg-yellow-500" },
+    { rank: 2, name: "趋势猎手", avatar: "#4F46E5", followers: "9.5K", trades: "987", return: "+142.3%", color: "bg-blue-500" },
+    { rank: 3, name: "波段王者", avatar: "#22C55E", followers: "7.2K", trades: "756", return: "+128.9%", color: "bg-green-500" },
+    { rank: 4, name: "价值投资者", avatar: "#A855F7", followers: "15.3K", trades: "543", return: "+115.4%", color: "bg-purple-500" },
+    { rank: 5, name: "短线高手", avatar: "#EF4444", followers: "6.8K", trades: "2,156", return: "+98.7%", color: "bg-red-500" },
+    { rank: 6, name: "套利专家", avatar: "#3B82F6", followers: "4.9K", trades: "678", return: "+87.2%", color: "bg-blue-600" },
+    { rank: 7, name: "技术分析师", avatar: "#EC4899", followers: "8.1K", trades: "892", return: "+76.8%", color: "bg-pink-500" },
+    { rank: 8, name: "风险控制师", avatar: "#10B981", followers: "11.2K", trades: "421", return: "+65.3%", color: "bg-emerald-500" },
   ]
 
   // 完整动态数据
@@ -227,7 +237,7 @@ export default function MomentsPage() {
                         <span className="text-gray-400 text-xs">{topic.posts} 条动态</span>
                       </div>
                     </div>
-                    <span className="text-custom-green text-sm font-medium">{topic.change}</span>
+                    <span className="text-green-500 text-sm font-medium">{topic.change}</span>
                   </div>
                 ))}
               </div>
@@ -491,33 +501,131 @@ export default function MomentsPage() {
             </div>
           </div>
 
-          {/* 右侧边栏 - 推荐关注 */}
+          {/* 右侧边栏 - 推荐关注与交易员排行榜 */}
           <div className="col-span-3">
-            <div className={`${cardStyle} rounded-lg p-6 sticky top-6`}>
-              <h3 className={`${isDark ? "text-white" : "text-gray-800"} text-lg font-bold mb-4`}>推荐关注</h3>
-              <div className="space-y-3">
-                {recommendedUsers.map((user, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between hover:bg-muted/50 p-2 rounded cursor-pointer"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <span className="text-lg">{user.avatar}</span>
-                      <div>
-                        <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium block`}>
-                          {user.name}
-                        </span>
-                        <span className="text-gray-400 text-xs">{user.posts} 条动态</span>
+            <div className={`${cardStyle} rounded-lg sticky top-6 overflow-hidden`}>
+              {/* 页签导航 */}
+              <div className="flex border-b border-gray-100 dark:border-gray-700">
+                <button
+                  onClick={() => setRightSidebarTab("推荐关注")}
+                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                    rightSidebarTab === "推荐关注"
+                      ? isDark
+                        ? "bg-blue-600 text-white border-b-2 border-blue-400"
+                        : "bg-blue-50 text-blue-600 border-b-2 border-blue-500"
+                      : isDark
+                        ? "text-gray-300 hover:text-white hover:bg-gray-700"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                  }`}
+                >
+                  推荐关注
+                </button>
+                <button
+                  onClick={() => setRightSidebarTab("交易员排行榜")}
+                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                    rightSidebarTab === "交易员排行榜"
+                      ? isDark
+                        ? "bg-blue-600 text-white border-b-2 border-blue-400"
+                        : "bg-blue-50 text-blue-600 border-b-2 border-blue-500"
+                      : isDark
+                        ? "text-gray-300 hover:text-white hover:bg-gray-700"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                  }`}
+                >
+                  交易员排行榜
+                </button>
+              </div>
+
+              {/* 内容区域 */}
+              <div className="p-6">
+                {rightSidebarTab === "推荐关注" ? (
+                  /* 推荐关注内容 */
+                  <div className="space-y-3">
+                    {recommendedUsers.map((user, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between hover:bg-muted/50 p-3 rounded-lg cursor-pointer transition-colors"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                            {user.avatar}
+                          </div>
+                          <div>
+                            <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium block`}>
+                              {user.name}
+                            </span>
+                            <span className="text-gray-400 text-xs">{user.posts} 条动态</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end">
+                          <span className="text-green-500 text-sm font-medium">{user.change}</span>
+                          <button className="text-xs bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-600 mt-1 transition-colors">
+                            关注
+                          </button>
+                        </div>
                       </div>
+                    ))}
+                  </div>
+                ) : (
+                  /* 交易员排行榜内容 */
+                  <div>
+                    {/* 时间筛选器 */}
+                    <div className="flex items-center space-x-2 mb-4 overflow-x-auto">
+                      {["单日", "本周", "本月", "总收益", "胜率"].map((period) => (
+                        <button
+                          key={period}
+                          onClick={() => setLeaderboardPeriod(period)}
+                          className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap transition-colors ${
+                            leaderboardPeriod === period
+                              ? "bg-blue-500 text-white"
+                              : isDark
+                                ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          }`}
+                        >
+                          {period}
+                        </button>
+                      ))}
                     </div>
-                    <div className="flex flex-col items-end">
-                      <span className="text-custom-green text-sm font-medium">{user.change}</span>
-                      <button className="text-xs bg-black text-white px-2 py-1 rounded-full hover:bg-gray-800 mt-1">
-                        关注
-                      </button>
+
+                    {/* 排行榜列表 */}
+                    <div className="space-y-3">
+                      {traderLeaderboard.map((trader) => (
+                        <div
+                          key={trader.rank}
+                          className="flex items-center justify-between p-3 hover:bg-muted/50 rounded-lg cursor-pointer transition-colors"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="w-6 h-6 flex items-center justify-center">
+                              <span className={`text-sm font-bold ${
+                                trader.rank <= 3 ? "text-yellow-500" : isDark ? "text-gray-300" : "text-gray-600"
+                              }`}>
+                                {trader.rank}
+                              </span>
+                            </div>
+                            <div className={`w-10 h-10 rounded-full ${trader.color} flex items-center justify-center text-white font-bold text-sm`}>
+                              {trader.name.charAt(0)}
+                            </div>
+                            <div>
+                              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {trader.name}
+                              </div>
+                              <div className="text-xs text-gray-400">
+                                {trader.followers} 关注者　{trader.trades} 笔交易
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-green-500 text-sm font-bold">{trader.return}</span>
+                            <button className="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
+                              跟单
+                            </button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>
