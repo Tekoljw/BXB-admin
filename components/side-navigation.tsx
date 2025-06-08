@@ -1,25 +1,16 @@
 "use client"
 
-import {
-  BarChart2,
-  Settings,
-  MessageCircle,
-  User,
-  Bell,
-  LineChart,
-  ArrowLeftRight,
-  FileText,
-  Globe2,
-  Users,
-  DollarSign,
-} from "lucide-react"
-import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
-import { useState, useRef, useEffect, useCallback } from "react"
-import ThemeToggle from "@/components/theme-toggle"
-import OptimizedButton from "@/components/optimized-button"
+import { 
+  MessageCircle, 
+  Users, 
+  ArrowLeftRight, 
+  FileText, 
+  BarChart2, 
+  DollarSign 
+} from "lucide-react"
 
 interface SideNavigationProps {
   onCloseMobile?: () => void
@@ -27,262 +18,50 @@ interface SideNavigationProps {
 
 export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
   const pathname = usePathname()
-  const router = useRouter()
-  const { language, setLanguage, theme } = useTheme()
-  const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
-  const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false)
-  const languageDropdownRef = useRef<HTMLDivElement>(null)
-  const notificationDropdownRef = useRef<HTMLDivElement>(null)
-
-  // 翻译对象
-  const t = {
-    en: {
-      chat: "Chat",
-      moments: "Moments",
-      usdtTrade: "USDT Trade",
-      statistics: "Market",
-      spot: "Spot",
-      futures: "Futures",
-      languageToggle: "Language",
-      themeToggle: "Theme",
-      notifications: "Notifications",
-      markAllAsRead: "Mark all as read",
-      settings: "Settings",
-    },
-    zh: {
-      chat: "聊天",
-      moments: "朋友圈",
-      usdtTrade: "USDT买卖",
-      statistics: "行情",
-      spot: "现货",
-      futures: "合约",
-      languageToggle: "语言",
-      themeToggle: "主题",
-      notifications: "通知",
-      markAllAsRead: "全部已读",
-      settings: "设置",
-    },
-  }[language]
-
-  const isActive = (path: string) => {
-    return pathname === path
-  }
-
-  const handleNavClick = useCallback((path: string) => {
-    // 立即更新UI，给用户快速响应感觉
-    if (onCloseMobile) {
-      onCloseMobile()
-    }
-    // 使用replace而不是push减少历史堆栈
-    router.replace(path)
-  }, [onCloseMobile, router])
-
-  // 预加载所有路由以减少首次访问延迟
-  useEffect(() => {
-    const routes = ['/chat', '/moments', '/usdt-trade', '/market', '/spot', '/futures', '/settings']
-    routes.forEach(route => {
-      router.prefetch(route)
-    })
-  }, [router])
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        languageDropdownRef.current &&
-        !languageDropdownRef.current.contains(event.target as Node)
-      ) {
-        setLanguageDropdownOpen(false)
-      }
-      if (
-        notificationDropdownRef.current &&
-        !notificationDropdownRef.current.contains(event.target as Node)
-      ) {
-        setNotificationDropdownOpen(false)
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
-
-  const handleLanguageChange = (newLanguage: "en" | "zh") => {
-    setLanguage(newLanguage)
-    setLanguageDropdownOpen(false)
-  }
-
+  const { theme } = useTheme()
   const isDark = theme === "dark"
 
+  const navigationItems = [
+    { href: "/chat", icon: MessageCircle, label: "聊天" },
+    { href: "/moments", icon: Users, label: "动态" },
+    { href: "/spot", icon: ArrowLeftRight, label: "现货" },
+    { href: "/futures", icon: FileText, label: "合约" },
+    { href: "/usdt-trade", icon: DollarSign, label: "USDT买卖" },
+    { href: "/market", icon: BarChart2, label: "行情" }
+  ]
+
   return (
-    <div className={`w-full h-full flex flex-col ${isDark ? "bg-[#374151]" : "bg-black"} text-white`}>
-      {/* User Avatar Section */}
-      <div className="p-3 pt-6 md:p-4 md:pt-8">
-        <div className="flex flex-col items-center">
-          <div className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-white/20 flex items-center justify-center mb-2 md:mb-0 ring-2 ring-white/30">
-            <User className="h-4 w-4 md:h-5 md:w-5 text-white" />
-          </div>
-          <div className="text-center md:hidden">
-            <div className="text-sm font-medium text-white">John Doe</div>
-            <div className="text-xs text-white/70">demo@example.com</div>
-          </div>
+    <nav className={`w-64 h-screen ${isDark ? "bg-[#1a1d29]" : "bg-white"} border-r ${isDark ? "border-[#252842]" : "border-gray-200"}`}>
+      <div className="p-4">
+        <h1 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"} mb-8`}>
+          BeDAO
+        </h1>
+        
+        <div className="space-y-2">
+          {navigationItems.map((item) => {
+            const Icon = item.icon
+            const isActive = pathname === item.href
+            
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onCloseMobile}
+                className={`flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left ${
+                  isActive
+                    ? "bg-[#00D4AA] text-white"
+                    : isDark
+                    ? "text-gray-300 hover:bg-gray-800"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <Icon className="w-5 h-5" />
+                <span>{item.label}</span>
+              </Link>
+            )
+          })}
         </div>
       </div>
-
-      <nav className="py-4 flex-1">
-        <ul className="space-y-2">
-          {/* 聊天 */}
-          <li className="flex justify-center md:justify-center">
-            <button
-              onClick={() => handleNavClick("/chat")}
-              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
-                isActive("/chat") ? "bg-white/20" : "text-white/70 hover:text-white"
-              }`}
-              title={t.chat}
-            >
-              <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
-              <span className="ml-3 md:hidden">{t.chat}</span>
-            </button>
-          </li>
-
-          {/* 朋友圈 */}
-          <li className="flex justify-center md:justify-center">
-            <button
-              onClick={() => handleNavClick("/moments")}
-              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
-                isActive("/moments") ? "bg-white/20" : "text-white/70 hover:text-white"
-              }`}
-              title={t.moments}
-            >
-              <Users className="h-5 w-5 md:h-6 md:w-6" />
-              <span className="ml-3 md:hidden">{t.moments}</span>
-            </button>
-          </li>
-
-          {/* USDT买卖 */}
-          <li className="flex justify-center md:justify-center">
-            <button
-              onClick={() => handleNavClick("/usdt-trade")}
-              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
-                isActive("/usdt-trade") ? "bg-white/20" : "text-white/70 hover:text-white"
-              }`}
-              title={t.usdtTrade}
-            >
-              <DollarSign className="h-5 w-5 md:h-6 md:w-6" />
-              <span className="ml-3 md:hidden">{t.usdtTrade}</span>
-            </button>
-          </li>
-
-          {/* 行情 */}
-          <li className="flex justify-center md:justify-center">
-            <button
-              onClick={() => handleNavClick("/market")}
-              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
-                isActive("/market") ? "bg-white/20" : "text-white/70 hover:text-white"
-              }`}
-              title={t.statistics}
-            >
-              <LineChart className="h-5 w-5 md:h-6 md:w-6" />
-              <span className="ml-3 md:hidden">{t.statistics}</span>
-            </button>
-          </li>
-
-          {/* 现货 */}
-          <li className="flex justify-center md:justify-center">
-            <button
-              onClick={() => handleNavClick("/spot")}
-              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
-                isActive("/spot") ? "bg-white/20" : "text-white/70 hover:text-white"
-              }`}
-              title={t.spot}
-            >
-              <ArrowLeftRight className="h-5 w-5 md:h-6 md:w-6" />
-              <span className="ml-3 md:hidden">{t.spot}</span>
-            </button>
-          </li>
-
-          {/* 合约 */}
-          <li className="flex justify-center md:justify-center">
-            <button
-              onClick={() => handleNavClick("/futures")}
-              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
-                isActive("/futures") ? "bg-white/20" : "text-white/70 hover:text-white"
-              }`}
-              title={t.futures}
-            >
-              <FileText className="h-5 w-5 md:h-6 md:w-6" />
-              <span className="ml-3 md:hidden">{t.futures}</span>
-            </button>
-          </li>
-
-
-        </ul>
-      </nav>
-
-      {/* Language Toggle Section */}
-      <div className="px-3 md:px-4 py-2">
-        <div className="relative" ref={languageDropdownRef}>
-          <button
-            onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
-            className="group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white"
-            title={t.languageToggle}
-          >
-            <Globe2 className="h-5 w-5 md:h-6 md:w-6" />
-            <span className="ml-3 md:hidden">{t.languageToggle}</span>
-          </button>
-
-          {/* Language Dropdown */}
-          {languageDropdownOpen && (
-            <div className="absolute bottom-full left-0 md:left-full md:bottom-0 mb-2 md:mb-0 md:ml-2 w-48 bg-card rounded-lg shadow-lg border border-border z-50 animate-in fade-in slide-in-from-bottom-5 md:slide-in-from-left-5 duration-200">
-              <div className="py-2">
-                <button
-                  onClick={() => handleLanguageChange("en")}
-                  className={`flex items-center w-full px-4 py-2 text-sm transition-colors hover:bg-muted ${
-                    language === "en" ? "bg-primary/10 text-primary font-medium" : "text-foreground"
-                  }`}
-                >
-                  <span className="mr-3 text-base">🇺🇸</span>
-                  <span>English</span>
-                  {language === "en" && <span className="ml-auto text-primary">✓</span>}
-                </button>
-                <button
-                  onClick={() => handleLanguageChange("zh")}
-                  className={`flex items-center w-full px-4 py-2 text-sm transition-colors hover:bg-muted ${
-                    language === "zh" ? "bg-primary/10 text-primary font-medium" : "text-foreground"
-                  }`}
-                >
-                  <span className="mr-3 text-base">🇨🇳</span>
-                  <span>中文</span>
-                  {language === "zh" && <span className="ml-auto text-primary">✓</span>}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Theme Toggle Section */}
-      <div className="px-3 md:px-4 py-2">
-        <div className="group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white">
-          <ThemeToggle />
-          <span className="ml-3 md:hidden">{t.themeToggle}</span>
-        </div>
-      </div>
-
-      {/* Settings Section */}
-      <div className="px-3 md:px-4 py-4">
-        <button
-          onClick={() => handleNavClick("/settings")}
-          className={`group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
-            isActive("/settings") ? "bg-white/20" : "text-white/70 hover:text-white"
-          }`}
-          title={t.settings}
-        >
-          <Settings className="h-5 w-5 md:h-6 md:w-6" />
-          <span className="ml-3 md:hidden">{t.settings}</span>
-        </button>
-      </div>
-    </div>
+    </nav>
   )
 }
