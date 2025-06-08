@@ -640,7 +640,7 @@ export default function MomentsPage() {
                         </div>
                         <div className="flex flex-col items-end">
                           <span className="text-[#00D4AA] text-sm font-medium">{user.change}</span>
-                          <button className="text-xs bg-[#00D4AA] text-white px-3 py-1 rounded-full hover:bg-[#00D4AA]/80 mt-1 transition-colors">
+                          <button className="text-xs bg-black text-white px-3 py-1 rounded-full hover:bg-gray-800 mt-1 transition-colors">
                             关注
                           </button>
                         </div>
@@ -703,7 +703,7 @@ export default function MomentsPage() {
                           {/* 收益率和跟单按钮 */}
                           <div className="flex flex-col items-end ml-2">
                             <span className="text-[#00D4AA] text-xs font-bold mb-1">{trader.return}</span>
-                            <button className="text-xs bg-[#00D4AA] text-white px-2 py-0.5 rounded hover:bg-[#00D4AA]/80 transition-colors">
+                            <button className="text-xs bg-black text-white px-2 py-0.5 rounded hover:bg-gray-800 transition-colors">
                               跟单
                             </button>
                           </div>
