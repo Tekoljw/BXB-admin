@@ -71,7 +71,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
 
   // 预加载所有路由以减少首次访问延迟
   useEffect(() => {
-    const routes = ['/dashboard', '/chat', '/moments', '/market', '/settings']
+    const routes = ['/dashboard', '/chat', '/moments', '/market', '/spot', '/settings']
     routes.forEach(route => {
       router.prefetch(route)
     })
@@ -163,6 +163,20 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
             >
               <TrendingUp className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.statistics}</span>
+            </button>
+          </li>
+
+          {/* 现货 */}
+          <li className="flex justify-center md:justify-center">
+            <button
+              onClick={() => handleNavClick("/spot")}
+              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
+                isActive("/spot") ? "bg-white/20" : "text-white/70 hover:text-white"
+              }`}
+              title={t.spot}
+            >
+              <Coins className="h-5 w-5 md:h-6 md:w-6" />
+              <span className="ml-3 md:hidden">{t.spot}</span>
             </button>
           </li>
 
