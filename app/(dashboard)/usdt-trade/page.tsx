@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import { Search, Star } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { debounce } from "@/lib/performance"
+import OptimizedButton from "@/components/optimized-button"
 
 // 验证图标组件
 const VerifiedIcon = () => (
@@ -116,17 +117,10 @@ export default function UsdtTradePage() {
     )
   }, [])
 
-  // Debounced search to improve performance
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setSearchTerm(value)
-    }, 300),
-    []
-  )
-
+  // Immediate search without debounce for better UX
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(e.target.value)
-  }, [debouncedSearch])
+    setSearchTerm(e.target.value)
+  }, [])
 
   const handleMainTabClick = useCallback((tab: string) => {
     setActiveMainTab(tab)
@@ -158,7 +152,7 @@ export default function UsdtTradePage() {
               <input
                 type="text"
                 placeholder="搜索商家名称"
-                defaultValue={searchTerm}
+                value={searchTerm}
                 onChange={handleSearchChange}
                 className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm transition-colors ${
                   isDark
@@ -172,19 +166,14 @@ export default function UsdtTradePage() {
           {/* 主要标签 */}
           <div className="flex space-x-2">
             {mainTabs.map((tab) => (
-              <button
+              <OptimizedButton
                 key={tab}
                 onClick={() => handleMainTabClick(tab)}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeMainTab === tab
-                    ? "bg-[#00D4AA] text-white"
-                    : isDark
-                      ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                      : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                }`}
+                variant={activeMainTab === tab ? "primary" : "secondary"}
+                size="sm"
               >
                 {tab}
-              </button>
+              </OptimizedButton>
             ))}
           </div>
         </div>
@@ -195,19 +184,15 @@ export default function UsdtTradePage() {
         {/* 次级标签 */}
         <div className="flex items-center space-x-1 mb-4 overflow-x-auto">
           {subTabs.map((tab) => (
-            <button
+            <OptimizedButton
               key={tab}
               onClick={() => handleSubTabClick(tab)}
-              className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap transition-colors ${
-                activeSubTab === tab
-                  ? "bg-[#00D4AA] text-white"
-                  : isDark
-                    ? "text-gray-400 hover:text-white hover:bg-gray-700"
-                    : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-              }`}
+              variant={activeSubTab === tab ? "primary" : "ghost"}
+              size="sm"
+              className="whitespace-nowrap"
             >
               {tab}
-            </button>
+            </OptimizedButton>
           ))}
         </div>
 
@@ -294,9 +279,13 @@ export default function UsdtTradePage() {
 
               {/* 交易按钮 */}
               <div className="flex items-center">
-                <button className="bg-[#00D4AA] hover:bg-[#00D4AA]/80 text-white px-4 py-1.5 rounded text-sm font-medium transition-colors">
+                <OptimizedButton
+                  onClick={() => {/* Handle trade action */}}
+                  variant="primary"
+                  size="sm"
+                >
                   {activeMainTab}
-                </button>
+                </OptimizedButton>
               </div>
             </div>
           ))}

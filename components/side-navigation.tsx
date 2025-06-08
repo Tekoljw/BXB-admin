@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
 import { useState, useRef, useEffect, useCallback } from "react"
 import ThemeToggle from "@/components/theme-toggle"
+import OptimizedButton from "@/components/optimized-button"
 
 interface SideNavigationProps {
   onCloseMobile?: () => void
