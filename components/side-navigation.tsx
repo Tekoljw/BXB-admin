@@ -2,6 +2,7 @@
 
 import {
   BarChart2,
+  BarChart3,
   Settings,
   MessageSquare,
   User,
@@ -37,6 +38,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
       moments: "Moments",
       statistics: "Market",
       spot: "Spot",
+      futures: "Futures",
       languageToggle: "Language",
       themeToggle: "Theme",
       notifications: "Notifications",
@@ -48,6 +50,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
       moments: "朋友圈",
       statistics: "行情",
       spot: "现货",
+      futures: "合约",
       languageToggle: "语言",
       themeToggle: "主题",
       notifications: "通知",
@@ -71,7 +74,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
 
   // 预加载所有路由以减少首次访问延迟
   useEffect(() => {
-    const routes = ['/chat', '/moments', '/market', '/spot', '/settings']
+    const routes = ['/chat', '/moments', '/market', '/spot', '/futures', '/settings']
     routes.forEach(route => {
       router.prefetch(route)
     })
@@ -177,6 +180,20 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
             >
               <Coins className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.spot}</span>
+            </button>
+          </li>
+
+          {/* 合约 */}
+          <li className="flex justify-center md:justify-center">
+            <button
+              onClick={() => handleNavClick("/futures")}
+              className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
+                isActive("/futures") ? "bg-white/20" : "text-white/70 hover:text-white"
+              }`}
+              title={t.futures}
+            >
+              <BarChart3 className="h-5 w-5 md:h-6 md:w-6" />
+              <span className="ml-3 md:hidden">{t.futures}</span>
             </button>
           </li>
 
