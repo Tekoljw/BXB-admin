@@ -64,6 +64,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen w-full bg-background text-foreground">
+      <NavigationLoader />
       <div className="h-full w-full">
         <div className="bg-card shadow-lg h-full">
           <div className="flex h-screen">
