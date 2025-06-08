@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { Search, Star } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
+import { debounce } from "@/lib/performance"
 
 // 验证图标组件
 const VerifiedIcon = () => (
@@ -107,20 +108,42 @@ export default function UsdtTradePage() {
   const mainTabs = ["买入", "卖出"]
   const subTabs = ["全部", "支付宝", "微信", "银行卡"]
 
-  const toggleFavorite = (user: string) => {
+  const toggleFavorite = useCallback((user: string) => {
     setFavorites(prev => 
       prev.includes(user) 
         ? prev.filter(fav => fav !== user)
         : [...prev, user]
     )
-  }
+  }, [])
 
-  const filteredAds = tradeAds.filter(ad => {
-    const matchesTab = activeMainTab === "买入" ? ad.type === "buy" : ad.type === "sell"
-    const matchesSearch = ad.user.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesPayment = activeSubTab === "全部" || ad.paymentMethods.includes(activeSubTab)
-    return matchesTab && matchesSearch && matchesPayment
-  })
+  // Debounced search to improve performance
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setSearchTerm(value)
+    }, 300),
+    []
+  )
+
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(e.target.value)
+  }, [debouncedSearch])
+
+  const handleMainTabClick = useCallback((tab: string) => {
+    setActiveMainTab(tab)
+  }, [])
+
+  const handleSubTabClick = useCallback((tab: string) => {
+    setActiveSubTab(tab)
+  }, [])
+
+  const filteredAds = useMemo(() => {
+    return tradeAds.filter(ad => {
+      const matchesTab = activeMainTab === "买入" ? ad.type === "buy" : ad.type === "sell"
+      const matchesSearch = ad.user.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesPayment = activeSubTab === "全部" || ad.paymentMethods.includes(activeSubTab)
+      return matchesTab && matchesSearch && matchesPayment
+    })
+  }, [activeMainTab, searchTerm, activeSubTab])
 
   const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
 

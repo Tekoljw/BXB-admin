@@ -17,7 +17,7 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import ThemeToggle from "@/components/theme-toggle"
 
 interface SideNavigationProps {
@@ -67,14 +67,14 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
     return pathname === path
   }
 
-  const handleNavClick = (path: string) => {
+  const handleNavClick = useCallback((path: string) => {
     // 立即更新UI，给用户快速响应感觉
     if (onCloseMobile) {
       onCloseMobile()
     }
     // 使用replace而不是push减少历史堆栈
     router.replace(path)
-  }
+  }, [onCloseMobile, router])
 
   // 预加载所有路由以减少首次访问延迟
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
     routes.forEach(route => {
       router.prefetch(route)
     })
-  }, [])
+  }, [router])
 
   // Close dropdowns when clicking outside
   useEffect(() => {
