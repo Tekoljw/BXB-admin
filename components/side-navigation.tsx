@@ -12,6 +12,7 @@ import {
 } from "lucide-react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
 import { useState, useRef, useEffect } from "react"
 import ThemeToggle from "@/components/theme-toggle"
@@ -22,6 +23,7 @@ interface SideNavigationProps {
 
 export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const { language, setLanguage, theme } = useTheme()
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false)
@@ -59,10 +61,21 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
   }
 
   const handleNavClick = (path: string) => {
+    // 立即更新UI，给用户快速响应感觉
     if (onCloseMobile) {
       onCloseMobile()
     }
+    // 使用replace而不是push减少历史堆栈
+    router.replace(path)
   }
+
+  // 预加载所有路由以减少首次访问延迟
+  useEffect(() => {
+    const routes = ['/chat', '/moments', '/market', '/spot', '/dashboard']
+    routes.forEach(route => {
+      router.prefetch(route)
+    })
+  }, [])
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -113,8 +126,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
         <ul className="space-y-2">
           {/* 聊天 */}
           <li className="flex justify-center md:justify-center">
-            <Link
-              href="/chat"
+            <button
               onClick={() => handleNavClick("/chat")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/chat") ? "bg-white/20" : "text-white/70 hover:text-white"
@@ -123,13 +135,12 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
             >
               <MessageSquare className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.chat}</span>
-            </Link>
+            </button>
           </li>
 
           {/* 朋友圈 */}
           <li className="flex justify-center md:justify-center">
-            <Link
-              href="/moments"
+            <button
               onClick={() => handleNavClick("/moments")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/moments") ? "bg-white/20" : "text-white/70 hover:text-white"
@@ -138,13 +149,12 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
             >
               <Globe className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.moments}</span>
-            </Link>
+            </button>
           </li>
 
           {/* 行情 */}
           <li className="flex justify-center md:justify-center">
-            <Link
-              href="/market"
+            <button
               onClick={() => handleNavClick("/market")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/market") ? "bg-white/20" : "text-white/70 hover:text-white"
@@ -153,13 +163,12 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
             >
               <TrendingUp className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.statistics}</span>
-            </Link>
+            </button>
           </li>
 
           {/* 现货 */}
           <li className="flex justify-center md:justify-center">
-            <Link
-              href="/spot"
+            <button
               onClick={() => handleNavClick("/spot")}
               className={`group relative flex items-center py-2 px-3 md:p-3 md:w-12 md:h-12 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/spot") ? "bg-white/20" : "text-white/70 hover:text-white"
@@ -168,7 +177,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
             >
               <Coins className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.spot}</span>
-            </Link>
+            </button>
           </li>
         </ul>
       </nav>
@@ -225,8 +234,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
 
       {/* Settings Section */}
       <div className="px-3 md:px-4 py-4">
-        <Link
-          href="/settings"
+        <button
           onClick={() => handleNavClick("/settings")}
           className={`group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
             isActive("/settings") ? "bg-white/20" : "text-white/70 hover:text-white"
@@ -235,7 +243,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
         >
           <Settings className="h-5 w-5 md:h-6 md:w-6" />
           <span className="ml-3 md:hidden">{t.settings}</span>
-        </Link>
+        </button>
       </div>
     </div>
   )

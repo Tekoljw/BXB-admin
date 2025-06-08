@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback, memo } from "react"
 import { useRouter } from "next/navigation"
 import SideNavigation from "@/components/side-navigation"
 import MobileSidebarToggle from "@/components/mobile-sidebar-toggle"
+import NavigationLoader from "@/components/navigation-loader"
 
 // 内存化侧边栏组件
 const MemoizedSideNavigation = memo(SideNavigation)
