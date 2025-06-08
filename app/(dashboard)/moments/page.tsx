@@ -266,7 +266,7 @@ export default function MomentsPage() {
                       {tab}
                       {/* 下划线动画 */}
                       <div
-                        className={`absolute bottom-0 left-0 h-0.5 bg-blue-500 transition-all duration-300 ease-out ${
+                        className={`absolute bottom-0 left-0 h-0.5 bg-green-500 transition-all duration-300 ease-out ${
                           activeMainTab === tab ? "w-full opacity-100" : "w-0 opacity-0"
                         }`}
                       />
@@ -288,9 +288,9 @@ export default function MomentsPage() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className={`pl-10 pr-4 py-2 w-64 rounded-lg border text-sm transition-colors ${
                       isDark
-                        ? "bg-[#1a1d29] border-[#252842] text-white placeholder-gray-400 focus:border-blue-500"
-                        : "bg-white border-gray-200 text-gray-800 placeholder-gray-500 focus:border-blue-500"
-                    } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                        ? "bg-[#1a1d29] border-[#252842] text-white placeholder-gray-400 focus:border-green-500"
+                        : "bg-white border-gray-200 text-gray-800 placeholder-gray-500 focus:border-green-500"
+                    } focus:outline-none focus:ring-2 focus:ring-green-500/20`}
                   />
                 </div>
               </div>
@@ -430,8 +430,8 @@ export default function MomentsPage() {
                             key={index} 
                             className={`px-3 py-1 text-sm font-medium rounded-full cursor-pointer transition-all duration-200 ${
                               isDark 
-                                ? "bg-blue-900/30 text-blue-300 hover:bg-blue-900/50" 
-                                : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                                ? "bg-green-900/30 text-green-300 hover:bg-green-900/50" 
+                                : "bg-green-50 text-green-600 hover:bg-green-100"
                             }`}
                           >
                             #{tag}
@@ -479,7 +479,7 @@ export default function MomentsPage() {
                           <span className="text-sm font-medium">{post.likes}</span>
                         </button>
 
-                        <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-gray-500 hover:text-blue-500 hover:bg-blue-50 transition-all duration-200">
+                        <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-gray-500 hover:text-green-500 hover:bg-green-50 transition-all duration-200">
                           <MessageCircle className="h-5 w-5" />
                           <span className="text-sm font-medium">{post.comments}</span>
                         </button>
@@ -504,28 +504,32 @@ export default function MomentsPage() {
           {/* 右侧边栏 - 推荐关注与交易员排行榜 */}
           <div className="col-span-3">
             <div className={`${cardStyle} rounded-lg sticky top-6 overflow-hidden`}>
-              {/* 页签导航 - 黑色方形小页签 */}
-              <div className="flex p-2 gap-1">
+              {/* 页签导航 */}
+              <div className="flex border-b border-gray-100 dark:border-gray-700">
                 <button
                   onClick={() => setRightSidebarTab("推荐关注")}
-                  className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
                     rightSidebarTab === "推荐关注"
-                      ? "bg-black text-white"
+                      ? isDark
+                        ? "bg-green-600 text-white border-b-2 border-green-400"
+                        : "bg-green-50 text-green-600 border-b-2 border-green-500"
                       : isDark
                         ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                   }`}
                 >
                   推荐关注
                 </button>
                 <button
                   onClick={() => setRightSidebarTab("交易员排行榜")}
-                  className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
                     rightSidebarTab === "交易员排行榜"
-                      ? "bg-black text-white"
+                      ? isDark
+                        ? "bg-green-600 text-white border-b-2 border-green-400"
+                        : "bg-green-50 text-green-600 border-b-2 border-green-500"
                       : isDark
                         ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                   }`}
                 >
                   交易员排行榜
@@ -555,7 +559,7 @@ export default function MomentsPage() {
                         </div>
                         <div className="flex flex-col items-end">
                           <span className="text-green-500 text-sm font-medium">{user.change}</span>
-                          <button className="text-xs bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-600 mt-1 transition-colors">
+                          <button className="text-xs bg-green-500 text-white px-3 py-1 rounded-full hover:bg-green-600 mt-1 transition-colors">
                             关注
                           </button>
                         </div>
@@ -565,15 +569,15 @@ export default function MomentsPage() {
                 ) : (
                   /* 交易员排行榜内容 */
                   <div>
-                    {/* 时间筛选器 - 黑色方形小页签 */}
-                    <div className="flex items-center space-x-1 mb-4 overflow-x-auto">
+                    {/* 时间筛选器 */}
+                    <div className="flex items-center space-x-2 mb-4 overflow-x-auto">
                       {["单日", "本周", "本月", "总收益", "胜率"].map((period) => (
                         <button
                           key={period}
                           onClick={() => setLeaderboardPeriod(period)}
-                          className={`px-3 py-1.5 text-xs font-medium rounded whitespace-nowrap transition-colors ${
+                          className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap transition-colors ${
                             leaderboardPeriod === period
-                              ? "bg-black text-white"
+                              ? "bg-green-500 text-white"
                               : isDark
                                 ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
                                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -618,7 +622,7 @@ export default function MomentsPage() {
                           {/* 收益率和跟单按钮 */}
                           <div className="flex flex-col items-end ml-2">
                             <span className="text-green-500 text-xs font-bold mb-1">{trader.return}</span>
-                            <button className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded hover:bg-blue-600 transition-colors">
+                            <button className="text-xs bg-green-500 text-white px-2 py-0.5 rounded hover:bg-green-600 transition-colors">
                               跟单
                             </button>
                           </div>
