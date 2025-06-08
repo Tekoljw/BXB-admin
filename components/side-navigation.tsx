@@ -81,13 +81,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
     return pathname === path
   }
 
-  // Debug: Log current pathname and clicks
-  useEffect(() => {
-    console.log("Current pathname:", pathname)
-  }, [pathname])
-
   const handleNavClick = (path: string) => {
-    console.log("Navigation clicked:", path)
     if (onCloseMobile) {
       onCloseMobile()
     }

@@ -12,22 +12,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [isLoading, setIsLoading] = useState(true)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
-  // Check if user is logged in
+  // Check if user is logged in - temporarily disabled for development
   useEffect(() => {
     const checkLoginStatus = () => {
       try {
-        // Check for login status
-        const sessionLogin = sessionStorage.getItem("isLoggedIn") === "true"
-        const cookieLogin = document.cookie.includes("isLoggedIn=true")
-
-        if (!sessionLogin && !cookieLogin) {
-          router.push("/login")
-        } else {
-          setIsLoading(false)
-        }
+        // Set login status for development
+        sessionStorage.setItem("isLoggedIn", "true")
+        document.cookie = "isLoggedIn=true; path=/"
+        setIsLoading(false)
       } catch (error) {
         console.error("Error checking login status:", error)
-        router.push("/login")
+        setIsLoading(false)
       }
     }
 
