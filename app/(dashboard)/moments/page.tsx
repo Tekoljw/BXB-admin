@@ -18,6 +18,7 @@ export default function MomentsPage() {
   const [scrollLeft, setScrollLeft] = useState(0)
   const [rightSidebarTab, setRightSidebarTab] = useState("推荐关注")
   const [leaderboardPeriod, setLeaderboardPeriod] = useState("单日")
+  const [leftSidebarTab, setLeftSidebarTab] = useState("热门话题")
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const isDark = theme === "dark"
 
@@ -62,6 +63,18 @@ export default function MomentsPage() {
     { tag: "Meme币", posts: "289", change: "+8.76%" },
     { tag: "GameFi", posts: "245", change: "+7.65%" },
     { tag: "Web3", posts: "198", change: "+6.43%" },
+  ]
+
+  // 圈子数据
+  const circles = [
+    { name: "量化交易圈", members: "2.3K", posts: "456", avatar: "📊", isJoined: true },
+    { name: "DeFi研究院", members: "1.8K", posts: "234", avatar: "🏛️", isJoined: false },
+    { name: "NFT收藏家", members: "1.5K", posts: "189", avatar: "🎨", isJoined: true },
+    { name: "区块链技术", members: "3.1K", posts: "567", avatar: "⛓️", isJoined: false },
+    { name: "Web3创业者", members: "987", posts: "123", avatar: "🚀", isJoined: true },
+    { name: "加密投资", members: "2.7K", posts: "345", avatar: "💰", isJoined: false },
+    { name: "Layer2生态", members: "1.2K", posts: "98", avatar: "🌐", isJoined: false },
+    { name: "Meme币社区", members: "856", posts: "67", avatar: "🐕", isJoined: true },
   ]
 
   // 推荐用户数据
@@ -218,28 +231,96 @@ export default function MomentsPage() {
       <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
         {/* 三栏布局 */}
         <div className="grid grid-cols-12 gap-6">
-          {/* 左侧边栏 - 热门话题 */}
+          {/* 左侧边栏 - 热门话题与圈子 */}
           <div className="col-span-3">
-            <div className={`${cardStyle} rounded-lg p-6 sticky top-6`}>
-              <h3 className={`${isDark ? "text-white" : "text-gray-800"} text-lg font-bold mb-4`}>热门话题</h3>
-              <div className="space-y-3">
-                {trendingTopics.map((topic, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between hover:bg-muted/50 p-2 rounded cursor-pointer"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <span className="text-lg">#</span>
-                      <div>
-                        <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium block`}>
-                          {topic.tag}
-                        </span>
-                        <span className="text-gray-400 text-xs">{topic.posts} 条动态</span>
+            <div className={`${cardStyle} rounded-lg sticky top-6 overflow-hidden`}>
+              {/* 页签导航 */}
+              <div className="flex border-b border-gray-100 dark:border-gray-700">
+                <button
+                  onClick={() => setLeftSidebarTab("热门话题")}
+                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                    leftSidebarTab === "热门话题"
+                      ? isDark
+                        ? "bg-[#00D4AA] text-white border-b-2 border-[#00D4AA]"
+                        : "bg-[#00D4AA]/10 text-[#00D4AA] border-b-2 border-[#00D4AA]"
+                      : isDark
+                        ? "text-gray-300 hover:text-white hover:bg-gray-700"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                  }`}
+                >
+                  热门话题
+                </button>
+                <button
+                  onClick={() => setLeftSidebarTab("圈子")}
+                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                    leftSidebarTab === "圈子"
+                      ? isDark
+                        ? "bg-[#00D4AA] text-white border-b-2 border-[#00D4AA]"
+                        : "bg-[#00D4AA]/10 text-[#00D4AA] border-b-2 border-[#00D4AA]"
+                      : isDark
+                        ? "text-gray-300 hover:text-white hover:bg-gray-700"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                  }`}
+                >
+                  圈子
+                </button>
+              </div>
+
+              {/* 内容区域 */}
+              <div className="p-6">
+                {leftSidebarTab === "热门话题" ? (
+                  /* 热门话题内容 */
+                  <div className="space-y-3">
+                    {trendingTopics.map((topic, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between hover:bg-muted/50 p-2 rounded cursor-pointer"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <span className="text-lg">#</span>
+                          <div>
+                            <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium block`}>
+                              {topic.tag}
+                            </span>
+                            <span className="text-gray-400 text-xs">{topic.posts} 条动态</span>
+                          </div>
+                        </div>
+                        <span className="text-[#00D4AA] text-sm font-medium">{topic.change}</span>
                       </div>
-                    </div>
-                    <span className="text-green-500 text-sm font-medium">{topic.change}</span>
+                    ))}
                   </div>
-                ))}
+                ) : (
+                  /* 圈子内容 */
+                  <div className="space-y-3">
+                    {circles.map((circle, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between hover:bg-muted/50 p-2 rounded cursor-pointer"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+                            {circle.avatar}
+                          </div>
+                          <div>
+                            <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium block`}>
+                              {circle.name}
+                            </span>
+                            <span className="text-gray-400 text-xs">{circle.members} 成员　{circle.posts} 条动态</span>
+                          </div>
+                        </div>
+                        <button 
+                          className={`text-xs px-3 py-1 rounded-full transition-colors ${
+                            circle.isJoined
+                              ? "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                              : "bg-[#00D4AA] text-white hover:bg-[#00D4AA]/80"
+                          }`}
+                        >
+                          {circle.isJoined ? "已加入" : "加入"}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
