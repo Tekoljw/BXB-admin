@@ -122,10 +122,12 @@ export default function UsdtTradePage() {
     return matchesTab && matchesSearch && matchesPayment
   })
 
+  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
+
   return (
     <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       {/* 搜索栏 */}
-      <div className={`p-4 rounded-lg mb-6 ${isDark ? "bg-card" : "bg-white"} shadow-sm`}>
+      <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4 flex-1">
             <div className="relative flex-1 max-w-md">
@@ -166,7 +168,7 @@ export default function UsdtTradePage() {
       </div>
 
       {/* 交易表格 */}
-      <div className={`p-4 rounded-lg ${isDark ? "bg-card" : "bg-white"} shadow-sm`}>
+      <div className={`${cardStyle} rounded-lg p-4`}>
         {/* 次级标签 */}
         <div className="flex items-center space-x-1 mb-4 overflow-x-auto">
           {subTabs.map((tab) => (
