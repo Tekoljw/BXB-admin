@@ -27,7 +27,7 @@ const OptimizedButton = memo(({
     }
   }, [onClick, disabled])
 
-  const baseStyles = 'font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-150'
+  const baseStyles = 'font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2 btn-optimized no-delay transform-optimized'
   
   const variantStyles = {
     primary: 'bg-[#00D4AA] hover:bg-[#00D4AA]/80 text-white focus:ring-[#00D4AA]',
