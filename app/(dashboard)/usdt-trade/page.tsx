@@ -13,6 +13,65 @@ const VerifiedIcon = () => (
   </div>
 )
 
+const tradeAdsData = [
+  {
+    id: 1,
+    user: "币友168",
+    verified: true,
+    rate: 98.5,
+    orderCount: "1,234",
+    price: "7.28",
+    available: "50,000.00",
+    min: "100",
+    max: "10,000",
+    paymentMethods: ["支付宝", "微信", "银行卡"],
+    responseTime: "1分钟内",
+    type: "buy"
+  },
+  {
+    id: 2,
+    user: "交易达人",
+    verified: true,
+    rate: 99.2,
+    orderCount: "856",
+    price: "7.29",
+    available: "25,000.00",
+    min: "50",
+    max: "5,000",
+    paymentMethods: ["支付宝", "微信"],
+    responseTime: "2分钟内",
+    type: "buy"
+  },
+  {
+    id: 3,
+    user: "稳定商家",
+    verified: true,
+    rate: 97.9,
+    orderCount: "2,134",
+    price: "7.26",
+    available: "100,000.00",
+    min: "500",
+    max: "50,000",
+    paymentMethods: ["支付宝", "微信", "银行卡"],
+    responseTime: "3分钟内",
+    type: "sell"
+  },
+  {
+    id: 4,
+    user: "安全第一",
+    verified: true,
+    rate: 98.7,
+    orderCount: "967",
+    price: "7.25",
+    available: "30,000.00",
+    min: "100",
+    max: "8,000",
+    paymentMethods: ["支付宝"],
+    responseTime: "1分钟内",
+    type: "sell"
+  }
+]
+
 export default function UsdtTradePage() {
   const { theme } = useTheme()
   const isDark = theme === "dark"
@@ -42,6 +101,15 @@ export default function UsdtTradePage() {
     setActiveSubTab(tab)
   }, [])
 
+  const filteredAds = useMemo(() => {
+    return tradeAdsData.filter(ad => {
+      const matchesTab = activeMainTab === "买入" ? ad.type === "buy" : ad.type === "sell"
+      const matchesSearch = ad.user.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesPayment = activeSubTab === "全部" || ad.paymentMethods.includes(activeSubTab)
+      return matchesTab && matchesSearch && matchesPayment
+    })
+  }, [activeMainTab, searchTerm, activeSubTab])
+
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -50,91 +118,8 @@ export default function UsdtTradePage() {
     return null
   }
 
-  const tradeAds = [
-    {
-      id: 1,
-      user: "币友168",
-      verified: true,
-      rate: 98.5,
-      orderCount: "1,234",
-      price: "7.28",
-      available: "50,000.00",
-      min: "100",
-      max: "10,000",
-      paymentMethods: ["支付宝", "微信", "银行卡"],
-      responseTime: "1分钟内",
-      type: "buy"
-    },
-    {
-      id: 2,
-      user: "交易达人",
-      verified: true,
-      rate: 99.2,
-      orderCount: "856",
-      price: "7.29",
-      available: "25,000.00",
-      min: "50",
-      max: "5,000",
-      paymentMethods: ["支付宝", "微信"],
-      responseTime: "2分钟内",
-      type: "buy"
-    },
-    {
-      id: 3,
-      user: "快速交易",
-      verified: false,
-      rate: 96.8,
-      orderCount: "432",
-      price: "7.27",
-      available: "75,000.00",
-      min: "200",
-      max: "15,000",
-      paymentMethods: ["银行卡"],
-      responseTime: "5分钟内",
-      type: "buy"
-    },
-    {
-      id: 4,
-      user: "稳定商家",
-      verified: true,
-      rate: 97.9,
-      orderCount: "2,134",
-      price: "7.26",
-      available: "100,000.00",
-      min: "500",
-      max: "50,000",
-      paymentMethods: ["支付宝", "微信", "银行卡"],
-      responseTime: "3分钟内",
-      type: "sell"
-    },
-    {
-      id: 5,
-      user: "安全第一",
-      verified: true,
-      rate: 98.7,
-      orderCount: "967",
-      price: "7.25",
-      available: "30,000.00",
-      min: "100",
-      max: "8,000",
-      paymentMethods: ["支付宝"],
-      responseTime: "1分钟内",
-      type: "sell"
-    }
-  ]
-
   const mainTabs = ["买入", "卖出"]
   const subTabs = ["全部", "支付宝", "微信", "银行卡"]
-
-  const filteredAds = useMemo(() => {
-    return tradeAds.filter(ad => {
-      const matchesTab = activeMainTab === "买入" ? ad.type === "buy" : ad.type === "sell"
-      const matchesSearch = ad.user.toLowerCase().includes(searchTerm.toLowerCase())
-      const matchesPayment = activeSubTab === "全部" || ad.paymentMethods.includes(activeSubTab)
-      return matchesTab && matchesSearch && matchesPayment
-    })
-  }, [activeMainTab, searchTerm, activeSubTab])
-
   const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
 
   return (
