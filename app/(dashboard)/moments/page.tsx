@@ -504,32 +504,28 @@ export default function MomentsPage() {
           {/* 右侧边栏 - 推荐关注与交易员排行榜 */}
           <div className="col-span-3">
             <div className={`${cardStyle} rounded-lg sticky top-6 overflow-hidden`}>
-              {/* 页签导航 */}
-              <div className="flex border-b border-gray-100 dark:border-gray-700">
+              {/* 页签导航 - 黑色方形小页签 */}
+              <div className="flex p-2 gap-1">
                 <button
                   onClick={() => setRightSidebarTab("推荐关注")}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
                     rightSidebarTab === "推荐关注"
-                      ? isDark
-                        ? "bg-blue-600 text-white border-b-2 border-blue-400"
-                        : "bg-blue-50 text-blue-600 border-b-2 border-blue-500"
+                      ? "bg-black text-white"
                       : isDark
                         ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                   }`}
                 >
                   推荐关注
                 </button>
                 <button
                   onClick={() => setRightSidebarTab("交易员排行榜")}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
                     rightSidebarTab === "交易员排行榜"
-                      ? isDark
-                        ? "bg-blue-600 text-white border-b-2 border-blue-400"
-                        : "bg-blue-50 text-blue-600 border-b-2 border-blue-500"
+                      ? "bg-black text-white"
                       : isDark
                         ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                   }`}
                 >
                   交易员排行榜
@@ -569,13 +565,13 @@ export default function MomentsPage() {
                 ) : (
                   /* 交易员排行榜内容 */
                   <div>
-                    {/* 时间筛选器 */}
-                    <div className="flex items-center space-x-2 mb-4 overflow-x-auto">
+                    {/* 时间筛选器 - 黑色方形小按钮 */}
+                    <div className="flex items-center space-x-1 mb-4 overflow-x-auto">
                       {["单日", "本周", "本月", "总收益", "胜率"].map((period) => (
                         <button
                           key={period}
                           onClick={() => setLeaderboardPeriod(period)}
-                          className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap transition-colors ${
+                          className={`px-2 py-1 text-xs font-medium rounded whitespace-nowrap transition-colors ${
                             leaderboardPeriod === period
                               ? "bg-blue-500 text-white"
                               : isDark
@@ -588,36 +584,41 @@ export default function MomentsPage() {
                       ))}
                     </div>
 
-                    {/* 排行榜列表 */}
-                    <div className="space-y-3">
+                    {/* 排行榜列表 - 优化排版 */}
+                    <div className="space-y-2">
                       {traderLeaderboard.map((trader) => (
                         <div
                           key={trader.rank}
-                          className="flex items-center justify-between p-3 hover:bg-muted/50 rounded-lg cursor-pointer transition-colors"
+                          className="flex items-center p-2 hover:bg-muted/30 rounded-lg cursor-pointer transition-colors"
                         >
-                          <div className="flex items-center space-x-3">
-                            <div className="w-6 h-6 flex items-center justify-center">
-                              <span className={`text-sm font-bold ${
-                                trader.rank <= 3 ? "text-yellow-500" : isDark ? "text-gray-300" : "text-gray-600"
-                              }`}>
-                                {trader.rank}
-                              </span>
+                          {/* 排名 */}
+                          <div className="w-5 flex items-center justify-center mr-2">
+                            <span className={`text-xs font-bold ${
+                              trader.rank <= 3 ? "text-yellow-500" : isDark ? "text-gray-400" : "text-gray-500"
+                            }`}>
+                              {trader.rank}
+                            </span>
+                          </div>
+                          
+                          {/* 头像 */}
+                          <div className={`w-8 h-8 rounded-full ${trader.color} flex items-center justify-center text-white font-bold text-xs mr-2`}>
+                            {trader.name.charAt(0)}
+                          </div>
+                          
+                          {/* 交易员信息 */}
+                          <div className="flex-1 min-w-0">
+                            <div className={`text-sm font-medium truncate ${isDark ? "text-white" : "text-gray-800"}`}>
+                              {trader.name}
                             </div>
-                            <div className={`w-10 h-10 rounded-full ${trader.color} flex items-center justify-center text-white font-bold text-sm`}>
-                              {trader.name.charAt(0)}
-                            </div>
-                            <div>
-                              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                                {trader.name}
-                              </div>
-                              <div className="text-xs text-gray-400">
-                                {trader.followers} 关注者　{trader.trades} 笔交易
-                              </div>
+                            <div className="text-xs text-gray-400 truncate">
+                              {trader.followers} 关注者　{trader.trades} 笔交易
                             </div>
                           </div>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-green-500 text-sm font-bold">{trader.return}</span>
-                            <button className="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
+                          
+                          {/* 收益率和跟单按钮 */}
+                          <div className="flex flex-col items-end ml-2">
+                            <span className="text-green-500 text-xs font-bold mb-1">{trader.return}</span>
+                            <button className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded hover:bg-blue-600 transition-colors">
                               跟单
                             </button>
                           </div>
