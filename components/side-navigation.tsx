@@ -3,13 +3,14 @@
 import {
   BarChart2,
   Settings,
-  MessageSquare,
+  MessageCircle,
   User,
   Bell,
-  TrendingUp,
-  TrendingDown,
+  LineChart,
   Coins,
-  Globe,
+  Zap,
+  Globe2,
+  Heart,
 } from "lucide-react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
@@ -136,7 +137,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
               }`}
               title={t.chat}
             >
-              <MessageSquare className="h-5 w-5 md:h-6 md:w-6" />
+              <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.chat}</span>
             </button>
           </li>
@@ -150,7 +151,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
               }`}
               title={t.moments}
             >
-              <Globe className="h-5 w-5 md:h-6 md:w-6" />
+              <Heart className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.moments}</span>
             </button>
           </li>
@@ -164,7 +165,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
               }`}
               title={t.statistics}
             >
-              <TrendingUp className="h-5 w-5 md:h-6 md:w-6" />
+              <LineChart className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.statistics}</span>
             </button>
           </li>
@@ -192,7 +193,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
               }`}
               title={t.futures}
             >
-              <TrendingDown className="h-5 w-5 md:h-6 md:w-6" />
+              <Zap className="h-5 w-5 md:h-6 md:w-6" />
               <span className="ml-3 md:hidden">{t.futures}</span>
             </button>
           </li>
@@ -209,7 +210,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
             className="group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white"
             title={t.languageToggle}
           >
-            <Globe className="h-5 w-5 md:h-6 md:w-6" />
+            <Globe2 className="h-5 w-5 md:h-6 md:w-6" />
             <span className="ml-3 md:hidden">{t.languageToggle}</span>
           </button>
 
