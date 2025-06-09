@@ -81,10 +81,12 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         <div className="h-12 flex items-center justify-center px-3 border-b border-gray-700">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105"
             title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
           >
-            <Menu size={20} />
+            <div className="transition-transform duration-200 hover:scale-110">
+              <Menu size={20} />
+            </div>
           </button>
         </div>
 
@@ -111,13 +113,15 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-3 rounded-lg hover:bg-gray-700 transition-colors ${
+                className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-3 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:scale-105 ${
                   isActive(item.path) ? "bg-gray-700" : ""
                 }`}
                 title={!isExpanded ? item.label : undefined}
               >
-                <Icon size={24} />
-                {isExpanded && <span className="ml-4 text-base font-medium">{item.label}</span>}
+                <div className="transition-transform duration-200 hover:scale-110">
+                  <Icon size={24} />
+                </div>
+                {isExpanded && <span className="ml-4 text-base font-medium transition-all duration-200">{item.label}</span>}
               </button>
             )
           })}
@@ -128,24 +132,30 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
           <div className={`${isExpanded ? 'h-16 flex items-center justify-center gap-4' : 'py-3 flex flex-col items-center gap-2'} px-3`}>
             <button 
               onClick={() => setLanguage(language === "zh" ? "en" : "zh")}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105"
               title={language === "zh" ? "Switch to English" : "切换到中文"}
             >
-              <Globe2 size={18} />
+              <div className="transition-transform duration-200 hover:scale-110">
+                <Globe2 size={18} />
+              </div>
             </button>
             <button 
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105"
               title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
             >
-              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              <div className="transition-transform duration-200 hover:scale-110">
+                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              </div>
             </button>
             <button 
               onClick={() => navigate("/settings")}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105"
               title="设置"
             >
-              <Settings size={18} />
+              <div className="transition-transform duration-200 hover:scale-110">
+                <Settings size={18} />
+              </div>
             </button>
           </div>
         </div>
