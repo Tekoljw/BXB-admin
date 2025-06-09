@@ -16,6 +16,8 @@ import {
   Globe2,
   Sun,
   Moon,
+  Menu,
+  User,
 } from "lucide-react"
 
 // Import all page components directly to avoid compilation delays
@@ -34,6 +36,7 @@ interface InstantNavigationProps {
 
 export default function InstantNavigation({ onCloseMobile }: InstantNavigationProps) {
   const [currentPage, setCurrentPage] = useState("/chat")
+  const [isExpanded, setIsExpanded] = useState(true)
   const pathname = usePathname()
   const { theme, setTheme, language, setLanguage } = useTheme()
 
@@ -73,13 +76,16 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       {/* Sidebar */}
-      <div className="w-64 bg-black text-white flex flex-col">
-        {/* Header */}
-        <div className="h-12 flex items-center justify-between px-3 border-b border-gray-700">
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs">U</div>
-            <span className="text-sm">用户</span>
-          </div>
+      <div className={`${isExpanded ? 'w-64' : 'w-16'} bg-black text-white flex flex-col transition-all duration-300`}>
+        {/* Header - Hamburger Menu */}
+        <div className="h-12 flex items-center justify-center px-3 border-b border-gray-700">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+            title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
+          >
+            <Menu size={20} />
+          </button>
         </div>
 
         {/* Navigation */}
@@ -90,39 +96,59 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`w-full flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors ${
+                className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-3 rounded-lg hover:bg-gray-700 transition-colors ${
                   isActive(item.path) ? "bg-gray-700" : ""
                 }`}
+                title={!isExpanded ? item.label : undefined}
               >
                 <Icon size={24} />
-                <span className="ml-4 text-base font-medium">{item.label}</span>
+                {isExpanded && <span className="ml-4 text-base font-medium">{item.label}</span>}
               </button>
             )
           })}
         </div>
 
-        {/* Footer */}
-        <div className="h-16 flex items-center justify-center gap-4 border-t border-gray-700 px-3">
-          <button 
-            onClick={() => setLanguage(language === "zh" ? "en" : "zh")}
-            className="p-3 hover:bg-gray-700 rounded-lg"
-            title={language === "zh" ? "Switch to English" : "切换到中文"}
-          >
-            <Globe2 size={20} />
-          </button>
-          <button 
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-3 hover:bg-gray-700 rounded-lg"
-            title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
-          >
-            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-          <button 
-            onClick={() => navigate("/settings")}
-            className="p-3 hover:bg-gray-700 rounded-lg"
-          >
-            <Settings size={20} />
-          </button>
+        {/* Footer - User Avatar and Controls */}
+        <div className="border-t border-gray-700">
+          {/* User Section */}
+          <div className={`${isExpanded ? 'px-4 py-3' : 'px-2 py-3'} border-b border-gray-700`}>
+            <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'}`}>
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                <User size={16} />
+              </div>
+              {isExpanded && (
+                <div>
+                  <div className="text-sm font-medium text-white">用户</div>
+                  <div className="text-xs text-gray-400">在线</div>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Controls */}
+          <div className={`h-16 flex items-center ${isExpanded ? 'justify-center gap-4' : 'flex-col gap-2'} px-3`}>
+            <button 
+              onClick={() => setLanguage(language === "zh" ? "en" : "zh")}
+              className="p-2 hover:bg-gray-700 rounded-lg"
+              title={language === "zh" ? "Switch to English" : "切换到中文"}
+            >
+              <Globe2 size={18} />
+            </button>
+            <button 
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 hover:bg-gray-700 rounded-lg"
+              title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <button 
+              onClick={() => navigate("/settings")}
+              className="p-2 hover:bg-gray-700 rounded-lg"
+              title="设置"
+            >
+              <Settings size={18} />
+            </button>
+          </div>
         </div>
       </div>
 
