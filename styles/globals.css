@@ -119,6 +119,19 @@ button, input[type="button"], input[type="submit"], [type="button"] {
   -webkit-perspective: 1000px;
 }
 
+/* Ensure sidebar maintains proper styling */
+#mobile-sidebar {
+  background-color: #374151 !important;
+}
+
+#mobile-sidebar .w-full.h-full.flex.flex-col {
+  background-color: #374151 !important;
+}
+
+.sidebar-container > div {
+  background-color: #374151 !important;
+}
+
 /* Disable transitions during resize */
 .resize-animation-stopper * {
   animation-duration: 0s !important;

@@ -95,7 +95,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               id="mobile-sidebar"
               className={`sidebar-container ${
                 mobileSidebarOpen ? "sidebar-open" : "sidebar-closed"
-              } fixed inset-y-0 left-0 z-30 w-64 bg-card border-r border-border md:relative md:translate-x-0 md:w-24`}
+              } fixed inset-y-0 left-0 z-30 w-64 md:relative md:translate-x-0 md:w-24`}
+              style={{
+                backgroundColor: '#374151',
+                borderRight: '1px solid rgb(55, 65, 81)'
+              }}
             >
               <MemoizedSideNavigation onCloseMobile={handleCloseMobile} />
             </div>
