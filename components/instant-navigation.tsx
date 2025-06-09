@@ -103,8 +103,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl border-r border-gray-700/50 relative overflow-hidden`}
         style={{
           width: isExpanded ? '256px' : '96px',
-          transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-          transform: isExpanded ? 'translateX(0)' : 'translateX(-8px)',
+          transition: 'all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
+          transform: isExpanded ? 'translateX(0) scale(1)' : 'translateX(-16px) scale(0.98)',
+          opacity: isExpanded ? 1 : 0.95,
         }}
       >
         {/* Background Overlay with Static Gradient */}
@@ -126,19 +127,17 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
         {/* User Section with Account Dropdown */}
         <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-2 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
-          <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'} transition-all duration-500`}>
-            <div className={`${isExpanded ? '' : 'flex justify-center w-full'}`}>
-              <AccountDropdown />
-            </div>
+          <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'} transition-all duration-500`}>
+            <AccountDropdown />
             <div 
               className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
               style={{
-                width: isExpanded ? '120px' : '0px',
+                width: isExpanded ? '140px' : '0px',
                 opacity: isExpanded ? 1 : 0,
               }}
             >
-              <div className="text-sm font-medium text-white whitespace-nowrap">John Doe</div>
-              <div className="text-xs text-gray-400 whitespace-nowrap">
+              <div className="text-sm font-medium text-white whitespace-nowrap text-center">John Doe</div>
+              <div className="text-xs text-gray-400 whitespace-nowrap text-center">
                 demo@example.com
               </div>
             </div>
@@ -177,8 +176,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                     <div className="absolute inset-1 border border-custom-green/0 group-hover:border-custom-green/30 transition-all duration-400 ease-in-out rounded-lg"></div>
                   )}
                   
-                  {/* Icon with Simple Animation */}
-                  <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
+                  {/* Icon with Simple Animation - Centered when collapsed */}
+                  <div className={`relative transition-all duration-300 ${isExpanded ? '' : 'w-full flex justify-center'} ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
                     <Icon size={26} />
                   </div>
                   
