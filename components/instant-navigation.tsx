@@ -85,13 +85,11 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         <div className="relative z-10 h-14 flex items-center justify-center px-3 border-b border-gray-700/50 backdrop-blur-sm">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-custom-green/20 group relative overflow-hidden"
+            className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative overflow-hidden"
             title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
           >
-            {/* Button Glow Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-custom-green/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
             <div className="relative transition-all duration-300 group-hover:rotate-180">
-              <Menu size={22} className="drop-shadow-sm" />
+              <Menu size={22} />
             </div>
           </button>
         </div>
@@ -100,12 +98,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-2 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
           <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'} transition-all duration-500`}>
             <div className="relative group">
-              <div className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-custom-green/30">
+              <div className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white font-bold text-sm transition-all duration-300 group-hover:scale-110">
                 <User size={18} />
               </div>
-              {/* Avatar Static Ring */}
-              <div className="absolute inset-0 rounded-full border-2 border-custom-green/30"></div>
-              <div className="absolute -inset-1 rounded-full border border-custom-green/20 opacity-50"></div>
             </div>
             {isExpanded && (
               <div className="ml-3">
@@ -130,8 +125,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   onClick={() => navigate(item.path)}
                   className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-4 rounded-xl transition-all duration-500 ease-in-out transform hover:scale-105 relative overflow-hidden ${
                     active 
-                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10 shadow-lg shadow-custom-green/20" 
-                      : "hover:bg-gray-700/20 hover:shadow-lg hover:shadow-custom-green/10"
+                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
+                      : "hover:bg-gray-700/20"
                   }`}
                   title={!isExpanded ? item.label : undefined}
                   style={{ 
@@ -147,15 +142,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   {/* Hover Border Effect */}
                   <div className="absolute inset-0 border-2 border-custom-green/0 group-hover:border-custom-green/50 transition-all duration-400 ease-in-out rounded-xl"></div>
                   
-                  {/* Icon with Enhanced Animation */}
-                  <div className={`relative transition-all duration-300 group-hover:scale-125 ${active ? 'text-custom-green drop-shadow-lg' : 'group-hover:text-custom-green'}`}>
-                    <Icon size={26} className="drop-shadow-sm" />
-                    {/* Icon Glow Effect */}
-                    {active && (
-                      <div className="absolute inset-0 animate-ping">
-                        <Icon size={26} className="text-custom-green/30" />
-                      </div>
-                    )}
+                  {/* Icon with Simple Animation */}
+                  <div className={`relative transition-all duration-300 group-hover:scale-125 ${active ? 'text-custom-green' : 'group-hover:text-custom-green'}`}>
+                    <Icon size={26} />
                   </div>
                   
                   {/* Label with Smooth Slide Animation */}
@@ -169,9 +158,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                     </div>
                   )}
                   
-                  {/* Active Indicator */}
-                  {active && (
-                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full shadow-lg"></div>
+                  {/* Active Indicator - Only show when expanded */}
+                  {active && isExpanded && (
+                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full"></div>
                   )}
                 </button>
                 
@@ -192,32 +181,29 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
           <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} px-3`}>
             <button 
               onClick={() => setLanguage(language === "zh" ? "en" : "zh")}
-              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/20 group relative overflow-hidden"
+              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
               title={language === "zh" ? "Switch to English" : "切换到中文"}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-custom-green/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
-              <div className="relative transition-all duration-300 group-hover:rotate-12 group-hover:text-blue-400">
-                <Globe2 size={20} className="drop-shadow-sm" />
+              <div className="transition-all duration-300 group-hover:rotate-12 group-hover:text-blue-400">
+                <Globe2 size={20} />
               </div>
             </button>
             <button 
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-yellow-500/20 group relative overflow-hidden"
+              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
               title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
-              <div className="relative transition-all duration-300 group-hover:rotate-180 group-hover:text-yellow-400">
-                {theme === "dark" ? <Sun size={20} className="drop-shadow-sm" /> : <Moon size={20} className="drop-shadow-sm" />}
+              <div className="transition-all duration-300 group-hover:rotate-180 group-hover:text-yellow-400">
+                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
               </div>
             </button>
             <button 
               onClick={() => navigate("/settings")}
-              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-gray-500/20 group relative overflow-hidden"
+              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
               title="设置"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-500/20 to-custom-green/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
-              <div className="relative transition-all duration-300 group-hover:rotate-90 group-hover:text-custom-green">
-                <Settings size={20} className="drop-shadow-sm" />
+              <div className="transition-all duration-300 group-hover:rotate-90 group-hover:text-custom-green">
+                <Settings size={20} />
               </div>
             </button>
           </div>
