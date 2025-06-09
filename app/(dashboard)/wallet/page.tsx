@@ -1,288 +1,220 @@
 "use client"
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { 
+  Wallet, 
+  CreditCard, 
+  TrendingUp, 
+  ArrowUpRight, 
+  ArrowDownLeft,
+  Eye,
+  EyeOff,
+  Plus,
+  Minus
+} from "lucide-react"
 import { useState } from "react"
-import { Wallet, ArrowDownLeft, ArrowUpRight, RefreshCw, Download } from "lucide-react"
-import WalletBalance from "@/components/wallet/wallet-balance"
-import AssetDistribution from "@/components/wallet/asset-distribution"
-import TransactionHistory from "@/components/wallet/transaction-history"
-import QuickActions from "@/components/wallet/quick-actions"
-import RecentActivity from "@/components/wallet/recent-activity"
 
 export default function WalletPage() {
-  const [activeTab, setActiveTab] = useState<"overview" | "deposit" | "withdraw" | "transfer">("overview")
+  const [balanceVisible, setBalanceVisible] = useState(true)
+
+  const walletData = {
+    totalBalance: "12,345.67",
+    availableBalance: "11,234.56",
+    frozenBalance: "1,111.11",
+    todayPnL: "+234.56",
+    totalPnL: "+1,234.56"
+  }
+
+  const recentTransactions = [
+    {
+      id: 1,
+      type: "deposit",
+      amount: "+500.00",
+      currency: "USDT",
+      time: "2024-01-15 14:30",
+      status: "completed"
+    },
+    {
+      id: 2,
+      type: "withdraw",
+      amount: "-200.00",
+      currency: "USDT",
+      time: "2024-01-15 10:15",
+      status: "pending"
+    },
+    {
+      id: 3,
+      type: "trade",
+      amount: "+45.67",
+      currency: "USDT",
+      time: "2024-01-14 16:45",
+      status: "completed"
+    }
+  ]
 
   return (
-    <div className="p-4">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-        <div className="flex items-center mb-4 md:mb-0">
-          <div className="bg-custom-green-50 rounded-full p-2 mr-3">
-            <Wallet className="h-6 w-6 text-custom-green" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">Wallet</h1>
-            <p className="text-gray-500 text-sm">Manage your crypto assets</p>
-          </div>
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="container mx-auto p-4 space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <Wallet className="h-6 w-6 text-[#00D4AA]" />
+            钱包
+          </h1>
+          <Button variant="outline" size="sm">
+            <Plus className="h-4 w-4 mr-2" />
+            充值
+          </Button>
         </div>
 
-        <div className="flex space-x-2">
-          <button className="px-4 py-2 bg-white border rounded-md text-sm font-medium flex items-center hover:bg-gray-50">
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </button>
-          <button className="px-4 py-2 bg-custom-green text-white rounded-md text-sm font-medium hover:bg-custom-green-600">
-            <RefreshCw className="h-4 w-4 inline-block mr-2" />
-            Refresh
-          </button>
+        {/* Balance Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-gradient-to-br from-[#00D4AA]/10 to-[#00D4AA]/5 border-[#00D4AA]/20">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">总资产</CardTitle>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setBalanceVisible(!balanceVisible)}
+                className="h-6 w-6 p-0"
+              >
+                {balanceVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-[#00D4AA]">
+                {balanceVisible ? `$${walletData.totalBalance}` : "****"}
+              </div>
+              <p className="text-xs text-muted-foreground">USDT</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">可用余额</CardTitle>
+              <CreditCard className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {balanceVisible ? `$${walletData.availableBalance}` : "****"}
+              </div>
+              <p className="text-xs text-muted-foreground">USDT</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">今日盈亏</CardTitle>
+              <TrendingUp className="h-4 w-4 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-500">
+                {balanceVisible ? walletData.todayPnL : "****"}
+              </div>
+              <p className="text-xs text-muted-foreground">+2.1%</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">总盈亏</CardTitle>
+              <TrendingUp className="h-4 w-4 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-500">
+                {balanceVisible ? walletData.totalPnL : "****"}
+              </div>
+              <p className="text-xs text-muted-foreground">+11.2%</p>
+            </CardContent>
+          </Card>
         </div>
-      </div>
 
-      <div className="mb-6">
-        <div className="flex overflow-x-auto pb-2 -mx-1">
-          <button
-            className={`px-4 py-2 mx-1 rounded-md text-sm font-medium whitespace-nowrap ${
-              activeTab === "overview" ? "bg-custom-green text-white" : "bg-white border text-gray-700 hover:bg-gray-50"
-            }`}
-            onClick={() => setActiveTab("overview")}
-          >
-            Overview
-          </button>
-          <button
-            className={`px-4 py-2 mx-1 rounded-md text-sm font-medium whitespace-nowrap flex items-center ${
-              activeTab === "deposit" ? "bg-custom-green text-white" : "bg-white border text-gray-700 hover:bg-gray-50"
-            }`}
-            onClick={() => setActiveTab("deposit")}
-          >
-            <ArrowDownLeft className="h-4 w-4 mr-1" />
-            Deposit
-          </button>
-          <button
-            className={`px-4 py-2 mx-1 rounded-md text-sm font-medium whitespace-nowrap flex items-center ${
-              activeTab === "withdraw" ? "bg-custom-green text-white" : "bg-white border text-gray-700 hover:bg-gray-50"
-            }`}
-            onClick={() => setActiveTab("withdraw")}
-          >
-            <ArrowUpRight className="h-4 w-4 mr-1" />
-            Withdraw
-          </button>
-          <button
-            className={`px-4 py-2 mx-1 rounded-md text-sm font-medium whitespace-nowrap ${
-              activeTab === "transfer" ? "bg-custom-green text-white" : "bg-white border text-gray-700 hover:bg-gray-50"
-            }`}
-            onClick={() => setActiveTab("transfer")}
-          >
-            Transfer
-          </button>
-        </div>
-      </div>
-
-      {activeTab === "overview" && (
-        <>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <div className="lg:col-span-2">
-              <WalletBalance />
+        {/* Quick Actions */}
+        <Card>
+          <CardHeader>
+            <CardTitle>快速操作</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Button className="bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white">
+                <Plus className="h-4 w-4 mr-2" />
+                充值
+              </Button>
+              <Button variant="outline">
+                <Minus className="h-4 w-4 mr-2" />
+                提现
+              </Button>
+              <Button variant="outline">
+                <ArrowUpRight className="h-4 w-4 mr-2" />
+                转账
+              </Button>
+              <Button variant="outline">
+                <TrendingUp className="h-4 w-4 mr-2" />
+                交易
+              </Button>
             </div>
-            <div>
-              <QuickActions />
-            </div>
-          </div>
+          </CardContent>
+        </Card>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <TransactionHistory />
-            </div>
-            <div className="space-y-6">
-              <AssetDistribution />
-              <RecentActivity />
-            </div>
-          </div>
-        </>
-      )}
-
-      {activeTab === "deposit" && (
-        <div className="bg-white rounded-lg border p-6">
-          <h2 className="text-lg font-bold mb-4">Deposit Funds</h2>
-          <p className="text-gray-500 mb-6">Select a cryptocurrency to generate a deposit address</p>
-
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Asset</label>
-            <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-custom-green focus:border-custom-green">
-              <option>Bitcoin (BTC)</option>
-              <option>Ethereum (ETH)</option>
-              <option>Litecoin (LTC)</option>
-              <option>Ripple (XRP)</option>
-              <option>Cardano (ADA)</option>
-            </select>
-          </div>
-
-          <div className="bg-gray-50 border rounded-md p-4 mb-6">
-            <div className="flex justify-center mb-4">
-              <div className="bg-white p-2 rounded-md border">
-                {/* QR Code placeholder */}
-                <div className="h-48 w-48 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500">QR Code</span>
+        {/* Recent Transactions */}
+        <Card>
+          <CardHeader>
+            <CardTitle>最近交易</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentTransactions.map((transaction) => (
+                <div
+                  key={transaction.id}
+                  className="flex items-center justify-between p-3 border rounded-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-full ${
+                      transaction.type === "deposit" 
+                        ? "bg-green-500/10 text-green-500" 
+                        : transaction.type === "withdraw"
+                        ? "bg-red-500/10 text-red-500"
+                        : "bg-blue-500/10 text-blue-500"
+                    }`}>
+                      {transaction.type === "deposit" ? (
+                        <ArrowDownLeft className="h-4 w-4" />
+                      ) : transaction.type === "withdraw" ? (
+                        <ArrowUpRight className="h-4 w-4" />
+                      ) : (
+                        <TrendingUp className="h-4 w-4" />
+                      )}
+                    </div>
+                    <div>
+                      <div className="font-medium">
+                        {transaction.type === "deposit" ? "充值" : 
+                         transaction.type === "withdraw" ? "提现" : "交易"}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {transaction.time}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className={`font-medium ${
+                      transaction.amount.startsWith("+") ? "text-green-500" : "text-red-500"
+                    }`}>
+                      {transaction.amount} {transaction.currency}
+                    </div>
+                    <div className={`text-xs ${
+                      transaction.status === "completed" 
+                        ? "text-green-500" 
+                        : "text-yellow-500"
+                    }`}>
+                      {transaction.status === "completed" ? "已完成" : "处理中"}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-
-            <div className="mb-4">
-              <label className="block text-xs text-gray-500 mb-1">Deposit Address</label>
-              <div className="flex">
-                <input
-                  type="text"
-                  value="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
-                  readOnly
-                  className="w-full border border-gray-300 rounded-l-md px-3 py-2 bg-white"
-                />
-                <button className="bg-custom-green text-white px-4 rounded-r-md hover:bg-custom-green-600">Copy</button>
-              </div>
-            </div>
-
-            <div className="text-sm text-gray-600">
-              <p className="font-medium mb-2">Important:</p>
-              <ul className="list-disc pl-5 space-y-1">
-                <li>Send only Bitcoin (BTC) to this deposit address</li>
-                <li>Ensure the network is Bitcoin (BTC)</li>
-                <li>Minimum deposit: 0.0001 BTC</li>
-                <li>Your deposit will be available after 2 network confirmations</li>
-              </ul>
-            </div>
-          </div>
-
-          <button className="w-full bg-custom-green text-white py-2 rounded-md font-medium hover:bg-custom-green-600">
-            I've Completed My Deposit
-          </button>
-        </div>
-      )}
-
-      {activeTab === "withdraw" && (
-        <div className="bg-white rounded-lg border p-6">
-          <h2 className="text-lg font-bold mb-4">Withdraw Funds</h2>
-          <p className="text-gray-500 mb-6">Complete the form below to withdraw your crypto</p>
-
-          <div className="space-y-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Select Asset</label>
-              <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-custom-green focus:border-custom-green">
-                <option>Bitcoin (BTC)</option>
-                <option>Ethereum (ETH)</option>
-                <option>Litecoin (LTC)</option>
-                <option>Ripple (XRP)</option>
-                <option>Cardano (ADA)</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Recipient Address</label>
-              <input
-                type="text"
-                placeholder="Enter recipient's wallet address"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-custom-green focus:border-custom-green"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Network</label>
-              <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-custom-green focus:border-custom-green">
-                <option>Bitcoin (BTC)</option>
-                <option>Bitcoin Cash (BCH)</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
-              <div className="flex">
-                <input
-                  type="number"
-                  placeholder="0.00"
-                  className="w-full border border-gray-300 rounded-l-md px-3 py-2 focus:outline-none focus:ring-custom-green focus:border-custom-green"
-                />
-                <button className="bg-gray-100 text-gray-700 px-4 rounded-r-md border-t border-r border-b border-gray-300">
-                  MAX
-                </button>
-              </div>
-              <div className="flex justify-between mt-1">
-                <span className="text-xs text-gray-500">Available: 0.5473 BTC</span>
-                <span className="text-xs text-gray-500">≈ $21,892.00</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-gray-50 border rounded-md p-4 mb-6">
-            <div className="flex justify-between mb-2">
-              <span className="text-sm text-gray-600">Network Fee</span>
-              <span className="text-sm font-medium">0.0005 BTC</span>
-            </div>
-            <div className="flex justify-between mb-2">
-              <span className="text-sm text-gray-600">You Will Receive</span>
-              <span className="text-sm font-medium">0.0995 BTC</span>
-            </div>
-          </div>
-
-          <button className="w-full bg-custom-green text-white py-2 rounded-md font-medium hover:bg-custom-green-600">
-            Withdraw Now
-          </button>
-        </div>
-      )}
-
-      {activeTab === "transfer" && (
-        <div className="bg-white rounded-lg border p-6">
-          <h2 className="text-lg font-bold mb-4">Transfer Funds</h2>
-          <p className="text-gray-500 mb-6">Transfer crypto between your accounts</p>
-
-          <div className="space-y-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
-              <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-custom-green focus:border-custom-green">
-                <option>Spot Wallet</option>
-                <option>Trading Account</option>
-                <option>Savings Account</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
-              <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-custom-green focus:border-custom-green">
-                <option>Trading Account</option>
-                <option>Spot Wallet</option>
-                <option>Savings Account</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Asset</label>
-              <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-custom-green focus:border-custom-green">
-                <option>Bitcoin (BTC)</option>
-                <option>Ethereum (ETH)</option>
-                <option>Litecoin (LTC)</option>
-                <option>Ripple (XRP)</option>
-                <option>Cardano (ADA)</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
-              <div className="flex">
-                <input
-                  type="number"
-                  placeholder="0.00"
-                  className="w-full border border-gray-300 rounded-l-md px-3 py-2 focus:outline-none focus:ring-custom-green focus:border-custom-green"
-                />
-                <button className="bg-gray-100 text-gray-700 px-4 rounded-r-md border-t border-r border-b border-gray-300">
-                  MAX
-                </button>
-              </div>
-              <div className="flex justify-between mt-1">
-                <span className="text-xs text-gray-500">Available: 0.5473 BTC</span>
-                <span className="text-xs text-gray-500">≈ $21,892.00</span>
-              </div>
-            </div>
-          </div>
-
-          <button className="w-full bg-custom-green text-white py-2 rounded-md font-medium hover:bg-custom-green-600">
-            Transfer Now
-          </button>
-        </div>
-      )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
