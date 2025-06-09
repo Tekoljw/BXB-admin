@@ -281,11 +281,6 @@ export default function USDTTradePage() {
 
   return (
     <div className={`min-h-screen p-4 ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
-      {/* 页面头部 */}
-      <div className="mb-6">
-        <h1 className={`text-3xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>USDT买卖</h1>
-        <p className="text-gray-400">安全便捷的USDT场外交易平台</p>
-      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* 左侧 - 交易筛选 */}
