@@ -156,10 +156,10 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <div key={item.path} className="relative group">
                 <button
                   onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} rounded-xl transition-all duration-500 ease-in-out transform hover:scale-105 relative overflow-hidden ${
+                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
                     active 
                       ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
-                      : "hover:bg-gray-700/20"
+                      : "hover:scale-105 hover:bg-gray-700/20"
                   }`}
                   style={{ 
                     padding: 'clamp(0.5rem, 1.5vh, 1rem) 1rem',
@@ -173,11 +173,13 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                     <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl"></div>
                   )}
                   
-                  {/* Hover Border Effect */}
-                  <div className="absolute inset-1 border border-custom-green/0 group-hover:border-custom-green/30 transition-all duration-400 ease-in-out rounded-lg"></div>
+                  {/* Hover Border Effect - Only for non-active items */}
+                  {!active && (
+                    <div className="absolute inset-1 border border-custom-green/0 group-hover:border-custom-green/30 transition-all duration-400 ease-in-out rounded-lg"></div>
+                  )}
                   
                   {/* Icon with Simple Animation */}
-                  <div className={`relative transition-all duration-300 group-hover:scale-110 ${active ? 'text-custom-green' : 'group-hover:text-custom-green'}`}>
+                  <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
                     <Icon size={26} />
                   </div>
                   
