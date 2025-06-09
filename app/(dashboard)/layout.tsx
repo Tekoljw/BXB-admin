@@ -68,11 +68,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="h-full w-full">
         <div className="bg-card shadow-lg h-full">
           <div className="flex min-h-screen">
-            {/* Mobile Sidebar Toggle - 只在移动端显示 */}
-            <div className="md:hidden fixed top-4 left-4 z-40">
+            {/* Mobile Top Navigation Bar */}
+            <div className="md:hidden fixed top-0 left-0 right-0 bg-background border-b border-border p-3 flex items-center justify-between z-30 min-h-[56px]">
               <div id="mobile-sidebar-toggle">
                 <MemoizedMobileSidebarToggle onToggle={handleToggleMobile} isOpen={mobileSidebarOpen} />
               </div>
+              <h1 className="text-lg font-semibold text-[#00D4AA]">BeDAO</h1>
+              <div className="w-8"></div> {/* 占位符保持居中 */}
             </div>
 
             {/* Mobile Sidebar Overlay */}
@@ -89,7 +91,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 overflow-auto w-full">
+            <div className="flex-1 overflow-auto w-full pt-14 md:pt-0">
               {children}
             </div>
           </div>
