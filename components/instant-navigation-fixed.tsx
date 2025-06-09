@@ -110,14 +110,14 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-gray-700/5 opacity-50"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent"></div>
         
-        {/* Header - Hamburger Menu with Glow Effect */}
+        {/* Header - Hamburger Menu */}
         <div className="relative z-10 h-14 flex items-center justify-center px-3 border-b border-gray-700/50 backdrop-blur-sm">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative overflow-hidden"
+            className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-105 group relative overflow-hidden"
             title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
           >
-            <div className="relative transition-all duration-300 group-hover:rotate-180">
+            <div className={`relative transition-all duration-500 ${isExpanded ? 'rotate-90' : 'rotate-0'}`}>
               <Menu size={22} />
             </div>
           </button>
@@ -171,8 +171,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   )}
                   
                   {/* Icon with Simple Animation - Centered when collapsed */}
-                  <div className={`relative transition-all duration-300 ${isExpanded ? '' : 'w-full flex justify-center'} ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
-                    <Icon size={26} />
+                  <div className={`relative transition-all duration-300 ${isExpanded ? '' : 'w-full flex justify-center'} ${active ? 'text-custom-green' : 'group-hover:scale-105 group-hover:text-custom-green'}`}>
+                    <Icon size={24} />
                   </div>
                   
                   {/* Label with Smooth Slide Animation */}
