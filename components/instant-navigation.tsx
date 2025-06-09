@@ -129,18 +129,20 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-2 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
           <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'} transition-all duration-500`}>
             <AccountDropdown />
-            <div 
-              className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
-              style={{
-                width: isExpanded ? '140px' : '0px',
-                opacity: isExpanded ? 1 : 0,
-              }}
-            >
-              <div className="text-sm font-medium text-white whitespace-nowrap text-center">John Doe</div>
-              <div className="text-xs text-gray-400 whitespace-nowrap text-center">
-                demo@example.com
+            {isExpanded && (
+              <div 
+                className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
+                style={{
+                  width: '140px',
+                  opacity: 1,
+                }}
+              >
+                <div className="text-sm font-medium text-white whitespace-nowrap text-center">John Doe</div>
+                <div className="text-xs text-gray-400 whitespace-nowrap text-center">
+                  demo@example.com
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -217,8 +219,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
         {/* Footer with Enhanced Controls */}
         <div className="relative z-10 border-t border-gray-700/50 backdrop-blur-sm">
-          <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} px-3 transition-all duration-500`}>
-            <div className={`relative ${isExpanded ? '' : 'flex justify-center w-full'}`}>
+          <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} transition-all duration-500`}>
+            <div className="relative flex justify-center w-full">
               <button 
                 onClick={(e) => {
                   e.stopPropagation()
@@ -261,7 +263,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </div>
               )}
             </div>
-            <div className={`${isExpanded ? '' : 'flex justify-center w-full'}`}>
+            <div className="flex justify-center w-full">
               <button 
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                 className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
@@ -272,7 +274,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </div>
               </button>
             </div>
-            <div className={`${isExpanded ? '' : 'flex justify-center w-full'}`}>
+            <div className="flex justify-center w-full">
               <button 
                 onClick={() => navigate("/settings")}
                 className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
