@@ -76,10 +76,10 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       {/* Sidebar */}
-      <div className={`${isExpanded ? 'w-64' : 'w-24'} ${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col transition-all duration-500 ease-in-out shadow-2xl border-r border-gray-700/50 relative overflow-hidden`}>
-        {/* Background Overlay with Animated Gradient */}
+      <div className={`${isExpanded ? 'w-64' : 'w-24'} ${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col transition-all duration-700 ease-in-out shadow-2xl border-r border-gray-700/50 relative overflow-hidden`}>
+        {/* Background Overlay with Static Gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-gray-700/5 opacity-50"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent animate-pulse"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent"></div>
         
         {/* Header - Hamburger Menu with Glow Effect */}
         <div className="relative z-10 h-14 flex items-center justify-center px-3 border-b border-gray-700/50 backdrop-blur-sm">
@@ -103,19 +103,21 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <div className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-custom-green/30">
                 <User size={18} />
               </div>
-              {/* Avatar Pulse Ring */}
-              <div className="absolute inset-0 rounded-full border-2 border-custom-green/30 animate-pulse"></div>
-              <div className="absolute -inset-1 rounded-full border border-custom-green/20 animate-ping opacity-75"></div>
+              {/* Avatar Static Ring */}
+              <div className="absolute inset-0 rounded-full border-2 border-custom-green/30"></div>
+              <div className="absolute -inset-1 rounded-full border border-custom-green/20 opacity-50"></div>
             </div>
-            {isExpanded && (
-              <div className="transition-all duration-500 transform">
+            <div className={`overflow-hidden transition-all duration-700 ease-in-out ${
+              isExpanded ? 'opacity-100 w-32' : 'opacity-0 w-0'
+            }`}>
+              <div className="whitespace-nowrap">
                 <div className="text-sm font-medium text-white">用户</div>
                 <div className="text-xs text-gray-400 flex items-center">
-                  <div className="w-2 h-2 bg-custom-green rounded-full mr-2 animate-pulse"></div>
+                  <div className="w-2 h-2 bg-custom-green rounded-full mr-2"></div>
                   在线
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
 
@@ -141,11 +143,11 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 >
                   {/* Active Item Background Glow */}
                   {active && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl animate-pulse"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl"></div>
                   )}
                   
-                  {/* Hover Ripple Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-custom-green/5 to-gray-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                  {/* Hover Ripple Effect with Fade */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-custom-green/5 to-gray-600/5 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out rounded-xl"></div>
                   
                   {/* Icon with Enhanced Animation */}
                   <div className={`relative transition-all duration-300 group-hover:scale-125 ${active ? 'text-custom-green drop-shadow-lg' : 'group-hover:text-custom-green'}`}>
@@ -158,18 +160,20 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                     )}
                   </div>
                   
-                  {/* Label with Slide Animation */}
-                  {isExpanded && (
-                    <span className={`ml-4 text-base font-medium transition-all duration-300 ${
+                  {/* Label with Smooth Slide Animation */}
+                  <div className={`ml-4 overflow-hidden transition-all duration-700 ease-in-out ${
+                    isExpanded ? 'opacity-100 w-32' : 'opacity-0 w-0'
+                  }`}>
+                    <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
                       active ? 'text-white font-semibold' : 'group-hover:text-custom-green'
                     }`}>
                       {item.label}
                     </span>
-                  )}
+                  </div>
                   
                   {/* Active Indicator */}
                   {active && (
-                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full shadow-lg animate-pulse"></div>
+                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full shadow-lg"></div>
                   )}
                 </button>
                 
