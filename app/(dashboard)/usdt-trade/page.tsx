@@ -285,7 +285,6 @@ export default function USDTTradePage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* 左侧 - 交易筛选 */}
         <div className={`${cardStyle} rounded-lg p-6`}>
-          <h3 className={`text-lg font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>交易筛选</h3>
           
           {/* 买入/卖出切换 */}
           <div className="mb-6">
@@ -308,6 +307,26 @@ export default function USDTTradePage() {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* 币种筛选 */}
+          <div className="mb-6">
+            <label className={`text-sm font-medium mb-2 block ${isDark ? "text-white" : "text-gray-800"}`}>
+              法币类型
+            </label>
+            <select 
+              className={`w-full px-3 py-2 text-sm border rounded-md ${
+                isDark 
+                  ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                  : "bg-white border-gray-300 text-gray-800"
+              } focus:outline-none focus:ring-1 focus:ring-blue-500`}
+            >
+              <option value="CNY">CNY (人民币)</option>
+              <option value="USD">USD (美元)</option>
+              <option value="EUR">EUR (欧元)</option>
+              <option value="KRW">KRW (韩元)</option>
+              <option value="JPY">JPY (日元)</option>
+            </select>
           </div>
 
           {/* 金额输入 */}
