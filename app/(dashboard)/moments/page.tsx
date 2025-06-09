@@ -238,28 +238,24 @@ export default function MomentsPage() {
               <div className="flex border-b border-gray-100 dark:border-gray-700">
                 <button
                   onClick={() => setLeftSidebarTab("热门话题")}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                  className={`flex-1 py-3 px-4 text-sm transition-colors ${
                     leftSidebarTab === "热门话题"
-                      ? isDark
-                        ? "bg-[#00D4AA] text-white border-b-2 border-[#00D4AA]"
-                        : "bg-[#00D4AA]/10 text-[#00D4AA] border-b-2 border-[#00D4AA]"
+                      ? "text-black font-bold border-b-2 border-black bg-transparent"
                       : isDark
-                        ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                        ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
                   }`}
                 >
                   热门话题
                 </button>
                 <button
                   onClick={() => setLeftSidebarTab("圈子")}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                  className={`flex-1 py-3 px-4 text-sm transition-colors ${
                     leftSidebarTab === "圈子"
-                      ? isDark
-                        ? "bg-[#00D4AA] text-white border-b-2 border-[#00D4AA]"
-                        : "bg-[#00D4AA]/10 text-[#00D4AA] border-b-2 border-[#00D4AA]"
+                      ? "text-black font-bold border-b-2 border-black bg-transparent"
                       : isDark
-                        ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                        ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
                   }`}
                 >
                   圈子
@@ -600,28 +596,24 @@ export default function MomentsPage() {
               <div className="flex border-b border-gray-100 dark:border-gray-700">
                 <button
                   onClick={() => setRightSidebarTab("推荐关注")}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                  className={`flex-1 py-3 px-4 text-sm transition-colors ${
                     rightSidebarTab === "推荐关注"
-                      ? isDark
-                        ? "bg-[#00D4AA] text-white border-b-2 border-[#00D4AA]"
-                        : "bg-[#00D4AA]/10 text-[#00D4AA] border-b-2 border-[#00D4AA]"
+                      ? "text-black font-bold border-b-2 border-black bg-transparent"
                       : isDark
-                        ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                        ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
                   }`}
                 >
                   推荐关注
                 </button>
                 <button
                   onClick={() => setRightSidebarTab("交易员排行榜")}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                  className={`flex-1 py-3 px-4 text-sm transition-colors ${
                     rightSidebarTab === "交易员排行榜"
-                      ? isDark
-                        ? "bg-[#00D4AA] text-white border-b-2 border-[#00D4AA]"
-                        : "bg-[#00D4AA]/10 text-[#00D4AA] border-b-2 border-[#00D4AA]"
+                      ? "text-black font-bold border-b-2 border-black bg-transparent"
                       : isDark
-                        ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                        ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
                   }`}
                 >
                   交易员排行榜
