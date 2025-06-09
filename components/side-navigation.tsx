@@ -193,6 +193,20 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
             </button>
           </li>
 
+          {/* 商城 */}
+          <li className="flex justify-center md:justify-center">
+            <button
+              onClick={() => handleNavClick("/mall")}
+              className={`group relative flex items-center py-2 px-3 ${isExpanded ? 'md:w-full md:justify-start md:px-4' : 'md:p-3 md:w-12 md:h-12 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+                isActive("/mall") ? "bg-white/20" : "text-white/70 hover:text-white"
+              }`}
+              title={!isExpanded ? "商城" : undefined}
+            >
+              <ShoppingBag className="h-5 w-5 md:h-6 md:w-6" />
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>商城</span>
+            </button>
+          </li>
+
           {/* USDT买卖 */}
           <li className="flex justify-center md:justify-center">
             <button
@@ -263,19 +277,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
             </button>
           </li>
 
-          {/* 商城 */}
-          <li className="flex justify-center md:justify-center">
-            <button
-              onClick={() => handleNavClick("/mall")}
-              className={`group relative flex items-center py-2 px-3 ${isExpanded ? 'md:w-full md:justify-start md:px-4' : 'md:p-3 md:w-12 md:h-12 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
-                isActive("/mall") ? "bg-white/20" : "text-white/70 hover:text-white"
-              }`}
-              title={!isExpanded ? "商城" : undefined}
-            >
-              <ShoppingBag className="h-5 w-5 md:h-6 md:w-6" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>商城</span>
-            </button>
-          </li>
+
 
 
         </ul>
