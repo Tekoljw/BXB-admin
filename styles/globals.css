@@ -165,13 +165,30 @@ button, input[type="button"], input[type="submit"], [type="button"] {
 
 /* Ensure sidebar content fits screen height without scrolling */
 #mobile-sidebar {
-  max-height: 100vh;
+  max-height: 100vh !important;
+  height: 100vh !important;
   overflow: hidden !important;
 }
 
 #mobile-sidebar .w-full.h-screen.flex.flex-col {
   height: 100vh !important;
+  max-height: 100vh !important;
   overflow: hidden !important;
+}
+
+/* Force navigation container to fit within remaining space */
+#mobile-sidebar nav {
+  flex: 1 !important;
+  overflow: hidden !important;
+  max-height: calc(100vh - 200px) !important;
+}
+
+#mobile-sidebar nav ul {
+  height: 100% !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
 }
 
 /* Disable transitions during resize */

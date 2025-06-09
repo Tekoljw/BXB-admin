@@ -163,19 +163,19 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
         </div>
       </div>
 
-      <nav className="py-2 flex-1 overflow-hidden">
-        <ul className="space-y-1 h-full flex flex-col justify-start">
+      <nav className="py-1 flex-1 overflow-hidden" style={{maxHeight: 'calc(100vh - 180px)'}}>
+        <ul className="space-y-0.5 h-full flex flex-col justify-start overflow-hidden">
           {/* 聊天 */}
           <li className="flex justify-center md:justify-center">
             <button
               onClick={() => handleNavClick("/chat")}
-              className={`group relative flex items-center py-1.5 px-3 ${isExpanded ? 'md:w-full md:justify-start md:px-4' : 'md:p-2.5 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+              className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-9 md:h-9 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/chat") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
               title={!isExpanded ? t.chat : undefined}
             >
-              <MessageCircle className="h-4 w-4 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.chat}</span>
+              <MessageCircle className="h-4 w-4 md:h-4 md:w-4" />
+              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.chat}</span>
             </button>
           </li>
 
@@ -183,13 +183,13 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
           <li className="flex justify-center md:justify-center">
             <button
               onClick={() => handleNavClick("/moments")}
-              className={`group relative flex items-center py-1.5 px-3 ${isExpanded ? 'md:w-full md:justify-start md:px-4' : 'md:p-2.5 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+              className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-9 md:h-9 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/moments") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
               title={!isExpanded ? t.moments : undefined}
             >
-              <Users className="h-4 w-4 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.moments}</span>
+              <Users className="h-4 w-4 md:h-4 md:w-4" />
+              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.moments}</span>
             </button>
           </li>
 
@@ -197,13 +197,13 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
           <li className="flex justify-center md:justify-center">
             <button
               onClick={() => handleNavClick("/mall")}
-              className={`group relative flex items-center py-1.5 px-3 ${isExpanded ? 'md:w-full md:justify-start md:px-4' : 'md:p-2.5 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+              className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-9 md:h-9 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/mall") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
               title={!isExpanded ? "商城" : undefined}
             >
-              <ShoppingBag className="h-4 w-4 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>商城</span>
+              <ShoppingBag className="h-4 w-4 md:h-4 md:w-4" />
+              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>商城</span>
             </button>
           </li>
 
@@ -211,13 +211,13 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
           <li className="flex justify-center md:justify-center">
             <button
               onClick={() => handleNavClick("/usdt-trade")}
-              className={`group relative flex items-center py-1.5 px-3 ${isExpanded ? 'md:w-full md:justify-start md:px-4' : 'md:p-2.5 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+              className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-9 md:h-9 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/usdt-trade") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
               title={!isExpanded ? t.usdtTrade : undefined}
             >
-              <DollarSign className="h-4 w-4 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.usdtTrade}</span>
+              <DollarSign className="h-4 w-4 md:h-4 md:w-4" />
+              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.usdtTrade}</span>
             </button>
           </li>
 
@@ -225,13 +225,13 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
           <li className="flex justify-center md:justify-center">
             <button
               onClick={() => handleNavClick("/market")}
-              className={`group relative flex items-center py-1.5 px-3 ${isExpanded ? 'md:w-full md:justify-start md:px-4' : 'md:p-2.5 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+              className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-9 md:h-9 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/market") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
               title={!isExpanded ? t.statistics : undefined}
             >
-              <LineChart className="h-4 w-4 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.statistics}</span>
+              <LineChart className="h-4 w-4 md:h-4 md:w-4" />
+              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.statistics}</span>
             </button>
           </li>
 
@@ -239,13 +239,13 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
           <li className="flex justify-center md:justify-center">
             <button
               onClick={() => handleNavClick("/spot")}
-              className={`group relative flex items-center py-1.5 px-3 ${isExpanded ? 'md:w-full md:justify-start md:px-4' : 'md:p-2.5 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+              className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-9 md:h-9 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/spot") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
               title={!isExpanded ? t.spot : undefined}
             >
-              <ArrowLeftRight className="h-4 w-4 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.spot}</span>
+              <ArrowLeftRight className="h-4 w-4 md:h-4 md:w-4" />
+              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.spot}</span>
             </button>
           </li>
 
@@ -253,13 +253,13 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
           <li className="flex justify-center md:justify-center">
             <button
               onClick={() => handleNavClick("/futures")}
-              className={`group relative flex items-center py-1.5 px-3 ${isExpanded ? 'md:w-full md:justify-start md:px-4' : 'md:p-2.5 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+              className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-9 md:h-9 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/futures") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
               title={!isExpanded ? t.futures : undefined}
             >
-              <FileText className="h-4 w-4 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.futures}</span>
+              <FileText className="h-4 w-4 md:h-4 md:w-4" />
+              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.futures}</span>
             </button>
           </li>
 
@@ -267,13 +267,13 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
           <li className="flex justify-center md:justify-center">
             <button
               onClick={() => handleNavClick("/wallet")}
-              className={`group relative flex items-center py-1.5 px-3 ${isExpanded ? 'md:w-full md:justify-start md:px-4' : 'md:p-2.5 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+              className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-9 md:h-9 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/wallet") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
               title={!isExpanded ? "钱包" : undefined}
             >
-              <Wallet className="h-4 w-4 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>钱包</span>
+              <Wallet className="h-4 w-4 md:h-4 md:w-4" />
+              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>钱包</span>
             </button>
           </li>
 
@@ -286,15 +286,15 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
       {/* Bottom Section - Fixed height */}
       <div className="mt-auto flex-shrink-0">
         {/* Language Toggle Section */}
-        <div className="px-3 md:px-4 py-0.5">
+        <div className="px-2 md:px-3 py-0">
           <div className="relative" ref={languageDropdownRef}>
             <button
               onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
-              className={`group relative flex items-center w-full py-1.5 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}
+              className={`group relative flex items-center w-full py-1 px-2 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}
               title={!isExpanded ? t.languageToggle : undefined}
             >
-              <Globe2 className="h-4 w-4 md:h-4 md:w-4" />
-              <span className={`ml-3 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.languageToggle}</span>
+              <Globe2 className="h-3 w-3 md:h-3 md:w-3" />
+              <span className={`ml-2 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.languageToggle}</span>
             </button>
 
             {/* Language Dropdown */}
