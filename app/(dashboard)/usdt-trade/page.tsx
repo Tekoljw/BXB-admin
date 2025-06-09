@@ -1,396 +1,87 @@
-"use client"
-
-import { useState, useEffect, useCallback, useMemo, useRef } from "react"
-import { Search, Star } from "lucide-react"
-import { useTheme } from "@/contexts/theme-context"
-import NativeButton from "@/components/native-button"
-
-const VerifiedIcon = () => (
-  <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-    <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
-      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-    </svg>
-  </div>
-)
-
-const tradeAdsData = [
-  {
-    id: 1,
-    user: "币友168",
-    verified: true,
-    rate: 98.5,
-    orderCount: "1,234",
-    price: "7.28",
-    available: "50,000.00",
-    min: "100",
-    max: "10,000",
-    paymentMethods: ["支付宝", "微信", "银行卡"],
-    responseTime: "1分钟内",
-    type: "buy"
-  },
-  {
-    id: 2,
-    user: "交易达人",
-    verified: true,
-    rate: 99.2,
-    orderCount: "856",
-    price: "7.29",
-    available: "25,000.00",
-    min: "50",
-    max: "5,000",
-    paymentMethods: ["支付宝", "微信"],
-    responseTime: "2分钟内",
-    type: "buy"
-  },
-  {
-    id: 3,
-    user: "稳定商家",
-    verified: true,
-    rate: 97.9,
-    orderCount: "2,134",
-    price: "7.26",
-    available: "100,000.00",
-    min: "500",
-    max: "50,000",
-    paymentMethods: ["支付宝", "微信", "银行卡"],
-    responseTime: "3分钟内",
-    type: "sell"
-  },
-  {
-    id: 4,
-    user: "安全第一",
-    verified: true,
-    rate: 98.7,
-    orderCount: "967",
-    price: "7.25",
-    available: "30,000.00",
-    min: "100",
-    max: "8,000",
-    paymentMethods: ["支付宝"],
-    responseTime: "1分钟内",
-    type: "sell"
-  }
-]
-
-export default function UsdtTradePage() {
-  const { theme } = useTheme()
-  const isDark = theme === "dark"
-  const [activeMainTab, setActiveMainTab] = useState("买入")
-  const [activeSubTab, setActiveSubTab] = useState("全部")
-  const [searchTerm, setSearchTerm] = useState("")
-  const [favorites, setFavorites] = useState<string[]>(["币友168", "交易达人"])
-  const [mounted, setMounted] = useState(false)
-
-  const toggleFavorite = useCallback((user: string) => {
-    setFavorites(prev => 
-      prev.includes(user) 
-        ? prev.filter(fav => fav !== user)
-        : [...prev, user]
-    )
-  }, [])
-
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value)
-  }, [])
-
-  const mainTabsRef = useRef<HTMLDivElement>(null)
-  const subTabsRef = useRef<HTMLDivElement>(null)
-  const contentRef = useRef<HTMLDivElement>(null)
-
-  const handleMainTabClick = useCallback((tab: string) => {
-    // Immediate DOM update for visual feedback
-    if (mainTabsRef.current) {
-      const buttons = mainTabsRef.current.querySelectorAll('button')
-      buttons.forEach((btn, index) => {
-        const tabText = ['买入', '卖出'][index]
-        if (tabText === tab) {
-          btn.className = btn.className.replace(/bg-gray-200|bg-gray-700/, 'bg-[#00D4AA]')
-          btn.className = btn.className.replace(/text-gray-800|text-gray-300/, 'text-white')
-        } else {
-          btn.className = btn.className.replace(/bg-\[#00D4AA\]/, 'bg-gray-200 dark:bg-gray-700')
-          btn.className = btn.className.replace(/text-white/, 'text-gray-800 dark:text-gray-300')
-        }
-      })
-    }
-    
-    // Update state after visual feedback
-    setActiveMainTab(tab)
-  }, [])
-
-  const handleSubTabClick = useCallback((tab: string) => {
-    // Immediate DOM update for visual feedback
-    if (subTabsRef.current) {
-      const buttons = subTabsRef.current.querySelectorAll('button')
-      const subTabsArray = ["全部", "支付宝", "微信", "银行卡"]
-      buttons.forEach((btn, index) => {
-        const tabText = subTabsArray[index]
-        if (tabText === tab) {
-          btn.className = btn.className.replace(/text-gray-600|text-gray-400/, 'bg-[#00D4AA] text-white')
-        } else {
-          btn.className = btn.className.replace(/bg-\[#00D4AA\]/, '')
-          btn.className = btn.className.replace(/text-white/, 'text-gray-600 dark:text-gray-400')
-        }
-      })
-    }
-    
-    // Update state after visual feedback
-    setActiveSubTab(tab)
-  }, [])
-
-  const filteredAds = useMemo(() => {
-    return tradeAdsData.filter(ad => {
-      const matchesTab = activeMainTab === "买入" ? ad.type === "buy" : ad.type === "sell"
-      const matchesSearch = ad.user.toLowerCase().includes(searchTerm.toLowerCase())
-      const matchesPayment = activeSubTab === "全部" || ad.paymentMethods.includes(activeSubTab)
-      return matchesTab && matchesSearch && matchesPayment
-    })
-  }, [activeMainTab, searchTerm, activeSubTab])
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return null
-  }
-
-  const mainTabs = ["买入", "卖出"]
-  const subTabs = ["全部", "支付宝", "微信", "银行卡"]
-  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
-
+export default function USDTTradePage() {
   return (
-    <div className={`p-3 md:p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
-      {/* 搜索栏 - 移动端优化 */}
-      <div className={`${cardStyle} rounded-lg p-3 md:p-4 mb-4 md:mb-6`}>
-        <div className="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
-          <div className="flex items-center space-x-2 md:space-x-4 flex-1">
-            <div className="relative flex-1 max-w-full md:max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="搜索商家名称"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                className={`w-full pl-10 pr-4 py-2 md:py-2 rounded-lg border text-sm ${
-                  isDark
-                    ? "bg-background border-gray-700 text-white placeholder-gray-500 focus:border-[#00D4AA]"
-                    : "bg-white border-gray-300 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
-                } focus:outline-none focus:ring-1 focus:ring-[#00D4AA]`}
-              />
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">USDT买卖</h1>
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Buy Section */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold text-green-600 mb-4">购买USDT</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">购买金额</label>
+              <input type="number" className="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="输入金额" />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">支付方式</label>
+              <select className="w-full border border-gray-300 rounded-md px-3 py-2">
+                <option>银行卡</option>
+                <option>支付宝</option>
+                <option>微信支付</option>
+              </select>
+            </div>
+            <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">
+              立即购买
+            </button>
           </div>
-          
-          {/* 主要标签 - 移动端全宽 */}
-          <div ref={mainTabsRef} className="flex space-x-2 md:space-x-2 w-full md:w-auto">
-            {mainTabs.map((tab) => (
-              <NativeButton
-                key={tab}
-                onClick={() => handleMainTabClick(tab)}
-                variant={activeMainTab === tab ? "primary" : "secondary"}
-                size="sm"
-                className="flex-1 md:flex-none"
-              >
-                {tab}
-              </NativeButton>
-            ))}
+        </div>
+
+        {/* Sell Section */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold text-red-600 mb-4">出售USDT</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">出售数量</label>
+              <input type="number" className="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="输入数量" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">收款方式</label>
+              <select className="w-full border border-gray-300 rounded-md px-3 py-2">
+                <option>银行卡</option>
+                <option>支付宝</option>
+                <option>微信支付</option>
+              </select>
+            </div>
+            <button className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700">
+              立即出售
+            </button>
           </div>
         </div>
       </div>
 
-      {/* 交易表格 */}
-      <div className={`${cardStyle} rounded-lg p-3 md:p-4`}>
-        {/* 次级标签 - 移动端滚动 */}
-        <div ref={subTabsRef} className="flex items-center space-x-1 mb-4 overflow-x-auto scrollbar-hide">
-          {subTabs.map((tab) => (
-            <NativeButton
-              key={tab}
-              onClick={() => handleSubTabClick(tab)}
-              variant={activeSubTab === tab ? "primary" : "ghost"}
-              size="sm"
-              className="whitespace-nowrap flex-shrink-0"
-            >
-              {tab}
-            </NativeButton>
-          ))}
-        </div>
-
-        {/* 表格头部 - 移动端隐藏 */}
-        <div className="hidden md:grid grid-cols-6 gap-4 py-3 border-b border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400">
-          <div>商家</div>
-          <div>价格</div>
-          <div>可用数量</div>
-          <div>限额</div>
-          <div>支付方式</div>
-          <div>交易</div>
-        </div>
-
-        {/* 广告列表 - 响应式布局 */}
-        <div className="space-y-3 md:space-y-1">
-          {filteredAds.map((ad, index) => (
-            <div key={ad.id}>
-              {/* 桌面端布局 */}
-              <div className={`hidden md:grid grid-cols-6 gap-4 py-4 border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${
-                index === filteredAds.length - 1 ? "border-b-0" : ""
-              }`}>
-                {/* 商家信息 */}
-                <div className="flex items-center space-x-3">
-                  <NativeButton
-                    onClick={() => toggleFavorite(ad.user)}
-                    variant="ghost"
-                    size="sm"
-                    className="p-1"
-                  >
-                    <Star 
-                      className={`w-4 h-4 ${
-                        favorites.includes(ad.user) 
-                          ? "text-yellow-500 fill-current" 
-                          : "text-gray-400"
-                      }`} 
-                    />
-                  </NativeButton>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
-                        {ad.user}
-                      </span>
-                      {ad.verified && <VerifiedIcon />}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {ad.rate}% | {ad.orderCount}单
-                    </div>
-                  </div>
-                </div>
-
-                {/* 价格 */}
-                <div className="flex items-center">
-                  <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
-                    ¥{ad.price}
-                  </span>
-                </div>
-
-                {/* 可用数量 */}
-                <div className="flex items-center">
-                  <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                    {ad.available} USDT
-                  </span>
-                </div>
-
-                {/* 限额 */}
-                <div className="flex items-center">
-                  <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                    ¥{ad.min} - ¥{ad.max}
-                  </span>
-                </div>
-
-                {/* 支付方式 */}
-                <div className="flex items-center">
-                  <div className="flex flex-wrap gap-1">
-                    {ad.paymentMethods.slice(0, 2).map((method, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs rounded"
-                      >
-                        {method}
-                      </span>
-                    ))}
-                    {ad.paymentMethods.length > 2 && (
-                      <span className="text-xs text-gray-400">+{ad.paymentMethods.length - 2}</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* 交易按钮 */}
-                <div className="flex items-center">
-                  <NativeButton
-                    onClick={() => {/* Handle trade action */}}
-                    variant="primary"
-                    size="sm"
-                  >
-                    {activeMainTab}
-                  </NativeButton>
-                </div>
-              </div>
-
-              {/* 移动端卡片布局 */}
-              <div className={`md:hidden ${cardStyle} rounded-lg p-4 border ${
-                index === filteredAds.length - 1 ? "" : "mb-3"
-              }`}>
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex items-center space-x-3">
-                    <NativeButton
-                      onClick={() => toggleFavorite(ad.user)}
-                      variant="ghost"
-                      size="sm"
-                      className="p-1"
-                    >
-                      <Star 
-                        className={`w-4 h-4 ${
-                          favorites.includes(ad.user) 
-                            ? "text-yellow-500 fill-current" 
-                            : "text-gray-400"
-                        }`} 
-                      />
-                    </NativeButton>
-                    <div>
-                      <div className="flex items-center space-x-2">
-                        <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
-                          {ad.user}
-                        </span>
-                        {ad.verified && <VerifiedIcon />}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {ad.rate}% | {ad.orderCount}单
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className={`text-lg font-bold ${isDark ? "text-[#00D4AA]" : "text-[#00D4AA]"}`}>
-                      ¥{ad.price}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2 mb-4">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">可用数量:</span>
-                    <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                      {ad.available} USDT
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">限额:</span>
-                    <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                      ¥{ad.min} - ¥{ad.max}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <div className="flex flex-wrap gap-1">
-                    {ad.paymentMethods.slice(0, 3).map((method, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs rounded"
-                      >
-                        {method}
-                      </span>
-                    ))}
-                    {ad.paymentMethods.length > 3 && (
-                      <span className="text-xs text-gray-400">+{ad.paymentMethods.length - 3}</span>
-                    )}
-                  </div>
-                  <NativeButton
-                    onClick={() => {/* Handle trade action */}}
-                    variant="primary"
-                    size="sm"
-                    className="ml-3"
-                  >
-                    {activeMainTab}
-                  </NativeButton>
-                </div>
-              </div>
-            </div>
-          ))}
+      {/* Transaction History */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">交易记录</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left py-2">时间</th>
+                <th className="text-left py-2">类型</th>
+                <th className="text-left py-2">数量</th>
+                <th className="text-left py-2">价格</th>
+                <th className="text-left py-2">状态</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b">
+                <td className="py-2">2024-01-15 14:30</td>
+                <td className="py-2 text-green-600">购买</td>
+                <td className="py-2">1000 USDT</td>
+                <td className="py-2">¥7,200</td>
+                <td className="py-2 text-green-600">已完成</td>
+              </tr>
+              <tr className="border-b">
+                <td className="py-2">2024-01-14 09:15</td>
+                <td className="py-2 text-red-600">出售</td>
+                <td className="py-2">500 USDT</td>
+                <td className="py-2">¥3,600</td>
+                <td className="py-2 text-green-600">已完成</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

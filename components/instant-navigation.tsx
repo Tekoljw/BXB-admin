@@ -20,6 +20,10 @@ import ChatPage from "@/app/(dashboard)/chat/page"
 import MomentsPage from "@/app/(dashboard)/moments/page"
 import MallPage from "@/app/(dashboard)/mall/page"
 import WalletPage from "@/app/(dashboard)/wallet/page"
+import USDTTradePage from "@/app/(dashboard)/usdt-trade/page"
+import MarketPage from "@/app/(dashboard)/market/page"
+import SpotPage from "@/app/(dashboard)/spot/page"
+import FuturesPage from "@/app/(dashboard)/futures/page"
 
 interface InstantNavigationProps {
   onCloseMobile?: () => void
@@ -46,10 +50,10 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
     { path: "/moments", icon: Users, label: "朋友圈", component: MomentsPage },
     { path: "/mall", icon: ShoppingBag, label: "商城", component: MallPage },
-    { path: "/usdt-trade", icon: DollarSign, label: "USDT买卖", component: () => <div className="p-4">USDT买卖页面</div> },
-    { path: "/market", icon: LineChart, label: "行情", component: () => <div className="p-4">行情页面</div> },
-    { path: "/spot", icon: ArrowLeftRight, label: "现货", component: () => <div className="p-4">现货页面</div> },
-    { path: "/futures", icon: FileText, label: "合约", component: () => <div className="p-4">合约页面</div> },
+    { path: "/usdt-trade", icon: DollarSign, label: "USDT买卖", component: USDTTradePage },
+    { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
+    { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
+    { path: "/futures", icon: FileText, label: "合约", component: FuturesPage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
   ]
 
