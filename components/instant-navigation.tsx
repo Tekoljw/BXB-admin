@@ -115,7 +115,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         </div>
 
         {/* Navigation with Enhanced Animations */}
-        <div className="relative z-10 flex-1 p-3 space-y-3 overflow-y-auto">
+        <div className="relative z-10 flex-1 p-2 flex flex-col justify-center min-h-0 overflow-hidden">
+          <div className="flex flex-col justify-center h-full" style={{gap: 'clamp(0.25rem, 2vh, 0.75rem)'}}>
           {navItems.map((item, index) => {
             const Icon = item.icon
             const active = isActive(item.path)
@@ -123,16 +124,17 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <div key={item.path} className="relative group">
                 <button
                   onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-4 rounded-xl transition-all duration-500 ease-in-out transform hover:scale-105 relative overflow-hidden ${
+                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} rounded-xl transition-all duration-500 ease-in-out transform hover:scale-105 relative overflow-hidden ${
                     active 
                       ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
                       : "hover:bg-gray-700/20"
                   }`}
-                  title={!isExpanded ? item.label : undefined}
                   style={{ 
+                    padding: 'clamp(0.5rem, 1.5vh, 1rem) 1rem',
                     animationDelay: `${index * 50}ms`,
                     animation: 'slideInLeft 0.6s ease-out forwards'
                   }}
+                  title={!isExpanded ? item.label : undefined}
                 >
                   {/* Active Item Background Glow */}
                   {active && (
@@ -174,6 +176,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               </div>
             )
           })}
+          </div>
         </div>
 
         {/* Footer with Enhanced Controls */}
