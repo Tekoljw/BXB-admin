@@ -105,10 +105,68 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "slideInLeft": {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(-30px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0)",
+          },
+        },
+        "float": {
+          "0%, 100%": {
+            transform: "translateY(0px)",
+          },
+          "50%": {
+            transform: "translateY(-6px)",
+          },
+        },
+        "shimmer": {
+          "0%": {
+            backgroundPosition: "-200% 0",
+          },
+          "100%": {
+            backgroundPosition: "200% 0",
+          },
+        },
+        "glow": {
+          "0%, 100%": {
+            boxShadow: "0 0 20px rgba(19, 194, 163, 0.3)",
+          },
+          "50%": {
+            boxShadow: "0 0 30px rgba(19, 194, 163, 0.6)",
+          },
+        },
+        "ripple": {
+          "0%": {
+            transform: "scale(0)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "scale(4)",
+            opacity: "0",
+          },
+        },
+        "breathe": {
+          "0%, 100%": {
+            transform: "scale(1)",
+          },
+          "50%": {
+            transform: "scale(1.05)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "slideInLeft": "slideInLeft 0.6s ease-out",
+        "float": "float 3s ease-in-out infinite",
+        "shimmer": "shimmer 2s infinite",
+        "glow": "glow 2s ease-in-out infinite",
+        "ripple": "ripple 0.6s ease-out",
+        "breathe": "breathe 3s ease-in-out infinite",
       },
     },
   },

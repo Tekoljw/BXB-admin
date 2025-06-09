@@ -76,85 +76,146 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       {/* Sidebar */}
-      <div className={`${isExpanded ? 'w-64' : 'w-24'} ${theme === 'dark' ? 'bg-gray-800' : 'bg-black'} text-white flex flex-col transition-all duration-300 ease-in-out`}>
-        {/* Header - Hamburger Menu */}
-        <div className="h-12 flex items-center justify-center px-3 border-b border-gray-700">
+      <div className={`${isExpanded ? 'w-64' : 'w-24'} ${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col transition-all duration-500 ease-in-out shadow-2xl border-r border-gray-700/50 relative overflow-hidden`}>
+        {/* Background Overlay with Animated Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-purple-500/5 opacity-50"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent animate-pulse"></div>
+        
+        {/* Header - Hamburger Menu with Glow Effect */}
+        <div className="relative z-10 h-14 flex items-center justify-center px-3 border-b border-gray-700/50 backdrop-blur-sm">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2 hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105"
+            className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-custom-green/20 group relative overflow-hidden"
             title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
           >
-            <div className="transition-transform duration-200 hover:scale-110">
-              <Menu size={20} />
+            {/* Button Glow Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-custom-green/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+            <div className="relative transition-all duration-300 group-hover:rotate-180">
+              <Menu size={22} className="drop-shadow-sm" />
             </div>
           </button>
         </div>
 
-        {/* User Section - Above Navigation */}
-        <div className={`${isExpanded ? 'px-4 py-3' : 'px-2 py-3'} border-b border-gray-700`}>
-          <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'}`}>
-            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-              <User size={16} />
+        {/* User Section with Animated Avatar */}
+        <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-2 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
+          <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'} transition-all duration-500`}>
+            <div className="relative group">
+              <div className="w-10 h-10 bg-gradient-to-br from-custom-green to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-custom-green/30">
+                <User size={18} />
+              </div>
+              {/* Avatar Pulse Ring */}
+              <div className="absolute inset-0 rounded-full border-2 border-custom-green/30 animate-pulse"></div>
+              <div className="absolute -inset-1 rounded-full border border-custom-green/20 animate-ping opacity-75"></div>
             </div>
             {isExpanded && (
-              <div>
+              <div className="transition-all duration-500 transform">
                 <div className="text-sm font-medium text-white">用户</div>
-                <div className="text-xs text-gray-400">在线</div>
+                <div className="text-xs text-gray-400 flex items-center">
+                  <div className="w-2 h-2 bg-custom-green rounded-full mr-2 animate-pulse"></div>
+                  在线
+                </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Navigation */}
-        <div className="flex-1 p-3 space-y-2">
-          {navItems.map((item) => {
+        {/* Navigation with Enhanced Animations */}
+        <div className="relative z-10 flex-1 p-3 space-y-3 overflow-y-auto">
+          {navItems.map((item, index) => {
             const Icon = item.icon
+            const active = isActive(item.path)
             return (
-              <button
-                key={item.path}
-                onClick={() => navigate(item.path)}
-                className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-3 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:scale-105 ${
-                  isActive(item.path) ? "bg-gray-700" : ""
-                }`}
-                title={!isExpanded ? item.label : undefined}
-              >
-                <div className="transition-transform duration-200 hover:scale-110">
-                  <Icon size={24} />
-                </div>
-                {isExpanded && <span className="ml-4 text-base font-medium transition-all duration-200">{item.label}</span>}
-              </button>
+              <div key={item.path} className="relative group">
+                <button
+                  onClick={() => navigate(item.path)}
+                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-4 rounded-xl transition-all duration-300 transform hover:scale-105 relative overflow-hidden ${
+                    active 
+                      ? "bg-gradient-to-r from-custom-green/20 to-purple-500/20 shadow-lg shadow-custom-green/20 border border-custom-green/30" 
+                      : "hover:bg-gray-700/50 hover:shadow-lg hover:shadow-gray-600/20"
+                  }`}
+                  title={!isExpanded ? item.label : undefined}
+                  style={{ 
+                    animationDelay: `${index * 50}ms`,
+                    animation: 'slideInLeft 0.6s ease-out forwards'
+                  }}
+                >
+                  {/* Active Item Background Glow */}
+                  {active && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-purple-500/10 rounded-xl animate-pulse"></div>
+                  )}
+                  
+                  {/* Hover Ripple Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-custom-green/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                  
+                  {/* Icon with Enhanced Animation */}
+                  <div className={`relative transition-all duration-300 group-hover:scale-125 ${active ? 'text-custom-green drop-shadow-lg' : 'group-hover:text-custom-green'}`}>
+                    <Icon size={26} className="drop-shadow-sm" />
+                    {/* Icon Glow Effect */}
+                    {active && (
+                      <div className="absolute inset-0 animate-ping">
+                        <Icon size={26} className="text-custom-green/30" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Label with Slide Animation */}
+                  {isExpanded && (
+                    <span className={`ml-4 text-base font-medium transition-all duration-300 ${
+                      active ? 'text-white font-semibold' : 'group-hover:text-custom-green'
+                    }`}>
+                      {item.label}
+                    </span>
+                  )}
+                  
+                  {/* Active Indicator */}
+                  {active && (
+                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-purple-500 rounded-full shadow-lg animate-pulse"></div>
+                  )}
+                </button>
+                
+                {/* Tooltip for Collapsed State */}
+                {!isExpanded && (
+                  <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50 whitespace-nowrap shadow-xl border border-gray-600">
+                    {item.label}
+                    <div className="absolute left-0 top-1/2 transform -translate-x-1 -translate-y-1/2 w-2 h-2 bg-gray-800 rotate-45 border-l border-b border-gray-600"></div>
+                  </div>
+                )}
+              </div>
             )
           })}
         </div>
 
-        {/* Footer - Controls */}
-        <div className="border-t border-gray-700">
-          <div className={`${isExpanded ? 'h-16 flex items-center justify-center gap-4' : 'py-3 flex flex-col items-center gap-2'} px-3`}>
+        {/* Footer with Enhanced Controls */}
+        <div className="relative z-10 border-t border-gray-700/50 backdrop-blur-sm">
+          <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} px-3`}>
             <button 
               onClick={() => setLanguage(language === "zh" ? "en" : "zh")}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105"
+              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/20 group relative overflow-hidden"
               title={language === "zh" ? "Switch to English" : "切换到中文"}
             >
-              <div className="transition-transform duration-200 hover:scale-110">
-                <Globe2 size={18} />
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+              <div className="relative transition-all duration-300 group-hover:rotate-12 group-hover:text-blue-400">
+                <Globe2 size={20} className="drop-shadow-sm" />
               </div>
             </button>
             <button 
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105"
+              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-yellow-500/20 group relative overflow-hidden"
               title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
             >
-              <div className="transition-transform duration-200 hover:scale-110">
-                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+              <div className="relative transition-all duration-300 group-hover:rotate-180 group-hover:text-yellow-400">
+                {theme === "dark" ? <Sun size={20} className="drop-shadow-sm" /> : <Moon size={20} className="drop-shadow-sm" />}
               </div>
             </button>
             <button 
               onClick={() => navigate("/settings")}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-all duration-200 hover:scale-105"
+              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-purple-500/20 group relative overflow-hidden"
               title="设置"
             >
-              <div className="transition-transform duration-200 hover:scale-110">
-                <Settings size={18} />
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+              <div className="relative transition-all duration-300 group-hover:rotate-90 group-hover:text-purple-400">
+                <Settings size={20} className="drop-shadow-sm" />
               </div>
             </button>
           </div>
