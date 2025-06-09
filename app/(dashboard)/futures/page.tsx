@@ -128,25 +128,25 @@ const TradingViewChart = () => {
 
   useEffect(() => {
     // 清理之前的脚本
-    const existingScript = document.getElementById("tradingview-script-futures")
+    const existingScript = document.getElementById("tradingview-script")
     if (existingScript) {
       existingScript.remove()
     }
 
     // 清理容器
-    const container = document.getElementById("tradingview-container-futures")
+    const container = document.getElementById("tradingview-container")
     if (container) {
       container.innerHTML = ""
     }
 
     // 创建新的脚本
     const script = document.createElement("script")
-    script.id = "tradingview-script-futures"
+    script.id = "tradingview-script"
     script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
     script.async = true
     script.innerHTML = JSON.stringify({
       autosize: true,
-      symbol: "BINANCE:BTCUSDT.P",
+      symbol: "BINANCE:BTCUSDT",
       timezone: "Etc/UTC",
       theme: isDark ? "dark" : "light",
       style: "1",
@@ -171,7 +171,7 @@ const TradingViewChart = () => {
 
   return (
     <div className="h-[36rem] w-full">
-      <div id="tradingview-container-futures" className="tradingview-widget-container h-full w-full">
+      <div id="tradingview-container" className="tradingview-widget-container h-full w-full">
         <div className="tradingview-widget-container__widget h-full w-full"></div>
       </div>
     </div>
@@ -395,7 +395,7 @@ const TradingInterface = () => {
             }`}
           />
 
-          {/* 做多按钮 */}
+          {/* 买入按钮 */}
           <button
             onClick={() => setActiveTab("buy")}
             className={`relative z-10 flex-1 py-2 text-xs font-medium rounded-md transition-colors duration-300 ${
@@ -406,10 +406,10 @@ const TradingInterface = () => {
                   : "text-gray-600 hover:text-gray-800"
             }`}
           >
-            做多
+            买入
           </button>
 
-          {/* 做空按钮 */}
+          {/* 卖出按钮 */}
           <button
             onClick={() => setActiveTab("sell")}
             className={`relative z-10 flex-1 py-2 text-xs font-medium rounded-md transition-colors duration-300 ${
@@ -420,7 +420,7 @@ const TradingInterface = () => {
                   : "text-gray-600 hover:text-gray-800"
             }`}
           >
-            做空
+            卖出
           </button>
         </div>
       </div>
@@ -441,101 +441,148 @@ const TradingInterface = () => {
               }`}
             />
           </button>
-          <span className={`text-xs ${isDark ? "text-gray-300" : "text-gray-600"}`}>限价</span>
+
+          {/* 价格输入框 */}
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              value={orderType === "limit" ? price : ""}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder={orderType === "limit" ? "价格" : "市价交易"}
+              disabled={orderType === "market"}
+              className={`w-full p-2 text-sm rounded-md border pr-16 ${
+                orderType === "market"
+                  ? isDark
+                    ? "bg-gray-700 border-gray-600 text-gray-400 cursor-not-allowed"
+                    : "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed"
+                  : isDark
+                    ? "bg-[#252842] border-[#3a3d4a] text-white"
+                    : "bg-white border-gray-300 text-gray-800"
+              } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            />
+            {/* 币种标签 */}
+            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
+              <div className="w-3 h-3 bg-custom-green rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-bold">+</span>
+              </div>
+              <span className="text-xs text-gray-400">USDT</span>
+            </div>
+          </div>
         </div>
       </div>
-
-      {/* 价格输入框 */}
-      {orderType === "limit" && (
-        <div className="mb-4">
-          <label className={`text-xs ${isDark ? "text-gray-300" : "text-gray-600"} mb-1 block`}>价格</label>
-          <input
-            type="text"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className={`w-full px-3 py-2 text-sm border rounded-md ${
-              isDark
-                ? "bg-[#252842] border-[#3a3d4a] text-white"
-                : "bg-white border-gray-300 text-gray-800"
-            } focus:outline-none focus:ring-1 focus:ring-blue-500`}
-          />
-        </div>
-      )}
 
       {/* 数量输入 */}
       <div className="mb-4">
-        <label className={`text-xs ${isDark ? "text-gray-300" : "text-gray-600"} mb-1 block`}>数量</label>
-        <input
-          type="text"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className={`w-full px-3 py-2 text-sm border rounded-md ${
-            isDark
-              ? "bg-[#252842] border-[#3a3d4a] text-white"
-              : "bg-white border-gray-300 text-gray-800"
-          } focus:outline-none focus:ring-1 focus:ring-blue-500`}
-        />
-      </div>
-
-      {/* 百分比选择器 */}
-      <div className="mb-4">
-        <div className="grid grid-cols-4 gap-2">
-          {[25, 50, 75, 100].map((percent) => (
-            <button
-              key={percent}
-              onClick={() => setPercentage(percent)}
-              className={`py-1 text-xs rounded transition-colors ${
-                percentage === percent
-                  ? activeTab === "buy"
-                    ? "bg-custom-green text-white"
-                    : "bg-red-500 text-white"
-                  : isDark
-                    ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {percent}%
-            </button>
-          ))}
+        <div className="relative">
+          <input
+            type="text"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="数量"
+            className={`w-full p-2 text-sm rounded-md border pr-16 ${
+              isDark ? "bg-[#252842] border-[#3a3d4a] text-white" : "bg-white border-gray-300 text-gray-800"
+            } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          />
+          {/* 币种标签 */}
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
+            <CryptoLogo symbol="BTC" size="w-3 h-3" />
+            <span className="text-xs text-gray-400">BTC</span>
+          </div>
         </div>
       </div>
 
-      {/* 总额 */}
+      {/* 成交额 */}
       <div className="mb-6">
-        <label className={`text-xs ${isDark ? "text-gray-300" : "text-gray-600"} mb-1 block`}>总额</label>
-        <input
-          type="text"
-          value={total}
-          onChange={(e) => setTotal(e.target.value)}
-          className={`w-full px-3 py-2 text-sm border rounded-md ${
-            isDark
-              ? "bg-[#252842] border-[#3a3d4a] text-white"
-              : "bg-white border-gray-300 text-gray-800"
-          } focus:outline-none focus:ring-1 focus:ring-blue-500`}
-        />
+        <div className="relative">
+          <input
+            type="text"
+            value={total}
+            onChange={(e) => setTotal(e.target.value)}
+            placeholder="成交额"
+            className={`w-full p-2 text-sm rounded-md border pr-16 ${
+              isDark ? "bg-[#252842] border-[#3a3d4a] text-white" : "bg-white border-gray-300 text-gray-800"
+            } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          />
+          {/* 币种标签 */}
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
+            <div className="w-3 h-3 bg-custom-green rounded-full flex items-center justify-center">
+              <span className="text-white text-xs font-bold">+</span>
+            </div>
+            <span className="text-xs text-gray-400">USDT</span>
+          </div>
+        </div>
       </div>
 
-      {/* 提交按钮 */}
-      <button
-        className={`w-full py-3 text-sm font-medium rounded-md transition-colors ${
-          activeTab === "buy"
-            ? "bg-custom-green hover:bg-custom-green/90 text-white"
-            : "bg-red-500 hover:bg-red-600 text-white"
-        }`}
-      >
-        {activeTab === "buy" ? "做多" : "做空"} BTC
+      {/* 百分比滑块 */}
+      <div className="mb-3">
+        <div className="flex justify-between text-xs text-gray-400 mb-2">
+          <span>0%</span>
+          <span>25%</span>
+          <span>50%</span>
+          <span>75%</span>
+          <span>100%</span>
+        </div>
+        <div className="relative">
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={percentage}
+            onChange={(e) => setPercentage(Number(e.target.value))}
+            className="w-full h-2 bg-gradient-to-r from-red-500 via-yellow-500 to-custom-green rounded-lg appearance-none cursor-pointer"
+            style={{
+              background: `linear-gradient(to right, #ef4444 0%, #eab308 25%, #13C2A3 50%, #13C2A3 75%, #13C2A3 100%)`,
+            }}
+          />
+          <div
+            className="absolute top-0 w-4 h-4 bg-white border-2 border-gray-400 rounded-full transform -translate-y-1"
+            style={{ left: `calc(${percentage}% - 8px)` }}
+          />
+        </div>
+      </div>
+
+      {/* 余额信息 */}
+      <div className="mb-3 space-y-1">
+        <div className="flex justify-between text-xs">
+          <span className={isDark ? "text-gray-400" : "text-gray-600"}>手续费</span>
+          <span className={isDark ? "text-white" : "text-gray-800"}>00.00 USDT</span>
+        </div>
+        <div className="flex justify-between text-xs">
+          <span className={isDark ? "text-gray-400" : "text-gray-600"}>可用</span>
+          <span className="text-custom-green">60,928.20 USDT ●</span>
+        </div>
+      </div>
+
+      {/* 买入按钮 */}
+      <button className="w-full bg-custom-green hover:bg-custom-green-600 text-white py-2 rounded-md font-medium text-sm transition-colors mb-3">
+        买入 BTC
       </button>
 
-      {/* 账户信息 */}
-      <div className="mt-4 pt-3 border-t border-gray-700/30">
-        <div className="space-y-2 text-xs">
-          <div className="flex justify-between">
-            <span className={isDark ? "text-gray-400" : "text-gray-500"}>可用余额</span>
-            <span className={isDark ? "text-white" : "text-gray-800"}>0.00 USDT</span>
+      {/* 资产信息 */}
+      <div className="border-t pt-4">
+        <div className={`text-xs font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>资产</div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <CryptoLogo symbol="BTC" size="w-4 h-4" />
+              <span className={`ml-2 font-medium ${isDark ? "text-white" : "text-gray-800"}`}>BTC</span>
+            </div>
+            <div className="text-right">
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>可用</div>
+              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>60,928.20</div>
+            </div>
           </div>
-          <div className="flex justify-between">
-            <span className={isDark ? "text-gray-400" : "text-gray-500"}>持仓量</span>
-            <span className={isDark ? "text-white" : "text-gray-800"}>0.00 BTC</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="w-5 h-5 bg-custom-green rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-bold">+</span>
+              </div>
+              <span className={`ml-2 font-medium ${isDark ? "text-white" : "text-gray-800"}`}>USDT</span>
+            </div>
+            <div className="text-right">
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>可用</div>
+              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>0.000000</div>
+            </div>
           </div>
         </div>
       </div>
@@ -543,120 +590,475 @@ const TradingInterface = () => {
   )
 }
 
-export default function FuturesPage() {
+export default function SpotPage() {
   const { theme } = useTheme()
+  const [favorites, setFavorites] = useState<string[]>(["BTC/USDT", "VGX/USDT"])
+  const [activeSubTab, setActiveSubTab] = useState("当前委托(0)")
+  const [hideOtherPairs, setHideOtherPairs] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const isDark = theme === "dark"
 
-  // 热门合约数据 - 修改为合约相关
-  const popularCryptos = [
-    { symbol: "BTC", name: "Bitcoin Futures", price: "69,877.68", change: "+1.45%", isPositive: true },
-    { symbol: "ETH", name: "Ethereum Futures", price: "3,256.78", change: "+2.34%", isPositive: true },
-    { symbol: "BFT", name: "BeFi Token Futures", price: "892.45", change: "-0.87%", isPositive: false },
-    { symbol: "DOGE", name: "Dogecoin Futures", price: "0.3456", change: "+5.67%", isPositive: true },
-    { symbol: "VGX", name: "Voyager Futures", price: "45.23", change: "-1.23%", isPositive: false },
-    { symbol: "CAK", name: "Cake Futures", price: "12.78", change: "+3.45%", isPositive: true },
-    { symbol: "BON", name: "Bonfire Futures", price: "0.0012", change: "+12.34%", isPositive: true },
-    { symbol: "UBC", name: "UBC Futures", price: "156.89", change: "-2.45%", isPositive: false },
-    { symbol: "AI", name: "AI Token Futures", price: "2.34", change: "+8.76%", isPositive: true },
-    { symbol: "BCO", name: "Bitcoin Futures", price: "234.56", change: "-3.21%", isPositive: false },
-    { symbol: "CT", name: "Crypto Futures", price: "45.67", change: "+1.98%", isPositive: true },
-    { symbol: "JPC", name: "JPC Futures", price: "0.89", change: "+4.32%", isPositive: true },
-    { symbol: "LTO", name: "LTO Futures", price: "78.90", change: "-1.45%", isPositive: false },
-    { symbol: "SM", name: "Smart Futures", price: "23.45", change: "+6.78%", isPositive: true },
-    { symbol: "AXV", name: "Axion Futures", price: "567.89", change: "-2.34%", isPositive: false },
+  // 解决闪烁问题
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // 如果组件未挂载，返回空白内容，避免闪烁
+  if (!mounted) {
+    return <div className="min-h-screen bg-[#f5f8fa] dark:bg-background"></div>
+  }
+
+  // 二级页签
+  const subTabs = ["当前委托(0)", "历史委托", "成交明细", "资产管理"]
+
+  // 完整订单数据
+  const orderData = [
+    {
+      id: "ORD001",
+      type: "买入",
+      symbol: "BTC",
+      pair: "USDT",
+      price: "69,877.68",
+      amount: "0.001500",
+      filled: "0.001500",
+      total: "104.82",
+      status: "已成交",
+      time: "2024-01-15 14:30:25",
+      isCompleted: true,
+    },
+    {
+      id: "ORD002",
+      type: "卖出",
+      symbol: "ETH",
+      pair: "USDT",
+      price: "3,949.25",
+      amount: "0.050000",
+      filled: "0.025000",
+      total: "98.73",
+      status: "部分成交",
+      time: "2024-01-15 14:28:15",
+      isCompleted: false,
+    },
+    {
+      id: "ORD003",
+      type: "买入",
+      symbol: "VGX",
+      pair: "USDT",
+      price: "1.5373",
+      amount: "100.000000",
+      filled: "0.000000",
+      total: "153.73",
+      status: "未成交",
+      time: "2024-01-15 14:25:10",
+      isCompleted: false,
+    },
+    {
+      id: "ORD004",
+      type: "卖出",
+      symbol: "BTC",
+      pair: "USDT",
+      price: "70,123.50",
+      amount: "0.002000",
+      filled: "0.002000",
+      total: "140.25",
+      status: "已成交",
+      time: "2024-01-15 14:20:45",
+      isCompleted: true,
+    },
+    {
+      id: "ORD005",
+      type: "买入",
+      symbol: "DOGE",
+      pair: "USDT",
+      price: "0.17205",
+      amount: "1000.000000",
+      filled: "500.000000",
+      total: "86.03",
+      status: "部分成交",
+      time: "2024-01-15 14:15:30",
+      isCompleted: false,
+    },
+    {
+      id: "ORD006",
+      type: "卖出",
+      symbol: "CAK",
+      pair: "USDT",
+      price: "0.84130",
+      amount: "50.000000",
+      filled: "0.000000",
+      total: "42.07",
+      status: "已取消",
+      time: "2024-01-15 14:10:20",
+      isCompleted: false,
+    },
   ]
 
+  const toggleFavorite = (pair: string) => {
+    setFavorites((prev) => (prev.includes(pair) ? prev.filter((f) => f !== pair) : [...prev, pair]))
+  }
+
+  // 过滤订单数据 - 根据开关状态决定是否只显示当前交易对
+  const filteredOrderData = hideOtherPairs
+    ? orderData.filter((item) => `${item.symbol}/${item.pair}` === "BTC/USDT")
+    : orderData
+
+  // 统一的卡片样式
+  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
+
   return (
-    <div className={`min-h-screen ${isDark ? "bg-[#0f1419]" : "bg-gray-50"} transition-colors`}>
-      {/* 主要内容区域 */}
-      <div className="container mx-auto p-4">
-        {/* 顶部区域 - 热门合约 */}
-        <div className="mb-6">
-          <h2 className={`text-lg font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>热门合约</h2>
-
-          {/* 热门合约卡片网格 */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-            {popularCryptos.map((crypto, index) => (
-              <div
-                key={index}
-                className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 hover:scale-105 ${
-                  isDark
-                    ? "bg-[#1a1d29] border-[#252842] hover:border-[#3a3d4a]"
-                    : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-md"
-                }`}
-              >
-                <div className="flex items-center space-x-2 mb-2">
-                  <CryptoLogo symbol={crypto.symbol} size="w-6 h-6" />
-                  <div>
-                    <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                      {crypto.symbol}
-                    </div>
-                    <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>永续合约</div>
-                  </div>
-                  <div className="ml-auto">
-                    <Star size={14} className={`${isDark ? "text-gray-600" : "text-gray-400"} hover:text-yellow-400`} />
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between mb-2">
-                  <div className={`text-sm font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                    ${crypto.price}
-                  </div>
-                  <div className={`text-xs ${crypto.isPositive ? "text-custom-green" : "text-red-400"}`}>
-                    {crypto.change}
-                  </div>
-                </div>
-
-                <MiniLineChart isPositive={crypto.isPositive} />
+    <div className={`p-3 md:p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+      {/* 交易对头部信息卡片 */}
+      <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
+        <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0">
+          {/* 左侧 - 交易对选择 */}
+          <div className="flex items-start space-x-3 w-full md:w-48">
+            <CryptoLogo symbol="BTC" size="w-8 h-8" />
+            <div>
+              <div className="flex items-center space-x-1">
+                <span className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>BTC/USDT</span>
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </div>
-            ))}
+              <div className="flex items-center mt-1">
+                <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>Bitcoin</span>
+                <button
+                  onClick={() => toggleFavorite("BTC/USDT")}
+                  className={`ml-2 ${
+                    favorites.includes("BTC/USDT") ? "text-yellow-500" : "text-gray-300"
+                  } hover:text-yellow-500 transition-colors`}
+                >
+                  <Star className="h-4 w-4" fill={favorites.includes("BTC/USDT") ? "currentColor" : "none"} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Trading metrics - responsive grid */}
+          <div className="grid grid-cols-2 md:flex md:flex-row gap-4 w-full mt-4 md:mt-0">
+            {/* Current price */}
+            <div className="md:w-32">
+              <div className="text-2xl font-bold text-custom-green">0.00</div>
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>≈ $0.00</div>
+            </div>
+
+            {/* 24h change rate */}
+            <div className="md:w-32">
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>24h变化率</div>
+              <div className="text-custom-green font-medium">+0.00%</div>
+            </div>
+
+            {/* 24h highest price */}
+            <div className="md:w-32">
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>24h最高价</div>
+              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>0.00</div>
+            </div>
+
+            {/* 24h lowest price */}
+            <div className="md:w-32">
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>24h最低价</div>
+              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>0.00</div>
+            </div>
+
+            {/* 24h volume (BTC) */}
+            <div className="md:w-40">
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>24h成交量(BTC)</div>
+              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>0.0000000</div>
+            </div>
+
+            {/* 24h volume (USDT) */}
+            <div className="md:w-40">
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>24h成交额(USDT)</div>
+              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>0.00</div>
+            </div>
+          </div>
+
+          {/* 右侧 - 操作按钮 */}
+          <div className="flex items-center space-x-3 mt-4 md:mt-0 md:ml-auto">
+            <button
+              className={`p-2 rounded-md transition-colors ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}
+            >
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+            </button>
+            <button
+              className={`p-2 rounded-md transition-colors ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}
+            >
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 主要交易界面 - K线图、深度图、交易界面 */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+        {/* K线图 - 占据3/5宽度 */}
+        <div className="col-span-1 md:col-span-3">
+          <div className={`${cardStyle} rounded-lg overflow-hidden h-[24rem] md:h-[36rem]`}>
+            <TradingViewChart />
           </div>
         </div>
 
-        {/* 中间区域 - 图表和深度图 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-          {/* K线图 */}
-          <div className="lg:col-span-2">
-            <TradingViewChart />
-          </div>
-
-          {/* 深度图 */}
-          <div className="lg:col-span-1">
+        {/* 深度图 - 占据1/5宽度 */}
+        <div className="col-span-1 md:col-span-1">
+          <div className={`${cardStyle} rounded-lg overflow-hidden h-[24rem] md:h-[36rem]`}>
             <DepthChart />
           </div>
         </div>
 
-        {/* 底部区域 - 交易界面 */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          {/* 交易界面 */}
-          <div className="lg:col-span-1">
+        {/* 交易界面 - 占据1/5宽度 */}
+        <div className="col-span-1 md:col-span-1">
+          <div className={`${cardStyle} rounded-lg overflow-hidden h-[24rem] md:h-[36rem]`}>
             <TradingInterface />
           </div>
+        </div>
+      </div>
 
-          {/* 持仓信息和订单历史 */}
-          <div className="lg:col-span-3">
-            <div
-              className={`h-[36rem] ${isDark ? "bg-[#1a1d29] border border-[#252842]" : "bg-white border border-gray-200"} rounded-lg p-4`}
+      {/* 二级页签和隐藏其他交易对开关 */}
+      <div className="mb-6">
+        <div
+          className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2 flex flex-col md:flex-row justify-between items-start md:items-center space-y-2 md:space-y-0`}
+        >
+          <div className="flex items-center space-x-1 overflow-x-auto w-full pb-1">
+            {subTabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveSubTab(tab)}
+                className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
+                  activeSubTab === tab
+                    ? isDark
+                      ? "bg-white text-gray-800 shadow-sm"
+                      : "bg-white text-gray-800 shadow-sm"
+                    : isDark
+                      ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* 隐藏其他交易对开关 - 移到页签同一行 */}
+          <div className="flex items-center space-x-2">
+            <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>隐藏其他交易对</span>
+            <button
+              onClick={() => setHideOtherPairs(!hideOtherPairs)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                hideOtherPairs ? "bg-blue-600" : isDark ? "bg-gray-600" : "bg-gray-200"
+              }`}
             >
-              <div className="flex items-center space-x-4 mb-4">
-                <button className="text-sm font-medium text-custom-green border-b-2 border-custom-green pb-1">
-                  持仓
-                </button>
-                <button className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"} hover:text-custom-green`}>
-                  订单历史
-                </button>
-                <button className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"} hover:text-custom-green`}>
-                  成交历史
-                </button>
-              </div>
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  hideOtherPairs ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+      </div>
 
-              <div className="text-center py-20">
-                <div className={`text-lg ${isDark ? "text-gray-400" : "text-gray-500"}`}>暂无持仓</div>
-                <div className={`text-sm ${isDark ? "text-gray-500" : "text-gray-400"} mt-2`}>开仓后持仓信息将显示在这里</div>
-              </div>
+      {/* 订单记录标题栏 */}
+      <div className={`${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
+        <div className="flex items-center p-4">
+          <div className="hidden md:grid md:grid-cols-10 gap-4 flex-1 text-base font-bold">
+            <div className="col-span-1">
+              {isDark ? <span className="text-white">订单号</span> : <span className="text-gray-800">订单号</span>}
+            </div>
+            <div className="col-span-1">
+              {isDark ? <span className="text-white">交易对</span> : <span className="text-gray-800">交易对</span>}
+            </div>
+            <div className="col-span-1">
+              {isDark ? <span className="text-white">方向</span> : <span className="text-gray-800">方向</span>}
+            </div>
+            <div className="col-span-1 text-right">
+              {isDark ? <span className="text-white">价格</span> : <span className="text-gray-800">价格</span>}
+            </div>
+            <div className="col-span-1 text-right">
+              {isDark ? <span className="text-white">数量</span> : <span className="text-gray-800">数量</span>}
+            </div>
+            <div className="col-span-1 text-right">
+              {isDark ? <span className="text-white">已成交</span> : <span className="text-gray-800">已成交</span>}
+            </div>
+            <div className="col-span-1 text-right">
+              {isDark ? <span className="text-white">成交额</span> : <span className="text-gray-800">成交额</span>}
+            </div>
+            <div className="col-span-1 text-center">
+              {isDark ? <span className="text-white">状态</span> : <span className="text-gray-800">状态</span>}
+            </div>
+            <div className="col-span-1 text-center">
+              {isDark ? <span className="text-white">时间</span> : <span className="text-gray-800">时间</span>}
+            </div>
+            <div className="col-span-1 text-right">
+              {isDark ? <span className="text-white">操作</span> : <span className="text-gray-800">操作</span>}
+            </div>
+          </div>
+          {/* Mobile order table header */}
+          <div className="md:hidden flex justify-between w-full text-sm font-bold">
+            <div>{isDark ? <span className="text-white">订单</span> : <span className="text-gray-800">订单</span>}</div>
+            <div>
+              {isDark ? (
+                <span className="text-white">状态/操作</span>
+              ) : (
+                <span className="text-gray-800">状态/操作</span>
+              )}
             </div>
           </div>
         </div>
+      </div>
+
+      {/* 订单记录横条卡片 */}
+      <div className="space-y-3">
+        {filteredOrderData.map((item, index) => {
+          const pairName = `${item.symbol}/${item.pair}`
+          const getStatusColor = (status: string) => {
+            switch (status) {
+              case "已成交":
+                return "bg-custom-green text-white"
+              case "部分成交":
+                return "bg-yellow-500 text-white"
+              case "未成交":
+                return "bg-gray-500 text-white"
+              case "已取消":
+                return "bg-red-500 text-white"
+              default:
+                return "bg-gray-500 text-white"
+            }
+          }
+
+          const getTypeColor = (type: string) => {
+            return type === "买入" ? "text-custom-green" : "text-red-500"
+          }
+
+          return (
+            <div
+              key={index}
+              className={`${cardStyle} rounded-lg transition-all duration-200 hover:${
+                isDark ? "bg-[#252842]" : "bg-gray-50"
+              }`}
+            >
+              <div className="hidden md:grid md:grid-cols-10 gap-4 p-4 items-center">
+                {/* 订单号 */}
+                <div className="col-span-1">
+                  <span className={`font-mono text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>{item.id}</span>
+                </div>
+
+                {/* 交易对 */}
+                <div className="col-span-1 flex items-center space-x-2">
+                  <CryptoLogo symbol={item.symbol} size="w-5 h-5" />
+                  <span className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>{pairName}</span>
+                </div>
+
+                {/* 方向 */}
+                <div className="col-span-1">
+                  <span className={`font-bold ${getTypeColor(item.type)}`}>{item.type}</span>
+                </div>
+
+                {/* 价格 */}
+                <div className={`col-span-1 font-bold text-right ${isDark ? "text-white" : "text-gray-800"}`}>
+                  {item.price}
+                </div>
+
+                {/* 数量 */}
+                <div className={`col-span-1 text-sm text-right ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  {item.amount}
+                </div>
+
+                {/* 已成交 */}
+                <div className={`col-span-1 text-sm text-right ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  {item.filled}
+                </div>
+
+                {/* 成交额 */}
+                <div className={`col-span-1 text-sm text-right ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  {item.total}
+                </div>
+
+                {/* 状态 */}
+                <div className="col-span-1 flex justify-center">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-md text-xs font-medium ${getStatusColor(item.status)}`}
+                  >
+                    {item.status}
+                  </span>
+                </div>
+
+                {/* 时间 */}
+                <div className={`col-span-1 text-xs text-center ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                  {item.time}
+                </div>
+
+                {/* 操作按钮 */}
+                <div className="col-span-1 text-right">
+                  {item.status === "未成交" || item.status === "部分成交" ? (
+                    <button className="bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded-md text-xs font-medium transition-colors">
+                      撤单
+                    </button>
+                  ) : (
+                    <button className="bg-black hover:bg-gray-800 text-white py-1 px-4 rounded-md text-xs font-medium transition-colors">
+                      查看
+                    </button>
+                  )}
+                </div>
+              </div>
+              {/* Mobile order display */}
+              <div className="md:hidden flex flex-col p-4">
+                <div className="flex justify-between items-center mb-2">
+                  <div className="flex items-center space-x-2">
+                    <CryptoLogo symbol={item.symbol} size="w-5 h-5" />
+                    <span className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>{pairName}</span>
+                  </div>
+                  <span className={`font-bold ${getTypeColor(item.type)}`}>{item.type}</span>
+                </div>
+
+                <div className="flex justify-between items-center mb-2">
+                  <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                    价格: <span className="font-bold">{item.price}</span>
+                  </div>
+                  <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>数量: {item.amount}</div>
+                </div>
+
+                <div className="flex justify-between items-center mb-2">
+                  <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>已成交: {item.filled}</div>
+                  <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>成交额: {item.total}</div>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>{item.time}</div>
+                  <div className="flex items-center space-x-2">
+                    <span
+                      className={`inline-block px-3 py-1 rounded-md text-xs font-medium ${getStatusColor(item.status)}`}
+                    >
+                      {item.status}
+                    </span>
+                    {item.status === "未成交" || item.status === "部分成交" ? (
+                      <button className="bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded-md text-xs font-medium transition-colors">
+                        撤单
+                      </button>
+                    ) : (
+                      <button className="bg-black hover:bg-gray-800 text-white py-1 px-4 rounded-md text-xs font-medium transition-colors">
+                        查看
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
