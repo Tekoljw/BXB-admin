@@ -133,7 +133,7 @@ export default function USDTTradePage() {
     return <div className="min-h-screen bg-[#f5f8fa] dark:bg-background"></div>
   }
 
-  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow-lg" : "bg-white border border-gray-200 shadow-lg"
+  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
 
   // USDT买卖数据
   const usdtOrders = {
