@@ -154,13 +154,13 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <div key={item.path} className="relative group">
                 <button
                   onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'justify-center px-0'} rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
+                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'justify-center'} rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
                     active 
                       ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
                       : "hover:scale-105 hover:bg-gray-700/20"
                   }`}
                   style={{ 
-                    padding: isExpanded ? 'clamp(0.5rem, 1.5vh, 1rem) 1rem' : 'clamp(0.5rem, 1.5vh, 1rem) 0',
+                    padding: 'clamp(0.5rem, 1.5vh, 1rem) 1rem',
                     animationDelay: `${index * 50}ms`,
                     animation: 'slideInLeft 0.6s ease-out forwards'
                   }}
@@ -177,26 +177,24 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   )}
                   
                   {/* Icon with Simple Animation - Centered when collapsed */}
-                  <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
+                  <div className={`relative transition-all duration-300 ${isExpanded ? '' : 'w-full flex justify-center'} ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
                     <Icon size={26} />
                   </div>
                   
                   {/* Label with Smooth Slide Animation */}
-                  {isExpanded && (
-                    <div 
-                      className="ml-4 overflow-hidden transition-all duration-500 ease-in-out"
-                      style={{
-                        width: isExpanded ? '120px' : '0px',
-                        opacity: isExpanded ? 1 : 0,
-                      }}
-                    >
-                      <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
-                        active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
-                      }`}>
-                        {item.label}
-                      </span>
-                    </div>
-                  )}
+                  <div 
+                    className="ml-4 overflow-hidden transition-all duration-500 ease-in-out"
+                    style={{
+                      width: isExpanded ? '120px' : '0px',
+                      opacity: isExpanded ? 1 : 0,
+                    }}
+                  >
+                    <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
+                      active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
+                    }`}>
+                      {item.label}
+                    </span>
+                  </div>
                   
                   {/* Active Indicator - Only show when expanded */}
                   {active && isExpanded && (
