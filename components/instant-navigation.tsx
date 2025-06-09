@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
+import { useTheme } from "@/contexts/theme-context"
 import {
   MessageCircle,
   Users,
@@ -13,6 +14,8 @@ import {
   Wallet,
   Settings,
   Globe2,
+  Sun,
+  Moon,
 } from "lucide-react"
 
 // Import all page components directly to avoid compilation delays
@@ -32,6 +35,7 @@ interface InstantNavigationProps {
 export default function InstantNavigation({ onCloseMobile }: InstantNavigationProps) {
   const [currentPage, setCurrentPage] = useState("/chat")
   const pathname = usePathname()
+  const { theme, setTheme, language, setLanguage } = useTheme()
 
   useEffect(() => {
     setCurrentPage(pathname)
@@ -79,31 +83,45 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         </div>
 
         {/* Navigation */}
-        <div className="flex-1 p-2 space-y-1">
+        <div className="flex-1 p-3 space-y-2">
           {navItems.map((item) => {
             const Icon = item.icon
             return (
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`w-full flex items-center p-2 rounded hover:bg-gray-700 transition-colors ${
+                className={`w-full flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors ${
                   isActive(item.path) ? "bg-gray-700" : ""
                 }`}
               >
-                <Icon size={20} />
-                <span className="ml-3 text-sm">{item.label}</span>
+                <Icon size={24} />
+                <span className="ml-4 text-base font-medium">{item.label}</span>
               </button>
             )
           })}
         </div>
 
         {/* Footer */}
-        <div className="h-12 flex items-center justify-center gap-3 border-t border-gray-700 px-2">
-          <button className="p-2 hover:bg-gray-700 rounded">
-            <Globe2 size={16} />
+        <div className="h-16 flex items-center justify-center gap-4 border-t border-gray-700 px-3">
+          <button 
+            onClick={() => setLanguage(language === "zh" ? "en" : "zh")}
+            className="p-3 hover:bg-gray-700 rounded-lg"
+            title={language === "zh" ? "Switch to English" : "切换到中文"}
+          >
+            <Globe2 size={20} />
           </button>
-          <button className="p-2 hover:bg-gray-700 rounded">
-            <Settings size={16} />
+          <button 
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="p-3 hover:bg-gray-700 rounded-lg"
+            title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
+          >
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          <button 
+            onClick={() => navigate("/settings")}
+            className="p-3 hover:bg-gray-700 rounded-lg"
+          >
+            <Settings size={20} />
           </button>
         </div>
       </div>
