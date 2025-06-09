@@ -97,14 +97,14 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   }
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
+    <div className="flex h-screen bg-gray-100 overflow-hidden relative">
       {/* Sidebar */}
       <div 
-        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl border-r border-gray-700/50 relative overflow-hidden`}
+        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl border-r border-gray-700/50 relative overflow-hidden absolute left-0 top-0 h-full z-10`}
         style={{
-          width: isExpanded ? '256px' : '80px',
-          transform: isExpanded ? 'translateX(0)' : 'translateX(0)',
-          transition: 'all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+          width: '256px',
+          transform: isExpanded ? 'translateX(0)' : 'translateX(-176px)',
+          transition: 'transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)',
         }}
       >
         {/* Background Overlay with Static Gradient */}
@@ -289,7 +289,12 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       </div>
 
       {/* Main Content - Render component directly */}
-      <div className="flex-1 overflow-auto">
+      <div 
+        className="flex-1 overflow-auto transition-all duration-800 ease-out"
+        style={{
+          marginLeft: isExpanded ? '256px' : '80px',
+        }}
+      >
         {renderCurrentPage()}
       </div>
     </div>
