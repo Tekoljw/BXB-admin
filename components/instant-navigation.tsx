@@ -76,7 +76,13 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       {/* Sidebar */}
-      <div className={`${isExpanded ? 'w-64' : 'w-24'} ${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col transition-all duration-700 ease-in-out shadow-2xl border-r border-gray-700/50 relative overflow-hidden`}>
+      <div 
+        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl border-r border-gray-700/50 relative overflow-hidden`}
+        style={{
+          width: isExpanded ? '256px' : '96px',
+          transition: 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
+      >
         {/* Background Overlay with Static Gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-gray-700/5 opacity-50"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent"></div>
@@ -102,15 +108,19 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 <User size={18} />
               </div>
             </div>
-            {isExpanded && (
-              <div className="ml-3">
-                <div className="text-sm font-medium text-white">用户</div>
-                <div className="text-xs text-gray-400 flex items-center">
-                  <div className="w-2 h-2 bg-custom-green rounded-full mr-2"></div>
-                  在线
-                </div>
+            <div 
+              className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
+              style={{
+                width: isExpanded ? '120px' : '0px',
+                opacity: isExpanded ? 1 : 0,
+              }}
+            >
+              <div className="text-sm font-medium text-white whitespace-nowrap">用户</div>
+              <div className="text-xs text-gray-400 flex items-center whitespace-nowrap">
+                <div className="w-2 h-2 bg-custom-green rounded-full mr-2"></div>
+                在线
               </div>
-            )}
+            </div>
           </div>
         </div>
 
@@ -150,15 +160,19 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   </div>
                   
                   {/* Label with Smooth Slide Animation */}
-                  {isExpanded && (
-                    <div className="ml-4 overflow-hidden transition-all duration-700 ease-in-out">
-                      <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
-                        active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
-                      }`}>
-                        {item.label}
-                      </span>
-                    </div>
-                  )}
+                  <div 
+                    className="ml-4 overflow-hidden transition-all duration-500 ease-in-out"
+                    style={{
+                      width: isExpanded ? '120px' : '0px',
+                      opacity: isExpanded ? 1 : 0,
+                    }}
+                  >
+                    <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
+                      active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
+                    }`}>
+                      {item.label}
+                    </span>
+                  </div>
                   
                   {/* Active Indicator - Only show when expanded */}
                   {active && isExpanded && (
