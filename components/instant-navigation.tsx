@@ -130,10 +130,10 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <div key={item.path} className="relative group">
                 <button
                   onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-4 rounded-xl transition-all duration-300 transform hover:scale-105 relative overflow-hidden ${
+                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-4 rounded-xl transition-all duration-500 ease-in-out transform hover:scale-105 relative overflow-hidden border ${
                     active 
-                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10 shadow-lg shadow-custom-green/20 border border-custom-green/30" 
-                      : "hover:bg-gray-700/50 hover:shadow-lg hover:shadow-gray-600/20"
+                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10 shadow-lg shadow-custom-green/20 border-custom-green/30" 
+                      : "border-transparent hover:border-custom-green/40 hover:bg-gray-700/30 hover:shadow-lg hover:shadow-custom-green/10"
                   }`}
                   title={!isExpanded ? item.label : undefined}
                   style={{ 
@@ -146,8 +146,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                     <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl"></div>
                   )}
                   
-                  {/* Hover Ripple Effect with Fade */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-custom-green/5 to-gray-600/5 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out rounded-xl"></div>
+                  {/* Hover Border and Background Effect */}
+                  <div className="absolute inset-0 border border-transparent group-hover:border-custom-green/30 group-hover:bg-custom-green/10 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out rounded-xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-custom-green/8 to-gray-600/8 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out rounded-xl"></div>
                   
                   {/* Icon with Enhanced Animation */}
                   <div className={`relative transition-all duration-300 group-hover:scale-125 ${active ? 'text-custom-green drop-shadow-lg' : 'group-hover:text-custom-green'}`}>
