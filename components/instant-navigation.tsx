@@ -55,9 +55,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
   const navItems = [
     { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
-    { path: "/moments", icon: Users, label: "朋友圈", component: MomentsPage },
+    { path: "/moments", icon: Users, label: "分享", component: MomentsPage },
     { path: "/mall", icon: ShoppingBag, label: "商城", component: MallPage },
-    { path: "/usdt-trade", icon: DollarSign, label: "USDT买卖", component: USDTTradePage },
+    { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
     { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
     { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
     { path: "/futures", icon: FileText, label: "合约", component: FuturesPage },
