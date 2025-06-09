@@ -441,45 +441,36 @@ const TradingInterface = () => {
               }`}
             />
           </button>
-
-          {/* 价格标签和输入 */}
-          <div className="flex-1">
-            <label className="block text-xs text-gray-400 mb-1">
-              {orderType === "limit" ? "价格(USDT)" : "市价"}
-            </label>
-            {orderType === "limit" ? (
-              <input
-                type="text"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className={`w-full px-3 py-2 text-sm rounded-md border focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
-                  isDark
-                    ? "bg-[#252842] border-[#3a3d4a] text-white"
-                    : "bg-white border-gray-300 text-gray-800"
-                }`}
-              />
-            ) : (
-              <div
-                className={`w-full px-3 py-2 text-sm rounded-md border ${
-                  isDark ? "bg-[#252842] border-[#3a3d4a] text-gray-400" : "bg-gray-100 border-gray-300 text-gray-500"
-                }`}
-              >
-                市价
-              </div>
-            )}
-          </div>
+          <span className="text-xs text-gray-400">限价</span>
         </div>
+
+        {/* 价格输入框 */}
+        {orderType === "limit" && (
+          <div className="mt-2">
+            <label className="text-xs text-gray-400 mb-1 block">价格</label>
+            <input
+              type="text"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className={`w-full px-3 py-2 text-xs border rounded ${
+                isDark
+                  ? "bg-[#252842] border-[#3a3d4a] text-white"
+                  : "bg-white border-gray-300 text-gray-800"
+              }`}
+            />
+          </div>
+        )}
       </div>
 
       {/* 数量输入 */}
       <div className="mb-4">
-        <label className="block text-xs text-gray-400 mb-1">数量(BTC)</label>
+        <label className="text-xs text-gray-400 mb-1 block">数量</label>
         <input
           type="text"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="0.00"
-          className={`w-full px-3 py-2 text-sm rounded-md border focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
+          className={`w-full px-3 py-2 text-xs border rounded ${
             isDark
               ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
               : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
@@ -487,19 +478,21 @@ const TradingInterface = () => {
         />
       </div>
 
-      {/* 百分比按钮 */}
+      {/* 百分比滑块 */}
       <div className="mb-4">
-        <div className="grid grid-cols-4 gap-2">
+        <div className="flex justify-between items-center mb-2">
           {[25, 50, 75, 100].map((percent) => (
             <button
               key={percent}
               onClick={() => setPercentage(percent)}
-              className={`py-1 text-xs rounded-md border transition-colors ${
+              className={`px-2 py-1 text-xs rounded transition-colors ${
                 percentage === percent
-                  ? "border-custom-green bg-custom-green/10 text-custom-green"
+                  ? activeTab === "buy"
+                    ? "bg-custom-green text-white"
+                    : "bg-red-500 text-white"
                   : isDark
-                    ? "border-[#3a3d4a] text-gray-400 hover:border-gray-400"
-                    : "border-gray-300 text-gray-600 hover:border-gray-400"
+                    ? "bg-[#252842] text-gray-400 hover:text-white"
+                    : "bg-gray-100 text-gray-600 hover:text-gray-800"
               }`}
             >
               {percent}%
@@ -508,50 +501,49 @@ const TradingInterface = () => {
         </div>
       </div>
 
-      {/* 总计 */}
+      {/* 总价显示 */}
       <div className="mb-4">
-        <label className="block text-xs text-gray-400 mb-1">总计(USDT)</label>
-        <input
-          type="text"
-          value={total}
-          onChange={(e) => setTotal(e.target.value)}
-          placeholder="0.00"
-          className={`w-full px-3 py-2 text-sm rounded-md border focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
-            isDark
-              ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
-              : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
+        <label className="text-xs text-gray-400 mb-1 block">总价</label>
+        <div
+          className={`w-full px-3 py-2 text-xs border rounded ${
+            isDark ? "bg-[#252842] border-[#3a3d4a] text-gray-400" : "bg-gray-50 border-gray-300 text-gray-600"
           }`}
-        />
+        >
+          {total || "0.00"} USDT
+        </div>
       </div>
 
-      {/* 账户信息 */}
-      <div className={`mb-4 p-3 rounded-md ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
-        <div className="flex justify-between text-xs mb-1">
-          <span className="text-gray-400">可用</span>
-          <span className={`${isDark ? "text-white" : "text-gray-800"}`}>0.00000000 BTC</span>
-        </div>
-        <div className="flex justify-between text-xs">
-          <span className="text-gray-400">可用</span>
-          <span className={`${isDark ? "text-white" : "text-gray-800"}`}>0.00 USDT</span>
+      {/* 可用余额 */}
+      <div className="mb-4 text-xs">
+        <div className="flex justify-between text-gray-400">
+          <span>可用余额</span>
+          <span>12,580.45 USDT</span>
         </div>
       </div>
 
       {/* 交易按钮 */}
       <button
-        className={`w-full py-3 text-sm font-medium rounded-md transition-colors ${
+        className={`w-full py-3 rounded-md text-sm font-medium transition-colors ${
           activeTab === "buy"
             ? "bg-custom-green hover:bg-custom-green/90 text-white"
             : "bg-red-500 hover:bg-red-600 text-white"
         }`}
       >
-        {activeTab === "buy" ? "买入 BTC" : "卖出 BTC"}
+        {activeTab === "buy" ? "买入" : "卖出"} BTC
       </button>
 
-      {/* 登录提示 */}
-      <div className="mt-3">
-        <button className="w-full py-2 text-xs text-blue-500 hover:text-blue-600 transition-colors">
-          登录或注册
-        </button>
+      {/* 持仓信息 - 添加到底部 */}
+      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-[#252842]">
+        <div className="space-y-2 text-xs">
+          <div className="flex justify-between text-gray-400">
+            <span>持仓价值</span>
+            <span className={isDark ? "text-white" : "text-gray-800"}>$8,920.45</span>
+          </div>
+          <div className="flex justify-between text-gray-400">
+            <span>未实现盈亏</span>
+            <span className="text-custom-green">+$145.67 (+1.66%)</span>
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -559,10 +551,10 @@ const TradingInterface = () => {
 
 export default function FuturesPage() {
   const { theme } = useTheme()
-  const isDark = theme === "dark"
   const [mounted, setMounted] = useState(false)
-  const [selectedPair, setSelectedPair] = useState("BTC/USDT")
-  const [activeMarketTab, setActiveMarketTab] = useState("收藏")
+  const [activeMainTab, setActiveMainTab] = useState("合约")
+  const [favorites, setFavorites] = useState<string[]>(["BTC/USDT", "ETH/USDT"])
+  const isDark = theme === "dark"
 
   useEffect(() => {
     setMounted(true)
@@ -572,302 +564,203 @@ export default function FuturesPage() {
     return <div className="min-h-screen bg-[#f5f8fa] dark:bg-background"></div>
   }
 
-  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
+  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow-lg" : "bg-white border border-gray-200 shadow-lg"
 
-  // 市场数据 - 调整为完整数据
-  const marketData = {
-    收藏: [
-      {
-        pair: "BTC/USDT",
-        price: "69,877.86",
-        change: "+60.244",
-        changePercent: "+0.09%",
-        volume: "41,234.58M",
-        isPositive: true,
-        isLarge: true,
-      },
-      {
-        pair: "ETH/USDT",
-        price: "2,680.50",
-        change: "-32.12",
-        changePercent: "-1.18%",
-        volume: "12,456.78M",
-        isPositive: false,
-        isLarge: false,
-      },
-      {
-        pair: "BFT/USDT",
-        price: "1.2345",
-        change: "+0.0234",
-        changePercent: "+1.93%",
-        volume: "8,765.43M",
-        isPositive: true,
-        isLarge: false,
-      },
-    ],
-    现货: [
-      {
-        pair: "EHT/USDT",
-        price: "2,680.50",
-        change: "-32.12",
-        changePercent: "-1.18%",
-        volume: "12,456.78M",
-        isPositive: false,
-        isLarge: false,
-      },
-      {
-        pair: "DOGE/USDT",
-        price: "0.08234",
-        change: "+0.00123",
-        changePercent: "+1.52%",
-        volume: "2,345.67M",
-        isPositive: true,
-        isLarge: false,
-      },
-      {
-        pair: "VGX/USDT",
-        price: "0.5678",
-        change: "-0.0123",
-        changePercent: "-2.12%",
-        volume: "1,234.56M",
-        isPositive: false,
-        isLarge: false,
-      },
-      {
-        pair: "CAK/USDT",
-        price: "4.5678",
-        change: "+0.1234",
-        changePercent: "+2.78%",
-        volume: "987.65M",
-        isPositive: true,
-        isLarge: false,
-      },
-    ],
-    杠杆: [
-      {
-        pair: "BON/USDT",
-        price: "12.3456",
-        change: "-0.5678",
-        changePercent: "-4.38%",
-        volume: "654.32M",
-        isPositive: false,
-        isLarge: false,
-      },
-      {
-        pair: "UBC/USDT",
-        price: "0.9876",
-        change: "+0.0345",
-        changePercent: "+3.62%",
-        volume: "432.10M",
-        isPositive: true,
-        isLarge: false,
-      },
-      {
-        pair: "AI/USDT",
-        price: "87.6543",
-        change: "+2.3456",
-        changePercent: "+2.75%",
-        volume: "321.09M",
-        isPositive: true,
-        isLarge: false,
-      },
-      {
-        pair: "BCO/USDT",
-        price: "0.3456",
-        change: "-0.0087",
-        changePercent: "-2.46%",
-        volume: "210.98M",
-        isPositive: false,
-        isLarge: false,
-      },
-    ],
-    合约: [
-      {
-        pair: "CT/USDT",
-        price: "234.56",
-        change: "+12.34",
-        changePercent: "+5.56%",
-        volume: "1,876.54M",
-        isPositive: true,
-        isLarge: false,
-      },
-      {
-        pair: "JPC/USDT",
-        price: "0.0123",
-        change: "-0.0005",
-        changePercent: "-3.90%",
-        volume: "765.43M",
-        isPositive: false,
-        isLarge: false,
-      },
-      {
-        pair: "LTO/USDT",
-        price: "45.6789",
-        change: "+1.2345",
-        changePercent: "+2.78%",
-        volume: "543.21M",
-        isPositive: true,
-        isLarge: false,
-      },
-      {
-        pair: "SM/USDT",
-        price: "9.8765",
-        change: "-0.3456",
-        changePercent: "-3.38%",
-        volume: "432.10M",
-        isPositive: false,
-        isLarge: false,
-      },
-      {
-        pair: "AXV/USDT",
-        price: "156.78",
-        change: "+8.90",
-        changePercent: "+6.02%",
-        volume: "987.65M",
-        isPositive: true,
-        isLarge: false,
-      },
-    ],
+  // 合约交易对数据
+  const cryptoData = [
+    {
+      symbol: "BTC",
+      pair: "BTC/USDT",
+      name: "Bitcoin",
+      price: "69,877.68",
+      change: "+2.45%",
+      changeValue: "+1,672.43",
+      volume: "125,890 BTC",
+      marketCap: "1,375B",
+      isPositive: true,
+    },
+    {
+      symbol: "ETH", 
+      pair: "ETH/USDT",
+      name: "Ethereum",
+      price: "3,245.89",
+      change: "+1.82%",
+      changeValue: "+58.12",
+      volume: "89,456 ETH",
+      marketCap: "390B",
+      isPositive: true,
+    },
+    {
+      symbol: "BNB",
+      pair: "BNB/USDT", 
+      name: "BNB",
+      price: "615.32",
+      change: "-0.67%",
+      changeValue: "-4.15",
+      volume: "45,123 BNB",
+      marketCap: "89B",
+      isPositive: false,
+    },
+    {
+      symbol: "ADA",
+      pair: "ADA/USDT",
+      name: "Cardano", 
+      price: "0.4567",
+      change: "+3.21%",
+      changeValue: "+0.0142",
+      volume: "1.23M ADA",
+      marketCap: "16B",
+      isPositive: true,
+    },
+    {
+      symbol: "SOL",
+      pair: "SOL/USDT",
+      name: "Solana",
+      price: "98.76", 
+      change: "-1.23%",
+      changeValue: "-1.23",
+      volume: "67,890 SOL",
+      marketCap: "44B",
+      isPositive: false,
+    },
+    {
+      symbol: "DOT",
+      pair: "DOT/USDT",
+      name: "Polkadot",
+      price: "7.654",
+      change: "+0.98%", 
+      changeValue: "+0.074",
+      volume: "234K DOT",
+      marketCap: "10B",
+      isPositive: true,
+    },
+  ]
+
+  const toggleFavorite = (pair: string) => {
+    setFavorites(prev => 
+      prev.includes(pair) 
+        ? prev.filter(p => p !== pair)
+        : [...prev, pair]
+    )
   }
-
-  const marketTabs = ["收藏", "现货", "杠杆", "合约"]
 
   return (
     <div className={`min-h-screen p-4 ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       {/* 页面头部 */}
       <div className="mb-6">
         <h1 className={`text-3xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>合约交易</h1>
-        <p className="text-gray-400">专业合约交易平台 - 永续合约交易</p>
+        <p className="text-gray-400">专业的加密货币合约交易平台</p>
       </div>
 
-      {/* 主要布局 */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[calc(100vh-12rem)]">
-        {/* 左侧 - 市场列表 */}
-        <div className={`${cardStyle} rounded-lg p-4 h-full flex flex-col`}>
-          {/* 搜索和页签 */}
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="搜索交易对"
-              className={`w-full px-3 py-2 text-sm rounded-md border mb-3 focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
-                isDark
-                  ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
-                  : "bg-gray-50 border-gray-300 text-gray-800 placeholder-gray-400"
-              }`}
-            />
-
-            {/* 页签 */}
-            <div className="flex space-x-1 mb-3">
-              {marketTabs.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveMarketTab(tab)}
-                  className={`px-3 py-1 text-xs rounded transition-colors ${
-                    activeMarketTab === tab
-                      ? "bg-custom-green text-white"
-                      : isDark
-                        ? "text-gray-400 hover:text-white hover:bg-[#252842]"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 市场列表表头 */}
-          <div className="grid grid-cols-3 gap-2 text-xs text-gray-400 mb-2 px-1">
-            <div>交易对</div>
-            <div className="text-right">价格</div>
-            <div className="text-right">24h涨跌</div>
-          </div>
-
-          {/* 市场列表内容 */}
-          <div className="flex-1 overflow-y-auto space-y-1">
-            {marketData[activeMarketTab]?.map((market, index) => (
-              <div
-                key={index}
-                onClick={() => setSelectedPair(market.pair)}
-                className={`grid grid-cols-3 gap-2 p-2 rounded cursor-pointer transition-colors ${
-                  selectedPair === market.pair
-                    ? isDark
-                      ? "bg-[#252842]"
-                      : "bg-gray-100"
-                    : isDark
-                      ? "hover:bg-[#252842]/50"
-                      : "hover:bg-gray-50"
-                }`}
-              >
-                <div className="flex items-center space-x-2">
-                  <CryptoLogo symbol={market.pair.split("/")[0]} size="w-5 h-5" />
-                  <div>
-                    <div className={`text-xs font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                      {market.pair}
-                    </div>
-                    <div className="text-xs text-gray-400">{market.volume}</div>
-                  </div>
-                  {index === 0 && <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />}
-                </div>
-                <div className={`text-right text-xs ${isDark ? "text-white" : "text-gray-800"}`}>{market.price}</div>
-                <div className="text-right">
-                  <div className={`text-xs ${market.isPositive ? "text-custom-green" : "text-red-400"}`}>
-                    {market.changePercent}
-                  </div>
-                  <div className="w-full flex justify-end mt-1">
-                    <MiniLineChart isPositive={market.isPositive} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* 中间 - K线图 */}
-        <div className={`lg:col-span-2 ${cardStyle} rounded-lg p-4`}>
-          {/* 图表头部 */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <CryptoLogo symbol={selectedPair.split("/")[0]} />
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        {/* 左侧 - K线图表 */}
+        <div className="lg:col-span-3">
+          <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <CryptoLogo symbol="BTC" />
                 <div>
-                  <div className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>{selectedPair}</div>
-                  <div className="text-xs text-gray-400">永续合约</div>
+                  <div className={`font-bold text-lg ${isDark ? "text-white" : "text-gray-800"}`}>BTC/USDT</div>
+                  <div className="text-sm text-gray-400">永续合约</div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className={`font-bold text-xl ${isDark ? "text-white" : "text-gray-800"}`}>69,877.68</div>
+                  <div className="text-custom-green text-sm">+2.45%</div>
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
-                <div className={`text-xl font-bold text-custom-green`}>69,877.86</div>
-                <div className="text-custom-green text-sm">+60.244 (+0.09%)</div>
+            </div>
+            <TradingViewChart />
+          </div>
+
+          {/* 交易对列表 */}
+          <div className={`${cardStyle} rounded-lg p-4`}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>合约交易对</h3>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  placeholder="搜索交易对"
+                  className={`px-3 py-1 text-sm rounded border ${
+                    isDark
+                      ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
+                      : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
+                  }`}
+                />
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <button
-                className={`px-3 py-1 text-xs rounded border transition-colors ${
-                  isDark
-                    ? "border-[#3a3d4a] text-gray-400 hover:text-white hover:border-gray-400"
-                    : "border-gray-300 text-gray-600 hover:text-gray-800 hover:border-gray-400"
-                }`}
-              >
-                全屏
-              </button>
+
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-xs text-gray-400 border-b border-gray-200 dark:border-[#252842]">
+                    <th className="text-left py-2 font-medium">交易对</th>
+                    <th className="text-right py-2 font-medium">最新价格</th>
+                    <th className="text-right py-2 font-medium">24h涨跌</th>
+                    <th className="text-center py-2 font-medium">趋势</th>
+                    <th className="text-right py-2 font-medium">24h成交量</th>
+                    <th className="text-center py-2 font-medium">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cryptoData.map((crypto, index) => (
+                    <tr key={index} className="border-b border-gray-100 dark:border-[#252842]/50 hover:bg-gray-50 dark:hover:bg-[#252842]/30 transition-colors">
+                      <td className="py-3">
+                        <div className="flex items-center space-x-3">
+                          <button
+                            onClick={() => toggleFavorite(crypto.pair)}
+                            className="p-1"
+                          >
+                            <Star
+                              className={`w-4 h-4 ${
+                                favorites.includes(crypto.pair)
+                                  ? "text-yellow-500 fill-yellow-500"
+                                  : "text-gray-400 hover:text-yellow-500"
+                              }`}
+                            />
+                          </button>
+                          <CryptoLogo symbol={crypto.symbol} size="w-6 h-6" />
+                          <div>
+                            <div className={`font-medium text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
+                              {crypto.pair}
+                            </div>
+                            <div className="text-xs text-gray-400">{crypto.name}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className={`text-right py-3 font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                        ${crypto.price}
+                      </td>
+                      <td className="text-right py-3">
+                        <div className={`font-medium ${crypto.isPositive ? "text-custom-green" : "text-red-500"}`}>
+                          {crypto.change}
+                        </div>
+                        <div className={`text-xs ${crypto.isPositive ? "text-custom-green" : "text-red-500"}`}>
+                          {crypto.isPositive ? "+" : ""}{crypto.changeValue}
+                        </div>
+                      </td>
+                      <td className="text-center py-3">
+                        <MiniLineChart isPositive={crypto.isPositive} />
+                      </td>
+                      <td className={`text-right py-3 text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                        {crypto.volume}
+                      </td>
+                      <td className="text-center py-3">
+                        <button className="px-3 py-1 text-xs bg-custom-green text-white rounded hover:bg-custom-green/90 transition-colors">
+                          交易
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-
-          {/* TradingView 图表 */}
-          <TradingViewChart />
         </div>
 
-        {/* 右侧 - 深度图和交易 */}
-        <div className="space-y-4 h-full flex flex-col">
-          {/* 深度图 */}
-          <div className="flex-1">
-            <DepthChart />
-          </div>
-
-          {/* 交易界面 */}
-          <div>
-            <TradingInterface />
-          </div>
+        {/* 右侧 - 深度图和交易界面 */}
+        <div className="lg:col-span-2 space-y-6">
+          <DepthChart />
+          <TradingInterface />
         </div>
       </div>
     </div>
