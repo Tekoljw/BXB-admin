@@ -78,7 +78,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       {/* Sidebar */}
       <div className={`${isExpanded ? 'w-64' : 'w-24'} ${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col transition-all duration-500 ease-in-out shadow-2xl border-r border-gray-700/50 relative overflow-hidden`}>
         {/* Background Overlay with Animated Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-purple-500/5 opacity-50"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-gray-700/5 opacity-50"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent animate-pulse"></div>
         
         {/* Header - Hamburger Menu with Glow Effect */}
@@ -89,7 +89,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
             title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
           >
             {/* Button Glow Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-custom-green/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-custom-green/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
             <div className="relative transition-all duration-300 group-hover:rotate-180">
               <Menu size={22} className="drop-shadow-sm" />
             </div>
@@ -100,7 +100,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-2 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
           <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'} transition-all duration-500`}>
             <div className="relative group">
-              <div className="w-10 h-10 bg-gradient-to-br from-custom-green to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-custom-green/30">
+              <div className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-custom-green/30">
                 <User size={18} />
               </div>
               {/* Avatar Pulse Ring */}
@@ -130,7 +130,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   onClick={() => navigate(item.path)}
                   className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-4 rounded-xl transition-all duration-300 transform hover:scale-105 relative overflow-hidden ${
                     active 
-                      ? "bg-gradient-to-r from-custom-green/20 to-purple-500/20 shadow-lg shadow-custom-green/20 border border-custom-green/30" 
+                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10 shadow-lg shadow-custom-green/20 border border-custom-green/30" 
                       : "hover:bg-gray-700/50 hover:shadow-lg hover:shadow-gray-600/20"
                   }`}
                   title={!isExpanded ? item.label : undefined}
@@ -141,11 +141,11 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 >
                   {/* Active Item Background Glow */}
                   {active && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-purple-500/10 rounded-xl animate-pulse"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl animate-pulse"></div>
                   )}
                   
                   {/* Hover Ripple Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-custom-green/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-custom-green/5 to-gray-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
                   
                   {/* Icon with Enhanced Animation */}
                   <div className={`relative transition-all duration-300 group-hover:scale-125 ${active ? 'text-custom-green drop-shadow-lg' : 'group-hover:text-custom-green'}`}>
@@ -169,7 +169,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   
                   {/* Active Indicator */}
                   {active && (
-                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-purple-500 rounded-full shadow-lg animate-pulse"></div>
+                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full shadow-lg animate-pulse"></div>
                   )}
                 </button>
                 
@@ -193,7 +193,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/20 group relative overflow-hidden"
               title={language === "zh" ? "Switch to English" : "切换到中文"}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-custom-green/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
               <div className="relative transition-all duration-300 group-hover:rotate-12 group-hover:text-blue-400">
                 <Globe2 size={20} className="drop-shadow-sm" />
               </div>
@@ -210,11 +210,11 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
             </button>
             <button 
               onClick={() => navigate("/settings")}
-              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-purple-500/20 group relative overflow-hidden"
+              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-gray-500/20 group relative overflow-hidden"
               title="设置"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
-              <div className="relative transition-all duration-300 group-hover:rotate-90 group-hover:text-purple-400">
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-500/20 to-custom-green/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+              <div className="relative transition-all duration-300 group-hover:rotate-90 group-hover:text-custom-green">
                 <Settings size={20} className="drop-shadow-sm" />
               </div>
             </button>
