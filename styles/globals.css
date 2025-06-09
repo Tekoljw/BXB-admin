@@ -219,3 +219,40 @@ button, input[type="button"], input[type="submit"], [type="button"] {
   transition-duration: 0s !important;
   transition-delay: 0s !important;
 }
+
+/* Hide Next.js development indicators */
+div[data-nextjs-toast-errors] {
+  display: none !important;
+}
+
+div[data-nextjs-dialog-overlay] {
+  display: none !important;
+}
+
+div[data-nextjs-portal] {
+  display: none !important;
+}
+
+/* Hide build activity indicator */
+div[id^="__next-build-watcher"] {
+  display: none !important;
+}
+
+/* Hide all Next.js dev overlays */
+div[style*="position: fixed"][style*="z-index"][style*="bottom"][style*="left"] {
+  display: none !important;
+}
+
+/* Target specific Next.js dev indicator patterns */
+div[style*="position:fixed"][style*="bottom:0"][style*="left:0"] {
+  display: none !important;
+}
+
+/* Hide React DevTools and Next.js indicators */
+div[data-react-devtools-portal-root] {
+  display: none !important;
+}
+
+#__next-build-watcher {
+  display: none !important;
+}

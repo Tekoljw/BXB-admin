@@ -23,10 +23,7 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
   },
-  // 禁用开发模式覆盖层
-  devIndicators: {
-    buildActivity: false,
-  },
+
 }
 
 export default nextConfig
