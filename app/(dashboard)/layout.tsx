@@ -23,17 +23,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     document.cookie = "isLoggedIn=true; path=/"
   }, [])
 
-  // 优化事件处理函数 - 使用 flushSync 立即更新
+  // 事件处理函数
   const handleCloseMobile = useCallback(() => {
-    requestAnimationFrame(() => {
-      setMobileSidebarOpen(false)
-    })
+    setMobileSidebarOpen(false)
   }, [])
 
   const handleToggleMobile = useCallback((isOpen: boolean) => {
-    requestAnimationFrame(() => {
-      setMobileSidebarOpen(isOpen)
-    })
+    setMobileSidebarOpen(isOpen)
   }, [])
 
   // 简化点击外部关闭逻辑
@@ -82,24 +78,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
 
             {/* Mobile Sidebar Overlay */}
-            <div 
-              id="sidebar-overlay"
-              className={`fixed inset-0 bg-black transition-opacity duration-150 z-20 md:hidden ${
-                mobileSidebarOpen ? 'opacity-50 pointer-events-auto' : 'opacity-0 pointer-events-none'
-              }`}
-              onClick={handleCloseMobile}
-            />
+            {mobileSidebarOpen && (
+              <div
+                className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"
+                onClick={handleCloseMobile}
+              />
+            )}
 
             {/* Sidebar */}
             <div
               id="mobile-sidebar"
-              className={`sidebar-container ${
-                mobileSidebarOpen ? "sidebar-open" : "sidebar-closed"
-              } fixed inset-y-0 left-0 z-30 w-64 md:relative md:translate-x-0 md:w-24`}
-              style={{
-                backgroundColor: '#374151',
-                borderRight: '1px solid rgb(55, 65, 81)'
-              }}
+              className={`${
+                mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
+              } fixed inset-y-0 left-0 z-30 w-64 bg-[#374151] border-r border-[#4B5563] transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-24`}
             >
               <MemoizedSideNavigation onCloseMobile={handleCloseMobile} />
             </div>
