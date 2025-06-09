@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useEffect, useState, useCallback, memo } from "react"
 import { useRouter } from "next/navigation"
-import SideNavigation from "@/components/side-navigation"
+import SideNavigation from "@/components/side-navigation-new"
 import MobileSidebarToggle from "@/components/mobile-sidebar-toggle"
 import NavigationLoader from "@/components/navigation-loader"
 
