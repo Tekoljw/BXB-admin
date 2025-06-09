@@ -103,7 +103,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl relative overflow-hidden`}
         style={{
           width: isExpanded ? '256px' : '96px',
-          transition: 'width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
+          transform: isExpanded ? 'translateX(0)' : 'translateX(-40px)',
+          transition: 'all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
+          opacity: isExpanded ? 1 : 0.9,
         }}
       >
         {/* Background Overlay with Static Gradient */}
