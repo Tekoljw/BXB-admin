@@ -19,6 +19,9 @@ import {
   Shield,
   UserPlus,
   QrCode,
+  Folder,
+  Scissors,
+  MoreVertical,
 } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
@@ -537,60 +540,130 @@ export default function ChatPage() {
                 </div>
               </div>
 
-              {/* 输入框 */}
-              <div className="p-4 border-t border-gray-200 dark:border-[#252842]">
-                <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
-                  <button
-                    type="button"
-                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                    }`}
-                  >
-                    <Smile className="h-5 w-5 text-gray-400" />
-                  </button>
-                  <button
-                    type="button"
-                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                    }`}
-                  >
-                    <Paperclip className="h-5 w-5 text-gray-400" />
-                  </button>
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="输入消息..."
-                      className={`w-full px-4 py-2 rounded-full text-sm transition-all duration-200 ${
-                        isDark
-                          ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-400 focus:scale-105"
-                          : "bg-gray-100 text-gray-800 border-gray-200 placeholder-gray-500 focus:scale-105"
-                      } border focus:outline-none focus:ring-2 focus:ring-custom-green/20`}
-                    />
+              {/* WeChat风格输入框 */}
+              <div className={`p-4 ${isDark ? "bg-[#1a1d29]" : "bg-white"} border-t border-gray-200 dark:border-[#252842]`}>
+                <div className="flex items-end space-x-3">
+                  {/* 左侧功能按钮 */}
+                  <div className="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
+                        isDark ? "hover:bg-[#252842] text-gray-400" : "hover:bg-gray-100 text-gray-600"
+                      }`}
+                      title="表情"
+                    >
+                      <Smile className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
+                        isDark ? "hover:bg-[#252842] text-gray-400" : "hover:bg-gray-100 text-gray-600"
+                      }`}
+                      title="文件"
+                    >
+                      <Folder className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
+                        isDark ? "hover:bg-[#252842] text-gray-400" : "hover:bg-gray-100 text-gray-600"
+                      }`}
+                      title="截图"
+                    >
+                      <Scissors className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
+                        isDark ? "hover:bg-[#252842] text-gray-400" : "hover:bg-gray-100 text-gray-600"
+                      }`}
+                      title="更多"
+                    >
+                      <MoreVertical className="h-5 w-5" />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                    }`}
-                  >
-                    <Mic className="h-5 w-5 text-gray-400" />
-                  </button>
-                  <button
-                    type="submit"
-                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                      message.trim()
-                        ? "bg-custom-green text-white hover:bg-custom-green/90"
-                        : isDark
-                          ? "bg-[#252842] text-gray-400"
-                          : "bg-gray-100 text-gray-400"
-                    }`}
-                    disabled={!message.trim()}
-                  >
-                    <Send className="h-5 w-5" />
-                  </button>
-                </form>
+
+                  {/* 中间输入区域 */}
+                  <div className="flex-1 relative">
+                    <form onSubmit={handleSendMessage} className="flex items-end space-x-3">
+                      {/* 输入框 - 无边框设计 */}
+                      <div className="flex-1 min-h-[40px] max-h-[120px] relative">
+                        <textarea
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                              e.preventDefault()
+                              handleSendMessage(e)
+                            }
+                          }}
+                          placeholder=""
+                          rows={1}
+                          className={`w-full px-3 py-2 text-sm resize-none overflow-hidden transition-all duration-200 ${
+                            isDark
+                              ? "bg-transparent text-white placeholder-gray-400"
+                              : "bg-transparent text-gray-800 placeholder-gray-500"
+                          } border-0 focus:outline-none focus:ring-0`}
+                          style={{
+                            minHeight: '40px',
+                            lineHeight: '20px',
+                            border: 'none',
+                            outline: 'none',
+                            boxShadow: 'none'
+                          }}
+                          onInput={(e) => {
+                            const target = e.target as HTMLTextAreaElement
+                            target.style.height = 'auto'
+                            target.style.height = Math.min(target.scrollHeight, 120) + 'px'
+                          }}
+                        />
+                        {/* 输入提示线 */}
+                        <div className={`absolute bottom-0 left-0 right-0 h-px ${
+                          message.length > 0 
+                            ? "bg-custom-green" 
+                            : isDark 
+                              ? "bg-gray-600" 
+                              : "bg-gray-300"
+                        } transition-colors duration-200`}></div>
+                      </div>
+
+                      {/* 右侧发送按钮 */}
+                      <div className="flex items-center space-x-2">
+                        <button
+                          type="button"
+                          className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
+                            isDark ? "hover:bg-[#252842] text-gray-400" : "hover:bg-gray-100 text-gray-600"
+                          }`}
+                          title="语音"
+                        >
+                          <Phone className="h-5 w-5" />
+                        </button>
+                        <button
+                          type="button"
+                          className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
+                            isDark ? "hover:bg-[#252842] text-gray-400" : "hover:bg-gray-100 text-gray-600"
+                          }`}
+                          title="视频"
+                        >
+                          <Video className="h-5 w-5" />
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={!message.trim()}
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                            message.trim()
+                              ? "bg-custom-green text-white hover:bg-custom-green/90 hover:scale-105"
+                              : isDark
+                                ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+                                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          }`}
+                        >
+                          发送(S)
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
               </div>
             </>
           ) : (
