@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { User, LogOut, Settings, UserCircle, CreditCard, HelpCircle } from "lucide-react"
+import { User, LogOut, Settings, UserCircle, CreditCard, HelpCircle, Edit3 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export default function AccountDropdown() {
@@ -43,14 +43,22 @@ export default function AccountDropdown() {
       {isOpen && (
         <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-card ring-1 ring-black/5 dark:ring-white/10 z-50 animate-in fade-in slide-in-from-top-5 duration-200">
           <div className="py-2 px-3 border-b border-border">
-            <div className="flex items-center space-x-3">
-              <div className="bg-primary/20 rounded-full p-2">
-                <UserCircle className="h-6 w-6 text-primary" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="bg-primary/20 rounded-full p-2">
+                  <UserCircle className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">John Doe</p>
+                  <p className="text-xs text-muted-foreground">demo@example.com</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium">John Doe</p>
-                <p className="text-xs text-muted-foreground">demo@example.com</p>
-              </div>
+              <button 
+                className="p-1.5 rounded-lg hover:bg-muted transition-colors duration-200 text-muted-foreground hover:text-foreground"
+                title="编辑个人资料"
+              >
+                <Edit3 className="h-4 w-4" />
+              </button>
             </div>
           </div>
 
