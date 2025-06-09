@@ -23,13 +23,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     document.cookie = "isLoggedIn=true; path=/"
   }, [])
 
-  // 优化事件处理函数
+  // 优化事件处理函数 - 使用 flushSync 立即更新
   const handleCloseMobile = useCallback(() => {
-    setMobileSidebarOpen(false)
+    requestAnimationFrame(() => {
+      setMobileSidebarOpen(false)
+    })
   }, [])
 
   const handleToggleMobile = useCallback((isOpen: boolean) => {
-    setMobileSidebarOpen(isOpen)
+    requestAnimationFrame(() => {
+      setMobileSidebarOpen(isOpen)
+    })
   }, [])
 
   // 简化点击外部关闭逻辑
@@ -78,14 +82,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
 
             {/* Mobile Sidebar Overlay */}
-            {mobileSidebarOpen && <div className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden" />}
+            <div 
+              id="sidebar-overlay"
+              className={`fixed inset-0 bg-black transition-opacity duration-150 z-20 md:hidden ${
+                mobileSidebarOpen ? 'opacity-50 pointer-events-auto' : 'opacity-0 pointer-events-none'
+              }`}
+              onClick={handleCloseMobile}
+            />
 
             {/* Sidebar */}
             <div
               id="mobile-sidebar"
-              className={`${
-                mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
-              } fixed inset-y-0 left-0 z-30 w-64 bg-card border-r border-border transform transition-transform duration-200 ease-out md:relative md:translate-x-0 md:w-24`}
+              className={`sidebar-container ${
+                mobileSidebarOpen ? "sidebar-open" : "sidebar-closed"
+              } fixed inset-y-0 left-0 z-30 w-64 bg-card border-r border-border md:relative md:translate-x-0 md:w-24`}
             >
               <MemoizedSideNavigation onCloseMobile={handleCloseMobile} />
             </div>
