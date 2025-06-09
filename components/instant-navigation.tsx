@@ -76,7 +76,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       {/* Sidebar */}
-      <div className={`${isExpanded ? 'w-64' : 'w-24'} ${theme === 'dark' ? 'bg-gray-800' : 'bg-black'} text-white flex flex-col transition-all duration-300`}>
+      <div className={`${isExpanded ? 'w-64' : 'w-24'} ${theme === 'dark' ? 'bg-gray-800' : 'bg-black'} text-white flex flex-col transition-all duration-300 ease-in-out`}>
         {/* Header - Hamburger Menu */}
         <div className="h-12 flex items-center justify-center px-3 border-b border-gray-700">
           <button
@@ -86,6 +86,21 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
           >
             <Menu size={20} />
           </button>
+        </div>
+
+        {/* User Section - Above Navigation */}
+        <div className={`${isExpanded ? 'px-4 py-3' : 'px-2 py-3'} border-b border-gray-700`}>
+          <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'}`}>
+            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+              <User size={16} />
+            </div>
+            {isExpanded && (
+              <div>
+                <div className="text-sm font-medium text-white">用户</div>
+                <div className="text-xs text-gray-400">在线</div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Navigation */}
@@ -108,42 +123,26 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
           })}
         </div>
 
-        {/* Footer - User Avatar and Controls */}
+        {/* Footer - Controls */}
         <div className="border-t border-gray-700">
-          {/* User Section */}
-          <div className={`${isExpanded ? 'px-4 py-3' : 'px-2 py-3'} border-b border-gray-700`}>
-            <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'}`}>
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                <User size={16} />
-              </div>
-              {isExpanded && (
-                <div>
-                  <div className="text-sm font-medium text-white">用户</div>
-                  <div className="text-xs text-gray-400">在线</div>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          {/* Controls */}
-          <div className={`h-16 flex items-center ${isExpanded ? 'justify-center gap-4' : 'flex-col gap-2'} px-3`}>
+          <div className={`${isExpanded ? 'h-16 flex items-center justify-center gap-4' : 'py-3 flex flex-col items-center gap-2'} px-3`}>
             <button 
               onClick={() => setLanguage(language === "zh" ? "en" : "zh")}
-              className="p-2 hover:bg-gray-700 rounded-lg"
+              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
               title={language === "zh" ? "Switch to English" : "切换到中文"}
             >
               <Globe2 size={18} />
             </button>
             <button 
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 hover:bg-gray-700 rounded-lg"
+              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
               title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
             >
               {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <button 
               onClick={() => navigate("/settings")}
-              className="p-2 hover:bg-gray-700 rounded-lg"
+              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
               title="设置"
             >
               <Settings size={18} />
