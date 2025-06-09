@@ -180,7 +180,8 @@ button, input[type="button"], input[type="submit"], [type="button"] {
 #mobile-sidebar nav {
   flex: 1 !important;
   overflow: hidden !important;
-  max-height: calc(100vh - 200px) !important;
+  max-height: calc(100vh - 120px) !important;
+  min-height: calc(100vh - 120px) !important;
 }
 
 #mobile-sidebar nav ul {
@@ -188,7 +189,27 @@ button, input[type="button"], input[type="submit"], [type="button"] {
   overflow: hidden !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-content: flex-start !important;
+  justify-content: space-evenly !important;
+}
+
+/* Force sidebar to never scroll */
+#mobile-sidebar {
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+}
+
+#mobile-sidebar * {
+  overflow: visible !important;
+}
+
+/* Hide any potential scrollbars */
+#mobile-sidebar::-webkit-scrollbar {
+  display: none !important;
+}
+
+#mobile-sidebar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 /* Disable transitions during resize */
