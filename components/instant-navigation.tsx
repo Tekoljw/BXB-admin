@@ -37,6 +37,7 @@ interface InstantNavigationProps {
 export default function InstantNavigation({ onCloseMobile }: InstantNavigationProps) {
   const [currentPage, setCurrentPage] = useState("/chat")
   const [isExpanded, setIsExpanded] = useState(true)
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const pathname = usePathname()
   const { theme, setTheme, language, setLanguage } = useTheme()
 
@@ -44,11 +45,32 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     setCurrentPage(pathname)
   }, [pathname])
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showLanguageDropdown) {
+        setShowLanguageDropdown(false)
+      }
+    }
+
+    if (showLanguageDropdown) {
+      document.addEventListener('click', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showLanguageDropdown])
+
   const navigate = (path: string) => {
     setCurrentPage(path)
     onCloseMobile?.()
     // Update URL without triggering page reload
     window.history.pushState({}, "", path)
+  }
+
+  const handleLanguageSelect = (lang: "en" | "zh") => {
+    setLanguage(lang)
+    setShowLanguageDropdown(false)
   }
 
   const isActive = (path: string) => currentPage === path
@@ -196,15 +218,49 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         {/* Footer with Enhanced Controls */}
         <div className="relative z-10 border-t border-gray-700/50 backdrop-blur-sm">
           <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} px-3`}>
-            <button 
-              onClick={() => setLanguage(language === "zh" ? "en" : "zh")}
-              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
-              title={language === "zh" ? "Switch to English" : "切换到中文"}
-            >
-              <div className="transition-all duration-300 group-hover:rotate-12 group-hover:text-blue-400">
-                <Globe2 size={20} />
-              </div>
-            </button>
+            <div className="relative">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setShowLanguageDropdown(!showLanguageDropdown)
+                }}
+                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
+                title="语言选择"
+              >
+                <div className="transition-all duration-300 group-hover:rotate-12 group-hover:text-blue-400">
+                  <Globe2 size={20} />
+                </div>
+              </button>
+
+              {/* Language Dropdown */}
+              {showLanguageDropdown && (
+                <div 
+                  className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-800 border border-gray-600 rounded-lg shadow-xl py-2 min-w-[120px] z-50 animate-in fade-in-0 zoom-in-95 duration-200"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={() => handleLanguageSelect("zh")}
+                    className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors duration-200 flex items-center ${
+                      language === "zh" ? "text-custom-green" : "text-white"
+                    }`}
+                  >
+                    <span className="mr-2">🇨🇳</span>
+                    中文
+                    {language === "zh" && <span className="ml-auto text-custom-green">✓</span>}
+                  </button>
+                  <button
+                    onClick={() => handleLanguageSelect("en")}
+                    className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors duration-200 flex items-center ${
+                      language === "en" ? "text-custom-green" : "text-white"
+                    }`}
+                  >
+                    <span className="mr-2">🇺🇸</span>
+                    English
+                    {language === "en" && <span className="ml-auto text-custom-green">✓</span>}
+                  </button>
+                </div>
+              )}
+            </div>
             <button 
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
