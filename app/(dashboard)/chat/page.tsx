@@ -298,9 +298,9 @@ export default function ChatPage() {
   return (
     <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       {/* 主聊天区域 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-0 h-screen">
-        {/* 左侧联系人列表 */}
-        <div className={`${cardStyle} h-screen flex flex-col`}>
+      <div className="flex h-screen">
+        {/* 左侧联系人列表 - 移动端全屏显示 */}
+        <div className={`${cardStyle} ${selectedContact && 'hidden'} md:block md:w-1/3 lg:w-1/4 xl:w-1/3 h-screen flex flex-col w-full`}>
           {/* 搜索框和添加按钮 */}
           <div className="flex items-center gap-2 p-4 border-b border-gray-200 dark:border-[#252842]">
             <div className="relative flex-1">
@@ -454,13 +454,22 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* 右侧聊天窗口 */}
-        <div className={`${cardStyle} h-screen flex flex-col md:col-span-2`}>
+        {/* 右侧聊天窗口 - 移动端全屏显示 */}
+        <div className={`${cardStyle} ${!selectedContact && 'hidden'} md:block md:flex-1 h-screen flex flex-col w-full`}>
           {selectedContactData ? (
             <>
-              {/* 聊天头部 */}
-              <div className="p-4 border-b border-gray-200 dark:border-[#252842] flex items-center justify-between">
+              {/* 聊天头部 - 移动端添加返回按钮 */}
+              <div className="p-3 md:p-4 border-b border-gray-200 dark:border-[#252842] flex items-center justify-between">
                 <div className="flex items-center">
+                  {/* 移动端返回按钮 */}
+                  <button
+                    onClick={() => setSelectedContact("")}
+                    className="md:hidden mr-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#252842]"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
                   <div className="relative mr-3">
                     <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-xl">
                       {selectedContactData.avatar}

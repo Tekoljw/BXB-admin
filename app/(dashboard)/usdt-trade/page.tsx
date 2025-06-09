@@ -159,19 +159,19 @@ export default function UsdtTradePage() {
   const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
 
   return (
-    <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
-      {/* 搜索栏 */}
-      <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4 flex-1">
-            <div className="relative flex-1 max-w-md">
+    <div className={`p-3 md:p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+      {/* 搜索栏 - 移动端优化 */}
+      <div className={`${cardStyle} rounded-lg p-3 md:p-4 mb-4 md:mb-6`}>
+        <div className="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
+          <div className="flex items-center space-x-2 md:space-x-4 flex-1">
+            <div className="relative flex-1 max-w-full md:max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
                 placeholder="搜索商家名称"
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
+                className={`w-full pl-10 pr-4 py-2 md:py-2 rounded-lg border text-sm ${
                   isDark
                     ? "bg-background border-gray-700 text-white placeholder-gray-500 focus:border-[#00D4AA]"
                     : "bg-white border-gray-300 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
@@ -180,14 +180,15 @@ export default function UsdtTradePage() {
             </div>
           </div>
           
-          {/* 主要标签 */}
-          <div ref={mainTabsRef} className="flex space-x-2">
+          {/* 主要标签 - 移动端全宽 */}
+          <div ref={mainTabsRef} className="flex space-x-2 md:space-x-2 w-full md:w-auto">
             {mainTabs.map((tab) => (
               <NativeButton
                 key={tab}
                 onClick={() => handleMainTabClick(tab)}
                 variant={activeMainTab === tab ? "primary" : "secondary"}
                 size="sm"
+                className="flex-1 md:flex-none"
               >
                 {tab}
               </NativeButton>
@@ -197,24 +198,24 @@ export default function UsdtTradePage() {
       </div>
 
       {/* 交易表格 */}
-      <div className={`${cardStyle} rounded-lg p-4`}>
-        {/* 次级标签 */}
-        <div ref={subTabsRef} className="flex items-center space-x-1 mb-4 overflow-x-auto">
+      <div className={`${cardStyle} rounded-lg p-3 md:p-4`}>
+        {/* 次级标签 - 移动端滚动 */}
+        <div ref={subTabsRef} className="flex items-center space-x-1 mb-4 overflow-x-auto scrollbar-hide">
           {subTabs.map((tab) => (
             <NativeButton
               key={tab}
               onClick={() => handleSubTabClick(tab)}
               variant={activeSubTab === tab ? "primary" : "ghost"}
               size="sm"
-              className="whitespace-nowrap"
+              className="whitespace-nowrap flex-shrink-0"
             >
               {tab}
             </NativeButton>
           ))}
         </div>
 
-        {/* 表格头部 */}
-        <div className="grid grid-cols-6 gap-4 py-3 border-b border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400">
+        {/* 表格头部 - 移动端隐藏 */}
+        <div className="hidden md:grid grid-cols-6 gap-4 py-3 border-b border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400">
           <div>商家</div>
           <div>价格</div>
           <div>可用数量</div>
@@ -223,91 +224,170 @@ export default function UsdtTradePage() {
           <div>交易</div>
         </div>
 
-        {/* 广告列表 */}
-        <div className="space-y-1">
+        {/* 广告列表 - 响应式布局 */}
+        <div className="space-y-3 md:space-y-1">
           {filteredAds.map((ad, index) => (
-            <div
-              key={ad.id}
-              className={`grid grid-cols-6 gap-4 py-4 border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${
+            <div key={ad.id}>
+              {/* 桌面端布局 */}
+              <div className={`hidden md:grid grid-cols-6 gap-4 py-4 border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${
                 index === filteredAds.length - 1 ? "border-b-0" : ""
-              }`}
-            >
-              {/* 商家信息 */}
-              <div className="flex items-center space-x-3">
-                <NativeButton
-                  onClick={() => toggleFavorite(ad.user)}
-                  variant="ghost"
-                  size="sm"
-                  className="p-1"
-                >
-                  <Star 
-                    className={`w-4 h-4 ${
-                      favorites.includes(ad.user) 
-                        ? "text-yellow-500 fill-current" 
-                        : "text-gray-400"
-                    }`} 
-                  />
-                </NativeButton>
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
-                      {ad.user}
-                    </span>
-                    {ad.verified && <VerifiedIcon />}
+              }`}>
+                {/* 商家信息 */}
+                <div className="flex items-center space-x-3">
+                  <NativeButton
+                    onClick={() => toggleFavorite(ad.user)}
+                    variant="ghost"
+                    size="sm"
+                    className="p-1"
+                  >
+                    <Star 
+                      className={`w-4 h-4 ${
+                        favorites.includes(ad.user) 
+                          ? "text-yellow-500 fill-current" 
+                          : "text-gray-400"
+                      }`} 
+                    />
+                  </NativeButton>
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+                        {ad.user}
+                      </span>
+                      {ad.verified && <VerifiedIcon />}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {ad.rate}% | {ad.orderCount}单
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-500">
-                    {ad.rate}% | {ad.orderCount}单
+                </div>
+
+                {/* 价格 */}
+                <div className="flex items-center">
+                  <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+                    ¥{ad.price}
+                  </span>
+                </div>
+
+                {/* 可用数量 */}
+                <div className="flex items-center">
+                  <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                    {ad.available} USDT
+                  </span>
+                </div>
+
+                {/* 限额 */}
+                <div className="flex items-center">
+                  <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                    ¥{ad.min} - ¥{ad.max}
+                  </span>
+                </div>
+
+                {/* 支付方式 */}
+                <div className="flex items-center">
+                  <div className="flex flex-wrap gap-1">
+                    {ad.paymentMethods.slice(0, 2).map((method, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs rounded"
+                      >
+                        {method}
+                      </span>
+                    ))}
+                    {ad.paymentMethods.length > 2 && (
+                      <span className="text-xs text-gray-400">+{ad.paymentMethods.length - 2}</span>
+                    )}
                   </div>
+                </div>
+
+                {/* 交易按钮 */}
+                <div className="flex items-center">
+                  <NativeButton
+                    onClick={() => {/* Handle trade action */}}
+                    variant="primary"
+                    size="sm"
+                  >
+                    {activeMainTab}
+                  </NativeButton>
                 </div>
               </div>
 
-              {/* 价格 */}
-              <div className="flex items-center">
-                <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
-                  ¥{ad.price}
-                </span>
-              </div>
-
-              {/* 可用数量 */}
-              <div className="flex items-center">
-                <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                  {ad.available} USDT
-                </span>
-              </div>
-
-              {/* 限额 */}
-              <div className="flex items-center">
-                <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                  ¥{ad.min} - ¥{ad.max}
-                </span>
-              </div>
-
-              {/* 支付方式 */}
-              <div className="flex items-center">
-                <div className="flex flex-wrap gap-1">
-                  {ad.paymentMethods.slice(0, 2).map((method, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs rounded"
+              {/* 移动端卡片布局 */}
+              <div className={`md:hidden ${cardStyle} rounded-lg p-4 border ${
+                index === filteredAds.length - 1 ? "" : "mb-3"
+              }`}>
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex items-center space-x-3">
+                    <NativeButton
+                      onClick={() => toggleFavorite(ad.user)}
+                      variant="ghost"
+                      size="sm"
+                      className="p-1"
                     >
-                      {method}
-                    </span>
-                  ))}
-                  {ad.paymentMethods.length > 2 && (
-                    <span className="text-xs text-gray-400">+{ad.paymentMethods.length - 2}</span>
-                  )}
+                      <Star 
+                        className={`w-4 h-4 ${
+                          favorites.includes(ad.user) 
+                            ? "text-yellow-500 fill-current" 
+                            : "text-gray-400"
+                        }`} 
+                      />
+                    </NativeButton>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+                          {ad.user}
+                        </span>
+                        {ad.verified && <VerifiedIcon />}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {ad.rate}% | {ad.orderCount}单
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-lg font-bold ${isDark ? "text-[#00D4AA]" : "text-[#00D4AA]"}`}>
+                      ¥{ad.price}
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              {/* 交易按钮 */}
-              <div className="flex items-center">
-                <NativeButton
-                  onClick={() => {/* Handle trade action */}}
-                  variant="primary"
-                  size="sm"
-                >
-                  {activeMainTab}
-                </NativeButton>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">可用数量:</span>
+                    <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                      {ad.available} USDT
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">限额:</span>
+                    <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                      ¥{ad.min} - ¥{ad.max}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <div className="flex flex-wrap gap-1">
+                    {ad.paymentMethods.slice(0, 3).map((method, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs rounded"
+                      >
+                        {method}
+                      </span>
+                    ))}
+                    {ad.paymentMethods.length > 3 && (
+                      <span className="text-xs text-gray-400">+{ad.paymentMethods.length - 3}</span>
+                    )}
+                  </div>
+                  <NativeButton
+                    onClick={() => {/* Handle trade action */}}
+                    variant="primary"
+                    size="sm"
+                    className="ml-3"
+                  >
+                    {activeMainTab}
+                  </NativeButton>
+                </div>
               </div>
             </div>
           ))}
