@@ -97,15 +97,13 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   }
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
+    <div className="flex h-screen bg-gray-900 overflow-hidden">
       {/* Sidebar */}
       <div 
-        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl border-r border-gray-700/50 relative overflow-hidden`}
+        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl relative overflow-hidden`}
         style={{
           width: isExpanded ? '256px' : '96px',
-          transition: 'all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
-          transform: isExpanded ? 'translateX(0) scale(1)' : 'translateX(-16px) scale(0.98)',
-          opacity: isExpanded ? 1 : 0.95,
+          transition: 'width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
         }}
       >
         {/* Background Overlay with Static Gradient */}
@@ -126,7 +124,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         </div>
 
         {/* User Section with Account Dropdown */}
-        <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-2 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
+        <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-0 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
           <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'} transition-all duration-500`}>
             <AccountDropdown />
             {isExpanded && (
@@ -147,7 +145,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         </div>
 
         {/* Navigation with Enhanced Animations */}
-        <div className="relative z-10 flex-1 p-2 flex flex-col justify-start min-h-0 overflow-hidden">
+        <div className={`relative z-10 flex-1 ${isExpanded ? 'p-2' : 'p-1'} flex flex-col justify-start min-h-0 overflow-hidden`}>
           <div className="flex flex-col justify-start pt-4" style={{gap: 'clamp(0.25rem, 2vh, 0.75rem)'}}>
           {navItems.map((item, index) => {
             const Icon = item.icon
