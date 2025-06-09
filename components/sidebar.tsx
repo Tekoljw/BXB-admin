@@ -2,6 +2,7 @@
 
 import React from "react"
 import { usePathname, useRouter } from "next/navigation"
+import { useRoutePreloader, instantNavigate } from "@/lib/route-preloader"
 import {
   MessageCircle,
   Users,
@@ -26,9 +27,12 @@ interface SidebarProps {
 export default function Sidebar({ onCloseMobile, onToggleExpanded, isExpanded = true }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
+  
+  // Pre-load all routes on component mount
+  useRoutePreloader()
 
   const navigate = (path: string) => {
-    router.push(path)
+    instantNavigate(router, path)
     onCloseMobile?.()
   }
 

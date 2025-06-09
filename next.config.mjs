@@ -9,26 +9,12 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // 优化性能配置
-  experimental: {
-    optimizeCss: false,
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-  },
   // 关闭严格模式以提高性能
   reactStrictMode: false,
-  // 优化构建
-  swcMinify: true,
-  // 减少编译时间
+  // 预编译所有页面以减少首次访问延迟
   onDemandEntries: {
-    maxInactiveAge: 25 * 1000,
-    pagesBufferLength: 2,
+    maxInactiveAge: 60 * 1000,
+    pagesBufferLength: 10,
   },
 }
 
