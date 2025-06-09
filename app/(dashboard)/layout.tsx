@@ -91,7 +91,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               id="mobile-sidebar"
               className={`${
                 mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
-              } ${sidebarExpanded ? "expanded" : ""} fixed inset-y-0 left-0 z-30 w-64 bg-[#374151] border-r border-[#4B5563] transform transition-all duration-300 ease-in-out md:relative md:translate-x-0 sidebar-width`}
+              } ${sidebarExpanded ? "expanded" : ""} fixed inset-y-0 left-0 z-30 w-64 border-r border-[#4B5563] transform transition-all duration-300 ease-in-out md:relative md:translate-x-0 sidebar-width`}
             >
               <MemoizedSideNavigation 
                 onCloseMobile={handleCloseMobile} 

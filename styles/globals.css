@@ -119,17 +119,17 @@ button, input[type="button"], input[type="submit"], [type="button"] {
   -webkit-perspective: 1000px;
 }
 
-/* Ensure sidebar maintains proper styling */
+/* Ensure sidebar maintains proper styling - responsive to theme */
 #mobile-sidebar {
-  background-color: #374151 !important;
+  background-color: inherit;
 }
 
 #mobile-sidebar .w-full.h-full.flex.flex-col {
-  background-color: #374151 !important;
+  background-color: inherit;
 }
 
 .sidebar-container > div {
-  background-color: #374151 !important;
+  background-color: inherit;
 }
 
 /* Dynamic sidebar width based on expansion state */
