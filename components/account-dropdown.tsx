@@ -34,27 +34,27 @@ export default function AccountDropdown() {
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        className={`bg-primary rounded-full p-2 transition-all duration-200 ${isOpen ? "ring-2 ring-primary/30" : "hover:bg-primary/90"}`}
+        className={`w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-lg ${isOpen ? "ring-2 ring-custom-green/50 scale-105" : ""}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <User className="h-5 w-5 text-primary-foreground" />
+        <User className="h-5 w-5" />
       </button>
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-card ring-1 ring-black/5 dark:ring-white/10 z-50 animate-in fade-in slide-in-from-top-5 duration-200">
-          <div className="py-2 px-3 border-b border-border">
+          <div className="py-3 px-3 border-b border-border">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="bg-primary/20 rounded-full p-2">
-                  <UserCircle className="h-6 w-6 text-primary" />
+              <div className="flex items-center space-x-3 flex-1 cursor-pointer hover:bg-muted/50 rounded-lg p-2 transition-colors duration-200" onClick={() => console.log('Profile clicked')}>
+                <div className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center flex-shrink-0">
+                  <UserCircle className="h-6 w-6 text-white" />
                 </div>
-                <div>
+                <div className="text-center flex-1">
                   <p className="text-sm font-medium">John Doe</p>
                   <p className="text-xs text-muted-foreground">demo@example.com</p>
                 </div>
               </div>
               <button 
-                className="p-1.5 rounded-lg hover:bg-muted transition-colors duration-200 text-muted-foreground hover:text-foreground"
+                className="p-1.5 rounded-lg hover:bg-muted transition-colors duration-200 text-muted-foreground hover:text-foreground ml-2"
                 title="编辑个人资料"
               >
                 <Edit3 className="h-4 w-4" />
