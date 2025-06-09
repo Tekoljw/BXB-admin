@@ -16,6 +16,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false) // 改为false减少初始渲染
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
+  const [sidebarExpanded, setSidebarExpanded] = useState(false)
 
   // 简化登录检查，移除不必要的延迟
   useEffect(() => {
@@ -90,9 +91,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               id="mobile-sidebar"
               className={`${
                 mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
-              } fixed inset-y-0 left-0 z-30 w-64 bg-[#374151] border-r border-[#4B5563] transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-24`}
+              } ${sidebarExpanded ? "expanded" : ""} fixed inset-y-0 left-0 z-30 w-64 bg-[#374151] border-r border-[#4B5563] transform transition-all duration-300 ease-in-out md:relative md:translate-x-0 sidebar-width`}
             >
-              <MemoizedSideNavigation onCloseMobile={handleCloseMobile} />
+              <MemoizedSideNavigation 
+                onCloseMobile={handleCloseMobile} 
+                onToggleExpanded={setSidebarExpanded}
+                isExpanded={sidebarExpanded}
+              />
             </div>
 
             {/* Main Content */}

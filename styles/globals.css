@@ -132,6 +132,22 @@ button, input[type="button"], input[type="submit"], [type="button"] {
   background-color: #374151 !important;
 }
 
+/* Dynamic sidebar width based on expansion state */
+.sidebar-width {
+  width: 6rem; /* w-24 collapsed */
+  transition: width 300ms ease-in-out;
+}
+
+.sidebar-width.expanded {
+  width: 16rem; /* w-64 expanded */
+}
+
+@media (max-width: 768px) {
+  .sidebar-width {
+    width: 16rem !important; /* Always full width on mobile */
+  }
+}
+
 /* Disable transitions during resize */
 .resize-animation-stopper * {
   animation-duration: 0s !important;

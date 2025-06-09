@@ -25,17 +25,30 @@ import OptimizedButton from "@/components/optimized-button"
 
 interface SideNavigationProps {
   onCloseMobile?: () => void
+  onToggleExpanded?: (expanded: boolean) => void
+  isExpanded?: boolean
 }
 
-export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
+export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpanded: propIsExpanded }: SideNavigationProps) {
   const pathname = usePathname()
   const router = useRouter()
   const { language, setLanguage, theme } = useTheme()
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(propIsExpanded || false)
   const languageDropdownRef = useRef<HTMLDivElement>(null)
   const notificationDropdownRef = useRef<HTMLDivElement>(null)
+
+  // Sync with prop
+  useEffect(() => {
+    setIsExpanded(propIsExpanded || false)
+  }, [propIsExpanded])
+
+  const handleToggleExpand = () => {
+    const newExpanded = !isExpanded
+    setIsExpanded(newExpanded)
+    onToggleExpanded?.(newExpanded)
+  }
 
   // 翻译对象
   const t = {
@@ -123,7 +136,7 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
       {/* Expand/Collapse Toggle Button */}
       <div className="hidden md:flex justify-end p-2">
         <button
-          onClick={() => setIsExpanded(!isExpanded)}
+          onClick={handleToggleExpand}
           className="p-2 rounded-lg hover:bg-white/10 transition-colors"
           title={isExpanded ? "收起" : "展开"}
         >
@@ -243,11 +256,11 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
         <div className="relative" ref={languageDropdownRef}>
           <button
             onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
-            className="group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white"
-            title={t.languageToggle}
+            className={`group relative flex items-center w-full py-2 md:py-3 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}
+            title={!isExpanded ? t.languageToggle : undefined}
           >
             <Globe2 className="h-5 w-5 md:h-6 md:w-6" />
-            <span className="ml-3 md:hidden">{t.languageToggle}</span>
+            <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.languageToggle}</span>
           </button>
 
           {/* Language Dropdown */}
@@ -282,9 +295,9 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
 
       {/* Theme Toggle Section */}
       <div className="px-3 md:px-4 py-2">
-        <div className="group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white">
+        <div className={`group relative flex items-center w-full py-2 md:py-3 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}>
           <ThemeToggle />
-          <span className="ml-3 md:hidden">{t.themeToggle}</span>
+          <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.themeToggle}</span>
         </div>
       </div>
 
@@ -292,13 +305,13 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
       <div className="px-3 md:px-4 py-4">
         <button
           onClick={() => handleNavClick("/settings")}
-          className={`group relative flex items-center w-full py-2 md:py-3 px-3 md:justify-center rounded-lg transition-colors hover:bg-white/10 ${
+          className={`group relative flex items-center w-full py-2 md:py-3 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
             isActive("/settings") ? "bg-white/20" : "text-white/70 hover:text-white"
           }`}
-          title={t.settings}
+          title={!isExpanded ? t.settings : undefined}
         >
           <Settings className="h-5 w-5 md:h-6 md:w-6" />
-          <span className="ml-3 md:hidden">{t.settings}</span>
+          <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.settings}</span>
         </button>
       </div>
     </div>
