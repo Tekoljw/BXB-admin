@@ -37,7 +37,7 @@ interface InstantNavigationProps {
 
 export default function InstantNavigation({ onCloseMobile }: InstantNavigationProps) {
   const [currentPage, setCurrentPage] = useState("/chat")
-  const [isExpanded, setIsExpanded] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const pathname = usePathname()
   const { theme, setTheme, language, setLanguage } = useTheme()
@@ -103,7 +103,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl border-r border-gray-700/50 relative overflow-hidden`}
         style={{
           width: isExpanded ? '256px' : '96px',
-          transition: 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+          transform: isExpanded ? 'translateX(0)' : 'translateX(-8px)',
         }}
       >
         {/* Background Overlay with Static Gradient */}
@@ -126,7 +127,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         {/* User Section with Account Dropdown */}
         <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-2 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
           <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'} transition-all duration-500`}>
-            <AccountDropdown />
+            <div className={`${isExpanded ? '' : 'flex justify-center w-full'}`}>
+              <AccountDropdown />
+            </div>
             <div 
               className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
               style={{
@@ -152,7 +155,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <div key={item.path} className="relative group">
                 <button
                   onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
+                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'justify-center'} rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
                     active 
                       ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
                       : "hover:scale-105 hover:bg-gray-700/20"
@@ -215,8 +218,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
         {/* Footer with Enhanced Controls */}
         <div className="relative z-10 border-t border-gray-700/50 backdrop-blur-sm">
-          <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} px-3`}>
-            <div className="relative">
+          <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} px-3 transition-all duration-500`}>
+            <div className={`relative ${isExpanded ? '' : 'flex justify-center w-full'}`}>
               <button 
                 onClick={(e) => {
                   e.stopPropagation()
@@ -259,24 +262,28 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </div>
               )}
             </div>
-            <button 
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
-              title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
-            >
-              <div className="transition-all duration-300 group-hover:rotate-180 group-hover:text-yellow-400">
-                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-              </div>
-            </button>
-            <button 
-              onClick={() => navigate("/settings")}
-              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
-              title="设置"
-            >
-              <div className="transition-all duration-300 group-hover:rotate-90 group-hover:text-custom-green">
-                <Settings size={20} />
-              </div>
-            </button>
+            <div className={`${isExpanded ? '' : 'flex justify-center w-full'}`}>
+              <button 
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
+                title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
+              >
+                <div className="transition-all duration-300 group-hover:rotate-180 group-hover:text-yellow-400">
+                  {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+                </div>
+              </button>
+            </div>
+            <div className={`${isExpanded ? '' : 'flex justify-center w-full'}`}>
+              <button 
+                onClick={() => navigate("/settings")}
+                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
+                title="设置"
+              >
+                <div className="transition-all duration-300 group-hover:rotate-90 group-hover:text-custom-green">
+                  <Settings size={20} />
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
