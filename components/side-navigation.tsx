@@ -174,8 +174,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? t.chat : undefined}
             >
-              <MessageCircle className="h-4 w-4 md:h-4 md:w-4" />
-              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.chat}</span>
+              <MessageCircle className="h-5 w-5 md:h-5 md:w-5" />
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.chat}</span>
             </button>
           </li>
 
@@ -188,8 +188,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? t.moments : undefined}
             >
-              <Users className="h-4 w-4 md:h-4 md:w-4" />
-              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.moments}</span>
+              <Users className="h-5 w-5 md:h-5 md:w-5" />
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.moments}</span>
             </button>
           </li>
 
@@ -202,8 +202,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? "商城" : undefined}
             >
-              <ShoppingBag className="h-4 w-4 md:h-4 md:w-4" />
-              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>商城</span>
+              <ShoppingBag className="h-5 w-5 md:h-5 md:w-5" />
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>商城</span>
             </button>
           </li>
 
@@ -216,8 +216,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? t.usdtTrade : undefined}
             >
-              <DollarSign className="h-4 w-4 md:h-4 md:w-4" />
-              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.usdtTrade}</span>
+              <DollarSign className="h-5 w-5 md:h-5 md:w-5" />
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.usdtTrade}</span>
             </button>
           </li>
 
@@ -230,8 +230,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? t.statistics : undefined}
             >
-              <LineChart className="h-4 w-4 md:h-4 md:w-4" />
-              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.statistics}</span>
+              <LineChart className="h-5 w-5 md:h-5 md:w-5" />
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.statistics}</span>
             </button>
           </li>
 
@@ -244,8 +244,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? t.spot : undefined}
             >
-              <ArrowLeftRight className="h-4 w-4 md:h-4 md:w-4" />
-              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.spot}</span>
+              <ArrowLeftRight className="h-5 w-5 md:h-5 md:w-5" />
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.spot}</span>
             </button>
           </li>
 
@@ -258,8 +258,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? t.futures : undefined}
             >
-              <FileText className="h-4 w-4 md:h-4 md:w-4" />
-              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.futures}</span>
+              <FileText className="h-5 w-5 md:h-5 md:w-5" />
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.futures}</span>
             </button>
           </li>
 
@@ -272,8 +272,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? "钱包" : undefined}
             >
-              <Wallet className="h-4 w-4 md:h-4 md:w-4" />
-              <span className={`ml-2 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>钱包</span>
+              <Wallet className="h-5 w-5 md:h-5 md:w-5" />
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>钱包</span>
             </button>
           </li>
 
@@ -293,8 +293,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center w-full py-1 px-2 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}
               title={!isExpanded ? t.languageToggle : undefined}
             >
-              <Globe2 className="h-3 w-3 md:h-3 md:w-3" />
-              <span className={`ml-2 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.languageToggle}</span>
+              <Globe2 className="h-4 w-4 md:h-4 md:w-4" />
+              <span className={`ml-3 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.languageToggle}</span>
             </button>
 
             {/* Language Dropdown */}
@@ -331,7 +331,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
         <div className="px-2 md:px-3 py-0">
           <div className={`group relative flex items-center w-full py-1 px-2 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}>
             <ThemeToggle />
-            <span className={`ml-2 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.themeToggle}</span>
+            <span className={`ml-3 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.themeToggle}</span>
           </div>
         </div>
 
@@ -344,8 +344,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
             }`}
             title={!isExpanded ? t.settings : undefined}
           >
-            <Settings className="h-3 w-3 md:h-3 md:w-3" />
-            <span className={`ml-2 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.settings}</span>
+            <Settings className="h-4 w-4 md:h-4 md:w-4" />
+            <span className={`ml-3 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.settings}</span>
           </button>
         </div>
       </div>
