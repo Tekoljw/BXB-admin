@@ -235,8 +235,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               {/* Language Dropdown */}
               {showLanguageDropdown && (
                 <div 
-                  className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-800 border border-gray-600 rounded-lg shadow-xl py-2 min-w-[120px] z-50 animate-in fade-in-0 zoom-in-95 duration-200"
+                  className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-800 border border-gray-600 rounded-lg shadow-xl py-2 min-w-[120px] z-[9999] animate-in fade-in-0 zoom-in-95 duration-200"
                   onClick={(e) => e.stopPropagation()}
+                  style={{ zIndex: 9999 }}
                 >
                   <button
                     onClick={() => handleLanguageSelect("zh")}
