@@ -154,13 +154,13 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <div key={item.path} className="relative group">
                 <button
                   onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'justify-center'} rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
+                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'justify-center px-0'} rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
                     active 
                       ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
                       : "hover:scale-105 hover:bg-gray-700/20"
                   }`}
                   style={{ 
-                    padding: 'clamp(0.5rem, 1.5vh, 1rem) 1rem',
+                    padding: isExpanded ? 'clamp(0.5rem, 1.5vh, 1rem) 1rem' : 'clamp(0.5rem, 1.5vh, 1rem) 0',
                     animationDelay: `${index * 50}ms`,
                     animation: 'slideInLeft 0.6s ease-out forwards'
                   }}
@@ -183,7 +183,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   
                   {/* Label with Smooth Slide Animation */}
                   <div 
-                    className="ml-4 overflow-hidden transition-all duration-500 ease-in-out"
+                    className={`${isExpanded ? 'ml-4' : 'ml-0'} overflow-hidden transition-all duration-500 ease-in-out`}
                     style={{
                       width: isExpanded ? '120px' : '0px',
                       opacity: isExpanded ? 1 : 0,
