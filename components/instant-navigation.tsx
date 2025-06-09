@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
+import AccountDropdown from "@/components/account-dropdown"
 import {
   MessageCircle,
   Users,
@@ -122,14 +123,10 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
           </button>
         </div>
 
-        {/* User Section with Animated Avatar */}
+        {/* User Section with Account Dropdown */}
         <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-2 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
           <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'} transition-all duration-500`}>
-            <div className="relative group">
-              <div className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white font-bold text-sm transition-all duration-300 group-hover:scale-110">
-                <User size={18} />
-              </div>
-            </div>
+            <AccountDropdown />
             <div 
               className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
               style={{
@@ -137,10 +134,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 opacity: isExpanded ? 1 : 0,
               }}
             >
-              <div className="text-sm font-medium text-white whitespace-nowrap">用户</div>
-              <div className="text-xs text-gray-400 flex items-center whitespace-nowrap">
-                <div className="w-2 h-2 bg-custom-green rounded-full mr-2"></div>
-                在线
+              <div className="text-sm font-medium text-white whitespace-nowrap">John Doe</div>
+              <div className="text-xs text-gray-400 whitespace-nowrap">
+                demo@example.com
               </div>
             </div>
           </div>
