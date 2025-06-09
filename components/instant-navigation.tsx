@@ -1,0 +1,113 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { useRouter, usePathname } from "next/navigation"
+import {
+  MessageCircle,
+  Users,
+  ShoppingBag,
+  DollarSign,
+  LineChart,
+  ArrowLeftRight,
+  FileText,
+  Wallet,
+  Settings,
+  Globe2,
+} from "lucide-react"
+
+// Import all page components directly to avoid compilation delays
+import ChatPage from "@/app/(dashboard)/chat/page"
+import MomentsPage from "@/app/(dashboard)/moments/page"
+import MallPage from "@/app/(dashboard)/mall/page"
+import WalletPage from "@/app/(dashboard)/wallet/page"
+
+interface InstantNavigationProps {
+  onCloseMobile?: () => void
+}
+
+export default function InstantNavigation({ onCloseMobile }: InstantNavigationProps) {
+  const [currentPage, setCurrentPage] = useState("/chat")
+  const pathname = usePathname()
+
+  useEffect(() => {
+    setCurrentPage(pathname)
+  }, [pathname])
+
+  const navigate = (path: string) => {
+    setCurrentPage(path)
+    onCloseMobile?.()
+    // Update URL without triggering page reload
+    window.history.pushState({}, "", path)
+  }
+
+  const isActive = (path: string) => currentPage === path
+
+  const navItems = [
+    { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
+    { path: "/moments", icon: Users, label: "朋友圈", component: MomentsPage },
+    { path: "/mall", icon: ShoppingBag, label: "商城", component: MallPage },
+    { path: "/usdt-trade", icon: DollarSign, label: "USDT买卖", component: () => <div className="p-4">USDT买卖页面</div> },
+    { path: "/market", icon: LineChart, label: "行情", component: () => <div className="p-4">行情页面</div> },
+    { path: "/spot", icon: ArrowLeftRight, label: "现货", component: () => <div className="p-4">现货页面</div> },
+    { path: "/futures", icon: FileText, label: "合约", component: () => <div className="p-4">合约页面</div> },
+    { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
+  ]
+
+  const renderCurrentPage = () => {
+    const currentItem = navItems.find(item => item.path === currentPage)
+    if (currentItem) {
+      const Component = currentItem.component
+      return <Component />
+    }
+    return <ChatPage />
+  }
+
+  return (
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
+      {/* Sidebar */}
+      <div className="w-64 bg-black text-white flex flex-col">
+        {/* Header */}
+        <div className="h-12 flex items-center justify-between px-3 border-b border-gray-700">
+          <div className="flex items-center space-x-2">
+            <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs">U</div>
+            <span className="text-sm">用户</span>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex-1 p-2 space-y-1">
+          {navItems.map((item) => {
+            const Icon = item.icon
+            return (
+              <button
+                key={item.path}
+                onClick={() => navigate(item.path)}
+                className={`w-full flex items-center p-2 rounded hover:bg-gray-700 transition-colors ${
+                  isActive(item.path) ? "bg-gray-700" : ""
+                }`}
+              >
+                <Icon size={20} />
+                <span className="ml-3 text-sm">{item.label}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Footer */}
+        <div className="h-12 flex items-center justify-center gap-3 border-t border-gray-700 px-2">
+          <button className="p-2 hover:bg-gray-700 rounded">
+            <Globe2 size={16} />
+          </button>
+          <button className="p-2 hover:bg-gray-700 rounded">
+            <Settings size={16} />
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content - Render component directly */}
+      <div className="flex-1 overflow-auto">
+        {renderCurrentPage()}
+      </div>
+    </div>
+  )
+}
