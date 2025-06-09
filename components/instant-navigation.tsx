@@ -107,17 +107,15 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <div className="absolute inset-0 rounded-full border-2 border-custom-green/30"></div>
               <div className="absolute -inset-1 rounded-full border border-custom-green/20 opacity-50"></div>
             </div>
-            <div className={`overflow-hidden transition-all duration-700 ease-in-out ${
-              isExpanded ? 'opacity-100 w-32' : 'opacity-0 w-0'
-            }`}>
-              <div className="whitespace-nowrap">
+            {isExpanded && (
+              <div className="ml-3">
                 <div className="text-sm font-medium text-white">用户</div>
                 <div className="text-xs text-gray-400 flex items-center">
                   <div className="w-2 h-2 bg-custom-green rounded-full mr-2"></div>
                   在线
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -130,10 +128,10 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <div key={item.path} className="relative group">
                 <button
                   onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-4 rounded-xl transition-all duration-500 ease-in-out transform hover:scale-105 relative overflow-hidden border ${
+                  className={`w-full flex items-center ${isExpanded ? 'px-4' : 'px-2 justify-center'} py-4 rounded-xl transition-all duration-500 ease-in-out transform hover:scale-105 relative overflow-hidden ${
                     active 
-                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10 shadow-lg shadow-custom-green/20 border-custom-green/30" 
-                      : "border-transparent hover:border-custom-green/40 hover:bg-gray-700/30 hover:shadow-lg hover:shadow-custom-green/10"
+                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10 shadow-lg shadow-custom-green/20" 
+                      : "hover:bg-gray-700/20 hover:shadow-lg hover:shadow-custom-green/10"
                   }`}
                   title={!isExpanded ? item.label : undefined}
                   style={{ 
@@ -146,9 +144,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                     <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl"></div>
                   )}
                   
-                  {/* Hover Border and Background Effect */}
-                  <div className="absolute inset-0 border border-transparent group-hover:border-custom-green/30 group-hover:bg-custom-green/10 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out rounded-xl"></div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-custom-green/8 to-gray-600/8 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out rounded-xl"></div>
+                  {/* Hover Border Effect */}
+                  <div className="absolute inset-0 border-2 border-custom-green/0 group-hover:border-custom-green/50 transition-all duration-400 ease-in-out rounded-xl"></div>
                   
                   {/* Icon with Enhanced Animation */}
                   <div className={`relative transition-all duration-300 group-hover:scale-125 ${active ? 'text-custom-green drop-shadow-lg' : 'group-hover:text-custom-green'}`}>
@@ -162,15 +159,15 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   </div>
                   
                   {/* Label with Smooth Slide Animation */}
-                  <div className={`ml-4 overflow-hidden transition-all duration-700 ease-in-out ${
-                    isExpanded ? 'opacity-100 w-32' : 'opacity-0 w-0'
-                  }`}>
-                    <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
-                      active ? 'text-white font-semibold' : 'group-hover:text-custom-green'
-                    }`}>
-                      {item.label}
-                    </span>
-                  </div>
+                  {isExpanded && (
+                    <div className="ml-4 overflow-hidden transition-all duration-700 ease-in-out">
+                      <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
+                        active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
+                      }`}>
+                        {item.label}
+                      </span>
+                    </div>
+                  )}
                   
                   {/* Active Indicator */}
                   {active && (
