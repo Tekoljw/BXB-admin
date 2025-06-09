@@ -115,8 +115,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         </div>
 
         {/* Navigation with Enhanced Animations */}
-        <div className="relative z-10 flex-1 p-2 flex flex-col justify-center min-h-0 overflow-hidden">
-          <div className="flex flex-col justify-center h-full" style={{gap: 'clamp(0.25rem, 2vh, 0.75rem)'}}>
+        <div className="relative z-10 flex-1 p-2 flex flex-col justify-start min-h-0 overflow-hidden">
+          <div className="flex flex-col justify-start pt-4" style={{gap: 'clamp(0.25rem, 2vh, 0.75rem)'}}>
           {navItems.map((item, index) => {
             const Icon = item.icon
             const active = isActive(item.path)
