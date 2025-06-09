@@ -142,7 +142,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   )}
                   
                   {/* Hover Border Effect */}
-                  <div className="absolute inset-0 border-2 border-custom-green/0 group-hover:border-custom-green/50 transition-all duration-400 ease-in-out rounded-xl"></div>
+                  <div className="absolute inset-0 border border-custom-green/0 group-hover:border-custom-green/40 transition-all duration-400 ease-in-out rounded-xl"></div>
                   
                   {/* Icon with Simple Animation */}
                   <div className={`relative transition-all duration-300 group-hover:scale-125 ${active ? 'text-custom-green' : 'group-hover:text-custom-green'}`}>
