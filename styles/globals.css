@@ -119,17 +119,30 @@ button, input[type="button"], input[type="submit"], [type="button"] {
   -webkit-perspective: 1000px;
 }
 
-/* Ensure sidebar maintains proper styling - responsive to theme */
+/* Ensure sidebar maintains proper styling - force dark theme colors */
 #mobile-sidebar {
-  background-color: inherit;
+  background-color: black !important;
 }
 
 #mobile-sidebar .w-full.h-full.flex.flex-col {
-  background-color: inherit;
+  background-color: black !important;
 }
 
 .sidebar-container > div {
-  background-color: inherit;
+  background-color: black !important;
+}
+
+/* Dark mode sidebar styling */
+.dark #mobile-sidebar {
+  background-color: #374151 !important;
+}
+
+.dark #mobile-sidebar .w-full.h-full.flex.flex-col {
+  background-color: #374151 !important;
+}
+
+.dark .sidebar-container > div {
+  background-color: #374151 !important;
 }
 
 /* Dynamic sidebar width based on expansion state */
