@@ -328,24 +328,24 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
         </div>
 
         {/* Theme Toggle Section */}
-        <div className="px-3 md:px-4 py-0.5">
-          <div className={`group relative flex items-center w-full py-1.5 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}>
+        <div className="px-2 md:px-3 py-0">
+          <div className={`group relative flex items-center w-full py-1 px-2 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}>
             <ThemeToggle />
-            <span className={`ml-3 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.themeToggle}</span>
+            <span className={`ml-2 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.themeToggle}</span>
           </div>
         </div>
 
         {/* Settings Section */}
-        <div className="px-3 md:px-4 py-0.5">
+        <div className="px-2 md:px-3 py-0">
           <button
             onClick={() => handleNavClick("/settings")}
-            className={`group relative flex items-center w-full py-1.5 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+            className={`group relative flex items-center w-full py-1 px-2 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
               isActive("/settings") ? "bg-white/20" : "text-white/70 hover:text-white"
             }`}
             title={!isExpanded ? t.settings : undefined}
           >
-            <Settings className="h-4 w-4 md:h-4 md:w-4" />
-            <span className={`ml-3 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.settings}</span>
+            <Settings className="h-3 w-3 md:h-3 md:w-3" />
+            <span className={`ml-2 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.settings}</span>
           </button>
         </div>
       </div>
