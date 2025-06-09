@@ -76,7 +76,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       {/* Sidebar */}
-      <div className={`${isExpanded ? 'w-64' : 'w-20'} ${theme === 'dark' ? 'bg-gray-800' : 'bg-black'} text-white flex flex-col transition-all duration-300`}>
+      <div className={`${isExpanded ? 'w-64' : 'w-24'} ${theme === 'dark' ? 'bg-gray-800' : 'bg-black'} text-white flex flex-col transition-all duration-300`}>
         {/* Header - Hamburger Menu */}
         <div className="h-12 flex items-center justify-center px-3 border-b border-gray-700">
           <button
