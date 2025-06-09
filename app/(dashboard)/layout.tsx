@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect } from "react"
-import InstantNavigation from "@/components/instant-navigation"
+import InstantNavigation from "@/components/instant-navigation-fixed"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {

@@ -65,27 +65,25 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const navigate = (path: string) => {
     setCurrentPage(path)
     onCloseMobile?.()
-    // Update URL without triggering page reload
-    window.history.pushState({}, "", path)
   }
 
-  const handleLanguageSelect = (lang: "en" | "zh") => {
-    setLanguage(lang)
+  const handleLanguageSelect = (newLanguage: "en" | "zh") => {
+    setLanguage(newLanguage)
     setShowLanguageDropdown(false)
   }
 
-  const isActive = (path: string) => currentPage === path
-
   const navItems = [
-    { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
-    { path: "/moments", icon: Users, label: "分享", component: MomentsPage },
-    { path: "/mall", icon: ShoppingBag, label: "商城", component: MallPage },
-    { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
-    { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
-    { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
-    { path: "/futures", icon: FileText, label: "合约", component: FuturesPage },
-    { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
+    { path: "/chat", label: "聊天", icon: MessageCircle, component: ChatPage },
+    { path: "/moments", label: "朋友圈", icon: Users, component: MomentsPage },
+    { path: "/mall", label: "商城", icon: ShoppingBag, component: MallPage },
+    { path: "/wallet", label: "钱包", icon: Wallet, component: WalletPage },
+    { path: "/usdt-trade", label: "USDT交易", icon: DollarSign, component: USDTTradePage },
+    { path: "/market", label: "行情", icon: LineChart, component: MarketPage },
+    { path: "/spot", label: "现货", icon: ArrowLeftRight, component: SpotPage },
+    { path: "/futures", label: "期货", icon: FileText, component: FuturesPage },
   ]
+
+  const isActive = (path: string) => currentPage === path
 
   const renderCurrentPage = () => {
     const currentItem = navItems.find(item => item.path === currentPage)
@@ -129,18 +127,14 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-2 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
           <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'} transition-all duration-500`}>
             <AccountDropdown />
-            <div 
-              className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
-              style={{
-                width: isExpanded ? '140px' : '0px',
-                opacity: isExpanded ? 1 : 0,
-              }}
-            >
-              <div className="text-sm font-medium text-white whitespace-nowrap text-center">John Doe</div>
-              <div className="text-xs text-gray-400 whitespace-nowrap text-center">
-                demo@example.com
+            {isExpanded && (
+              <div className="ml-3 flex-1">
+                <div className="text-sm font-medium text-white text-center">John Doe</div>
+                <div className="text-xs text-gray-400 text-center">
+                  demo@example.com
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -177,19 +171,13 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   )}
                   
                   {/* Icon with Simple Animation - Centered when collapsed */}
-                  <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
+                  <div className={`relative transition-all duration-300 ${isExpanded ? '' : 'w-full flex justify-center'} ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
                     <Icon size={26} />
                   </div>
                   
                   {/* Label with Smooth Slide Animation */}
                   {isExpanded && (
-                    <div 
-                      className="ml-4 overflow-hidden transition-all duration-500 ease-in-out"
-                      style={{
-                        width: isExpanded ? '120px' : '0px',
-                        opacity: isExpanded ? 1 : 0,
-                      }}
-                    >
+                    <div className="ml-4 flex-1">
                       <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
                         active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
                       }`}>
