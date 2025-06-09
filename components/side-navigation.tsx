@@ -132,7 +132,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
   const isDark = theme === "dark"
 
   return (
-    <div className={`w-full h-full flex flex-col ${isDark ? "bg-[#374151]" : "bg-black"} text-white overflow-hidden`}>
+    <div className={`w-full h-screen flex flex-col ${isDark ? "bg-[#374151]" : "bg-black"} text-white overflow-hidden`}>
       {/* Expand/Collapse Toggle Button */}
       <div className="hidden md:flex justify-end p-2">
         <button
@@ -161,8 +161,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
         </div>
       </div>
 
-      <nav className="py-4 flex-1">
-        <ul className="space-y-2">
+      <nav className="py-4 flex-1 overflow-hidden">
+        <ul className="space-y-2 h-full flex flex-col justify-start">
           {/* 聊天 */}
           <li className="flex justify-center md:justify-center">
             <button
@@ -251,68 +251,71 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
         </ul>
       </nav>
 
-      {/* Language Toggle Section */}
-      <div className="px-3 md:px-4 py-2">
-        <div className="relative" ref={languageDropdownRef}>
-          <button
-            onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
-            className={`group relative flex items-center w-full py-2 md:py-3 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}
-            title={!isExpanded ? t.languageToggle : undefined}
-          >
-            <Globe2 className="h-5 w-5 md:h-6 md:w-6" />
-            <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.languageToggle}</span>
-          </button>
+      {/* Bottom Section - Fixed height */}
+      <div className="mt-auto flex-shrink-0">
+        {/* Language Toggle Section */}
+        <div className="px-3 md:px-4 py-1">
+          <div className="relative" ref={languageDropdownRef}>
+            <button
+              onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
+              className={`group relative flex items-center w-full py-2 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}
+              title={!isExpanded ? t.languageToggle : undefined}
+            >
+              <Globe2 className="h-5 w-5 md:h-5 md:w-5" />
+              <span className={`ml-3 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.languageToggle}</span>
+            </button>
 
-          {/* Language Dropdown */}
-          {languageDropdownOpen && (
-            <div className="absolute bottom-full left-0 md:left-full md:bottom-0 mb-2 md:mb-0 md:ml-2 w-48 bg-card rounded-lg shadow-lg border border-border z-50 animate-in fade-in slide-in-from-bottom-5 md:slide-in-from-left-5 duration-200">
-              <div className="py-2">
-                <button
-                  onClick={() => handleLanguageChange("en")}
-                  className={`flex items-center w-full px-4 py-2 text-sm transition-colors hover:bg-muted ${
-                    language === "en" ? "bg-primary/10 text-primary font-medium" : "text-foreground"
-                  }`}
-                >
-                  <span className="mr-3 text-base">🇺🇸</span>
-                  <span>English</span>
-                  {language === "en" && <span className="ml-auto text-primary">✓</span>}
-                </button>
-                <button
-                  onClick={() => handleLanguageChange("zh")}
-                  className={`flex items-center w-full px-4 py-2 text-sm transition-colors hover:bg-muted ${
-                    language === "zh" ? "bg-primary/10 text-primary font-medium" : "text-foreground"
-                  }`}
-                >
-                  <span className="mr-3 text-base">🇨🇳</span>
-                  <span>中文</span>
-                  {language === "zh" && <span className="ml-auto text-primary">✓</span>}
-                </button>
+            {/* Language Dropdown */}
+            {languageDropdownOpen && (
+              <div className="absolute bottom-full left-0 md:left-full md:bottom-0 mb-2 md:mb-0 md:ml-2 w-48 bg-card rounded-lg shadow-lg border border-border z-50 animate-in fade-in slide-in-from-bottom-5 md:slide-in-from-left-5 duration-200">
+                <div className="py-2">
+                  <button
+                    onClick={() => handleLanguageChange("en")}
+                    className={`flex items-center w-full px-4 py-2 text-sm transition-colors hover:bg-muted ${
+                      language === "en" ? "bg-primary/10 text-primary font-medium" : "text-foreground"
+                    }`}
+                  >
+                    <span className="mr-3 text-base">🇺🇸</span>
+                    <span>English</span>
+                    {language === "en" && <span className="ml-auto text-primary">✓</span>}
+                  </button>
+                  <button
+                    onClick={() => handleLanguageChange("zh")}
+                    className={`flex items-center w-full px-4 py-2 text-sm transition-colors hover:bg-muted ${
+                      language === "zh" ? "bg-primary/10 text-primary font-medium" : "text-foreground"
+                    }`}
+                  >
+                    <span className="mr-3 text-base">🇨🇳</span>
+                    <span>中文</span>
+                    {language === "zh" && <span className="ml-auto text-primary">✓</span>}
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Theme Toggle Section */}
-      <div className="px-3 md:px-4 py-2">
-        <div className={`group relative flex items-center w-full py-2 md:py-3 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}>
-          <ThemeToggle />
-          <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.themeToggle}</span>
+        {/* Theme Toggle Section */}
+        <div className="px-3 md:px-4 py-1">
+          <div className={`group relative flex items-center w-full py-2 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}>
+            <ThemeToggle />
+            <span className={`ml-3 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.themeToggle}</span>
+          </div>
         </div>
-      </div>
 
-      {/* Settings Section */}
-      <div className="px-3 md:px-4 py-4">
-        <button
-          onClick={() => handleNavClick("/settings")}
-          className={`group relative flex items-center w-full py-2 md:py-3 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
-            isActive("/settings") ? "bg-white/20" : "text-white/70 hover:text-white"
-          }`}
-          title={!isExpanded ? t.settings : undefined}
-        >
-          <Settings className="h-5 w-5 md:h-6 md:w-6" />
-          <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.settings}</span>
-        </button>
+        {/* Settings Section */}
+        <div className="px-3 md:px-4 py-2">
+          <button
+            onClick={() => handleNavClick("/settings")}
+            className={`group relative flex items-center w-full py-2 px-3 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+              isActive("/settings") ? "bg-white/20" : "text-white/70 hover:text-white"
+            }`}
+            title={!isExpanded ? t.settings : undefined}
+          >
+            <Settings className="h-5 w-5 md:h-5 md:w-5" />
+            <span className={`ml-3 text-sm ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.settings}</span>
+          </button>
+        </div>
       </div>
     </div>
   )

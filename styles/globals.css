@@ -149,6 +149,8 @@ button, input[type="button"], input[type="submit"], [type="button"] {
 .sidebar-width {
   width: 6rem; /* w-24 collapsed */
   transition: width 300ms ease-in-out;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .sidebar-width.expanded {
@@ -159,6 +161,17 @@ button, input[type="button"], input[type="submit"], [type="button"] {
   .sidebar-width {
     width: 16rem !important; /* Always full width on mobile */
   }
+}
+
+/* Ensure sidebar content fits screen height without scrolling */
+#mobile-sidebar {
+  max-height: 100vh;
+  overflow: hidden !important;
+}
+
+#mobile-sidebar .w-full.h-screen.flex.flex-col {
+  height: 100vh !important;
+  overflow: hidden !important;
 }
 
 /* Disable transitions during resize */
