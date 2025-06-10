@@ -98,21 +98,25 @@ const MerchantRating = ({ rating }: { rating: number }) => {
 const PaymentIcon = ({ type }: { type: string }) => {
   const getIcon = () => {
     switch (type) {
+      case "现金交易":
+        return <span className="text-lg">🛡️</span>
       case "银行卡":
         return <CreditCard className="w-4 h-4" />
       case "支付宝":
         return <div className="w-4 h-4 bg-blue-500 rounded text-white text-xs flex items-center justify-center font-bold">支</div>
       case "微信":
         return <div className="w-4 h-4 bg-green-500 rounded text-white text-xs flex items-center justify-center font-bold">微</div>
+      case "全部":
+        return <div className="w-4 h-4 bg-gray-500 rounded text-white text-xs flex items-center justify-center font-bold">全</div>
       default:
         return <DollarSign className="w-4 h-4" />
     }
   }
 
   return (
-    <div className="flex items-center space-x-1">
+    <div className="flex items-center space-x-2">
       {getIcon()}
-      <span className="text-xs">{type}</span>
+      <span className="text-sm">{type}</span>
     </div>
   )
 }
@@ -276,7 +280,7 @@ export default function USDTTradePage() {
   }
 
   const tabs = ["买入", "卖出"]
-  const paymentFilters = ["全部", "银行卡", "支付宝", "微信"]
+  const paymentFilters = ["全部", "现金交易", "银行卡", "支付宝", "微信"]
   const quickAmounts = ["1000", "5000", "10000", "50000"]
 
   const filteredOrders = usdtOrders[activeTab].filter((order) => {
@@ -492,68 +496,39 @@ export default function USDTTradePage() {
             </div>
           )}
 
-          {/* C2C现金交易筛选 - 仅在C2C模式下显示 */}
-          {tradeMode === "C2C" && (
-            <div className="mb-6">
-              <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-700"}`}>
-                交易类型
-              </label>
-              <div className="space-y-3">
-                <button
-                  onClick={() => setCashTradeFilter(!cashTradeFilter)}
-                  className={`w-full flex items-center justify-between p-3 rounded-lg border-2 transition-all duration-200 ${
-                    cashTradeFilter
-                      ? "border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20"
-                      : isDark
-                        ? "border-[#3a3d4a] hover:border-gray-400"
-                        : "border-gray-300 hover:border-gray-400"
-                  }`}
-                >
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg">🛡️</span>
-                    <div className="text-left">
-                      <div className={`font-medium ${cashTradeFilter ? "text-yellow-800 dark:text-yellow-300" : isDark ? "text-white" : "text-gray-800"}`}>
-                        现金交易
-                      </div>
-                      <div className={`text-xs ${cashTradeFilter ? "text-yellow-600 dark:text-yellow-400" : "text-gray-500"}`}>
-                        安全担保，实名认证
-                      </div>
-                    </div>
-                  </div>
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    cashTradeFilter
-                      ? "border-yellow-400 bg-yellow-400"
-                      : "border-gray-300"
-                  }`}>
-                    {cashTradeFilter && (
-                      <span className="text-white text-xs">✓</span>
-                    )}
-                  </div>
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* 支付方式筛选 - 仅在C2C和OTC模式下显示 */}
           {(tradeMode === "C2C" || tradeMode === "OTC") && (
             <div className="mb-6">
-              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-700"}`}>
+              <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-700"}`}>
                 支付方式
               </label>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {paymentFilters.map((payment) => (
                   <button
                     key={payment}
                     onClick={() => setSelectedPayment(payment)}
-                    className={`w-full text-left py-2 px-3 text-sm rounded-md transition-colors ${
+                    className={`w-full flex items-center py-3 px-3 rounded-lg transition-all duration-200 ${
                       selectedPayment === payment
-                        ? "bg-custom-green/10 text-custom-green border border-custom-green"
+                        ? payment === "现金交易"
+                          ? "border-2 border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20"
+                          : "bg-custom-green/10 text-custom-green border-2 border-custom-green"
                         : isDark
-                          ? "text-gray-400 hover:bg-[#252842] border border-transparent"
-                          : "text-gray-600 hover:bg-gray-100 border border-transparent"
+                          ? "border border-[#3a3d4a] hover:border-gray-400 hover:bg-[#252842]"
+                          : "border border-gray-300 hover:border-gray-400 hover:bg-gray-100"
                     }`}
                   >
-                    {payment}
+                    <PaymentIcon type={payment} />
+                    {payment === "现金交易" && (
+                      <div className="ml-auto">
+                        <div className={`text-xs px-2 py-1 rounded ${
+                          selectedPayment === payment
+                            ? "bg-yellow-200 text-yellow-800"
+                            : "bg-gray-200 text-gray-600"
+                        }`}>
+                          安全担保
+                        </div>
+                      </div>
+                    )}
                   </button>
                 ))}
               </div>
