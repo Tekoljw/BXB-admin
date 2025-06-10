@@ -256,3 +256,23 @@ div[data-react-devtools-portal-root] {
 #__next-build-watcher {
   display: none !important;
 }
+
+/* Hide Next.js favicon/logo in bottom left */
+div[style*="position: fixed"][style*="bottom: 20px"][style*="left: 20px"] {
+  display: none !important;
+}
+
+/* Target Next.js branding elements */
+div[data-nextjs-toast] {
+  display: none !important;
+}
+
+/* Hide any Next.js logo or branding elements */
+img[src*="next"] {
+  display: none !important;
+}
+
+/* Hide development mode indicators */
+div[style*="position:fixed"][style*="z-index:9999"] {
+  display: none !important;
+}
