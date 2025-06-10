@@ -232,35 +232,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </div>
               </button>
 
-              {/* Language Dropdown */}
-              {showLanguageDropdown && (
-                <div 
-                  className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-800 border border-gray-600 rounded-lg shadow-xl py-2 min-w-[120px] z-[9999] animate-in fade-in-0 zoom-in-95 duration-200"
-                  onClick={(e) => e.stopPropagation()}
-                  style={{ zIndex: 9999 }}
-                >
-                  <button
-                    onClick={() => handleLanguageSelect("zh")}
-                    className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors duration-200 flex items-center ${
-                      language === "zh" ? "text-custom-green" : "text-white"
-                    }`}
-                  >
-                    <span className="mr-2">🇨🇳</span>
-                    中文
-                    {language === "zh" && <span className="ml-auto text-custom-green">✓</span>}
-                  </button>
-                  <button
-                    onClick={() => handleLanguageSelect("en")}
-                    className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors duration-200 flex items-center ${
-                      language === "en" ? "text-custom-green" : "text-white"
-                    }`}
-                  >
-                    <span className="mr-2">🇺🇸</span>
-                    English
-                    {language === "en" && <span className="ml-auto text-custom-green">✓</span>}
-                  </button>
-                </div>
-              )}
+
             </div>
             <div className="flex justify-center w-full">
               <button 
@@ -287,6 +259,40 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
           </div>
         </div>
       </div>
+
+      {/* Language Dropdown - Positioned outside navigation */}
+      {showLanguageDropdown && (
+        <div 
+          className="fixed left-20 bottom-20 bg-gray-800 border border-gray-600 rounded-lg shadow-xl py-2 min-w-[120px] z-[9999] animate-in fade-in-0 zoom-in-95 duration-200"
+          onClick={(e) => e.stopPropagation()}
+          style={{ 
+            zIndex: 9999,
+            left: isExpanded ? '272px' : '112px',
+            transition: 'left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)'
+          }}
+        >
+          <button
+            onClick={() => handleLanguageSelect("zh")}
+            className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors duration-200 flex items-center ${
+              language === "zh" ? "text-custom-green" : "text-white"
+            }`}
+          >
+            <span className="mr-2">🇨🇳</span>
+            中文
+            {language === "zh" && <span className="ml-auto text-custom-green">✓</span>}
+          </button>
+          <button
+            onClick={() => handleLanguageSelect("en")}
+            className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors duration-200 flex items-center ${
+              language === "en" ? "text-custom-green" : "text-white"
+            }`}
+          >
+            <span className="mr-2">🇺🇸</span>
+            English
+            {language === "en" && <span className="ml-auto text-custom-green">✓</span>}
+          </button>
+        </div>
+      )}
 
       {/* Main Content - Render component directly */}
       <div className="flex-1 overflow-auto">
