@@ -108,6 +108,9 @@ export default function WalletPage() {
     }
   }
 
+  // 统一的卡片样式，参考行情页面
+  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
+
   const renderTabContent = () => {
     const currentData = walletData[activeTab as keyof typeof walletData]
 
@@ -117,9 +120,9 @@ export default function WalletPage() {
           <div className="space-y-6">
             {/* Balance Overview */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="bg-gradient-to-br from-[#00D4AA]/10 to-[#00D4AA]/5 border-[#00D4AA]/20">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">总资产</CardTitle>
+              <div className={`${cardStyle} bg-gradient-to-br from-[#00D4AA]/10 to-[#00D4AA]/5 border-[#00D4AA]/20 rounded-lg p-4`}>
+                <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <h3 className="text-sm font-medium">总资产</h3>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -128,81 +131,77 @@ export default function WalletPage() {
                   >
                     {balanceVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                   </Button>
-                </CardHeader>
-                <CardContent>
+                </div>
+                <div>
                   <div className="text-2xl font-bold text-[#00D4AA]">
                     {balanceVisible ? `$${currentData.totalBalance}` : "****"}
                   </div>
-                  <p className="text-xs text-muted-foreground">USDT</p>
-                </CardContent>
-              </Card>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</p>
+                </div>
+              </div>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">可用余额</CardTitle>
-                  <CreditCard className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <h3 className="text-sm font-medium">可用余额</h3>
+                  <CreditCard className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                </div>
+                <div>
                   <div className="text-2xl font-bold">
                     {balanceVisible ? `$${currentData.availableBalance}` : "****"}
                   </div>
-                  <p className="text-xs text-muted-foreground">USDT</p>
-                </CardContent>
-              </Card>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</p>
+                </div>
+              </div>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">今日盈亏</CardTitle>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <h3 className="text-sm font-medium">今日盈亏</h3>
                   <TrendingUp className="h-4 w-4 text-green-500" />
-                </CardHeader>
-                <CardContent>
+                </div>
+                <div>
                   <div className="text-2xl font-bold text-green-500">
                     {balanceVisible ? currentData.todayPnL : "****"}
                   </div>
-                  <p className="text-xs text-muted-foreground">+2.1%</p>
-                </CardContent>
-              </Card>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>+2.1%</p>
+                </div>
+              </div>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">总盈亏</CardTitle>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <h3 className="text-sm font-medium">总盈亏</h3>
                   <TrendingUp className="h-4 w-4 text-green-500" />
-                </CardHeader>
-                <CardContent>
+                </div>
+                <div>
                   <div className="text-2xl font-bold text-green-500">
                     {balanceVisible ? currentData.totalPnL : "****"}
                   </div>
-                  <p className="text-xs text-muted-foreground">+11.2%</p>
-                </CardContent>
-              </Card>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>+11.2%</p>
+                </div>
+              </div>
             </div>
 
             {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle>快速操作</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <Button className="bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white">
-                    <Plus className="h-4 w-4 mr-2" />
-                    充值
-                  </Button>
-                  <Button variant="outline">
-                    <Minus className="h-4 w-4 mr-2" />
-                    提现
-                  </Button>
-                  <Button variant="outline">
-                    <ArrowUpRight className="h-4 w-4 mr-2" />
-                    转账
-                  </Button>
-                  <Button variant="outline">
-                    <TrendingUp className="h-4 w-4 mr-2" />
-                    交易
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div className={`${cardStyle} rounded-lg p-4`}>
+              <h3 className="text-lg font-semibold mb-4">快速操作</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <Button className="bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white">
+                  <Plus className="h-4 w-4 mr-2" />
+                  充值
+                </Button>
+                <Button variant="outline">
+                  <Minus className="h-4 w-4 mr-2" />
+                  提现
+                </Button>
+                <Button variant="outline">
+                  <ArrowUpRight className="h-4 w-4 mr-2" />
+                  转账
+                </Button>
+                <Button variant="outline">
+                  <TrendingUp className="h-4 w-4 mr-2" />
+                  交易
+                </Button>
+              </div>
+            </div>
           </div>
         )
 
@@ -210,60 +209,44 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">现货总资产</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.totalBalance}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">可用余额</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.availableBalance}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">冻结资产</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.frozenBalance}</div>
-                </CardContent>
-              </Card>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">现货总资产</h3>
+                <div className="text-2xl font-bold">${currentData.totalBalance}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">可用余额</h3>
+                <div className="text-2xl font-bold">${currentData.availableBalance}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">冻结资产</h3>
+                <div className="text-2xl font-bold">${currentData.frozenBalance}</div>
+              </div>
             </div>
             
-            <Card>
-              <CardHeader>
-                <CardTitle>现货资产</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {currentData.assets.map((asset, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-[#00D4AA] rounded-full flex items-center justify-center text-white font-bold text-sm">
-                          {asset.symbol.slice(0, 2)}
-                        </div>
-                        <div>
-                          <div className="font-medium">{asset.symbol}</div>
-                          <div className="text-sm text-gray-500">{asset.balance}</div>
-                        </div>
+            <div className={`${cardStyle} rounded-lg p-4`}>
+              <h3 className="text-lg font-semibold mb-4">现货资产</h3>
+              <div className="space-y-4">
+                {currentData.assets.map((asset, index) => (
+                  <div key={index} className={`flex items-center justify-between p-4 ${isDark ? 'border-[#252842]' : 'border-gray-200'} border rounded-lg`}>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-[#00D4AA] rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        {asset.symbol.slice(0, 2)}
                       </div>
-                      <div className="text-right">
-                        <div className="font-medium">${asset.value}</div>
-                        <div className={`text-sm ${asset.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
-                          {asset.change}
-                        </div>
+                      <div>
+                        <div className="font-medium">{asset.symbol}</div>
+                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{asset.balance}</div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <div className="text-right">
+                      <div className="font-medium">${asset.value}</div>
+                      <div className={`text-sm ${asset.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+                        {asset.change}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )
 
@@ -271,63 +254,43 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">合约资产</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.totalBalance}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">未实现盈亏</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-500">{currentData.unrealizedPnL}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">已用保证金</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.marginUsed}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">可用保证金</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.marginAvailable}</div>
-                </CardContent>
-              </Card>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">合约资产</h3>
+                <div className="text-2xl font-bold">${currentData.totalBalance}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">未实现盈亏</h3>
+                <div className="text-2xl font-bold text-green-500">{currentData.unrealizedPnL}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">已用保证金</h3>
+                <div className="text-2xl font-bold">${currentData.marginUsed}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">可用保证金</h3>
+                <div className="text-2xl font-bold">${currentData.marginAvailable}</div>
+              </div>
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>持仓</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {currentData.positions.map((position, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div>
-                        <div className="font-medium">{position.symbol}</div>
-                        <div className="text-sm text-gray-500">{position.side} {position.size}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className={`font-medium ${position.pnl.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
-                          {position.pnl}
-                        </div>
-                        <div className="text-sm text-gray-500">保证金: ${position.margin}</div>
-                      </div>
+            <div className={`${cardStyle} rounded-lg p-4`}>
+              <h3 className="text-lg font-semibold mb-4">持仓</h3>
+              <div className="space-y-4">
+                {currentData.positions.map((position, index) => (
+                  <div key={index} className={`flex items-center justify-between p-4 ${isDark ? 'border-[#252842]' : 'border-gray-200'} border rounded-lg`}>
+                    <div>
+                      <div className="font-medium">{position.symbol}</div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{position.side} {position.size}</div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <div className="text-right">
+                      <div className={`font-medium ${position.pnl.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+                        {position.pnl}
+                      </div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>保证金: ${position.margin}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )
 
@@ -335,46 +298,34 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">理财总资产</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.totalAssets}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">累计收益</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-500">{currentData.totalEarnings}</div>
-                </CardContent>
-              </Card>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">理财总资产</h3>
+                <div className="text-2xl font-bold">${currentData.totalAssets}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">累计收益</h3>
+                <div className="text-2xl font-bold text-green-500">{currentData.totalEarnings}</div>
+              </div>
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>理财产品</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {currentData.products.map((product, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div>
-                        <div className="font-medium">{product.name}</div>
-                        <div className="text-sm text-gray-500">金额: {product.amount}</div>
-                        <div className="text-sm text-gray-500">年化: {product.apy}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-medium text-green-500">{product.earnings}</div>
-                        <div className="text-sm text-gray-500">收益</div>
-                      </div>
+            <div className={`${cardStyle} rounded-lg p-4`}>
+              <h3 className="text-lg font-semibold mb-4">理财产品</h3>
+              <div className="space-y-4">
+                {currentData.products.map((product, index) => (
+                  <div key={index} className={`flex items-center justify-between p-4 ${isDark ? 'border-[#252842]' : 'border-gray-200'} border rounded-lg`}>
+                    <div>
+                      <div className="font-medium">{product.name}</div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>金额: {product.amount}</div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>年化: {product.apy}</div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <div className="text-right">
+                      <div className="font-medium text-green-500">{product.earnings}</div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>收益</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )
 
@@ -382,58 +333,38 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">总佣金</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.totalCommission}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">今日佣金</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-500">{currentData.todayCommission}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">本月佣金</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-500">{currentData.thisMonthCommission}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">邀请人数</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{currentData.referrals}</div>
-                </CardContent>
-              </Card>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">总佣金</h3>
+                <div className="text-2xl font-bold">${currentData.totalCommission}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">今日佣金</h3>
+                <div className="text-2xl font-bold text-green-500">{currentData.todayCommission}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">本月佣金</h3>
+                <div className="text-2xl font-bold text-green-500">{currentData.thisMonthCommission}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">邀请人数</h3>
+                <div className="text-2xl font-bold">{currentData.referrals}</div>
+              </div>
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>佣金记录</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {currentData.commissionHistory.map((record, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div>
-                        <div className="font-medium">{record.source}</div>
-                        <div className="text-sm text-gray-500">{record.date}</div>
-                      </div>
-                      <div className="text-green-500 font-medium">{record.amount}</div>
+            <div className={`${cardStyle} rounded-lg p-4`}>
+              <h3 className="text-lg font-semibold mb-4">佣金记录</h3>
+              <div className="space-y-4">
+                {currentData.commissionHistory.map((record, index) => (
+                  <div key={index} className={`flex items-center justify-between p-4 ${isDark ? 'border-[#252842]' : 'border-gray-200'} border rounded-lg`}>
+                    <div>
+                      <div className="font-medium">{record.source}</div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{record.date}</div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <div className="text-green-500 font-medium">{record.amount}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )
 
@@ -441,55 +372,39 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">卡片余额</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.cardBalance}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">信用额度</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.cardLimit}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">本月消费</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.monthlySpent}</div>
-                </CardContent>
-              </Card>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">卡片余额</h3>
+                <div className="text-2xl font-bold">${currentData.cardBalance}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">信用额度</h3>
+                <div className="text-2xl font-bold">${currentData.cardLimit}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">本月消费</h3>
+                <div className="text-2xl font-bold">${currentData.monthlySpent}</div>
+              </div>
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>交易记录</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {currentData.transactions.map((transaction, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div>
-                        <div className="font-medium">{transaction.merchant}</div>
-                        <div className="text-sm text-gray-500">{transaction.date}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className={`font-medium ${transaction.amount.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
-                          {transaction.amount}
-                        </div>
-                        <div className="text-sm text-gray-500">{transaction.status}</div>
-                      </div>
+            <div className={`${cardStyle} rounded-lg p-4`}>
+              <h3 className="text-lg font-semibold mb-4">交易记录</h3>
+              <div className="space-y-4">
+                {currentData.transactions.map((transaction, index) => (
+                  <div key={index} className={`flex items-center justify-between p-4 ${isDark ? 'border-[#252842]' : 'border-gray-200'} border rounded-lg`}>
+                    <div>
+                      <div className="font-medium">{transaction.merchant}</div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{transaction.date}</div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <div className="text-right">
+                      <div className={`font-medium ${transaction.amount.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+                        {transaction.amount}
+                      </div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{transaction.status}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )
 
