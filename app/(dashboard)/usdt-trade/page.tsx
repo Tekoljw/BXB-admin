@@ -360,6 +360,96 @@ export default function USDTTradePage() {
                 </button>
               ))}
             </div>
+            
+            {/* 优势劣势标签 */}
+            <div className={`mt-4 p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+              <div className="flex flex-wrap gap-2">
+                {/* 根据交易模式显示不同的标签 */}
+                {tradeMode === "C2C" && (
+                  <>
+                    {/* C2C优势标签 (绿色) */}
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      汇率优惠
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      免手续费
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      支持现金送货
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      支持大额
+                    </span>
+                    
+                    {/* C2C劣势标签 (红色) */}
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      需担保时间
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      需KYC
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      人工交易
+                    </span>
+                  </>
+                )}
+                
+                {tradeMode === "快捷" && (
+                  <>
+                    {/* 快捷优势标签 (绿色) */}
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      操作简单
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      秒级到账
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      自动匹配
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      无需等待
+                    </span>
+                    
+                    {/* 快捷劣势标签 (红色) */}
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      汇率略高
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      限额较小
+                    </span>
+                  </>
+                )}
+                
+                {tradeMode === "OTC" && (
+                  <>
+                    {/* OTC优势标签 (绿色) */}
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      大额交易
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      专业服务
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      隐私保护
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      定制化
+                    </span>
+                    
+                    {/* OTC劣势标签 (红色) */}
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      门槛较高
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      处理时间长
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      需要审核
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* 金额输入 */}
