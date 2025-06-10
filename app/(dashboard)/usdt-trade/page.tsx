@@ -123,24 +123,6 @@ export default function USDTTradePage() {
   return (
     <div className={`min-h-screen p-6 ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       <div className="max-w-full mx-auto">
-        
-        {/* 页面标题和操作栏 */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-              USDT 交易中心
-            </h1>
-            <p className="text-gray-500 mt-1">安全、快速的数字货币交易平台</p>
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="text-right">
-              <div className="text-sm text-gray-500">USDT/CNY</div>
-              <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>¥7.24</div>
-              <div className="text-green-500 text-sm">+0.28%</div>
-            </div>
-          </div>
-        </div>
-
         {/* 主要布局 */}
         <div className="grid grid-cols-12 gap-6">
           
