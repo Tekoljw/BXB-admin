@@ -657,25 +657,25 @@ export default function USDTTradePage() {
                       <div className="col-span-3">
                         <div className="flex items-center space-x-3">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${
-                            order.user.verified ? "bg-custom-green" : "bg-gray-500"
+                            order.isVerified ? "bg-custom-green" : "bg-gray-500"
                           }`}>
-                            {order.user.name.charAt(0)}
+                            {order.merchant.charAt(0)}
                           </div>
                           <div>
                             <div className="flex items-center space-x-2">
                               <span className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                                {order.user.name}
+                                {order.merchant}
                               </span>
-                              {order.user.verified && (
+                              {order.isVerified && (
                                 <div className="w-4 h-4 bg-custom-green rounded-full flex items-center justify-center">
                                   <span className="text-white text-xs">✓</span>
                                 </div>
                               )}
                             </div>
                             <div className="flex items-center space-x-2 text-xs text-gray-400">
-                              <span>{order.user.completedTrades} 笔交易</span>
+                              <span>完成率 {order.orders}</span>
                               <span>•</span>
-                              <span>{order.user.successRate}% 成功率</span>
+                              <span>{order.totalOrders}单</span>
                             </div>
                           </div>
                         </div>
@@ -684,27 +684,27 @@ export default function USDTTradePage() {
                       {/* 价格 */}
                       <div className="col-span-2 text-center">
                         <div className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                          ¥{order.price.toFixed(2)}
+                          ¥{order.price}
                         </div>
                         <div className="text-xs text-gray-400">
-                          {order.priceChange > 0 ? "+" : ""}{order.priceChange.toFixed(2)}%
+                          市场价格
                         </div>
                       </div>
 
                       {/* 可用/限额 */}
                       <div className="col-span-2 text-center">
                         <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                          {order.available.toLocaleString()} USDT
+                          {order.available} USDT
                         </div>
                         <div className="text-xs text-gray-400">
-                          限额: ¥{order.minAmount.toLocaleString()}-¥{order.maxAmount.toLocaleString()}
+                          限额: ¥{order.minAmount}-¥{order.maxAmount}
                         </div>
                       </div>
 
                       {/* 支付方式 */}
                       <div className="col-span-2 text-center">
                         <div className="flex flex-wrap justify-center gap-1">
-                          {order.paymentMethods.map((method, index) => (
+                          {order.payments.map((method, index) => (
                             <span key={index} className={`px-2 py-1 text-xs rounded ${
                               isDark ? "bg-[#252842] text-gray-300" : "bg-gray-100 text-gray-600"
                             }`}>
