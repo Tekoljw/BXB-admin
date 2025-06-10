@@ -597,26 +597,44 @@ export default function USDTTradePage() {
           )}
 
           {tradeMode === "OTC" && (
-            <div className={`${cardStyle} rounded-lg p-6`}>
-              {/* 搜索框 */}
-              <div className="mb-6">
-                <div className="relative">
-                  <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
-                  <input
-                    type="text"
-                    placeholder="搜索OTC供应商..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`w-full pl-10 pr-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
+            <>
+              {/* OTC模式 - 搜索和筛选栏 */}
+              <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="relative flex-1 max-w-md">
+                    <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    }`} />
+                    <input
+                      type="text"
+                      placeholder="搜索OTC供应商"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
+                        isDark
+                          ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
+                          : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
+                      }`}
+                    />
+                  </div>
+                  
+                  <div className="flex items-center space-x-2 text-sm">
+                    <span className="text-gray-400">排序:</span>
+                    <select className={`px-3 py-2 rounded-lg border text-sm focus:outline-none ${
                       isDark
-                        ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
-                        : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
-                    }`}
-                  />
+                        ? "bg-[#252842] border-[#3a3d4a] text-white"
+                        : "bg-white border-gray-300 text-gray-800"
+                    }`}>
+                      <option value="rating">信誉优先</option>
+                      <option value="fees">费率优先</option>
+                      <option value="limit">限额优先</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-              
-              <div className="space-y-4">
+
+              <div className={`${cardStyle} rounded-lg p-6`}>
+                <div className="space-y-4">
                 {/* Moonpay */}
                 <div className={`p-4 rounded-lg border-2 border-transparent hover:border-custom-green transition-all cursor-pointer ${
                   isDark ? "bg-[#252842] hover:bg-[#2a2d42]" : "bg-gray-50 hover:bg-gray-100"
@@ -679,8 +697,9 @@ export default function USDTTradePage() {
                     </div>
                   </div>
                 </div>
+                </div>
               </div>
-            </div>
+            </>
           )}
 
           {tradeMode === "快捷" && (
