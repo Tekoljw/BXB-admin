@@ -281,8 +281,14 @@ export default function USDTTradePage() {
   return (
     <div className={`min-h-screen p-4 ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       
-      {/* 顶部交易模式切换 */}
-      <div className="mb-6 flex justify-end">
+      {/* 顶部标题栏和交易模式切换 */}
+      <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        <div className="mb-4 lg:mb-0">
+          <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+            USDT 交易
+          </h1>
+        </div>
+        
         {/* 右侧交易模式切换 */}
         <div className="flex flex-col items-end">
           <div className="flex bg-gray-200 dark:bg-[#252842] rounded-lg p-1 mb-3">
@@ -468,40 +474,111 @@ export default function USDTTradePage() {
 
         {/* 右侧 - 根据交易模式显示不同内容 */}
         <div className="lg:col-span-3">
-          {tradeMode === "C2C" && (
-            <>
-              {/* C2C模式 - 搜索和筛选栏 */}
-              <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <div className="relative flex-1 max-w-md">
-                    <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? "text-gray-400" : "text-gray-500"} w-4 h-4`} />
-                    <input
-                      type="text"
-                      placeholder="搜索商户名称"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
-                        isDark
-                          ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
-                          : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
-                      }`}
-                    />
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 text-sm">
-                    <span className="text-gray-400">排序:</span>
-                    <select className={`px-3 py-2 rounded-lg border text-sm focus:outline-none ${
+          {/* 统一控制面板 - 交易模式切换和搜索筛选 */}
+          <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
+            {/* 交易模式切换 */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+              <div className="flex bg-gray-200 dark:bg-[#252842] rounded-lg p-1">
+                {["C2C", "OTC", "快捷"].map((mode) => (
+                  <button
+                    key={mode}
+                    onClick={() => setTradeMode(mode)}
+                    className={`py-2 px-6 text-sm font-medium rounded-md transition-all duration-200 ${
+                      tradeMode === mode
+                        ? "bg-white text-gray-800 shadow-sm"
+                        : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    {mode}
+                  </button>
+                ))}
+              </div>
+              
+              {/* 交易模式描述 */}
+              <div className="flex flex-wrap gap-2">
+                {tradeMode === "C2C" && (
+                  <>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      汇率优惠
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      需担保时间
+                    </span>
+                  </>
+                )}
+                
+                {tradeMode === "快捷" && (
+                  <>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      操作简单
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      汇率略高
+                    </span>
+                  </>
+                )}
+                
+                {tradeMode === "OTC" && (
+                  <>
+                    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      大额交易
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                      门槛较高
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+            
+            {/* 搜索和排序 - 仅在C2C和OTC模式下显示 */}
+            {(tradeMode === "C2C" || tradeMode === "OTC") && (
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="relative flex-1 max-w-md">
+                  <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? "text-gray-400" : "text-gray-500"} w-4 h-4`} />
+                  <input
+                    type="text"
+                    placeholder={tradeMode === "C2C" ? "搜索商户名称" : "搜索OTC供应商"}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
                       isDark
-                        ? "bg-[#252842] border-[#3a3d4a] text-white"
-                        : "bg-white border-gray-300 text-gray-800"
-                    }`}>
-                      <option value="price">价格优先</option>
-                      <option value="rating">信誉优先</option>
-                      <option value="speed">速度优先</option>
-                    </select>
-                  </div>
+                        ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
+                        : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
+                    }`}
+                  />
+                </div>
+                
+                <div className="flex items-center space-x-2 text-sm">
+                  <span className="text-gray-400">排序:</span>
+                  <select className={`px-3 py-2 rounded-lg border text-sm focus:outline-none ${
+                    isDark
+                      ? "bg-[#252842] border-[#3a3d4a] text-white"
+                      : "bg-white border-gray-300 text-gray-800"
+                  }`}>
+                    {tradeMode === "C2C" ? (
+                      <>
+                        <option value="price">价格优先</option>
+                        <option value="rating">信誉优先</option>
+                        <option value="speed">速度优先</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="reputation">信誉优先</option>
+                        <option value="rate">费率优先</option>
+                        <option value="limit">限额优先</option>
+                      </>
+                    )}
+                  </select>
                 </div>
               </div>
+            )}
+          </div>
+
+          {tradeMode === "C2C" && (
+            <>
 
               {/* C2C交易订单列表 */}
               <div className="space-y-4">
@@ -586,39 +663,6 @@ export default function USDTTradePage() {
 
           {tradeMode === "OTC" && (
             <>
-              {/* OTC模式 - 搜索和筛选栏 */}
-              <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <div className="relative flex-1 max-w-md">
-                    <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? "text-gray-400" : "text-gray-500"} w-4 h-4`} />
-                    <input
-                      type="text"
-                      placeholder="搜索OTC供应商"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
-                        isDark
-                          ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
-                          : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
-                      }`}
-                    />
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 text-sm">
-                    <span className="text-gray-400">排序:</span>
-                    <select className={`px-3 py-2 rounded-lg border text-sm focus:outline-none ${
-                      isDark
-                        ? "bg-[#252842] border-[#3a3d4a] text-white"
-                        : "bg-white border-gray-300 text-gray-800"
-                    }`}>
-                      <option value="reputation">信誉优先</option>
-                      <option value="rate">费率优先</option>
-                      <option value="limit">限额优先</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
               {/* OTC供应商卡片 */}
               <div className="space-y-4">
                 {/* OTC卡片列表 */}
