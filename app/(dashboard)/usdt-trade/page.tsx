@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Star, Search, TrendingUp, TrendingDown, Shield, Clock, CreditCard, DollarSign } from "lucide-react"
+import { Star, Search, TrendingUp, TrendingDown, Shield, Clock, CreditCard, DollarSign, MessageCircle, Plus } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
+import { Button } from "@/components/ui/button"
 
 // 简洁线性图表组件
 const MiniLineChart = ({ isPositive }: { isPositive: boolean }) => {
@@ -635,108 +636,130 @@ export default function USDTTradePage() {
 
           {/* C2C模式的订单列表 */}
           {tradeMode === "C2C" && (
-            <>
-              {/* 订单列表表头 */}
-              <div className={`${cardStyle} rounded-lg p-4 mb-4`}>
-                <div className="grid grid-cols-12 gap-4 text-xs font-medium text-gray-400">
-                  <div className="col-span-3">商户信息</div>
-                  <div className="col-span-2 text-center">价格 (CNY)</div>
-                  <div className="col-span-2 text-center">可用/限额</div>
-                  <div className="col-span-2 text-center">支付方式</div>
-                  <div className="col-span-2 text-center">平均时间</div>
-                  <div className="col-span-1 text-center">操作</div>
-                </div>
-              </div>
-
-              {/* 订单列表 */}
-              <div className="space-y-4">
-                {filteredOrders.map((order) => (
-                  <div key={order.id} className={`${cardStyle} rounded-lg p-4 hover:shadow-xl transition-all duration-200`}>
-                    <div className="grid grid-cols-12 gap-4 items-center">
-                      {/* 商户信息 */}
-                      <div className="col-span-3">
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${
-                            order.isVerified ? "bg-custom-green" : "bg-gray-500"
-                          }`}>
-                            {order.merchant.charAt(0)}
-                          </div>
-                          <div>
-                            <div className="flex items-center space-x-2">
-                              <span className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                                {order.merchant}
-                              </span>
-                              {order.isVerified && (
-                                <div className="w-4 h-4 bg-custom-green rounded-full flex items-center justify-center">
-                                  <span className="text-white text-xs">✓</span>
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex items-center space-x-2 text-xs text-gray-400">
-                              <span>完成率 {order.orders}</span>
-                              <span>•</span>
-                              <span>{order.totalOrders}单</span>
-                            </div>
-                          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Buy Card - Based on first screenshot */}
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="relative">
+                      <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-semibold">BM</span>
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className="font-medium">BitcoinMaster</span>
+                        <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">✓</span>
                         </div>
                       </div>
-
-                      {/* 价格 */}
-                      <div className="col-span-2 text-center">
-                        <div className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                          ¥{order.price}
-                        </div>
-                        <div className="text-xs text-gray-400">
-                          市场价格
-                        </div>
-                      </div>
-
-                      {/* 可用/限额 */}
-                      <div className="col-span-2 text-center">
-                        <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                          {order.available} USDT
-                        </div>
-                        <div className="text-xs text-gray-400">
-                          限额: ¥{order.minAmount}-¥{order.maxAmount}
-                        </div>
-                      </div>
-
-                      {/* 支付方式 */}
-                      <div className="col-span-2 text-center">
-                        <div className="flex flex-wrap justify-center gap-1">
-                          {order.payments.map((method, index) => (
-                            <span key={index} className={`px-2 py-1 text-xs rounded ${
-                              isDark ? "bg-[#252842] text-gray-300" : "bg-gray-100 text-gray-600"
-                            }`}>
-                              {method}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* 平均时间 */}
-                      <div className="col-span-2 text-center">
-                        <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                          {order.avgTime}
-                        </div>
-                        <div className="text-xs text-gray-400">平均放币</div>
-                      </div>
-
-                      {/* 操作 */}
-                      <div className="col-span-1 text-center">
-                        <button className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                          activeTab === "买入"
-                            ? "bg-custom-green text-white hover:bg-custom-green/90"
-                            : "bg-red-500 text-white hover:bg-red-600"
-                        }`}>
-                          {activeTab === "买入" ? "买入" : "卖出"}
-                        </button>
+                      <div className="flex items-center space-x-2 text-sm">
+                        <span className="text-yellow-500">⭐ 4.8</span>
+                        <span className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1923单</span>
                       </div>
                     </div>
                   </div>
-                ))}
+                  <div className="text-right">
+                    <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mb-1">
+                      要求担保周期12小时
+                    </div>
+                    <div className="text-2xl font-bold">¥7.23</div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>剩余 无限制</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between mb-3">
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    限额: ¥500 - ¥100000
+                  </div>
+                  <div className="flex items-center space-x-1 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                    <span>🛡️</span>
+                    <span>现金交易</span>
+                  </div>
+                </div>
+                
+                <div className="flex space-x-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1 border-blue-300 text-blue-600 hover:bg-blue-50"
+                  >
+                    <MessageCircle className="h-4 w-4 mr-1" />
+                  </Button>
+                  <Button 
+                    className="flex-1 bg-green-500 hover:bg-green-600 text-white"
+                    size="sm"
+                  >
+                    买入
+                  </Button>
+                </div>
               </div>
-            </>
+
+              {/* Sell Card - Based on second screenshot */}
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="relative">
+                      <div className="w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-semibold">CK</span>
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className="font-medium">CryptoKing888</span>
+                        <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">✓</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm">
+                        <span className="text-yellow-500">⭐ 4.9</span>
+                        <span className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>2847单</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex space-x-2 mb-1">
+                      <div className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
+                        担保50万
+                      </div>
+                      <div className="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">
+                        周期24小时
+                      </div>
+                    </div>
+                    <div className="text-2xl font-bold">¥7.25</div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>剩余 48,500</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between mb-3">
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    限额: ¥100 - ¥50000
+                  </div>
+                  <div className="flex items-center space-x-1 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                    <span>🛡️</span>
+                    <span>现金交易</span>
+                  </div>
+                </div>
+                
+                <div className="flex space-x-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1 border-blue-300 text-blue-600 hover:bg-blue-50"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+                    size="sm"
+                  >
+                    卖出
+                  </Button>
+                </div>
+              </div>
+            </div>
           )}
 
 
