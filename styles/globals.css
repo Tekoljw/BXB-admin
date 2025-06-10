@@ -276,3 +276,68 @@ img[src*="next"] {
 div[style*="position:fixed"][style*="z-index:9999"] {
   display: none !important;
 }
+
+/* More specific Next.js icon targeting */
+div[style*="position: fixed"][style*="bottom"][style*="left"] svg {
+  display: none !important;
+}
+
+/* Hide Next.js development icons */
+div[id*="__next"] {
+  display: none !important;
+}
+
+/* Target specific Next.js development overlay */
+div[data-nextjs-dialog] {
+  display: none !important;
+}
+
+/* Hide any iframe elements that might contain Next.js branding */
+iframe[src*="next"] {
+  display: none !important;
+}
+
+/* Comprehensive Next.js development UI hiding */
+[data-nextjs-toast-errors-parent] {
+  display: none !important;
+}
+
+[data-nextjs-dialog-overlay] {
+  display: none !important;
+}
+
+/* Hide all fixed position elements in bottom left quadrant */
+div[style*="position: fixed"][style*="left: 0"][style*="bottom: 0"],
+div[style*="position: fixed"][style*="left:0"][style*="bottom:0"],
+div[style*="position:fixed"][style*="left: 0"][style*="bottom: 0"],
+div[style*="position:fixed"][style*="left:0"][style*="bottom:0"] {
+  display: none !important;
+}
+
+/* Aggressive targeting of Next.js development elements */
+div[style*="position: fixed"][style*="bottom"][style*="left"][style*="z-index"] {
+  display: none !important;
+}
+
+/* Hide all elements with Next.js related attributes */
+*[data-nextjs*] {
+  display: none !important;
+}
+
+/* Target development server indicators */
+div[style*="position: fixed"][style*="bottom"][style*="left"]:has(svg) {
+  display: none !important;
+}
+
+/* Nuclear option for bottom-left fixed elements */
+div[style*="position: fixed"]:has([data-nextjs]),
+div[style*="position: fixed"]:has(svg[data-testid*="next"]),
+div[style*="position: fixed"]:has(img[alt*="next"]),
+div[style*="position: fixed"]:has(img[alt*="Next"]) {
+  display: none !important;
+}
+
+/* Hide any element containing "next" text or attributes */
+[title*="Next"], [title*="next"], [alt*="Next"], [alt*="next"] {
+  display: none !important;
+}
