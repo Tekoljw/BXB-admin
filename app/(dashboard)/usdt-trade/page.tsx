@@ -98,7 +98,7 @@ const MerchantRating = ({ rating }: { rating: number }) => {
 const PaymentIcon = ({ type }: { type: string }) => {
   const getIcon = () => {
     switch (type) {
-      case "现金交易":
+      case "现金送达":
         return <span className="text-lg">🛡️</span>
       case "银行卡":
         return <CreditCard className="w-4 h-4" />
@@ -280,7 +280,7 @@ export default function USDTTradePage() {
   }
 
   const tabs = ["买入", "卖出"]
-  const paymentFilters = ["全部", "现金交易", "银行卡", "支付宝", "微信"]
+  const paymentFilters = ["全部", "现金送达", "银行卡", "支付宝", "微信"]
   const quickAmounts = ["1000", "5000", "10000", "50000"]
 
   const filteredOrders = usdtOrders[activeTab].filter((order) => {
@@ -380,7 +380,7 @@ export default function USDTTradePage() {
                       免手续费
                     </span>
                     <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
-                      支持现金送货
+                      支持现金送达
                     </span>
                     <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
                       支持大额
@@ -509,7 +509,7 @@ export default function USDTTradePage() {
                     onClick={() => setSelectedPayment(payment)}
                     className={`w-full flex items-center py-3 px-3 rounded-lg transition-all duration-200 ${
                       selectedPayment === payment
-                        ? payment === "现金交易"
+                        ? payment === "现金送达"
                           ? "border-2 border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20"
                           : "bg-custom-green/10 text-custom-green border-2 border-custom-green"
                         : isDark
@@ -518,7 +518,7 @@ export default function USDTTradePage() {
                     }`}
                   >
                     <PaymentIcon type={payment} />
-                    {payment === "现金交易" && (
+                    {payment === "现金送达" && (
                       <div className="ml-auto">
                         <div className={`text-xs px-2 py-1 rounded ${
                           selectedPayment === payment
