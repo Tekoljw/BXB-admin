@@ -291,6 +291,72 @@ export default function USDTTradePage() {
 
   return (
     <div className={`min-h-screen p-4 ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+      
+      {/* 顶部标题栏和交易模式切换 */}
+      <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        <div className="mb-4 lg:mb-0">
+          <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+            USDT 交易
+          </h1>
+        </div>
+        
+        {/* 右侧交易模式切换 */}
+        <div className="flex flex-col items-end">
+          <div className="flex bg-gray-200 dark:bg-[#252842] rounded-lg p-1 mb-3">
+            {["C2C", "OTC", "快捷"].map((mode) => (
+              <button
+                key={mode}
+                onClick={() => setTradeMode(mode)}
+                className={`py-2 px-6 text-sm font-medium rounded-md transition-all duration-200 ${
+                  tradeMode === mode
+                    ? "bg-white text-gray-800 shadow-sm"
+                    : isDark
+                      ? "text-gray-300 hover:text-white"
+                      : "text-gray-600 hover:text-gray-800"
+                }`}
+              >
+                {mode}
+              </button>
+            ))}
+          </div>
+          
+          {/* 交易模式描述 */}
+          <div className="flex flex-wrap gap-2 justify-end">
+            {tradeMode === "C2C" && (
+              <>
+                <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                  汇率优惠
+                </span>
+                <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                  需担保时间
+                </span>
+              </>
+            )}
+            
+            {tradeMode === "快捷" && (
+              <>
+                <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                  操作简单
+                </span>
+                <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                  汇率略高
+                </span>
+              </>
+            )}
+            
+            {tradeMode === "OTC" && (
+              <>
+                <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                  大额交易
+                </span>
+                <span className="px-3 py-1 text-xs rounded-full bg-red-100 text-red-800">
+                  门槛较高
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* 左侧 - 交易筛选 */}
@@ -345,26 +411,6 @@ export default function USDTTradePage() {
               <option value="JPY">JPY (日元)</option>
             </select>
           </div>
-
-          {/* 交易模式选择 */}
-          <div className="mb-6">
-            <div className="flex bg-gray-200 dark:bg-[#252842] rounded-lg p-1">
-              {["C2C", "OTC", "快捷"].map((mode) => (
-                <button
-                  key={mode}
-                  onClick={() => setTradeMode(mode)}
-                  className={`flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 ${
-                    tradeMode === mode
-                      ? "bg-white text-gray-800 shadow-sm"
-                      : isDark
-                        ? "text-gray-300 hover:text-white"
-                        : "text-gray-600 hover:text-gray-800"
-                  }`}
-                >
-                  {mode}
-                </button>
-              ))}
-            </div>
             
             {/* 优势劣势标签 */}
             <div className={`mt-4 p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
