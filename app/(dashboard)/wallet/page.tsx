@@ -412,61 +412,41 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">总保证金</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.totalMargin}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">已用保证金</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.usedMargin}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">可用保证金</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${currentData.availableMargin}</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">保证金率</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-500">{currentData.marginLevel}</div>
-                </CardContent>
-              </Card>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">总保证金</h3>
+                <div className="text-2xl font-bold">${currentData.totalMargin}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">已用保证金</h3>
+                <div className="text-2xl font-bold">${currentData.usedMargin}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">可用保证金</h3>
+                <div className="text-2xl font-bold">${currentData.availableMargin}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">保证金率</h3>
+                <div className="text-2xl font-bold text-green-500">{currentData.marginLevel}</div>
+              </div>
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>保证金仓位</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {currentData.positions.map((position, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div>
-                        <div className="font-medium">{position.pair}</div>
-                        <div className="text-sm text-gray-500">杠杆: {position.leverage}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-medium">${position.margin}</div>
-                        <div className="text-sm text-green-500">{position.status}</div>
-                      </div>
+            <div className={`${cardStyle} rounded-lg p-4`}>
+              <h3 className="text-lg font-semibold mb-4">保证金仓位</h3>
+              <div className="space-y-4">
+                {currentData.positions.map((position, index) => (
+                  <div key={index} className={`flex items-center justify-between p-4 ${isDark ? 'border-[#252842]' : 'border-gray-200'} border rounded-lg`}>
+                    <div>
+                      <div className="font-medium">{position.pair}</div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>杠杆: {position.leverage}</div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <div className="text-right">
+                      <div className="font-medium">${position.margin}</div>
+                      <div className="text-sm text-green-500">{position.status}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )
 
