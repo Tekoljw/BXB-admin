@@ -124,6 +124,7 @@ export default function USDTTradePage() {
   const [selectedAmount, setSelectedAmount] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedPayment, setSelectedPayment] = useState("全部")
+  const [cashTradeFilter, setCashTradeFilter] = useState(false)
   const [tradeMode, setTradeMode] = useState("C2C")
   const [selectedCurrency, setSelectedCurrency] = useState("CNY")
   const [quickPayExpanded, setQuickPayExpanded] = useState(false)
@@ -350,7 +351,7 @@ export default function USDTTradePage() {
                   onClick={() => setTradeMode(mode)}
                   className={`flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 ${
                     tradeMode === mode
-                      ? "bg-custom-green text-white shadow-sm"
+                      ? "bg-white text-gray-800 shadow-sm"
                       : isDark
                         ? "text-gray-300 hover:text-white"
                         : "text-gray-600 hover:text-gray-800"
@@ -487,6 +488,48 @@ export default function USDTTradePage() {
                     ¥{amount}
                   </button>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* C2C现金交易筛选 - 仅在C2C模式下显示 */}
+          {tradeMode === "C2C" && (
+            <div className="mb-6">
+              <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-700"}`}>
+                交易类型
+              </label>
+              <div className="space-y-3">
+                <button
+                  onClick={() => setCashTradeFilter(!cashTradeFilter)}
+                  className={`w-full flex items-center justify-between p-3 rounded-lg border-2 transition-all duration-200 ${
+                    cashTradeFilter
+                      ? "border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20"
+                      : isDark
+                        ? "border-[#3a3d4a] hover:border-gray-400"
+                        : "border-gray-300 hover:border-gray-400"
+                  }`}
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg">🛡️</span>
+                    <div className="text-left">
+                      <div className={`font-medium ${cashTradeFilter ? "text-yellow-800 dark:text-yellow-300" : isDark ? "text-white" : "text-gray-800"}`}>
+                        现金交易
+                      </div>
+                      <div className={`text-xs ${cashTradeFilter ? "text-yellow-600 dark:text-yellow-400" : "text-gray-500"}`}>
+                        安全担保，实名认证
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    cashTradeFilter
+                      ? "border-yellow-400 bg-yellow-400"
+                      : "border-gray-300"
+                  }`}>
+                    {cashTradeFilter && (
+                      <span className="text-white text-xs">✓</span>
+                    )}
+                  </div>
+                </button>
               </div>
             </div>
           )}
