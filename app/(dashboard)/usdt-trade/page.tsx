@@ -452,66 +452,70 @@ export default function USDTTradePage() {
             </div>
           </div>
 
-          {/* 金额输入 */}
-          <div className="mb-6">
-            <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-700"}`}>
-              交易金额 (CNY)
-            </label>
-            <input
-              type="text"
-              value={selectedAmount}
-              onChange={(e) => setSelectedAmount(e.target.value)}
-              placeholder="请输入金额"
-              className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
-                isDark
-                  ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
-                  : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
-              }`}
-            />
-            
-            {/* 快捷金额按钮 */}
-            <div className="grid grid-cols-2 gap-2 mt-3">
-              {quickAmounts.map((amount) => (
-                <button
-                  key={amount}
-                  onClick={() => setSelectedAmount(amount)}
-                  className={`py-2 px-3 text-xs rounded-md border transition-colors ${
-                    selectedAmount === amount
-                      ? "border-custom-green bg-custom-green/10 text-custom-green"
-                      : isDark
-                        ? "border-[#3a3d4a] text-gray-400 hover:border-gray-400"
-                        : "border-gray-300 text-gray-600 hover:border-gray-400"
-                  }`}
-                >
-                  ¥{amount}
-                </button>
-              ))}
+          {/* 金额输入 - 仅在C2C和OTC模式下显示 */}
+          {(tradeMode === "C2C" || tradeMode === "OTC") && (
+            <div className="mb-6">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-700"}`}>
+                交易金额 (CNY)
+              </label>
+              <input
+                type="text"
+                value={selectedAmount}
+                onChange={(e) => setSelectedAmount(e.target.value)}
+                placeholder="请输入金额"
+                className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
+                  isDark
+                    ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
+                    : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
+                }`}
+              />
+              
+              {/* 快捷金额按钮 */}
+              <div className="grid grid-cols-2 gap-2 mt-3">
+                {quickAmounts.map((amount) => (
+                  <button
+                    key={amount}
+                    onClick={() => setSelectedAmount(amount)}
+                    className={`py-2 px-3 text-xs rounded-md border transition-colors ${
+                      selectedAmount === amount
+                        ? "border-custom-green bg-custom-green/10 text-custom-green"
+                        : isDark
+                          ? "border-[#3a3d4a] text-gray-400 hover:border-gray-400"
+                          : "border-gray-300 text-gray-600 hover:border-gray-400"
+                    }`}
+                  >
+                    ¥{amount}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* 支付方式筛选 */}
-          <div className="mb-6">
-            <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-700"}`}>
-              支付方式
-            </label>
-            <div className="space-y-2">
-              {paymentFilters.map((payment) => (
-                <button
-                  key={payment}
-                  onClick={() => setSelectedPayment(payment)}
-                  className={`w-full text-left py-2 px-3 text-sm rounded-md transition-colors ${
-                    selectedPayment === payment
-                      ? "bg-custom-green/10 text-custom-green border border-custom-green"
-                      : isDark
-                        ? "text-gray-400 hover:bg-[#252842] border border-transparent"
-                        : "text-gray-600 hover:bg-gray-100 border border-transparent"
-                  }`}
-                >
-                  {payment}
-                </button>
-              ))}
+          {/* 支付方式筛选 - 仅在C2C和OTC模式下显示 */}
+          {(tradeMode === "C2C" || tradeMode === "OTC") && (
+            <div className="mb-6">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-700"}`}>
+                支付方式
+              </label>
+              <div className="space-y-2">
+                {paymentFilters.map((payment) => (
+                  <button
+                    key={payment}
+                    onClick={() => setSelectedPayment(payment)}
+                    className={`w-full text-left py-2 px-3 text-sm rounded-md transition-colors ${
+                      selectedPayment === payment
+                        ? "bg-custom-green/10 text-custom-green border border-custom-green"
+                        : isDark
+                          ? "text-gray-400 hover:bg-[#252842] border border-transparent"
+                          : "text-gray-600 hover:bg-gray-100 border border-transparent"
+                    }`}
+                  >
+                    {payment}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* 市场统计 */}
           <div className={`p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
