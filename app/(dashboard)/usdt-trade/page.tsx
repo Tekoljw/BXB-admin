@@ -281,14 +281,8 @@ export default function USDTTradePage() {
   return (
     <div className={`min-h-screen p-4 ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       
-      {/* 顶部标题栏和交易模式切换 */}
-      <div className="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between">
-        <div className="mb-4 lg:mb-0">
-          <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-            USDT 交易
-          </h1>
-        </div>
-        
+      {/* 顶部交易模式切换 */}
+      <div className="mb-6 flex justify-end">
         {/* 右侧交易模式切换 */}
         <div className="flex flex-col items-end">
           <div className="flex bg-gray-200 dark:bg-[#252842] rounded-lg p-1 mb-3">
