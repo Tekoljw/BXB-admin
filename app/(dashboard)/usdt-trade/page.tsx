@@ -315,11 +315,16 @@ export default function USDTTradePage() {
               法币类型
             </label>
             <select 
-              className={`w-full px-3 py-2 text-sm border rounded-md ${
+              className={`w-full px-3 py-2 text-sm border rounded-md transition-all duration-300 ease-in-out ${
                 isDark 
-                  ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                  : "bg-white border-gray-300 text-gray-800"
-              } focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                  ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#2a2d42] focus:bg-[#2a2d42]" 
+                  : "bg-white border-gray-300 text-gray-800 hover:bg-gray-50 focus:bg-gray-50"
+              } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 transform hover:scale-[1.01] focus:scale-[1.01]`}
+              style={{
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                opacity: '0',
+                animation: 'fadeIn 0.5s ease-in-out forwards'
+              }}
             >
               <option value="CNY">CNY (人民币)</option>
               <option value="USD">USD (美元)</option>
