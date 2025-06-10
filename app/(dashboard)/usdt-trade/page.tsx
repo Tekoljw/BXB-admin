@@ -598,9 +598,24 @@ export default function USDTTradePage() {
 
           {tradeMode === "OTC" && (
             <div className={`${cardStyle} rounded-lg p-6`}>
-              <h3 className={`text-lg font-bold mb-6 ${isDark ? "text-white" : "text-gray-800"}`}>
-                OTC 供应商
-              </h3>
+              {/* 搜索框 */}
+              <div className="mb-6">
+                <div className="relative">
+                  <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+                  <input
+                    type="text"
+                    placeholder="搜索OTC供应商..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className={`w-full pl-10 pr-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
+                      isDark
+                        ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
+                        : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
+                    }`}
+                  />
+                </div>
+              </div>
+              
               <div className="space-y-4">
                 {/* Moonpay */}
                 <div className={`p-4 rounded-lg border-2 border-transparent hover:border-custom-green transition-all cursor-pointer ${
