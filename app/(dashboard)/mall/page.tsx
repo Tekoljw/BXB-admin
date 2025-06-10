@@ -102,22 +102,18 @@ export default function MallPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto p-4 space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <ShoppingBag className="h-6 w-6 text-[#00D4AA]" />
-            商城
-          </h1>
-          <Button variant="outline" size="sm">
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            购物车 (0)
-          </Button>
-        </div>
+
 
         {/* Search and Filters */}
         <Card>
           <CardContent className="p-4">
             <div className="flex flex-col md:flex-row gap-4 items-center">
+              {/* Shopping Cart */}
+              <Button variant="outline" size="sm">
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                购物车 (0)
+              </Button>
+
               {/* Search */}
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
