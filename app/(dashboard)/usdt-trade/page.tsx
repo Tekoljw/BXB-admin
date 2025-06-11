@@ -181,13 +181,14 @@ export default function USDTTradePage() {
                     <button
                       key={mode}
                       onClick={() => setTradeMode(mode)}
-                      className={`w-full px-3 py-3 rounded-lg text-sm transition-colors duration-200 ${
+                      className={`w-full px-3 py-3 rounded-lg text-sm transition-all border cursor-pointer ${
                         tradeMode === mode
-                          ? "border-[3px] border-custom-green bg-white text-gray-800 shadow-sm"
+                          ? "border-custom-green bg-white text-gray-800 shadow-sm"
                           : isDark
-                          ? "border-[3px] border-gray-600 text-gray-300 hover:border-custom-green hover:bg-[#2a2d42] hover:shadow-sm"
-                          : "border-[3px] border-gray-300 text-gray-600 hover:border-custom-green hover:bg-gray-100 hover:shadow-sm"
+                          ? "border-[#3a3d4a] text-gray-300 hover:border-custom-green hover:bg-[#252842] hover:shadow-md"
+                          : "border-gray-200 text-gray-600 hover:border-custom-green hover:bg-gray-50 hover:shadow-md"
                       }`}
+                      style={{ transform: 'none' }}
                     >
                       <div className="flex flex-col space-y-1">
                         <div className="font-bold text-left text-base flex items-center space-x-2">
