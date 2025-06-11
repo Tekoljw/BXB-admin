@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 
 export default function USDTTradePage() {
   const { isDark } = useTheme()
-  const [activeTab, setActiveTab] = useState("买入")
+  const [activeTab, setActiveTab] = useState("买入USDT")
   const [tradeMode, setTradeMode] = useState("C2C")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedPayment, setSelectedPayment] = useState("全部")
@@ -132,23 +132,27 @@ export default function USDTTradePage() {
               
               {/* 买入/卖出切换 */}
               <div className="mb-6">
-                <h3 className={`font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
-                  交易类型
-                </h3>
-                <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 dark:bg-[#252842] rounded-lg">
-                  {["买入", "卖出"].map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveTab(tab)}
-                      className={`py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                        activeTab === tab
-                          ? "bg-white dark:bg-[#1a1c2e] text-custom-green shadow-sm"
-                          : "text-gray-600 dark:text-gray-400"
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setActiveTab("买入USDT")}
+                    className={`py-3 px-4 rounded-lg text-sm font-medium transition-all ${
+                      activeTab === "买入USDT" || activeTab === "买入"
+                        ? "bg-green-500 text-white shadow-lg"
+                        : "bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-800/40"
+                    }`}
+                  >
+                    买入USDT
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("卖出USDT")}
+                    className={`py-3 px-4 rounded-lg text-sm font-medium transition-all ${
+                      activeTab === "卖出USDT" || activeTab === "卖出"
+                        ? "bg-red-500 text-white shadow-lg"
+                        : "bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-800/40"
+                    }`}
+                  >
+                    卖出USDT
+                  </button>
                 </div>
               </div>
 
