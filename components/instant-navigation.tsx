@@ -111,7 +111,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent"></div>
         
         {/* Header - Hamburger Menu with Glow Effect */}
-        <div className="relative z-10 h-14 flex items-center justify-center px-3 border-b border-gray-700/50 backdrop-blur-sm">
+        <div className="relative z-10 h-14 flex items-center justify-center px-3 backdrop-blur-sm">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative overflow-hidden"
@@ -124,7 +124,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         </div>
 
         {/* User Section with Account Dropdown */}
-        <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-0 py-4'} border-b border-gray-700/50 backdrop-blur-sm`}>
+        <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-0 py-4'} backdrop-blur-sm`}>
           <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'} transition-all duration-500`}>
             <AccountDropdown />
             {isExpanded && (
@@ -216,7 +216,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         </div>
 
         {/* Footer with Enhanced Controls */}
-        <div className="relative z-10 border-t border-gray-700/50 backdrop-blur-sm">
+        <div className="relative z-10 backdrop-blur-sm">
           <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} transition-all duration-500`}>
             <div className="relative flex justify-center w-full">
               <button 
