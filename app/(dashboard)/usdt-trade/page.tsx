@@ -132,23 +132,23 @@ export default function USDTTradePage() {
               
               {/* 买入/卖出切换 */}
               <div className="mb-6">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="flex border-b border-gray-200 dark:border-gray-700">
                   <button
                     onClick={() => setActiveTab("买入USDT")}
-                    className={`py-3 px-4 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex-1 py-3 px-4 text-sm font-medium transition-all border-b-2 ${
                       activeTab === "买入USDT" || activeTab === "买入"
-                        ? "bg-green-500 text-white shadow-lg"
-                        : "bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-800/40"
+                        ? "border-green-500 text-green-500 bg-green-50 dark:bg-green-900/20"
+                        : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                     }`}
                   >
                     买入USDT
                   </button>
                   <button
                     onClick={() => setActiveTab("卖出USDT")}
-                    className={`py-3 px-4 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex-1 py-3 px-4 text-sm font-medium transition-all border-b-2 ${
                       activeTab === "卖出USDT" || activeTab === "卖出"
-                        ? "bg-red-500 text-white shadow-lg"
-                        : "bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-800/40"
+                        ? "border-red-500 text-red-500 bg-red-50 dark:bg-red-900/20"
+                        : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                     }`}
                   >
                     卖出USDT
