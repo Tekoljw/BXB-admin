@@ -173,62 +173,30 @@ export default function USDTTradePage() {
               {/* 交易模式 */}
               <div className="mb-4">
                 <div className="space-y-2">
-                  {["C2C", "快捷", "OTC"].map((mode) => (
-                    <div key={mode}>
-                      <button
-                        onClick={() => setTradeMode(mode)}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all border-2 ${
-                          tradeMode === mode
-                            ? "border-custom-green bg-white text-gray-800"
-                            : isDark
-                            ? "border-gray-600 text-gray-300 hover:border-custom-green hover:bg-[#2a2d42]"
-                            : "border-gray-300 text-gray-600 hover:border-custom-green hover:bg-gray-100"
-                        }`}
-                      >
-                        {mode}
-                      </button>
-                      
-                      {/* 展开的优劣势标签 */}
-                      {tradeMode === mode && (
-                        <div className="mt-2 px-3 py-2 bg-gray-50 dark:bg-[#1a1d29] rounded-lg border border-gray-200 dark:border-gray-700">
-                          <div className="space-y-1">
-                            {mode === "C2C" && (
-                              <>
-                                <div className="flex flex-wrap gap-1">
-                                  <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">✓ 价格灵活</span>
-                                  <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">✓ 支付多样</span>
-                                </div>
-                                <div className="flex flex-wrap gap-1">
-                                  <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">× 交易时间长</span>
-                                </div>
-                              </>
-                            )}
-                            {mode === "快捷" && (
-                              <>
-                                <div className="flex flex-wrap gap-1">
-                                  <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">✓ 交易快速</span>
-                                  <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">✓ 操作简单</span>
-                                </div>
-                                <div className="flex flex-wrap gap-1">
-                                  <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">× 价格固定</span>
-                                </div>
-                              </>
-                            )}
-                            {mode === "OTC" && (
-                              <>
-                                <div className="flex flex-wrap gap-1">
-                                  <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">✓ 大额交易</span>
-                                  <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">✓ 专业服务</span>
-                                </div>
-                                <div className="flex flex-wrap gap-1">
-                                  <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">× 门槛较高</span>
-                                </div>
-                              </>
-                            )}
-                          </div>
+                  {[
+                    { mode: "C2C", advantage: "价格灵活", disadvantage: "交易时间长" },
+                    { mode: "快捷", advantage: "交易快速", disadvantage: "价格固定" },
+                    { mode: "OTC", advantage: "大额交易", disadvantage: "门槛较高" }
+                  ].map(({ mode, advantage, disadvantage }) => (
+                    <button
+                      key={mode}
+                      onClick={() => setTradeMode(mode)}
+                      className={`w-full px-3 py-3 rounded-lg text-sm transition-all border-2 ${
+                        tradeMode === mode
+                          ? "border-custom-green bg-white text-gray-800"
+                          : isDark
+                          ? "border-gray-600 text-gray-300 hover:border-custom-green hover:bg-[#2a2d42]"
+                          : "border-gray-300 text-gray-600 hover:border-custom-green hover:bg-gray-100"
+                      }`}
+                    >
+                      <div className="flex flex-col space-y-1">
+                        <div className="font-bold text-left">{mode}</div>
+                        <div className="flex justify-between text-xs">
+                          <span className="text-green-600">✓ {advantage}</span>
+                          <span className="text-red-600">× {disadvantage}</span>
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    </button>
                   ))}
                 </div>
               </div>
