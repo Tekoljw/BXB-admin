@@ -54,8 +54,11 @@ export default function ChatPage() {
   const [favorites, setFavorites] = useState<string[]>(["contact-1", "contact-3"])
   const [showAddMenu, setShowAddMenu] = useState(false)
   const [isMenuAnimating, setIsMenuAnimating] = useState(false)
+  const [showUnreadIndicator, setShowUnreadIndicator] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const addMenuRef = useRef<HTMLDivElement>(null)
+  const chatContainerRef = useRef<HTMLDivElement>(null)
+  const firstUnreadRef = useRef<HTMLDivElement>(null)
 
   // 处理菜单显示
   const handleShowMenu = useCallback(() => {
@@ -272,6 +275,11 @@ export default function ChatPage() {
 
   const selectedContactData = contacts.find((contact) => contact.id === selectedContact)
   const selectedMessages = selectedContact ? messages[selectedContact] || [] : []
+  
+  // 计算未读消息数量
+  const unreadMessages = selectedMessages.filter(msg => !msg.isRead && msg.senderId !== "user")
+  const unreadCount = unreadMessages.length
+  const firstUnreadMessage = unreadMessages[0]
 
   // 处理发送消息
   const handleSendMessage = (e: React.FormEvent) => {
@@ -286,6 +294,42 @@ export default function ChatPage() {
   const toggleFavorite = (contactId: string) => {
     setFavorites((prev) => (prev.includes(contactId) ? prev.filter((f) => f !== contactId) : [...prev, contactId]))
   }
+
+  // 跳转到未读消息
+  const jumpToUnreadMessages = () => {
+    if (firstUnreadRef.current) {
+      firstUnreadRef.current.scrollIntoView({ 
+        behavior: "smooth", 
+        block: "center" 
+      })
+    }
+  }
+
+  // 检查滚动位置显示未读指示器
+  useEffect(() => {
+    const chatContainer = chatContainerRef.current
+    if (!chatContainer || unreadCount === 0) {
+      setShowUnreadIndicator(false)
+      return
+    }
+
+    const handleScroll = () => {
+      if (firstUnreadRef.current && chatContainer) {
+        const containerRect = chatContainer.getBoundingClientRect()
+        const unreadRect = firstUnreadRef.current.getBoundingClientRect()
+        
+        // 如果第一条未读消息不在视口内，显示指示器
+        const isVisible = unreadRect.top >= containerRect.top && 
+                         unreadRect.bottom <= containerRect.bottom
+        setShowUnreadIndicator(!isVisible)
+      }
+    }
+
+    chatContainer.addEventListener('scroll', handleScroll)
+    handleScroll() // 初始检查
+
+    return () => chatContainer.removeEventListener('scroll', handleScroll)
+  }, [unreadCount, selectedContact])
 
   // 添加功能菜单项
   const addMenuItems = [
@@ -479,9 +523,24 @@ export default function ChatPage() {
                     )}
                   </div>
                   <div>
-                    <h2 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                      {selectedContactData.name}
-                    </h2>
+                    <div className="flex items-center space-x-2">
+                      <h2 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                        {selectedContactData.name}
+                      </h2>
+                      {unreadCount > 0 && (
+                        <div className="flex items-center space-x-1">
+                          <div className="h-5 w-5 bg-red-500 rounded-full flex items-center justify-center animate-pulse">
+                            <span className="text-xs text-white font-bold">{unreadCount}</span>
+                          </div>
+                          <button
+                            onClick={jumpToUnreadMessages}
+                            className="text-xs bg-custom-green text-white px-2 py-1 rounded-full hover:bg-custom-green/80 transition-colors"
+                          >
+                            跳转
+                          </button>
+                        </div>
+                      )}
+                    </div>
                     <div className="text-xs text-gray-400">{selectedContactData.isOnline ? "在线" : "离线"}</div>
                   </div>
                 </div>
@@ -512,12 +571,19 @@ export default function ChatPage() {
 
               {/* 聊天内容 */}
               <div
-                className={`flex-1 p-4 overflow-y-auto ${isDark ? "bg-[#0f1419]" : "bg-gray-50"}`}
+                ref={chatContainerRef}
+                className={`flex-1 p-4 overflow-y-auto relative ${isDark ? "bg-[#0f1419]" : "bg-gray-50"}`}
                 style={{ minHeight: "300px" }}
               >
                 <div className="space-y-4">
-                  {selectedMessages.map((msg) => (
-                    <div key={msg.id} className={`flex ${msg.senderId === "user" ? "justify-end" : "justify-start"}`}>
+                  {selectedMessages.map((msg, index) => {
+                    const isFirstUnread = msg.id === firstUnreadMessage?.id
+                    return (
+                    <div 
+                      key={msg.id} 
+                      ref={isFirstUnread ? firstUnreadRef : null}
+                      className={`flex ${msg.senderId === "user" ? "justify-end" : "justify-start"} ${!msg.isRead && msg.senderId !== "user" ? "relative" : ""}`}
+                    >
                       {msg.senderId !== "user" && (
                         <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-sm mr-2 flex-shrink-0">
                           {selectedContactData.avatar}
