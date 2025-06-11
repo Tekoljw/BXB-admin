@@ -174,10 +174,10 @@ export default function USDTTradePage() {
               <div className="mb-4">
                 <div className="space-y-2">
                   {[
-                    { mode: "C2C", advantage: "价格灵活", disadvantage: "交易时间长" },
-                    { mode: "快捷", advantage: "交易快速", disadvantage: "价格固定" },
-                    { mode: "OTC", advantage: "大额交易", disadvantage: "门槛较高" }
-                  ].map(({ mode, advantage, disadvantage }) => (
+                    { mode: "C2C", icon: "👥", advantage: "价格灵活", disadvantage: "交易时间长" },
+                    { mode: "快捷", icon: "⚡", advantage: "交易快速", disadvantage: "价格固定" },
+                    { mode: "OTC", icon: "🏢", advantage: "大额交易", disadvantage: "门槛较高" }
+                  ].map(({ mode, icon, advantage, disadvantage }) => (
                     <button
                       key={mode}
                       onClick={() => setTradeMode(mode)}
@@ -190,7 +190,10 @@ export default function USDTTradePage() {
                       }`}
                     >
                       <div className="flex flex-col space-y-1">
-                        <div className="font-bold text-left">{mode}</div>
+                        <div className="font-bold text-left text-base flex items-center space-x-2">
+                          <span className="text-lg">{icon}</span>
+                          <span>{mode}</span>
+                        </div>
                         <div className="flex justify-between text-xs">
                           <span className="text-green-600">✓ {advantage}</span>
                           <span className="text-red-600">× {disadvantage}</span>
