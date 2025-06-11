@@ -177,19 +177,22 @@ export default function USDTTradePage() {
                     { 
                       mode: "C2C", 
                       icon: Users, 
-                      tags: ["价格灵活", "支付多样", "交易时间长", "需要沟通", "风险较高"]
+                      advantages: ["价格灵活", "支付多样"],
+                      disadvantages: ["交易时间长", "需要沟通", "风险较高"]
                     },
                     { 
                       mode: "快捷", 
                       icon: Zap, 
-                      tags: ["交易快速", "操作简单", "价格固定", "手续费低"]
+                      advantages: ["交易快速", "操作简单", "手续费低"],
+                      disadvantages: ["价格固定"]
                     },
                     { 
                       mode: "OTC", 
                       icon: Building2, 
-                      tags: ["大额交易", "专业服务", "门槛较高", "定制化", "安全可靠"]
+                      advantages: ["大额交易", "专业服务", "安全可靠"],
+                      disadvantages: ["门槛较高", "定制化"]
                     }
-                  ].map(({ mode, icon: Icon, tags }) => (
+                  ].map(({ mode, icon: Icon, advantages, disadvantages }) => (
                     <button
                       key={mode}
                       onClick={() => setTradeMode(mode)}
@@ -208,14 +211,18 @@ export default function USDTTradePage() {
                           <span>{mode}</span>
                         </div>
                         <div className="flex flex-wrap gap-1">
-                          {tags.map((tag, index) => (
+                          {advantages.map((tag, index) => (
                             <span 
-                              key={index}
-                              className={`px-2 py-0.5 rounded-full text-xs ${
-                                isDark 
-                                  ? "bg-gray-700 text-gray-300" 
-                                  : "bg-gray-100 text-gray-600"
-                              }`}
+                              key={`adv-${index}`}
+                              className="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-700"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                          {disadvantages.map((tag, index) => (
+                            <span 
+                              key={`dis-${index}`}
+                              className="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-700"
                             >
                               {tag}
                             </span>
