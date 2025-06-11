@@ -128,7 +128,7 @@ export default function USDTTradePage() {
           
           {/* 左侧筛选面板 */}
           <div className="col-span-3">
-            <div className={`${cardStyle} rounded-lg p-6`}>
+            <div className={`${cardStyle} rounded-lg p-4`}>
               
               {/* 买入/卖出切换 */}
               <div className="relative mb-4">
@@ -143,7 +143,7 @@ export default function USDTTradePage() {
                   {/* 买入按钮 */}
                   <button
                     onClick={() => setActiveTab("买入USDT")}
-                    className={`relative z-10 flex-1 py-3 text-sm font-medium rounded-md transition-colors duration-300 ${
+                    className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
                       activeTab === "买入USDT" || activeTab === "买入"
                         ? "text-white"
                         : isDark
@@ -157,7 +157,7 @@ export default function USDTTradePage() {
                   {/* 卖出按钮 */}
                   <button
                     onClick={() => setActiveTab("卖出USDT")}
-                    className={`relative z-10 flex-1 py-3 text-sm font-medium rounded-md transition-colors duration-300 ${
+                    className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
                       activeTab === "卖出USDT" || activeTab === "卖出"
                         ? "text-white"
                         : isDark
@@ -171,8 +171,8 @@ export default function USDTTradePage() {
               </div>
 
               {/* 交易模式 */}
-              <div className="mb-6">
-                <h3 className={`font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+              <div className="mb-4">
+                <h3 className={`font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
                   交易模式
                 </h3>
                 <div className="space-y-2">
@@ -195,8 +195,8 @@ export default function USDTTradePage() {
               </div>
 
               {/* 支付方式筛选 */}
-              <div className="mb-6">
-                <h3 className={`font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+              <div className="mb-4">
+                <h3 className={`font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
                   支付方式
                 </h3>
                 <div className="space-y-2">
@@ -220,7 +220,7 @@ export default function USDTTradePage() {
 
               {/* 金额筛选 */}
               <div>
-                <h3 className={`font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                <h3 className={`font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
                   交易金额
                 </h3>
                 <div className="space-y-2">
