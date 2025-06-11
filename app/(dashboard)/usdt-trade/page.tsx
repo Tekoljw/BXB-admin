@@ -174,10 +174,22 @@ export default function USDTTradePage() {
               <div className="mb-4">
                 <div className="space-y-2">
                   {[
-                    { mode: "C2C", icon: Users, advantage: "价格灵活", disadvantage: "交易时间长" },
-                    { mode: "快捷", icon: Zap, advantage: "交易快速", disadvantage: "价格固定" },
-                    { mode: "OTC", icon: Building2, advantage: "大额交易", disadvantage: "门槛较高" }
-                  ].map(({ mode, icon: Icon, advantage, disadvantage }) => (
+                    { 
+                      mode: "C2C", 
+                      icon: Users, 
+                      tags: ["价格灵活", "支付多样", "交易时间长", "需要沟通", "风险较高"]
+                    },
+                    { 
+                      mode: "快捷", 
+                      icon: Zap, 
+                      tags: ["交易快速", "操作简单", "价格固定", "手续费低"]
+                    },
+                    { 
+                      mode: "OTC", 
+                      icon: Building2, 
+                      tags: ["大额交易", "专业服务", "门槛较高", "定制化", "安全可靠"]
+                    }
+                  ].map(({ mode, icon: Icon, tags }) => (
                     <button
                       key={mode}
                       onClick={() => setTradeMode(mode)}
@@ -190,14 +202,24 @@ export default function USDTTradePage() {
                       }`}
                       style={{ transform: 'none' }}
                     >
-                      <div className="flex flex-col space-y-1">
+                      <div className="flex flex-col space-y-2">
                         <div className="font-bold text-left text-base flex items-center space-x-2">
                           <Icon className="w-4 h-4" />
                           <span>{mode}</span>
                         </div>
-                        <div className="flex justify-between text-xs">
-                          <span className="text-green-600">✓ {advantage}</span>
-                          <span className="text-red-600">× {disadvantage}</span>
+                        <div className="flex flex-wrap gap-1">
+                          {tags.map((tag, index) => (
+                            <span 
+                              key={index}
+                              className={`px-2 py-0.5 rounded-full text-xs ${
+                                isDark 
+                                  ? "bg-gray-700 text-gray-300" 
+                                  : "bg-gray-100 text-gray-600"
+                              }`}
+                            >
+                              {tag}
+                            </span>
+                          ))}
                         </div>
                       </div>
                     </button>
