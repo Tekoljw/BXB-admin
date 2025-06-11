@@ -529,24 +529,9 @@ export default function ChatPage() {
                     )}
                   </div>
                   <div>
-                    <div className="flex items-center space-x-2">
-                      <h2 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                        {selectedContactData.name}
-                      </h2>
-                      {unreadCount > 0 && (
-                        <div className="flex items-center space-x-1">
-                          <div className="h-5 w-5 bg-red-500 rounded-full flex items-center justify-center animate-pulse">
-                            <span className="text-xs text-white font-bold">{unreadCount}</span>
-                          </div>
-                          <button
-                            onClick={jumpToUnreadMessages}
-                            className="text-xs bg-custom-green text-white px-2 py-1 rounded-full hover:bg-custom-green/80 transition-colors"
-                          >
-                            跳转
-                          </button>
-                        </div>
-                      )}
-                    </div>
+                    <h2 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                      {selectedContactData.name}
+                    </h2>
                     <div className="text-xs text-gray-400">{selectedContactData.isOnline ? "在线" : "离线"}</div>
                   </div>
                 </div>
@@ -581,6 +566,18 @@ export default function ChatPage() {
                 className={`flex-1 p-4 overflow-y-auto relative ${isDark ? "bg-[#0f1419]" : "bg-gray-50"}`}
                 style={{ minHeight: "300px" }}
               >
+                {/* 未读消息指示器 - 右上角 */}
+                {unreadCount > 0 && (
+                  <div className="absolute top-4 right-4 z-10">
+                    <button
+                      onClick={jumpToUnreadMessages}
+                      className="bg-custom-green text-white px-3 py-1 rounded-full shadow-lg hover:bg-custom-green/80 transition-all duration-200 flex items-center space-x-1 text-sm font-medium"
+                    >
+                      <span>↑</span>
+                      <span>{unreadCount}条新消息</span>
+                    </button>
+                  </div>
+                )}
                 <div className="space-y-4">
                   {selectedMessages.map((msg, index) => {
                     const isFirstUnread = msg.id === firstUnreadMessage?.id
@@ -640,58 +637,76 @@ export default function ChatPage() {
 
               {/* 输入框 */}
               <div className="p-4 border-t border-gray-200 dark:border-[#252842]">
-                <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
-                  <button
-                    type="button"
-                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                    }`}
-                  >
-                    <Smile className="h-5 w-5 text-gray-400" />
-                  </button>
-                  <button
-                    type="button"
-                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                    }`}
-                  >
-                    <Paperclip className="h-5 w-5 text-gray-400" />
-                  </button>
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="输入消息..."
-                      className={`w-full px-4 py-2 rounded-full text-sm transition-all duration-200 ${
-                        isDark
-                          ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-400 focus:scale-105"
-                          : "bg-gray-100 text-gray-800 border-gray-200 placeholder-gray-500 focus:scale-105"
-                      } border focus:outline-none focus:ring-2 focus:ring-custom-green/20`}
-                    />
+                <div className="flex items-center space-x-3">
+                  {/* 左侧功能按钮组 */}
+                  <div className="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                        isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                      }`}
+                      title="表情"
+                    >
+                      <Smile className="h-6 w-6 text-gray-400" />
+                    </button>
+                    <button
+                      type="button"
+                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                        isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                      }`}
+                      title="文件"
+                    >
+                      <svg className="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v14l-5-3-5 3V5z" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                        isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                      }`}
+                      title="剪切"
+                    >
+                      <svg className="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                        isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                      }`}
+                      title="聊天气泡"
+                    >
+                      <MessageCircle className="h-6 w-6 text-gray-400" />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                    }`}
-                  >
-                    <Mic className="h-5 w-5 text-gray-400" />
-                  </button>
-                  <button
-                    type="submit"
-                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                      message.trim()
-                        ? "bg-custom-green text-white hover:bg-custom-green/90"
-                        : isDark
-                          ? "bg-[#252842] text-gray-400"
-                          : "bg-gray-100 text-gray-400"
-                    }`}
-                    disabled={!message.trim()}
-                  >
-                    <Send className="h-5 w-5" />
-                  </button>
-                </form>
+
+                  {/* 输入框和发送按钮 */}
+                  <div className="flex-1 flex items-center space-x-3">
+                    <form onSubmit={handleSendMessage} className="flex-1 flex items-center space-x-3">
+                      <input
+                        type="text"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="输入消息..."
+                        className={`flex-1 px-4 py-3 rounded-lg text-sm transition-all duration-200 ${
+                          isDark
+                            ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-400"
+                            : "bg-white text-gray-800 border-gray-200 placeholder-gray-500"
+                        } border focus:outline-none focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
+                      />
+                      <button
+                        type="submit"
+                        disabled={!message.trim()}
+                        className="px-6 py-3 bg-custom-green hover:bg-custom-green/80 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-all duration-200 hover:scale-105 whitespace-nowrap"
+                      >
+                        发送(S)
+                      </button>
+                    </form>
+                  </div>
+                </div>
               </div>
             </>
           ) : (
