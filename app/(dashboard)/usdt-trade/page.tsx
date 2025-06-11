@@ -172,20 +172,17 @@ export default function USDTTradePage() {
 
               {/* 交易模式 */}
               <div className="mb-4">
-                <h3 className={`font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
-                  交易模式
-                </h3>
                 <div className="space-y-2">
                   {["C2C", "快捷", "OTC"].map((mode) => (
                     <button
                       key={mode}
                       onClick={() => setTradeMode(mode)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all border ${
                         tradeMode === mode
-                          ? "bg-custom-green text-white"
+                          ? "border-custom-green bg-white text-gray-800"
                           : isDark
-                          ? "text-gray-300 hover:bg-[#2a2d42]"
-                          : "text-gray-600 hover:bg-gray-100"
+                          ? "border-gray-600 text-gray-300 hover:bg-[#2a2d42]"
+                          : "border-gray-300 text-gray-600 hover:bg-gray-100"
                       }`}
                     >
                       {mode}
