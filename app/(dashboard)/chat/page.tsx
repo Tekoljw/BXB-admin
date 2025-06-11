@@ -302,7 +302,7 @@ export default function ChatPage() {
         {/* 左侧联系人列表 - 移动端全屏显示 */}
         <div className={`${cardStyle} ${selectedContact && 'hidden'} md:block md:w-1/3 lg:w-1/4 xl:w-1/3 h-screen flex flex-col w-full`}>
           {/* 搜索框和添加按钮 */}
-          <div className="flex items-center gap-2 p-4 border-b border-gray-200 dark:border-[#252842]">
+          <div className="flex items-center gap-2 p-4">
             <div className="relative flex-1">
               <Search
                 className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
