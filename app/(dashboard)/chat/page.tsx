@@ -305,7 +305,15 @@ export default function ChatPage() {
     }
   }
 
-  // 检查滚动位置显示未读指示器
+  // 添加功能菜单项
+  const addMenuItems = [
+    { icon: Users, label: "发起群聊", action: () => console.log("发起群聊") },
+    { icon: Shield, label: "发起担保", action: () => console.log("发起担保") },
+    { icon: UserPlus, label: "添加好友", action: () => console.log("添加好友") },
+    { icon: QrCode, label: "扫一扫", action: () => console.log("扫一扫") },
+  ]
+
+  // 检查滚动位置显示未读指示器 - 移动到所有变量定义之后
   useEffect(() => {
     const chatContainer = chatContainerRef.current
     if (!chatContainer || unreadCount === 0) {
@@ -330,14 +338,6 @@ export default function ChatPage() {
 
     return () => chatContainer.removeEventListener('scroll', handleScroll)
   }, [unreadCount, selectedContact])
-
-  // 添加功能菜单项
-  const addMenuItems = [
-    { icon: Users, label: "发起群聊", action: () => console.log("发起群聊") },
-    { icon: Shield, label: "发起担保", action: () => console.log("发起担保") },
-    { icon: UserPlus, label: "添加好友", action: () => console.log("添加好友") },
-    { icon: QrCode, label: "扫一扫", action: () => console.log("扫一扫") },
-  ]
 
   return (
     <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
