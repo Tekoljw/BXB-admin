@@ -131,7 +131,7 @@ export default function USDTTradePage() {
             <div className={`${cardStyle} rounded-lg p-6`}>
               
               {/* 买入/卖出切换 */}
-              <div className="relative mb-6">
+              <div className="relative mb-4">
                 <div className="flex bg-gray-200 dark:bg-[#252842] rounded-md p-1">
                   {/* 滑动背景 */}
                   <div
@@ -143,7 +143,7 @@ export default function USDTTradePage() {
                   {/* 买入按钮 */}
                   <button
                     onClick={() => setActiveTab("买入USDT")}
-                    className={`relative z-10 flex-1 py-2 text-xs font-medium rounded-md transition-colors duration-300 ${
+                    className={`relative z-10 flex-1 py-3 text-sm font-medium rounded-md transition-colors duration-300 ${
                       activeTab === "买入USDT" || activeTab === "买入"
                         ? "text-white"
                         : isDark
@@ -157,7 +157,7 @@ export default function USDTTradePage() {
                   {/* 卖出按钮 */}
                   <button
                     onClick={() => setActiveTab("卖出USDT")}
-                    className={`relative z-10 flex-1 py-2 text-xs font-medium rounded-md transition-colors duration-300 ${
+                    className={`relative z-10 flex-1 py-3 text-sm font-medium rounded-md transition-colors duration-300 ${
                       activeTab === "卖出USDT" || activeTab === "卖出"
                         ? "text-white"
                         : isDark
