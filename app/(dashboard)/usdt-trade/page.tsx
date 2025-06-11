@@ -271,12 +271,18 @@ export default function USDTTradePage() {
                     />
                   </div>
                   
-                  {tradeMode === "C2C" && (
-                    <button className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all">
-                      <Plus className="w-4 h-4" />
-                      <span>发布订单</span>
-                    </button>
-                  )}
+                  {/* 排序下拉框 */}
+                  <select
+                    className={`px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
+                      isDark
+                        ? "bg-[#252842] border-[#3a3d4a] text-white"
+                        : "bg-white border-gray-300 text-gray-800"
+                    }`}
+                  >
+                    <option value="price">价格排序</option>
+                    <option value="time">时间排序</option>
+                    <option value="reputation">信誉排序</option>
+                  </select>
                 </div>
                 
                 <div className="flex items-center space-x-2">
@@ -290,6 +296,13 @@ export default function USDTTradePage() {
                   }`}>
                     <RefreshCw className="w-4 h-4" />
                   </button>
+                  
+                  {tradeMode === "C2C" && (
+                    <button className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all">
+                      <Plus className="w-4 h-4" />
+                      <span>发布订单</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
