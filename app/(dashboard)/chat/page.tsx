@@ -96,7 +96,37 @@ export default function ChatPage() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [handleCloseMenu]) // 添加handleCloseMenu作为依赖项
+  }, [handleCloseMenu])
+
+
+
+  // 检查滚动位置显示未读指示器
+  useEffect(() => {
+    if (!mounted) return
+    
+    const chatContainer = chatContainerRef.current
+    if (!chatContainer) {
+      setShowUnreadIndicator(false)
+      return
+    }
+
+    const handleScroll = () => {
+      if (firstUnreadRef.current && chatContainer) {
+        const containerRect = chatContainer.getBoundingClientRect()
+        const unreadRect = firstUnreadRef.current.getBoundingClientRect()
+        
+        // 如果第一条未读消息不在视口内，显示指示器
+        const isVisible = unreadRect.top >= containerRect.top && 
+                         unreadRect.bottom <= containerRect.bottom
+        setShowUnreadIndicator(!isVisible)
+      }
+    }
+
+    chatContainer.addEventListener('scroll', handleScroll)
+    handleScroll() // 初始检查
+
+    return () => chatContainer.removeEventListener('scroll', handleScroll)
+  }, [selectedContact, mounted])
 
   // 如果组件未挂载，返回空白内容，避免闪烁
   if (!mounted) {
@@ -305,31 +335,7 @@ export default function ChatPage() {
     }
   }
 
-  // 检查滚动位置显示未读指示器
-  useEffect(() => {
-    const chatContainer = chatContainerRef.current
-    if (!chatContainer || unreadCount === 0) {
-      setShowUnreadIndicator(false)
-      return
-    }
 
-    const handleScroll = () => {
-      if (firstUnreadRef.current && chatContainer) {
-        const containerRect = chatContainer.getBoundingClientRect()
-        const unreadRect = firstUnreadRef.current.getBoundingClientRect()
-        
-        // 如果第一条未读消息不在视口内，显示指示器
-        const isVisible = unreadRect.top >= containerRect.top && 
-                         unreadRect.bottom <= containerRect.bottom
-        setShowUnreadIndicator(!isVisible)
-      }
-    }
-
-    chatContainer.addEventListener('scroll', handleScroll)
-    handleScroll() // 初始检查
-
-    return () => chatContainer.removeEventListener('scroll', handleScroll)
-  }, [unreadCount, selectedContact])
 
   // 添加功能菜单项
   const addMenuItems = [
