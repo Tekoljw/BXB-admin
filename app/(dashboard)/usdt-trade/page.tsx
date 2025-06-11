@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageSquare, Filter, RefreshCw } from "lucide-react"
+import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageSquare, Filter, RefreshCw, Users, Zap, Building2 } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { Button } from "@/components/ui/button"
 
@@ -174,10 +174,10 @@ export default function USDTTradePage() {
               <div className="mb-4">
                 <div className="space-y-2">
                   {[
-                    { mode: "C2C", icon: "👥", advantage: "价格灵活", disadvantage: "交易时间长" },
-                    { mode: "快捷", icon: "⚡", advantage: "交易快速", disadvantage: "价格固定" },
-                    { mode: "OTC", icon: "🏢", advantage: "大额交易", disadvantage: "门槛较高" }
-                  ].map(({ mode, icon, advantage, disadvantage }) => (
+                    { mode: "C2C", icon: Users, advantage: "价格灵活", disadvantage: "交易时间长" },
+                    { mode: "快捷", icon: Zap, advantage: "交易快速", disadvantage: "价格固定" },
+                    { mode: "OTC", icon: Building2, advantage: "大额交易", disadvantage: "门槛较高" }
+                  ].map(({ mode, icon: Icon, advantage, disadvantage }) => (
                     <button
                       key={mode}
                       onClick={() => setTradeMode(mode)}
@@ -191,7 +191,7 @@ export default function USDTTradePage() {
                     >
                       <div className="flex flex-col space-y-1">
                         <div className="font-bold text-left text-base flex items-center space-x-2">
-                          <span className="text-lg">{icon}</span>
+                          <Icon className="w-4 h-4" />
                           <span>{mode}</span>
                         </div>
                         <div className="flex justify-between text-xs">
