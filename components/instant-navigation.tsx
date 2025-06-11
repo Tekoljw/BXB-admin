@@ -100,10 +100,11 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     <div className="flex h-screen bg-gray-900 overflow-hidden">
       {/* Sidebar */}
       <div 
-        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl relative overflow-hidden`}
+        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl relative overflow-hidden h-full`}
         style={{
           width: isExpanded ? '256px' : '96px',
           transition: 'width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
+          minHeight: '100vh',
         }}
       >
         {/* Background Overlay with Static Gradient */}
