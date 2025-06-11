@@ -606,10 +606,30 @@ export default function ChatPage() {
                           👤
                         </div>
                       )}
+                      {/* 未读消息标记 */}
+                      {!msg.isRead && msg.senderId !== "user" && isFirstUnread && (
+                        <div className="absolute -left-2 top-0 w-1 h-full bg-custom-green rounded-full"></div>
+                      )}
                     </div>
-                  ))}
+                    )
+                  })}
                   <div ref={messagesEndRef} />
                 </div>
+                
+                {/* 浮动未读消息指示器 */}
+                {showUnreadIndicator && unreadCount > 0 && (
+                  <div className="absolute bottom-4 right-4 z-10">
+                    <button
+                      onClick={jumpToUnreadMessages}
+                      className="bg-custom-green text-white px-4 py-2 rounded-full shadow-lg hover:bg-custom-green/80 transition-all duration-200 flex items-center space-x-2 animate-bounce"
+                    >
+                      <span className="text-sm font-medium">{unreadCount} 条未读</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* 输入框 */}
