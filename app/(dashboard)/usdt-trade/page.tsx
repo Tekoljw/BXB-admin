@@ -360,13 +360,7 @@ export default function USDTTradePage() {
                   </div>
                 </div>
 
-                {/* 发布订单按钮 */}
-                <button
-                  onClick={handleOpenPublishModal}
-                  className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all"
-                >
-                  发布订单
-                </button>
+
               </div>
 
               {/* 法币选择下拉框 */}
@@ -647,7 +641,10 @@ export default function USDTTradePage() {
                 </button>
                 
                 {tradeMode === "C2C" && (
-                  <button className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all">
+                  <button 
+                    onClick={handleOpenPublishModal}
+                    className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all"
+                  >
                     <Plus className="w-4 h-4" />
                     <span>发布订单</span>
                   </button>
