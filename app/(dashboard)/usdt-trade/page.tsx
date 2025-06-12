@@ -784,8 +784,12 @@ export default function USDTTradePage() {
                                 ))}
                               </div>
 
-                              <button className="w-full bg-custom-green text-white py-3 rounded-lg font-medium hover:bg-custom-green/90 transition-all">
-                                确认购买
+                              <button className={`w-full py-3 rounded-lg font-medium transition-all ${
+                                activeTab.includes("买入")
+                                  ? "bg-custom-green text-white hover:bg-custom-green/90"
+                                  : "bg-red-500 text-white hover:bg-red-600"
+                              }`}>
+                                {activeTab.includes("买入") ? "确认购买" : "确认卖出"}
                               </button>
                             </div>
                           </div>
