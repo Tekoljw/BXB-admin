@@ -357,27 +357,33 @@ export default function USDTTradePage() {
                   筛选支付方式
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {["现金交易", "银行卡", "支付宝", "微信", "现金上门"].map((payment) => (
-                    <button
-                      key={payment}
-                      onClick={() => {
-                        if (selectedPayments.includes(payment)) {
-                          setSelectedPayments(prev => prev.filter(p => p !== payment))
-                        } else {
-                          setSelectedPayments(prev => [...prev, payment])
-                        }
-                      }}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
-                        selectedPayments.includes(payment)
-                          ? "border-black bg-white text-black"
-                          : isDark
-                            ? "border-[#3a3d4a] bg-[#2a2d42] text-gray-300 hover:bg-[#3a3d4a]"
-                            : "border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
-                      }`}
-                    >
-                      {payment}
-                    </button>
-                  ))}
+                  {sortPaymentMethods(["现金交易", "银行卡", "支付宝", "微信", "现金上门"]).map((payment) => {
+                    const isCash = payment.includes("现金")
+                    return (
+                      <button
+                        key={payment}
+                        onClick={() => {
+                          if (selectedPayments.includes(payment)) {
+                            setSelectedPayments(prev => prev.filter(p => p !== payment))
+                          } else {
+                            setSelectedPayments(prev => [...prev, payment])
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border flex items-center gap-1 ${
+                          selectedPayments.includes(payment)
+                            ? "border-black bg-white text-black"
+                            : isCash
+                              ? "border-orange-200 bg-orange-50 text-orange-800 hover:bg-orange-100"
+                              : isDark
+                                ? "border-[#3a3d4a] bg-[#2a2d42] text-gray-300 hover:bg-[#3a3d4a]"
+                                : "border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        }`}
+                      >
+                        {getPaymentIcon(payment)}
+                        {payment}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
 
