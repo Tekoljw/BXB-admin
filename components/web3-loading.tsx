@@ -66,44 +66,37 @@ export default function Web3Loading({ onComplete }: Web3LoadingProps) {
       <div className="relative z-10 flex flex-col items-center">
         {/* 创意加载动画 */}
         <div className="flex justify-center items-center space-x-6 mb-8">
-          <div className="creative-loader" style={{
-            '--path': '#00D4AA',
-            '--dot': '#00D4AA',
-            '--duration': '3s',
-            width: '80px',
-            height: '80px',
-            position: 'relative'
-          }}>
+          <div className="relative w-20 h-20">
             <style jsx>{`
-              .creative-loader:before {
+              .web3-creative-loader:before {
                 content: '';
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
                 position: absolute;
                 display: block;
-                background: var(--dot);
+                background: #00D4AA;
                 top: 67px;
                 left: 34px;
                 transform: translate(-18px, -18px);
-                animation: dotCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+                animation: dotCircle 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
               }
               
-              .creative-loader svg {
+              .web3-creative-loader svg {
                 display: block;
                 width: 100%;
                 height: 100%;
               }
               
-              .creative-loader svg circle {
+              .web3-creative-loader svg circle {
                 fill: none;
-                stroke: var(--path);
+                stroke: #00D4AA;
                 stroke-width: 10px;
                 stroke-linejoin: round;
                 stroke-linecap: round;
                 stroke-dasharray: 150 50 150 50;
                 stroke-dashoffset: 75;
-                animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+                animation: pathCircle 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
               }
               
               @keyframes pathCircle {
@@ -120,9 +113,11 @@ export default function Web3Loading({ onComplete }: Web3LoadingProps) {
                 100% { transform: translate(-18px, -18px); }
               }
             `}</style>
-            <svg viewBox="0 0 80 80">
-              <circle cx="40" cy="40" r="32" />
-            </svg>
+            <div className="web3-creative-loader">
+              <svg viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32" />
+              </svg>
+            </div>
           </div>
         </div>
         
