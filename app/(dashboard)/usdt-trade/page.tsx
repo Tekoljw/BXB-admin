@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageCircle, Filter, RefreshCw, Users, Zap, Building2, ChevronDown } from "lucide-react"
+import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageCircle, Filter, RefreshCw, Users, Zap, Building2, ChevronDown, CreditCard, Smartphone, MapPin, Banknote } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { Button } from "@/components/ui/button"
 
@@ -16,6 +16,32 @@ export default function USDTTradePage() {
   const [selectedCurrency, setSelectedCurrency] = useState("CNY")
   const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false)
   const currencyDropdownRef = useRef<HTMLDivElement>(null)
+
+  // 支付方式图标映射
+  const getPaymentIcon = (method: string) => {
+    switch (method) {
+      case "银行卡":
+        return <CreditCard className="w-3 h-3" />
+      case "支付宝":
+        return <Smartphone className="w-3 h-3" />
+      case "微信":
+        return <Smartphone className="w-3 h-3" />
+      case "现金上门":
+      case "现金交易":
+        return <MapPin className="w-3 h-3" />
+      default:
+        return <Banknote className="w-3 h-3" />
+    }
+  }
+
+  // 排序支付方式，现金上门排第一
+  const sortPaymentMethods = (methods: string[]) => {
+    return [...methods].sort((a, b) => {
+      if (a.includes("现金")) return -1
+      if (b.includes("现金")) return 1
+      return 0
+    })
+  }
 
   const currencies = [
     { code: "CNY", name: "人民币", symbol: "¥" },
@@ -545,14 +571,22 @@ export default function USDTTradePage() {
                         {/* 支付方式 */}
                         <div className="col-span-3">
                           <div className="flex flex-wrap gap-1">
-                            {merchant.paymentMethods.slice(0, 2).map((method, index) => (
-                              <span 
-                                key={index}
-                                className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full"
-                              >
-                                {method}
-                              </span>
-                            ))}
+                            {sortPaymentMethods(merchant.paymentMethods).slice(0, 2).map((method, index) => {
+                              const isCash = method.includes("现金")
+                              return (
+                                <span 
+                                  key={index}
+                                  className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${
+                                    isCash 
+                                      ? "bg-orange-100 text-orange-800 border border-orange-200 font-medium" 
+                                      : "bg-yellow-100 text-yellow-800"
+                                  }`}
+                                >
+                                  {getPaymentIcon(method)}
+                                  {method}
+                                </span>
+                              )
+                            })}
                             {merchant.paymentMethods.length > 2 && (
                               <span className="text-xs text-gray-500">+{merchant.paymentMethods.length - 2}</span>
                             )}
