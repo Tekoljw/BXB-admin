@@ -57,7 +57,7 @@ export default function ChatPage() {
   const [showAddMenu, setShowAddMenu] = useState(false)
   const [isMenuAnimating, setIsMenuAnimating] = useState(false)
   const [showUnreadIndicator, setShowUnreadIndicator] = useState(false)
-  const [inputHeight, setInputHeight] = useState(120)
+  const [inputHeight, setInputHeight] = useState(80)
   const [isResizing, setIsResizing] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const addMenuRef = useRef<HTMLDivElement>(null)
@@ -670,50 +670,50 @@ export default function ChatPage() {
               >
                 {/* 拖拽调整高度的手柄 */}
                 <div 
-                  className={`w-full h-2 cursor-ns-resize flex items-center justify-center ${
+                  className={`w-full h-1 cursor-ns-resize flex items-center justify-center ${
                     isDark ? "hover:bg-[#2a2d42]" : "hover:bg-gray-100"
                   } ${isResizing ? (isDark ? "bg-[#2a2d42]" : "bg-gray-100") : ""}`}
                   onMouseDown={handleMouseDown}
                 >
-                  <GripHorizontal className="w-4 h-4 text-gray-400 rotate-90" />
+                  <GripHorizontal className="w-3 h-3 text-gray-400 rotate-90" />
                 </div>
 
                 {/* 输入区域内容 */}
-                <div className="flex flex-col p-4" style={{ height: `${inputHeight - 8}px` }}>
+                <div className="flex flex-col px-3 py-2" style={{ height: `${inputHeight - 4}px` }}>
                   {/* 功能按钮行 */}
-                  <div className="flex items-center space-x-2 mb-3">
-                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                  <div className="flex items-center space-x-1">
+                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <Smile className="w-5 h-5" />
+                      <Smile className="w-4 h-4" />
                     </button>
-                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <Paperclip className="w-5 h-5" />
+                      <Paperclip className="w-4 h-4" />
                     </button>
-                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <Scissors className="w-5 h-5" />
+                      <Scissors className="w-4 h-4" />
                     </button>
-                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <MessageCircle className="w-5 h-5" />
+                      <MessageCircle className="w-4 h-4" />
                     </button>
                     
                     {/* 右侧功能按钮 */}
                     <div className="flex-1"></div>
-                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <Phone className="w-5 h-5" />
+                      <Phone className="w-4 h-4" />
                     </button>
-                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <Video className="w-5 h-5" />
+                      <Video className="w-4 h-4" />
                     </button>
                   </div>
 
@@ -734,7 +734,7 @@ export default function ChatPage() {
                           ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-500" 
                           : "bg-white text-gray-900 border-gray-300 placeholder-gray-400"
                       } focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
-                      style={{ height: `${Math.max(60, inputHeight - 80)}px` }}
+                      style={{ height: `${Math.max(40, inputHeight - 50)}px` }}
                     />
                     
                     {/* 发送按钮 */}
