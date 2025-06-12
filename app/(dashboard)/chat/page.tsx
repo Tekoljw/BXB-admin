@@ -19,6 +19,7 @@ import {
   Shield,
   UserPlus,
   QrCode,
+  Scissors,
 } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
@@ -635,76 +636,79 @@ export default function ChatPage() {
                 )}
               </div>
 
-              {/* 输入框 */}
-              <div className="p-4 border-t border-gray-200 dark:border-[#252842]">
-                <div className="flex items-center space-x-3">
-                  {/* 左侧功能按钮组 */}
+              {/* 新的聊天输入组件 */}
+              <div className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
+                <div className="flex items-center p-4 space-x-3">
+                  {/* 左侧功能按钮 */}
                   <div className="flex items-center space-x-2">
-                    <button
-                      type="button"
-                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                        isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                      }`}
-                      title="表情"
-                    >
-                      <Smile className="h-6 w-6 text-gray-400" />
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Smile className="w-5 h-5" />
                     </button>
-                    <button
-                      type="button"
-                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                        isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                      }`}
-                      title="文件"
-                    >
-                      <svg className="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v14l-5-3-5 3V5z" />
-                      </svg>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Paperclip className="w-5 h-5" />
                     </button>
-                    <button
-                      type="button"
-                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                        isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                      }`}
-                      title="剪切"
-                    >
-                      <svg className="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                      </svg>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Scissors className="w-5 h-5" />
                     </button>
-                    <button
-                      type="button"
-                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
-                        isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                      }`}
-                      title="聊天气泡"
-                    >
-                      <MessageCircle className="h-6 w-6 text-gray-400" />
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <MessageCircle className="w-5 h-5" />
                     </button>
                   </div>
 
-                  {/* 输入框和发送按钮 */}
-                  <div className="flex-1 flex items-center space-x-3">
-                    <form onSubmit={handleSendMessage} className="flex-1 flex items-center space-x-3">
-                      <input
-                        type="text"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="输入消息..."
-                        className={`flex-1 px-4 py-3 rounded-lg text-sm transition-all duration-200 ${
-                          isDark
-                            ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-400"
-                            : "bg-white text-gray-800 border-gray-200 placeholder-gray-500"
-                        } border focus:outline-none focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
-                      />
-                      <button
-                        type="submit"
-                        disabled={!message.trim()}
-                        className="px-6 py-3 bg-custom-green hover:bg-custom-green/80 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-all duration-200 hover:scale-105 whitespace-nowrap"
-                      >
-                        发送(S)
-                      </button>
-                    </form>
+                  {/* 输入框 */}
+                  <div className="flex-1">
+                    <input
+                      type="text"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault()
+                          handleSendMessage(e)
+                        }
+                      }}
+                      placeholder="123123"
+                      className={`w-full px-3 py-2 border-none outline-none bg-transparent text-base ${
+                        isDark ? "text-white placeholder-gray-500" : "text-gray-900 placeholder-gray-400"
+                      }`}
+                    />
+                  </div>
+
+                  {/* 右侧功能按钮 */}
+                  <div className="flex items-center space-x-2">
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Phone className="w-5 h-5" />
+                    </button>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Video className="w-5 h-5" />
+                    </button>
+                    
+                    {/* 发送按钮 */}
+                    <button
+                      onClick={handleSendMessage}
+                      disabled={!message.trim()}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        message.trim()
+                          ? "bg-custom-green text-white hover:bg-custom-green/90"
+                          : isDark
+                            ? "bg-[#3a3d4a] text-gray-500 cursor-not-allowed"
+                            : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      }`}
+                    >
+                      发送(S)
+                    </button>
                   </div>
                 </div>
               </div>
