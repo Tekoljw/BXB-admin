@@ -64,14 +64,14 @@ export default function ChatPage() {
   const chatContainerRef = useRef<HTMLDivElement>(null)
   const firstUnreadRef = useRef<HTMLDivElement>(null)
 
-  // 处理输入框拖拽调整高度
+  // 处理输入框拖拽调整高度 - 向上拖拽增加高度，向下拖拽减少高度
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsResizing(true)
     const startY = e.clientY
     const startHeight = inputHeight
 
     const handleMouseMove = (e: MouseEvent) => {
-      const deltaY = startY - e.clientY
+      const deltaY = startY - e.clientY // 向上为正，向下为负
       const newHeight = Math.max(80, Math.min(400, startHeight + deltaY))
       setInputHeight(newHeight)
     }
@@ -532,8 +532,7 @@ export default function ChatPage() {
 
         {/* 右侧聊天窗口 - 移动端全屏显示 */}
         <div 
-          className={`${cardStyle} ${!selectedContact && 'hidden'} md:block md:flex-1 flex flex-col w-full`}
-          style={{ height: `calc(100vh - ${inputHeight}px)` }}
+          className={`${cardStyle} ${!selectedContact && 'hidden'} md:block md:flex-1 flex flex-col w-full h-screen`}
         >
           {selectedContactData ? (
             <>
@@ -592,8 +591,8 @@ export default function ChatPage() {
               {/* 聊天内容 */}
               <div
                 ref={chatContainerRef}
-                className={`flex-1 p-4 overflow-y-auto relative ${isDark ? "bg-[#0f1419]" : "bg-gray-50"}`}
-                style={{ minHeight: "300px" }}
+                className={`p-4 overflow-y-auto relative ${isDark ? "bg-[#0f1419]" : "bg-gray-50"}`}
+                style={{ height: `calc(100vh - 120px - ${inputHeight}px)` }}
               >
                 {/* 未读消息指示器 - 右上角 */}
                 {unreadCount > 0 && (
