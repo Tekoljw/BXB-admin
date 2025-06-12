@@ -664,6 +664,97 @@ export default function ChatPage() {
                 )}
               </div>
 
+              {/* 聊天输入区域 - 在消息区域底部 */}
+              <div 
+                className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}
+                style={{ height: `${inputHeight}px` }}
+              >
+                {/* 拖拽调整高度的手柄 */}
+                <div 
+                  className={`w-full h-2 cursor-ns-resize flex items-center justify-center ${
+                    isDark ? "hover:bg-[#2a2d42]" : "hover:bg-gray-100"
+                  } ${isResizing ? (isDark ? "bg-[#2a2d42]" : "bg-gray-100") : ""}`}
+                  onMouseDown={handleMouseDown}
+                >
+                  <GripHorizontal className="w-4 h-4 text-gray-400 rotate-90" />
+                </div>
+
+                {/* 输入区域内容 */}
+                <div className="flex flex-col h-full p-4">
+                  {/* 功能按钮行 */}
+                  <div className="flex items-center space-x-2 mb-3">
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Smile className="w-5 h-5" />
+                    </button>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Paperclip className="w-5 h-5" />
+                    </button>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Scissors className="w-5 h-5" />
+                    </button>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <MessageCircle className="w-5 h-5" />
+                    </button>
+                    
+                    {/* 右侧功能按钮 */}
+                    <div className="flex-1"></div>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Phone className="w-5 h-5" />
+                    </button>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Video className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* 输入框区域 */}
+                  <div className="flex-1 flex items-end space-x-3">
+                    <textarea
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault()
+                          handleSendMessage(e as any)
+                        }
+                      }}
+                      placeholder="123123"
+                      className={`flex-1 p-3 border rounded-lg resize-none outline-none text-base ${
+                        isDark 
+                          ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-500" 
+                          : "bg-white text-gray-900 border-gray-300 placeholder-gray-400"
+                      } focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
+                      style={{ minHeight: '60px', maxHeight: '120px' }}
+                    />
+                    
+                    {/* 发送按钮 */}
+                    <button
+                      onClick={handleSendMessage}
+                      disabled={!message.trim()}
+                      className={`px-6 py-3 rounded-lg text-sm font-medium transition-all ${
+                        message.trim()
+                          ? "bg-custom-green text-white hover:bg-custom-green/90"
+                          : isDark
+                            ? "bg-[#3a3d4a] text-gray-500 cursor-not-allowed"
+                            : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      }`}
+                    >
+                      发送(S)
+                    </button>
+                  </div>
+                </div>
+              </div>
 
             </>
           ) : (
@@ -679,102 +770,6 @@ export default function ChatPage() {
           )}
         </div>
       </div>
-
-      {/* 底部可调整大小的输入区域 - 仅在选择联系人时显示 */}
-      {selectedContact && (
-        <div 
-          className={`fixed bottom-0 left-0 right-0 border-t ${
-            isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"
-          }`}
-          style={{ height: `${inputHeight}px` }}
-        >
-        {/* 拖拽调整高度的手柄 */}
-        <div 
-          className={`w-full h-2 cursor-ns-resize flex items-center justify-center ${
-            isDark ? "hover:bg-[#2a2d42]" : "hover:bg-gray-100"
-          } ${isResizing ? (isDark ? "bg-[#2a2d42]" : "bg-gray-100") : ""}`}
-          onMouseDown={handleMouseDown}
-        >
-          <GripHorizontal className="w-4 h-4 text-gray-400 rotate-90" />
-        </div>
-
-        {/* 输入区域内容 */}
-        <div className="flex flex-col h-full p-4">
-          {/* 功能按钮行 */}
-          <div className="flex items-center space-x-2 mb-3">
-            <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-            }`}>
-              <Smile className="w-5 h-5" />
-            </button>
-            <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-            }`}>
-              <Paperclip className="w-5 h-5" />
-            </button>
-            <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-            }`}>
-              <Scissors className="w-5 h-5" />
-            </button>
-            <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-            }`}>
-              <MessageCircle className="w-5 h-5" />
-            </button>
-            
-            {/* 右侧功能按钮 */}
-            <div className="flex-1"></div>
-            <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-            }`}>
-              <Phone className="w-5 h-5" />
-            </button>
-            <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-            }`}>
-              <Video className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* 输入框区域 */}
-          <div className="flex-1 flex">
-            <textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault()
-                  handleSendMessage(e as any)
-                }
-              }}
-              placeholder="123123"
-              className={`flex-1 p-3 border rounded-lg resize-none outline-none text-base ${
-                isDark 
-                  ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-500" 
-                  : "bg-white text-gray-900 border-gray-300 placeholder-gray-400"
-              } focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
-              style={{ minHeight: '60px' }}
-            />
-          </div>
-        </div>
-
-        {/* 固定在右下角的发送按钮 */}
-        <button
-          onClick={handleSendMessage}
-          disabled={!message.trim()}
-          className={`fixed bottom-4 right-4 px-6 py-3 rounded-full text-sm font-medium transition-all shadow-lg ${
-            message.trim()
-              ? "bg-custom-green text-white hover:bg-custom-green/90 hover:scale-105"
-              : isDark
-                ? "bg-[#3a3d4a] text-gray-500 cursor-not-allowed"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
-          }`}
-        >
-          发送(S)
-        </button>
-        </div>
-      )}
     </div>
   )
 }
