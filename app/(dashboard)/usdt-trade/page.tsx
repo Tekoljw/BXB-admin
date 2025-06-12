@@ -14,8 +14,8 @@ export default function USDTTradePage() {
   const [selectedAmount, setSelectedAmount] = useState("")
 
   const cardStyle = isDark
-    ? "bg-[#1a1c2e] border border-[#2a2d42] shadow-lg"
-    : "bg-white border border-gray-200 shadow-lg"
+    ? "bg-[#1a1c2e] border border-[#2a2d42] shadow"
+    : "bg-white border border-gray-200 shadow"
 
   // C2C商家数据
   const c2cMerchants = [
