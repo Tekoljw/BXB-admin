@@ -285,6 +285,7 @@ export default function USDTTradePage() {
 
   // 打开发布订单弹窗
   const handleOpenPublishModal = () => {
+    console.log('Opening publish modal')
     setShowPublishModal(true)
     setPublishPrice("")
     setPublishMinAmount("")
