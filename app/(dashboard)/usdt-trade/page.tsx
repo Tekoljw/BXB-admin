@@ -288,7 +288,7 @@ export default function USDTTradePage() {
     setTimeout(() => {
       setShowTradeModal(false)
       setSelectedMerchant(null)
-    }, 300)
+    }, 500)
   }
 
   // 打开发布订单弹窗
@@ -310,7 +310,7 @@ export default function USDTTradePage() {
     setPublishModalAnimating(false)
     setTimeout(() => {
       setShowPublishModal(false)
-    }, 300)
+    }, 500)
   }
 
   // 计算总价
@@ -977,9 +977,15 @@ export default function USDTTradePage() {
       {showTradeModal && selectedMerchant && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300" onClick={handleCloseTradeModal}></div>
-          <div className={`absolute right-0 top-0 h-full w-96 transform transition-transform duration-300 ease-in-out ${
-            tradeModalAnimating ? "translate-x-0" : "translate-x-full"
-          } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl`}>
+          <div 
+            className={`absolute right-0 top-0 h-full w-96 transform transition-all duration-500 ${
+              tradeModalAnimating ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+            } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl`}
+            style={{ 
+              transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              willChange: 'transform, opacity'
+            }}
+          >
             <div className="p-6 h-full overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
@@ -1087,9 +1093,15 @@ export default function USDTTradePage() {
       {showPublishModal && (
         <div className="fixed inset-0 z-[9999] overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300" onClick={handleClosePublishModal}></div>
-          <div className={`absolute right-0 top-0 h-full w-96 transform transition-transform duration-300 ease-in-out ${
-            publishModalAnimating ? "translate-x-0" : "translate-x-full"
-          } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl z-[10000]`}>
+          <div 
+            className={`absolute right-0 top-0 h-full w-96 transform transition-all duration-500 ${
+              publishModalAnimating ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+            } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl z-[10000]`}
+            style={{ 
+              transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              willChange: 'transform, opacity'
+            }}
+          >
             <div className="p-6 h-full overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
