@@ -369,9 +369,9 @@ export default function USDTTradePage() {
                             setSelectedPayments(prev => [...prev, payment])
                           }
                         }}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border flex items-center gap-1 ${
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border-2 flex items-center gap-1 ${
                           selectedPayments.includes(payment)
-                            ? "border-black bg-white text-black"
+                            ? "border-custom-green bg-custom-green/10 text-custom-green"
                             : isCash
                               ? "border-orange-200 bg-orange-50 text-orange-800 hover:bg-orange-100"
                               : isDark
@@ -404,9 +404,9 @@ export default function USDTTradePage() {
                             setMinAmount("")
                             setMaxAmount(amount)
                           }}
-                          className={`px-3 py-2 rounded-lg text-xs font-medium transition-all border ${
+                          className={`px-3 py-2 rounded-lg text-xs font-medium transition-all border-2 ${
                             maxAmount === amount && !minAmount
-                              ? "border-black bg-white text-black"
+                              ? "border-custom-green bg-custom-green/10 text-custom-green"
                               : isDark
                                 ? "border-[#3a3d4a] bg-[#2a2d42] text-gray-300 hover:bg-[#3a3d4a]"
                                 : "border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
