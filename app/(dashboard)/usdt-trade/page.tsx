@@ -1,12 +1,12 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageCircle, Filter, RefreshCw, Users, Zap, Building2, ChevronDown, CreditCard, Smartphone, MapPin, Banknote, Loader2 } from "lucide-react"
+import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageCircle, Filter, RefreshCw, Users, Zap, Building2, ChevronDown, CreditCard, Smartphone, MapPin, Banknote, Loader2, Moon, Sun } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { Button } from "@/components/ui/button"
 
 export default function USDTTradePage() {
-  const { isDark } = useTheme()
+  const { isDark, theme, setTheme } = useTheme()
   const [activeTab, setActiveTab] = useState("买入USDT")
   const [tradeMode, setTradeMode] = useState("C2C")
   const [searchTerm, setSearchTerm] = useState("")
@@ -338,6 +338,29 @@ export default function USDTTradePage() {
   return (
     <div className={`min-h-screen p-6 ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       <div className="max-w-full mx-auto">
+        {/* 页面标题和主题切换 */}
+        <div className="flex items-center justify-between mb-6">
+          <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+            USDT交易
+          </h1>
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 ${
+              isDark 
+                ? "bg-[#252842] border-[#3a3d4a] text-gray-300 hover:text-white hover:bg-[#2a2d42]" 
+                : "bg-white border-gray-300 text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+            } border`}
+            aria-label={theme === "dark" ? "切换到浅色主题" : "切换到深色主题"}
+            title={theme === "dark" ? "切换到浅色主题" : "切换到深色主题"}
+          >
+            {theme === "dark" ? (
+              <Sun className="h-5 w-5" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
+          </button>
+        </div>
+        
         {/* 主要布局 */}
         <div className="grid grid-cols-12 gap-6">
           
