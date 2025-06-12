@@ -504,8 +504,7 @@ export default function USDTTradePage() {
                     <div className="col-span-2">价格(CNY)</div>
                     <div className="col-span-2">限额</div>
                     <div className="col-span-2">支付方式</div>
-                    <div className="col-span-2">完成率</div>
-                    <div className="col-span-1">操作</div>
+                    <div className="col-span-3">操作</div>
                   </div>
 
                   {/* 商家列表 */}
@@ -569,18 +568,8 @@ export default function USDTTradePage() {
                           ))}
                         </div>
 
-                        {/* 完成率 */}
-                        <div className="col-span-2 flex items-center">
-                          <span className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                            {merchant.completionRate}
-                          </span>
-                        </div>
-
                         {/* 操作 */}
-                        <div className="col-span-1 flex items-center space-x-2">
-                          <button className="bg-custom-green text-white px-3 py-1 rounded text-xs font-medium hover:bg-custom-green/90 transition-all">
-                            {activeTab.includes("买入") ? "买入" : "卖出"}
-                          </button>
+                        <div className="col-span-3 flex items-center space-x-2">
                           <button 
                             className="bg-black text-white p-1.5 rounded text-xs hover:bg-gray-800 transition-all"
                             onClick={() => {
@@ -592,6 +581,9 @@ export default function USDTTradePage() {
                             }}
                           >
                             {merchant.isFriend ? <MessageSquare className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+                          </button>
+                          <button className="bg-custom-green text-white px-3 py-1 rounded text-xs font-medium hover:bg-custom-green/90 transition-all">
+                            {activeTab.includes("买入") ? "买入" : "卖出"}
                           </button>
                         </div>
                       </div>
