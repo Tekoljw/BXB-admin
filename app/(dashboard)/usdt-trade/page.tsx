@@ -302,13 +302,13 @@ export default function USDTTradePage() {
                   {/* 自定义金额 */}
                   <div>
                     <p className={`text-xs mb-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>自定义范围</p>
-                    <div className="flex gap-2">
+                    <div className="space-y-2">
                       <input
                         type="number"
                         placeholder="最小 USDT"
                         value={minAmount}
                         onChange={(e) => setMinAmount(e.target.value)}
-                        className={`flex-1 px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
+                        className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
                           isDark
                             ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
                             : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
@@ -319,22 +319,22 @@ export default function USDTTradePage() {
                         placeholder="最大 USDT"
                         value={maxAmount}
                         onChange={(e) => setMaxAmount(e.target.value)}
-                        className={`flex-1 px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
+                        className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
                           isDark
                             ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
                             : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
                         }`}
                       />
+                      <button
+                        onClick={() => {
+                          // Apply filter logic here
+                          console.log('Searching with amounts:', minAmount, maxAmount)
+                        }}
+                        className="w-full px-3 py-2 bg-custom-green text-white rounded-lg text-sm font-medium hover:bg-custom-green/90 transition-all"
+                      >
+                        检索
+                      </button>
                     </div>
-                    <button
-                      onClick={() => {
-                        // Apply filter logic here
-                        console.log('Searching with amounts:', minAmount, maxAmount)
-                      }}
-                      className="w-full mt-2 px-3 py-2 bg-custom-green text-white rounded-lg text-sm font-medium hover:bg-custom-green/90 transition-all"
-                    >
-                      检索
-                    </button>
                   </div>
                 </div>
               </div>
