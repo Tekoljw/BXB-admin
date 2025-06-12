@@ -29,7 +29,7 @@ export default function USDTTradePage() {
       price: "7.23",
       note: "要求担保周期12小时",
       limit: "500 - 100000",
-      paymentMethod: "现金交易",
+      paymentMethods: ["现金交易", "银行卡", "支付宝"],
       responseTime: "剩余 无限制",
       completionRate: "99.2%"
     },
@@ -41,7 +41,7 @@ export default function USDTTradePage() {
       price: "7.22",
       note: "要求担保周期6小时",
       limit: "1000 - 90000",
-      paymentMethod: "现金交易",
+      paymentMethods: ["银行卡", "微信", "现金上门"],
       responseTime: "剩余 无限制",
       completionRate: "98.8%"
     },
@@ -53,7 +53,7 @@ export default function USDTTradePage() {
       price: "7.24",
       note: "要求担保周期8小时",
       limit: "200 - 50000",
-      paymentMethod: "现金交易",
+      paymentMethods: ["支付宝", "微信"],
       responseTime: "剩余 无限制",
       completionRate: "99.5%"
     }
@@ -471,10 +471,15 @@ export default function USDTTradePage() {
                         </div>
 
                         {/* 支付方式 */}
-                        <div className="col-span-2 flex items-center">
-                          <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
-                            💰 {merchant.paymentMethod}
-                          </span>
+                        <div className="col-span-2 flex flex-wrap gap-1">
+                          {merchant.paymentMethods.map((method, index) => (
+                            <span 
+                              key={index}
+                              className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full"
+                            >
+                              {method}
+                            </span>
+                          ))}
                         </div>
 
                         {/* 完成率 */}
