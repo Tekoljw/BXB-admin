@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageCircle, Filter, RefreshCw, Users, Zap, Building2, ChevronDown, CreditCard, Smartphone, MapPin, Banknote } from "lucide-react"
+import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageCircle, Filter, RefreshCw, Users, Zap, Building2, ChevronDown, CreditCard, Smartphone, MapPin, Banknote, Loader2 } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { Button } from "@/components/ui/button"
 
@@ -16,6 +16,8 @@ export default function USDTTradePage() {
   const [selectedCurrency, setSelectedCurrency] = useState("CNY")
   const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false)
   const currencyDropdownRef = useRef<HTMLDivElement>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [displayCount, setDisplayCount] = useState(3)
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -176,6 +178,18 @@ export default function USDTTradePage() {
     const matchesSearch = merchant.name.toLowerCase().includes(searchTerm.toLowerCase())
     return matchesSearch
   })
+
+  // 加载更多功能
+  const handleLoadMore = async () => {
+    setIsLoading(true)
+    // 模拟加载延迟
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    setDisplayCount(prev => prev + 3)
+    setIsLoading(false)
+  }
+
+  const displayedMerchants = filteredMerchants.slice(0, displayCount)
+  const hasMore = displayCount < filteredMerchants.length
 
   return (
     <div className={`min-h-screen p-6 ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
@@ -520,7 +534,7 @@ export default function USDTTradePage() {
               {tradeMode === "C2C" && (
                 <div className="divide-y divide-gray-200 dark:divide-[#3a3d4a]">
                   {/* 商家卡片列表 */}
-                  {filteredMerchants.map((merchant, index) => (
+                  {displayedMerchants.map((merchant, index) => (
                     <div key={index} className="p-4 hover:bg-gray-50 dark:hover:bg-[#252842] transition-all">
                       {/* 卡片布局 - 对齐设计 */}
                       <div className="grid grid-cols-12 gap-4 items-center">
@@ -611,6 +625,33 @@ export default function USDTTradePage() {
                       </div>
                     </div>
                   ))}
+                  
+                  {/* 加载更多按钮 */}
+                  {hasMore && (
+                    <div className="p-4 border-t border-gray-200 dark:border-[#3a3d4a] flex justify-center">
+                      <button
+                        onClick={handleLoadMore}
+                        disabled={isLoading}
+                        className={`flex items-center space-x-2 px-6 py-3 rounded-lg text-sm font-medium transition-all ${
+                          isDark
+                            ? "bg-[#252842] border border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42] disabled:opacity-50"
+                            : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                        }`}
+                      >
+                        {isLoading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>加载中...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>加载更多</span>
+                            <ChevronDown className="w-4 h-4" />
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
