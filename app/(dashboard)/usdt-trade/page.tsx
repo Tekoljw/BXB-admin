@@ -10,8 +10,10 @@ export default function USDTTradePage() {
   const [activeTab, setActiveTab] = useState("买入USDT")
   const [tradeMode, setTradeMode] = useState("C2C")
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedPayment, setSelectedPayment] = useState("全部")
-  const [selectedAmount, setSelectedAmount] = useState("")
+  const [selectedPayments, setSelectedPayments] = useState<string[]>([])
+  const [minAmount, setMinAmount] = useState("")
+  const [maxAmount, setMaxAmount] = useState("")
+  const [supportsCashPickup, setSupportsCashPickup] = useState(false)
 
   const cardStyle = isDark
     ? "bg-[#1a1c2e] border border-[#2a2d42] shadow"
@@ -236,39 +238,50 @@ export default function USDTTradePage() {
                 </div>
               </div>
 
-              {/* 支付方式筛选 */}
+              {/* 筛选支付方式 */}
               <div className="mb-4">
                 <h3 className={`font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
-                  支付方式
+                  筛选支付方式
                 </h3>
                 <div className="space-y-2">
-                  {["全部", "现金交易", "银行卡", "支付宝", "微信"].map((payment) => (
-                    <button
+                  {["现金交易", "银行卡", "支付宝", "微信"].map((payment) => (
+                    <label
                       key={payment}
-                      onClick={() => setSelectedPayment(payment)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
-                        selectedPayment === payment
-                          ? "bg-custom-green text-white"
-                          : isDark
-                          ? "text-gray-300 hover:bg-[#2a2d42]"
-                          : "text-gray-600 hover:bg-gray-100"
+                      className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm transition-all cursor-pointer ${
+                        isDark ? "hover:bg-[#2a2d42]" : "hover:bg-gray-100"
                       }`}
                     >
-                      {payment}
-                    </button>
+                      <input
+                        type="checkbox"
+                        checked={selectedPayments.includes(payment)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedPayments(prev => [...prev, payment])
+                          } else {
+                            setSelectedPayments(prev => prev.filter(p => p !== payment))
+                          }
+                        }}
+                        className="w-4 h-4 text-custom-green bg-gray-100 border-gray-300 rounded focus:ring-custom-green focus:ring-2"
+                      />
+                      <span className={isDark ? "text-gray-300" : "text-gray-600"}>
+                        {payment}
+                      </span>
+                    </label>
                   ))}
                 </div>
               </div>
 
-              {/* 金额筛选 */}
-              <div>
+              {/* 筛选交易金额 */}
+              <div className="mb-4">
                 <h3 className={`font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
-                  交易金额
+                  筛选交易金额
                 </h3>
                 <div className="space-y-2">
                   <input
                     type="number"
-                    placeholder="最小金额"
+                    placeholder="最小金额 (USDT)"
+                    value={minAmount}
+                    onChange={(e) => setMinAmount(e.target.value)}
                     className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
                       isDark
                         ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
@@ -277,7 +290,9 @@ export default function USDTTradePage() {
                   />
                   <input
                     type="number"
-                    placeholder="最大金额"
+                    placeholder="最大金额 (USDT)"
+                    value={maxAmount}
+                    onChange={(e) => setMaxAmount(e.target.value)}
                     className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
                       isDark
                         ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
@@ -285,6 +300,26 @@ export default function USDTTradePage() {
                     }`}
                   />
                 </div>
+              </div>
+
+              {/* 是否支持现金上门 */}
+              <div>
+                <h3 className={`font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
+                  现金上门
+                </h3>
+                <label className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm transition-all cursor-pointer ${
+                  isDark ? "hover:bg-[#2a2d42]" : "hover:bg-gray-100"
+                }`}>
+                  <input
+                    type="checkbox"
+                    checked={supportsCashPickup}
+                    onChange={(e) => setSupportsCashPickup(e.target.checked)}
+                    className="w-4 h-4 text-custom-green bg-gray-100 border-gray-300 rounded focus:ring-custom-green focus:ring-2"
+                  />
+                  <span className={isDark ? "text-gray-300" : "text-gray-600"}>
+                    支持现金上门
+                  </span>
+                </label>
               </div>
             </div>
           </div>
