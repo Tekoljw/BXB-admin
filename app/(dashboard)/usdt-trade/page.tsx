@@ -13,7 +13,7 @@ export default function USDTTradePage() {
   const [selectedPayments, setSelectedPayments] = useState<string[]>([])
   const [minAmount, setMinAmount] = useState("")
   const [maxAmount, setMaxAmount] = useState("")
-  const [supportsCashPickup, setSupportsCashPickup] = useState(false)
+
 
   const cardStyle = isDark
     ? "bg-[#1a1c2e] border border-[#2a2d42] shadow"
@@ -244,7 +244,7 @@ export default function USDTTradePage() {
                   筛选支付方式
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {["现金交易", "银行卡", "支付宝", "微信"].map((payment) => (
+                  {["现金交易", "银行卡", "支付宝", "微信", "现金上门"].map((payment) => (
                     <button
                       key={payment}
                       onClick={() => {
@@ -254,12 +254,12 @@ export default function USDTTradePage() {
                           setSelectedPayments(prev => [...prev, payment])
                         }
                       }}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
                         selectedPayments.includes(payment)
-                          ? "bg-custom-green text-white"
+                          ? "border-black bg-white text-black"
                           : isDark
-                            ? "bg-[#2a2d42] text-gray-300 hover:bg-[#3a3d4a]"
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            ? "border-[#3a3d4a] bg-[#2a2d42] text-gray-300 hover:bg-[#3a3d4a]"
+                            : "border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
                       }`}
                     >
                       {payment}
@@ -285,10 +285,12 @@ export default function USDTTradePage() {
                             setMinAmount("")
                             setMaxAmount(amount)
                           }}
-                          className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-                            isDark
-                              ? "bg-[#2a2d42] text-gray-300 hover:bg-[#3a3d4a]"
-                              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          className={`px-3 py-2 rounded-lg text-xs font-medium transition-all border ${
+                            maxAmount === amount && !minAmount
+                              ? "border-black bg-white text-black"
+                              : isDark
+                                ? "border-[#3a3d4a] bg-[#2a2d42] text-gray-300 hover:bg-[#3a3d4a]"
+                                : "border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
                           }`}
                         >
                           {amount} USDT
@@ -337,33 +339,7 @@ export default function USDTTradePage() {
                 </div>
               </div>
 
-              {/* 是否支持现金上门 */}
-              <div>
-                <h3 className={`font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
-                  现金上门
-                </h3>
-                <div className="flex items-center justify-between">
-                  <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                    支持现金上门
-                  </span>
-                  <button
-                    onClick={() => setSupportsCashPickup(!supportsCashPickup)}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      supportsCashPickup 
-                        ? "bg-custom-green" 
-                        : isDark 
-                          ? "bg-gray-600" 
-                          : "bg-gray-300"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        supportsCashPickup ? "translate-x-6" : "translate-x-1"
-                      }`}
-                    />
-                  </button>
-                </div>
-              </div>
+
             </div>
           </div>
 
