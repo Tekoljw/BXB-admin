@@ -837,19 +837,19 @@ export default function USDTTradePage() {
               {tradeMode === "OTC" && (
                 <div className="p-6 space-y-6">
                   {/* USDT数量输入区域 */}
-                  <div className="flex gap-4">
-                    <div className={`flex-1 p-4 rounded-lg border ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
+                  <div className="flex gap-3">
+                    <div className={`flex-1 px-4 py-3 rounded-lg border ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
                       <input
                         type="text"
                         placeholder="购买USDT数量（最低购买100USDT）"
                         value={otcAmount}
                         onChange={(e) => setOtcAmount(e.target.value)}
-                        className={`w-full text-center text-2xl font-medium bg-transparent border-none outline-none ${
+                        className={`w-full text-center text-lg font-medium bg-transparent border-none outline-none ${
                           isDark ? "text-white placeholder-gray-500" : "text-gray-900 placeholder-gray-400"
                         }`}
                       />
                     </div>
-                    <button className="px-6 py-4 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all whitespace-nowrap">
+                    <button className="px-4 py-3 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all whitespace-nowrap">
                       重新查看报价
                     </button>
                   </div>
