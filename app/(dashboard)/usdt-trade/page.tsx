@@ -739,11 +739,17 @@ export default function USDTTradePage() {
                         </div>
 
                         {/* 展开内容 */}
-                        {expandedCard === index && (
+                        <div 
+                          className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                            expandedCard === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                          }`}
+                        >
                           <div className={`px-4 pb-4 border-t ${
                             isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"
                           }`}>
-                            <div className="pt-4">
+                            <div className={`pt-4 transform transition-transform duration-300 ease-in-out ${
+                              expandedCard === index ? "translate-y-0" : "-translate-y-2"
+                            }`}>
                               <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
                                 购买金额
                               </h4>
@@ -754,7 +760,7 @@ export default function USDTTradePage() {
                                   placeholder={`输入金额 (¥${method.limit.split(" - ")[0]} - ¥${method.limit.split(" - ")[1]})`}
                                   value={purchaseAmount}
                                   onChange={(e) => setPurchaseAmount(e.target.value)}
-                                  className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                                  className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green transition-all ${
                                     isDark 
                                       ? "bg-[#1a1c2e] border-[#3a3d4a] text-white" 
                                       : "bg-white border-gray-300 text-gray-900"
@@ -763,7 +769,7 @@ export default function USDTTradePage() {
                               </div>
 
                               <div className="mb-4">
-                                <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                                <div className={`text-sm transition-all ${isDark ? "text-gray-300" : "text-gray-600"}`}>
                                   约合 0 USDT （今日刹余额度1000USDT）
                                 </div>
                               </div>
@@ -773,7 +779,7 @@ export default function USDTTradePage() {
                                   <button
                                     key={amount}
                                     onClick={() => setPurchaseAmount(amount)}
-                                    className={`py-2 px-3 text-sm border rounded-lg transition-all hover:border-custom-green ${
+                                    className={`py-2 px-3 text-sm border rounded-lg transition-all hover:border-custom-green transform hover:scale-105 ${
                                       isDark 
                                         ? "border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42]" 
                                         : "border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -784,7 +790,7 @@ export default function USDTTradePage() {
                                 ))}
                               </div>
 
-                              <button className={`w-full py-3 rounded-lg font-medium transition-all ${
+                              <button className={`w-full py-3 rounded-lg font-medium transition-all transform hover:scale-[1.02] ${
                                 activeTab.includes("买入")
                                   ? "bg-custom-green text-white hover:bg-custom-green/90"
                                   : "bg-red-500 text-white hover:bg-red-600"
@@ -793,7 +799,7 @@ export default function USDTTradePage() {
                               </button>
                             </div>
                           </div>
-                        )}
+                        </div>
                       </div>
                     ))}
                   </div>
