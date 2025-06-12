@@ -18,6 +18,8 @@ export default function USDTTradePage() {
   const currencyDropdownRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [displayCount, setDisplayCount] = useState(2)
+  const [expandedCard, setExpandedCard] = useState<number | null>(null)
+  const [purchaseAmount, setPurchaseAmount] = useState("")
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -701,39 +703,93 @@ export default function USDTTradePage() {
               {/* 快捷模式 */}
               {tradeMode === "快捷" && (
                 <div className="p-6">
-                  <h3 className={`text-lg font-semibold mb-6 ${isDark ? "text-white" : "text-gray-800"}`}>
-                    选择支付方式
-                  </h3>
-                  
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-4">
                     {paymentMethods.map((method, index) => (
-                      <div key={index} className={`p-6 rounded-lg border cursor-pointer transition-all hover:border-custom-green hover:shadow-md ${
-                        isDark ? "border-[#3a3d4a] hover:bg-[#252842]" : "border-gray-200 hover:bg-gray-50"
+                      <div key={index} className={`rounded-lg border transition-all ${
+                        isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"
                       }`}>
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center space-x-3">
-                            <span className="text-2xl">{method.icon}</span>
-                            <div>
-                              <div className={`font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
-                                {method.name}
+                        {/* 卡片主体 - 横向布局 */}
+                        <div 
+                          className={`p-4 cursor-pointer transition-all hover:border-custom-green hover:shadow-md ${
+                            expandedCard === index ? "border-custom-green" : ""
+                          }`}
+                          onClick={() => setExpandedCard(expandedCard === index ? null : index)}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <span className="text-2xl">{method.icon}</span>
+                              <div>
+                                <div className={`font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                                  {method.name}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  汇率: ¥{method.rate} • 手续费: {method.fee}
+                                </div>
                               </div>
-                              <div className="text-sm text-gray-500">
+                            </div>
+                            <div className="text-right">
+                              <div className="text-lg font-bold text-custom-green">
+                                ¥{method.limit.split(" - ")[0]} - ¥{method.limit.split(" - ")[1]}
+                              </div>
+                              <div className="text-xs text-gray-400">
                                 {method.status}
                               </div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-lg font-bold text-custom-green">
-                              ¥{method.rate}
-                            </div>
-                            <div className="text-xs text-gray-400">
-                              费率: {method.fee}
+                        </div>
+
+                        {/* 展开内容 */}
+                        {expandedCard === index && (
+                          <div className={`px-4 pb-4 border-t ${
+                            isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"
+                          }`}>
+                            <div className="pt-4">
+                              <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                                购买金额
+                              </h4>
+                              
+                              <div className="mb-4">
+                                <input
+                                  type="text"
+                                  placeholder={`输入金额 (¥${method.limit.split(" - ")[0]} - ¥${method.limit.split(" - ")[1]})`}
+                                  value={purchaseAmount}
+                                  onChange={(e) => setPurchaseAmount(e.target.value)}
+                                  className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                                    isDark 
+                                      ? "bg-[#1a1c2e] border-[#3a3d4a] text-white" 
+                                      : "bg-white border-gray-300 text-gray-900"
+                                  }`}
+                                />
+                              </div>
+
+                              <div className="mb-4">
+                                <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                                  约合 0 USDT （今日刹余额度1000USDT）
+                                </div>
+                              </div>
+
+                              <div className="grid grid-cols-4 gap-2 mb-4">
+                                {["100", "500", "1000", "3000"].map((amount) => (
+                                  <button
+                                    key={amount}
+                                    onClick={() => setPurchaseAmount(amount)}
+                                    className={`py-2 px-3 text-sm border rounded-lg transition-all hover:border-custom-green ${
+                                      isDark 
+                                        ? "border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42]" 
+                                        : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                                    }`}
+                                  >
+                                    ¥{amount}
+                                  </button>
+                                ))}
+                              </div>
+
+                              <button className="w-full bg-custom-green text-white py-3 rounded-lg font-medium hover:bg-custom-green/90 transition-all">
+                                确认购买
+                              </button>
                             </div>
                           </div>
-                        </div>
-                        <div className="text-sm text-gray-600">
-                          限额: ¥{method.limit}
-                        </div>
+                        )}
                       </div>
                     ))}
                   </div>
