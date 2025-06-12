@@ -22,7 +22,9 @@ export default function USDTTradePage() {
   const [purchaseAmount, setPurchaseAmount] = useState("")
   const [otcAmount, setOtcAmount] = useState("")
   const [showTradeModal, setShowTradeModal] = useState(false)
+  const [tradeModalAnimating, setTradeModalAnimating] = useState(false)
   const [showPublishModal, setShowPublishModal] = useState(false)
+  const [publishModalAnimating, setPublishModalAnimating] = useState(false)
   const [selectedMerchant, setSelectedMerchant] = useState<any>(null)
   const [tradeType, setTradeType] = useState<"buy" | "sell">("buy")
   const [tradeAmount, setTradeAmount] = useState("")
@@ -275,18 +277,27 @@ export default function USDTTradePage() {
     setTradeAmount("")
     setTotalPrice("")
     setShowTradeModal(true)
+    setTimeout(() => {
+      setTradeModalAnimating(true)
+    }, 10)
   }
 
   // 关闭交易弹窗
   const handleCloseTradeModal = () => {
-    setShowTradeModal(false)
-    setSelectedMerchant(null)
+    setTradeModalAnimating(false)
+    setTimeout(() => {
+      setShowTradeModal(false)
+      setSelectedMerchant(null)
+    }, 300)
   }
 
   // 打开发布订单弹窗
   const handleOpenPublishModal = () => {
     console.log('Opening publish modal')
     setShowPublishModal(true)
+    setTimeout(() => {
+      setPublishModalAnimating(true)
+    }, 10)
     setPublishPrice("")
     setPublishMinAmount("")
     setPublishMaxAmount("")
@@ -296,7 +307,10 @@ export default function USDTTradePage() {
 
   // 关闭发布订单弹窗
   const handleClosePublishModal = () => {
-    setShowPublishModal(false)
+    setPublishModalAnimating(false)
+    setTimeout(() => {
+      setShowPublishModal(false)
+    }, 300)
   }
 
   // 计算总价
@@ -964,7 +978,7 @@ export default function USDTTradePage() {
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300" onClick={handleCloseTradeModal}></div>
           <div className={`absolute right-0 top-0 h-full w-96 transform transition-transform duration-300 ease-in-out ${
-            showTradeModal ? "translate-x-0" : "translate-x-full"
+            tradeModalAnimating ? "translate-x-0" : "translate-x-full"
           } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl`}>
             <div className="p-6 h-full overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
@@ -1074,7 +1088,7 @@ export default function USDTTradePage() {
         <div className="fixed inset-0 z-[9999] overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300" onClick={handleClosePublishModal}></div>
           <div className={`absolute right-0 top-0 h-full w-96 transform transition-transform duration-300 ease-in-out ${
-            showPublishModal ? "translate-x-0" : "translate-x-full"
+            publishModalAnimating ? "translate-x-0" : "translate-x-full"
           } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl z-[10000]`}>
             <div className="p-6 h-full overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
