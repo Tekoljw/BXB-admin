@@ -64,65 +64,74 @@ export default function Web3Loading({ onComplete }: Web3LoadingProps) {
 
       {/* 主要内容容器 */}
       <div className="relative z-10 flex flex-col items-center">
-        {/* 圆形进度条 */}
-        <div className="relative">
-          {/* 外层装饰圆环 */}
-          <div className={`absolute inset-0 w-32 h-32 rounded-full border-2 ${
-            isDark ? 'border-gray-800' : 'border-gray-100'
-          } animate-spin-slow`} style={{ animationDuration: '8s' }} />
-          
-          {/* 中层装饰圆环 */}
-          <div className={`absolute inset-2 w-28 h-28 rounded-full border ${
-            isDark ? 'border-gray-700' : 'border-gray-200'
-          } animate-spin-slow`} style={{ animationDuration: '6s', animationDirection: 'reverse' }} />
-
-          {/* 主进度圆环 */}
-          <div className="relative w-32 h-32">
-            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-              {/* 背景圆环 */}
-              <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                stroke={isDark ? "#1f2937" : "#f3f4f6"}
-                strokeWidth="3"
-              />
-              {/* 进度圆环 */}
-              <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                stroke="url(#progressGradient)"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeDasharray={strokeDasharray}
-                strokeDashoffset={strokeDashoffset}
-                className="transition-all duration-300 ease-out"
-              />
-              <defs>
-                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#00D4AA" />
-                  <stop offset="50%" stopColor="#06B6D4" />
-                  <stop offset="100%" stopColor="#3B82F6" />
-                </linearGradient>
-              </defs>
+        {/* 创意加载动画 */}
+        <div className="flex justify-center items-center space-x-6 mb-8">
+          <div className="creative-loader" style={{
+            '--path': '#00D4AA',
+            '--dot': '#00D4AA',
+            '--duration': '3s',
+            width: '80px',
+            height: '80px',
+            position: 'relative'
+          }}>
+            <style jsx>{`
+              .creative-loader:before {
+                content: '';
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                position: absolute;
+                display: block;
+                background: var(--dot);
+                top: 67px;
+                left: 34px;
+                transform: translate(-18px, -18px);
+                animation: dotCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+              }
+              
+              .creative-loader svg {
+                display: block;
+                width: 100%;
+                height: 100%;
+              }
+              
+              .creative-loader svg circle {
+                fill: none;
+                stroke: var(--path);
+                stroke-width: 10px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                stroke-dasharray: 150 50 150 50;
+                stroke-dashoffset: 75;
+                animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+              }
+              
+              @keyframes pathCircle {
+                25% { stroke-dashoffset: 125; }
+                50% { stroke-dashoffset: 175; }
+                75% { stroke-dashoffset: 225; }
+                100% { stroke-dashoffset: 275; }
+              }
+              
+              @keyframes dotCircle {
+                25% { transform: translate(0, 0); }
+                50% { transform: translate(18px, -18px); }
+                75% { transform: translate(0, -36px); }
+                100% { transform: translate(-18px, -18px); }
+              }
+            `}</style>
+            <svg viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="32" />
             </svg>
-
-            {/* 中心内容 */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <div className={`text-2xl font-bold mb-1 ${
-                isDark ? 'text-white' : 'text-gray-900'
-              }`}>
-                {Math.round(progress)}%
-              </div>
-              <div className="w-8 h-1 bg-gradient-to-r from-[#00D4AA] to-[#3B82F6] rounded-full animate-pulse" />
-            </div>
           </div>
-
-          {/* 发光效果 */}
-          <div className="absolute inset-0 w-32 h-32 rounded-full bg-gradient-to-r from-[#00D4AA]/20 to-[#3B82F6]/20 blur-xl animate-pulse" />
+        </div>
+        
+        {/* 进度条 */}
+        <div className="w-64 h-2 bg-gray-200 dark:bg-gray-700 rounded-full mb-6">
+          <div 
+            className="h-2 bg-gradient-to-r from-[#00D4AA] to-[#3B82F6] rounded-full transition-all duration-300 ease-out"
+            style={{ width: `${progress}%` }}
+          />
         </div>
 
         {/* Logo和文字 */}
