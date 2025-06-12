@@ -20,6 +20,7 @@ export default function USDTTradePage() {
   const [displayCount, setDisplayCount] = useState(2)
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
   const [purchaseAmount, setPurchaseAmount] = useState("")
+  const [otcAmount, setOtcAmount] = useState("")
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -198,20 +199,46 @@ export default function USDTTradePage() {
     {
       name: "Ramp",
       label: "价格最优",
-      price: "7150.00",
+      price: "879.45",
       rate: "7.15",
       payments: ["银行卡", "支付宝", "微信", "Apple Pay"],
       icon: "⚡",
-      fees: "1.5%"
+      fees: "1.5%",
+      bgColor: "bg-yellow-50 border-yellow-200",
+      iconBg: "bg-yellow-500"
     },
     {
       name: "MoonPay", 
       label: "",
-      price: "7180.00",
+      price: "883.14",
       rate: "7.18",
       payments: ["银行卡", "支付宝", "微信"],
       icon: "🌙",
-      fees: "2.1%"
+      fees: "2.1%",
+      bgColor: "bg-orange-50 border-orange-200",
+      iconBg: "bg-orange-500"
+    },
+    {
+      name: "Transak",
+      label: "",
+      price: "885.60",
+      rate: "7.20",
+      payments: ["银行卡", "支付宝"],
+      icon: "🔄",
+      fees: "2.3%",
+      bgColor: "bg-blue-50 border-blue-200",
+      iconBg: "bg-blue-500"
+    },
+    {
+      name: "Simplex",
+      label: "",
+      price: "888.06",
+      rate: "7.22",
+      payments: ["银行卡", "PayPal"],
+      icon: "💎",
+      fees: "2.5%",
+      bgColor: "bg-red-50 border-red-200",
+      iconBg: "bg-red-500"
     }
   ]
 
@@ -808,55 +835,89 @@ export default function USDTTradePage() {
 
               {/* OTC模式 */}
               {tradeMode === "OTC" && (
-                <div className="p-6">
-                  <h3 className={`text-lg font-semibold mb-6 ${isDark ? "text-white" : "text-gray-800"}`}>
-                    选择OTC服务商
-                  </h3>
-                  
-                  <div className="space-y-4">
-                    {otcProviders.map((provider, index) => (
-                      <div key={index} className={`p-6 border rounded-lg cursor-pointer transition-all hover:border-custom-green hover:shadow-md ${
-                        isDark ? "border-[#3a3d4a] hover:bg-[#252842]" : "border-gray-200 hover:bg-gray-50"
-                      }`}>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <span className="text-2xl">{provider.icon}</span>
-                            <div>
-                              <div className="flex items-center space-x-2">
-                                <span className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
-                                  {provider.name}
-                                </span>
-                                {provider.label && (
-                                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                                    {provider.label}
-                                  </span>
-                                )}
+                <div className="p-6 space-y-6">
+                  {/* USDT数量输入区域 */}
+                  <div>
+                    <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+                      购买USDT数量
+                    </h3>
+                    <div className={`p-6 rounded-lg border ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
+                      <input
+                        type="text"
+                        placeholder="123"
+                        value={otcAmount}
+                        onChange={(e) => setOtcAmount(e.target.value)}
+                        className={`w-full text-center text-3xl font-medium bg-transparent border-none outline-none ${
+                          isDark ? "text-white placeholder-gray-500" : "text-gray-900 placeholder-gray-400"
+                        }`}
+                      />
+                      <div className={`text-center text-sm mt-3 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                        最低购买: 100 USDT • 无上限
+                      </div>
+                    </div>
+                    <button className="w-full mt-4 bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-all">
+                      重新查看报价
+                    </button>
+                  </div>
+
+                  {/* 服务商选择区域 */}
+                  <div>
+                    <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+                      请选择服务商
+                    </h3>
+                    
+                    <div className="space-y-3">
+                      {otcProviders.map((provider, index) => (
+                        <div 
+                          key={index} 
+                          className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md hover:border-custom-green ${
+                            isDark 
+                              ? "border-[#3a3d4a] bg-[#1a1c2e] hover:bg-[#252842]" 
+                              : `${provider.bgColor} hover:shadow-lg`
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-4">
+                              <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-white ${
+                                isDark ? "bg-[#3a3d4a]" : provider.iconBg
+                              }`}>
+                                <span className="text-xl">{provider.icon}</span>
                               </div>
-                              <div className="text-sm text-gray-500 mt-1">
-                                手续费: {provider.fees}
-                              </div>
-                              <div className="flex flex-wrap gap-2 mt-2">
-                                {provider.payments.map((payment, idx) => (
-                                  <span key={idx} className={`text-xs px-2 py-1 rounded ${
-                                    isDark ? "bg-[#1a1c2e] text-gray-300" : "bg-gray-100 text-gray-600"
-                                  }`}>
-                                    {payment}
+                              <div>
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <span className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
+                                    {provider.name}
                                   </span>
-                                ))}
+                                  {provider.label && (
+                                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                                      {provider.label}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center space-x-4">
+                                  {provider.payments.slice(0, 4).map((payment, payIndex) => (
+                                    <div key={payIndex} className="flex items-center space-x-1">
+                                      {getPaymentIcon(payment)}
+                                      <span className={`text-xs ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                                        {payment}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-2xl font-bold text-custom-green">
-                              ¥{provider.price}
-                            </div>
-                            <div className="text-sm text-gray-400">
-                              ¥{provider.rate}/USDT
+                            <div className="text-right">
+                              <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                                ¥{provider.price}
+                              </div>
+                              <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                                折合 ¥{provider.rate}/USDT
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
