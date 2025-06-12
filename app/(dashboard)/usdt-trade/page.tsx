@@ -196,12 +196,14 @@ export default function USDTTradePage() {
                     <button
                       key={mode}
                       onClick={() => setTradeMode(mode)}
-                      className={`w-full px-3 py-3 rounded-lg text-sm transition-all border cursor-pointer ${
+                      className={`w-full px-3 py-3 rounded-lg text-sm transition-all cursor-pointer ${
                         tradeMode === mode
-                          ? "border-custom-green bg-white text-gray-800 shadow-sm"
+                          ? isDark 
+                            ? "border-2 border-custom-green bg-[#1a1c2e]/50 text-white shadow-lg" 
+                            : "border-2 border-custom-green bg-custom-green/5 text-gray-900 shadow-lg"
                           : isDark
-                          ? "border-[#3a3d4a] text-gray-300 hover:border-custom-green hover:bg-[#252842] hover:shadow-md"
-                          : "border-gray-200 text-gray-600 hover:border-custom-green hover:bg-gray-50 hover:shadow-md"
+                            ? "border border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42] hover:border-custom-green/50"
+                            : "border border-gray-200 text-gray-600 hover:border-custom-green hover:bg-gray-50 hover:shadow-md"
                       }`}
                       style={{ transform: 'none' }}
                     >
