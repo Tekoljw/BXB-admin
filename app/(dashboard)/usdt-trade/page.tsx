@@ -291,6 +291,7 @@ export default function USDTTradePage() {
     setPublishMinAmount("")
     setPublishMaxAmount("")
     setPublishPayments([])
+    console.log('Modal state set to:', true)
   }
 
   // 关闭发布订单弹窗
@@ -1073,11 +1074,11 @@ export default function USDTTradePage() {
 
       {/* 发布订单弹窗 */}
       {showPublishModal && (
-        <div className="fixed inset-0 z-50 overflow-hidden">
+        <div className="fixed inset-0 z-[9999] overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={handleClosePublishModal}></div>
           <div className={`absolute right-0 top-0 h-full w-96 transform transition-transform duration-300 ${
             isDark ? "bg-[#1a1c2e]" : "bg-white"
-          } shadow-xl`}>
+          } shadow-xl z-[10000]`}>
             <div className="p-6 h-full overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
