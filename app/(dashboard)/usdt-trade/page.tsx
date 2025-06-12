@@ -328,11 +328,11 @@ export default function USDTTradePage() {
                       <button
                         onClick={() => {
                           // Apply filter logic here
-                          console.log('Searching with amounts:', minAmount, maxAmount)
+                          console.log('Filtering with amounts:', minAmount, maxAmount)
                         }}
-                        className="w-full px-3 py-2 bg-custom-green text-white rounded-lg text-sm font-medium hover:bg-custom-green/90 transition-all"
+                        className="w-full px-3 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all"
                       >
-                        检索
+                        筛选
                       </button>
                     </div>
                   </div>
