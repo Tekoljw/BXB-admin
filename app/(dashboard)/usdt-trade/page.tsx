@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageSquare, Filter, RefreshCw, Users, Zap, Building2, ChevronDown } from "lucide-react"
+import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageCircle, Filter, RefreshCw, Users, Zap, Building2, ChevronDown } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { Button } from "@/components/ui/button"
 
@@ -571,7 +571,7 @@ export default function USDTTradePage() {
                         {/* 操作 */}
                         <div className="col-span-3 flex items-center justify-end space-x-2 pr-2">
                           <button 
-                            className="bg-black text-white px-2 py-2 rounded text-xs hover:bg-gray-800 transition-all"
+                            className="bg-black text-white px-2 py-2 rounded text-xs hover:bg-gray-800 transition-all h-8 flex items-center justify-center"
                             onClick={() => {
                               if (merchant.isFriend) {
                                 console.log('开始对话:', merchant.name)
@@ -580,9 +580,9 @@ export default function USDTTradePage() {
                               }
                             }}
                           >
-                            {merchant.isFriend ? <MessageSquare className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+                            {merchant.isFriend ? <MessageCircle className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
                           </button>
-                          <button className="bg-custom-green text-white px-4 py-2 rounded text-xs font-medium hover:bg-custom-green/90 transition-all">
+                          <button className="bg-custom-green text-white px-4 py-2 rounded text-xs font-medium hover:bg-custom-green/90 transition-all h-8 flex items-center justify-center">
                             {activeTab.includes("买入") ? "买入" : "卖出"}
                           </button>
                         </div>
