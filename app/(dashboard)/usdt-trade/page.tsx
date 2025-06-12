@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageSquare, Filter, RefreshCw, Users, Zap, Building2 } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
+import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageSquare, Filter, RefreshCw, Users, Zap, Building2, ChevronDown } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { Button } from "@/components/ui/button"
 
@@ -13,6 +13,32 @@ export default function USDTTradePage() {
   const [selectedPayments, setSelectedPayments] = useState<string[]>([])
   const [minAmount, setMinAmount] = useState("")
   const [maxAmount, setMaxAmount] = useState("")
+  const [selectedCurrency, setSelectedCurrency] = useState("CNY")
+  const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false)
+  const currencyDropdownRef = useRef<HTMLDivElement>(null)
+
+  const currencies = [
+    { code: "CNY", name: "人民币", symbol: "¥" },
+    { code: "USD", name: "美元", symbol: "$" },
+    { code: "EUR", name: "欧元", symbol: "€" },
+    { code: "HKD", name: "港币", symbol: "HK$" },
+    { code: "JPY", name: "日元", symbol: "¥" },
+    { code: "KRW", name: "韩元", symbol: "₩" }
+  ]
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (currencyDropdownRef.current && !currencyDropdownRef.current.contains(event.target as Node)) {
+        setCurrencyDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
 
   const cardStyle = isDark
@@ -169,6 +195,64 @@ export default function USDTTradePage() {
                   >
                     卖出USDT
                   </button>
+                </div>
+              </div>
+
+              {/* 法币选择下拉框 */}
+              <div className="mb-4 relative" ref={currencyDropdownRef}>
+                <button
+                  onClick={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
+                    isDark
+                      ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#2a2d42]"
+                      : "bg-white border-gray-300 text-gray-800 hover:bg-gray-50"
+                  }`}
+                >
+                  <span className="flex items-center space-x-2">
+                    <span>{currencies.find(c => c.code === selectedCurrency)?.symbol}</span>
+                    <span>{currencies.find(c => c.code === selectedCurrency)?.name}</span>
+                  </span>
+                  <ChevronDown 
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      currencyDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* 下拉菜单 */}
+                <div 
+                  className={`absolute top-full left-0 right-0 mt-1 z-50 rounded-lg border shadow-lg transition-all duration-200 ${
+                    currencyDropdownOpen 
+                      ? "opacity-100 visible translate-y-0" 
+                      : "opacity-0 invisible -translate-y-2"
+                  } ${
+                    isDark
+                      ? "bg-[#252842] border-[#3a3d4a]"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  {currencies.map((currency) => (
+                    <button
+                      key={currency.code}
+                      onClick={() => {
+                        setSelectedCurrency(currency.code)
+                        setCurrencyDropdownOpen(false)
+                      }}
+                      className={`w-full flex items-center space-x-3 px-3 py-2 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                        selectedCurrency === currency.code
+                          ? isDark
+                            ? "bg-custom-green/20 text-custom-green"
+                            : "bg-custom-green/10 text-custom-green"
+                          : isDark
+                            ? "text-gray-300 hover:bg-[#2a2d42]"
+                            : "text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      <span className="font-medium">{currency.symbol}</span>
+                      <span>{currency.name}</span>
+                      <span className="text-xs text-gray-500">({currency.code})</span>
+                    </button>
+                  ))}
                 </div>
               </div>
 
