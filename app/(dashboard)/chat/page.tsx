@@ -679,7 +679,7 @@ export default function ChatPage() {
                 </div>
 
                 {/* 输入区域内容 */}
-                <div className="flex flex-col h-full p-4">
+                <div className="flex flex-col p-4" style={{ height: `${inputHeight - 8}px` }}>
                   {/* 功能按钮行 */}
                   <div className="flex items-center space-x-2 mb-3">
                     <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
@@ -734,7 +734,7 @@ export default function ChatPage() {
                           ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-500" 
                           : "bg-white text-gray-900 border-gray-300 placeholder-gray-400"
                       } focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
-                      style={{ minHeight: '60px', maxHeight: '120px' }}
+                      style={{ height: `${Math.max(60, inputHeight - 80)}px` }}
                     />
                     
                     {/* 发送按钮 */}
