@@ -1074,11 +1074,11 @@ export default function USDTTradePage() {
 
       {/* 发布订单弹窗 */}
       {showPublishModal && (
-        <div className="fixed inset-0 z-[9999] overflow-hidden">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={handleClosePublishModal}></div>
-          <div className={`absolute right-0 top-0 h-full w-96 transform transition-transform duration-300 ${
+          <div className={`relative w-full max-w-md max-h-[90vh] transform transition-transform duration-300 ${
             isDark ? "bg-[#1a1c2e]" : "bg-white"
-          } shadow-xl z-[10000]`}>
+          } shadow-xl rounded-lg z-[10000]`}>
             <div className="p-6 h-full overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
