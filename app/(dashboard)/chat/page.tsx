@@ -531,7 +531,10 @@ export default function ChatPage() {
         </div>
 
         {/* 右侧聊天窗口 - 移动端全屏显示 */}
-        <div className={`${cardStyle} ${!selectedContact && 'hidden'} md:block md:flex-1 h-screen flex flex-col w-full`}>
+        <div 
+          className={`${cardStyle} ${!selectedContact && 'hidden'} md:block md:flex-1 flex flex-col w-full`}
+          style={{ height: `calc(100vh - ${inputHeight}px)` }}
+        >
           {selectedContactData ? (
             <>
               {/* 聊天头部 - 移动端添加返回按钮 */}
