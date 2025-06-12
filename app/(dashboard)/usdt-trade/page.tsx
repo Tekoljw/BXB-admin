@@ -835,83 +835,62 @@ export default function USDTTradePage() {
 
               {/* OTC模式 */}
               {tradeMode === "OTC" && (
-                <div className="p-6 space-y-6">
-                  {/* USDT数量输入区域 */}
-                  <div className="flex gap-3">
-                    <div className={`flex-1 px-4 py-3 rounded-lg border ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
-                      <input
-                        type="text"
-                        placeholder="购买USDT数量（最低购买100USDT）"
-                        value={otcAmount}
-                        onChange={(e) => setOtcAmount(e.target.value)}
-                        className={`w-full text-center text-lg font-medium bg-transparent border-none outline-none ${
-                          isDark ? "text-white placeholder-gray-500" : "text-gray-900 placeholder-gray-400"
+                <div className="p-6">
+                  <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+                    请选择服务商
+                  </h3>
+                  
+                  <div className="space-y-3">
+                    {otcProviders.map((provider, index) => (
+                      <div 
+                        key={index} 
+                        className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md hover:border-custom-green ${
+                          isDark 
+                            ? "border-[#3a3d4a] bg-[#1a1c2e] hover:bg-[#252842]" 
+                            : "border-gray-200 bg-white hover:shadow-lg"
                         }`}
-                      />
-                    </div>
-                    <button className="px-4 py-3 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all whitespace-nowrap">
-                      重新查看报价
-                    </button>
-                  </div>
-
-                  {/* 服务商选择区域 */}
-                  <div>
-                    <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-                      请选择服务商
-                    </h3>
-                    
-                    <div className="space-y-3">
-                      {otcProviders.map((provider, index) => (
-                        <div 
-                          key={index} 
-                          className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md hover:border-custom-green ${
-                            isDark 
-                              ? "border-[#3a3d4a] bg-[#1a1c2e] hover:bg-[#252842]" 
-                              : `${provider.bgColor} hover:shadow-lg`
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-4">
-                              <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-white ${
-                                isDark ? "bg-[#3a3d4a]" : provider.iconBg
-                              }`}>
-                                <span className="text-xl">{provider.icon}</span>
-                              </div>
-                              <div>
-                                <div className="flex items-center space-x-2 mb-2">
-                                  <span className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
-                                    {provider.name}
-                                  </span>
-                                  {provider.label && (
-                                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
-                                      {provider.label}
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="flex items-center space-x-4">
-                                  {provider.payments.slice(0, 4).map((payment, payIndex) => (
-                                    <div key={payIndex} className="flex items-center space-x-1">
-                                      {getPaymentIcon(payment)}
-                                      <span className={`text-xs ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                                        {payment}
-                                      </span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                              isDark ? "bg-[#3a3d4a] text-white" : "bg-gray-100 text-gray-600"
+                            }`}>
+                              <span className="text-xl">{provider.icon}</span>
                             </div>
-                            <div className="text-right">
-                              <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                                ¥{provider.price}
+                            <div>
+                              <div className="flex items-center space-x-2 mb-2">
+                                <span className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
+                                  {provider.name}
+                                </span>
+                                {provider.label && (
+                                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                                    {provider.label}
+                                  </span>
+                                )}
                               </div>
-                              <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                                折合 ¥{provider.rate}/USDT
+                              <div className="flex items-center space-x-4">
+                                {provider.payments.slice(0, 4).map((payment, payIndex) => (
+                                  <div key={payIndex} className="flex items-center space-x-1">
+                                    {getPaymentIcon(payment)}
+                                    <span className={`text-xs ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                                      {payment}
+                                    </span>
+                                  </div>
+                                ))}
                               </div>
                             </div>
                           </div>
+                          <div className="text-right">
+                            <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                              ¥{provider.price}
+                            </div>
+                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                              折合 ¥{provider.rate}/USDT
+                            </div>
+                          </div>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
