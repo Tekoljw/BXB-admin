@@ -26,6 +26,7 @@ import { useTheme } from "@/contexts/theme-context"
 import { useState, useRef, useEffect, useCallback } from "react"
 import ThemeToggle from "@/components/theme-toggle"
 import OptimizedButton from "@/components/optimized-button"
+import TetherIcon from "@/components/tether-icon"
 
 interface SideNavigationProps {
   onCloseMobile?: () => void
@@ -218,7 +219,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? t.usdtTrade : undefined}
             >
-              <Coins className="h-5 w-5 md:h-5 md:w-5" />
+              <TetherIcon className="h-5 w-5 md:h-5 md:w-5" />
               <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.usdtTrade}</span>
             </button>
           </li>
