@@ -288,7 +288,7 @@ export default function USDTTradePage() {
     setTimeout(() => {
       setShowTradeModal(false)
       setSelectedMerchant(null)
-    }, 500)
+    }, 300)
   }
 
   // 打开发布订单弹窗
@@ -310,7 +310,7 @@ export default function USDTTradePage() {
     setPublishModalAnimating(false)
     setTimeout(() => {
       setShowPublishModal(false)
-    }, 500)
+    }, 300)
   }
 
   // 计算总价
@@ -978,7 +978,7 @@ export default function USDTTradePage() {
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300" onClick={handleCloseTradeModal}></div>
           <div 
-            className={`absolute right-0 top-0 h-full w-96 transform transition-all duration-500 ${
+            className={`absolute right-0 top-0 h-full w-96 transform transition-all duration-300 ${
               tradeModalAnimating ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
             } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl`}
             style={{ 
@@ -1094,7 +1094,7 @@ export default function USDTTradePage() {
         <div className="fixed inset-0 z-[9999] overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300" onClick={handleClosePublishModal}></div>
           <div 
-            className={`absolute right-0 top-0 h-full w-96 transform transition-all duration-500 ${
+            className={`absolute right-0 top-0 h-full w-96 transform transition-all duration-300 ${
               publishModalAnimating ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
             } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl z-[10000]`}
             style={{ 
