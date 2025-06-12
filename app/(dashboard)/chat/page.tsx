@@ -680,13 +680,14 @@ export default function ChatPage() {
         </div>
       </div>
 
-      {/* 底部可调整大小的输入区域 */}
-      <div 
-        className={`fixed bottom-0 left-0 right-0 border-t ${
-          isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"
-        }`}
-        style={{ height: `${inputHeight}px` }}
-      >
+      {/* 底部可调整大小的输入区域 - 仅在选择联系人时显示 */}
+      {selectedContact && (
+        <div 
+          className={`fixed bottom-0 left-0 right-0 border-t ${
+            isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"
+          }`}
+          style={{ height: `${inputHeight}px` }}
+        >
         {/* 拖拽调整高度的手柄 */}
         <div 
           className={`w-full h-2 cursor-ns-resize flex items-center justify-center ${
@@ -772,7 +773,8 @@ export default function ChatPage() {
         >
           发送(S)
         </button>
-      </div>
+        </div>
+      )}
     </div>
   )
 }
