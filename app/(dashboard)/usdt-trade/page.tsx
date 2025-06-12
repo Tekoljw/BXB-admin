@@ -17,7 +17,7 @@ export default function USDTTradePage() {
   const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false)
   const currencyDropdownRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [displayCount, setDisplayCount] = useState(3)
+  const [displayCount, setDisplayCount] = useState(2)
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -112,6 +112,45 @@ export default function USDTTradePage() {
       paymentMethods: ["支付宝", "微信"],
       responseTime: "剩余 无限制",
       completionRate: "99.5%",
+      isFriend: false
+    },
+    {
+      name: "USDTKing",
+      verified: true,
+      rating: 4.6,
+      orders: 1876,
+      price: "7.26",
+      note: "要求担保周期10小时",
+      limit: "300 - 80000",
+      paymentMethods: ["银行卡", "现金上门", "支付宝"],
+      responseTime: "剩余 无限制",
+      completionRate: "98.9%",
+      isFriend: true
+    },
+    {
+      name: "DigitalTrader",
+      verified: true,
+      rating: 4.5,
+      orders: 1432,
+      price: "7.25",
+      note: "要求担保周期14小时",
+      limit: "100 - 60000",
+      paymentMethods: ["微信", "支付宝"],
+      responseTime: "剩余 无限制",
+      completionRate: "99.1%",
+      isFriend: false
+    },
+    {
+      name: "CoinMaster",
+      verified: true,
+      rating: 4.8,
+      orders: 2645,
+      price: "7.21",
+      note: "要求担保周期4小时",
+      limit: "500 - 120000",
+      paymentMethods: ["银行卡", "现金交易", "微信", "支付宝"],
+      responseTime: "剩余 无限制",
+      completionRate: "99.7%",
       isFriend: false
     }
   ]
