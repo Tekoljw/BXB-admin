@@ -569,9 +569,9 @@ export default function USDTTradePage() {
                         </div>
 
                         {/* 操作 */}
-                        <div className="col-span-3 flex items-center space-x-2">
+                        <div className="col-span-3 flex items-center justify-end space-x-2 pr-2">
                           <button 
-                            className="bg-black text-white p-1.5 rounded text-xs hover:bg-gray-800 transition-all"
+                            className="bg-black text-white px-2 py-2 rounded text-xs hover:bg-gray-800 transition-all"
                             onClick={() => {
                               if (merchant.isFriend) {
                                 console.log('开始对话:', merchant.name)
@@ -582,7 +582,7 @@ export default function USDTTradePage() {
                           >
                             {merchant.isFriend ? <MessageSquare className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
                           </button>
-                          <button className="bg-custom-green text-white px-3 py-1 rounded text-xs font-medium hover:bg-custom-green/90 transition-all">
+                          <button className="bg-custom-green text-white px-4 py-2 rounded text-xs font-medium hover:bg-custom-green/90 transition-all">
                             {activeTab.includes("买入") ? "买入" : "卖出"}
                           </button>
                         </div>
