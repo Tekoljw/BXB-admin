@@ -681,39 +681,39 @@ export default function ChatPage() {
                 {/* 输入区域内容 */}
                 <div className="flex flex-col px-3 py-2" style={{ height: `${inputHeight - 4}px` }}>
                   {/* 功能按钮行 */}
-                  <div className="flex items-center space-x-1">
-                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
+                  <div className="flex items-center space-x-2">
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <Smile className="w-4 h-4" />
+                      <Smile className="w-5 h-5" />
                     </button>
-                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <Paperclip className="w-4 h-4" />
+                      <Paperclip className="w-5 h-5" />
                     </button>
-                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <Scissors className="w-4 h-4" />
+                      <Scissors className="w-5 h-5" />
                     </button>
-                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <MessageCircle className="w-4 h-4" />
+                      <MessageCircle className="w-5 h-5" />
                     </button>
                     
                     {/* 右侧功能按钮 */}
                     <div className="flex-1"></div>
-                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <Phone className="w-4 h-4" />
+                      <Phone className="w-5 h-5" />
                     </button>
-                    <button className={`p-1.5 rounded-full hover:bg-gray-100 transition-colors ${
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
                       isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                     }`}>
-                      <Video className="w-4 h-4" />
+                      <Video className="w-5 h-5" />
                     </button>
                   </div>
 
