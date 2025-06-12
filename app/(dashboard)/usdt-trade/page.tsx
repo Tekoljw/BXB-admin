@@ -467,58 +467,49 @@ export default function USDTTradePage() {
             
             {/* 搜索和操作栏 */}
             <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="relative">
-                    <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
-                      isDark ? "text-gray-400" : "text-gray-500"
-                    }`} />
-                    <input
-                      type="text"
-                      placeholder="搜索商家或订单"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className={`pl-10 pr-4 py-2 w-80 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
-                        isDark
-                          ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
-                          : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
-                      }`}
-                    />
-                  </div>
-                  
-                  {/* 排序下拉框 */}
-                  <select
-                    className={`px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
+              <div className="flex items-center space-x-4">
+                <div className="relative flex-1">
+                  <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
+                    isDark ? "text-gray-400" : "text-gray-500"
+                  }`} />
+                  <input
+                    type="text"
+                    placeholder="搜索商家或订单"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
                       isDark
-                        ? "bg-[#252842] border-[#3a3d4a] text-white"
-                        : "bg-white border-gray-300 text-gray-800"
+                        ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500"
+                        : "bg-white border-gray-300 text-gray-800 placeholder-gray-400"
                     }`}
-                  >
-                    <option value="price">价格排序</option>
-                    <option value="time">时间排序</option>
-                    <option value="reputation">信誉排序</option>
-                  </select>
+                  />
                 </div>
                 
-                <div className="flex items-center space-x-2">
-                  <button className={`p-2 rounded-lg border transition-all ${
-                    isDark ? "border-[#3a3d4a] hover:bg-[#2a2d42]" : "border-gray-300 hover:bg-gray-50"
-                  }`}>
-                    <Filter className="w-4 h-4" />
+                {/* 排序下拉框 */}
+                <select
+                  className={`px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-custom-green/50 ${
+                    isDark
+                      ? "bg-[#252842] border-[#3a3d4a] text-white"
+                      : "bg-white border-gray-300 text-gray-800"
+                  }`}
+                >
+                  <option value="price">价格排序</option>
+                  <option value="time">时间排序</option>
+                  <option value="reputation">信誉排序</option>
+                </select>
+                
+                <button className={`p-2 rounded-lg border transition-all ${
+                  isDark ? "border-[#3a3d4a] hover:bg-[#2a2d42]" : "border-gray-300 hover:bg-gray-50"
+                }`}>
+                  <RefreshCw className="w-4 h-4" />
+                </button>
+                
+                {tradeMode === "C2C" && (
+                  <button className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all">
+                    <Plus className="w-4 h-4" />
+                    <span>发布订单</span>
                   </button>
-                  <button className={`p-2 rounded-lg border transition-all ${
-                    isDark ? "border-[#3a3d4a] hover:bg-[#2a2d42]" : "border-gray-300 hover:bg-gray-50"
-                  }`}>
-                    <RefreshCw className="w-4 h-4" />
-                  </button>
-                  
-                  {tradeMode === "C2C" && (
-                    <button className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all">
-                      <Plus className="w-4 h-4" />
-                      <span>发布订单</span>
-                    </button>
-                  )}
-                </div>
+                )}
               </div>
             </div>
 
