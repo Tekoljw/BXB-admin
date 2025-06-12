@@ -11,143 +11,171 @@ export default function Web3Loading({ onComplete }: Web3LoadingProps) {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
   const [progress, setProgress] = useState(0)
-  const [currentStep, setCurrentStep] = useState(0)
-
-  const loadingSteps = [
-    "初始化区块链连接...",
-    "加载智能合约...",
-    "验证钱包权限...",
-    "同步市场数据...",
-    "准备交易界面..."
-  ]
+  const [dots, setDots] = useState("")
 
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
           clearInterval(interval)
-          setTimeout(() => onComplete?.(), 500)
+          setTimeout(() => onComplete?.(), 800)
           return 100
         }
-        return prev + 2
+        return prev + 1.5
       })
-    }, 50)
+    }, 60)
 
     return () => clearInterval(interval)
   }, [onComplete])
 
   useEffect(() => {
-    const stepInterval = setInterval(() => {
-      setCurrentStep(prev => (prev + 1) % loadingSteps.length)
-    }, 1000)
+    const dotsInterval = setInterval(() => {
+      setDots(prev => {
+        if (prev === "...") return ""
+        return prev + "."
+      })
+    }, 500)
 
-    return () => clearInterval(stepInterval)
+    return () => clearInterval(dotsInterval)
   }, [])
+
+  const circumference = 2 * Math.PI * 45
+  const strokeDasharray = circumference
+  const strokeDashoffset = circumference - (progress / 100) * circumference
 
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center ${
-      isDark ? 'bg-gradient-to-br from-[#0f0f1a] via-[#1a1c2e] to-[#0f0f1a]' : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
+      isDark ? 'bg-[#0a0b14]' : 'bg-white'
     }`}>
-      {/* 背景粒子效果 */}
-      <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 50 }).map((_, i) => (
-          <div
-            key={i}
-            className={`absolute animate-pulse ${isDark ? 'bg-custom-green/20' : 'bg-custom-green/30'}`}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              width: `${Math.random() * 4 + 1}px`,
-              height: `${Math.random() * 4 + 1}px`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${Math.random() * 3 + 2}s`
-            }}
-          />
-        ))}
+      {/* 背景装饰网格 */}
+      <div className="absolute inset-0 opacity-10">
+        <div className={`w-full h-full ${
+          isDark ? 'bg-[radial-gradient(circle_at_50%_50%,rgba(0,212,170,0.1)_0%,transparent_50%)]' : 'bg-[radial-gradient(circle_at_50%_50%,rgba(0,212,170,0.05)_0%,transparent_50%)]'
+        }`} />
+        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke={isDark ? "#1f2937" : "#f3f4f6"} strokeWidth="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
       </div>
 
-      {/* 主要内容 */}
-      <div className="relative z-10 text-center max-w-md mx-auto px-6">
-        {/* Logo区域 */}
-        <div className="mb-8">
-          <div className={`relative mx-auto w-24 h-24 rounded-full flex items-center justify-center ${
-            isDark ? 'bg-gradient-to-r from-custom-green to-blue-500' : 'bg-gradient-to-r from-custom-green to-blue-600'
-          } shadow-2xl animate-spin-slow`}>
-            <div className={`w-20 h-20 rounded-full ${
-              isDark ? 'bg-[#1a1c2e]' : 'bg-white'
-            } flex items-center justify-center`}>
-              <div className="text-2xl font-bold bg-gradient-to-r from-custom-green to-blue-500 bg-clip-text text-transparent">
-                ₿
+      {/* 主要内容容器 */}
+      <div className="relative z-10 flex flex-col items-center">
+        {/* 圆形进度条 */}
+        <div className="relative">
+          {/* 外层装饰圆环 */}
+          <div className={`absolute inset-0 w-32 h-32 rounded-full border-2 ${
+            isDark ? 'border-gray-800' : 'border-gray-100'
+          } animate-spin-slow`} style={{ animationDuration: '8s' }} />
+          
+          {/* 中层装饰圆环 */}
+          <div className={`absolute inset-2 w-28 h-28 rounded-full border ${
+            isDark ? 'border-gray-700' : 'border-gray-200'
+          } animate-spin-slow`} style={{ animationDuration: '6s', animationDirection: 'reverse' }} />
+
+          {/* 主进度圆环 */}
+          <div className="relative w-32 h-32">
+            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+              {/* 背景圆环 */}
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke={isDark ? "#1f2937" : "#f3f4f6"}
+                strokeWidth="3"
+              />
+              {/* 进度圆环 */}
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke="url(#progressGradient)"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeDasharray={strokeDasharray}
+                strokeDashoffset={strokeDashoffset}
+                className="transition-all duration-300 ease-out"
+              />
+              <defs>
+                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#00D4AA" />
+                  <stop offset="50%" stopColor="#06B6D4" />
+                  <stop offset="100%" stopColor="#3B82F6" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            {/* 中心内容 */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className={`text-2xl font-bold mb-1 ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>
+                {Math.round(progress)}%
               </div>
+              <div className="w-8 h-1 bg-gradient-to-r from-[#00D4AA] to-[#3B82F6] rounded-full animate-pulse" />
             </div>
           </div>
+
+          {/* 发光效果 */}
+          <div className="absolute inset-0 w-32 h-32 rounded-full bg-gradient-to-r from-[#00D4AA]/20 to-[#3B82F6]/20 blur-xl animate-pulse" />
         </div>
 
-        {/* 标题 */}
-        <h1 className={`text-3xl font-bold mb-2 ${
-          isDark ? 'text-white' : 'text-gray-800'
-        }`}>
-          BeDAO
-        </h1>
-        <p className={`text-lg mb-8 ${
-          isDark ? 'text-gray-300' : 'text-gray-600'
-        }`}>
-          去中心化交易平台
-        </p>
-
-        {/* 进度条 */}
-        <div className="mb-6">
-          <div className={`w-full h-2 rounded-full ${
-            isDark ? 'bg-gray-700' : 'bg-gray-200'
-          } overflow-hidden`}>
-            <div 
-              className="h-full bg-gradient-to-r from-custom-green to-blue-500 rounded-full transition-all duration-300 ease-out relative"
-              style={{ width: `${progress}%` }}
-            >
-              <div className="absolute inset-0 bg-white/30 animate-pulse rounded-full" />
-            </div>
+        {/* Logo和文字 */}
+        <div className="mt-12 text-center">
+          <div className={`text-4xl font-bold mb-2 bg-gradient-to-r from-[#00D4AA] to-[#3B82F6] bg-clip-text text-transparent`}>
+            BeDAO
           </div>
-          <div className={`text-sm mt-2 ${
-            isDark ? 'text-gray-400' : 'text-gray-500'
+          <div className={`text-lg mb-6 ${
+            isDark ? 'text-gray-400' : 'text-gray-600'
           }`}>
-            {progress}%
+            去中心化交易平台
+          </div>
+          
+          {/* 加载状态文字 */}
+          <div className={`text-sm font-medium ${
+            isDark ? 'text-gray-300' : 'text-gray-700'
+          }`}>
+            正在加载{dots}
           </div>
         </div>
 
-        {/* 加载步骤 */}
-        <div className={`text-sm ${
-          isDark ? 'text-gray-300' : 'text-gray-600'
-        } animate-pulse`}>
-          {loadingSteps[currentStep]}
-        </div>
-
-        {/* 装饰性元素 */}
-        <div className="absolute -top-10 -left-10 w-20 h-20 border border-custom-green/30 rounded-full animate-spin-slow" />
-        <div className="absolute -bottom-10 -right-10 w-16 h-16 border border-blue-500/30 rounded-full animate-spin-reverse" />
-        
-        {/* 浮动的加密货币符号 */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-          {['₿', 'Ξ', '◈', '⟐'].map((symbol, i) => (
+        {/* 底部装饰点 */}
+        <div className="flex space-x-2 mt-8">
+          {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className={`absolute text-2xl ${
-                isDark ? 'text-custom-green/20' : 'text-custom-green/30'
-              } animate-float`}
+              className={`w-2 h-2 rounded-full bg-gradient-to-r from-[#00D4AA] to-[#3B82F6] animate-pulse`}
               style={{
-                left: `${20 + i * 20}%`,
-                top: `${30 + i * 15}%`,
-                animationDelay: `${i * 0.5}s`,
-                animationDuration: `${3 + i * 0.5}s`
+                animationDelay: `${i * 0.2}s`,
+                animationDuration: '1.5s'
               }}
-            >
-              {symbol}
-            </div>
+            />
+          ))}
+        </div>
+
+        {/* 浮动粒子效果 */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div
+              key={i}
+              className={`absolute w-1 h-1 rounded-full ${
+                isDark ? 'bg-[#00D4AA]/30' : 'bg-[#00D4AA]/40'
+              } animate-ping`}
+              style={{
+                left: `${15 + Math.random() * 70}%`,
+                top: `${15 + Math.random() * 70}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${2 + Math.random() * 2}s`
+              }}
+            />
           ))}
         </div>
       </div>
-
-      {/* 底部装饰线 */}
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-custom-green to-transparent opacity-50" />
     </div>
   )
 }
