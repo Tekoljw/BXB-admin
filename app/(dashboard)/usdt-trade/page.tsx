@@ -21,6 +21,18 @@ export default function USDTTradePage() {
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
   const [purchaseAmount, setPurchaseAmount] = useState("")
   const [otcAmount, setOtcAmount] = useState("")
+  const [showTradeModal, setShowTradeModal] = useState(false)
+  const [showPublishModal, setShowPublishModal] = useState(false)
+  const [selectedMerchant, setSelectedMerchant] = useState<any>(null)
+  const [tradeType, setTradeType] = useState<"buy" | "sell">("buy")
+  const [tradeAmount, setTradeAmount] = useState("")
+  const [totalPrice, setTotalPrice] = useState("")
+  const [publishOrderType, setPublishOrderType] = useState<"buy" | "sell">("buy")
+  const [publishPrice, setPublishPrice] = useState("")
+  const [publishMinAmount, setPublishMinAmount] = useState("")
+  const [publishMaxAmount, setPublishMaxAmount] = useState("")
+  const [publishPayments, setPublishPayments] = useState<string[]>([])
+  const [publishPeriod, setPublishPeriod] = useState("24小时")
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -256,6 +268,42 @@ export default function USDTTradePage() {
     setIsLoading(false)
   }
 
+  // 打开交易弹窗
+  const handleOpenTradeModal = (merchant: any, type: "buy" | "sell") => {
+    setSelectedMerchant(merchant)
+    setTradeType(type)
+    setTradeAmount("")
+    setTotalPrice("")
+    setShowTradeModal(true)
+  }
+
+  // 关闭交易弹窗
+  const handleCloseTradeModal = () => {
+    setShowTradeModal(false)
+    setSelectedMerchant(null)
+  }
+
+  // 打开发布订单弹窗
+  const handleOpenPublishModal = () => {
+    setShowPublishModal(true)
+    setPublishPrice("")
+    setPublishMinAmount("")
+    setPublishMaxAmount("")
+    setPublishPayments([])
+  }
+
+  // 关闭发布订单弹窗
+  const handleClosePublishModal = () => {
+    setShowPublishModal(false)
+  }
+
+  // 计算总价
+  const calculateTotal = (amount: string, price: string) => {
+    const amountNum = parseFloat(amount) || 0
+    const priceNum = parseFloat(price) || 0
+    return (amountNum * priceNum).toFixed(2)
+  }
+
   const displayedMerchants = filteredMerchants.slice(0, displayCount)
   const hasMore = displayCount < filteredMerchants.length
 
@@ -269,44 +317,54 @@ export default function USDTTradePage() {
           <div className="col-span-3">
             <div className={`${cardStyle} rounded-lg p-4`}>
               
-              {/* 买入/卖出切换 */}
-              <div className="relative mb-4">
-                <div className="flex bg-gray-200 dark:bg-[#252842] rounded-md p-1">
-                  {/* 滑动背景 */}
-                  <div
-                    className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${
-                      activeTab === "买入USDT" || activeTab === "买入" ? "bg-custom-green left-1" : "bg-red-500 left-1/2"
-                    }`}
-                  />
+              {/* 买入/卖出切换和发布订单 */}
+              <div className="mb-4 space-y-3">
+                <div className="relative">
+                  <div className="flex bg-gray-200 dark:bg-[#252842] rounded-md p-1">
+                    {/* 滑动背景 */}
+                    <div
+                      className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${
+                        activeTab === "买入USDT" || activeTab === "买入" ? "bg-custom-green left-1" : "bg-red-500 left-1/2"
+                      }`}
+                    />
 
-                  {/* 买入按钮 */}
-                  <button
-                    onClick={() => setActiveTab("买入USDT")}
-                    className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
-                      activeTab === "买入USDT" || activeTab === "买入"
-                        ? "text-white"
-                        : isDark
-                          ? "text-gray-400 hover:text-white"
-                          : "text-gray-600 hover:text-gray-800"
-                    }`}
-                  >
-                    买入USDT
-                  </button>
+                    {/* 买入按钮 */}
+                    <button
+                      onClick={() => setActiveTab("买入USDT")}
+                      className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
+                        activeTab === "买入USDT" || activeTab === "买入"
+                          ? "text-white"
+                          : isDark
+                            ? "text-gray-400 hover:text-white"
+                            : "text-gray-600 hover:text-gray-800"
+                      }`}
+                    >
+                      买入USDT
+                    </button>
 
-                  {/* 卖出按钮 */}
-                  <button
-                    onClick={() => setActiveTab("卖出USDT")}
-                    className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
-                      activeTab === "卖出USDT" || activeTab === "卖出"
-                        ? "text-white"
-                        : isDark
-                          ? "text-gray-400 hover:text-white"
-                          : "text-gray-600 hover:text-gray-800"
-                    }`}
-                  >
-                    卖出USDT
-                  </button>
+                    {/* 卖出按钮 */}
+                    <button
+                      onClick={() => setActiveTab("卖出USDT")}
+                      className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
+                        activeTab === "卖出USDT" || activeTab === "卖出"
+                          ? "text-white"
+                          : isDark
+                            ? "text-gray-400 hover:text-white"
+                            : "text-gray-600 hover:text-gray-800"
+                      }`}
+                    >
+                      卖出USDT
+                    </button>
+                  </div>
                 </div>
+
+                {/* 发布订单按钮 */}
+                <button
+                  onClick={handleOpenPublishModal}
+                  className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all"
+                >
+                  发布订单
+                </button>
               </div>
 
               {/* 法币选择下拉框 */}
@@ -686,11 +744,14 @@ export default function USDTTradePage() {
                           >
                             {merchant.isFriend ? <MessageCircle className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
                           </button>
-                          <button className={`px-3 py-1.5 rounded text-xs font-medium transition-all h-8 flex items-center justify-center ${
-                            activeTab.includes("买入") 
-                              ? "bg-custom-green text-white hover:bg-custom-green/90" 
-                              : "bg-red-500 text-white hover:bg-red-600"
-                          }`}>
+                          <button 
+                            className={`px-3 py-1.5 rounded text-xs font-medium transition-all h-8 flex items-center justify-center ${
+                              activeTab.includes("买入") 
+                                ? "bg-custom-green text-white hover:bg-custom-green/90" 
+                                : "bg-red-500 text-white hover:bg-red-600"
+                            }`}
+                            onClick={() => handleOpenTradeModal(merchant, activeTab.includes("买入") ? "buy" : "sell")}
+                          >
                             {activeTab.includes("买入") ? "买入" : "卖出"}
                           </button>
                         </div>
@@ -898,6 +959,282 @@ export default function USDTTradePage() {
           </div>
         </div>
       </div>
+
+      {/* 交易弹窗 */}
+      {showTradeModal && selectedMerchant && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={handleCloseTradeModal}></div>
+          <div className={`absolute right-0 top-0 h-full w-96 transform transition-transform duration-300 ${
+            isDark ? "bg-[#1a1c2e]" : "bg-white"
+          } shadow-xl`}>
+            <div className="p-6 h-full overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                  {tradeType === "buy" ? "买入 USDT" : "卖出 USDT"}
+                </h2>
+                <button onClick={handleCloseTradeModal} className={`p-1 ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
+                  ×
+                </button>
+              </div>
+
+              {/* 商家信息 */}
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <span className={`font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
+                      {selectedMerchant.name}
+                    </span>
+                    {selectedMerchant.verified && (
+                      <Shield className="w-4 h-4 text-blue-500" />
+                    )}
+                  </div>
+                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                    {selectedMerchant.rating}★ • {selectedMerchant.orders}单 • 1分钟响应
+                  </div>
+                </div>
+              </div>
+
+              {/* 交易信息 */}
+              <div className="space-y-4 mb-6">
+                <div className="flex justify-between">
+                  <span className={isDark ? "text-gray-400" : "text-gray-600"}>单价</span>
+                  <span className={`font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                    ¥{selectedMerchant.price}/USDT
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className={isDark ? "text-gray-400" : "text-gray-600"}>限额</span>
+                  <span className={isDark ? "text-white" : "text-gray-900"}>
+                    ¥{selectedMerchant.limit}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className={isDark ? "text-gray-400" : "text-gray-600"}>库存</span>
+                  <span className={isDark ? "text-white" : "text-gray-900"}>
+                    {tradeType === "buy" ? "无限制 USDT" : "48,500 USDT"}
+                  </span>
+                </div>
+              </div>
+
+              {/* 交易数量输入 */}
+              <div className="mb-6">
+                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  {tradeType === "buy" ? "买入数量 (USDT)" : "卖出数量 (USDT)"}
+                </label>
+                <input
+                  type="text"
+                  placeholder={tradeType === "buy" ? "最少 500" : "最少 100"}
+                  value={tradeAmount}
+                  onChange={(e) => {
+                    setTradeAmount(e.target.value)
+                    setTotalPrice(calculateTotal(e.target.value, selectedMerchant.price))
+                  }}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                    isDark 
+                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                      : "bg-white border-gray-300 text-gray-900"
+                  }`}
+                />
+                <div className={`text-sm mt-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                  总价: ¥{totalPrice || "0.00"}
+                </div>
+              </div>
+
+              {/* 支付方式 */}
+              <div className="mb-6">
+                <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  支付方式
+                </label>
+                <div className="space-y-2">
+                  {selectedMerchant.paymentMethods.slice(0, 3).map((method: string, index: number) => (
+                    <div key={index} className={`p-3 border rounded-lg flex items-center space-x-2 ${
+                      isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"
+                    }`}>
+                      {getPaymentIcon(method)}
+                      <span className={isDark ? "text-white" : "text-gray-900"}>{method}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button className={`w-full py-3 rounded-lg font-medium transition-all ${
+                tradeType === "buy"
+                  ? "bg-custom-green text-white hover:bg-custom-green/90"
+                  : "bg-red-500 text-white hover:bg-red-600"
+              }`}>
+                下一步
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 发布订单弹窗 */}
+      {showPublishModal && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={handleClosePublishModal}></div>
+          <div className={`absolute right-0 top-0 h-full w-96 transform transition-transform duration-300 ${
+            isDark ? "bg-[#1a1c2e]" : "bg-white"
+          } shadow-xl`}>
+            <div className="p-6 h-full overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                  发布订单
+                </h2>
+                <button onClick={handleClosePublishModal} className={`p-1 ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
+                  ×
+                </button>
+              </div>
+
+              {/* 订单类型 */}
+              <div className="mb-6">
+                <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  订单类型
+                </label>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setPublishOrderType("buy")}
+                    className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                      publishOrderType === "buy"
+                        ? "bg-custom-green text-white"
+                        : isDark 
+                          ? "bg-[#252842] text-gray-300 border border-[#3a3d4a]"
+                          : "bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    买入USDT
+                  </button>
+                  <button
+                    onClick={() => setPublishOrderType("sell")}
+                    className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                      publishOrderType === "sell"
+                        ? "bg-red-500 text-white"
+                        : isDark 
+                          ? "bg-[#252842] text-gray-300 border border-[#3a3d4a]"
+                          : "bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    卖出USDT
+                  </button>
+                </div>
+              </div>
+
+              {/* 价格 */}
+              <div className="mb-4">
+                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  价格 (CNY)
+                </label>
+                <input
+                  type="text"
+                  placeholder="输入单价"
+                  value={publishPrice}
+                  onChange={(e) => setPublishPrice(e.target.value)}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                    isDark 
+                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                      : "bg-white border-gray-300 text-gray-900"
+                  }`}
+                />
+              </div>
+
+              {/* 金额范围 */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                    最小金额 (CNY)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="最小金额"
+                    value={publishMinAmount}
+                    onChange={(e) => setPublishMinAmount(e.target.value)}
+                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                      isDark 
+                        ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    }`}
+                  />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                    最大金额 (CNY)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="最大金额"
+                    value={publishMaxAmount}
+                    onChange={(e) => setPublishMaxAmount(e.target.value)}
+                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                      isDark 
+                        ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    }`}
+                  />
+                </div>
+              </div>
+
+              {/* 支付方式选择 */}
+              <div className="mb-4">
+                <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  支付方式
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {["支付宝", "微信", "银行卡", "现金"].map((method) => (
+                    <button
+                      key={method}
+                      onClick={() => {
+                        if (publishPayments.includes(method)) {
+                          setPublishPayments(publishPayments.filter(p => p !== method))
+                        } else {
+                          setPublishPayments([...publishPayments, method])
+                        }
+                      }}
+                      className={`p-3 border rounded-lg flex items-center justify-center space-x-2 transition-all ${
+                        publishPayments.includes(method)
+                          ? "border-custom-green bg-green-50"
+                          : isDark 
+                            ? "border-[#3a3d4a] bg-[#252842]"
+                            : "border-gray-200 bg-gray-50"
+                      }`}
+                    >
+                      {getPaymentIcon(method)}
+                      <span className={publishPayments.includes(method) ? "text-custom-green" : isDark ? "text-white" : "text-gray-900"}>
+                        {method}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 要求担保周期 */}
+              <div className="mb-6">
+                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  要求担保周期
+                </label>
+                <select
+                  value={publishPeriod}
+                  onChange={(e) => setPublishPeriod(e.target.value)}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                    isDark 
+                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                      : "bg-white border-gray-300 text-gray-900"
+                  }`}
+                >
+                  <option value="24小时">24小时</option>
+                  <option value="12小时">12小时</option>
+                  <option value="6小时">6小时</option>
+                  <option value="3小时">3小时</option>
+                </select>
+              </div>
+
+              <button className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all">
+                发布订单
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
