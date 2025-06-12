@@ -17,6 +17,7 @@ import {
   Wallet,
   ShoppingBag,
   Share2,
+  Coins,
 } from "lucide-react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
@@ -217,7 +218,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? t.usdtTrade : undefined}
             >
-              <DollarSign className="h-5 w-5 md:h-5 md:w-5" />
+              <Coins className="h-5 w-5 md:h-5 md:w-5" />
               <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.usdtTrade}</span>
             </button>
           </li>
