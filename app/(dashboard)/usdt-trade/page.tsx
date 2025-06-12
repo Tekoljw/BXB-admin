@@ -23,8 +23,10 @@ export default function USDTTradePage() {
   const [otcAmount, setOtcAmount] = useState("")
   const [showTradeModal, setShowTradeModal] = useState(false)
   const [tradeModalAnimating, setTradeModalAnimating] = useState(false)
+  const [tradeModalClosing, setTradeModalClosing] = useState(false)
   const [showPublishModal, setShowPublishModal] = useState(false)
   const [publishModalAnimating, setPublishModalAnimating] = useState(false)
+  const [publishModalClosing, setPublishModalClosing] = useState(false)
   const [selectedMerchant, setSelectedMerchant] = useState<any>(null)
   const [tradeType, setTradeType] = useState<"buy" | "sell">("buy")
   const [tradeAmount, setTradeAmount] = useState("")
@@ -272,32 +274,39 @@ export default function USDTTradePage() {
 
   // 打开交易弹窗
   const handleOpenTradeModal = (merchant: any, type: "buy" | "sell") => {
+    if (tradeModalClosing) return
     setSelectedMerchant(merchant)
     setTradeType(type)
     setTradeAmount("")
     setTotalPrice("")
+    setTradeModalClosing(false)
     setShowTradeModal(true)
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       setTradeModalAnimating(true)
-    }, 10)
+    })
   }
 
   // 关闭交易弹窗
   const handleCloseTradeModal = () => {
+    if (tradeModalClosing) return
+    setTradeModalClosing(true)
     setTradeModalAnimating(false)
     setTimeout(() => {
       setShowTradeModal(false)
       setSelectedMerchant(null)
+      setTradeModalClosing(false)
     }, 300)
   }
 
   // 打开发布订单弹窗
   const handleOpenPublishModal = () => {
+    if (publishModalClosing) return
     console.log('Opening publish modal')
+    setPublishModalClosing(false)
     setShowPublishModal(true)
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       setPublishModalAnimating(true)
-    }, 10)
+    })
     setPublishPrice("")
     setPublishMinAmount("")
     setPublishMaxAmount("")
@@ -307,9 +316,12 @@ export default function USDTTradePage() {
 
   // 关闭发布订单弹窗
   const handleClosePublishModal = () => {
+    if (publishModalClosing) return
+    setPublishModalClosing(true)
     setPublishModalAnimating(false)
     setTimeout(() => {
       setShowPublishModal(false)
+      setPublishModalClosing(false)
     }, 300)
   }
 
