@@ -499,52 +499,51 @@ export default function USDTTradePage() {
                   {/* 商家卡片列表 */}
                   {filteredMerchants.map((merchant, index) => (
                     <div key={index} className="p-4 hover:bg-gray-50 dark:hover:bg-[#252842] transition-all">
-                      {/* 卡片布局 - 紧凑型设计 */}
-                      <div className="flex items-center justify-between">
-                        {/* 左侧：商家信息和交易详情 */}
-                        <div className="flex items-center space-x-4 flex-1">
-                          {/* 头像和基本信息 */}
-                          <div className="flex items-center space-x-3">
-                            <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center">
-                              <span className="text-xs font-bold text-blue-600 dark:text-blue-300">
-                                {merchant.name.charAt(0)}
+                      {/* 卡片布局 - 对齐设计 */}
+                      <div className="grid grid-cols-12 gap-4 items-center">
+                        {/* 商家信息 */}
+                        <div className="col-span-3 flex items-center space-x-3">
+                          <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center">
+                            <span className="text-xs font-bold text-blue-600 dark:text-blue-300">
+                              {merchant.name.charAt(0)}
+                            </span>
+                          </div>
+                          <div>
+                            <div className="flex items-center space-x-1">
+                              <span className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {merchant.name}
                               </span>
+                              {merchant.verified && (
+                                <Shield className="w-3 h-3 text-blue-500" />
+                              )}
                             </div>
-                            <div>
-                              <div className="flex items-center space-x-1">
-                                <span className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                                  {merchant.name}
-                                </span>
-                                {merchant.verified && (
-                                  <Shield className="w-3 h-3 text-blue-500" />
-                                )}
+                            <div className="flex items-center space-x-2 text-xs text-gray-500">
+                              <div className="flex items-center">
+                                <Star className="w-3 h-3 text-yellow-400 mr-1" />
+                                {merchant.rating}
                               </div>
-                              <div className="flex items-center space-x-2 text-xs text-gray-500">
-                                <div className="flex items-center">
-                                  <Star className="w-3 h-3 text-yellow-400 mr-1" />
-                                  {merchant.rating}
-                                </div>
-                                <span>•</span>
-                                <span>{merchant.orders}单</span>
-                              </div>
+                              <span>•</span>
+                              <span>{merchant.orders}单</span>
                             </div>
                           </div>
+                        </div>
 
-                          {/* 价格和限额 */}
-                          <div className="flex items-center space-x-6">
-                            <div>
-                              <div className="text-lg font-bold text-custom-green">¥{merchant.price}</div>
-                              <div className="text-xs text-gray-400">{merchant.responseTime}</div>
-                            </div>
-                            <div>
-                              <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
-                                ¥{merchant.limit}
-                              </div>
-                              <div className="text-xs text-blue-600">{merchant.note}</div>
-                            </div>
+                        {/* 价格 */}
+                        <div className="col-span-2">
+                          <div className="text-lg font-bold text-custom-green">¥{merchant.price}</div>
+                          <div className="text-xs text-gray-400">{merchant.responseTime}</div>
+                        </div>
+
+                        {/* 限额 */}
+                        <div className="col-span-2">
+                          <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
+                            ¥{merchant.limit}
                           </div>
+                          <div className="text-xs text-blue-600">{merchant.note}</div>
+                        </div>
 
-                          {/* 支付方式 */}
+                        {/* 支付方式 */}
+                        <div className="col-span-3">
                           <div className="flex flex-wrap gap-1">
                             {merchant.paymentMethods.slice(0, 2).map((method, index) => (
                               <span 
@@ -560,8 +559,8 @@ export default function USDTTradePage() {
                           </div>
                         </div>
 
-                        {/* 右侧：操作按钮 */}
-                        <div className="flex items-center space-x-2 ml-4">
+                        {/* 操作按钮 */}
+                        <div className="col-span-2 flex items-center justify-end space-x-2">
                           <button 
                             className="bg-black text-white px-2 py-1.5 rounded text-xs hover:bg-gray-800 transition-all flex items-center justify-center"
                             onClick={() => {
