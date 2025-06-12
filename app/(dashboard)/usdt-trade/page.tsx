@@ -57,7 +57,8 @@ export default function USDTTradePage() {
       limit: "500 - 100000",
       paymentMethods: ["现金交易", "银行卡", "支付宝"],
       responseTime: "剩余 无限制",
-      completionRate: "99.2%"
+      completionRate: "99.2%",
+      isFriend: true
     },
     {
       name: "SafeTrader", 
@@ -69,7 +70,8 @@ export default function USDTTradePage() {
       limit: "1000 - 90000",
       paymentMethods: ["银行卡", "微信", "现金上门"],
       responseTime: "剩余 无限制",
-      completionRate: "98.8%"
+      completionRate: "98.8%",
+      isFriend: false
     },
     {
       name: "CryptoExpert",
@@ -81,7 +83,8 @@ export default function USDTTradePage() {
       limit: "200 - 50000",
       paymentMethods: ["支付宝", "微信"],
       responseTime: "剩余 无限制",
-      completionRate: "99.5%"
+      completionRate: "99.5%",
+      isFriend: false
     }
   ]
 
@@ -576,7 +579,19 @@ export default function USDTTradePage() {
                         {/* 操作 */}
                         <div className="col-span-1 flex items-center space-x-2">
                           <button className="bg-custom-green text-white px-3 py-1 rounded text-xs font-medium hover:bg-custom-green/90 transition-all">
-                            {activeTab}
+                            {activeTab.includes("买入") ? "买入" : "卖出"}
+                          </button>
+                          <button 
+                            className="bg-black text-white p-1.5 rounded text-xs hover:bg-gray-800 transition-all"
+                            onClick={() => {
+                              if (merchant.isFriend) {
+                                console.log('开始对话:', merchant.name)
+                              } else {
+                                console.log('添加好友:', merchant.name)
+                              }
+                            }}
+                          >
+                            {merchant.isFriend ? <MessageSquare className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
                           </button>
                         </div>
                       </div>
