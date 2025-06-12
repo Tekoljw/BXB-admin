@@ -495,81 +495,40 @@ export default function USDTTradePage() {
               
               {/* C2C模式 */}
               {tradeMode === "C2C" && (
-                <div>
-                  {/* 表格头部 */}
-                  <div className={`grid grid-cols-12 gap-4 p-4 border-b text-sm font-medium text-gray-500 ${
-                    isDark ? "border-[#3a3d4a]" : "border-gray-200"
-                  }`}>
-                    <div className="col-span-3">商家</div>
-                    <div className="col-span-2">价格(CNY)</div>
-                    <div className="col-span-2">限额</div>
-                    <div className="col-span-2">支付方式</div>
-                    <div className="col-span-3">操作</div>
-                  </div>
-
-                  {/* 商家列表 */}
-                  <div className="divide-y divide-gray-200 dark:divide-[#3a3d4a]">
-                    {filteredMerchants.map((merchant, index) => (
-                      <div key={index} className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-50 dark:hover:bg-[#252842] transition-all">
-                        
-                        {/* 商家信息 */}
-                        <div className="col-span-3 flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                            <span className="text-sm font-bold">
+                <div className="space-y-4">
+                  {/* 商家卡片列表 */}
+                  {filteredMerchants.map((merchant, index) => (
+                    <div key={index} className={`${cardStyle} rounded-lg p-4 hover:shadow-lg transition-all`}>
+                      {/* 卡片头部 - 商家信息和操作按钮 */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center">
+                            <span className="text-sm font-bold text-blue-600 dark:text-blue-300">
                               {merchant.name.charAt(0)}
                             </span>
                           </div>
                           <div>
-                            <div className="flex items-center space-x-2">
-                              <span className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                            <div className="flex items-center space-x-1">
+                              <span className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
                                 {merchant.name}
                               </span>
                               {merchant.verified && (
                                 <Shield className="w-4 h-4 text-blue-500" />
                               )}
                             </div>
-                            <div className="flex items-center space-x-1 text-xs">
-                              <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                              <span className="text-yellow-600">{merchant.rating}</span>
-                              <span className="text-gray-400">({merchant.orders}单)</span>
+                            <div className="flex items-center space-x-2 text-xs text-gray-500">
+                              <div className="flex items-center">
+                                <Star className="w-3 h-3 text-yellow-400 mr-1" />
+                                {merchant.rating}
+                              </div>
+                              <span>•</span>
+                              <span>{merchant.orders}单</span>
                             </div>
                           </div>
                         </div>
 
-                        {/* 价格 */}
-                        <div className="col-span-2 flex flex-col justify-center">
-                          <div className="text-lg font-bold text-custom-green">
-                            ¥{merchant.price}
-                          </div>
-                          <div className="text-xs text-gray-400">
-                            {merchant.responseTime}
-                          </div>
-                        </div>
-
-                        {/* 限额 */}
-                        <div className="col-span-2 flex flex-col justify-center">
-                          <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
-                            ¥{merchant.limit}
-                          </div>
-                          <div className="text-xs text-blue-600">
-                            {merchant.note}
-                          </div>
-                        </div>
-
-                        {/* 支付方式 */}
-                        <div className="col-span-2 flex flex-wrap gap-1">
-                          {merchant.paymentMethods.map((method, index) => (
-                            <span 
-                              key={index}
-                              className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full"
-                            >
-                              {method}
-                            </span>
-                          ))}
-                        </div>
-
-                        {/* 操作 */}
-                        <div className="col-span-3 flex items-center justify-end space-x-2 pr-2">
+                        {/* 操作按钮 */}
+                        <div className="flex items-center space-x-2">
                           <button 
                             className="bg-black text-white px-2 py-2 rounded text-xs hover:bg-gray-800 transition-all h-8 flex items-center justify-center"
                             onClick={() => {
@@ -587,8 +546,42 @@ export default function USDTTradePage() {
                           </button>
                         </div>
                       </div>
-                    ))}
-                  </div>
+
+                      {/* 卡片主体 - 交易信息 */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {/* 价格信息 */}
+                        <div className="text-center sm:text-left">
+                          <div className="text-xs text-gray-500 mb-1">价格</div>
+                          <div className="text-xl font-bold text-custom-green">¥{merchant.price}</div>
+                          <div className="text-xs text-gray-400">{merchant.responseTime}</div>
+                        </div>
+
+                        {/* 限额信息 */}
+                        <div className="text-center sm:text-left">
+                          <div className="text-xs text-gray-500 mb-1">限额</div>
+                          <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                            ¥{merchant.limit}
+                          </div>
+                          <div className="text-xs text-blue-600">{merchant.note}</div>
+                        </div>
+
+                        {/* 支付方式 */}
+                        <div className="text-center sm:text-left">
+                          <div className="text-xs text-gray-500 mb-1">支付方式</div>
+                          <div className="flex flex-wrap gap-1 justify-center sm:justify-start">
+                            {merchant.paymentMethods.map((method, index) => (
+                              <span 
+                                key={index}
+                                className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full"
+                              >
+                                {method}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
 
