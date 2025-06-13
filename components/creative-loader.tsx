@@ -30,13 +30,16 @@ export default function CreativeLoader({
     <div className={`creative-loader ${className}`}>
       <style jsx>{`
         .creative-loader {
-          --path: #00D4AA;
+          --path: #000000;
           --dot: #00D4AA;
           --duration: 3s;
           width: ${size}px;
           height: ${size}px;
           position: relative;
           display: inline-block;
+          background: black;
+          border-radius: 8px;
+          padding: 8px;
           ${variant === "triangle" ? `width: ${Math.round(size * 1.09)}px;` : ""}
         }
         
