@@ -1096,9 +1096,9 @@ export default function USDTTradePage() {
                   : "translate-x-full"   // 向内模式：隐藏在右侧，从右往左滑入
             } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl ${
               isLargeScreen 
-                ? "border-l" 
+                ? "" 
                 : "absolute right-0 top-0"
-            } ${isDark ? "border-[#3a3d4a]" : "border-gray-200"}`}
+            }`}
             style={{ 
               transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
               willChange: 'transform'
@@ -1235,9 +1235,9 @@ export default function USDTTradePage() {
                   : "translate-x-full"   // 向内模式：隐藏在右侧，从右往左滑入
             } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl ${
               isLargeScreen 
-                ? "border-l" 
+                ? "" 
                 : "absolute right-0 top-0"
-            } ${isDark ? "border-[#3a3d4a]" : "border-gray-200"}`}
+            }`}
             style={{ 
               transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
               willChange: 'transform'
