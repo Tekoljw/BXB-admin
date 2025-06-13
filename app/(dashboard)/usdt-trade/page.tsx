@@ -1075,9 +1075,14 @@ export default function USDTTradePage() {
           
           <div className={`fixed z-50 overflow-hidden ${
             isLargeScreen 
-              ? "right-0 top-0 h-full" 
+              ? isOutwardMode
+                ? "top-0 h-full"
+                : "right-0 top-0 h-full"
               : "inset-0"
-          }`}>
+          }`}
+          style={{
+            right: isLargeScreen && isOutwardMode ? '384px' : (isLargeScreen ? '0' : 'auto')
+          }}>
             {/* 小屏幕模式的遮罩 */}
             {!isLargeScreen && (
               <div 
@@ -1214,9 +1219,14 @@ export default function USDTTradePage() {
           
           <div className={`fixed z-[9999] overflow-hidden ${
             isLargeScreen 
-              ? "right-0 top-0 h-full" 
+              ? isOutwardMode
+                ? "top-0 h-full"
+                : "right-0 top-0 h-full"
               : "inset-0"
-          }`}>
+          }`}
+          style={{
+            right: isLargeScreen && isOutwardMode ? '384px' : (isLargeScreen ? '0' : 'auto')
+          }}>
             {/* 小屏幕模式的遮罩 */}
             {!isLargeScreen && (
               <div 
