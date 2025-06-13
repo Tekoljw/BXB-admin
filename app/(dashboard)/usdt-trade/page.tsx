@@ -1060,7 +1060,7 @@ export default function USDTTradePage() {
                 : shouldUseOutwardMode 
                   ? "-translate-x-full"  // 向外模式：隐藏在左侧，从左往右滑出
                   : "translate-x-full"   // 向内模式：隐藏在右侧，从右往左滑入
-            } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl`}
+            } ${isDark ? "bg-[#1a1c2e]" : "bg-white"}`}
             style={{ 
               transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
               willChange: 'transform'
@@ -1182,7 +1182,7 @@ export default function USDTTradePage() {
                 : shouldUseOutwardMode 
                   ? "-translate-x-full"  // 向外模式：隐藏在左侧，从左往右滑出
                   : "translate-x-full"   // 向内模式：隐藏在右侧，从右往左滑入
-            } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl`}
+            } ${isDark ? "bg-[#1a1c2e]" : "bg-white"}`}
             style={{ 
               transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
               willChange: 'transform'
