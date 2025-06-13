@@ -999,14 +999,6 @@ export default function USDTTradePage() {
             }}
           >
             <div className="p-6 h-full overflow-y-auto">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                  {tradeType === "buy" ? "买入 USDT" : "卖出 USDT"}
-                </h2>
-                <button onClick={handleCloseTradeModal} className={`p-1 ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
-                  ×
-                </button>
-              </div>
 
               {/* 商家信息 */}
               <div className="flex items-center space-x-3 mb-6">
@@ -1115,14 +1107,6 @@ export default function USDTTradePage() {
             }}
           >
             <div className="p-6 h-full overflow-y-auto">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                  发布订单
-                </h2>
-                <button onClick={handleClosePublishModal} className={`p-1 ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
-                  ×
-                </button>
-              </div>
 
               {/* 订单类型 */}
               <div className="mb-6">
