@@ -371,11 +371,9 @@ export default function USDTTradePage() {
     return () => window.removeEventListener('resize', checkScreenSize)
   }, [])
 
-  const containerClass = `min-h-screen p-6 transition-all duration-500 ease-in-out ${isDark ? "bg-background" : "bg-gray-50"}`
-  
   return (
     <div 
-      className={containerClass}
+      className={`min-h-screen p-6 transition-all duration-500 ease-in-out ${isDark ? "bg-background" : "bg-gray-50"}`}
       style={{ 
         marginRight: isLargeScreen && (showTradeModal || showPublishModal) ? '384px' : '0px',
         transition: 'margin-right 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
@@ -1031,20 +1029,27 @@ export default function USDTTradePage() {
 
       {/* 交易弹窗 */}
       {showTradeModal && selectedMerchant && (
-        <div className={`fixed z-50 overflow-hidden ${
-          isLargeScreen 
-            ? "right-0 top-0 h-full" 
-            : "inset-0"
-        }`}>
-          {/* 点击外部区域关闭弹窗 */}
-          <div 
-            className={`absolute transition-opacity duration-500 ${
-              isLargeScreen
-                ? "inset-0 right-96" // 大屏幕：覆盖主内容区域
-                : "inset-0 bg-black bg-opacity-50" // 小屏幕：半透明遮罩
-            }`}
-            onClick={handleCloseTradeModal}
-          />
+        <>
+          {/* 点击外部区域关闭弹窗 - 大屏幕模式的透明遮罩 */}
+          {isLargeScreen && (
+            <div 
+              className="fixed inset-0 z-40"
+              onClick={handleCloseTradeModal}
+            />
+          )}
+          
+          <div className={`fixed z-50 overflow-hidden ${
+            isLargeScreen 
+              ? "right-0 top-0 h-full" 
+              : "inset-0"
+          }`}>
+            {/* 小屏幕模式的遮罩 */}
+            {!isLargeScreen && (
+              <div 
+                className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-500" 
+                onClick={handleCloseTradeModal}
+              />
+            )}
           <div 
             className={`h-full w-96 transform transition-all duration-500 ${
               tradeModalAnimating ? "translate-x-0" : "translate-x-full"
@@ -1149,25 +1154,33 @@ export default function USDTTradePage() {
               </button>
             </div>
           </div>
-        </div>
+          </div>
+        </>
       )}
 
       {/* 发布订单弹窗 */}
       {showPublishModal && (
-        <div className={`fixed z-[9999] overflow-hidden ${
-          isLargeScreen 
-            ? "right-0 top-0 h-full" 
-            : "inset-0"
-        }`}>
-          {/* 点击外部区域关闭弹窗 */}
-          <div 
-            className={`absolute transition-opacity duration-500 ${
-              isLargeScreen
-                ? "inset-0 right-96" // 大屏幕：覆盖主内容区域
-                : "inset-0 bg-black bg-opacity-50" // 小屏幕：半透明遮罩
-            }`}
-            onClick={handleClosePublishModal}
-          />
+        <>
+          {/* 点击外部区域关闭弹窗 - 大屏幕模式的透明遮罩 */}
+          {isLargeScreen && (
+            <div 
+              className="fixed inset-0 z-40"
+              onClick={handleClosePublishModal}
+            />
+          )}
+          
+          <div className={`fixed z-[9999] overflow-hidden ${
+            isLargeScreen 
+              ? "right-0 top-0 h-full" 
+              : "inset-0"
+          }`}>
+            {/* 小屏幕模式的遮罩 */}
+            {!isLargeScreen && (
+              <div 
+                className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-500" 
+                onClick={handleClosePublishModal}
+              />
+            )}
           <div 
             className={`h-full w-96 transform transition-all duration-500 ${
               publishModalAnimating ? "translate-x-0" : "translate-x-full"
@@ -1341,7 +1354,8 @@ export default function USDTTradePage() {
               </button>
             </div>
           </div>
-        </div>
+          </div>
+        </>
       )}
     </div>
   )
