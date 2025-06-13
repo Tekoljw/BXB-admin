@@ -43,6 +43,14 @@ interface Message {
   isRead: boolean
 }
 
+interface GroupMember {
+  id: string
+  name: string
+  avatar: string
+  role?: string
+  isOnline: boolean
+}
+
 export default function ChatPage() {
   const { theme } = useTheme()
   const isDark = theme === "dark"
@@ -59,10 +67,13 @@ export default function ChatPage() {
   const [showUnreadIndicator, setShowUnreadIndicator] = useState(false)
   const [inputHeight, setInputHeight] = useState(80)
   const [isResizing, setIsResizing] = useState(false)
+  const [showMemberSidebar, setShowMemberSidebar] = useState(false)
+  const [memberSidebarAnimating, setMemberSidebarAnimating] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const addMenuRef = useRef<HTMLDivElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
   const firstUnreadRef = useRef<HTMLDivElement>(null)
+  const memberSidebarRef = useRef<HTMLDivElement>(null)
 
   // 处理输入框拖拽调整高度 - 向上拖拽增加高度，向下拖拽减少高度
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -100,6 +111,20 @@ export default function ChatPage() {
     }, 200) // 等待动画完成
   }, [])
 
+  // 处理成员侧边栏显示
+  const handleShowMemberSidebar = useCallback(() => {
+    setShowMemberSidebar(true)
+    setMemberSidebarAnimating(true)
+  }, [])
+
+  // 处理成员侧边栏关闭
+  const handleCloseMemberSidebar = useCallback(() => {
+    setMemberSidebarAnimating(false)
+    setTimeout(() => {
+      setShowMemberSidebar(false)
+    }, 300) // 等待动画完成
+  }, [])
+
   // 解决闪烁问题
   useEffect(() => {
     setMounted(true)
@@ -123,6 +148,22 @@ export default function ChatPage() {
       document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [handleCloseMenu])
+
+  // 点击外部关闭成员侧边栏
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (memberSidebarRef.current && !memberSidebarRef.current.contains(event.target as Node)) {
+        handleCloseMemberSidebar()
+      }
+    }
+
+    if (showMemberSidebar) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside)
+      }
+    }
+  }, [showMemberSidebar, handleCloseMemberSidebar])
 
 
 
@@ -235,6 +276,147 @@ export default function ChatPage() {
       isOnline: false,
     },
   ]
+
+  // 群成员数据
+  const groupMembers: { [key: string]: GroupMember[] } = {
+    "contact-2": [ // BTC交易群成员
+      {
+        id: "member-1",
+        name: "群主王子",
+        avatar: "👑",
+        role: "群主",
+        isOnline: true,
+      },
+      {
+        id: "member-2", 
+        name: "Peter Pan",
+        avatar: "🧙‍♂️",
+        role: "管理员",
+        isOnline: true,
+      },
+      {
+        id: "member-3",
+        name: "依恋",
+        avatar: "🌸",
+        isOnline: false,
+      },
+      {
+        id: "member-4",
+        name: "还好",
+        avatar: "😊",
+        isOnline: true,
+      },
+      {
+        id: "member-5",
+        name: "Imt创...",
+        avatar: "🚀",
+        isOnline: true,
+      },
+      {
+        id: "member-6",
+        name: "道法自然",
+        avatar: "☯️",
+        isOnline: false,
+      },
+      {
+        id: "member-7",
+        name: "针针针...",
+        avatar: "📊",
+        isOnline: true,
+      },
+      {
+        id: "member-8",
+        name: "无为虚空",
+        avatar: "🌌",
+        isOnline: false,
+      },
+      {
+        id: "member-9",
+        name: "凯森",
+        avatar: "💼",
+        isOnline: true,
+      },
+      {
+        id: "member-10",
+        name: "Rex",
+        avatar: "🦎",
+        isOnline: true,
+      },
+      {
+        id: "member-11",
+        name: "Abraham",
+        avatar: "👨‍💻",
+        isOnline: false,
+      },
+      {
+        id: "member-12",
+        name: "雨上",
+        avatar: "🌧️",
+        isOnline: true,
+      },
+      {
+        id: "member-13",
+        name: "天空海阔",
+        avatar: "🌊",
+        isOnline: false,
+      },
+      {
+        id: "member-14",
+        name: "任平生",
+        avatar: "⚔️",
+        isOnline: true,
+      },
+      {
+        id: "member-15",
+        name: "添加",
+        avatar: "➕",
+        isOnline: false,
+      },
+    ],
+    "contact-5": [ // ETH爱好者群成员
+      {
+        id: "eth-member-1",
+        name: "ETH专家",
+        avatar: "💎",
+        role: "群主",
+        isOnline: true,
+      },
+      {
+        id: "eth-member-2",
+        name: "智能合约开发者",
+        avatar: "🔧",
+        role: "管理员", 
+        isOnline: true,
+      },
+      {
+        id: "eth-member-3",
+        name: "DeFi爱好者",
+        avatar: "🏦",
+        isOnline: false,
+      },
+      {
+        id: "eth-member-4",
+        name: "NFT收藏家",
+        avatar: "🎨",
+        isOnline: true,
+      },
+    ],
+    "contact-7": [ // DeFi研究小组成员
+      {
+        id: "defi-member-1",
+        name: "流动性专家",
+        avatar: "💧",
+        role: "群主",
+        isOnline: true,
+      },
+      {
+        id: "defi-member-2",
+        name: "收益农夫",
+        avatar: "🌾",
+        isOnline: true,
+      },
+    ],
+  }
 
   // 消息数据
   const messages: { [key: string]: Message[] } = {
@@ -564,6 +746,17 @@ export default function ChatPage() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
+                  {/* 群成员按钮 - 仅群聊显示 */}
+                  {selectedContactData.name.includes("群") && (
+                    <button
+                      onClick={handleShowMemberSidebar}
+                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                        isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                      }`}
+                    >
+                      <Users className="h-5 w-5 text-gray-400" />
+                    </button>
+                  )}
                   <button
                     className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
                       isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
