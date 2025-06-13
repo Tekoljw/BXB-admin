@@ -1258,7 +1258,7 @@ export default function USDTTradePage() {
                 </select>
               </div>
 
-              <button className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all">
+              <button className="w-full py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition-all">
                 发布订单
               </button>
             </div>
