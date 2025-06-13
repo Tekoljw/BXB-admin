@@ -358,11 +358,16 @@ export default function USDTTradePage() {
   const displayedMerchants = filteredMerchants.slice(0, displayCount)
   const hasMore = displayCount < filteredMerchants.length
 
+  const containerClass = `min-h-screen p-6 transition-all duration-300 ease-out ${isDark ? "bg-background" : "bg-gray-50"}`
+  
   return (
-    <div className={`min-h-screen p-6 ${isDark ? "bg-background" : "bg-gray-50"}`}>
-      <div className="max-w-full mx-auto">
-        {/* 主要布局 */}
-        <div className="grid grid-cols-12 gap-6">
+    <div 
+      className={containerClass}
+      style={{ marginRight: showTradeModal || showPublishModal ? '384px' : '0px' }}
+    >
+        <div className="max-w-full mx-auto">
+          {/* 主要布局 */}
+          <div className="grid grid-cols-12 gap-6">
           
           {/* 左侧筛选面板 */}
           <div className="col-span-3">
@@ -1119,15 +1124,16 @@ export default function USDTTradePage() {
 
       {/* 发布订单弹窗 */}
       {showPublishModal && (
-        <div className="fixed inset-0 z-[9999] overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300" onClick={handleClosePublishModal}></div>
+        <div className="fixed right-0 top-0 h-full z-[9999] overflow-hidden">
           <div 
-            className={`absolute right-0 top-0 h-full w-96 transform transition-all duration-300 ${
-              publishModalAnimating ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
-            } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl z-[10000]`}
+            className={`h-full w-96 transform transition-all duration-300 ${
+              publishModalAnimating ? "translate-x-0" : "translate-x-full"
+            } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl border-l ${
+              isDark ? "border-[#3a3d4a]" : "border-gray-200"
+            }`}
             style={{ 
               transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-              willChange: 'transform, opacity'
+              willChange: 'transform'
             }}
           >
             <div className="p-6 h-full overflow-y-auto">
