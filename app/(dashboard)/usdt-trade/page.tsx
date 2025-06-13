@@ -375,8 +375,8 @@ export default function USDTTradePage() {
     <div 
       className={`min-h-screen p-6 transition-all duration-500 ease-in-out ${isDark ? "bg-background" : "bg-gray-50"}`}
       style={{ 
-        marginRight: isLargeScreen && (showTradeModal || showPublishModal) ? '384px' : '0px',
-        transition: 'margin-right 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        marginLeft: isLargeScreen && (showTradeModal || showPublishModal) ? '384px' : '0px',
+        transition: 'margin-left 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
       }}
     >
         <div className="max-w-full mx-auto">
@@ -1040,7 +1040,7 @@ export default function USDTTradePage() {
           
           <div className={`fixed z-50 overflow-hidden ${
             isLargeScreen 
-              ? "right-0 top-0 h-full" 
+              ? "left-0 top-0 h-full" 
               : "inset-0"
           }`}>
             {/* 小屏幕模式的遮罩 */}
@@ -1052,11 +1052,11 @@ export default function USDTTradePage() {
             )}
           <div 
             className={`h-full w-96 transform transition-all duration-500 ${
-              tradeModalAnimating ? "translate-x-0" : "translate-x-full"
+              tradeModalAnimating ? "translate-x-0" : "-translate-x-full"
             } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl ${
               isLargeScreen 
-                ? "border-l" 
-                : "absolute right-0 top-0"
+                ? "border-r" 
+                : "absolute left-0 top-0"
             } ${isDark ? "border-[#3a3d4a]" : "border-gray-200"}`}
             style={{ 
               transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -1171,7 +1171,7 @@ export default function USDTTradePage() {
           
           <div className={`fixed z-[9999] overflow-hidden ${
             isLargeScreen 
-              ? "right-0 top-0 h-full" 
+              ? "left-0 top-0 h-full" 
               : "inset-0"
           }`}>
             {/* 小屏幕模式的遮罩 */}
@@ -1183,11 +1183,11 @@ export default function USDTTradePage() {
             )}
           <div 
             className={`h-full w-96 transform transition-all duration-500 ${
-              publishModalAnimating ? "translate-x-0" : "translate-x-full"
+              publishModalAnimating ? "translate-x-0" : "-translate-x-full"
             } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl ${
               isLargeScreen 
-                ? "border-l" 
-                : "absolute right-0 top-0"
+                ? "border-r" 
+                : "absolute left-0 top-0"
             } ${isDark ? "border-[#3a3d4a]" : "border-gray-200"}`}
             style={{ 
               transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
