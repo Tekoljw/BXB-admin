@@ -1246,6 +1246,24 @@ export default function USDTTradePage() {
                 </div>
               </div>
 
+              {/* 交易总金额 */}
+              <div className="mb-6">
+                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  交易总金额
+                </label>
+                <input
+                  type="text"
+                  placeholder="输入交易总金额"
+                  value={publishPrice}
+                  onChange={(e) => setPublishPrice(e.target.value)}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                    isDark 
+                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                      : "bg-white border-gray-300 text-gray-900"
+                  }`}
+                />
+              </div>
+
               {/* 要求担保周期 */}
               <div className="mb-6">
                 <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
