@@ -1063,10 +1063,12 @@ export default function USDTTradePage() {
       {/* 交易弹窗 */}
       {showTradeModal && selectedMerchant && (
         <>
-          {/* 点击外部区域关闭弹窗 - 大屏幕模式的透明遮罩 */}
+          {/* 点击外部区域关闭弹窗 - 大屏幕模式遮罩 */}
           {isLargeScreen && (
             <div 
-              className="fixed inset-0 z-40"
+              className={`fixed inset-0 z-40 transition-opacity duration-500 ${
+                isOutwardMode ? "" : "bg-black bg-opacity-30"
+              }`}
               onClick={handleCloseTradeModal}
             />
           )}
@@ -1198,10 +1200,12 @@ export default function USDTTradePage() {
       {/* 发布订单弹窗 */}
       {showPublishModal && (
         <>
-          {/* 点击外部区域关闭弹窗 - 大屏幕模式的透明遮罩 */}
+          {/* 点击外部区域关闭弹窗 - 大屏幕模式遮罩 */}
           {isLargeScreen && (
             <div 
-              className="fixed inset-0 z-40"
+              className={`fixed inset-0 z-40 transition-opacity duration-500 ${
+                isOutwardMode ? "" : "bg-black bg-opacity-30"
+              }`}
               onClick={handleClosePublishModal}
             />
           )}
@@ -1220,7 +1224,11 @@ export default function USDTTradePage() {
             )}
           <div 
             className={`h-full w-96 transform transition-all duration-500 ${
-              publishModalAnimating ? "translate-x-0" : "translate-x-full"
+              publishModalAnimating 
+                ? "translate-x-0" 
+                : isOutwardMode 
+                  ? "translate-x-full"  // 向外模式：隐藏在右侧外部
+                  : "translate-x-full"  // 向内模式：也是从右侧滑入，但不推挤内容
             } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl ${
               isLargeScreen 
                 ? "border-l" 
