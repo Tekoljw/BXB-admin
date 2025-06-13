@@ -38,6 +38,7 @@ export default function USDTTradePage() {
   const [publishPayments, setPublishPayments] = useState<string[]>([])
   const [publishPeriod, setPublishPeriod] = useState("24小时")
   const [customPayment, setCustomPayment] = useState("")
+  const [publishCurrency, setPublishCurrency] = useState("CNY")
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -74,6 +75,19 @@ export default function USDTTradePage() {
     { code: "KRW", name: "韩元", symbol: "₩" }
   ]
 
+  const paymentMethodsByCurrency: Record<string, string[]> = {
+    "CNY": ["现金上门", "支付宝", "微信支付", "银行转账"],
+    "USD": ["现金上门", "PayPal", "银行转账", "Western Union"],
+    "EUR": ["现金上门", "银行转账", "SEPA", "PayPal"],
+    "HKD": ["现金上门", "银行转账", "八达通", "支付宝HK"],
+    "JPY": ["现金上门", "银行转账", "Line Pay", "PayPay"],
+    "KRW": ["现金上门", "银行转账", "카카오페이", "네이버페이"]
+  }
+
+  const getCurrentPaymentMethods = () => {
+    return paymentMethodsByCurrency[publishCurrency] || paymentMethodsByCurrency["CNY"]
+  }
+
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -87,6 +101,14 @@ export default function USDTTradePage() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
+
+  // Auto-select first payment method when currency changes
+  useEffect(() => {
+    const currentMethods = getCurrentPaymentMethods()
+    if (currentMethods.length > 0 && !publishPayments.some(method => currentMethods.includes(method))) {
+      setPublishPayments([currentMethods[0]])
+    }
+  }, [publishCurrency])
 
 
   const cardStyle = isDark
@@ -1144,34 +1166,21 @@ export default function USDTTradePage() {
                 <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
                   法币币种
                 </label>
-                <select className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
-                  isDark 
-                    ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}>
-                  <option value="CNY">CNY - 人民币</option>
-                  <option value="USD">USD - 美元</option>
-                  <option value="EUR">EUR - 欧元</option>
-                  <option value="HKD">HKD - 港币</option>
-                </select>
-              </div>
-
-              {/* 交易总金额 */}
-              <div className="mb-4">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  交易总金额
-                </label>
-                <input
-                  type="text"
-                  placeholder="输入交易总金额"
-                  value={publishPrice}
-                  onChange={(e) => setPublishPrice(e.target.value)}
+                <select 
+                  value={publishCurrency}
+                  onChange={(e) => setPublishCurrency(e.target.value)}
                   className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
                     isDark 
                       ? "bg-[#252842] border-[#3a3d4a] text-white" 
                       : "bg-white border-gray-300 text-gray-900"
-                  }`}
-                />
+                  }`}>
+                  <option value="CNY">CNY - 人民币</option>
+                  <option value="USD">USD - 美元</option>
+                  <option value="EUR">EUR - 欧元</option>
+                  <option value="HKD">HKD - 港币</option>
+                  <option value="JPY">JPY - 日元</option>
+                  <option value="KRW">KRW - 韩元</option>
+                </select>
               </div>
 
               {/* 支付方式选择 */}
@@ -1180,7 +1189,7 @@ export default function USDTTradePage() {
                   支付方式
                 </label>
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {["支付宝", "微信", "银行卡", "现金交易"].map((method) => (
+                  {getCurrentPaymentMethods().map((method) => (
                     <button
                       key={method}
                       onClick={() => {
