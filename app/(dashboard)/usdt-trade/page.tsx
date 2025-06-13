@@ -360,6 +360,8 @@ export default function USDTTradePage() {
 
   // 检测屏幕宽度，决定弹窗行为
   const [isLargeScreen, setIsLargeScreen] = useState(true)
+  // 控制弹窗模式：true=向外弹出(挤压内容), false=向内弹出(遮盖内容)
+  const [isOutwardMode, setIsOutwardMode] = useState(true)
   
   useEffect(() => {
     const checkScreenSize = () => {
@@ -375,7 +377,7 @@ export default function USDTTradePage() {
     <div 
       className={`min-h-screen p-6 transition-all duration-500 ease-in-out ${isDark ? "bg-background" : "bg-gray-50"}`}
       style={{ 
-        marginRight: isLargeScreen && (showTradeModal || showPublishModal) ? '384px' : '0px',
+        marginRight: isLargeScreen && isOutwardMode && (showTradeModal || showPublishModal) ? '384px' : '0px',
         transition: 'margin-right 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
       }}
     >
@@ -387,6 +389,37 @@ export default function USDTTradePage() {
           <div className="col-span-3">
             <div className={`${cardStyle} rounded-lg p-4`}>
               
+              {/* 弹窗模式切换 */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">弹窗模式</label>
+                <div className="flex bg-gray-200 dark:bg-[#252842] rounded-md p-1">
+                  <button
+                    onClick={() => setIsOutwardMode(true)}
+                    className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors duration-300 ${
+                      isOutwardMode
+                        ? "bg-custom-green text-white"
+                        : isDark
+                          ? "text-gray-400 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    向外弹出
+                  </button>
+                  <button
+                    onClick={() => setIsOutwardMode(false)}
+                    className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors duration-300 ${
+                      !isOutwardMode
+                        ? "bg-custom-green text-white"
+                        : isDark
+                          ? "text-gray-400 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    向内弹出
+                  </button>
+                </div>
+              </div>
+
               {/* 买入/卖出切换和发布订单 */}
               <div className="mb-4 space-y-3">
                 <div className="relative">
@@ -1052,7 +1085,11 @@ export default function USDTTradePage() {
             )}
           <div 
             className={`h-full w-96 transform transition-all duration-500 ${
-              tradeModalAnimating ? "translate-x-0" : "translate-x-full"
+              tradeModalAnimating 
+                ? "translate-x-0" 
+                : isOutwardMode 
+                  ? "translate-x-full"  // 向外模式：隐藏在右侧外部
+                  : "translate-x-full"  // 向内模式：也是从右侧滑入，但不推挤内容
             } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl ${
               isLargeScreen 
                 ? "border-l" 
