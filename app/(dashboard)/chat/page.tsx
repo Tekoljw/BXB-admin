@@ -100,7 +100,10 @@ export default function ChatPage() {
   // 处理菜单显示
   const handleShowMenu = useCallback(() => {
     setShowAddMenu(true)
-    setIsMenuAnimating(true)
+    // 使用 requestAnimationFrame 确保立即响应
+    requestAnimationFrame(() => {
+      setIsMenuAnimating(true)
+    })
   }, [])
 
   // 处理菜单关闭
@@ -108,7 +111,7 @@ export default function ChatPage() {
     setIsMenuAnimating(false)
     setTimeout(() => {
       setShowAddMenu(false)
-    }, 200) // 等待动画完成
+    }, 150) // 减少等待时间
   }, [])
 
   // 处理成员侧边栏显示
@@ -596,7 +599,7 @@ export default function ChatPage() {
               {/* 弹出菜单 */}
               {showAddMenu && (
                 <div
-                  className={`absolute top-full right-0 mt-2 w-48 ${cardStyle} rounded-lg shadow-lg z-50 transition-all duration-200 origin-top-right ${
+                  className={`absolute top-full right-0 mt-2 w-56 ${cardStyle} rounded-lg shadow-lg z-50 transition-all duration-150 origin-top-right ${
                     isMenuAnimating ? "opacity-100 scale-100" : "opacity-0 scale-95"
                   }`}
                 >
@@ -608,7 +611,7 @@ export default function ChatPage() {
                           item.action()
                           handleCloseMenu()
                         }}
-                        className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-150 ${
+                        className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-100 ${
                           isDark
                             ? "text-white hover:bg-[#252842] hover:translate-x-1"
                             : "text-gray-800 hover:bg-gray-100 hover:translate-x-1"
