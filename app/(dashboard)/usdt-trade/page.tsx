@@ -1088,10 +1088,12 @@ export default function USDTTradePage() {
           <div 
             className={`h-full w-96 transform transition-all duration-500 ${
               tradeModalAnimating 
-                ? "translate-x-0" 
+                ? isOutwardMode 
+                  ? "translate-x-0"      // 向外模式：显示在正常位置
+                  : "translate-x-0"      // 向内模式：显示在正常位置
                 : isOutwardMode 
-                  ? "translate-x-full"  // 向外模式：隐藏在右侧外部
-                  : "translate-x-full"  // 向内模式：也是从右侧滑入，但不推挤内容
+                  ? "-translate-x-full"  // 向外模式：隐藏在左侧，从左往右滑出
+                  : "translate-x-full"   // 向内模式：隐藏在右侧，从右往左滑入
             } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl ${
               isLargeScreen 
                 ? "border-l" 
@@ -1225,10 +1227,12 @@ export default function USDTTradePage() {
           <div 
             className={`h-full w-96 transform transition-all duration-500 ${
               publishModalAnimating 
-                ? "translate-x-0" 
+                ? isOutwardMode 
+                  ? "translate-x-0"      // 向外模式：显示在正常位置
+                  : "translate-x-0"      // 向内模式：显示在正常位置
                 : isOutwardMode 
-                  ? "translate-x-full"  // 向外模式：隐藏在右侧外部
-                  : "translate-x-full"  // 向内模式：也是从右侧滑入，但不推挤内容
+                  ? "-translate-x-full"  // 向外模式：隐藏在左侧，从左往右滑出
+                  : "translate-x-full"   // 向内模式：隐藏在右侧，从右往左滑入
             } ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl ${
               isLargeScreen 
                 ? "border-l" 
