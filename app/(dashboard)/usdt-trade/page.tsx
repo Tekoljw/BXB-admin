@@ -1036,12 +1036,15 @@ export default function USDTTradePage() {
             ? "right-0 top-0 h-full" 
             : "inset-0"
         }`}>
-          {!isLargeScreen && (
-            <div 
-              className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-500" 
-              onClick={handleCloseTradeModal}
-            />
-          )}
+          {/* 点击外部区域关闭弹窗 */}
+          <div 
+            className={`absolute transition-opacity duration-500 ${
+              isLargeScreen
+                ? "inset-0 right-96" // 大屏幕：覆盖主内容区域
+                : "inset-0 bg-black bg-opacity-50" // 小屏幕：半透明遮罩
+            }`}
+            onClick={handleCloseTradeModal}
+          />
           <div 
             className={`h-full w-96 transform transition-all duration-500 ${
               tradeModalAnimating ? "translate-x-0" : "translate-x-full"
@@ -1056,20 +1059,6 @@ export default function USDTTradePage() {
             }}
           >
             <div className="p-6 h-full overflow-y-auto">
-              {/* 关闭按钮 */}
-              <div className="flex justify-end mb-4">
-                <button
-                  onClick={handleCloseTradeModal}
-                  className={`p-2 rounded-full transition-colors ${
-                    isDark 
-                      ? "hover:bg-[#3a3d4a] text-gray-400 hover:text-white"
-                      : "hover:bg-gray-100 text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
               {/* 商家信息 */}
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
@@ -1170,12 +1159,15 @@ export default function USDTTradePage() {
             ? "right-0 top-0 h-full" 
             : "inset-0"
         }`}>
-          {!isLargeScreen && (
-            <div 
-              className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-500" 
-              onClick={handleClosePublishModal}
-            />
-          )}
+          {/* 点击外部区域关闭弹窗 */}
+          <div 
+            className={`absolute transition-opacity duration-500 ${
+              isLargeScreen
+                ? "inset-0 right-96" // 大屏幕：覆盖主内容区域
+                : "inset-0 bg-black bg-opacity-50" // 小屏幕：半透明遮罩
+            }`}
+            onClick={handleClosePublishModal}
+          />
           <div 
             className={`h-full w-96 transform transition-all duration-500 ${
               publishModalAnimating ? "translate-x-0" : "translate-x-full"
@@ -1190,20 +1182,6 @@ export default function USDTTradePage() {
             }}
           >
             <div className="p-6 h-full overflow-y-auto">
-              {/* 关闭按钮 */}
-              <div className="flex justify-end mb-4">
-                <button
-                  onClick={handleClosePublishModal}
-                  className={`p-2 rounded-full transition-colors ${
-                    isDark 
-                      ? "hover:bg-[#3a3d4a] text-gray-400 hover:text-white"
-                      : "hover:bg-gray-100 text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
               {/* 页签切换 */}
               <div className="mb-6">
                 <div className={`flex rounded-lg border ${isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"}`}>
