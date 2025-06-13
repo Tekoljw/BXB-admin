@@ -37,6 +37,7 @@ export default function USDTTradePage() {
   const [publishMaxAmount, setPublishMaxAmount] = useState("")
   const [publishPayments, setPublishPayments] = useState<string[]>([])
   const [publishPeriod, setPublishPeriod] = useState("24小时")
+  const [customPayment, setCustomPayment] = useState("")
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -1108,47 +1109,61 @@ export default function USDTTradePage() {
           >
             <div className="p-6 h-full overflow-y-auto">
 
-              {/* 订单类型 */}
+              {/* 页签切换 */}
               <div className="mb-6">
-                <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  订单类型
-                </label>
-                <div className="flex gap-2">
+                <div className={`flex rounded-lg border ${isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"}`}>
                   <button
                     onClick={() => setPublishOrderType("buy")}
-                    className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex-1 py-3 px-4 text-sm font-medium transition-all rounded-l-lg ${
                       publishOrderType === "buy"
-                        ? "bg-custom-green text-white"
+                        ? "bg-white text-gray-900 shadow-sm"
                         : isDark 
-                          ? "bg-[#252842] text-gray-300 border border-[#3a3d4a]"
-                          : "bg-gray-100 text-gray-700"
+                          ? "text-gray-400 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
                     }`}
                   >
-                    买入USDT
+                    买入
                   </button>
                   <button
                     onClick={() => setPublishOrderType("sell")}
-                    className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex-1 py-3 px-4 text-sm font-medium transition-all rounded-r-lg ${
                       publishOrderType === "sell"
-                        ? "bg-red-500 text-white"
+                        ? "bg-white text-gray-900 shadow-sm"
                         : isDark 
-                          ? "bg-[#252842] text-gray-300 border border-[#3a3d4a]"
-                          : "bg-gray-100 text-gray-700"
+                          ? "text-gray-400 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
                     }`}
                   >
-                    卖出USDT
+                    卖出
                   </button>
                 </div>
               </div>
 
-              {/* 价格 */}
+              {/* 法币选择 */}
               <div className="mb-4">
                 <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  价格 (CNY)
+                  法币币种
+                </label>
+                <select className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                  isDark 
+                    ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                    : "bg-white border-gray-300 text-gray-900"
+                }`}>
+                  <option value="CNY">CNY - 人民币</option>
+                  <option value="USD">USD - 美元</option>
+                  <option value="EUR">EUR - 欧元</option>
+                  <option value="HKD">HKD - 港币</option>
+                </select>
+              </div>
+
+              {/* 交易总金额 */}
+              <div className="mb-4">
+                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  交易总金额
                 </label>
                 <input
                   type="text"
-                  placeholder="输入单价"
+                  placeholder="输入交易总金额"
                   value={publishPrice}
                   onChange={(e) => setPublishPrice(e.target.value)}
                   className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
@@ -1159,49 +1174,13 @@ export default function USDTTradePage() {
                 />
               </div>
 
-              {/* 金额范围 */}
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                    最小金额 (CNY)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="最小金额"
-                    value={publishMinAmount}
-                    onChange={(e) => setPublishMinAmount(e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
-                      isDark 
-                        ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    }`}
-                  />
-                </div>
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                    最大金额 (CNY)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="最大金额"
-                    value={publishMaxAmount}
-                    onChange={(e) => setPublishMaxAmount(e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
-                      isDark 
-                        ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    }`}
-                  />
-                </div>
-              </div>
-
               {/* 支付方式选择 */}
-              <div className="mb-4">
+              <div className="mb-6">
                 <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>
                   支付方式
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {["支付宝", "微信", "银行卡", "现金"].map((method) => (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {["支付宝", "微信", "银行卡", "现金交易"].map((method) => (
                     <button
                       key={method}
                       onClick={() => {
@@ -1211,20 +1190,50 @@ export default function USDTTradePage() {
                           setPublishPayments([...publishPayments, method])
                         }
                       }}
-                      className={`p-3 border rounded-lg flex items-center justify-center space-x-2 transition-all ${
+                      className={`px-3 py-1 rounded-full text-xs flex items-center space-x-1 transition-all ${
                         publishPayments.includes(method)
-                          ? "border-custom-green bg-green-50"
+                          ? "bg-green-100 text-green-800 border border-green-300"
                           : isDark 
-                            ? "border-[#3a3d4a] bg-[#252842]"
-                            : "border-gray-200 bg-gray-50"
+                            ? "bg-[#252842] text-gray-300 border border-[#3a3d4a] hover:bg-[#2a2d42]"
+                            : "bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200"
                       }`}
                     >
                       {getPaymentIcon(method)}
-                      <span className={publishPayments.includes(method) ? "text-custom-green" : isDark ? "text-white" : "text-gray-900"}>
+                      <span>
                         {method}
                       </span>
                     </button>
                   ))}
+                </div>
+                
+                {/* 手动添加支付方式 */}
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="手动输入支付方式"
+                    value={customPayment}
+                    onChange={(e) => setCustomPayment(e.target.value)}
+                    className={`flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                      isDark 
+                        ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500" 
+                        : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
+                    }`}
+                  />
+                  <button
+                    onClick={() => {
+                      if (customPayment.trim() && !publishPayments.includes(customPayment.trim())) {
+                        setPublishPayments([...publishPayments, customPayment.trim()])
+                        setCustomPayment("")
+                      }
+                    }}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      isDark 
+                        ? "bg-[#252842] text-gray-300 border border-[#3a3d4a] hover:bg-[#2a2d42]"
+                        : "bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200"
+                    }`}
+                  >
+                    添加
+                  </button>
                 </div>
               </div>
 
