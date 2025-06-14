@@ -1125,8 +1125,19 @@ export default function USDTTradePage() {
       {/* 交易弹窗 */}
       {showTradeModal && selectedMerchant && (
         <>
-          {/* 点击外部区域关闭弹窗 - 向外弹出模式不显示遮罩 */}
-          {!shouldUseOutwardMode && (
+          {/* 点击外部区域关闭弹窗 */}
+          {shouldUseOutwardMode ? (
+            /* 向外弹出模式：覆盖被压缩的内容区域 */
+            <div 
+              className="fixed left-0 top-0 z-40 transition-all duration-500"
+              style={{ 
+                width: 'calc(100% - 384px)',
+                height: '100%'
+              }}
+              onClick={handleCloseTradeModal}
+            />
+          ) : (
+            /* 向内弹出模式：全屏半透明遮罩 */
             <div 
               className="fixed inset-0 z-40 bg-black bg-opacity-30 transition-opacity duration-500"
               onClick={handleCloseTradeModal}
@@ -1247,8 +1258,19 @@ export default function USDTTradePage() {
       {/* 发布订单弹窗 */}
       {showPublishModal && (
         <>
-          {/* 点击外部区域关闭弹窗 - 向外弹出模式不显示遮罩 */}
-          {!shouldUseOutwardMode && (
+          {/* 点击外部区域关闭弹窗 */}
+          {shouldUseOutwardMode ? (
+            /* 向外弹出模式：覆盖被压缩的内容区域 */
+            <div 
+              className="fixed left-0 top-0 z-40 transition-all duration-500"
+              style={{ 
+                width: 'calc(100% - 384px)',
+                height: '100%'
+              }}
+              onClick={handleClosePublishModal}
+            />
+          ) : (
+            /* 向内弹出模式：全屏半透明遮罩 */
             <div 
               className="fixed inset-0 z-40 bg-black bg-opacity-30 transition-opacity duration-500"
               onClick={handleClosePublishModal}
