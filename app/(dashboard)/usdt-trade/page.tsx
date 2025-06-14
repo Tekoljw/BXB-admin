@@ -662,13 +662,7 @@ export default function USDTTradePage() {
                     return (
                       <button
                         key={payment}
-                        onClick={() => {
-                          if (selectedPayments.includes(payment)) {
-                            setSelectedPayments(prev => prev.filter(p => p !== payment))
-                          } else {
-                            setSelectedPayments(prev => [...prev, payment])
-                          }
-                        }}
+                        onClick={() => handlePaymentMethodToggle(payment)}
                         className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border-2 flex items-center gap-1 ${
                           selectedPayments.includes(payment)
                             ? "border-custom-green bg-custom-green/10 text-custom-green"
@@ -884,6 +878,11 @@ export default function USDTTradePage() {
                                 >
                                   {getPaymentIcon(method)}
                                   {method}
+                                  {isCash && merchant.cashLocation && (
+                                    <span className="ml-1 text-xs text-orange-600">
+                                      ({merchant.cashLocation.city})
+                                    </span>
+                                  )}
                                 </span>
                               )
                             })}
@@ -1432,6 +1431,157 @@ export default function USDTTradePage() {
               </button>
             </div>
           </div>
+          </div>
+        </>
+      )}
+
+      {/* 现金上门位置选择模态框 */}
+      {showLocationModal && (
+        <>
+          {/* 背景遮罩 */}
+          <div 
+            className="fixed inset-0 z-[100] bg-black bg-opacity-30 transition-opacity duration-300"
+            onClick={handleCloseLocationModal}
+          />
+          
+          {/* 位置选择模态框 */}
+          <div className="fixed inset-0 z-[101] flex items-center justify-center p-4">
+            <div 
+              className={`w-full max-w-md ${isDark ? "bg-[#1a1c2e]" : "bg-white"} rounded-lg shadow-xl transform transition-all duration-300 ${
+                locationModalAnimating ? "scale-100 opacity-100" : "scale-95 opacity-0"
+              }`}
+            >
+              <div className="p-6">
+                {/* 模态框头部 */}
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                    选择现金上门位置
+                  </h3>
+                  <button
+                    onClick={handleCloseLocationModal}
+                    className={`p-2 rounded-full transition-colors ${
+                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                    }`}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* 搜索框 */}
+                <div className="mb-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="搜索国家或城市"
+                      value={locationSearchTerm}
+                      onChange={(e) => setLocationSearchTerm(e.target.value)}
+                      className={`w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-custom-green ${
+                        isDark
+                          ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400"
+                          : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                {/* 国家选择 */}
+                <div className="mb-4">
+                  <h4 className={`text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
+                    选择国家
+                  </h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    {countries
+                      .filter(country => 
+                        !locationSearchTerm || 
+                        country.name.toLowerCase().includes(locationSearchTerm.toLowerCase())
+                      )
+                      .map((country) => (
+                      <button
+                        key={country.code}
+                        onClick={() => {
+                          setSelectedCountry(country.name)
+                          setSelectedCity(country.cities[0])
+                        }}
+                        className={`p-2 text-sm rounded-lg border transition-colors ${
+                          selectedCountry === country.name
+                            ? "border-custom-green bg-custom-green/10 text-custom-green"
+                            : isDark
+                              ? "border-[#3a3d4a] bg-[#252842] text-gray-300 hover:bg-[#2a2d42]"
+                              : "border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
+                        }`}
+                      >
+                        {country.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 城市选择 */}
+                {selectedCountry && (
+                  <div className="mb-6">
+                    <h4 className={`text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
+                      选择城市
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
+                      {countries
+                        .find(c => c.name === selectedCountry)
+                        ?.cities
+                        .filter(city => 
+                          !locationSearchTerm || 
+                          city.toLowerCase().includes(locationSearchTerm.toLowerCase())
+                        )
+                        .map((city) => (
+                        <button
+                          key={city}
+                          onClick={() => setSelectedCity(city)}
+                          className={`p-2 text-sm rounded-lg border transition-colors ${
+                            selectedCity === city
+                              ? "border-custom-green bg-custom-green/10 text-custom-green"
+                              : isDark
+                                ? "border-[#3a3d4a] bg-[#252842] text-gray-300 hover:bg-[#2a2d42]"
+                                : "border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
+                          }`}
+                        >
+                          {city}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 确认按钮 */}
+                <div className="flex space-x-3">
+                  <button
+                    onClick={handleCloseLocationModal}
+                    className={`flex-1 py-2 px-4 border rounded-lg text-sm font-medium transition-colors ${
+                      isDark
+                        ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]"
+                        : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    取消
+                  </button>
+                  <button
+                    onClick={handleCloseLocationModal}
+                    className="flex-1 py-2 px-4 bg-custom-green text-white rounded-lg text-sm font-medium transition-colors hover:bg-custom-green/90"
+                  >
+                    确认选择
+                  </button>
+                </div>
+
+                {/* 当前选择显示 */}
+                {selectedCountry && selectedCity && (
+                  <div className={`mt-4 p-3 rounded-lg border ${
+                    isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"
+                  }`}>
+                    <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                      已选择: <span className="font-medium text-custom-green">{selectedCountry} - {selectedCity}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </>
       )}
