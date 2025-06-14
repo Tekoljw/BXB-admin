@@ -39,6 +39,13 @@ export default function USDTTradePage() {
   const [publishPeriod, setPublishPeriod] = useState("24小时")
   const [customPayment, setCustomPayment] = useState("")
   const [publishCurrency, setPublishCurrency] = useState("CNY")
+  
+  // 现金上门位置选择
+  const [showLocationModal, setShowLocationModal] = useState(false)
+  const [locationModalAnimating, setLocationModalAnimating] = useState(false)
+  const [selectedCountry, setSelectedCountry] = useState("中国")
+  const [selectedCity, setSelectedCity] = useState("北京")
+  const [locationSearchTerm, setLocationSearchTerm] = useState("")
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -115,6 +122,15 @@ export default function USDTTradePage() {
     ? "bg-[#1a1c2e] border border-[#2a2d42] shadow"
     : "bg-white border border-gray-200 shadow"
 
+  // 位置数据
+  const countries = [
+    { code: "CN", name: "中国", cities: ["北京", "上海", "广州", "深圳", "杭州", "成都", "重庆", "武汉", "西安", "南京"] },
+    { code: "US", name: "美国", cities: ["纽约", "洛杉矶", "芝加哥", "休斯敦", "费城", "凤凰城", "圣安东尼奥", "圣地亚哥", "达拉斯", "圣何塞"] },
+    { code: "HK", name: "香港", cities: ["中环", "铜锣湾", "尖沙咀", "旺角", "荃湾", "沙田", "元朗", "屯门", "观塘", "九龙塘"] },
+    { code: "JP", name: "日本", cities: ["东京", "大阪", "横滨", "名古屋", "札幌", "神户", "京都", "福冈", "川崎", "埼玉"] },
+    { code: "KR", name: "韩国", cities: ["首尔", "釜山", "仁川", "大邱", "大田", "光州", "蔚山", "水原", "城南", "高阳"] }
+  ]
+
   // C2C商家数据
   const c2cMerchants = [
     {
@@ -128,7 +144,8 @@ export default function USDTTradePage() {
       paymentMethods: ["现金交易", "银行卡", "支付宝"],
       responseTime: "剩余 无限制",
       completionRate: "99.2%",
-      isFriend: true
+      isFriend: true,
+      cashLocation: { country: "中国", city: "北京" }
     },
     {
       name: "SafeTrader", 
@@ -141,7 +158,8 @@ export default function USDTTradePage() {
       paymentMethods: ["银行卡", "微信", "现金上门"],
       responseTime: "剩余 无限制",
       completionRate: "98.8%",
-      isFriend: false
+      isFriend: false,
+      cashLocation: { country: "中国", city: "上海" }
     },
     {
       name: "CryptoExpert",
@@ -167,7 +185,8 @@ export default function USDTTradePage() {
       paymentMethods: ["银行卡", "现金上门", "支付宝"],
       responseTime: "剩余 无限制",
       completionRate: "98.9%",
-      isFriend: true
+      isFriend: true,
+      cashLocation: { country: "中国", city: "广州" }
     },
     {
       name: "DigitalTrader",
@@ -193,7 +212,8 @@ export default function USDTTradePage() {
       paymentMethods: ["银行卡", "现金交易", "微信", "支付宝"],
       responseTime: "剩余 无限制",
       completionRate: "99.7%",
-      isFriend: false
+      isFriend: false,
+      cashLocation: { country: "香港", city: "中环" }
     }
   ]
 
@@ -281,10 +301,7 @@ export default function USDTTradePage() {
     }
   ]
 
-  const filteredMerchants = c2cMerchants.filter(merchant => {
-    const matchesSearch = merchant.name.toLowerCase().includes(searchTerm.toLowerCase())
-    return matchesSearch
-  })
+
 
   // 加载更多功能
   const handleLoadMore = async () => {
@@ -355,8 +372,7 @@ export default function USDTTradePage() {
     return (amountNum * priceNum).toFixed(2)
   }
 
-  const displayedMerchants = filteredMerchants.slice(0, displayCount)
-  const hasMore = displayCount < filteredMerchants.length
+
 
   // 自动检测是否应该向外弹出
   const [shouldUseOutwardMode, setShouldUseOutwardMode] = useState(true)
@@ -380,6 +396,74 @@ export default function USDTTradePage() {
     window.addEventListener('resize', checkModalMode)
     return () => window.removeEventListener('resize', checkModalMode)
   }, [])
+
+  // 位置选择模态框处理
+  const handleOpenLocationModal = () => {
+    setShowLocationModal(true)
+    requestAnimationFrame(() => {
+      setLocationModalAnimating(true)
+    })
+  }
+
+  const handleCloseLocationModal = () => {
+    setLocationModalAnimating(false)
+    setTimeout(() => {
+      setShowLocationModal(false)
+    }, 300)
+  }
+
+  // 处理支付方式变化
+  const handlePaymentMethodToggle = (method: string) => {
+    if (method === "现金上门") {
+      if (selectedPayments.includes(method)) {
+        setSelectedPayments(selectedPayments.filter(p => p !== method))
+      } else {
+        handleOpenLocationModal()
+        setSelectedPayments([...selectedPayments, method])
+      }
+    } else {
+      if (selectedPayments.includes(method)) {
+        setSelectedPayments(selectedPayments.filter(p => p !== method))
+      } else {
+        setSelectedPayments([...selectedPayments, method])
+      }
+    }
+  }
+
+  // 获取筛选后的商家
+  const getFilteredMerchants = () => {
+    return c2cMerchants.filter(merchant => {
+      // 支付方式筛选
+      if (selectedPayments.length > 0) {
+        const hasMatchingPayment = selectedPayments.some(payment => {
+          if (payment === "现金上门") {
+            return merchant.paymentMethods.some(method => 
+              method === "现金上门" || method === "现金交易"
+            ) && merchant.cashLocation?.country === selectedCountry && merchant.cashLocation?.city === selectedCity
+          }
+          return merchant.paymentMethods.includes(payment)
+        })
+        if (!hasMatchingPayment) return false
+      }
+      
+      // 金额筛选
+      if (minAmount) {
+        const merchantMin = parseInt(merchant.limit.split(" - ")[0])
+        if (merchantMin > parseInt(minAmount)) return false
+      }
+      
+      if (maxAmount) {
+        const merchantMax = parseInt(merchant.limit.split(" - ")[1])
+        if (merchantMax < parseInt(maxAmount)) return false
+      }
+      
+      return true
+    })
+  }
+
+  const filteredMerchants = getFilteredMerchants()
+  const displayedMerchants = filteredMerchants.slice(0, displayCount)
+  const hasMore = displayCount < filteredMerchants.length
 
   return (
     <div 
