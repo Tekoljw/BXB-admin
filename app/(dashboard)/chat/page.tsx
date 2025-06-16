@@ -576,7 +576,7 @@ export default function ChatPage() {
         {/* 左侧联系人列表 - 移动端全屏显示，选中联系人时隐藏 */}
         <div 
           className={`${cardStyle} ${selectedContact ? 'hidden md:flex' : 'flex'} h-screen flex-col ${isMobile ? 'w-screen' : 'w-auto'}`} 
-          style={isMobile ? { width: '100vw', minWidth: '100vw', maxWidth: '100vw' } : { minWidth: '320px', maxWidth: '400px', width: 'clamp(320px, 25vw, 400px)' }}
+          style={isMobile ? { width: '100vw', minWidth: '100vw', maxWidth: '100vw' } : { minWidth: '416px', maxWidth: '500px', width: 'clamp(416px, 30vw, 500px)' }}
         >
           {/* 搜索框和添加按钮 */}
           <div className="flex items-center gap-2 p-4">
