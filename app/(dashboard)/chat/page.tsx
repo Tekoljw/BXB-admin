@@ -69,6 +69,7 @@ export default function ChatPage() {
   const [isResizing, setIsResizing] = useState(false)
   const [showMemberSidebar, setShowMemberSidebar] = useState(false)
   const [memberSidebarAnimating, setMemberSidebarAnimating] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const addMenuRef = useRef<HTMLDivElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
@@ -131,6 +132,18 @@ export default function ChatPage() {
   // 解决闪烁问题
   useEffect(() => {
     setMounted(true)
+    
+    // 检测移动端设备
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+    }
   }, [])
 
   // 滚动到最新消息
@@ -560,8 +573,11 @@ export default function ChatPage() {
     <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       {/* 主聊天区域 */}
       <div className="flex h-screen">
-        {/* 左侧联系人列表 - 移动端选中联系人时隐藏 */}
-        <div className={`${cardStyle} ${selectedContact ? 'hidden md:flex' : 'flex'} h-screen flex-col w-full md:w-auto`} style={{ minWidth: '280px', maxWidth: '400px', width: 'clamp(280px, 25vw, 400px)' }}>
+        {/* 左侧联系人列表 - 移动端全屏显示，选中联系人时隐藏 */}
+        <div 
+          className={`${cardStyle} ${selectedContact ? 'hidden md:flex' : 'flex'} h-screen flex-col ${isMobile ? 'w-screen' : 'w-auto'}`} 
+          style={isMobile ? { width: '100vw', minWidth: '100vw', maxWidth: '100vw' } : { minWidth: '280px', maxWidth: '400px', width: 'clamp(280px, 25vw, 400px)' }}
+        >
           {/* 搜索框和添加按钮 */}
           <div className="flex items-center gap-2 p-4">
             <div className="relative flex-1">
