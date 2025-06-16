@@ -560,8 +560,8 @@ export default function ChatPage() {
     <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       {/* 主聊天区域 */}
       <div className="flex h-screen">
-        {/* 左侧联系人列表 - 移动端全屏显示 */}
-        <div className={`${cardStyle} ${selectedContact && 'hidden'} md:block h-screen flex flex-col w-full md:w-auto`} style={{ minWidth: '320px', maxWidth: '400px', width: 'clamp(320px, 25vw, 400px)' }}>
+        {/* 左侧联系人列表 - 移动端选中联系人时隐藏 */}
+        <div className={`${cardStyle} ${selectedContact ? 'hidden md:flex' : 'flex'} h-screen flex-col w-full md:w-auto`} style={{ minWidth: '280px', maxWidth: '400px', width: 'clamp(280px, 25vw, 400px)' }}>
           {/* 搜索框和添加按钮 */}
           <div className="flex items-center gap-2 p-4">
             <div className="relative flex-1">
@@ -715,9 +715,9 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* 右侧聊天窗口 - 移动端全屏显示 */}
+        {/* 右侧聊天窗口 - 移动端选中联系人时显示，未选中时隐藏 */}
         <div 
-          className={`${cardStyle} ${!selectedContact && 'hidden'} md:block md:flex-1 flex flex-col w-full h-screen`}
+          className={`${cardStyle} ${!selectedContact ? 'hidden md:flex' : 'flex'} flex-1 flex-col w-full h-screen`}
         >
           {selectedContactData ? (
             <>
