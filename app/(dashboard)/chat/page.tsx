@@ -738,32 +738,55 @@ export default function ChatPage() {
           {selectedContactData ? (
             <>
               {/* 聊天头部 - 移动端添加返回按钮 */}
-              <div className="p-3 md:p-4 border-b border-gray-200 dark:border-[#252842] flex items-center justify-between">
-                <div className="flex items-center">
-                  {/* 移动端返回按钮 */}
-                  <button
-                    onClick={() => setSelectedContact("")}
-                    className="md:hidden mr-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#252842]"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                  </button>
-                  <div className="relative mr-3">
-                    <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-xl">
-                      {selectedContactData.avatar}
+              <div className="py-4 px-3 md:px-4 border-b border-gray-200 dark:border-[#252842] flex items-center justify-between min-h-[72px]">
+                {isMobile ? (
+                  /* 移动端布局 - 返回按钮在左，用户信息居中 */
+                  <>
+                    <button
+                      onClick={() => setSelectedContact("")}
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#252842]"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    <div className="flex items-center justify-center flex-1">
+                      <div className="relative mr-3">
+                        <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-xl">
+                          {selectedContactData.avatar}
+                        </div>
+                        {selectedContactData.isOnline && (
+                          <div className="absolute bottom-0 right-0 h-2.5 w-2.5 bg-custom-green rounded-full border-2 border-card"></div>
+                        )}
+                      </div>
+                      <div className="text-center">
+                        <h2 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {selectedContactData.name}
+                        </h2>
+                        <div className="text-xs text-gray-400">{selectedContactData.isOnline ? "在线" : "离线"}</div>
+                      </div>
                     </div>
-                    {selectedContactData.isOnline && (
-                      <div className="absolute bottom-0 right-0 h-2.5 w-2.5 bg-custom-green rounded-full border-2 border-card"></div>
-                    )}
+                    <div className="w-10"></div> {/* 占位符保持对称 */}
+                  </>
+                ) : (
+                  /* 桌面端布局 */
+                  <div className="flex items-center">
+                    <div className="relative mr-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-xl">
+                        {selectedContactData.avatar}
+                      </div>
+                      {selectedContactData.isOnline && (
+                        <div className="absolute bottom-0 right-0 h-2.5 w-2.5 bg-custom-green rounded-full border-2 border-card"></div>
+                      )}
+                    </div>
+                    <div>
+                      <h2 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                        {selectedContactData.name}
+                      </h2>
+                      <div className="text-xs text-gray-400">{selectedContactData.isOnline ? "在线" : "离线"}</div>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                      {selectedContactData.name}
-                    </h2>
-                    <div className="text-xs text-gray-400">{selectedContactData.isOnline ? "在线" : "离线"}</div>
-                  </div>
-                </div>
+                )}
                 <div className="flex items-center space-x-2">
                   {/* 群成员按钮 - 仅群聊显示 */}
                   {selectedContactData.name.includes("群") && (
