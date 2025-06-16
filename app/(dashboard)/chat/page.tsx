@@ -561,7 +561,7 @@ export default function ChatPage() {
       {/* 主聊天区域 */}
       <div className="flex h-screen">
         {/* 左侧联系人列表 - 移动端全屏显示 */}
-        <div className={`${cardStyle} ${selectedContact && 'hidden'} md:block md:w-1/3 lg:w-1/4 xl:w-1/3 h-screen flex flex-col w-full`}>
+        <div className={`${cardStyle} ${selectedContact && 'hidden'} md:block h-screen flex flex-col w-full md:w-auto`} style={{ minWidth: '320px', maxWidth: '400px', width: 'clamp(320px, 25vw, 400px)' }}>
           {/* 搜索框和添加按钮 */}
           <div className="flex items-center gap-2 p-4">
             <div className="relative flex-1">
