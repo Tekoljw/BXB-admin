@@ -13,18 +13,18 @@ export default function TetherIcon({ className = "w-5 h-5" }: TetherIconProps) {
       {/* Top horizontal bar */}
       <rect x="80" y="80" width="352" height="80" fill="currentColor"/>
       
-      {/* Vertical stem extending down */}
-      <rect x="220" y="80" width="72" height="352" fill="currentColor"/>
+      {/* Vertical stem extending down - longer */}
+      <rect x="220" y="80" width="72" height="380" fill="currentColor"/>
       
-      {/* Horizontal ellipse through the middle */}
+      {/* Horizontal ellipse through the middle - smaller and lower */}
       <ellipse 
         cx="256" 
-        cy="256" 
-        rx="230" 
-        ry="60" 
+        cy="290" 
+        rx="180" 
+        ry="45" 
         fill="none" 
         stroke="currentColor" 
-        strokeWidth="40"
+        strokeWidth="35"
       />
     </svg>
   )
