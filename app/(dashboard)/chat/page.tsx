@@ -45,6 +45,7 @@ export default function ChatPage() {
   const [memberSidebarAnimating, setMemberSidebarAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [activeProfileTab, setActiveProfileTab] = useState("动态")
+  const [showAIProfile, setShowAIProfile] = useState(false)
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -532,6 +533,8 @@ export default function ChatPage() {
                     key={contact.id}
                     onClick={() => {
                       setSelectedContact(contact.id)
+                      setShowAIProfile(true)
+                      setShowMemberSidebar(true)
                       if (isMobile) {
                         // Mobile navigation logic would go here
                       }
@@ -766,7 +769,7 @@ export default function ChatPage() {
               </div>
             </div>
           </div>
-        ) : activeTab === "通讯录" && (selectedContact?.startsWith("friend-") || selectedContact?.startsWith("ai-")) ? (
+        ) : activeTab === "通讯录" && (selectedContact?.startsWith("friend-") || selectedContact?.startsWith("ai-")) && showAIProfile ? (
           // User Profile Page - Single Column Layout
           <div className="flex-1 flex flex-col">
             {/* Profile Header */}
@@ -785,10 +788,14 @@ export default function ChatPage() {
                   <div className="flex items-center justify-between mb-2">
                     <div>
                       <h2 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                        {selectedContact?.startsWith("ai-") ? "AI交易助手" : "Alex Chen"}
+                        {selectedContact === "ai-escrow" ? "AI担保助手" : 
+                         selectedContact === "ai-trading" ? "AI交易助手" :
+                         selectedContact === "ai-customer" ? "AI客服助手" : "Alex Chen"}
                       </h2>
                       <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                        {selectedContact?.startsWith("ai-") ? "专业AI助手" : "专业交易员"}
+                        {selectedContact === "ai-escrow" ? "安全担保交易专家" : 
+                         selectedContact === "ai-trading" ? "专业交易策略顾问" :
+                         selectedContact === "ai-customer" ? "24小时客户服务" : "专业交易员"}
                       </p>
                     </div>
                     
@@ -811,54 +818,138 @@ export default function ChatPage() {
                     </div>
                   </div>
 
-                  <p className={`text-sm mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                    专注数字货币交易，擅长技术分析和风险控制。提供专业的市场分析和交易策略指导。
-                  </p>
+                  {selectedContact?.startsWith("ai-") ? (
+                    // AI Assistant Description
+                    <div>
+                      <p className={`text-sm mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                        {selectedContact === "ai-escrow" ? "专业的第三方担保服务，确保交易双方资金安全，提供争议仲裁和风险防控。" : 
+                         selectedContact === "ai-trading" ? "基于大数据分析的智能交易助手，提供实时市场分析、交易策略建议和风险管理。" :
+                         "24小时在线客户服务，解答平台使用问题，处理账户相关事务，提供技术支持。"}
+                      </p>
 
-                  <div className="flex items-center space-x-6 mb-4">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm">📍</span>
-                      <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>上海市</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm">📅</span>
-                      <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>2019年加入</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm">💼</span>
-                      <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>专业交易5年</span>
-                    </div>
-                  </div>
+                      {/* AI Features */}
+                      <div className="mb-6">
+                        <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>主要功能</h4>
+                        <div className="grid grid-cols-2 gap-3">
+                          {selectedContact === "ai-escrow" && [
+                            { icon: "🛡️", text: "资金托管" },
+                            { icon: "⚖️", text: "争议仲裁" },
+                            { icon: "📋", text: "合约审核" },
+                            { icon: "🔒", text: "安全保障" }
+                          ].map((feature, index) => (
+                            <div key={index} className={`flex items-center space-x-2 p-2 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+                              <span className="text-sm">{feature.icon}</span>
+                              <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>{feature.text}</span>
+                            </div>
+                          ))}
+                          {selectedContact === "ai-trading" && [
+                            { icon: "📊", text: "市场分析" },
+                            { icon: "💡", text: "策略建议" },
+                            { icon: "⚠️", text: "风险提醒" },
+                            { icon: "📈", text: "趋势预测" }
+                          ].map((feature, index) => (
+                            <div key={index} className={`flex items-center space-x-2 p-2 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+                              <span className="text-sm">{feature.icon}</span>
+                              <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>{feature.text}</span>
+                            </div>
+                          ))}
+                          {selectedContact === "ai-customer" && [
+                            { icon: "❓", text: "问题解答" },
+                            { icon: "👤", text: "账户管理" },
+                            { icon: "🔧", text: "技术支持" },
+                            { icon: "📞", text: "24小时服务" }
+                          ].map((feature, index) => (
+                            <div key={index} className={`flex items-center space-x-2 p-2 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+                              <span className="text-sm">{feature.icon}</span>
+                              <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>{feature.text}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-8">
-                      <div className="text-center">
-                        <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>236</div>
-                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>动态</div>
+                      {/* Response Time & Availability */}
+                      <div className="flex items-center space-x-6 mb-6">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm">⚡</span>
+                          <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>响应时间: 秒级</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm">🕒</span>
+                          <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>24小时在线</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm">🌐</span>
+                          <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>多语言支持</span>
+                        </div>
                       </div>
-                      <div className="text-center">
-                        <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>12.8K</div>
-                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>粉丝</div>
-                      </div>
-                      <div className="text-center">
-                        <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>89</div>
-                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>关注</div>
-                      </div>
-                    </div>
 
-                    <div className="flex space-x-3">
-                      <button className="px-6 py-2 bg-[#00D4AA] text-white text-sm rounded-lg hover:bg-[#00b89a] transition-colors">
-                        发消息
-                      </button>
-                      <button className={`px-6 py-2 text-sm rounded-lg transition-colors ${
-                        isDark
-                          ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                      }`}>
-                        关注
-                      </button>
+                      {/* Action Button */}
+                      <div className="text-center">
+                        <button 
+                          onClick={() => {
+                            setShowAIProfile(false)
+                            setShowMemberSidebar(false)
+                            console.log(`开始与${selectedContact}对话`)
+                          }}
+                          className="px-8 py-3 bg-[#00D4AA] text-white text-base font-medium rounded-lg hover:bg-[#00b89a] transition-colors shadow-lg"
+                        >
+                          开始对话
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    // Regular User Profile
+                    <div>
+                      <p className={`text-sm mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                        专注数字货币交易，擅长技术分析和风险控制。提供专业的市场分析和交易策略指导。
+                      </p>
+
+                      <div className="flex items-center space-x-6 mb-4">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm">📍</span>
+                          <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>上海市</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm">📅</span>
+                          <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>2019年加入</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm">💼</span>
+                          <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>专业交易5年</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-8">
+                          <div className="text-center">
+                            <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>236</div>
+                            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>动态</div>
+                          </div>
+                          <div className="text-center">
+                            <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>12.8K</div>
+                            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>粉丝</div>
+                          </div>
+                          <div className="text-center">
+                            <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>89</div>
+                            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>关注</div>
+                          </div>
+                        </div>
+
+                        <div className="flex space-x-3">
+                          <button className="px-6 py-2 bg-[#00D4AA] text-white text-sm rounded-lg hover:bg-[#00b89a] transition-colors">
+                            发消息
+                          </button>
+                          <button className={`px-6 py-2 text-sm rounded-lg transition-colors ${
+                            isDark
+                              ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]"
+                              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          }`}>
+                            关注
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
