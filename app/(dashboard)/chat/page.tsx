@@ -953,7 +953,7 @@ export default function ChatPage() {
                   </div>
 
                   {/* 输入框区域 */}
-                  <div className="flex-1 flex items-end space-x-3">
+                  <div className="flex-1 flex flex-col space-y-3">
                     <textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
@@ -964,24 +964,22 @@ export default function ChatPage() {
                         }
                       }}
                       placeholder="123123"
-                      className={`flex-1 p-3 border rounded-lg resize-none outline-none text-base ${
+                      className={`w-full p-3 border rounded-lg resize-none outline-none text-base ${
                         isDark 
                           ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-500" 
                           : "bg-white text-gray-900 border-gray-300 placeholder-gray-400"
                       } focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
-                      style={{ height: `${Math.max(40, inputHeight - 50)}px` }}
+                      style={{ height: `${Math.max(40, inputHeight - 90)}px` }}
                     />
                     
                     {/* 发送按钮 */}
                     <button
                       onClick={handleSendMessage}
                       disabled={!message.trim()}
-                      className={`px-6 py-3 rounded-lg text-sm font-medium transition-all ${
+                      className={`w-full py-3 rounded-lg text-sm font-medium transition-all ${
                         message.trim()
-                          ? "bg-custom-green text-white hover:bg-custom-green/90"
-                          : isDark
-                            ? "bg-[#3a3d4a] text-gray-500 cursor-not-allowed"
-                            : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          ? "bg-black text-white hover:bg-gray-800"
+                          : "border border-gray-400 text-gray-400 cursor-not-allowed bg-transparent"
                       }`}
                     >
                       发送(S)
