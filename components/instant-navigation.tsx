@@ -11,7 +11,7 @@ import {
   DollarSign,
   LineChart,
   ArrowLeftRight,
-  TrendingUp,
+  BarChart3,
   Wallet,
   Settings,
   Globe2,
@@ -83,7 +83,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
     { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
     { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
-    { path: "/futures", icon: TrendingUp, label: "合约", component: FuturesPage },
+    { path: "/futures", icon: BarChart3, label: "合约", component: FuturesPage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
   ]
 
