@@ -821,70 +821,125 @@ export default function ChatPage() {
                   </div>
 
                   {selectedContact?.startsWith("ai-") ? (
-                    // AI Assistant Simple Profile - Clean Layout
-                    <div className="max-w-xl mx-auto text-center py-12">
-                      {/* Main Description */}
-                      <div className="mb-12">
-                        <p className={`text-lg leading-relaxed ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                          {selectedContact === "ai-escrow" ? 
-                            "专业的AI担保助手，为您的每一笔交易提供安全保障，基于智能合约技术确保资金安全。" : 
-                           selectedContact === "ai-trading" ? 
-                            "您的专属AI交易顾问，基于GPT-4模型提供实时市场分析和交易策略建议。" :
-                            "24小时在线的AI客服助手，随时为您解答问题和提供技术支持。"}
-                        </p>
-                      </div>
+                    // Brand New AI Assistant Profile Design
+                    <div className="flex flex-col h-full">
+                      {/* Hero Section */}
+                      <div className="text-center py-16 px-8">
+                        {/* AI Avatar */}
+                        <div className="relative mx-auto mb-8 w-32 h-32">
+                          <div className={`w-full h-full rounded-full ${isDark ? 'bg-gradient-to-br from-[#00D4AA] to-[#00a389]' : 'bg-gradient-to-br from-[#00D4AA] to-[#00c5a5]'} flex items-center justify-center text-6xl text-white shadow-2xl`}>
+                            {selectedContact === "ai-escrow" ? "🛡️" : 
+                             selectedContact === "ai-trading" ? "📊" : "🤖"}
+                          </div>
+                          <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
+                            <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                          </div>
+                        </div>
 
-                      {/* Core Features */}
-                      <div className="mb-12">
-                        <div className="grid grid-cols-2 gap-6">
-                          {selectedContact === "ai-escrow" && [
-                            { icon: "🛡️", text: "资金托管" },
-                            { icon: "⚖️", text: "争议仲裁" },
-                            { icon: "📋", text: "合约审核" },
-                            { icon: "🔒", text: "安全保障" }
-                          ].map((feature, index) => (
-                            <div key={index} className={`p-6 rounded-xl ${isDark ? "bg-[#252842]" : "bg-gray-50"} hover:scale-105 transition-transform`}>
-                              <div className="text-3xl mb-3">{feature.icon}</div>
-                              <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>{feature.text}</div>
-                            </div>
-                          ))}
-                          {selectedContact === "ai-trading" && [
-                            { icon: "📊", text: "市场分析" },
-                            { icon: "💡", text: "策略建议" },
-                            { icon: "⚠️", text: "风险提醒" },
-                            { icon: "📈", text: "趋势预测" }
-                          ].map((feature, index) => (
-                            <div key={index} className={`p-6 rounded-xl ${isDark ? "bg-[#252842]" : "bg-gray-50"} hover:scale-105 transition-transform`}>
-                              <div className="text-3xl mb-3">{feature.icon}</div>
-                              <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>{feature.text}</div>
-                            </div>
-                          ))}
-                          {selectedContact === "ai-customer" && [
-                            { icon: "❓", text: "问题解答" },
-                            { icon: "👤", text: "账户管理" },
-                            { icon: "🔧", text: "技术支持" },
-                            { icon: "📞", text: "24小时服务" }
-                          ].map((feature, index) => (
-                            <div key={index} className={`p-6 rounded-xl ${isDark ? "bg-[#252842]" : "bg-gray-50"} hover:scale-105 transition-transform`}>
-                              <div className="text-3xl mb-3">{feature.icon}</div>
-                              <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>{feature.text}</div>
-                            </div>
-                          ))}
+                        {/* Title & Subtitle */}
+                        <h1 className={`text-3xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>
+                          {selectedContact === "ai-escrow" ? "担保专家" : 
+                           selectedContact === "ai-trading" ? "交易顾问" : "智能客服"}
+                        </h1>
+                        
+                        <p className={`text-xl mb-8 max-w-md mx-auto ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                          {selectedContact === "ai-escrow" ? "守护您的每一笔交易" : 
+                           selectedContact === "ai-trading" ? "洞察市场 · 智慧投资" : "随时为您提供帮助"}
+                        </p>
+
+                        {/* Quick Stats */}
+                        <div className="flex justify-center space-x-8 mb-12">
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-[#00D4AA]">7×24</div>
+                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>全天候服务</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-[#00D4AA]">&lt;1s</div>
+                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>响应时间</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-[#00D4AA]">AI</div>
+                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>智能驱动</div>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Start Chat Button */}
-                      <div>
-                        <button 
-                          onClick={() => {
-                            setShowAIProfile(false)
-                            setShowMemberSidebar(false)
-                            console.log(`开始与${selectedContact}对话`)
-                          }}
-                          className="px-16 py-5 bg-[#00D4AA] text-white text-xl font-semibold rounded-2xl hover:bg-[#00b89a] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-                        >
-                          开始对话
-                        </button>
+                      {/* Feature Cards */}
+                      <div className="flex-1 px-8 pb-8">
+                        <div className="max-w-2xl mx-auto">
+                          <h2 className={`text-lg font-semibold mb-6 text-center ${isDark ? "text-white" : "text-gray-800"}`}>
+                            我能为您做什么？
+                          </h2>
+                          
+                          <div className="space-y-4">
+                            {selectedContact === "ai-escrow" && [
+                              { icon: "🔐", title: "资金托管", desc: "安全托管交易资金，确保双方权益" },
+                              { icon: "⚖️", title: "纠纷调解", desc: "公正处理交易争议，快速解决问题" },
+                              { icon: "📝", title: "合约管理", desc: "智能合约生成与执行监控" }
+                            ].map((item, index) => (
+                              <div key={index} className={`flex items-center p-4 rounded-xl ${isDark ? "bg-[#252842] hover:bg-[#2a2d42]" : "bg-gray-50 hover:bg-gray-100"} transition-all cursor-pointer`}>
+                                <div className="text-3xl mr-4">{item.icon}</div>
+                                <div className="flex-1">
+                                  <h3 className={`font-medium mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>{item.title}</h3>
+                                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>{item.desc}</p>
+                                </div>
+                                <div className="text-[#00D4AA]">→</div>
+                              </div>
+                            ))}
+                            
+                            {selectedContact === "ai-trading" && [
+                              { icon: "📈", title: "市场分析", desc: "实时分析市场趋势和价格走向" },
+                              { icon: "💡", title: "投资建议", desc: "基于数据提供个性化投资策略" },
+                              { icon: "⚠️", title: "风险预警", desc: "及时提醒潜在风险和异常波动" }
+                            ].map((item, index) => (
+                              <div key={index} className={`flex items-center p-4 rounded-xl ${isDark ? "bg-[#252842] hover:bg-[#2a2d42]" : "bg-gray-50 hover:bg-gray-100"} transition-all cursor-pointer`}>
+                                <div className="text-3xl mr-4">{item.icon}</div>
+                                <div className="flex-1">
+                                  <h3 className={`font-medium mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>{item.title}</h3>
+                                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>{item.desc}</p>
+                                </div>
+                                <div className="text-[#00D4AA]">→</div>
+                              </div>
+                            ))}
+                            
+                            {selectedContact === "ai-customer" && [
+                              { icon: "💬", title: "即时问答", desc: "快速解答您的各种问题" },
+                              { icon: "🔧", title: "技术支持", desc: "协助解决技术和操作问题" },
+                              { icon: "📚", title: "使用指导", desc: "详细的功能介绍和操作教程" }
+                            ].map((item, index) => (
+                              <div key={index} className={`flex items-center p-4 rounded-xl ${isDark ? "bg-[#252842] hover:bg-[#2a2d42]" : "bg-gray-50 hover:bg-gray-100"} transition-all cursor-pointer`}>
+                                <div className="text-3xl mr-4">{item.icon}</div>
+                                <div className="flex-1">
+                                  <h3 className={`font-medium mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>{item.title}</h3>
+                                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>{item.desc}</p>
+                                </div>
+                                <div className="text-[#00D4AA]">→</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Area */}
+                      <div className="p-8 border-t border-gray-200 dark:border-[#3a3d4a]">
+                        <div className="text-center">
+                          <button 
+                            onClick={() => {
+                              setShowAIProfile(false)
+                              setShowMemberSidebar(false)
+                              console.log(`开始与${selectedContact}对话`)
+                            }}
+                            className="group relative overflow-hidden px-12 py-4 bg-[#00D4AA] text-white text-lg font-semibold rounded-full hover:bg-[#00b89a] transition-all duration-300 shadow-lg hover:shadow-xl"
+                          >
+                            <span className="relative z-10 flex items-center justify-center">
+                              <span className="mr-2">开始对话</span>
+                              <span className="group-hover:translate-x-1 transition-transform">💬</span>
+                            </span>
+                          </button>
+                          <p className={`text-sm mt-3 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                            点击开始，我将为您提供专业服务
+                          </p>
+                        </div>
                       </div>
                     </div>
                   ) : (
