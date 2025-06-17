@@ -282,26 +282,36 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className={`${isDark ? "bg-[#252842]" : "bg-gray-100"} rounded-lg p-1 mx-4 mb-4`}>
-          <div className="flex items-center">
-            {tabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-all duration-300 whitespace-nowrap relative ${
-                  activeTab === tab
-                    ? isDark
-                      ? "bg-black text-white shadow-sm"
-                      : "bg-black text-white shadow-sm"
-                    : isDark
-                      ? "text-gray-300 hover:text-white hover:bg-[#1a1d29]/50"
-                      : "text-gray-600 hover:text-gray-800 hover:bg-white/50"
-                }`}
-              >
-                <span className="relative z-10">{tab}</span>
-              </button>
-            ))}
+        {/* Tabs with sliding animation */}
+        <div className="mx-4 mb-4">
+          <div className="relative">
+            <div className={`flex ${isDark ? "bg-[#252842]" : "bg-gray-200"} rounded-md p-1`}>
+              {/* Sliding background */}
+              <div
+                className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out bg-black`}
+                style={{
+                  width: `${100 / tabs.length}%`,
+                  left: `${(tabs.indexOf(activeTab) * 100) / tabs.length}%`
+                }}
+              />
+
+              {/* Tab buttons */}
+              {tabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`relative z-10 flex-1 py-2 text-xs font-medium rounded-md transition-colors duration-300 whitespace-nowrap ${
+                    activeTab === tab
+                      ? "text-white"
+                      : isDark
+                        ? "text-gray-400 hover:text-white"
+                        : "text-gray-600 hover:text-gray-800"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
