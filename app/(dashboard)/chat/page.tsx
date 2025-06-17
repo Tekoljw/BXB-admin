@@ -726,21 +726,18 @@ export default function ChatPage() {
                         {request.avatar}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                            {request.name}
-                          </h3>
-                          <span className="text-xs text-gray-400">{request.time}</span>
-                        </div>
+                        <h3 className={`font-medium mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {request.name}
+                        </h3>
                         <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
                           {request.message}
                         </p>
                       </div>
                       
                       {/* Action buttons on the right */}
-                      <div className="flex items-center ml-4">
+                      <div className="flex flex-col items-end ml-4">
                         {request.status === "pending" ? (
-                          <div className="flex space-x-2">
+                          <div className="flex space-x-2 mb-1">
                             <button className="px-3 py-1.5 bg-[#00D4AA] text-white text-xs rounded-md hover:bg-[#00b89a] transition-colors">
                               接受
                             </button>
@@ -753,13 +750,14 @@ export default function ChatPage() {
                             </button>
                           </div>
                         ) : (
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center space-x-2 mb-1">
                             <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
                               <span className="text-xs text-white">✓</span>
                             </div>
                             <span className="text-xs text-green-500">已接受</span>
                           </div>
                         )}
+                        <span className="text-xs text-gray-400">{request.time}</span>
                       </div>
                     </div>
                   </div>
