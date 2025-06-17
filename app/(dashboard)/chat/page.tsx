@@ -128,6 +128,11 @@ export default function ChatPage() {
     }
   }, [])
 
+  // Reset selected contact when tab changes
+  useEffect(() => {
+    setSelectedContact(null)
+  }, [activeTab])
+
   // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -149,20 +154,39 @@ export default function ChatPage() {
   const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
   const tabs = ["好友", "群组", "担保", "通讯录"]
 
-  // Contact data
-  const contacts: Contact[] = [
+  // Contact data for different tabs
+  const friendContacts: Contact[] = [
     {
-      id: "contact-1",
-      name: "交易助手",
-      avatar: "🤖",
-      lastMessage: "您好，我是您的AI交易助手，有什么可以帮您的吗？",
-      time: "09:30",
-      unread: 2,
+      id: "friend-1",
+      name: "张三",
+      avatar: "👨‍💼",
+      lastMessage: "今天BTC走势不错",
+      time: "10:30",
+      unread: 1,
       isOnline: true,
       isActive: true,
     },
     {
-      id: "contact-2",
+      id: "friend-2",
+      name: "李四",
+      avatar: "👩‍💼",
+      lastMessage: "我刚看了那个分析报告",
+      time: "09:45",
+      isOnline: true,
+    },
+    {
+      id: "friend-3",
+      name: "王五",
+      avatar: "👨‍🎓",
+      lastMessage: "明天见面聊聊",
+      time: "昨天",
+      isOnline: false,
+    },
+  ]
+
+  const groupContacts: Contact[] = [
+    {
+      id: "group-1",
       name: "BTC交易群",
       avatar: "₿",
       lastMessage: "张三: 今天BTC走势如何？",
@@ -171,14 +195,97 @@ export default function ChatPage() {
       isOnline: true,
     },
     {
-      id: "contact-3",
-      name: "李四",
-      avatar: "👨‍💼",
-      lastMessage: "我刚看了那个分析报告，非常有见地",
+      id: "group-2",
+      name: "USDT交易讨论",
+      avatar: "💰",
+      lastMessage: "李四: 稳定币市场分析",
+      time: "08:30",
+      unread: 3,
+      isOnline: true,
+    },
+    {
+      id: "group-3",
+      name: "投资策略群",
+      avatar: "📈",
+      lastMessage: "王五: 下周市场预测",
       time: "昨天",
       isOnline: false,
     },
   ]
+
+  const escrowContacts: Contact[] = [
+    {
+      id: "escrow-1",
+      name: "担保交易 #001",
+      avatar: "🛡️",
+      lastMessage: "交易进行中，请等待确认",
+      time: "11:00",
+      unread: 1,
+      isOnline: true,
+    },
+    {
+      id: "escrow-2",
+      name: "担保交易 #002",
+      avatar: "🔒",
+      lastMessage: "资金已托管，等待买家确认",
+      time: "10:15",
+      isOnline: true,
+    },
+    {
+      id: "escrow-3",
+      name: "担保交易 #003",
+      avatar: "✅",
+      lastMessage: "交易已完成",
+      time: "2小时前",
+      isOnline: false,
+    },
+  ]
+
+  const addressBookContacts: Contact[] = [
+    {
+      id: "contact-1",
+      name: "交易助手",
+      avatar: "🤖",
+      lastMessage: "您好，我是您的AI交易助手",
+      time: "09:30",
+      unread: 2,
+      isOnline: true,
+    },
+    {
+      id: "contact-2",
+      name: "客服小助手",
+      avatar: "👩‍💻",
+      lastMessage: "有问题随时联系我",
+      time: "09:00",
+      isOnline: true,
+    },
+    {
+      id: "contact-3",
+      name: "技术支持",
+      avatar: "🔧",
+      lastMessage: "技术问题咨询",
+      time: "昨天",
+      isOnline: false,
+    },
+  ]
+
+  // Get contacts based on active tab
+  const getContactsByTab = () => {
+    switch (activeTab) {
+      case "好友":
+        return friendContacts
+      case "群组":
+        return groupContacts
+      case "担保":
+        return escrowContacts
+      case "通讯录":
+        return addressBookContacts
+      default:
+        return friendContacts
+    }
+  }
+
+  const contacts = getContactsByTab()
 
   // Message data
   const messages: { [key: string]: Message[] } = {
