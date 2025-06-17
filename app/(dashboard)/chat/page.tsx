@@ -49,32 +49,21 @@ export default function ChatPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const addMenuRef = useRef<HTMLDivElement>(null)
-  const chatContainerRef = useRef<HTMLDivElement>(null)
-  const firstUnreadRef = useRef<HTMLDivElement>(null)
-  const memberSidebarRef = useRef<HTMLDivElement>(null)
 
-  // Auto-adjust textarea height
+  // Adjust textarea height
   const adjustTextareaHeight = useCallback(() => {
     if (textareaRef.current) {
-      const textarea = textareaRef.current
-      textarea.style.height = 'auto'
-      const scrollHeight = textarea.scrollHeight
-      const newHeight = Math.max(140, Math.min(400, scrollHeight + 80))
-      setInputHeight(newHeight)
-      textarea.style.height = `${scrollHeight}px`
+      textareaRef.current.style.height = 'auto'
+      const scrollHeight = textareaRef.current.scrollHeight
+      textareaRef.current.style.height = `${Math.min(scrollHeight, 120)}px`
     }
   }, [])
 
-  // When message content changes, adjust height
-  useEffect(() => {
-    adjustTextareaHeight()
-  }, [message, adjustTextareaHeight])
-
-
-
-  // Handle input area drag resize
+  // Handle resize
   const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault()
     setIsResizing(true)
+
     const startY = e.clientY
     const startHeight = inputHeight
 
@@ -430,13 +419,11 @@ export default function ChatPage() {
                         item.action()
                         handleCloseMenu()
                       }}
-                      className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-100 ${
-                        isDark
-                          ? "text-white hover:bg-[#252842] hover:translate-x-1"
-                          : "text-gray-800 hover:bg-gray-100 hover:translate-x-1"
+                      className={`w-full flex items-center px-4 py-3 text-sm hover:bg-gray-50 transition-colors ${
+                        isDark ? "text-white hover:bg-[#252842]" : "text-gray-700"
                       }`}
                     >
-                      <item.icon className="h-4 w-4 mr-3" />
+                      <item.icon className="w-4 h-4 mr-3" />
                       {item.label}
                     </button>
                   ))}
@@ -446,7 +433,7 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Tabs with sliding animation */}
+        {/* Tab Navigation */}
         <div className="mx-4 mb-4">
           <div className="relative">
             <div className={`flex ${isDark ? "bg-[#252842]" : "bg-gray-200"} rounded-md p-1`}>
@@ -687,137 +674,228 @@ export default function ChatPage() {
 
       {/* Chat Area */}
       {selectedContact && !isMobile ? (
-        <div className="flex-1 flex flex-col">
-          {/* Chat Header */}
-          <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center justify-between`}>
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                🤖
-              </div>
-              <div>
-                <h2 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>交易助手</h2>
-                <p className="text-sm text-green-500">在线</p>
-              </div>
+        selectedContact === "friend-request-1" ? (
+          // Friend Request List
+          <div className="flex-1 flex flex-col">
+            {/* Header */}
+            <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
+              <h2 className={`text-lg font-medium ${isDark ? "text-white" : "text-gray-800"}`}>新的朋友</h2>
+              <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>管理好友请求</p>
             </div>
-            <div className="flex items-center space-x-2">
-              <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-              }`}>
-                <Phone className="w-5 h-5" />
-              </button>
-              <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-              }`}>
-                <Video className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
 
-          {/* Messages Area */}
-          <div className="flex-1 p-4 overflow-y-auto">
-            <div className="space-y-4">
-              {(messages[selectedContact] || []).map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${msg.senderId === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
+            {/* Friend Requests List */}
+            <div className="flex-1 p-4 overflow-y-auto">
+              <div className="space-y-3">
+                {/* Sample friend requests */}
+                {[
+                  {
+                    id: "req-1",
+                    name: "张明",
+                    avatar: "👨‍💼",
+                    message: "你好，我想加你为好友",
+                    time: "2小时前",
+                    status: "pending"
+                  },
+                  {
+                    id: "req-2", 
+                    name: "李华",
+                    avatar: "👩‍💻",
+                    message: "通过朋友介绍认识",
+                    time: "5小时前",
+                    status: "pending"
+                  },
+                  {
+                    id: "req-3",
+                    name: "王强",
+                    avatar: "👨‍🎓",
+                    message: "我们在交易群里聊过",
+                    time: "1天前",
+                    status: "accepted"
+                  }
+                ].map((request) => (
                   <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                      msg.senderId === 'user'
-                        ? 'bg-[#00D4AA] text-white'
-                        : isDark
-                          ? 'bg-[#252842] text-white'
-                          : 'bg-gray-100 text-gray-800'
+                    key={request.id}
+                    className={`p-4 rounded-lg border ${
+                      isDark
+                        ? "bg-[#1a1d29] border-[#252842]"
+                        : "bg-white border-gray-200"
                     }`}
                   >
-                    <p className="text-sm">{msg.text}</p>
-                    <p className="text-xs mt-1 opacity-70">{msg.time}</p>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white text-lg font-bold">
+                        {request.avatar}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                            {request.name}
+                          </h3>
+                          <span className="text-xs text-gray-400">{request.time}</span>
+                        </div>
+                        <p className={`text-sm mb-3 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                          {request.message}
+                        </p>
+                        
+                        {request.status === "pending" ? (
+                          <div className="flex space-x-2">
+                            <button className="px-4 py-2 bg-[#00D4AA] text-white text-sm rounded-lg hover:bg-[#00b89a] transition-colors">
+                              接受
+                            </button>
+                            <button className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                              isDark
+                                ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]"
+                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            }`}>
+                              拒绝
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                              <span className="text-xs text-white">✓</span>
+                            </div>
+                            <span className="text-sm text-green-500">已接受</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input Area */}
-          <div 
-            className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex flex-col`}
-            style={{ height: `${inputHeight}px`, minHeight: `${inputHeight}px`, maxHeight: `${inputHeight}px` }}
-          >
-            {/* Drag Handle */}
-            <div 
-              className={`w-full h-1 cursor-ns-resize flex items-center justify-center ${
-                isDark ? "hover:bg-[#2a2d42]" : "hover:bg-gray-100"
-              } ${isResizing ? (isDark ? "bg-[#2a2d42]" : "bg-gray-100") : ""} transition-colors`}
-              onMouseDown={handleMouseDown}
-            >
-              <div className={`w-8 h-0.5 rounded-full ${
-                isDark ? "bg-gray-600" : "bg-gray-300"
-              }`}></div>
-            </div>
-
-            {/* Toolbar */}
-            <div className="flex items-center px-4 py-2 space-x-2">
-              <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-              }`}>
-                <Smile className="w-5 h-5" />
-              </button>
-              <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-              }`}>
-                <Paperclip className="w-5 h-5" />
-              </button>
-              <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-              }`}>
-                <Scissors className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Input Area */}
-            <div className="flex-1 p-4 flex flex-col min-h-0 overflow-hidden">
-              <div className="flex-1 min-h-0 mb-3">
-                <textarea
-                  ref={textareaRef}
-                  value={message}
-                  onChange={(e) => {
-                    setMessage(e.target.value)
-                    adjustTextareaHeight()
-                  }}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault()
-                      handleSendMessage(e as any)
-                    }
-                  }}
-                  placeholder="输入消息..."
-                  className={`w-full h-full p-3 resize-none outline-none text-base bg-transparent ${
-                    isDark 
-                      ? "text-white placeholder-gray-500" 
-                      : "text-gray-900 placeholder-gray-400"
-                  }`}
-                  style={{ minHeight: '100px', maxHeight: '300px' }}
-                />
+                ))}
               </div>
-              
-              {/* Send Button */}
-              <div className="flex justify-end shrink-0">
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!message.trim()}
-                  className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
-                    message.trim()
-                      ? "bg-black text-white hover:bg-gray-800"
-                      : "border border-gray-400 text-gray-400 cursor-not-allowed bg-transparent"
-                  }`}
-                >
-                  发送
+            </div>
+          </div>
+        ) : (
+          // Regular Chat Interface
+          <div className="flex-1 flex flex-col">
+            {/* Chat Header */}
+            <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center justify-between`}>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                  🤖
+                </div>
+                <div>
+                  <h2 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>交易助手</h2>
+                  <p className="text-sm text-green-500">在线</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                  isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                }`}>
+                  <Phone className="w-5 h-5" />
+                </button>
+                <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                  isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                }`}>
+                  <Video className="w-5 h-5" />
                 </button>
               </div>
             </div>
+
+            {/* Messages Area */}
+            <div className="flex-1 p-4 overflow-y-auto">
+              <div className="space-y-4">
+                {(messages[selectedContact] || []).map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`flex ${msg.senderId === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                        msg.senderId === 'user'
+                          ? 'bg-[#00D4AA] text-white'
+                          : isDark
+                            ? 'bg-[#252842] text-white'
+                            : 'bg-gray-100 text-gray-800'
+                      }`}
+                    >
+                      <p className="text-sm">{msg.text}</p>
+                      <p className="text-xs mt-1 opacity-70">{msg.time}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Area */}
+            <div 
+              className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex flex-col`}
+              style={{ height: `${inputHeight}px`, minHeight: `${inputHeight}px`, maxHeight: `${inputHeight}px` }}
+            >
+              {/* Drag Handle */}
+              <div 
+                className={`w-full h-1 cursor-ns-resize flex items-center justify-center ${
+                  isDark ? "hover:bg-[#2a2d42]" : "hover:bg-gray-100"
+                } ${isResizing ? (isDark ? "bg-[#2a2d42]" : "bg-gray-100") : ""} transition-colors`}
+                onMouseDown={handleMouseDown}
+              >
+                <div className={`w-8 h-0.5 rounded-full ${
+                  isDark ? "bg-gray-600" : "bg-gray-300"
+                }`}></div>
+              </div>
+
+              {/* Toolbar */}
+              <div className="flex items-center px-4 py-2 space-x-2">
+                <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                  isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                }`}>
+                  <Smile className="w-5 h-5" />
+                </button>
+                <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                  isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                }`}>
+                  <Paperclip className="w-5 h-5" />
+                </button>
+                <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                  isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                }`}>
+                  <Scissors className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Input Area */}
+              <div className="flex-1 p-4 flex flex-col min-h-0 overflow-hidden">
+                <div className="flex-1 min-h-0 mb-3">
+                  <textarea
+                    ref={textareaRef}
+                    value={message}
+                    onChange={(e) => {
+                      setMessage(e.target.value)
+                      adjustTextareaHeight()
+                    }}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault()
+                        handleSendMessage()
+                      }
+                    }}
+                    placeholder="输入消息..."
+                    className={`w-full resize-none border-none outline-none text-sm leading-relaxed ${
+                      isDark
+                        ? "bg-transparent text-white placeholder-gray-400"
+                        : "bg-transparent text-gray-800 placeholder-gray-500"
+                    }`}
+                    style={{ minHeight: '80px', maxHeight: '120px' }}
+                  />
+                </div>
+                <div className="flex items-center justify-end">
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!message.trim()}
+                    className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
+                      message.trim()
+                        ? "bg-black text-white hover:bg-gray-800"
+                        : "border border-gray-400 text-gray-400 cursor-not-allowed bg-transparent"
+                    }`}
+                  >
+                    发送
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        )
       ) : !isMobile ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
