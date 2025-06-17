@@ -9,12 +9,17 @@ export default function TetherIcon({ className = "w-5 h-5" }: TetherIconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M8 7h8M12 7v10"/>
-      <circle cx="12" cy="15" r="2" fill="none"/>
+      {/* Horizontal top bar */}
+      <path d="M6 4h12v4H6z" fill="none" stroke="currentColor"/>
+      
+      {/* Vertical bar */}
+      <path d="M10 4h4v16h-4z" fill="none" stroke="currentColor"/>
+      
+      {/* Oval/ellipse in the middle */}
+      <ellipse cx="12" cy="12" rx="8" ry="3" fill="none" stroke="currentColor"/>
     </svg>
   )
 }
