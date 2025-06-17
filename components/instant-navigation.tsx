@@ -180,7 +180,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   {/* Icon with Simple Animation */}
                   <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
                     {item.path === '/usdt-trade' ? (
-                      <TetherIcon className="w-[26px] h-[26px]" />
+                      <div className={`transition-all duration-300 ${active ? 'text-custom-green' : 'text-gray-300'}`}>
+                        <TetherIcon className="w-[26px] h-[26px]" />
+                      </div>
                     ) : (
                       <Icon size={26} />
                     )}
