@@ -44,6 +44,7 @@ export default function ChatPage() {
   const [showMemberSidebar, setShowMemberSidebar] = useState(false)
   const [memberSidebarAnimating, setMemberSidebarAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [activeProfileTab, setActiveProfileTab] = useState("动态")
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -865,103 +866,359 @@ export default function ChatPage() {
             {/* Tab Navigation */}
             <div className={`${cardStyle} mb-4`}>
               <div className="flex border-b border-gray-200 dark:border-[#3a3d4a]">
-                <button className={`px-6 py-3 text-sm font-medium border-b-2 border-[#00D4AA] text-[#00D4AA]`}>
+                <button 
+                  onClick={() => setActiveProfileTab("动态")}
+                  className={`px-6 py-3 text-sm font-medium ${
+                    activeProfileTab === "动态" 
+                      ? "border-b-2 border-[#00D4AA] text-[#00D4AA]" 
+                      : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"
+                  }`}
+                >
                   动态
                 </button>
-                <button className={`px-6 py-3 text-sm font-medium ${
-                  isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"
-                }`}>
+                <button 
+                  onClick={() => setActiveProfileTab("交易记录")}
+                  className={`px-6 py-3 text-sm font-medium ${
+                    activeProfileTab === "交易记录" 
+                      ? "border-b-2 border-[#00D4AA] text-[#00D4AA]" 
+                      : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"
+                  }`}
+                >
                   交易记录
                 </button>
-                <button className={`px-6 py-3 text-sm font-medium ${
-                  isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"
-                }`}>
+                <button 
+                  onClick={() => setActiveProfileTab("持仓分析")}
+                  className={`px-6 py-3 text-sm font-medium ${
+                    activeProfileTab === "持仓分析" 
+                      ? "border-b-2 border-[#00D4AA] text-[#00D4AA]" 
+                      : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"
+                  }`}
+                >
                   持仓分析
                 </button>
               </div>
             </div>
 
-            {/* Posts Content */}
-            <div className="flex-1 overflow-y-auto space-y-4">
-              {/* Post 1 */}
-              <div className={`${cardStyle} p-6`}>
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
-                    👨‍💼
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <h4 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>Alex Chen</h4>
-                      <span className="text-xs text-gray-500">2小时前</span>
-                    </div>
-                    <p className={`text-sm mb-4 leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                      今日BTC突破关键阻力位，建议关注回调机会。技术面显示强势上涨趋势，但需要注意风险控制。
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <span className="text-sm font-medium text-[#00D4AA]">+12.5%</span>
-                        <div className="flex items-center space-x-1">
-                          <button className="text-red-500 hover:text-red-600">
-                            <span className="text-sm">❤️</span>
-                          </button>
-                          <span className="text-sm text-gray-500">156</span>
+            {/* Content Based on Active Tab */}
+            <div className="flex-1 overflow-y-auto">
+              {activeProfileTab === "动态" && (
+                <div className="space-y-4">
+                  {/* Post 1 */}
+                  <div className={`${cardStyle} p-6`}>
+                    <div className="flex items-start space-x-4">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
+                        👨‍💼
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <h4 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>Alex Chen</h4>
+                          <span className="text-xs text-gray-500">2小时前</span>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <button className={`${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
-                            <MessageCircle className="w-4 h-4" />
+                        <p className={`text-sm mb-4 leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                          今日BTC突破关键阻力位，建议关注回调机会。技术面显示强势上涨趋势，但需要注意风险控制。
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <span className="text-sm font-medium text-[#00D4AA]">+12.5%</span>
+                            <div className="flex items-center space-x-1">
+                              <button className="text-red-500 hover:text-red-600">
+                                <span className="text-sm">❤️</span>
+                              </button>
+                              <span className="text-sm text-gray-500">156</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <button className={`${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
+                                <MessageCircle className="w-4 h-4" />
+                              </button>
+                              <span className="text-sm text-gray-500">23</span>
+                            </div>
+                          </div>
+                          <button className={`text-xs px-3 py-1 rounded-full ${
+                            isDark ? "bg-[#252842] text-gray-300" : "bg-gray-100 text-gray-600"
+                          }`}>
+                            BTC/USDT
                           </button>
-                          <span className="text-sm text-gray-500">23</span>
                         </div>
                       </div>
-                      <button className={`text-xs px-3 py-1 rounded-full ${
-                        isDark ? "bg-[#252842] text-gray-300" : "bg-gray-100 text-gray-600"
-                      }`}>
-                        BTC/USDT
-                      </button>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              {/* Post 2 */}
-              <div className={`${cardStyle} p-6`}>
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
-                    👨‍💼
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <h4 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>Alex Chen</h4>
-                      <span className="text-xs text-gray-500">6小时前</span>
-                    </div>
-                    <p className={`text-sm mb-4 leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                      ETH/USDT 4小时级别形成看涨三角形突破，目标位看到2150附近。
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <span className="text-sm font-medium text-[#00D4AA]">+8.3%</span>
-                        <div className="flex items-center space-x-1">
-                          <button className="text-red-500 hover:text-red-600">
-                            <span className="text-sm">❤️</span>
-                          </button>
-                          <span className="text-sm text-gray-500">89</span>
+                  {/* Post 2 */}
+                  <div className={`${cardStyle} p-6`}>
+                    <div className="flex items-start space-x-4">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
+                        👨‍💼
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <h4 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>Alex Chen</h4>
+                          <span className="text-xs text-gray-500">6小时前</span>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <button className={`${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
-                            <MessageCircle className="w-4 h-4" />
+                        <p className={`text-sm mb-4 leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                          ETH/USDT 4小时级别形成看涨三角形突破，目标位看到2150附近。
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <span className="text-sm font-medium text-[#00D4AA]">+8.3%</span>
+                            <div className="flex items-center space-x-1">
+                              <button className="text-red-500 hover:text-red-600">
+                                <span className="text-sm">❤️</span>
+                              </button>
+                              <span className="text-sm text-gray-500">89</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <button className={`${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
+                                <MessageCircle className="w-4 h-4" />
+                              </button>
+                              <span className="text-sm text-gray-500">12</span>
+                            </div>
+                          </div>
+                          <button className={`text-xs px-3 py-1 rounded-full ${
+                            isDark ? "bg-[#252842] text-gray-300" : "bg-gray-100 text-gray-600"
+                          }`}>
+                            ETH/USDT
                           </button>
-                          <span className="text-sm text-gray-500">12</span>
                         </div>
                       </div>
-                      <button className={`text-xs px-3 py-1 rounded-full ${
-                        isDark ? "bg-[#252842] text-gray-300" : "bg-gray-100 text-gray-600"
-                      }`}>
-                        ETH/USDT
-                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {activeProfileTab === "交易记录" && (
+                <div className="space-y-4">
+                  {/* Performance Stats */}
+                  <div className={`${cardStyle} p-6`}>
+                    <div className="grid grid-cols-3 gap-6 mb-6">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-[#00D4AA]">+158.7%</div>
+                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>总收益</div>
+                      </div>
+                      <div className="text-center">
+                        <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>85.2%</div>
+                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>胜率</div>
+                      </div>
+                      <div className="text-center">
+                        <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>1234</div>
+                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>交易笔数</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Trading Records */}
+                  <div className={`${cardStyle}`}>
+                    <div className="p-4 border-b border-gray-200 dark:border-[#3a3d4a]">
+                      <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>最近交易</h3>
+                    </div>
+                    <div className="divide-y divide-gray-200 dark:divide-[#3a3d4a]">
+                      {/* BTC Trade */}
+                      <div className="p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                              BTC
+                            </div>
+                            <div>
+                              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>BTC/USDT</div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-xs px-2 py-1 bg-[#00D4AA] text-white rounded">多单</span>
+                                <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>已平仓</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-[#00D4AA] font-medium">+2.3%</div>
+                            <div className="text-xs text-gray-500">10:30</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>买入: $42,150</span>
+                          <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>卖出: $43,120</span>
+                        </div>
+                        <div className="mt-1">
+                          <span className="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded">开仓 +15%</span>
+                        </div>
+                      </div>
+
+                      {/* ETH Trade */}
+                      <div className="p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                              ETH
+                            </div>
+                            <div>
+                              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>ETH/USDT</div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-xs px-2 py-1 bg-red-500 text-white rounded">空单</span>
+                                <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>已平仓</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-[#00D4AA] font-medium">+1.8%</div>
+                            <div className="text-xs text-gray-500">09:15</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>买入: $2,450</span>
+                          <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>卖出: $2,406</span>
+                        </div>
+                        <div className="mt-1">
+                          <span className="text-xs px-2 py-1 bg-red-100 text-red-600 rounded">平仓 -8%</span>
+                        </div>
+                      </div>
+
+                      {/* BNB Trade */}
+                      <div className="p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                              BNB
+                            </div>
+                            <div>
+                              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>BNB/USDT</div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-xs px-2 py-1 bg-[#00D4AA] text-white rounded">多单</span>
+                                <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>已平仓</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-[#00D4AA] font-medium">+3.5%</div>
+                            <div className="text-xs text-gray-500">昨天</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>买入: $285</span>
+                          <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>卖出: $295</span>
+                        </div>
+                        <div className="mt-1">
+                          <span className="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded">开仓 +22%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeProfileTab === "持仓分析" && (
+                <div className="space-y-4">
+                  {/* Performance Overview */}
+                  <div className={`${cardStyle} p-6`}>
+                    <div className="grid grid-cols-3 gap-6 mb-6">
+                      <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                        <div className="text-2xl font-bold text-[#00D4AA]">+3.2%</div>
+                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>今日盈亏</div>
+                      </div>
+                      <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                        <div className="text-2xl font-bold text-blue-500">+15.8%</div>
+                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>本周盈亏</div>
+                      </div>
+                      <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                        <div className="text-2xl font-bold text-purple-500">+68.4%</div>
+                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>12个月盈亏</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Portfolio Holdings */}
+                  <div className={`${cardStyle}`}>
+                    <div className="p-4 border-b border-gray-200 dark:border-[#3a3d4a]">
+                      <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>持仓详情</h3>
+                    </div>
+                    <div className="divide-y divide-gray-200 dark:divide-[#3a3d4a]">
+                      {/* BTC Holding */}
+                      <div className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                              BTC
+                            </div>
+                            <div>
+                              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>BTC</div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-xs px-2 py-1 bg-[#00D4AA] text-white rounded">多单</span>
+                                <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>持仓占比</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>35.2%</div>
+                            <div className="text-[#00D4AA] text-sm">+2.04%</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* ETH Holding */}
+                      <div className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                              ETH
+                            </div>
+                            <div>
+                              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>ETH</div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-xs px-2 py-1 bg-red-500 text-white rounded">空单</span>
+                                <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>持仓占比</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>28.1%</div>
+                            <div className="text-red-500 text-sm">-1.23%</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* BNB Holding */}
+                      <div className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                              BNB
+                            </div>
+                            <div>
+                              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>BNB</div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-xs px-2 py-1 bg-[#00D4AA] text-white rounded">多单</span>
+                                <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>持仓占比</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>18.7%</div>
+                            <div className="text-[#00D4AA] text-sm">+0.89%</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* SOL Holding */}
+                      <div className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                              SOL
+                            </div>
+                            <div>
+                              <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>SOL</div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-xs px-2 py-1 bg-red-500 text-white rounded">空单</span>
+                                <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>持仓占比</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>18.0%</div>
+                            <div className="text-[#00D4AA] text-sm">+1.15%</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         ) : (
