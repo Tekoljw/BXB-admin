@@ -6,7 +6,7 @@ import { useTheme } from "@/contexts/theme-context"
 import AccountDropdown from "@/components/account-dropdown"
 import {
   MessageCircle,
-  Users,
+  Compass,
   ShoppingBag,
   DollarSign,
   LineChart,
@@ -78,7 +78,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
   const navItems = [
     { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
-    { path: "/moments", icon: Users, label: "分享", component: MomentsPage },
+    { path: "/moments", icon: Compass, label: "分享", component: MomentsPage },
     { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
     { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
     { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
