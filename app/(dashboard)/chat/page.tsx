@@ -13,6 +13,8 @@ interface Contact {
   unread?: number
   isOnline: boolean
   isActive?: boolean
+  isSpecial?: boolean
+  isAI?: boolean
 }
 
 interface Message {
@@ -242,30 +244,85 @@ export default function ChatPage() {
   ]
 
   const addressBookContacts: Contact[] = [
+    // 新好友请求
     {
-      id: "contact-1",
-      name: "交易助手",
-      avatar: "🤖",
-      lastMessage: "您好，我是您的AI交易助手",
-      time: "09:30",
+      id: "friend-request-1",
+      name: "新好友请求",
+      avatar: "👋",
+      lastMessage: "有 2 个新的好友请求",
+      time: "刚刚",
       unread: 2,
       isOnline: true,
+      isSpecial: true,
+    },
+    // AI助手
+    {
+      id: "ai-escrow",
+      name: "AI担保助手",
+      avatar: "🛡️",
+      lastMessage: "我可以帮您进行安全的担保交易",
+      time: "在线",
+      isOnline: true,
+      isAI: true,
     },
     {
-      id: "contact-2",
-      name: "客服小助手",
+      id: "ai-trading",
+      name: "AI交易助手",
+      avatar: "🤖",
+      lastMessage: "为您提供专业的交易建议",
+      time: "在线",
+      isOnline: true,
+      isAI: true,
+    },
+    {
+      id: "ai-customer",
+      name: "AI客服助手",
       avatar: "👩‍💻",
-      lastMessage: "有问题随时联系我",
-      time: "09:00",
+      lastMessage: "24小时为您服务",
+      time: "在线",
+      isOnline: true,
+      isAI: true,
+    },
+    // 我的好友 (按字母排序)
+    {
+      id: "friend-alex",
+      name: "Alex Chen",
+      avatar: "👨‍💼",
+      lastMessage: "明天的会议改时间了",
+      time: "15:30",
       isOnline: true,
     },
     {
-      id: "contact-3",
-      name: "技术支持",
-      avatar: "🔧",
-      lastMessage: "技术问题咨询",
+      id: "friend-bob",
+      name: "Bob Wang",
+      avatar: "👨‍🎓",
+      lastMessage: "那个项目进展如何？",
       time: "昨天",
       isOnline: false,
+    },
+    {
+      id: "friend-charlie",
+      name: "Charlie Li",
+      avatar: "👨‍🔬",
+      lastMessage: "新的投资机会",
+      time: "2天前",
+      isOnline: true,
+    },
+    {
+      id: "friend-david",
+      name: "David Zhang",
+      avatar: "👨‍💻",
+      lastMessage: "技术分析报告已发送",
+      time: "3天前",
+      isOnline: false,
+    },
+    {
+      id: "friend-eric",
+      name: "Eric Liu",
+      avatar: "👨‍🏫",
+      lastMessage: "下周聚餐安排",
+      time: "1周前",
+      isOnline: true,
     },
   ]
 
@@ -424,51 +481,207 @@ export default function ChatPage() {
 
         {/* Contact List */}
         <div className="flex-1 px-4 pb-4 overflow-y-auto">
-          <div className="space-y-2">
-            {filteredContacts.map((contact) => (
-              <div
-                key={contact.id}
-                onClick={() => {
-                  setSelectedContact(contact.id)
-                  if (isMobile) {
-                    // Mobile navigation logic would go here
-                  }
-                }}
-                className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer ${
-                  selectedContact === contact.id
-                    ? isDark
-                      ? "bg-[#252842]"
-                      : "bg-gray-100"
-                    : isDark
-                      ? "hover:bg-[#252842]/50"
-                      : "hover:bg-gray-50"
-                }`}
-              >
-                <div className="relative">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold">
-                    {contact.avatar}
+          {activeTab === "通讯录" ? (
+            // Address Book with sections
+            <div className="space-y-4">
+              {/* Friend Requests Section */}
+              <div>
+                <h4 className={`text-xs font-medium mb-2 px-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                  新的朋友
+                </h4>
+                {filteredContacts.filter(contact => contact.isSpecial).map((contact) => (
+                  <div
+                    key={contact.id}
+                    onClick={() => {
+                      setSelectedContact(contact.id)
+                      if (isMobile) {
+                        // Mobile navigation logic would go here
+                      }
+                    }}
+                    className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer mb-2 ${
+                      selectedContact === contact.id
+                        ? isDark
+                          ? "bg-[#252842]"
+                          : "bg-gray-100"
+                        : isDark
+                          ? "hover:bg-[#252842]/50"
+                          : "hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white text-lg font-bold">
+                        {contact.avatar}
+                      </div>
+                      {contact.isOnline && (
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h3 className={`font-medium truncate ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {contact.name}
+                        </h3>
+                        <span className="text-xs text-gray-400">{contact.time}</span>
+                      </div>
+                      <p className="text-sm text-gray-400 truncate">{contact.lastMessage}</p>
+                    </div>
+                    {contact.unread && (
+                      <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                        <span className="text-xs text-white font-bold">{contact.unread}</span>
+                      </div>
+                    )}
                   </div>
-                  {contact.isOnline && (
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                ))}
+              </div>
+
+              {/* AI Assistants Section */}
+              <div>
+                <h4 className={`text-xs font-medium mb-2 px-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                  AI助手
+                </h4>
+                {filteredContacts.filter(contact => contact.isAI).map((contact) => (
+                  <div
+                    key={contact.id}
+                    onClick={() => {
+                      setSelectedContact(contact.id)
+                      if (isMobile) {
+                        // Mobile navigation logic would go here
+                      }
+                    }}
+                    className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer mb-2 ${
+                      selectedContact === contact.id
+                        ? isDark
+                          ? "bg-[#252842]"
+                          : "bg-gray-100"
+                        : isDark
+                          ? "hover:bg-[#252842]/50"
+                          : "hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white text-lg font-bold">
+                        {contact.avatar}
+                      </div>
+                      {contact.isOnline && (
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h3 className={`font-medium truncate ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {contact.name}
+                        </h3>
+                        <span className="text-xs text-gray-400">{contact.time}</span>
+                      </div>
+                      <p className="text-sm text-gray-400 truncate">{contact.lastMessage}</p>
+                    </div>
+                    {contact.unread && (
+                      <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                        <span className="text-xs text-white font-bold">{contact.unread}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Friends Section */}
+              <div>
+                <h4 className={`text-xs font-medium mb-2 px-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                  我的好友
+                </h4>
+                {filteredContacts.filter(contact => !contact.isSpecial && !contact.isAI).map((contact) => (
+                  <div
+                    key={contact.id}
+                    onClick={() => {
+                      setSelectedContact(contact.id)
+                      if (isMobile) {
+                        // Mobile navigation logic would go here
+                      }
+                    }}
+                    className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer mb-2 ${
+                      selectedContact === contact.id
+                        ? isDark
+                          ? "bg-[#252842]"
+                          : "bg-gray-100"
+                        : isDark
+                          ? "hover:bg-[#252842]/50"
+                          : "hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-lg font-bold">
+                        {contact.avatar}
+                      </div>
+                      {contact.isOnline && (
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h3 className={`font-medium truncate ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {contact.name}
+                        </h3>
+                        <span className="text-xs text-gray-400">{contact.time}</span>
+                      </div>
+                      <p className="text-sm text-gray-400 truncate">{contact.lastMessage}</p>
+                    </div>
+                    {contact.unread && (
+                      <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                        <span className="text-xs text-white font-bold">{contact.unread}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            // Regular contact list for other tabs
+            <div className="space-y-2">
+              {filteredContacts.map((contact) => (
+                <div
+                  key={contact.id}
+                  onClick={() => {
+                    setSelectedContact(contact.id)
+                    if (isMobile) {
+                      // Mobile navigation logic would go here
+                    }
+                  }}
+                  className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer ${
+                    selectedContact === contact.id
+                      ? isDark
+                        ? "bg-[#252842]"
+                        : "bg-gray-100"
+                      : isDark
+                        ? "hover:bg-[#252842]/50"
+                        : "hover:bg-gray-50"
+                  }`}
+                >
+                  <div className="relative">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold">
+                      {contact.avatar}
+                    </div>
+                    {contact.isOnline && (
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <h3 className={`font-medium truncate ${isDark ? "text-white" : "text-gray-800"}`}>
+                        {contact.name}
+                      </h3>
+                      <span className="text-xs text-gray-400">{contact.time}</span>
+                    </div>
+                    <p className="text-sm text-gray-400 truncate">{contact.lastMessage}</p>
+                  </div>
+                  {contact.unread && (
+                    <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                      <span className="text-xs text-white font-bold">{contact.unread}</span>
+                    </div>
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <h3 className={`font-medium truncate ${isDark ? "text-white" : "text-gray-800"}`}>
-                      {contact.name}
-                    </h3>
-                    <span className="text-xs text-gray-400">{contact.time}</span>
-                  </div>
-                  <p className="text-sm text-gray-400 truncate">{contact.lastMessage}</p>
-                </div>
-                {contact.unread && (
-                  <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs text-white font-bold">{contact.unread}</span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
