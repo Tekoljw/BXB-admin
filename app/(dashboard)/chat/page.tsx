@@ -913,7 +913,7 @@ export default function ChatPage() {
                 </div>
 
                 {/* 输入区域内容 */}
-                <div className="flex flex-col px-3 py-2" style={{ height: `${inputHeight - 4}px` }}>
+                <div className="flex flex-col px-3 py-2 pb-4" style={{ height: `${inputHeight - 4}px` }}>
                   {/* 功能按钮行 */}
                   <div className="flex items-center space-x-2">
                     <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
@@ -972,7 +972,7 @@ export default function ChatPage() {
                     />
                     
                     {/* 发送按钮 */}
-                    <div className="flex justify-end">
+                    <div className="flex justify-end mb-3">
                       <button
                         onClick={handleSendMessage}
                         disabled={!message.trim()}
