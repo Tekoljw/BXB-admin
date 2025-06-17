@@ -330,8 +330,8 @@ export default function ChatPage() {
                 className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer ${
                   selectedContact === contact.id
                     ? isDark
-                      ? "bg-[#252842] border border-[#00D4AA]/30"
-                      : "bg-gray-100 border border-[#00D4AA]/30"
+                      ? "bg-[#252842]"
+                      : "bg-gray-100"
                     : isDark
                       ? "hover:bg-[#252842]/50"
                       : "hover:bg-gray-50"
