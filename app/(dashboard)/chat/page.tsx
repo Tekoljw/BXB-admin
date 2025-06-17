@@ -900,7 +900,7 @@ export default function ChatPage() {
               {/* 聊天输入区域 - 在消息区域底部 */}
               <div 
                 className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}
-                style={{ height: `${inputHeight}px` }}
+                style={{ height: `${inputHeight}px`, minHeight: `${inputHeight}px`, maxHeight: `${inputHeight}px` }}
               >
                 {/* 拖拽调整高度的手柄 */}
                 <div 
@@ -913,7 +913,7 @@ export default function ChatPage() {
                 </div>
 
                 {/* 输入区域内容 */}
-                <div className="flex flex-col px-3 py-2 pb-4" style={{ height: `${inputHeight - 4}px` }}>
+                <div className="flex flex-col px-3 py-2 h-full overflow-hidden">
                   {/* 功能按钮行 */}
                   <div className="flex items-center space-x-2">
                     <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
@@ -968,7 +968,7 @@ export default function ChatPage() {
                           ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-500" 
                           : "bg-white text-gray-900 border-gray-300 placeholder-gray-400"
                       } focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
-                      style={{ height: `${Math.max(40, inputHeight - 90)}px` }}
+                      style={{ height: `${Math.max(40, inputHeight - 120)}px` }}
                     />
                     
                     {/* 发送按钮 */}
