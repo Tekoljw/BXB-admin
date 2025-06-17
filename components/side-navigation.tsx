@@ -16,7 +16,7 @@ import {
   ChevronLeft,
   Wallet,
   ShoppingBag,
-  Share2,
+  Compass,
   Coins,
 } from "lucide-react"
 import { usePathname } from "next/navigation"
@@ -191,7 +191,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               }`}
               title={!isExpanded ? t.moments : undefined}
             >
-              <Share2 className="h-5 w-5 md:h-5 md:w-5" />
+              <Compass className="h-5 w-5 md:h-5 md:w-5" />
               <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.moments}</span>
             </button>
           </li>
