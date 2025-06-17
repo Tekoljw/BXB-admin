@@ -570,12 +570,12 @@ export default function ChatPage() {
   ]
 
   return (
-    <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+    <div className={`h-screen overflow-hidden ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       {/* 主聊天区域 */}
-      <div className="flex h-screen">
+      <div className="flex h-full">
         {/* 左侧联系人列表 - 移动端全屏显示，选中联系人时隐藏 */}
         <div 
-          className={`${cardStyle} ${selectedContact ? 'hidden md:flex' : 'flex'} h-screen flex-col ${isMobile ? 'w-screen' : 'w-auto'}`} 
+          className={`${cardStyle} ${selectedContact ? 'hidden md:flex' : 'flex'} h-full flex-col ${isMobile ? 'w-screen' : 'w-auto'} overflow-hidden`} 
           style={isMobile ? { width: '100vw', minWidth: '100vw', maxWidth: '100vw' } : { minWidth: '416px', maxWidth: '500px', width: 'clamp(416px, 30vw, 500px)' }}
         >
           {/* 搜索框和添加按钮 */}
@@ -733,7 +733,7 @@ export default function ChatPage() {
 
         {/* 右侧聊天窗口 - 移动端选中联系人时显示，未选中时隐藏 */}
         <div 
-          className={`${cardStyle} ${!selectedContact ? 'hidden md:flex' : 'flex'} flex-1 flex-col w-full h-screen`}
+          className={`${cardStyle} ${!selectedContact ? 'hidden md:flex' : 'flex'} flex-1 flex-col w-full h-full overflow-hidden`}
         >
           {selectedContactData ? (
             <>
@@ -826,8 +826,7 @@ export default function ChatPage() {
               {/* 聊天内容 */}
               <div
                 ref={chatContainerRef}
-                className={`p-4 overflow-y-auto relative ${isDark ? "bg-[#0f1419]" : "bg-gray-50"}`}
-                style={{ height: `calc(100vh - 120px - ${inputHeight}px)` }}
+                className={`flex-1 p-4 overflow-y-auto relative ${isDark ? "bg-[#0f1419]" : "bg-gray-50"}`}
               >
                 {/* 未读消息指示器 - 右上角 */}
                 {unreadCount > 0 && (
