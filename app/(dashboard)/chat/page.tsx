@@ -327,7 +327,7 @@ export default function ChatPage() {
                     // Mobile navigation logic would go here
                   }
                 }}
-                className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
+                className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer ${
                   selectedContact === contact.id
                     ? isDark
                       ? "bg-[#252842] border border-[#00D4AA]/30"
