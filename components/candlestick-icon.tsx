@@ -7,30 +7,33 @@ export default function CandlestickIcon({ className = "w-5 h-5" }: CandlestickIc
     <svg
       className={className}
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
+      fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* First candlestick */}
-      <line x1="4" y1="6" x2="4" y2="18" />
-      <rect x="3" y="8" width="2" height="6" fill="currentColor" />
+      {/* Chart bars - increasing height from left to right */}
+      <rect x="2" y="16" width="2.5" height="6" fill="currentColor" />
+      <rect x="6" y="13" width="2.5" height="9" fill="currentColor" />
+      <rect x="10" y="18" width="2.5" height="4" fill="currentColor" />
+      <rect x="14" y="10" width="2.5" height="12" fill="currentColor" />
+      <rect x="18" y="6" width="2.5" height="16" fill="currentColor" />
       
-      {/* Second candlestick */}
-      <line x1="8" y1="4" x2="8" y2="20" />
-      <rect x="7" y="7" width="2" height="8" fill="none" stroke="currentColor" strokeWidth="2" />
+      {/* Trending line connecting the tops of bars */}
+      <polyline 
+        points="3.25,16 7.25,13 11.25,18 15.25,10 19.25,6 22,3"
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
       
-      {/* Third candlestick */}
-      <line x1="12" y1="3" x2="12" y2="16" />
-      <rect x="11" y="5" width="2" height="7" fill="currentColor" />
-      
-      {/* Fourth candlestick */}
-      <line x1="16" y1="7" x2="16" y2="21" />
-      <rect x="15" y="10" width="2" height="6" fill="none" stroke="currentColor" strokeWidth="2" />
-      
-      {/* Fifth candlestick */}
-      <line x1="20" y1="5" x2="20" y2="18" />
-      <rect x="19" y="8" width="2" height="5" fill="currentColor" />
+      {/* Upward arrow at the end */}
+      <polyline 
+        points="18,3 22,3 22,7"
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
