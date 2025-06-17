@@ -973,17 +973,19 @@ export default function ChatPage() {
                     />
                     
                     {/* 发送按钮 */}
-                    <button
-                      onClick={handleSendMessage}
-                      disabled={!message.trim()}
-                      className={`w-full py-3 rounded-lg text-sm font-medium transition-all ${
-                        message.trim()
-                          ? "bg-black text-white hover:bg-gray-800"
-                          : "border border-gray-400 text-gray-400 cursor-not-allowed bg-transparent"
-                      }`}
-                    >
-                      发送(S)
-                    </button>
+                    <div className="flex justify-end">
+                      <button
+                        onClick={handleSendMessage}
+                        disabled={!message.trim()}
+                        className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
+                          message.trim()
+                            ? "bg-black text-white hover:bg-gray-800"
+                            : "border border-gray-400 text-gray-400 cursor-not-allowed bg-transparent"
+                        }`}
+                      >
+                        发送(S)
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
