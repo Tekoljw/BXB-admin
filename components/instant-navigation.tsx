@@ -99,7 +99,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
       {/* Sidebar */}
       <div 
-        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl relative overflow-hidden h-full`}
+        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl shadow-black/20 relative overflow-hidden h-full`}
         style={{
           width: isExpanded ? '256px' : '96px',
           transition: 'width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
