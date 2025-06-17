@@ -65,7 +65,7 @@ export default function ChatPage() {
   const [showAddMenu, setShowAddMenu] = useState(false)
   const [isMenuAnimating, setIsMenuAnimating] = useState(false)
   const [showUnreadIndicator, setShowUnreadIndicator] = useState(false)
-  const [inputHeight, setInputHeight] = useState(80)
+  const [inputHeight, setInputHeight] = useState(140)
   const [isResizing, setIsResizing] = useState(false)
   const [showMemberSidebar, setShowMemberSidebar] = useState(false)
   const [memberSidebarAnimating, setMemberSidebarAnimating] = useState(false)
@@ -84,7 +84,7 @@ export default function ChatPage() {
 
     const handleMouseMove = (e: MouseEvent) => {
       const deltaY = startY - e.clientY // 向上为正，向下为负
-      const newHeight = Math.max(80, Math.min(400, startHeight + deltaY))
+      const newHeight = Math.max(140, Math.min(400, startHeight + deltaY))
       setInputHeight(newHeight)
     }
 
@@ -968,7 +968,7 @@ export default function ChatPage() {
                           ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-500" 
                           : "bg-white text-gray-900 border-gray-300 placeholder-gray-400"
                       } focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
-                      style={{ height: `${Math.max(40, inputHeight - 120)}px` }}
+                      style={{ height: `${Math.max(100, inputHeight - 120)}px` }}
                     />
                     
                     {/* 发送按钮 */}
