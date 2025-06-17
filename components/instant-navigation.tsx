@@ -11,7 +11,7 @@ import {
   DollarSign,
   LineChart,
   ArrowLeftRight,
-  FileText,
+  TrendingUp,
   Wallet,
   Settings,
   Globe2,
@@ -31,7 +31,6 @@ import MarketPage from "@/app/(dashboard)/market/page"
 import SpotPage from "@/app/(dashboard)/spot/page"
 import FuturesPage from "@/app/(dashboard)/futures/page"
 import TetherIcon from "@/components/tether-icon"
-import CandlestickIcon from "@/components/candlestick-icon"
 
 interface InstantNavigationProps {
   onCloseMobile?: () => void
@@ -84,7 +83,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
     { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
     { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
-    { path: "/futures", icon: FileText, label: "合约", component: FuturesPage },
+    { path: "/futures", icon: TrendingUp, label: "合约", component: FuturesPage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
   ]
 
@@ -184,8 +183,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                       <div className={`transition-all duration-300 ${active ? 'text-custom-green' : 'text-gray-300'}`}>
                         <TetherIcon className="w-[26px] h-[26px]" />
                       </div>
-                    ) : item.path === '/futures' ? (
-                      <CandlestickIcon className="w-[26px] h-[26px]" />
                     ) : (
                       <Icon size={26} />
                     )}
