@@ -765,6 +765,170 @@ export default function ChatPage() {
               </div>
             </div>
           </div>
+        ) : activeTab === "通讯录" && (selectedContact?.startsWith("friend-") || selectedContact?.startsWith("ai-")) ? (
+          // User Profile Page
+          <div className="flex-1 flex flex-col">
+            {/* Profile Header */}
+            <div className={`p-6 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-2xl font-bold">
+                    👨‍💼
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
+                    <span className="text-xs text-white">✓</span>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                    {selectedContact?.startsWith("ai-") ? "AI交易助手" : "Alex Chen"}
+                  </h2>
+                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                    {selectedContact?.startsWith("ai-") ? "专业AI助手" : "专业交易员"}
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button className={`p-2 rounded-lg transition-colors ${
+                    isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                  }`}>
+                    <Phone className="w-5 h-5" />
+                  </button>
+                  <button className={`p-2 rounded-lg transition-colors ${
+                    isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                  }`}>
+                    <Video className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Bio */}
+              <p className={`text-sm mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                专注核心交易年，擅长趋势分析和风险控制
+              </p>
+
+              {/* Location and Join Date */}
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="flex items-center space-x-1">
+                  <span className="text-red-500">📍</span>
+                  <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>上海</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <span className="text-gray-500">📅</span>
+                  <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>2019年加入</span>
+                </div>
+              </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="text-center">
+                  <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>236</div>
+                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>动态</div>
+                </div>
+                <div className="text-center">
+                  <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>12800</div>
+                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>粉丝</div>
+                </div>
+                <div className="text-center">
+                  <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>89</div>
+                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>关注</div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-3 gap-3">
+                <button className="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors">
+                  关注
+                </button>
+                <button className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                  isDark
+                    ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}>
+                  加好友
+                </button>
+                <button className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                  isDark
+                    ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}>
+                  举报
+                </button>
+              </div>
+            </div>
+
+            {/* Profile Content */}
+            <div className="flex-1 overflow-y-auto">
+              {/* Tab Navigation */}
+              <div className={`border-b ${isDark ? "border-[#3a3d4a]" : "border-gray-200"}`}>
+                <div className="flex">
+                  <button className={`px-6 py-3 text-sm font-medium border-b-2 border-blue-500 ${
+                    isDark ? "text-blue-400" : "text-blue-600"
+                  }`}>
+                    动态
+                  </button>
+                  <button className={`px-6 py-3 text-sm font-medium ${
+                    isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"
+                  }`}>
+                    合约交易
+                  </button>
+                  <button className={`px-6 py-3 text-sm font-medium ${
+                    isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"
+                  }`}>
+                    合约持仓
+                  </button>
+                </div>
+              </div>
+
+              {/* Posts */}
+              <div className="p-4 space-y-4">
+                {/* Post 1 */}
+                <div className={`p-4 rounded-lg border ${
+                  isDark ? "bg-[#1a1d29] border-[#252842]" : "bg-white border-gray-200"
+                }`}>
+                  <p className={`text-sm mb-3 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                    今日BTC突破关键阻力位，建议关注回调机会
+                  </p>
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span>2小时前</span>
+                    <div className="flex items-center space-x-4">
+                      <span className="text-green-500">+12.5%</span>
+                      <div className="flex items-center space-x-1">
+                        <span className="text-red-500">❤️</span>
+                        <span>156</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <span>💬</span>
+                        <span>23</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Post 2 */}
+                <div className={`p-4 rounded-lg border ${
+                  isDark ? "bg-[#1a1d29] border-[#252842]" : "bg-white border-gray-200"
+                }`}>
+                  <p className={`text-sm mb-3 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                    ETH/USDT 4小时级别形成看涨三角形
+                  </p>
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span>6小时前</span>
+                    <div className="flex items-center space-x-4">
+                      <span className="text-green-500">+8.3%</span>
+                      <div className="flex items-center space-x-1">
+                        <span className="text-red-500">❤️</span>
+                        <span>89</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <span>💬</span>
+                        <span>12</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
           // Regular Chat Interface
           <div className="flex-1 flex flex-col">
