@@ -66,7 +66,28 @@ export default function ChatPage() {
   const [isMenuAnimating, setIsMenuAnimating] = useState(false)
   const [showUnreadIndicator, setShowUnreadIndicator] = useState(false)
   const [inputHeight, setInputHeight] = useState(140)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [isResizing, setIsResizing] = useState(false)
+
+  // 自动调整输入框高度
+  const adjustTextareaHeight = useCallback(() => {
+    if (textareaRef.current) {
+      const textarea = textareaRef.current
+      // 重置高度以获得正确的scrollHeight
+      textarea.style.height = 'auto'
+      const scrollHeight = textarea.scrollHeight
+      // 计算需要的总高度（包括padding和按钮空间）
+      const newHeight = Math.max(140, Math.min(400, scrollHeight + 80))
+      setInputHeight(newHeight)
+      // 设置textarea的实际高度
+      textarea.style.height = `${scrollHeight}px`
+    }
+  }, [])
+
+  // 当消息内容变化时调整高度
+  useEffect(() => {
+    adjustTextareaHeight()
+  }, [message, adjustTextareaHeight])
   const [showMemberSidebar, setShowMemberSidebar] = useState(false)
   const [memberSidebarAnimating, setMemberSidebarAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -955,8 +976,12 @@ export default function ChatPage() {
                   <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
                     <div className="flex-1 min-h-0 mb-3">
                       <textarea
+                        ref={textareaRef}
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                        onChange={(e) => {
+                          setMessage(e.target.value)
+                          adjustTextareaHeight()
+                        }}
                         onKeyPress={(e) => {
                           if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault()
@@ -969,6 +994,7 @@ export default function ChatPage() {
                             ? "text-white placeholder-gray-500" 
                             : "text-gray-900 placeholder-gray-400"
                         }`}
+                        style={{ minHeight: '100px', maxHeight: '300px' }}
                       />
                     </div>
                     
