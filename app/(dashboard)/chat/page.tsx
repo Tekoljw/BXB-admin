@@ -42,6 +42,7 @@ export default function ChatPage() {
   const [showMemberSidebar, setShowMemberSidebar] = useState(false)
   const [memberSidebarAnimating, setMemberSidebarAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [tabIndicatorStyle, setTabIndicatorStyle] = useState({ left: 0, width: 0 })
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -50,6 +51,7 @@ export default function ChatPage() {
   const chatContainerRef = useRef<HTMLDivElement>(null)
   const firstUnreadRef = useRef<HTMLDivElement>(null)
   const memberSidebarRef = useRef<HTMLDivElement>(null)
+  const tabsRef = useRef<HTMLDivElement>(null)
 
   // Auto-adjust textarea height
   const adjustTextareaHeight = useCallback(() => {
@@ -146,6 +148,41 @@ export default function ChatPage() {
 
   const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
   const tabs = ["好友", "群组", "担保", "通讯录"]
+
+  // Update tab indicator position
+  const updateTabIndicator = useCallback(() => {
+    if (tabsRef.current) {
+      const tabsContainer = tabsRef.current
+      const activeTabIndex = tabs.indexOf(activeTab)
+      const tabButtons = tabsContainer.querySelectorAll('button')
+      
+      if (tabButtons[activeTabIndex]) {
+        const activeButton = tabButtons[activeTabIndex] as HTMLElement
+        const containerRect = tabsContainer.getBoundingClientRect()
+        const buttonRect = activeButton.getBoundingClientRect()
+        
+        setTabIndicatorStyle({
+          left: buttonRect.left - containerRect.left,
+          width: buttonRect.width
+        })
+      }
+    }
+  }, [activeTab, tabs])
+
+  // Update indicator when activeTab changes
+  useEffect(() => {
+    updateTabIndicator()
+  }, [updateTabIndicator])
+
+  // Update indicator on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      updateTabIndicator()
+    }
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [updateTabIndicator])
 
   // Contact data
   const contacts: Contact[] = [
@@ -281,23 +318,31 @@ export default function ChatPage() {
         </div>
 
         {/* Tabs */}
-        <div className={`${isDark ? "bg-[#252842]" : "bg-gray-100"} rounded-lg p-1 mx-4 mb-4`}>
-          <div className="flex items-center">
+        <div className={`${isDark ? "bg-[#252842]" : "bg-gray-100"} rounded-lg p-1 mx-4 mb-4 relative`}>
+          <div ref={tabsRef} className="flex items-center relative">
+            {/* Sliding indicator */}
+            <div
+              className="absolute top-1 bottom-1 bg-black rounded-md transition-all duration-300 ease-out z-0"
+              style={{
+                left: `${tabIndicatorStyle.left}px`,
+                width: `${tabIndicatorStyle.width}px`,
+                transform: 'translateZ(0)' // Enable hardware acceleration
+              }}
+            />
+            
             {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-all duration-300 whitespace-nowrap relative ${
+                className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-all duration-300 whitespace-nowrap relative z-10 ${
                   activeTab === tab
-                    ? isDark
-                      ? "bg-black text-white shadow-sm"
-                      : "bg-black text-white shadow-sm"
+                    ? "text-white"
                     : isDark
-                      ? "text-gray-300 hover:text-white hover:bg-[#1a1d29]/50"
-                      : "text-gray-600 hover:text-gray-800 hover:bg-white/50"
+                      ? "text-gray-300 hover:text-white"
+                      : "text-gray-600 hover:text-gray-800"
                 }`}
               >
-                <span className="relative z-10">{tab}</span>
+                <span className="relative">{tab}</span>
               </button>
             ))}
           </div>
