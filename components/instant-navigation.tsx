@@ -30,6 +30,7 @@ import USDTTradePage from "@/app/(dashboard)/usdt-trade/page"
 import MarketPage from "@/app/(dashboard)/market/page"
 import SpotPage from "@/app/(dashboard)/spot/page"
 import FuturesPage from "@/app/(dashboard)/futures/page"
+import TetherIcon from "@/components/tether-icon"
 
 interface InstantNavigationProps {
   onCloseMobile?: () => void
@@ -178,7 +179,11 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   
                   {/* Icon with Simple Animation */}
                   <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
-                    <Icon size={26} />
+                    {item.path === '/usdt-trade' ? (
+                      <TetherIcon className="w-[26px] h-[26px]" />
+                    ) : (
+                      <Icon size={26} />
+                    )}
                   </div>
                   
                   {/* Label with Smooth Slide Animation */}
