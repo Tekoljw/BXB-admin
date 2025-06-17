@@ -964,11 +964,11 @@ export default function ChatPage() {
                           }
                         }}
                         placeholder="123123"
-                        className={`w-full h-full p-3 border rounded-lg resize-none outline-none text-base ${
+                        className={`w-full h-full p-3 resize-none outline-none text-base bg-transparent ${
                           isDark 
-                            ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-500" 
-                            : "bg-white text-gray-900 border-gray-300 placeholder-gray-400"
-                        } focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
+                            ? "text-white placeholder-gray-500" 
+                            : "text-gray-900 placeholder-gray-400"
+                        }`}
                       />
                     </div>
                     
