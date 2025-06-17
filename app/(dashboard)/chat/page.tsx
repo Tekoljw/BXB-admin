@@ -899,7 +899,7 @@ export default function ChatPage() {
 
               {/* 聊天输入区域 - 在消息区域底部 */}
               <div 
-                className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}
+                className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex flex-col`}
                 style={{ height: `${inputHeight}px`, minHeight: `${inputHeight}px`, maxHeight: `${inputHeight}px` }}
               >
                 {/* 拖拽调整高度的手柄 */}
@@ -952,27 +952,28 @@ export default function ChatPage() {
                   </div>
 
                   {/* 输入框区域 */}
-                  <div className="flex-1 flex flex-col space-y-3">
-                    <textarea
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault()
-                          handleSendMessage(e as any)
-                        }
-                      }}
-                      placeholder="123123"
-                      className={`w-full p-3 border rounded-lg resize-none outline-none text-base ${
-                        isDark 
-                          ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-500" 
-                          : "bg-white text-gray-900 border-gray-300 placeholder-gray-400"
-                      } focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
-                      style={{ height: `${Math.max(100, inputHeight - 120)}px` }}
-                    />
+                  <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div className="flex-1 min-h-0 mb-3">
+                      <textarea
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault()
+                            handleSendMessage(e as any)
+                          }
+                        }}
+                        placeholder="123123"
+                        className={`w-full h-full p-3 border rounded-lg resize-none outline-none text-base ${
+                          isDark 
+                            ? "bg-[#252842] text-white border-[#3a3d4a] placeholder-gray-500" 
+                            : "bg-white text-gray-900 border-gray-300 placeholder-gray-400"
+                        } focus:ring-2 focus:ring-custom-green/20 focus:border-custom-green`}
+                      />
+                    </div>
                     
-                    {/* 发送按钮 */}
-                    <div className="flex justify-end mb-3">
+                    {/* 发送按钮 - 固定在底部 */}
+                    <div className="flex justify-end shrink-0">
                       <button
                         onClick={handleSendMessage}
                         disabled={!message.trim()}
