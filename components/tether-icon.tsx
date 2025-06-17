@@ -11,10 +11,10 @@ export default function TetherIcon({ className = "w-5 h-5" }: TetherIconProps) {
       xmlns="http://www.w3.org/2000/svg"
     >
       {/* Top horizontal bar */}
-      <rect x="55" y="55" width="402" height="120" fill="currentColor"/>
+      <rect x="80" y="80" width="352" height="80" fill="currentColor"/>
       
       {/* Vertical stem extending down */}
-      <rect x="200" y="55" width="112" height="402" fill="currentColor"/>
+      <rect x="220" y="80" width="72" height="352" fill="currentColor"/>
       
       {/* Horizontal ellipse through the middle */}
       <ellipse 
