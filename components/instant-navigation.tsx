@@ -31,6 +31,7 @@ import MarketPage from "@/app/(dashboard)/market/page"
 import SpotPage from "@/app/(dashboard)/spot/page"
 import FuturesPage from "@/app/(dashboard)/futures/page"
 import TetherIcon from "@/components/tether-icon"
+import CandlestickIcon from "@/components/candlestick-icon"
 
 interface InstantNavigationProps {
   onCloseMobile?: () => void
@@ -183,6 +184,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                       <div className={`transition-all duration-300 ${active ? 'text-custom-green' : 'text-gray-300'}`}>
                         <TetherIcon className="w-[26px] h-[26px]" />
                       </div>
+                    ) : item.path === '/futures' ? (
+                      <CandlestickIcon className="w-[26px] h-[26px]" />
                     ) : (
                       <Icon size={26} />
                     )}
