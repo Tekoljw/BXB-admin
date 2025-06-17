@@ -821,151 +821,70 @@ export default function ChatPage() {
                   </div>
 
                   {selectedContact?.startsWith("ai-") ? (
-                    // AI Assistant Detailed Profile - Centered Layout
-                    <div className="max-w-2xl mx-auto text-center py-8">
-                      {/* Detailed Description */}
-                      <div className="mb-10">
-                        <p className={`text-base leading-relaxed mb-6 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                    // AI Assistant Simple Profile - Clean Layout
+                    <div className="max-w-xl mx-auto text-center py-12">
+                      {/* Main Description */}
+                      <div className="mb-12">
+                        <p className={`text-lg leading-relaxed ${isDark ? "text-gray-300" : "text-gray-600"}`}>
                           {selectedContact === "ai-escrow" ? 
-                            "我是BeDAO专业的AI担保助手，基于先进的区块链智能合约技术和风险评估算法，为您提供安全可靠的第三方担保服务。通过深度学习模型分析交易风险，确保每一笔交易都在安全的环境下进行，保护买卖双方的合法权益。" : 
+                            "专业的AI担保助手，为您的每一笔交易提供安全保障，基于智能合约技术确保资金安全。" : 
                            selectedContact === "ai-trading" ? 
-                            "我是您的专属AI交易顾问，采用最新的GPT-4和量化分析模型，实时监控全球数字货币市场动态。结合大数据分析、技术指标计算和市场情绪分析，为您提供精准的交易策略建议和风险管理方案，助您在波动的市场中把握投资机会。" :
-                            "我是BeDAO的AI客服助手，基于自然语言处理技术和知识图谱构建，能够理解您的各种问题并提供准确的解答。无论是账户操作、交易咨询还是技术支持，我都能为您提供专业、及时的服务，让您的交易体验更加顺畅。"}
+                            "您的专属AI交易顾问，基于GPT-4模型提供实时市场分析和交易策略建议。" :
+                            "24小时在线的AI客服助手，随时为您解答问题和提供技术支持。"}
                         </p>
                       </div>
 
-                      {/* Model Information */}
-                      <div className={`mb-10 p-6 rounded-xl ${isDark ? "bg-gradient-to-r from-[#252842] to-[#1a1d35]" : "bg-gradient-to-r from-blue-50 to-indigo-50"}`}>
-                        <h4 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>核心技术</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className={`p-4 rounded-lg ${isDark ? "bg-[#1a1d35]" : "bg-white"} shadow-sm`}>
-                            <div className="text-2xl mb-2">🧠</div>
-                            <div className={`text-sm font-medium mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>
-                              {selectedContact === "ai-escrow" ? "区块链AI" : 
-                               selectedContact === "ai-trading" ? "GPT-4 Turbo" : 
-                               "自然语言处理"}
-                            </div>
-                            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                              {selectedContact === "ai-escrow" ? "智能合约分析" : 
-                               selectedContact === "ai-trading" ? "市场预测模型" : 
-                               "多轮对话理解"}
-                            </div>
-                          </div>
-                          <div className={`p-4 rounded-lg ${isDark ? "bg-[#1a1d35]" : "bg-white"} shadow-sm`}>
-                            <div className="text-2xl mb-2">⚡</div>
-                            <div className={`text-sm font-medium mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>
-                              {selectedContact === "ai-escrow" ? "风险评估" : 
-                               selectedContact === "ai-trading" ? "实时计算" : 
-                               "即时响应"}
-                            </div>
-                            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                              {selectedContact === "ai-escrow" ? "毫秒级风控" : 
-                               selectedContact === "ai-trading" ? "秒级分析" : 
-                               "0.5秒响应"}
-                            </div>
-                          </div>
-                          <div className={`p-4 rounded-lg ${isDark ? "bg-[#1a1d35]" : "bg-white"} shadow-sm`}>
-                            <div className="text-2xl mb-2">🔒</div>
-                            <div className={`text-sm font-medium mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>
-                              {selectedContact === "ai-escrow" ? "多重验证" : 
-                               selectedContact === "ai-trading" ? "数据加密" : 
-                               "隐私保护"}
-                            </div>
-                            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                              {selectedContact === "ai-escrow" ? "多签技术" : 
-                               selectedContact === "ai-trading" ? "端到端加密" : 
-                               "数据不留存"}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Core Functions */}
-                      <div className="mb-10">
-                        <h4 className={`text-lg font-semibold mb-6 ${isDark ? "text-white" : "text-gray-800"}`}>核心功能</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Core Features */}
+                      <div className="mb-12">
+                        <div className="grid grid-cols-2 gap-6">
                           {selectedContact === "ai-escrow" && [
-                            { icon: "🛡️", title: "智能担保", desc: "基于智能合约的自动化资金托管，确保交易安全" },
-                            { icon: "⚖️", title: "争议仲裁", desc: "AI驱动的纠纷解决机制，快速公正处理交易争议" },
-                            { icon: "📋", title: "合约审核", desc: "深度学习算法检测合约漏洞，预防潜在风险" },
-                            { icon: "🔒", title: "多重保障", desc: "多层次安全防护体系，保障资金和信息安全" }
+                            { icon: "🛡️", text: "资金托管" },
+                            { icon: "⚖️", text: "争议仲裁" },
+                            { icon: "📋", text: "合约审核" },
+                            { icon: "🔒", text: "安全保障" }
                           ].map((feature, index) => (
-                            <div key={index} className={`p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"} text-left`}>
-                              <div className="flex items-start space-x-3">
-                                <span className="text-2xl">{feature.icon}</span>
-                                <div>
-                                  <h5 className={`font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>{feature.title}</h5>
-                                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>{feature.desc}</p>
-                                </div>
-                              </div>
+                            <div key={index} className={`p-6 rounded-xl ${isDark ? "bg-[#252842]" : "bg-gray-50"} hover:scale-105 transition-transform`}>
+                              <div className="text-3xl mb-3">{feature.icon}</div>
+                              <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>{feature.text}</div>
                             </div>
                           ))}
                           {selectedContact === "ai-trading" && [
-                            { icon: "📊", title: "市场分析", desc: "实时监控全球市场数据，提供深度技术分析报告" },
-                            { icon: "💡", title: "策略建议", desc: "基于量化模型生成个性化交易策略和最佳入场点" },
-                            { icon: "⚠️", title: "风险管理", desc: "智能风控系统实时监控持仓风险，及时预警" },
-                            { icon: "📈", title: "趋势预测", desc: "机器学习算法预测价格走势，把握市场机会" }
+                            { icon: "📊", text: "市场分析" },
+                            { icon: "💡", text: "策略建议" },
+                            { icon: "⚠️", text: "风险提醒" },
+                            { icon: "📈", text: "趋势预测" }
                           ].map((feature, index) => (
-                            <div key={index} className={`p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"} text-left`}>
-                              <div className="flex items-start space-x-3">
-                                <span className="text-2xl">{feature.icon}</span>
-                                <div>
-                                  <h5 className={`font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>{feature.title}</h5>
-                                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>{feature.desc}</p>
-                                </div>
-                              </div>
+                            <div key={index} className={`p-6 rounded-xl ${isDark ? "bg-[#252842]" : "bg-gray-50"} hover:scale-105 transition-transform`}>
+                              <div className="text-3xl mb-3">{feature.icon}</div>
+                              <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>{feature.text}</div>
                             </div>
                           ))}
                           {selectedContact === "ai-customer" && [
-                            { icon: "❓", title: "智能问答", desc: "理解自然语言，准确回答各类平台使用问题" },
-                            { icon: "👤", title: "账户服务", desc: "协助处理账户相关事务，包括认证、设置等" },
-                            { icon: "🔧", title: "技术支持", desc: "解决技术问题，提供操作指导和故障排除" },
-                            { icon: "📞", title: "全天候服务", desc: "24小时不间断服务，随时响应用户需求" }
+                            { icon: "❓", text: "问题解答" },
+                            { icon: "👤", text: "账户管理" },
+                            { icon: "🔧", text: "技术支持" },
+                            { icon: "📞", text: "24小时服务" }
                           ].map((feature, index) => (
-                            <div key={index} className={`p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"} text-left`}>
-                              <div className="flex items-start space-x-3">
-                                <span className="text-2xl">{feature.icon}</span>
-                                <div>
-                                  <h5 className={`font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>{feature.title}</h5>
-                                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>{feature.desc}</p>
-                                </div>
-                              </div>
+                            <div key={index} className={`p-6 rounded-xl ${isDark ? "bg-[#252842]" : "bg-gray-50"} hover:scale-105 transition-transform`}>
+                              <div className="text-3xl mb-3">{feature.icon}</div>
+                              <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>{feature.text}</div>
                             </div>
                           ))}
                         </div>
                       </div>
 
-                      {/* Service Stats */}
-                      <div className="grid grid-cols-3 gap-6 mb-10">
-                        <div className={`p-6 rounded-xl ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
-                          <div className="text-3xl font-bold text-[#00D4AA] mb-2">99.9%</div>
-                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>服务可用性</div>
-                        </div>
-                        <div className={`p-6 rounded-xl ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
-                          <div className="text-3xl font-bold text-[#00D4AA] mb-2">&lt;500ms</div>
-                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>平均响应时间</div>
-                        </div>
-                        <div className={`p-6 rounded-xl ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
-                          <div className="text-3xl font-bold text-[#00D4AA] mb-2">20+</div>
-                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>支持语言</div>
-                        </div>
-                      </div>
-
-                      {/* Call to Action */}
-                      <div className="space-y-4">
+                      {/* Start Chat Button */}
+                      <div>
                         <button 
                           onClick={() => {
                             setShowAIProfile(false)
                             setShowMemberSidebar(false)
                             console.log(`开始与${selectedContact}对话`)
                           }}
-                          className="w-full max-w-md mx-auto px-8 py-4 bg-[#00D4AA] text-white text-lg font-semibold rounded-xl hover:bg-[#00b89a] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                          className="px-16 py-5 bg-[#00D4AA] text-white text-xl font-semibold rounded-2xl hover:bg-[#00b89a] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                         >
                           开始对话
                         </button>
-                        <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                          点击开始对话，立即体验AI助手的专业服务
-                        </p>
                       </div>
                     </div>
                   ) : (
