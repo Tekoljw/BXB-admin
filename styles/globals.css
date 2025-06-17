@@ -119,18 +119,7 @@ button, input[type="button"], input[type="submit"], [type="button"] {
   -webkit-perspective: 1000px;
 }
 
-/* Ensure sidebar maintains proper styling - force dark theme colors */
-#mobile-sidebar {
-  background-color: black !important;
-}
-
-#mobile-sidebar .w-full.h-full.flex.flex-col {
-  background-color: black !important;
-}
-
-.sidebar-container > div {
-  background-color: black !important;
-}
+/* Ensure sidebar maintains proper styling */
 
 /* Dark mode sidebar styling */
 .dark #mobile-sidebar {
