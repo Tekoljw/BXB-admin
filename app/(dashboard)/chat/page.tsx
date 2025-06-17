@@ -585,6 +585,8 @@ export default function ChatPage() {
                     key={contact.id}
                     onClick={() => {
                       setSelectedContact(contact.id)
+                      setShowAIProfile(false)
+                      setShowMemberSidebar(true)
                       if (isMobile) {
                         // Mobile navigation logic would go here
                       }
@@ -769,7 +771,7 @@ export default function ChatPage() {
               </div>
             </div>
           </div>
-        ) : activeTab === "通讯录" && (selectedContact?.startsWith("friend-") || selectedContact?.startsWith("ai-")) && showAIProfile ? (
+        ) : activeTab === "通讯录" && (selectedContact?.startsWith("friend-") || selectedContact?.startsWith("ai-")) ? (
           // User Profile Page - Single Column Layout
           <div className="flex-1 flex flex-col">
             {/* Profile Header */}
