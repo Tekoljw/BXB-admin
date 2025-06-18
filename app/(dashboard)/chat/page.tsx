@@ -51,100 +51,38 @@ export default function ChatPage() {
   const firstUnreadRef = useRef<HTMLDivElement>(null)
   const memberSidebarRef = useRef<HTMLDivElement>(null)
 
-  // Auto-adjust textarea height
-  const adjustTextareaHeight = useCallback(() => {
-    if (textareaRef.current) {
-      const textarea = textareaRef.current
-      textarea.style.height = 'auto'
-      const scrollHeight = textarea.scrollHeight
-      const newHeight = Math.max(140, Math.min(400, scrollHeight + 80))
-      setInputHeight(newHeight)
-      textarea.style.height = `${scrollHeight}px`
-    }
+  const cardStyle = `${isDark ? 'bg-[#1a1d29] border-[#3a3d4a]' : 'bg-white border-gray-200'} border rounded-lg shadow-sm`
+
+  // Close menu handlers
+  const handleShowMenu = useCallback(() => {
+    setShowAddMenu(true)
+    setIsMenuAnimating(true)
   }, [])
 
-  // When message content changes, adjust height
-  useEffect(() => {
-    adjustTextareaHeight()
-  }, [message, adjustTextareaHeight])
-
-  // Handle input area drag resize
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsResizing(true)
-    const startY = e.clientY
-    const startHeight = inputHeight
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const deltaY = startY - e.clientY
-      const newHeight = Math.max(140, Math.min(400, startHeight + deltaY))
-      setInputHeight(newHeight)
-    }
-
-    const handleMouseUp = () => {
-      setIsResizing(false)
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-    }
-
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseup', handleMouseUp)
-  }
+  const handleCloseMenu = useCallback(() => {
+    setIsMenuAnimating(false)
+    setTimeout(() => {
+      setShowAddMenu(false)
+    }, 200)
+  }, [])
 
   // Handle send message
-  const handleSendMessage = (e?: React.FormEvent) => {
-    e?.preventDefault()
-    if (!message.trim()) return
-    
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!message.trim() || !selectedContact) return
     console.log(`发送消息到 ${selectedContact}: ${message}`)
     setMessage("")
   }
 
-  // Handle add menu
-  const handleShowMenu = () => {
-    setShowAddMenu(true)
-    setTimeout(() => setIsMenuAnimating(true), 10)
-  }
-
-  const handleCloseMenu = () => {
-    setIsMenuAnimating(false)
-    setTimeout(() => setShowAddMenu(false), 150)
-  }
-
-  // Handle mount and mobile detection
+  // Solve hydration issue
   useEffect(() => {
     setMounted(true)
-    
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    
-    return () => {
-      window.removeEventListener('resize', checkMobile)
-    }
-  }, [])
-
-  // Close menu on outside click
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (addMenuRef.current && !addMenuRef.current.contains(event.target as Node)) {
-        handleCloseMenu()
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
   }, [])
 
   if (!mounted) {
-    return <div className="min-h-screen bg-[#f5f8fa] dark:bg-background"></div>
+    return null
   }
 
-  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
   const tabs = ["好友", "群组", "担保", "通讯录"]
 
   // Contact data
@@ -198,22 +136,8 @@ export default function ChatPage() {
     ],
   }
 
-  // Address book data
-  const addressBookContacts = [
-    { id: "addr-1", name: "张伟", phone: "138****1234", company: "币安科技", position: "产品经理" },
-    { id: "addr-2", name: "李娜", phone: "139****5678", company: "火币集团", position: "技术总监" },
-    { id: "addr-3", name: "王强", phone: "137****9012", company: "欧易交易所", position: "运营主管" },
-    { id: "addr-4", name: "刘敏", phone: "136****3456", company: "币安链", position: "区块链工程师" },
-    { id: "addr-5", name: "陈杰", phone: "135****7890", company: "去中心化金融", position: "DeFi专家" },
-  ]
-
   const filteredContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  const filteredAddressBook = addressBookContacts.filter(contact =>
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contact.company.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const addMenuItems = [
@@ -223,7 +147,312 @@ export default function ChatPage() {
     { icon: BookOpen, label: "通讯录", action: () => console.log("通讯录") },
   ]
 
-  return (
+  // Render Address Book Layout
+  const renderAddressBookLayout = () => (
+    <div className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
+      {/* Contact Groups Sidebar */}
+      <div 
+        className={`${cardStyle} flex flex-col`}
+        style={isMobile ? { width: '100vw', minWidth: '100vw', maxWidth: '100vw' } : { minWidth: '416px', maxWidth: '500px', width: 'clamp(416px, 30vw, 500px)' }}
+      >
+        {/* Header */}
+        <div className="flex items-center gap-2 p-4">
+          <div className="relative flex-1">
+            <Search
+              className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
+                isDark ? "text-gray-400" : "text-gray-500"
+              }`}
+            />
+            <input
+              type="text"
+              placeholder="搜索联系人"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm transition-colors ${
+                isDark
+                  ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400 focus:border-[#00D4AA]"
+                  : "bg-gray-100 border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
+              } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+            />
+          </div>
+          <div className="relative" ref={addMenuRef}>
+            <button
+              onClick={showAddMenu ? handleCloseMenu : handleShowMenu}
+              className={`p-2 rounded-lg border transition-all duration-200 ${
+                isDark
+                  ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#3a3d4a] hover:scale-105"
+                  : "bg-gray-100 border-gray-200 text-gray-800 hover:bg-gray-200 hover:scale-105"
+              } ${showAddMenu ? "scale-105" : ""}`}
+            >
+              <Plus className={`h-4 w-4 transition-transform duration-200 ${showAddMenu ? "rotate-45" : ""}`} />
+            </button>
+            {showAddMenu && (
+              <div
+                className={`absolute top-full right-0 mt-2 w-56 ${cardStyle} rounded-lg shadow-lg z-50 transition-all duration-150 origin-top-right ${
+                  isMenuAnimating ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                }`}
+              >
+                <div className="py-2">
+                  {addMenuItems.map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        item.action()
+                        handleCloseMenu()
+                      }}
+                      className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-100 ${
+                        isDark
+                          ? "text-white hover:bg-[#252842] hover:translate-x-1"
+                          : "text-gray-800 hover:bg-gray-100 hover:translate-x-1"
+                      }`}
+                    >
+                      <item.icon className="h-4 w-4 mr-3" />
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Contact Groups */}
+        <div className="flex-1 overflow-y-auto">
+          {/* New Friends Entry */}
+          <div className="mb-4">
+            <div
+              className={`flex items-center p-3 mx-2 rounded-lg cursor-pointer transition-all ${
+                isDark
+                  ? 'hover:bg-[#252842] text-gray-300'
+                  : 'hover:bg-gray-100 text-gray-700'
+              }`}
+              onClick={() => setSelectedContact("new-friends")}
+            >
+              <div className="relative">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white text-lg">
+                  👥
+                </div>
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  3
+                </div>
+              </div>
+              <div className="ml-3 flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-medium truncate">新好友</h3>
+                </div>
+                <p className="text-sm opacity-70 truncate">3个新的好友请求</p>
+              </div>
+            </div>
+          </div>
+
+          {/* AI Assistants */}
+          <div className="mb-4">
+            <div className={`px-4 py-2 text-xs font-medium ${
+              isDark ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              AI助手
+            </div>
+            <div
+              className={`flex items-center p-3 mx-2 rounded-lg cursor-pointer transition-all ${
+                selectedContact === "contact-1"
+                  ? 'bg-[#00D4AA] text-white'
+                  : isDark
+                  ? 'hover:bg-[#252842] text-gray-300'
+                  : 'hover:bg-gray-100 text-gray-700'
+              }`}
+              onClick={() => setSelectedContact("contact-1")}
+            >
+              <div className="relative">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg">
+                  🤖
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+              </div>
+              <div className="ml-3 flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-medium truncate">交易助手</h3>
+                  <span className="text-xs opacity-70">09:30</span>
+                </div>
+                <p className="text-sm opacity-70 truncate">您好，我是您的AI交易助手</p>
+              </div>
+              <div className="ml-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                2
+              </div>
+            </div>
+          </div>
+
+          {/* Regular Friends */}
+          <div>
+            <div className={`px-4 py-2 text-xs font-medium ${
+              isDark ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              好友 (2)
+            </div>
+            {filteredContacts.filter(c => !c.name.includes("群") && c.id !== "contact-1").map((contact) => (
+              <div
+                key={contact.id}
+                className={`flex items-center p-3 mx-2 rounded-lg cursor-pointer transition-all ${
+                  selectedContact === contact.id
+                    ? 'bg-[#00D4AA] text-white'
+                    : isDark
+                    ? 'hover:bg-[#252842] text-gray-300'
+                    : 'hover:bg-gray-100 text-gray-700'
+                }`}
+                onClick={() => setSelectedContact(contact.id)}
+              >
+                <div className="relative">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg">
+                    {contact.avatar}
+                  </div>
+                  {contact.isOnline && (
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                  )}
+                </div>
+                <div className="ml-3 flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium truncate">{contact.name}</h3>
+                    <span className="text-xs opacity-70">{contact.time}</span>
+                  </div>
+                  <p className="text-sm opacity-70 truncate">{contact.lastMessage}</p>
+                </div>
+                {contact.unread && (
+                  <div className="ml-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {contact.unread}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Personal Profile Sidebar */}
+      <div className={`flex-1 ${cardStyle} ml-4`}>
+        <div className="p-6 h-full overflow-y-auto">
+          {/* Profile Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl">
+                A
+              </div>
+              <div>
+                <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>Alex Chen</h2>
+                <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>专业交易员 • 5年经验</p>
+                <p className={`text-sm ${isDark ? "text-gray-500" : "text-gray-500"}`}>604位好友 • 4万粉丝</p>
+              </div>
+            </div>
+            <button className="bg-[#00D4AA] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#00b89a] transition-colors">
+              发消息
+            </button>
+          </div>
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className={`p-4 rounded-lg text-center ${isDark ? "bg-[#252842]" : "bg-gray-100"}`}>
+              <div className="text-2xl font-bold text-green-500 mb-1">+158%</div>
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>总收益率</div>
+            </div>
+            <div className={`p-4 rounded-lg text-center ${isDark ? "bg-[#252842]" : "bg-gray-100"}`}>
+              <div className={`text-2xl font-bold mb-1 ${isDark ? "text-white" : "text-gray-900"}`}>85.2%</div>
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>胜率</div>
+            </div>
+            <div className={`p-4 rounded-lg text-center ${isDark ? "bg-[#252842]" : "bg-gray-100"}`}>
+              <div className={`text-lg font-bold mb-1 ${isDark ? "text-white" : "text-gray-900"}`}>1,234</div>
+              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>交易笔数</div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            <button className={`py-2 px-3 border transition-colors text-sm ${
+              isDark 
+                ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]" 
+                : "border-gray-300 text-gray-700 hover:bg-gray-50"
+            } rounded-lg`}>
+              关注
+            </button>
+            <button className={`py-2 px-3 border transition-colors text-sm ${
+              isDark 
+                ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]" 
+                : "border-gray-300 text-gray-700 hover:bg-gray-50"
+            } rounded-lg`}>
+              加好友
+            </button>
+            <button className="py-2 px-3 bg-[#00D4AA] text-white rounded-lg hover:bg-[#00b89a] transition-colors text-sm">
+              跟单
+            </button>
+          </div>
+
+          {/* Profile Tabs */}
+          <div className="mb-6">
+            <div className="flex space-x-8 border-b border-gray-200 dark:border-[#3a3d4a]">
+              {["动态", "交易记录", "持仓分析"].map((tab) => (
+                <button
+                  key={tab}
+                  className={`pb-3 text-sm font-medium border-b-2 transition-colors ${
+                    tab === "动态"
+                      ? "border-[#00D4AA] text-[#00D4AA]"
+                      : isDark
+                        ? "border-transparent text-gray-400 hover:text-gray-300"
+                        : "border-transparent text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Activity Feed */}
+          <div className="space-y-4">
+            <div className={`p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm">
+                  A
+                </div>
+                <div>
+                  <h4 className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>Alex Chen</h4>
+                  <p className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>2小时前</p>
+                </div>
+              </div>
+              <p className={`text-sm mb-3 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                今日BTC突破关键阻力位，建议关注回调机会。技术指标显示上涨趋势仍将持续。
+              </p>
+              <div className={`p-3 rounded-lg ${isDark ? "bg-[#1a1d29]" : "bg-white"} border ${isDark ? "border-[#3a3d4a]" : "border-gray-200"}`}>
+                <div className="text-center py-8">
+                  <div className="w-16 h-12 mx-auto mb-2 bg-gradient-to-r from-green-400 to-blue-500 rounded flex items-center justify-center">
+                    <div className="text-white text-2xl">📊</div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center justify-between mt-3 text-sm">
+                <div className="flex items-center space-x-4">
+                  <button className={`flex items-center space-x-1 ${isDark ? "text-gray-400 hover:text-red-500" : "text-gray-500 hover:text-red-500"}`}>
+                    <span>❤️</span>
+                    <span>156</span>
+                  </button>
+                  <button className={`flex items-center space-x-1 ${isDark ? "text-gray-400 hover:text-blue-500" : "text-gray-500 hover:text-blue-500"}`}>
+                    <span>💬</span>
+                    <span>23</span>
+                  </button>
+                  <button className={`flex items-center space-x-1 ${isDark ? "text-gray-400 hover:text-green-500" : "text-gray-500 hover:text-green-500"}`}>
+                    <span>🔄</span>
+                    <span>12</span>
+                  </button>
+                </div>
+                <button className={`${isDark ? "text-gray-400 hover:text-gray-300" : "text-gray-500 hover:text-gray-700"}`}>
+                  <span>📤</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Render Regular Chat Layout
+  const renderChatLayout = () => (
     <div className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
       {/* Contact List Sidebar */}
       <div 
@@ -320,42 +549,7 @@ export default function ChatPage() {
         {/* Contact List */}
         <div className="flex-1 px-4 pb-4 overflow-y-auto">
           <div className="space-y-2">
-            {activeTab === "通讯录" ? (
-              // Address Book View
-              <>
-                <div className={`text-xs font-medium mb-3 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                  通讯录 ({filteredAddressBook.length})
-                </div>
-                {filteredAddressBook.map((contact) => (
-                  <div
-                    key={contact.id}
-                    className={`p-3 rounded-lg border transition-all duration-200 ${
-                      isDark
-                        ? "border-[#3a3d4a] hover:bg-[#252842]/50 hover:border-[#00D4AA]/30"
-                        : "border-gray-200 hover:bg-gray-50 hover:border-[#00D4AA]/30"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center text-white text-sm font-bold">
-                          {contact.name.charAt(0)}
-                        </div>
-                        <div>
-                          <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                            {contact.name}
-                          </h3>
-                          <p className="text-xs text-gray-400">{contact.position}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs text-gray-400">{contact.phone}</p>
-                        <p className="text-xs text-gray-500">{contact.company}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </>
-            ) : activeTab === "担保" ? (
+            {activeTab === "担保" ? (
               // Guarantee View
               <div className="text-center py-12">
                 <Shield className={`h-12 w-12 mx-auto mb-4 ${isDark ? "text-gray-600" : "text-gray-400"}`} />
@@ -419,148 +613,65 @@ export default function ChatPage() {
 
       {/* Chat Area */}
       {selectedContact && !isMobile ? (
-        <div className="flex-1 flex flex-col">
-          {/* Chat Header */}
-          <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center justify-between`}>
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                🤖
-              </div>
-              <div>
-                <h2 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>交易助手</h2>
-                <p className="text-sm text-green-500">在线</p>
-              </div>
+        <div className={`flex-1 ${cardStyle} ml-4 flex flex-col`}>
+          <div className="flex-1 flex flex-col" style={{ height: `${inputHeight}px` }}>
+            <div className="flex-1 p-4">
+              <textarea
+                ref={textareaRef}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    handleSendMessage(e as any)
+                  }
+                }}
+                placeholder="123123"
+                className={`w-full h-full p-3 resize-none outline-none text-base bg-transparent ${
+                  isDark 
+                    ? "text-white placeholder-gray-500" 
+                    : "text-gray-900 placeholder-gray-400"
+                }`}
+                style={{ minHeight: '100px', maxHeight: '300px' }}
+              />
             </div>
-            <div className="flex items-center space-x-2">
-              <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-              }`}>
-                <Phone className="w-5 h-5" />
+            
+            {/* Send Button */}
+            <div className="flex justify-end shrink-0">
+              <button
+                onClick={handleSendMessage}
+                disabled={!message.trim()}
+                className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
+                  message.trim()
+                    ? "bg-black text-white hover:bg-gray-800"
+                    : "border border-gray-400 text-gray-400 cursor-not-allowed bg-transparent"
+                }`}
+              >
+                发送
               </button>
-              <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-              }`}>
-                <Video className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Messages Area */}
-          <div className="flex-1 p-4 overflow-y-auto">
-            <div className="space-y-4">
-              {(messages[selectedContact] || []).map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${msg.senderId === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                      msg.senderId === 'user'
-                        ? 'bg-[#00D4AA] text-white'
-                        : isDark
-                          ? 'bg-[#252842] text-white'
-                          : 'bg-gray-100 text-gray-800'
-                    }`}
-                  >
-                    <p className="text-sm">{msg.text}</p>
-                    <p className="text-xs mt-1 opacity-70">{msg.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input Area */}
-          <div 
-            className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex flex-col`}
-            style={{ height: `${inputHeight}px`, minHeight: `${inputHeight}px`, maxHeight: `${inputHeight}px` }}
-          >
-            {/* Drag Handle */}
-            <div 
-              className={`w-full h-1 cursor-ns-resize flex items-center justify-center ${
-                isDark ? "hover:bg-[#2a2d42]" : "hover:bg-gray-100"
-              } ${isResizing ? (isDark ? "bg-[#2a2d42]" : "bg-gray-100") : ""} transition-colors`}
-              onMouseDown={handleMouseDown}
-            >
-              <div className={`w-8 h-0.5 rounded-full ${
-                isDark ? "bg-gray-600" : "bg-gray-300"
-              }`}></div>
-            </div>
-
-            {/* Toolbar */}
-            <div className="flex items-center px-4 py-2 space-x-2">
-              <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-              }`}>
-                <Smile className="w-5 h-5" />
-              </button>
-              <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-              }`}>
-                <Paperclip className="w-5 h-5" />
-              </button>
-              <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-              }`}>
-                <Scissors className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Input Area */}
-            <div className="flex-1 p-4 flex flex-col min-h-0 overflow-hidden">
-              <div className="flex-1 min-h-0 mb-3">
-                <textarea
-                  ref={textareaRef}
-                  value={message}
-                  onChange={(e) => {
-                    setMessage(e.target.value)
-                    adjustTextareaHeight()
-                  }}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault()
-                      handleSendMessage(e as any)
-                    }
-                  }}
-                  placeholder="输入消息..."
-                  className={`w-full h-full p-3 resize-none outline-none text-base bg-transparent ${
-                    isDark 
-                      ? "text-white placeholder-gray-500" 
-                      : "text-gray-900 placeholder-gray-400"
-                  }`}
-                  style={{ minHeight: '100px', maxHeight: '300px' }}
-                />
-              </div>
-              
-              {/* Send Button */}
-              <div className="flex justify-end shrink-0">
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!message.trim()}
-                  className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
-                    message.trim()
-                      ? "bg-black text-white hover:bg-gray-800"
-                      : "border border-gray-400 text-gray-400 cursor-not-allowed bg-transparent"
-                  }`}
-                >
-                  发送
-                </button>
-              </div>
             </div>
           </div>
         </div>
       ) : !isMobile ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <MessageCircle className="h-16 w-16 mx-auto mb-4 text-gray-300" />
-            <h3 className={`text-lg font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
-              选择一个联系人开始聊天
+            <MessageCircle className={`h-16 w-16 mx-auto mb-4 ${isDark ? "text-gray-600" : "text-gray-400"}`} />
+            <h3 className={`text-lg font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-500"}`}>
+              选择一个对话
             </h3>
-            <p className="text-gray-400">从左侧列表选择一个联系人或群组</p>
+            <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+              从左侧选择一个联系人开始聊天
+            </p>
           </div>
         </div>
       ) : null}
     </div>
   )
+
+  // Main render - switch between layouts based on activeTab
+  if (activeTab === "通讯录") {
+    return renderAddressBookLayout()
+  } else {
+    return renderChatLayout()
+  }
 }
