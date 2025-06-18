@@ -198,8 +198,22 @@ export default function ChatPage() {
     ],
   }
 
+  // Address book data
+  const addressBookContacts = [
+    { id: "addr-1", name: "张伟", phone: "138****1234", company: "币安科技", position: "产品经理" },
+    { id: "addr-2", name: "李娜", phone: "139****5678", company: "火币集团", position: "技术总监" },
+    { id: "addr-3", name: "王强", phone: "137****9012", company: "欧易交易所", position: "运营主管" },
+    { id: "addr-4", name: "刘敏", phone: "136****3456", company: "币安链", position: "区块链工程师" },
+    { id: "addr-5", name: "陈杰", phone: "135****7890", company: "去中心化金融", position: "DeFi专家" },
+  ]
+
   const filteredContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const filteredAddressBook = addressBookContacts.filter(contact =>
+    contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    contact.company.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const addMenuItems = [
@@ -306,49 +320,99 @@ export default function ChatPage() {
         {/* Contact List */}
         <div className="flex-1 px-4 pb-4 overflow-y-auto">
           <div className="space-y-2">
-            {filteredContacts.map((contact) => (
-              <div
-                key={contact.id}
-                onClick={() => {
-                  setSelectedContact(contact.id)
-                  if (isMobile) {
-                    // Mobile navigation logic would go here
-                  }
-                }}
-                className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
-                  selectedContact === contact.id
-                    ? isDark
-                      ? "bg-[#252842] border border-[#00D4AA]/30"
-                      : "bg-gray-100 border border-[#00D4AA]/30"
-                    : isDark
-                      ? "hover:bg-[#252842]/50"
-                      : "hover:bg-gray-50"
-                }`}
-              >
-                <div className="relative">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold">
-                    {contact.avatar}
-                  </div>
-                  {contact.isOnline && (
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-                  )}
+            {activeTab === "通讯录" ? (
+              // Address Book View
+              <>
+                <div className={`text-xs font-medium mb-3 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                  通讯录 ({filteredAddressBook.length})
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <h3 className={`font-medium truncate ${isDark ? "text-white" : "text-gray-800"}`}>
-                      {contact.name}
-                    </h3>
-                    <span className="text-xs text-gray-400">{contact.time}</span>
+                {filteredAddressBook.map((contact) => (
+                  <div
+                    key={contact.id}
+                    className={`p-3 rounded-lg border transition-all duration-200 ${
+                      isDark
+                        ? "border-[#3a3d4a] hover:bg-[#252842]/50 hover:border-[#00D4AA]/30"
+                        : "border-gray-200 hover:bg-gray-50 hover:border-[#00D4AA]/30"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center text-white text-sm font-bold">
+                          {contact.name.charAt(0)}
+                        </div>
+                        <div>
+                          <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                            {contact.name}
+                          </h3>
+                          <p className="text-xs text-gray-400">{contact.position}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-gray-400">{contact.phone}</p>
+                        <p className="text-xs text-gray-500">{contact.company}</p>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-400 truncate">{contact.lastMessage}</p>
-                </div>
-                {contact.unread && (
-                  <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs text-white font-bold">{contact.unread}</span>
-                  </div>
-                )}
+                ))}
+              </>
+            ) : activeTab === "担保" ? (
+              // Guarantee View
+              <div className="text-center py-12">
+                <Shield className={`h-12 w-12 mx-auto mb-4 ${isDark ? "text-gray-600" : "text-gray-400"}`} />
+                <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>暂无担保记录</p>
               </div>
-            ))}
+            ) : (
+              // Chat Contacts View (好友 and 群组)
+              filteredContacts
+                .filter(contact => {
+                  if (activeTab === "好友" && contact.name.includes("群")) return false
+                  if (activeTab === "群组" && !contact.name.includes("群")) return false
+                  return true
+                })
+                .map((contact) => (
+                  <div
+                    key={contact.id}
+                    onClick={() => {
+                      setSelectedContact(contact.id)
+                      if (isMobile) {
+                        // Mobile navigation logic would go here
+                      }
+                    }}
+                    className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
+                      selectedContact === contact.id
+                        ? isDark
+                          ? "bg-[#252842] border border-[#00D4AA]/30"
+                          : "bg-gray-100 border border-[#00D4AA]/30"
+                        : isDark
+                          ? "hover:bg-[#252842]/50"
+                          : "hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold">
+                        {contact.avatar}
+                      </div>
+                      {contact.isOnline && (
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h3 className={`font-medium truncate ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {contact.name}
+                        </h3>
+                        <span className="text-xs text-gray-400">{contact.time}</span>
+                      </div>
+                      <p className="text-sm text-gray-400 truncate">{contact.lastMessage}</p>
+                    </div>
+                    {contact.unread && (
+                      <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                        <span className="text-xs text-white font-bold">{contact.unread}</span>
+                      </div>
+                    )}
+                  </div>
+                ))
+            )}
           </div>
         </div>
       </div>
