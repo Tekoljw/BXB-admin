@@ -725,66 +725,85 @@ export default function ChatPage() {
                 )}
 
                 {activeProfileTab === "合约交易" && (
-                  <div className="space-y-1">
-                    {/* BTC Trade */}
-                    <div className="py-4 border-b border-gray-200 dark:border-[#3a3d4a]">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-2">
-                          <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>BTC/USDT</span>
-                          <span className="text-green-600 text-sm">多单</span>
-                          <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>已平仓</span>
-                        </div>
-                        <div className="text-[#00D4AA] font-bold text-lg">+2.3%</div>
+                  <div className="space-y-6">
+                    {/* Header Stats */}
+                    <div className="grid grid-cols-3 gap-4 mb-6">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-green-500">+158.7%</div>
+                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>总收益</div>
                       </div>
-                      <div className="space-y-1">
-                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                          买入：$42,150　卖出：$43,120
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-blue-500 text-sm">开仓 +15%</div>
-                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>10:30</div>
-                        </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-500">85.2%</div>
+                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>胜率</div>
+                      </div>
+                      <div className="text-center">
+                        <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>1234</div>
+                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>交易笔数</div>
                       </div>
                     </div>
 
-                    {/* ETH Trade */}
-                    <div className="py-4 border-b border-gray-200 dark:border-[#3a3d4a]">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-2">
-                          <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>ETH/USDT</span>
-                          <span className="text-red-600 text-sm">空单</span>
-                          <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>已平仓</span>
+                    {/* Trading Positions */}
+                    <div className="space-y-4">
+                      {/* BTC Trade */}
+                      <div className={`p-4 rounded-lg ${isDark ? "bg-[#1a1d29]" : "bg-gray-50"}`}>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>BTC/USDT</span>
+                            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">多单</span>
+                            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">已平仓</span>
+                          </div>
+                          <div className="text-green-500 font-bold text-lg">+2.3%</div>
                         </div>
-                        <div className="text-[#00D4AA] font-bold text-lg">+1.8%</div>
+                        <div className="space-y-1">
+                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                            买入：$42,150　卖出：$43,120
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="text-blue-500 text-sm">开仓 +15%</div>
+                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>10:30</div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="space-y-1">
-                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                          买入：$2,450　卖出：$2,406
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-blue-500 text-sm">平仓 -8%</div>
-                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>09:15</div>
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* BNB Trade */}
-                    <div className="py-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-2">
-                          <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>BNB/USDT</span>
-                          <span className="text-green-600 text-sm">多单</span>
-                          <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>已平仓</span>
+                      {/* ETH Trade */}
+                      <div className={`p-4 rounded-lg ${isDark ? "bg-[#1a1d29]" : "bg-gray-50"}`}>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>ETH/USDT</span>
+                            <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">空单</span>
+                            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">已平仓</span>
+                          </div>
+                          <div className="text-green-500 font-bold text-lg">+1.8%</div>
                         </div>
-                        <div className="text-[#00D4AA] font-bold text-lg">+3.5%</div>
+                        <div className="space-y-1">
+                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                            买入：$2,450　卖出：$2,406
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="text-blue-500 text-sm">平仓 -8%</div>
+                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>09:15</div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="space-y-1">
-                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                          买入：$285　卖出：$295
+
+                      {/* BNB Trade */}
+                      <div className={`p-4 rounded-lg ${isDark ? "bg-[#1a1d29]" : "bg-gray-50"}`}>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>BNB/USDT</span>
+                            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">多单</span>
+                            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">已平仓</span>
+                          </div>
+                          <div className="text-green-500 font-bold text-lg">+3.5%</div>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-blue-500 text-sm">开仓 +22%</div>
-                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>昨天</div>
+                        <div className="space-y-1">
+                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                            买入：$285　卖出：$295
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="text-blue-500 text-sm">开仓 +22%</div>
+                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>昨天</div>
+                          </div>
                         </div>
                       </div>
                     </div>
