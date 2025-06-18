@@ -43,9 +43,8 @@ export default function ChatPage() {
 
   // Mock data
   const contacts: Contact[] = [
-    // Friend Requests Section
-    { id: "req-1", name: "李明", avatar: "👤", lastMessage: "想要添加您为好友", time: "刚刚", isOnline: false, isSpecial: true },
-    { id: "req-2", name: "张华", avatar: "👤", lastMessage: "请求添加好友", time: "5分钟前", isOnline: true, isSpecial: true },
+    // Single entry point for friend requests
+    { id: "new-friends", name: "新好友", avatar: "👥", lastMessage: "3个新的好友请求", time: "", isOnline: false, isSpecial: true },
     
     // AI Assistants Section
     { id: "ai-trading", name: "交易顾问", avatar: "🤖", lastMessage: "市场分析已更新，建议查看BTC走势", time: "1分钟前", isOnline: true, isAI: true },
@@ -58,6 +57,13 @@ export default function ChatPage() {
     { id: "contact-3", name: "Carol Li", avatar: "👩‍💻", lastMessage: "今天收益不错", time: "1小时前", unread: 1, isOnline: true },
     { id: "contact-4", name: "David Liu", avatar: "👨‍🔬", lastMessage: "风险控制很重要", time: "2小时前", isOnline: false },
     { id: "contact-5", name: "Emma Zhang", avatar: "👩‍🎨", lastMessage: "新手求指导", time: "昨天", isOnline: true },
+  ]
+
+  // Friend requests data (separate from main contacts)
+  const friendRequests = [
+    { id: "req-1", name: "李明", avatar: "👤", message: "想要添加您为好友", time: "刚刚", isOnline: false },
+    { id: "req-2", name: "张华", avatar: "👤", message: "请求添加好友", time: "5分钟前", isOnline: true },
+    { id: "req-3", name: "王小红", avatar: "👤", message: "希望成为好友", time: "1小时前", isOnline: false },
   ]
 
   const messages: Record<string, Message[]> = {
@@ -124,7 +130,7 @@ export default function ChatPage() {
   }, [showMemberSidebar])
 
   const groupedContacts = {
-    requests: filteredContacts.filter(c => c.isSpecial && !c.isAI),
+    newFriends: filteredContacts.filter(c => c.id === "new-friends"),
     ai: filteredContacts.filter(c => c.isAI),
     friends: filteredContacts.filter(c => !c.isSpecial && !c.isAI).sort((a, b) => a.name.localeCompare(b.name))
   }
@@ -191,15 +197,10 @@ export default function ChatPage() {
 
         {/* Contact Groups */}
         <div className="flex-1 overflow-y-auto">
-          {/* Friend Requests */}
-          {groupedContacts.requests.length > 0 && (
+          {/* New Friends Entry */}
+          {groupedContacts.newFriends.length > 0 && (
             <div className="mb-4">
-              <div className={`px-4 py-2 text-xs font-medium ${
-                isDark ? 'text-gray-400' : 'text-gray-600'
-              }`}>
-                好友请求 ({groupedContacts.requests.length})
-              </div>
-              {groupedContacts.requests.map((contact) => (
+              {groupedContacts.newFriends.map((contact) => (
                 <div
                   key={contact.id}
                   className={`flex items-center p-3 mx-2 rounded-lg cursor-pointer transition-all ${
