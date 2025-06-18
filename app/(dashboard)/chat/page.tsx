@@ -213,29 +213,18 @@ export default function ChatPage() {
                   onClick={() => setSelectedContact(contact.id)}
                 >
                   <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white text-lg">
                       {contact.avatar}
                     </div>
-                    {contact.isOnline && (
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-                    )}
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {friendRequests.length}
+                    </div>
                   </div>
                   <div className="ml-3 flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium truncate">{contact.name}</h3>
-                      <span className="text-xs opacity-70">{contact.time}</span>
                     </div>
                     <p className="text-sm opacity-70 truncate">{contact.lastMessage}</p>
-                  </div>
-                  <div className="flex space-x-2 ml-2">
-                    <button className="px-3 py-1 bg-[#00D4AA] text-white text-xs rounded hover:bg-[#00b89a]">
-                      接受
-                    </button>
-                    <button className={`px-3 py-1 text-xs rounded ${
-                      isDark ? 'bg-[#3a3d4a] text-gray-300' : 'bg-gray-200 text-gray-600'
-                    }`}>
-                      忽略
-                    </button>
                   </div>
                 </div>
               ))}
@@ -338,7 +327,65 @@ export default function ChatPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex">
         {selectedContact ? (
-          selectedContact.startsWith("ai-") ? (
+          selectedContact === "new-friends" ? (
+            // Friend Requests Page
+            <div className="flex-1 flex flex-col p-6">
+              <div className="flex flex-col h-full">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                    新好友请求
+                  </h1>
+                  <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                    {friendRequests.length} 个待处理
+                  </span>
+                </div>
+
+                {/* Friend Requests List */}
+                <div className="flex-1 overflow-y-auto space-y-4">
+                  {friendRequests.map((request) => (
+                    <div key={request.id} className={`${cardStyle} p-6`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          <div className="relative">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl">
+                              {request.avatar}
+                            </div>
+                            {request.isOnline && (
+                              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className={`font-medium text-lg ${isDark ? "text-white" : "text-gray-900"}`}>
+                              {request.name}
+                            </h3>
+                            <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                              {request.message}
+                            </p>
+                            <span className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"}`}>
+                              {request.time}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex space-x-3">
+                          <button className="px-4 py-2 bg-[#00D4AA] text-white text-sm rounded-lg hover:bg-[#00b89a] transition-colors">
+                            接受
+                          </button>
+                          <button className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                            isDark 
+                              ? 'bg-[#3a3d4a] text-gray-300 hover:bg-[#454851]' 
+                              : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                          }`}>
+                            忽略
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : selectedContact.startsWith("ai-") ? (
             // AI Assistant Profile in Main Area
             <div className="flex-1 flex flex-col p-6">
               <div className="flex flex-col h-full">
