@@ -459,6 +459,42 @@ export default function ChatPage() {
                 </div>
               </div>
             </div>
+          ) : selectedContact?.startsWith("req-") ? (
+            // Friend Request Interface
+            <div className="flex-1 flex flex-col p-6">
+              <div className="flex flex-col items-center justify-center h-full max-w-md mx-auto">
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-4xl mb-6">
+                  👤
+                </div>
+                
+                <h2 className={`text-2xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  {contacts.find(c => c.id === selectedContact)?.name}
+                </h2>
+                
+                <p className={`text-center mb-8 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  想要添加您为好友
+                </p>
+                
+                <div className="flex space-x-4 w-full">
+                  <button className="flex-1 py-3 px-6 bg-[#00D4AA] text-white rounded-lg hover:bg-[#00b89a] transition-colors font-medium">
+                    接受
+                  </button>
+                  <button className={`flex-1 py-3 px-6 border rounded-lg transition-colors font-medium ${
+                    isDark 
+                      ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]" 
+                      : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                  }`}>
+                    拒绝
+                  </button>
+                </div>
+                
+                <div className={`mt-6 p-4 rounded-lg text-center ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                    通过好友验证后，您可以开始聊天
+                  </p>
+                </div>
+              </div>
+            </div>
           ) : (
             // Regular User Profile in Main Area
             <div className="flex-1 overflow-y-auto p-6">
