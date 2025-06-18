@@ -1,7 +1,27 @@
 "use client"
 
-import { useState, useRef, useCallback, useEffect } from "react"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp } from "lucide-react"
+import type React from "react"
+
+import { useState, useEffect, useRef, useCallback } from "react"
+import {
+  Search,
+  Star,
+  MessageCircle,
+  Phone,
+  Video,
+  MoreHorizontal,
+  Send,
+  Smile,
+  Paperclip,
+  Mic,
+  Plus,
+  Users,
+  Shield,
+  UserPlus,
+  QrCode,
+  Scissors,
+  GripHorizontal,
+} from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
 interface Contact {
@@ -13,8 +33,6 @@ interface Contact {
   unread?: number
   isOnline: boolean
   isActive?: boolean
-  isSpecial?: boolean
-  isAI?: boolean
 }
 
 interface Message {
@@ -25,50 +43,459 @@ interface Message {
   isRead: boolean
 }
 
+interface GroupMember {
+  id: string
+  name: string
+  avatar: string
+  role?: string
+  isOnline: boolean
+}
+
 export default function ChatPage() {
   const { theme } = useTheme()
   const isDark = theme === "dark"
-  
+
+  // All hooks must be called before any conditional returns
+  const [mounted, setMounted] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedContact, setSelectedContact] = useState<string | null>(null)
-  const [showMemberSidebar, setShowMemberSidebar] = useState(false)
+  const [activeTab, setActiveTab] = useState("好友")
+  const [selectedContact, setSelectedContact] = useState<string | null>("contact-1")
+  const [message, setMessage] = useState("")
+  const [favorites, setFavorites] = useState<string[]>(["contact-1", "contact-3"])
   const [showAddMenu, setShowAddMenu] = useState(false)
+  const [isMenuAnimating, setIsMenuAnimating] = useState(false)
+  const [showUnreadIndicator, setShowUnreadIndicator] = useState(false)
+  const [inputHeight, setInputHeight] = useState(140)
+  const [isResizing, setIsResizing] = useState(false)
+  const [showMemberSidebar, setShowMemberSidebar] = useState(false)
+  const [memberSidebarAnimating, setMemberSidebarAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [activeProfileTab, setActiveProfileTab] = useState("动态")
-  const [showAIProfile, setShowAIProfile] = useState(false)
-  const [activeTab, setActiveTab] = useState("contacts")
-  const [contactFilter, setContactFilter] = useState("friends")
+  const [tabIndicatorStyle, setTabIndicatorStyle] = useState({ left: 0, width: 0 })
+  
+  // All refs
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const tabsRef = useRef<HTMLDivElement>(null)
   const addMenuRef = useRef<HTMLDivElement>(null)
+  const chatContainerRef = useRef<HTMLDivElement>(null)
+  const firstUnreadRef = useRef<HTMLDivElement>(null)
   const memberSidebarRef = useRef<HTMLDivElement>(null)
 
-  const cardStyle = `${isDark ? 'bg-[#1a1d29] border-[#3a3d4a]' : 'bg-white border-gray-200'} border rounded-lg shadow-sm`
+  // 自动调整输入框高度
+  const adjustTextareaHeight = useCallback(() => {
+    if (textareaRef.current) {
+      const textarea = textareaRef.current
+      // 重置高度以获得正确的scrollHeight
+      textarea.style.height = 'auto'
+      const scrollHeight = textarea.scrollHeight
+      // 计算需要的总高度（包括padding和按钮空间）
+      const newHeight = Math.max(140, Math.min(400, scrollHeight + 80))
+      setInputHeight(newHeight)
+      // 设置textarea的实际高度
+      textarea.style.height = `${scrollHeight}px`
+    }
+  }, [])
 
-  // Mock data
+  // 当消息内容变化时调整高度
+  useEffect(() => {
+    adjustTextareaHeight()
+  }, [message, adjustTextareaHeight])
+
+  // 处理输入框拖拽调整高度 - 向上拖拽增加高度，向下拖拽减少高度
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsResizing(true)
+    const startY = e.clientY
+    const startHeight = inputHeight
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const deltaY = startY - e.clientY // 向上为正，向下为负
+      const newHeight = Math.max(140, Math.min(400, startHeight + deltaY))
+      setInputHeight(newHeight)
+    }
+
+    const handleMouseUp = () => {
+      setIsResizing(false)
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+  }
+
+  // 处理菜单显示
+  const handleShowMenu = useCallback(() => {
+    setShowAddMenu(true)
+    // 使用 requestAnimationFrame 确保立即响应
+    requestAnimationFrame(() => {
+      setIsMenuAnimating(true)
+    })
+  }, [])
+
+  // 处理菜单关闭
+  const handleCloseMenu = useCallback(() => {
+    setIsMenuAnimating(false)
+    setTimeout(() => {
+      setShowAddMenu(false)
+    }, 150) // 减少等待时间
+  }, [])
+
+  // 处理成员侧边栏显示
+  const handleShowMemberSidebar = useCallback(() => {
+    setShowMemberSidebar(true)
+    setMemberSidebarAnimating(true)
+  }, [])
+
+  // 处理成员侧边栏关闭
+  const handleCloseMemberSidebar = useCallback(() => {
+    setMemberSidebarAnimating(false)
+    setTimeout(() => {
+      setShowMemberSidebar(false)
+    }, 300) // 等待动画完成
+  }, [])
+
+  // 解决闪烁问题
+  useEffect(() => {
+    setMounted(true)
+    
+    // 检测移动端设备
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+    }
+  }, [])
+
+  // 滚动到最新消息
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [selectedContact])
+
+  // 点击外部关闭添加菜单
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (addMenuRef.current && !addMenuRef.current.contains(event.target as Node)) {
+        handleCloseMenu()
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [handleCloseMenu])
+
+  // 点击外部关闭成员侧边栏
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (memberSidebarRef.current && !memberSidebarRef.current.contains(event.target as Node)) {
+        handleCloseMemberSidebar()
+      }
+    }
+
+    if (showMemberSidebar) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside)
+      }
+    }
+  }, [showMemberSidebar, handleCloseMemberSidebar])
+
+
+
+  // 检查滚动位置显示未读指示器
+  useEffect(() => {
+    if (!mounted) return
+    
+    const chatContainer = chatContainerRef.current
+    if (!chatContainer) {
+      setShowUnreadIndicator(false)
+      return
+    }
+
+    const handleScroll = () => {
+      if (firstUnreadRef.current && chatContainer) {
+        const containerRect = chatContainer.getBoundingClientRect()
+        const unreadRect = firstUnreadRef.current.getBoundingClientRect()
+        
+        // 如果第一条未读消息不在视口内，显示指示器
+        const isVisible = unreadRect.top >= containerRect.top && 
+                         unreadRect.bottom <= containerRect.bottom
+        setShowUnreadIndicator(!isVisible)
+      }
+    }
+
+    chatContainer.addEventListener('scroll', handleScroll)
+    handleScroll() // 初始检查
+
+    return () => chatContainer.removeEventListener('scroll', handleScroll)
+  }, [selectedContact, mounted])
+
+  // 如果组件未挂载，返回空白内容，避免闪烁
+  if (!mounted) {
+    return <div className="min-h-screen bg-[#f5f8fa] dark:bg-background"></div>
+  }
+
+  // 统一的卡片样式
+  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
+
+  // 页签
+  const tabs = ["好友", "群组", "担保", "通讯录"]
+
+  // 更新选项卡指示器位置
+  const updateTabIndicator = useCallback(() => {
+    if (tabsRef.current) {
+      const tabsContainer = tabsRef.current
+      const activeTabIndex = tabs.indexOf(activeTab)
+      const tabButtons = tabsContainer.querySelectorAll('button')
+      
+      if (tabButtons[activeTabIndex]) {
+        const activeButton = tabButtons[activeTabIndex] as HTMLElement
+        const containerRect = tabsContainer.getBoundingClientRect()
+        const buttonRect = activeButton.getBoundingClientRect()
+        
+        setTabIndicatorStyle({
+          left: buttonRect.left - containerRect.left,
+          width: buttonRect.width
+        })
+      }
+    }
+  }, [activeTab, tabs])
+
+  // 当activeTab改变时更新指示器位置
+  useEffect(() => {
+    updateTabIndicator()
+  }, [updateTabIndicator])
+
+  // 窗口大小改变时重新计算位置
+  useEffect(() => {
+    const handleResize = () => {
+      updateTabIndicator()
+    }
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [updateTabIndicator])
+
+  // 联系人数据
   const contacts: Contact[] = [
-    // Single entry point for friend requests
-    { id: "new-friends", name: "新好友", avatar: "👥", lastMessage: "3个新的好友请求", time: "", isOnline: false, isSpecial: true },
-    
-    // AI Assistants Section
-    { id: "ai-trading", name: "交易顾问", avatar: "🤖", lastMessage: "市场分析已更新，建议查看BTC走势", time: "1分钟前", isOnline: true, isAI: true },
-    { id: "ai-escrow", name: "担保专家", avatar: "🛡️", lastMessage: "您的担保交易已完成", time: "10分钟前", isOnline: true, isAI: true },
-    { id: "ai-customer", name: "智能客服", avatar: "💬", lastMessage: "有什么可以帮您的吗？", time: "在线", isOnline: true, isAI: true },
-    
-    // Regular Friends (Alphabetically sorted)
-    { id: "contact-1", name: "Alex Chen", avatar: "👨‍💼", lastMessage: "BTC今日走势如何？", time: "2分钟前", unread: 2, isOnline: true, isActive: true },
-    { id: "contact-2", name: "Bob Wang", avatar: "👨‍🎓", lastMessage: "ETH合约建议做多", time: "15分钟前", isOnline: false },
-    { id: "contact-3", name: "Carol Li", avatar: "👩‍💻", lastMessage: "今天收益不错", time: "1小时前", unread: 1, isOnline: true },
-    { id: "contact-4", name: "David Liu", avatar: "👨‍🔬", lastMessage: "风险控制很重要", time: "2小时前", isOnline: false },
-    { id: "contact-5", name: "Emma Zhang", avatar: "👩‍🎨", lastMessage: "新手求指导", time: "昨天", isOnline: true },
+    {
+      id: "contact-1",
+      name: "交易助手",
+      avatar: "🤖",
+      lastMessage: "您好，我是您的AI交易助手，有什么可以帮您的吗？",
+      time: "09:30",
+      unread: 2,
+      isOnline: true,
+      isActive: true,
+    },
+    {
+      id: "contact-2",
+      name: "BTC交易群",
+      avatar: "₿",
+      lastMessage: "张三: 今天BTC走势如何？",
+      time: "09:15",
+      unread: 5,
+      isOnline: true,
+    },
+    {
+      id: "contact-3",
+      name: "李四",
+      avatar: "👨‍💼",
+      lastMessage: "我刚看了那个分析报告，非常有见地",
+      time: "昨天",
+      isOnline: false,
+    },
+    {
+      id: "contact-4",
+      name: "王五",
+      avatar: "👩‍💼",
+      lastMessage: "下周一我们讨论一下那个新项目",
+      time: "昨天",
+      isOnline: true,
+    },
+    {
+      id: "contact-5",
+      name: "ETH爱好者群",
+      avatar: "🔷",
+      lastMessage: "赵六: 以太坊2.0的进展如何？",
+      time: "周一",
+      isOnline: true,
+    },
+    {
+      id: "contact-6",
+      name: "赵六",
+      avatar: "👨‍🚀",
+      lastMessage: "我对那个NFT项目很感兴趣",
+      time: "周日",
+      isOnline: false,
+    },
+    {
+      id: "contact-7",
+      name: "DeFi研究小组",
+      avatar: "🏦",
+      lastMessage: "钱七: 最新的流动性挖矿机会分享",
+      time: "上周",
+      isOnline: true,
+    },
+    {
+      id: "contact-8",
+      name: "孙八",
+      avatar: "👨‍💻",
+      lastMessage: "我们来讨论一下最新的市场趋势",
+      time: "05/15",
+      isOnline: false,
+    },
   ]
 
-  // Friend requests data (separate from main contacts)
-  const friendRequests = [
-    { id: "req-1", name: "李明", avatar: "👤", message: "想要添加您为好友", time: "刚刚", isOnline: false },
-    { id: "req-2", name: "张华", avatar: "👤", message: "请求添加好友", time: "5分钟前", isOnline: true },
-    { id: "req-3", name: "王小红", avatar: "👤", message: "希望成为好友", time: "1小时前", isOnline: false },
-  ]
+  // 群成员数据
+  const groupMembers: { [key: string]: GroupMember[] } = {
+    "contact-2": [ // BTC交易群成员
+      {
+        id: "member-1",
+        name: "群主王子",
+        avatar: "👑",
+        role: "群主",
+        isOnline: true,
+      },
+      {
+        id: "member-2", 
+        name: "Peter Pan",
+        avatar: "🧙‍♂️",
+        role: "管理员",
+        isOnline: true,
+      },
+      {
+        id: "member-3",
+        name: "依恋",
+        avatar: "🌸",
+        isOnline: false,
+      },
+      {
+        id: "member-4",
+        name: "还好",
+        avatar: "😊",
+        isOnline: true,
+      },
+      {
+        id: "member-5",
+        name: "Imt创...",
+        avatar: "🚀",
+        isOnline: true,
+      },
+      {
+        id: "member-6",
+        name: "道法自然",
+        avatar: "☯️",
+        isOnline: false,
+      },
+      {
+        id: "member-7",
+        name: "针针针...",
+        avatar: "📊",
+        isOnline: true,
+      },
+      {
+        id: "member-8",
+        name: "无为虚空",
+        avatar: "🌌",
+        isOnline: false,
+      },
+      {
+        id: "member-9",
+        name: "凯森",
+        avatar: "💼",
+        isOnline: true,
+      },
+      {
+        id: "member-10",
+        name: "Rex",
+        avatar: "🦎",
+        isOnline: true,
+      },
+      {
+        id: "member-11",
+        name: "Abraham",
+        avatar: "👨‍💻",
+        isOnline: false,
+      },
+      {
+        id: "member-12",
+        name: "雨上",
+        avatar: "🌧️",
+        isOnline: true,
+      },
+      {
+        id: "member-13",
+        name: "天空海阔",
+        avatar: "🌊",
+        isOnline: false,
+      },
+      {
+        id: "member-14",
+        name: "任平生",
+        avatar: "⚔️",
+        isOnline: true,
+      },
+      {
+        id: "member-15",
+        name: "添加",
+        avatar: "➕",
+        isOnline: false,
+      },
+    ],
+    "contact-5": [ // ETH爱好者群成员
+      {
+        id: "eth-member-1",
+        name: "ETH专家",
+        avatar: "💎",
+        role: "群主",
+        isOnline: true,
+      },
+      {
+        id: "eth-member-2",
+        name: "智能合约开发者",
+        avatar: "🔧",
+        role: "管理员", 
+        isOnline: true,
+      },
+      {
+        id: "eth-member-3",
+        name: "DeFi爱好者",
+        avatar: "🏦",
+        isOnline: false,
+      },
+      {
+        id: "eth-member-4",
+        name: "NFT收藏家",
+        avatar: "🎨",
+        isOnline: true,
+      },
+    ],
+    "contact-7": [ // DeFi研究小组成员
+      {
+        id: "defi-member-1",
+        name: "流动性专家",
+        avatar: "💧",
+        role: "群主",
+        isOnline: true,
+      },
+      {
+        id: "defi-member-2",
+        name: "收益农夫",
+        avatar: "🌾",
+        isOnline: true,
+      },
+    ],
+  }
 
-  const messages: Record<string, Message[]> = {
+  // 消息数据
+  const messages: { [key: string]: Message[] } = {
     "contact-1": [
       {
         id: "msg-1",
@@ -84,1016 +511,712 @@ export default function ChatPage() {
         time: "09:31",
         isRead: true,
       },
+      {
+        id: "msg-3",
+        senderId: "contact-1",
+        text: "根据最近的数据分析，比特币在过去一周呈现震荡上行趋势，突破了68,000美元的阻力位。技术指标RSI显示目前处于65左右，表明有适度的上行动能但尚未进入超买区间。",
+        time: "09:32",
+        isRead: true,
+      },
+      {
+        id: "msg-4",
+        senderId: "user",
+        text: "你认为现在是买入的好时机吗？",
+        time: "09:33",
+        isRead: true,
+      },
+      {
+        id: "msg-5",
+        senderId: "contact-1",
+        text: "从技术面来看，当前价格处于上升通道中，但接近短期阻力位。如果您是长期投资者，可以考虑分批买入策略；如果是短期交易，建议等待回调至支撑位再入场，并设置止损。请注意，这不构成投资建议，市场有风险，投资需谨慎。",
+        time: "09:34",
+        isRead: false,
+      },
+      {
+        id: "msg-6",
+        senderId: "contact-1",
+        text: "您还想了解其他加密货币的情况吗？例如以太坊或其他热门代币？",
+        time: "09:35",
+        isRead: false,
+      },
+    ],
+    "contact-3": [
+      {
+        id: "msg-1",
+        senderId: "contact-3",
+        text: "嗨，你看了最新的市场分析报告了吗？",
+        time: "昨天 18:30",
+        isRead: true,
+      },
+      {
+        id: "msg-2",
+        senderId: "user",
+        text: "还没有，有什么重要的发现吗？",
+        time: "昨天 18:35",
+        isRead: true,
+      },
+      {
+        id: "msg-3",
+        senderId: "contact-3",
+        text: "报告指出机构投资者正在增加比特币持仓，这可能预示着未来几周会有大幅上涨",
+        time: "昨天 18:40",
+        isRead: true,
+      },
+      {
+        id: "msg-4",
+        senderId: "user",
+        text: "这很有趣，你觉得现在应该增加仓位吗？",
+        time: "昨天 18:42",
+        isRead: true,
+      },
+      {
+        id: "msg-5",
+        senderId: "contact-3",
+        text: "我刚看了那个分析报告，非常有见地",
+        time: "昨天 18:45",
+        isRead: true,
+      },
     ],
   }
 
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // 过滤联系人
+  const filteredContacts = contacts.filter((contact) => {
+    if (activeTab === "好友" && contact.name.includes("群")) return false
+    if (activeTab === "群组" && !contact.name.includes("群")) return false
+    if (activeTab === "担保") return false // 暂时没有担保相关联系人
+    return contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+  })
 
+  const selectedContactData = contacts.find((contact) => contact.id === selectedContact)
+  const selectedMessages = selectedContact ? messages[selectedContact] || [] : []
+  
+  // 计算未读消息数量
+  const unreadMessages = selectedMessages.filter(msg => !msg.isRead && msg.senderId !== "user")
+  const unreadCount = unreadMessages.length
+  const firstUnreadMessage = unreadMessages[0]
+
+  // 处理发送消息
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!message.trim() || !selectedContact) return
+
+    // 在实际应用中，这里会调用API发送消息
+    console.log(`发送消息到 ${selectedContact}: ${message}`)
+    setMessage("")
+  }
+
+  const toggleFavorite = (contactId: string) => {
+    setFavorites((prev) => (prev.includes(contactId) ? prev.filter((f) => f !== contactId) : [...prev, contactId]))
+  }
+
+  // 跳转到未读消息
+  const jumpToUnreadMessages = () => {
+    if (firstUnreadRef.current) {
+      firstUnreadRef.current.scrollIntoView({ 
+        behavior: "smooth", 
+        block: "center" 
+      })
+    }
+  }
+
+
+
+  // 添加功能菜单项
   const addMenuItems = [
-    { icon: User, label: "添加好友", action: () => console.log("添加好友") },
-    { icon: Users, label: "创建群聊", action: () => console.log("创建群聊") },
-    { icon: Shield, label: "担保交易", action: () => console.log("担保交易") },
-    { icon: BookOpen, label: "通讯录", action: () => console.log("通讯录") },
+    { icon: Users, label: "发起群聊", action: () => console.log("发起群聊") },
+    { icon: Shield, label: "发起担保", action: () => console.log("发起担保") },
+    { icon: UserPlus, label: "添加好友", action: () => console.log("添加好友") },
+    { icon: QrCode, label: "扫一扫", action: () => console.log("扫一扫") },
   ]
 
-  // Handle click outside for dropdowns
-  const handleMouseMove = (e: MouseEvent) => {
-    const sidebar = memberSidebarRef.current
-    if (!sidebar) return
-
-    const rect = sidebar.getBoundingClientRect()
-    const isNearRightEdge = e.clientX > rect.right - 50
-
-    if (showMemberSidebar && !isNearRightEdge && e.clientX < rect.left - 20) {
-      setShowMemberSidebar(false)
-    }
-  }
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (addMenuRef.current && !addMenuRef.current.contains(event.target as Node)) {
-      setShowAddMenu(false)
-    }
-  }
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    document.addEventListener('mousedown', handleClickOutside)
-    document.addEventListener('mousemove', handleMouseMove)
-    
-    return () => {
-      window.removeEventListener('resize', checkMobile)
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('mousemove', handleMouseMove)
-    }
-  }, [showMemberSidebar])
-
-  // Filter contacts based on contact filter
-  const getContactsForFilter = () => {
-    switch (contactFilter) {
-      case "friends":
-        return {
-          newFriends: filteredContacts.filter(c => c.id === "new-friends"),
-          ai: filteredContacts.filter(c => c.isAI),
-          friends: filteredContacts.filter(c => !c.isSpecial && !c.isAI).sort((a, b) => a.name.localeCompare(b.name))
-        }
-      case "groups":
-        return {
-          newFriends: [],
-          ai: [],
-          friends: [
-            { id: "group-1", name: "交易策略讨论群", avatar: "👥", lastMessage: "BTC今日分析已更新", time: "5分钟前", isOnline: true },
-            { id: "group-2", name: "风险控制交流群", avatar: "👥", lastMessage: "新手必看风控指南", time: "1小时前", isOnline: false },
-            { id: "group-3", name: "行情分析群", avatar: "👥", lastMessage: "ETH突破关键阻力", time: "2小时前", isOnline: true }
-          ]
-        }
-      case "escrow":
-        return {
-          newFriends: [],
-          ai: filteredContacts.filter(c => c.id === "ai-escrow"),
-          friends: [
-            { id: "escrow-1", name: "担保交易001", avatar: "🛡️", lastMessage: "交易已完成，请确认", time: "刚刚", isOnline: true },
-            { id: "escrow-2", name: "担保交易002", avatar: "🛡️", lastMessage: "等待买方确认", time: "10分钟前", isOnline: false }
-          ]
-        }
-      case "contacts":
-        return {
-          newFriends: [],
-          ai: [],
-          friends: filteredContacts.filter(c => !c.isSpecial && !c.isAI).sort((a, b) => a.name.localeCompare(b.name))
-        }
-      default:
-        return {
-          newFriends: filteredContacts.filter(c => c.id === "new-friends"),
-          ai: filteredContacts.filter(c => c.isAI),
-          friends: filteredContacts.filter(c => !c.isSpecial && !c.isAI).sort((a, b) => a.name.localeCompare(b.name))
-        }
-    }
-  }
-
-  const groupedContacts = getContactsForFilter()
-
   return (
-    <div className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
-      {/* Contact List Sidebar */}
-      <div 
-        className={`${cardStyle} flex flex-col`}
-        style={isMobile ? { width: '100vw', minWidth: '100vw', maxWidth: '100vw' } : { minWidth: '416px', maxWidth: '500px', width: 'clamp(416px, 30vw, 500px)' }}
-      >
-        {/* Search and Add Button */}
-        <div className="flex items-center gap-2 p-4">
-          <div className="relative flex-1">
-            <Search
-              className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
-                isDark ? 'text-gray-400' : 'text-gray-500'
-              }`}
-            />
-            <input
-              type="text"
-              placeholder="搜索联系人..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
-                isDark
-                  ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400'
-                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
-              } focus:outline-none focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
-            />
+    <div className={`h-screen overflow-hidden ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+      {/* 主聊天区域 */}
+      <div className="flex h-full">
+        {/* 左侧联系人列表 - 移动端全屏显示，选中联系人时隐藏 */}
+        <div 
+          className={`${cardStyle} ${selectedContact ? 'hidden md:flex' : 'flex'} h-full flex-col ${isMobile ? 'w-screen' : 'w-auto'} overflow-hidden`} 
+          style={isMobile ? { width: '100vw', minWidth: '100vw', maxWidth: '100vw' } : { minWidth: '416px', maxWidth: '500px', width: 'clamp(416px, 30vw, 500px)' }}
+        >
+          {/* 搜索框和添加按钮 */}
+          <div className="flex items-center gap-2 p-4">
+            <div className="relative flex-1">
+              <Search
+                className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
+                  isDark ? "text-gray-400" : "text-gray-500"
+                }`}
+              />
+              <input
+                type="text"
+                placeholder="搜索联系人"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm transition-colors ${
+                  isDark
+                    ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400 focus:border-[#00D4AA]"
+                    : "bg-gray-100 border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
+                } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+              />
+            </div>
+
+            {/* 添加按钮和弹出菜单 */}
+            <div className="relative" ref={addMenuRef}>
+              <button
+                onClick={showAddMenu ? handleCloseMenu : handleShowMenu}
+                className={`p-2 rounded-lg border transition-all duration-200 ${
+                  isDark
+                    ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#3a3d4a] hover:scale-105"
+                    : "bg-gray-100 border-gray-200 text-gray-800 hover:bg-gray-200 hover:scale-105"
+                } ${showAddMenu ? "scale-105" : ""}`}
+              >
+                <Plus className={`h-4 w-4 transition-transform duration-200 ${showAddMenu ? "rotate-45" : ""}`} />
+              </button>
+
+              {/* 弹出菜单 */}
+              {showAddMenu && (
+                <div
+                  className={`absolute top-full right-0 mt-2 w-56 ${cardStyle} rounded-lg shadow-lg z-50 transition-all duration-150 origin-top-right ${
+                    isMenuAnimating ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                  }`}
+                >
+                  <div className="py-2">
+                    {addMenuItems.map((item, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          item.action()
+                          handleCloseMenu()
+                        }}
+                        className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-100 ${
+                          isDark
+                            ? "text-white hover:bg-[#252842] hover:translate-x-1"
+                            : "text-gray-800 hover:bg-gray-100 hover:translate-x-1"
+                        }`}
+                      >
+                        <item.icon className="h-4 w-4 mr-3" />
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="relative" ref={addMenuRef}>
-            <button
-              onClick={() => setShowAddMenu(!showAddMenu)}
-              className={`p-2 rounded-lg transition-colors ${
-                isDark
-                  ? 'bg-[#252842] hover:bg-[#3a3d4a] text-gray-300'
-                  : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
-              }`}
-            >
-              <Plus className="h-4 w-4" />
-            </button>
-            {showAddMenu && (
-              <div className={`absolute right-0 top-full mt-2 w-48 ${cardStyle} py-2 z-50`}>
-                {addMenuItems.map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      item.action()
-                      setShowAddMenu(false)
-                    }}
-                    className={`w-full flex items-center px-4 py-2 text-sm hover:${
-                      isDark ? 'bg-[#252842]' : 'bg-gray-50'
-                    } transition-colors`}
+
+          {/* 页签 */}
+          <div className={`${isDark ? "bg-[#252842]" : "bg-gray-100"} rounded-lg p-1 mx-4 mb-4 relative`}>
+            <div ref={tabsRef} className="flex items-center relative">
+              {/* 滑动指示器 */}
+              <div
+                className="absolute top-1 bottom-1 bg-black rounded-md transition-all duration-300 ease-out z-0"
+                style={{
+                  left: `${tabIndicatorStyle.left}px`,
+                  width: `${tabIndicatorStyle.width}px`,
+                  transform: 'translateZ(0)' // 启用硬件加速
+                }}
+              />
+              
+              {tabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-all duration-300 whitespace-nowrap relative z-10 ${
+                    activeTab === tab
+                      ? "text-white"
+                      : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-600 hover:text-gray-800"
+                  }`}
+                >
+                  <span className="relative">{tab}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 联系人列表 */}
+          <div className="flex-1 px-4 pb-4 overflow-y-auto" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+            <div className="space-y-2">
+              <style jsx>{`
+                div::-webkit-scrollbar {
+                  display: none;
+                }
+              `}</style>
+              {filteredContacts.length > 0 ? (
+                filteredContacts.map((contact) => (
+                  <div
+                    key={contact.id}
+                    className={`p-3 rounded-lg cursor-pointer transition-all duration-200 flex items-center transform hover:scale-102 ${
+                      selectedContact === contact.id
+                        ? isDark
+                          ? "bg-[#252842] text-white shadow-md scale-102"
+                          : "bg-gray-100 text-gray-800 shadow-md scale-102"
+                        : isDark
+                          ? "hover:bg-[#252842]/50 text-white"
+                          : "hover:bg-gray-100/50 text-gray-800"
+                    }`}
+                    onClick={() => setSelectedContact(contact.id)}
                   >
-                    <item.icon className="h-4 w-4 mr-3" />
-                    <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{item.label}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Page Navigation Tabs */}
-        <div className="px-4 mb-4">
-          <div className="flex space-x-1 bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
-            <button 
-              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeTab === "contacts" 
-                  ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
-              onClick={() => setActiveTab("contacts")}
-            >
-              联系人
-            </button>
-            <button 
-              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeTab === "chat" 
-                  ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
-              onClick={() => setActiveTab("chat")}
-            >
-              聊天
-            </button>
-          </div>
-        </div>
-
-        {/* Contact Filter Tabs - Only show when on contacts page */}
-        {activeTab === "contacts" && (
-          <div className="px-4 mb-4">
-            <div className="flex space-x-1 bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
-              <button 
-                className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  contactFilter === "friends" 
-                    ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                }`}
-                onClick={() => setContactFilter("friends")}
-              >
-                好友
-              </button>
-              <button 
-                className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  contactFilter === "groups" 
-                    ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                }`}
-                onClick={() => setContactFilter("groups")}
-              >
-                群组
-              </button>
-              <button 
-                className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  contactFilter === "escrow" 
-                    ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                }`}
-                onClick={() => setContactFilter("escrow")}
-              >
-                担保
-              </button>
-              <button 
-                className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  contactFilter === "contacts" 
-                    ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                }`}
-                onClick={() => setContactFilter("contacts")}
-              >
-                通讯录
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Content based on active tab */}
-        <div className="flex-1 overflow-y-auto">
-          {activeTab === "contacts" ? (
-            <>
-              {/* New Friends Entry */}
-              {groupedContacts.newFriends.length > 0 && (
-            <div className="mb-4">
-              {groupedContacts.newFriends.map((contact) => (
-                <div
-                  key={contact.id}
-                  className={`flex items-center p-3 mx-2 rounded-lg cursor-pointer transition-all ${
-                    selectedContact === contact.id
-                      ? 'bg-[#00D4AA] text-white'
-                      : isDark
-                      ? 'hover:bg-[#252842] text-gray-300'
-                      : 'hover:bg-gray-100 text-gray-700'
-                  }`}
-                  onClick={() => setSelectedContact(contact.id)}
-                >
-                  <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white text-lg">
-                      {contact.avatar}
+                    <div className="relative mr-3">
+                      <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center text-2xl">
+                        {contact.avatar}
+                      </div>
+                      {contact.isOnline && (
+                        <div className="absolute bottom-0 right-0 h-3 w-3 bg-custom-green rounded-full border-2 border-card animate-pulse"></div>
+                      )}
                     </div>
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                      {friendRequests.length}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-medium truncate">{contact.name}</h3>
+                        <span className="text-xs text-gray-400">{contact.time}</span>
+                      </div>
+                      <p className="text-sm truncate text-gray-400">{contact.lastMessage}</p>
                     </div>
-                  </div>
-                  <div className="ml-3 flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-medium truncate">{contact.name}</h3>
-                    </div>
-                    <p className="text-sm opacity-70 truncate">{contact.lastMessage}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* AI Assistants */}
-          {groupedContacts.ai.length > 0 && (
-            <div className="mb-4">
-              <div className={`px-4 py-2 text-xs font-medium ${
-                isDark ? 'text-gray-400' : 'text-gray-600'
-              }`}>
-                AI助手
-              </div>
-              {groupedContacts.ai.map((contact) => (
-                <div
-                  key={contact.id}
-                  className={`flex items-center p-3 mx-2 rounded-lg cursor-pointer transition-all ${
-                    selectedContact === contact.id
-                      ? 'bg-[#00D4AA] text-white'
-                      : isDark
-                      ? 'hover:bg-[#252842] text-gray-300'
-                      : 'hover:bg-gray-100 text-gray-700'
-                  }`}
-                  onClick={() => {
-                    setSelectedContact(contact.id)
-                    setShowMemberSidebar(false)
-                    setShowAIProfile(true)
-                  }}
-                >
-                  <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00D4AA] to-[#00b89a] flex items-center justify-center text-white text-lg">
-                      {contact.avatar}
-                    </div>
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-                  </div>
-                  <div className="ml-3 flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-medium truncate">{contact.name}</h3>
-                      <span className="text-xs opacity-70">{contact.time}</span>
-                    </div>
-                    <p className="text-sm opacity-70 truncate">{contact.lastMessage}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Regular Friends */}
-          {groupedContacts.friends.length > 0 && (
-            <div>
-              <div className={`px-4 py-2 text-xs font-medium ${
-                isDark ? 'text-gray-400' : 'text-gray-600'
-              }`}>
-                好友 ({groupedContacts.friends.length})
-              </div>
-              {groupedContacts.friends.map((contact) => (
-                <div
-                  key={contact.id}
-                  className={`flex items-center p-3 mx-2 rounded-lg cursor-pointer transition-all ${
-                    selectedContact === contact.id
-                      ? 'bg-[#00D4AA] text-white'
-                      : isDark
-                      ? 'hover:bg-[#252842] text-gray-300'
-                      : 'hover:bg-gray-100 text-gray-700'
-                  }`}
-                  onClick={() => {
-                    setSelectedContact(contact.id)
-                    setShowMemberSidebar(false)
-                    setShowAIProfile(false)
-                  }}
-                >
-                  <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-lg">
-                      {contact.avatar}
-                    </div>
-                    {contact.isOnline && (
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                    {contact.unread && (
+                      <div className="ml-2 h-5 w-5 bg-red-500 rounded-full flex items-center justify-center animate-bounce">
+                        <span className="text-xs text-white">{contact.unread}</span>
+                      </div>
                     )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleFavorite(contact.id)
+                      }}
+                      className={`ml-2 p-1 rounded-full transition-all duration-200 hover:scale-110 ${
+                        favorites.includes(contact.id) ? "text-yellow-500" : "text-gray-400"
+                      } hover:bg-gray-200/20`}
+                    >
+                      <Star className="h-4 w-4" fill={favorites.includes(contact.id) ? "currentColor" : "none"} />
+                    </button>
                   </div>
-                  <div className="ml-3 flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-medium truncate">{contact.name}</h3>
-                      <span className="text-xs opacity-70">{contact.time}</span>
-                    </div>
-                    <p className="text-sm opacity-70 truncate">{contact.lastMessage}</p>
-                  </div>
-                  {contact.unread && (
-                    <div className="ml-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                      {contact.unread}
-                    </div>
-                  )}
+                ))
+              ) : (
+                <div className="text-center py-8">
+                  <div className="text-gray-400 text-sm">{activeTab === "担保" ? "暂无担保记录" : "暂无联系人"}</div>
                 </div>
-              ))}
+              )}
             </div>
-          )}
+          </div>
+        </div>
+
+        {/* 右侧聊天窗口 - 移动端选中联系人时显示，未选中时隐藏 */}
+        <div 
+          className={`${cardStyle} ${!selectedContact ? 'hidden md:flex' : 'flex'} flex-1 flex-col w-full h-full overflow-hidden`}
+        >
+          {selectedContactData ? (
+            <>
+              {/* 聊天头部 - 移动端添加返回按钮 */}
+              <div className="py-4 px-3 md:px-4 border-b border-gray-200 dark:border-[#252842] flex items-center justify-between min-h-[72px]">
+                {isMobile ? (
+                  /* 移动端布局 - 返回按钮在左，用户信息居中 */
+                  <>
+                    <button
+                      onClick={() => setSelectedContact("")}
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#252842]"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    <div className="flex items-center justify-center flex-1">
+                      <div className="relative mr-3">
+                        <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-xl">
+                          {selectedContactData.avatar}
+                        </div>
+                        {selectedContactData.isOnline && (
+                          <div className="absolute bottom-0 right-0 h-2.5 w-2.5 bg-custom-green rounded-full border-2 border-card"></div>
+                        )}
+                      </div>
+                      <div className="text-center">
+                        <h2 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {selectedContactData.name}
+                        </h2>
+                        <div className="text-xs text-gray-400">{selectedContactData.isOnline ? "在线" : "离线"}</div>
+                      </div>
+                    </div>
+                    <div className="w-10"></div> {/* 占位符保持对称 */}
+                  </>
+                ) : (
+                  /* 桌面端布局 */
+                  <div className="flex items-center">
+                    <div className="relative mr-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-xl">
+                        {selectedContactData.avatar}
+                      </div>
+                      {selectedContactData.isOnline && (
+                        <div className="absolute bottom-0 right-0 h-2.5 w-2.5 bg-custom-green rounded-full border-2 border-card"></div>
+                      )}
+                    </div>
+                    <div>
+                      <h2 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                        {selectedContactData.name}
+                      </h2>
+                      <div className="text-xs text-gray-400">{selectedContactData.isOnline ? "在线" : "离线"}</div>
+                    </div>
+                  </div>
+                )}
+                <div className="flex items-center space-x-2">
+                  {/* 群成员按钮 - 仅群聊显示 */}
+                  {selectedContactData.name.includes("群") && (
+                    <button
+                      onClick={handleShowMemberSidebar}
+                      className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                        isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                      }`}
+                    >
+                      <Users className="h-5 w-5 text-gray-400" />
+                    </button>
+                  )}
+                  <button
+                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                    }`}
+                  >
+                    <Phone className="h-5 w-5 text-gray-400" />
+                  </button>
+                  <button
+                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                    }`}
+                  >
+                    <Video className="h-5 w-5 text-gray-400" />
+                  </button>
+                  <button
+                    className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                    }`}
+                  >
+                    <MoreHorizontal className="h-5 w-5 text-gray-400" />
+                  </button>
+                </div>
+              </div>
+
+              {/* 聊天内容 */}
+              <div
+                ref={chatContainerRef}
+                className={`flex-1 p-4 overflow-y-auto relative ${isDark ? "bg-[#0f1419]" : "bg-gray-50"}`}
+              >
+                {/* 未读消息指示器 - 右上角 */}
+                {unreadCount > 0 && (
+                  <div className="absolute top-4 right-4 z-10">
+                    <button
+                      onClick={jumpToUnreadMessages}
+                      className="bg-custom-green text-white px-3 py-1 rounded-full shadow-lg hover:bg-custom-green/80 transition-all duration-200 flex items-center space-x-1 text-sm font-medium"
+                    >
+                      <span>↑</span>
+                      <span>{unreadCount}条新消息</span>
+                    </button>
+                  </div>
+                )}
+                <div className="space-y-4">
+                  {selectedMessages.map((msg, index) => {
+                    const isFirstUnread = msg.id === firstUnreadMessage?.id
+                    return (
+                      <div 
+                        key={msg.id} 
+                        ref={isFirstUnread ? firstUnreadRef : null}
+                        className={`flex ${msg.senderId === "user" ? "justify-end" : "justify-start"} ${!msg.isRead && msg.senderId !== "user" ? "relative" : ""}`}
+                      >
+                        {msg.senderId !== "user" && (
+                          <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-sm mr-2 flex-shrink-0">
+                            {selectedContactData.avatar}
+                          </div>
+                        )}
+                        <div
+                          className={`max-w-[70%] rounded-2xl px-4 py-2 ${
+                            msg.senderId === "user"
+                              ? "bg-custom-green text-white"
+                              : isDark
+                                ? "bg-[#252842] text-white"
+                                : "bg-white text-gray-800 border border-gray-200"
+                          }`}
+                        >
+                          <div className="text-sm">{msg.text}</div>
+                          <div className="text-xs mt-1 opacity-70 text-right">{msg.time}</div>
+                        </div>
+                        {msg.senderId === "user" && (
+                          <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-sm ml-2 flex-shrink-0">
+                            👤
+                          </div>
+                        )}
+                        {/* 未读消息标记 */}
+                        {!msg.isRead && msg.senderId !== "user" && isFirstUnread && (
+                          <div className="absolute -left-2 top-0 w-1 h-full bg-custom-green rounded-full"></div>
+                        )}
+                      </div>
+                    )
+                  })}
+                  <div ref={messagesEndRef} />
+                </div>
+                
+                {/* 浮动未读消息指示器 */}
+                {showUnreadIndicator && unreadCount > 0 && (
+                  <div className="absolute bottom-4 right-4 z-10">
+                    <button
+                      onClick={jumpToUnreadMessages}
+                      className="bg-custom-green text-white px-4 py-2 rounded-full shadow-lg hover:bg-custom-green/80 transition-all duration-200 flex items-center space-x-2 animate-bounce"
+                    >
+                      <span className="text-sm font-medium">{unreadCount} 条未读</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* 聊天输入区域 - 在消息区域底部 */}
+              <div 
+                className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex flex-col`}
+                style={{ height: `${inputHeight}px`, minHeight: `${inputHeight}px`, maxHeight: `${inputHeight}px` }}
+              >
+                {/* 拖拽调整高度的手柄 */}
+                <div 
+                  className={`w-full h-1 cursor-ns-resize flex items-center justify-center ${
+                    isDark ? "hover:bg-[#2a2d42]" : "hover:bg-gray-100"
+                  } ${isResizing ? (isDark ? "bg-[#2a2d42]" : "bg-gray-100") : ""}`}
+                  onMouseDown={handleMouseDown}
+                >
+                  <GripHorizontal className="w-3 h-3 text-gray-400 rotate-90" />
+                </div>
+
+                {/* 输入区域内容 */}
+                <div className="flex flex-col px-3 py-2 h-full overflow-hidden">
+                  {/* 功能按钮行 */}
+                  <div className="flex items-center space-x-2">
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Smile className="w-5 h-5" />
+                    </button>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Paperclip className="w-5 h-5" />
+                    </button>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Scissors className="w-5 h-5" />
+                    </button>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <MessageCircle className="w-5 h-5" />
+                    </button>
+                    
+                    {/* 右侧功能按钮 */}
+                    <div className="flex-1"></div>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Phone className="w-5 h-5" />
+                    </button>
+                    <button className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                    }`}>
+                      <Video className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* 输入框区域 */}
+                  <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div className="flex-1 min-h-0 mb-3">
+                      <textarea
+                        ref={textareaRef}
+                        value={message}
+                        onChange={(e) => {
+                          setMessage(e.target.value)
+                          adjustTextareaHeight()
+                        }}
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault()
+                            handleSendMessage(e as any)
+                          }
+                        }}
+                        placeholder="123123"
+                        className={`w-full h-full p-3 resize-none outline-none text-base bg-transparent ${
+                          isDark 
+                            ? "text-white placeholder-gray-500" 
+                            : "text-gray-900 placeholder-gray-400"
+                        }`}
+                        style={{ minHeight: '100px', maxHeight: '300px' }}
+                      />
+                    </div>
+                    
+                    {/* 发送按钮 - 固定在底部 */}
+                    <div className="flex justify-end shrink-0">
+                      <button
+                        onClick={handleSendMessage}
+                        disabled={!message.trim()}
+                        className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
+                          message.trim()
+                            ? "bg-black text-white hover:bg-gray-800"
+                            : "border border-gray-400 text-gray-400 cursor-not-allowed bg-transparent"
+                        }`}
+                      >
+                        发送(S)
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </>
           ) : (
-            /* Chat List View */
-            <div className="space-y-2 px-2">
-              <div className={`px-4 py-2 text-xs font-medium ${
-                isDark ? 'text-gray-400' : 'text-gray-600'
-              }`}>
-                最近聊天
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center">
+                <MessageCircle className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+                <h3 className={`text-lg font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
+                  选择一个联系人开始聊天
+                </h3>
+                <p className="text-gray-400">从左侧列表选择一个联系人或群组</p>
               </div>
-              {contacts.filter(c => !c.isSpecial).slice(0, 8).map((contact) => (
-                <div
-                  key={contact.id}
-                  className={`flex items-center p-3 rounded-lg cursor-pointer transition-all ${
-                    selectedContact === contact.id
-                      ? 'bg-[#00D4AA] text-white'
-                      : isDark
-                      ? 'hover:bg-[#252842] text-gray-300'
-                      : 'hover:bg-gray-100 text-gray-700'
-                  }`}
-                  onClick={() => {
-                    setSelectedContact(contact.id)
-                    setShowMemberSidebar(false)
-                    setShowAIProfile(contact.isAI || false)
-                  }}
-                >
-                  <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg">
-                      {contact.avatar}
-                    </div>
-                    {contact.isOnline && (
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-                    )}
-                  </div>
-                  <div className="ml-3 flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-medium truncate">{contact.name}</h3>
-                      <span className="text-xs opacity-70">{contact.time}</span>
-                    </div>
-                    <p className="text-sm opacity-70 truncate">{contact.lastMessage}</p>
-                  </div>
-                  {contact.unread && (
-                    <div className="ml-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                      {contact.unread}
-                    </div>
-                  )}
-                </div>
-              ))}
             </div>
           )}
         </div>
-      </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex">
-        {selectedContact ? (
-          selectedContact === "new-friends" ? (
-            // Friend Requests Page
-            <div className="flex-1 flex flex-col p-6">
+        {/* 群成员侧边栏 */}
+        {showMemberSidebar && selectedContact && selectedContactData?.name.includes("群") && (
+          <>
+            {/* 背景遮罩 */}
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-30 z-40 transition-opacity duration-300"
+              onClick={handleCloseMemberSidebar}
+            />
+            
+            {/* 成员侧边栏 */}
+            <div 
+              ref={memberSidebarRef}
+              className={`fixed right-0 top-0 h-full w-80 ${cardStyle} z-50 transform transition-all duration-300 ease-in-out ${
+                memberSidebarAnimating ? "translate-x-0" : "translate-x-full"
+              }`}
+            >
               <div className="flex flex-col h-full">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                    新好友请求
-                  </h1>
-                  <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                    {friendRequests.length} 个待处理
-                  </span>
+                {/* 侧边栏头部 */}
+                <div className="p-4 border-b border-gray-200 dark:border-[#252842] flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Users className="h-5 w-5 mr-2 text-gray-400" />
+                    <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                      群成员 ({groupMembers[selectedContact]?.length || 0})
+                    </h3>
+                  </div>
+                  <button
+                    onClick={handleCloseMemberSidebar}
+                    className={`p-1 rounded-full transition-all duration-200 hover:scale-110 ${
+                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                    }`}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </div>
 
-                {/* Friend Requests List */}
-                <div className="flex-1 overflow-y-auto space-y-4">
-                  {friendRequests.map((request) => (
-                    <div key={request.id} className={`${cardStyle} p-6`}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="relative">
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl">
-                              {request.avatar}
+                {/* 搜索成员 */}
+                <div className="p-4 border-b border-gray-200 dark:border-[#252842]">
+                  <div className="relative">
+                    <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    }`} />
+                    <input
+                      type="text"
+                      placeholder="搜索群成员"
+                      className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm transition-colors ${
+                        isDark
+                          ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400 focus:border-[#00D4AA]"
+                          : "bg-gray-100 border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
+                      } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+                    />
+                  </div>
+                </div>
+
+                {/* 成员列表 */}
+                <div className="flex-1 overflow-y-auto">
+                  {/* 成员网格布局 */}
+                  <div className="p-4">
+                    <div className="grid grid-cols-4 gap-3 mb-6">
+                      {groupMembers[selectedContact]?.slice(0, 8).map((member) => (
+                        <div key={member.id} className="flex flex-col items-center">
+                          <div className="relative mb-2">
+                            <div className="h-12 w-12 rounded-lg bg-primary/20 flex items-center justify-center text-lg">
+                              {member.avatar}
                             </div>
-                            {request.isOnline && (
-                              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                            {member.isOnline && (
+                              <div className="absolute bottom-0 right-0 h-3 w-3 bg-custom-green rounded-full border-2 border-card"></div>
                             )}
                           </div>
-                          <div className="flex-1">
-                            <h3 className={`font-medium text-lg ${isDark ? "text-white" : "text-gray-900"}`}>
-                              {request.name}
-                            </h3>
-                            <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                              {request.message}
-                            </p>
-                            <span className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"}`}>
-                              {request.time}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex space-x-3">
-                          <button className="px-4 py-2 bg-[#00D4AA] text-white text-sm rounded-lg hover:bg-[#00b89a] transition-colors">
-                            接受
-                          </button>
-                          <button className={`px-4 py-2 text-sm rounded-lg transition-colors ${
-                            isDark 
-                              ? 'bg-[#3a3d4a] text-gray-300 hover:bg-[#454851]' 
-                              : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                          <span className={`text-xs text-center truncate w-full ${
+                            isDark ? "text-gray-300" : "text-gray-600"
                           }`}>
-                            忽略
+                            {member.name}
+                          </span>
+                        </div>
+                      ))}
+                      {/* 查看更多按钮 */}
+                      {groupMembers[selectedContact]?.length > 8 && (
+                        <div className="flex flex-col items-center">
+                          <button className={`h-12 w-12 rounded-lg border-2 border-dashed flex items-center justify-center transition-colors ${
+                            isDark 
+                              ? "border-gray-600 hover:border-gray-500 text-gray-400 hover:text-gray-300" 
+                              : "border-gray-300 hover:border-gray-400 text-gray-500 hover:text-gray-600"
+                          }`}>
+                            <Plus className="h-5 w-5" />
                           </button>
+                          <span className={`text-xs text-center mt-2 ${
+                            isDark ? "text-gray-400" : "text-gray-500"
+                          }`}>
+                            查看更多
+                          </span>
                         </div>
-                      </div>
+                      )}
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ) : selectedContact.startsWith("ai-") ? (
-            // AI Assistant Profile in Main Area
-            <div className="flex-1 flex flex-col p-6">
-              <div className="flex flex-col h-full">
-                {/* Hero Section */}
-                <div className="text-center py-16 px-8">
-                  {/* AI Avatar */}
-                  <div className="relative mx-auto mb-8 w-32 h-32">
-                    <div className={`w-full h-full rounded-full ${isDark ? 'bg-gradient-to-br from-[#00D4AA] to-[#00a389]' : 'bg-gradient-to-br from-[#00D4AA] to-[#00c5a5]'} flex items-center justify-center text-6xl text-white shadow-2xl`}>
-                      {selectedContact === "ai-escrow" ? "🛡️" : 
-                       selectedContact === "ai-trading" ? "📊" : "🤖"}
-                    </div>
-                    <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
-                      <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-                    </div>
-                  </div>
 
-                  {/* Title & Subtitle */}
-                  <h1 className={`text-3xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>
-                    {selectedContact === "ai-escrow" ? "担保专家" : 
-                     selectedContact === "ai-trading" ? "交易顾问" : "智能客服"}
-                  </h1>
-                  
-                  <p className={`text-xl mb-8 max-w-md mx-auto ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                    {selectedContact === "ai-escrow" ? "守护您的每一笔交易" : 
-                     selectedContact === "ai-trading" ? "洞察市场 · 智慧投资" : "随时为您提供帮助"}
-                  </p>
-
-                  {/* Quick Stats */}
-                  <div className="flex justify-center space-x-8 mb-12">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-[#00D4AA]">7×24</div>
-                      <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>全天候服务</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-[#00D4AA]">&lt;1s</div>
-                      <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>响应时间</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-[#00D4AA]">AI</div>
-                      <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>智能驱动</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Feature Cards */}
-                <div className="flex-1 px-8 pb-8">
-                  <div className="max-w-2xl mx-auto">
-                    <h2 className={`text-lg font-semibold mb-6 text-center ${isDark ? "text-white" : "text-gray-800"}`}>
-                      我能为您做什么？
-                    </h2>
-                    
-                    <div className="space-y-4">
-                      {selectedContact === "ai-escrow" && [
-                        { icon: "🔐", title: "资金托管", desc: "安全托管交易资金，确保双方权益" },
-                        { icon: "⚖️", title: "纠纷调解", desc: "公正处理交易争议，快速解决问题" },
-                        { icon: "📝", title: "合约管理", desc: "智能合约生成与执行监控" }
-                      ].map((item, index) => (
-                        <div key={index} className={`flex items-center p-4 rounded-xl ${isDark ? "bg-[#252842] hover:bg-[#2a2d42]" : "bg-gray-50 hover:bg-gray-100"} transition-all cursor-pointer`}>
-                          <div className="text-3xl mr-4">{item.icon}</div>
-                          <div className="flex-1">
-                            <h3 className={`font-medium mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>{item.title}</h3>
-                            <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>{item.desc}</p>
-                          </div>
-                          <div className="text-[#00D4AA]">→</div>
-                        </div>
-                      ))}
-                      
-                      {selectedContact === "ai-trading" && [
-                        { icon: "📈", title: "市场分析", desc: "实时分析市场趋势和价格走向" },
-                        { icon: "💡", title: "投资建议", desc: "基于数据提供个性化投资策略" },
-                        { icon: "⚠️", title: "风险预警", desc: "及时提醒潜在风险和异常波动" }
-                      ].map((item, index) => (
-                        <div key={index} className={`flex items-center p-4 rounded-xl ${isDark ? "bg-[#252842] hover:bg-[#2a2d42]" : "bg-gray-50 hover:bg-gray-100"} transition-all cursor-pointer`}>
-                          <div className="text-3xl mr-4">{item.icon}</div>
-                          <div className="flex-1">
-                            <h3 className={`font-medium mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>{item.title}</h3>
-                            <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>{item.desc}</p>
-                          </div>
-                          <div className="text-[#00D4AA]">→</div>
-                        </div>
-                      ))}
-                      
-                      {selectedContact === "ai-customer" && [
-                        { icon: "💬", title: "即时问答", desc: "快速解答您的各种问题" },
-                        { icon: "🔧", title: "技术支持", desc: "协助解决技术和操作问题" },
-                        { icon: "📚", title: "使用指导", desc: "详细的功能介绍和操作教程" }
-                      ].map((item, index) => (
-                        <div key={index} className={`flex items-center p-4 rounded-xl ${isDark ? "bg-[#252842] hover:bg-[#2a2d42]" : "bg-gray-50 hover:bg-gray-100"} transition-all cursor-pointer`}>
-                          <div className="text-3xl mr-4">{item.icon}</div>
-                          <div className="flex-1">
-                            <h3 className={`font-medium mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>{item.title}</h3>
-                            <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>{item.desc}</p>
-                          </div>
-                          <div className="text-[#00D4AA]">→</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Area */}
-                <div className="p-8 border-t border-gray-200 dark:border-[#3a3d4a]">
-                  <div className="text-center">
-                    <button 
-                      onClick={() => {
-                        console.log(`开始与${selectedContact}对话`)
-                      }}
-                      className="group relative overflow-hidden px-12 py-4 bg-[#00D4AA] text-white text-lg font-semibold rounded-full hover:bg-[#00b89a] transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
-                      <span className="relative z-10 flex items-center justify-center">
-                        <span className="mr-2">开始对话</span>
-                        <span className="group-hover:translate-x-1 transition-transform">💬</span>
-                      </span>
-                    </button>
-                    <p className={`text-sm mt-3 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                      点击开始，我将为您提供专业服务
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : selectedContact?.startsWith("req-") ? (
-            // Friend Request Interface
-            <div className="flex-1 flex flex-col p-6">
-              <div className="flex flex-col items-center justify-center h-full max-w-md mx-auto">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-4xl mb-6">
-                  👤
-                </div>
-                
-                <h2 className={`text-2xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  {contacts.find(c => c.id === selectedContact)?.name}
-                </h2>
-                
-                <p className={`text-center mb-8 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                  想要添加您为好友
-                </p>
-                
-                <div className="flex space-x-4 w-full">
-                  <button className="flex-1 py-3 px-6 bg-[#00D4AA] text-white rounded-lg hover:bg-[#00b89a] transition-colors font-medium">
-                    接受
-                  </button>
-                  <button className={`flex-1 py-3 px-6 border rounded-lg transition-colors font-medium ${
-                    isDark 
-                      ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]" 
-                      : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                  }`}>
-                    拒绝
-                  </button>
-                </div>
-                
-                <div className={`mt-6 p-4 rounded-lg text-center ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
-                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                    通过好友验证后，您可以开始聊天
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            // Regular User Profile in Main Area
-            <div className="flex-1 overflow-y-auto p-6">
-              {/* Profile Card */}
-              <div className={`${cardStyle} mb-6`}>
-                {/* Profile Content */}
-                <div className="p-6">
-                  {/* Avatar and Basic Info */}
-                  <div className="flex items-start space-x-4 mb-6">
-                    <div className="relative">
-                      <div className="w-20 h-20 rounded-full bg-black flex items-center justify-center text-white text-2xl">
-                        👨‍💼
-                      </div>
-                      <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
-                    </div>
-                    
-                    <div className="flex-1">
-                      <h2 className={`text-xl font-bold mb-1 ${isDark ? "text-white" : "text-gray-900"}`}>
-                        {contacts.find(c => c.id === selectedContact)?.name}
-                      </h2>
-                      <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"} mb-2`}>
-                        专业交易员 • 5年经验
+                    {/* 群聊名称设置 */}
+                    <div className="mb-6">
+                      <h4 className={`font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                        群聊名称
+                      </h4>
+                      <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                        仅群主或管理员可以修改
                       </p>
-                      <div className="flex items-center space-x-4 text-sm">
-                        <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>604位好友</span>
-                        <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>4.5万粉丝</span>
-                      </div>
                     </div>
-                  </div>
 
-                  {/* Stats Row - Smaller and integrated */}
-                  <div className="grid grid-cols-3 gap-6 mb-6 text-center">
-                    <div>
-                      <div className="text-lg font-bold text-[#00D4AA] mb-1">+158%</div>
-                      <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>总收益率</div>
-                    </div>
-                    <div>
-                      <div className={`text-lg font-bold mb-1 ${isDark ? "text-white" : "text-gray-900"}`}>85.2%</div>
-                      <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>胜率</div>
-                    </div>
-                    <div>
-                      <div className={`text-lg font-bold mb-1 ${isDark ? "text-white" : "text-gray-900"}`}>1,234</div>
-                      <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>交易笔数</div>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="grid grid-cols-3 gap-3 mb-6">
-                    <button className={`py-2 px-3 border transition-colors text-sm ${
-                      isDark 
-                        ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]" 
-                        : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                    } rounded-lg`}>
-                      关注
-                    </button>
-                    <button className={`py-2 px-3 border transition-colors text-sm ${
-                      isDark 
-                        ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]" 
-                        : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                    } rounded-lg`}>
-                      加好友
-                    </button>
-                    <button className="py-2 px-3 bg-[#00D4AA] text-white rounded-lg hover:bg-[#00b89a] transition-colors text-sm">
-                      跟单
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tab Navigation - Text only */}
-              <div className="mb-6">
-                <div className="flex space-x-8 border-b border-gray-200 dark:border-[#3a3d4a]">
-                  <button 
-                    onClick={() => setActiveProfileTab("动态")}
-                    className={`pb-3 text-sm font-medium ${
-                      activeProfileTab === "动态" 
-                        ? "border-b-2 border-[#00D4AA] text-[#00D4AA]" 
-                        : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"
-                    }`}
-                  >
-                    动态
-                  </button>
-                  <button 
-                    onClick={() => setActiveProfileTab("合约交易")}
-                    className={`pb-3 text-sm font-medium ${
-                      activeProfileTab === "合约交易" 
-                        ? "border-b-2 border-[#00D4AA] text-[#00D4AA]" 
-                        : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"
-                    }`}
-                  >
-                    合约交易
-                  </button>
-                  <button 
-                    onClick={() => setActiveProfileTab("合约持仓")}
-                    className={`pb-3 text-sm font-medium ${
-                      activeProfileTab === "合约持仓" 
-                        ? "border-b-2 border-[#00D4AA] text-[#00D4AA]" 
-                        : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"
-                    }`}
-                  >
-                    合约持仓
-                  </button>
-                </div>
-              </div>
-
-              {/* Content Based on Active Tab */}
-              <div className="flex-1 overflow-y-auto">
-                {activeProfileTab === "动态" && (
-                  <div className="space-y-6">
-                    {/* Post with Image */}
-                    <div className="pb-6 border-b border-gray-200 dark:border-[#3a3d4a]">
-                      <div className="flex items-center space-x-3 mb-3">
-                        <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white text-lg">
-                          👨‍💼
-                        </div>
-                        <div className="flex-1">
-                          <h4 className={`font-medium text-sm ${isDark ? "text-white" : "text-gray-900"}`}>
-                            {contacts.find(c => c.id === selectedContact)?.name}
-                          </h4>
-                          <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>2小时前</span>
-                        </div>
-                      </div>
-                      <p className={`text-sm mb-4 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                        今日BTC突破关键阻力位，建议关注回调机会。技术面显示强势上涨趋势，但需要注意风险控制。
+                    {/* 群公告 */}
+                    <div className="mb-6">
+                      <h4 className={`font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                        群公告
+                      </h4>
+                      <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                        群主未设置
                       </p>
-                      
-                      {/* Post Image */}
-                      <div className="h-48 bg-gradient-to-r from-cyan-400 to-cyan-500 flex items-center justify-center rounded-lg mb-4">
-                        <div className="text-white text-6xl">📊</div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-6">
-                        <button className={`flex items-center space-x-1 text-sm ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
-                          <span>❤️</span>
-                          <span>156</span>
-                        </button>
-                        <button className={`flex items-center space-x-1 text-sm ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
-                          <span>💬</span>
-                          <span>23</span>
-                        </button>
-                        <button className={`flex items-center space-x-1 text-sm ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
-                          <span>🔄</span>
-                          <span>12</span>
-                        </button>
-                      </div>
                     </div>
 
-                    {/* Text Post */}
-                    <div className="pb-6 border-b border-gray-200 dark:border-[#3a3d4a]">
-                      <div className="flex items-center space-x-3 mb-3">
-                        <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white text-lg">
-                          👨‍💼
-                        </div>
-                        <div className="flex-1">
-                          <h4 className={`font-medium text-sm ${isDark ? "text-white" : "text-gray-900"}`}>
-                            {contacts.find(c => c.id === selectedContact)?.name}
-                          </h4>
-                          <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>6小时前</span>
-                        </div>
-                      </div>
-                      <p className={`text-sm mb-4 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                        ETH/USDT 4小时级别形成看涨三角形突破，目标位看到2150附近。
+                    {/* 备注 */}
+                    <div className="mb-6">
+                      <h4 className={`font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                        备注
+                      </h4>
+                      <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                        群聊的备注仅自己可见
                       </p>
-                      <div className="flex items-center space-x-6">
-                        <button className={`flex items-center space-x-1 text-sm ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
-                          <span>❤️</span>
-                          <span>89</span>
-                        </button>
-                        <button className={`flex items-center space-x-1 text-sm ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
-                          <span>💬</span>
-                          <span>12</span>
-                        </button>
-                        <button className={`flex items-center space-x-1 text-sm ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-700"}`}>
-                          <span>🔄</span>
-                          <span>5</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {activeProfileTab === "合约交易" && (
-                  <div className={`${cardStyle} p-6`}>
-                    {/* Header Stats */}
-                    <div className="grid grid-cols-3 gap-4 mb-6">
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-green-500">+158.7%</div>
-                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>总收益</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-blue-500">85.2%</div>
-                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>胜率</div>
-                      </div>
-                      <div className="text-center">
-                        <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>1234</div>
-                        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>交易笔数</div>
-                      </div>
                     </div>
 
-                    {/* Trading Positions */}
-                    <div className="space-y-4">
-                      {/* BTC Trade */}
-                      <div className={`p-4 rounded-lg border ${isDark ? "bg-[#252842] border-[#3a3d4a]" : "bg-white border-gray-200"}`}>
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center space-x-2">
-                            <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>BTC/USDT</span>
-                            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">多单</span>
-                            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">已平仓</span>
-                          </div>
-                          <div className="text-green-500 font-bold text-lg">+2.3%</div>
-                        </div>
-                        <div className="space-y-1">
-                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                            买入：$42,150　卖出：$43,120
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <div className="text-blue-500 text-sm">开仓 +15%</div>
-                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>10:30</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* ETH Trade */}
-                      <div className={`p-4 rounded-lg border ${isDark ? "bg-[#252842] border-[#3a3d4a]" : "bg-white border-gray-200"}`}>
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center space-x-2">
-                            <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>ETH/USDT</span>
-                            <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">空单</span>
-                            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">已平仓</span>
-                          </div>
-                          <div className="text-green-500 font-bold text-lg">+1.8%</div>
-                        </div>
-                        <div className="space-y-1">
-                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                            买入：$2,450　卖出：$2,406
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <div className="text-blue-500 text-sm">平仓 -8%</div>
-                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>09:15</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* BNB Trade */}
-                      <div className={`p-4 rounded-lg border ${isDark ? "bg-[#252842] border-[#3a3d4a]" : "bg-white border-gray-200"}`}>
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center space-x-2">
-                            <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>BNB/USDT</span>
-                            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">多单</span>
-                            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">已平仓</span>
-                          </div>
-                          <div className="text-green-500 font-bold text-lg">+3.5%</div>
-                        </div>
-                        <div className="space-y-1">
-                          <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                            买入：$285　卖出：$295
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <div className="text-blue-500 text-sm">开仓 +22%</div>
-                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>昨天</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {activeProfileTab === "合约持仓" && (
-                  <div className={`${cardStyle} p-6`}>
-                    {/* Performance Grid with colored backgrounds - exactly as shown */}
-                    <div className="grid grid-cols-3 gap-3 mb-6">
-                      <div className="p-4 bg-green-100 rounded-lg text-center">
-                        <div className="text-lg font-bold text-green-700 mb-1">+3.2%</div>
-                        <div className="text-xs text-green-700">今日盈亏</div>
-                      </div>
-                      <div className="p-4 bg-blue-100 rounded-lg text-center">
-                        <div className="text-lg font-bold text-blue-700 mb-1">+15.8%</div>
-                        <div className="text-xs text-blue-700">本周盈亏</div>
-                      </div>
-                      <div className="p-4 bg-purple-100 rounded-lg text-center">
-                        <div className="text-lg font-bold text-purple-700 mb-1">+68.4%</div>
-                        <div className="text-xs text-purple-700">12个月盈亏</div>
-                      </div>
-                    </div>
-
-                    {/* Holdings Section */}
+                    {/* 我在本群的昵称 */}
                     <div>
-                      <h3 className={`font-medium mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>持仓详情</h3>
-                      
-                      {/* BTC Holding */}
-                      <div className={`p-4 rounded-lg border mb-4 ${isDark ? "bg-[#252842] border-[#3a3d4a]" : "bg-white border-gray-200"}`}>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                              BT
-                            </div>
-                            <div>
-                              <div className="flex items-center space-x-2 mb-1">
-                                <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>BTC</span>
-                                <span className="text-green-600 text-sm">多单</span>
-                              </div>
-                              <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                                持仓占比
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-bold text-lg">35.2%</div>
-                            <div className="text-[#00D4AA] text-sm">+2.34%</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* ETH Holding */}
-                      <div className={`p-4 rounded-lg border mb-4 ${isDark ? "bg-[#252842] border-[#3a3d4a]" : "bg-white border-gray-200"}`}>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                              ET
-                            </div>
-                            <div>
-                              <div className="flex items-center space-x-2 mb-1">
-                                <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>ETH</span>
-                                <span className="text-red-600 text-sm">空单</span>
-                              </div>
-                              <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                                持仓占比
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-bold text-lg">28.1%</div>
-                            <div className="text-red-500 text-sm">-1.23%</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* BNB Holding */}
-                      <div className={`p-4 rounded-lg border ${isDark ? "bg-[#252842] border-[#3a3d4a]" : "bg-white border-gray-200"}`}>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                              BN
-                            </div>
-                            <div>
-                              <div className="flex items-center space-x-2 mb-1">
-                                <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>BNB</span>
-                                <span className="text-green-600 text-sm">多单</span>
-                              </div>
-                              <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                                持仓占比
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-bold text-lg">18.7%</div>
-                            <div className="text-[#00D4AA] text-sm">+0.89%</div>
-                          </div>
-                        </div>
-                      </div>
+                      <h4 className={`font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                        我在本群的昵称
+                      </h4>
+                      <p className={`text-sm font-mono ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                        Kepler-22B
+                      </p>
                     </div>
                   </div>
-                )}
-              </div>
-            </div>
-          )
-        ) : (
-          // Empty State
-          <div className="flex-1 flex flex-col">
-            <div className="flex-1 overflow-y-auto p-4">
-              <div className="flex flex-col items-center justify-center h-full">
-                <div className="text-center">
-                  <div className="w-20 h-20 bg-gray-200 dark:bg-[#252842] rounded-full flex items-center justify-center text-4xl mb-4 mx-auto">
-                    💬
-                  </div>
-                  <h3 className={`text-lg font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
-                    选择一个对话
-                  </h3>
-                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                    从左侧选择一个联系人开始聊天
-                  </p>
                 </div>
               </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>
