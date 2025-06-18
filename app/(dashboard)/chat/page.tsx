@@ -235,6 +235,52 @@ export default function ChatPage() {
           </div>
         </div>
 
+        {/* Contact Tabs */}
+        <div className="px-4 mb-4">
+          <div className="flex space-x-1 bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
+            <button 
+              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeTab === "friends" 
+                  ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              }`}
+              onClick={() => setActiveTab("friends")}
+            >
+              好友
+            </button>
+            <button 
+              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeTab === "groups" 
+                  ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              }`}
+              onClick={() => setActiveTab("groups")}
+            >
+              群组
+            </button>
+            <button 
+              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeTab === "escrow" 
+                  ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              }`}
+              onClick={() => setActiveTab("escrow")}
+            >
+              担保
+            </button>
+            <button 
+              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeTab === "contacts" 
+                  ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              }`}
+              onClick={() => setActiveTab("contacts")}
+            >
+              通讯录
+            </button>
+          </div>
+        </div>
+
         {/* Contact Groups */}
         <div className="flex-1 overflow-y-auto">
           {/* New Friends Entry */}
@@ -969,67 +1015,6 @@ export default function ChatPage() {
             </div>
           </div>
         )}
-      </div>
-
-      {/* Bottom Navigation Tabs */}
-      <div className={`${cardStyle} border-t-0 rounded-t-none`}>
-        <div className="flex items-center justify-around py-3">
-          <button 
-            className={`flex flex-col items-center space-y-1 px-4 py-2 rounded-lg transition-colors ${
-              activeTab === "friends" 
-                ? "bg-[#00D4AA] text-white" 
-                : isDark 
-                ? "text-gray-400 hover:text-white hover:bg-[#252842]" 
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            }`}
-            onClick={() => setActiveTab("friends")}
-          >
-            <span className="text-lg">👥</span>
-            <span className="text-xs font-medium">好友</span>
-          </button>
-          
-          <button 
-            className={`flex flex-col items-center space-y-1 px-4 py-2 rounded-lg transition-colors ${
-              activeTab === "groups" 
-                ? "bg-[#00D4AA] text-white" 
-                : isDark 
-                ? "text-gray-400 hover:text-white hover:bg-[#252842]" 
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            }`}
-            onClick={() => setActiveTab("groups")}
-          >
-            <span className="text-lg">👥</span>
-            <span className="text-xs font-medium">群组</span>
-          </button>
-          
-          <button 
-            className={`flex flex-col items-center space-y-1 px-4 py-2 rounded-lg transition-colors ${
-              activeTab === "escrow" 
-                ? "bg-[#00D4AA] text-white" 
-                : isDark 
-                ? "text-gray-400 hover:text-white hover:bg-[#252842]" 
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            }`}
-            onClick={() => setActiveTab("escrow")}
-          >
-            <span className="text-lg">🛡️</span>
-            <span className="text-xs font-medium">担保</span>
-          </button>
-          
-          <button 
-            className={`flex flex-col items-center space-y-1 px-4 py-2 rounded-lg transition-colors ${
-              activeTab === "contacts" 
-                ? "bg-[#00D4AA] text-white" 
-                : isDark 
-                ? "text-gray-400 hover:text-white hover:bg-[#252842]" 
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            }`}
-            onClick={() => setActiveTab("contacts")}
-          >
-            <span className="text-lg">📞</span>
-            <span className="text-xs font-medium">通讯录</span>
-          </button>
-        </div>
       </div>
     </div>
   )
