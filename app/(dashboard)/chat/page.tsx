@@ -36,6 +36,7 @@ export default function ChatPage() {
   const [isMobile, setIsMobile] = useState(false)
   const [activeProfileTab, setActiveProfileTab] = useState("动态")
   const [showAIProfile, setShowAIProfile] = useState(false)
+  const [activeTab, setActiveTab] = useState("friends")
   const addMenuRef = useRef<HTMLDivElement>(null)
   const memberSidebarRef = useRef<HTMLDivElement>(null)
 
@@ -129,11 +130,50 @@ export default function ChatPage() {
     }
   }, [showMemberSidebar])
 
-  const groupedContacts = {
-    newFriends: filteredContacts.filter(c => c.id === "new-friends"),
-    ai: filteredContacts.filter(c => c.isAI),
-    friends: filteredContacts.filter(c => !c.isSpecial && !c.isAI).sort((a, b) => a.name.localeCompare(b.name))
+  // Filter contacts based on active tab
+  const getContactsForTab = () => {
+    switch (activeTab) {
+      case "friends":
+        return {
+          newFriends: filteredContacts.filter(c => c.id === "new-friends"),
+          ai: filteredContacts.filter(c => c.isAI),
+          friends: filteredContacts.filter(c => !c.isSpecial && !c.isAI).sort((a, b) => a.name.localeCompare(b.name))
+        }
+      case "groups":
+        return {
+          newFriends: [],
+          ai: [],
+          friends: [
+            { id: "group-1", name: "交易策略讨论群", avatar: "👥", lastMessage: "BTC今日分析已更新", time: "5分钟前", isOnline: true },
+            { id: "group-2", name: "风险控制交流群", avatar: "👥", lastMessage: "新手必看风控指南", time: "1小时前", isOnline: false },
+            { id: "group-3", name: "行情分析群", avatar: "👥", lastMessage: "ETH突破关键阻力", time: "2小时前", isOnline: true }
+          ]
+        }
+      case "escrow":
+        return {
+          newFriends: [],
+          ai: filteredContacts.filter(c => c.id === "ai-escrow"),
+          friends: [
+            { id: "escrow-1", name: "担保交易001", avatar: "🛡️", lastMessage: "交易已完成，请确认", time: "刚刚", isOnline: true },
+            { id: "escrow-2", name: "担保交易002", avatar: "🛡️", lastMessage: "等待买方确认", time: "10分钟前", isOnline: false }
+          ]
+        }
+      case "contacts":
+        return {
+          newFriends: [],
+          ai: [],
+          friends: filteredContacts.filter(c => !c.isSpecial && !c.isAI).sort((a, b) => a.name.localeCompare(b.name))
+        }
+      default:
+        return {
+          newFriends: filteredContacts.filter(c => c.id === "new-friends"),
+          ai: filteredContacts.filter(c => c.isAI),
+          friends: filteredContacts.filter(c => !c.isSpecial && !c.isAI).sort((a, b) => a.name.localeCompare(b.name))
+        }
+    }
   }
+
+  const groupedContacts = getContactsForTab()
 
   return (
     <div className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
@@ -929,6 +969,67 @@ export default function ChatPage() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Bottom Navigation Tabs */}
+      <div className={`${cardStyle} border-t-0 rounded-t-none`}>
+        <div className="flex items-center justify-around py-3">
+          <button 
+            className={`flex flex-col items-center space-y-1 px-4 py-2 rounded-lg transition-colors ${
+              activeTab === "friends" 
+                ? "bg-[#00D4AA] text-white" 
+                : isDark 
+                ? "text-gray-400 hover:text-white hover:bg-[#252842]" 
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+            onClick={() => setActiveTab("friends")}
+          >
+            <span className="text-lg">👥</span>
+            <span className="text-xs font-medium">好友</span>
+          </button>
+          
+          <button 
+            className={`flex flex-col items-center space-y-1 px-4 py-2 rounded-lg transition-colors ${
+              activeTab === "groups" 
+                ? "bg-[#00D4AA] text-white" 
+                : isDark 
+                ? "text-gray-400 hover:text-white hover:bg-[#252842]" 
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+            onClick={() => setActiveTab("groups")}
+          >
+            <span className="text-lg">👥</span>
+            <span className="text-xs font-medium">群组</span>
+          </button>
+          
+          <button 
+            className={`flex flex-col items-center space-y-1 px-4 py-2 rounded-lg transition-colors ${
+              activeTab === "escrow" 
+                ? "bg-[#00D4AA] text-white" 
+                : isDark 
+                ? "text-gray-400 hover:text-white hover:bg-[#252842]" 
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+            onClick={() => setActiveTab("escrow")}
+          >
+            <span className="text-lg">🛡️</span>
+            <span className="text-xs font-medium">担保</span>
+          </button>
+          
+          <button 
+            className={`flex flex-col items-center space-y-1 px-4 py-2 rounded-lg transition-colors ${
+              activeTab === "contacts" 
+                ? "bg-[#00D4AA] text-white" 
+                : isDark 
+                ? "text-gray-400 hover:text-white hover:bg-[#252842]" 
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+            onClick={() => setActiveTab("contacts")}
+          >
+            <span className="text-lg">📞</span>
+            <span className="text-xs font-medium">通讯录</span>
+          </button>
+        </div>
       </div>
     </div>
   )
