@@ -462,18 +462,14 @@ export default function ChatPage() {
           ) : (
             // Regular User Profile in Main Area
             <div className="flex-1 overflow-y-auto p-6">
-              {/* Header Card with Cyan Gradient */}
-              <div className={`${cardStyle} mb-6 overflow-hidden`}>
-                {/* Cyan Header Background */}
-                <div className="h-20 bg-gradient-to-r from-cyan-400 to-cyan-500 relative">
-                </div>
-                
+              {/* Profile Card */}
+              <div className={`${cardStyle} mb-6`}>
                 {/* Profile Content */}
-                <div className="p-6 -mt-4">
+                <div className="p-6">
                   {/* Avatar and Basic Info */}
                   <div className="flex items-start space-x-4 mb-6">
                     <div className="relative">
-                      <div className="w-20 h-20 rounded-full bg-black border-4 border-white shadow-lg flex items-center justify-center text-white text-2xl">
+                      <div className="w-20 h-20 rounded-full bg-black flex items-center justify-center text-white text-2xl">
                         👨‍💼
                       </div>
                       <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
