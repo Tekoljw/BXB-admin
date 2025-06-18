@@ -36,7 +36,8 @@ export default function ChatPage() {
   const [isMobile, setIsMobile] = useState(false)
   const [activeProfileTab, setActiveProfileTab] = useState("动态")
   const [showAIProfile, setShowAIProfile] = useState(false)
-  const [activeTab, setActiveTab] = useState("friends")
+  const [activeTab, setActiveTab] = useState("contacts")
+  const [contactFilter, setContactFilter] = useState("friends")
   const addMenuRef = useRef<HTMLDivElement>(null)
   const memberSidebarRef = useRef<HTMLDivElement>(null)
 
@@ -130,9 +131,9 @@ export default function ChatPage() {
     }
   }, [showMemberSidebar])
 
-  // Filter contacts based on active tab
-  const getContactsForTab = () => {
-    switch (activeTab) {
+  // Filter contacts based on contact filter
+  const getContactsForFilter = () => {
+    switch (contactFilter) {
       case "friends":
         return {
           newFriends: filteredContacts.filter(c => c.id === "new-friends"),
@@ -173,7 +174,7 @@ export default function ChatPage() {
     }
   }
 
-  const groupedContacts = getContactsForTab()
+  const groupedContacts = getContactsForFilter()
 
   return (
     <div className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
@@ -235,39 +236,9 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Contact Tabs */}
+        {/* Page Navigation Tabs */}
         <div className="px-4 mb-4">
           <div className="flex space-x-1 bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
-            <button 
-              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeTab === "friends" 
-                  ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
-              onClick={() => setActiveTab("friends")}
-            >
-              好友
-            </button>
-            <button 
-              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeTab === "groups" 
-                  ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
-              onClick={() => setActiveTab("groups")}
-            >
-              群组
-            </button>
-            <button 
-              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeTab === "escrow" 
-                  ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
-              onClick={() => setActiveTab("escrow")}
-            >
-              担保
-            </button>
             <button 
               className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 activeTab === "contacts" 
@@ -276,15 +247,75 @@ export default function ChatPage() {
               }`}
               onClick={() => setActiveTab("contacts")}
             >
-              通讯录
+              联系人
+            </button>
+            <button 
+              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeTab === "chat" 
+                  ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              }`}
+              onClick={() => setActiveTab("chat")}
+            >
+              聊天
             </button>
           </div>
         </div>
 
-        {/* Contact Groups */}
+        {/* Contact Filter Tabs - Only show when on contacts page */}
+        {activeTab === "contacts" && (
+          <div className="px-4 mb-4">
+            <div className="flex space-x-1 bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
+              <button 
+                className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  contactFilter === "friends" 
+                    ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                }`}
+                onClick={() => setContactFilter("friends")}
+              >
+                好友
+              </button>
+              <button 
+                className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  contactFilter === "groups" 
+                    ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                }`}
+                onClick={() => setContactFilter("groups")}
+              >
+                群组
+              </button>
+              <button 
+                className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  contactFilter === "escrow" 
+                    ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                }`}
+                onClick={() => setContactFilter("escrow")}
+              >
+                担保
+              </button>
+              <button 
+                className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  contactFilter === "contacts" 
+                    ? "bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm" 
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                }`}
+                onClick={() => setContactFilter("contacts")}
+              >
+                通讯录
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Content based on active tab */}
         <div className="flex-1 overflow-y-auto">
-          {/* New Friends Entry */}
-          {groupedContacts.newFriends.length > 0 && (
+          {activeTab === "contacts" ? (
+            <>
+              {/* New Friends Entry */}
+              {groupedContacts.newFriends.length > 0 && (
             <div className="mb-4">
               {groupedContacts.newFriends.map((contact) => (
                 <div
@@ -385,6 +416,55 @@ export default function ChatPage() {
                 >
                   <div className="relative">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-lg">
+                      {contact.avatar}
+                    </div>
+                    {contact.isOnline && (
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                    )}
+                  </div>
+                  <div className="ml-3 flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-medium truncate">{contact.name}</h3>
+                      <span className="text-xs opacity-70">{contact.time}</span>
+                    </div>
+                    <p className="text-sm opacity-70 truncate">{contact.lastMessage}</p>
+                  </div>
+                  {contact.unread && (
+                    <div className="ml-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {contact.unread}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+            </>
+          ) : (
+            /* Chat List View */
+            <div className="space-y-2 px-2">
+              <div className={`px-4 py-2 text-xs font-medium ${
+                isDark ? 'text-gray-400' : 'text-gray-600'
+              }`}>
+                最近聊天
+              </div>
+              {contacts.filter(c => !c.isSpecial).slice(0, 8).map((contact) => (
+                <div
+                  key={contact.id}
+                  className={`flex items-center p-3 rounded-lg cursor-pointer transition-all ${
+                    selectedContact === contact.id
+                      ? 'bg-[#00D4AA] text-white'
+                      : isDark
+                      ? 'hover:bg-[#252842] text-gray-300'
+                      : 'hover:bg-gray-100 text-gray-700'
+                  }`}
+                  onClick={() => {
+                    setSelectedContact(contact.id)
+                    setShowMemberSidebar(false)
+                    setShowAIProfile(contact.isAI || false)
+                  }}
+                >
+                  <div className="relative">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg">
                       {contact.avatar}
                     </div>
                     {contact.isOnline && (
