@@ -466,14 +466,6 @@ export default function ChatPage() {
               <div className={`${cardStyle} mb-6 overflow-hidden`}>
                 {/* Cyan Header Background */}
                 <div className="h-20 bg-gradient-to-r from-cyan-400 to-cyan-500 relative">
-                  <div className="absolute top-4 right-4 flex space-x-3">
-                    <button className={`p-2 rounded-full ${isDark ? 'bg-white/20 hover:bg-white/30' : 'bg-black/10 hover:bg-black/20'} transition-all`}>
-                      <User className="w-4 h-4 text-white" />
-                    </button>
-                    <button className={`px-4 py-2 rounded-full border border-white/30 text-white text-sm hover:bg-white/10 transition-all`}>
-                      编辑资料
-                    </button>
-                  </div>
                 </div>
                 
                 {/* Profile Content */}
