@@ -877,46 +877,43 @@ export default function ChatPage() {
                 const currentAI = aiData[selectedContact as keyof typeof aiData]
                 
                 return (
-                  <>
-                    {/* AI Assistant Header */}
-                    <div className={`p-6 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
-                      <div className="flex items-center space-x-4">
-                        <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${currentAI.gradient} flex items-center justify-center text-white text-2xl font-bold`}>
+                  <div className="flex-1 flex items-center justify-center p-6 overflow-y-auto">
+                    <div className="max-w-md w-full text-center space-y-8">
+                      {/* AI Avatar and Name */}
+                      <div className="space-y-4">
+                        <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${currentAI.gradient} flex items-center justify-center text-white text-3xl font-bold mx-auto`}>
                           {currentAI.avatar}
                         </div>
-                        <div className="flex-1">
-                          <h2 className={`text-xl font-bold mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                        <div>
+                          <h2 className={`text-2xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
                             {currentAI.name}
                           </h2>
-                          <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                          <p className={`text-base ${isDark ? "text-gray-300" : "text-gray-600"}`}>
                             {currentAI.description}
                           </p>
                         </div>
                       </div>
-                    </div>
 
-                    {/* AI Assistant Content */}
-                    <div className="flex-1 p-6 overflow-y-auto">
                       {/* Capabilities Section */}
-                      <div className="mb-8">
-                        <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+                      <div className="space-y-4">
+                        <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
                           能力介绍
                         </h3>
-                        <p className={`text-sm leading-relaxed mb-6 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                        <p className={`text-sm leading-relaxed ${isDark ? "text-gray-300" : "text-gray-600"}`}>
                           {currentAI.capabilities}
                         </p>
                       </div>
 
                       {/* Features Section */}
-                      <div className="mb-8">
-                        <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+                      <div className="space-y-4">
+                        <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
                           主要功能
                         </h3>
-                        <div className="grid gap-3">
+                        <div className="space-y-2">
                           {currentAI.features.map((feature, index) => (
                             <div 
                               key={index}
-                              className={`p-3 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"} flex items-center space-x-3`}
+                              className={`p-3 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"} flex items-center justify-center space-x-3`}
                             >
                               <span className="text-lg">{feature.split(' ')[0]}</span>
                               <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
@@ -928,17 +925,17 @@ export default function ChatPage() {
                       </div>
 
                       {/* Action Button */}
-                      <div className="flex justify-center">
+                      <div className="pt-4">
                         <button 
                           onClick={() => console.log(`开始与${currentAI.name}对话`)}
-                          className={`bg-gradient-to-r ${currentAI.gradient} text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center space-x-2`}
+                          className={`bg-gradient-to-r ${currentAI.gradient} text-white px-10 py-4 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center space-x-3 mx-auto text-lg`}
                         >
-                          <MessageCircle className="w-5 h-5" />
+                          <MessageCircle className="w-6 h-6" />
                           <span>立即开始对话</span>
                         </button>
                       </div>
                     </div>
-                  </>
+                  </div>
                 )
               })()}
             </>
