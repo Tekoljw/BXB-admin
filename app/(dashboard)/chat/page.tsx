@@ -1193,39 +1193,96 @@ export default function ChatPage() {
 
                       {/* Tab Content */}
                       {profileTab === "动态" && (
-                        <div className="space-y-4">
-                          <div className={`p-4 rounded-lg border ${
-                            isDark ? "border-gray-700 bg-[#252842]" : "border-gray-200 bg-gray-50"
+                        <div className="space-y-6">
+                          <div className={`${cardStyle} rounded-xl p-6 transition-all duration-200 hover:shadow-lg hover:${
+                            isDark ? "bg-[#1e2332]" : "bg-gray-50"
                           }`}>
-                            <div className="text-sm text-gray-400 mb-2">今日BTC突破关键阻力位，建议关注回调机会</div>
-                            <div className="text-xs text-gray-500 mb-2">2小时前</div>
-                            <div className="flex items-center space-x-4 text-xs">
-                              <span className="text-green-500">+12.5%</span>
-                              <div className="flex items-center space-x-1">
-                                <span>❤️</span>
-                                <span className="text-gray-400">156</span>
+                            {/* 头部 - 用户信息和操作 */}
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold shadow-lg">
+                                  {currentFriend.avatar}
+                                </div>
+                                <div>
+                                  <div className="flex items-center space-x-2">
+                                    <span className={`font-bold text-base ${isDark ? "text-white" : "text-gray-900"}`}>
+                                      {currentFriend.name}
+                                    </span>
+                                    <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                      </svg>
+                                    </div>
+                                  </div>
+                                  <div className="text-sm text-gray-500">4小时前</div>
+                                </div>
                               </div>
-                              <div className="flex items-center space-x-1">
-                                <span>💬</span>
-                                <span className="text-gray-400">23</span>
+                              
+                              <div className="flex items-center space-x-2">
+                                <button className="p-2 rounded-full text-gray-400 hover:text-yellow-500 hover:bg-gray-50 transition-all duration-200">
+                                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                  </svg>
+                                </button>
+                                <button className="p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all duration-200">
+                                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                                  </svg>
+                                </button>
                               </div>
                             </div>
-                          </div>
 
-                          <div className={`p-4 rounded-lg border ${
-                            isDark ? "border-gray-700 bg-[#252842]" : "border-gray-200 bg-gray-50"
-                          }`}>
-                            <div className="text-sm text-gray-400 mb-2">ETH/USDT 4小时级别形成看涨三角形</div>
-                            <div className="text-xs text-gray-500 mb-2">6小时前</div>
-                            <div className="flex items-center space-x-4 text-xs">
-                              <span className="text-green-500">+8.3%</span>
-                              <div className="flex items-center space-x-1">
-                                <span>❤️</span>
-                                <span className="text-gray-400">89</span>
+                            {/* 内容 */}
+                            <div className="mb-4">
+                              <p className={`text-base leading-relaxed ${isDark ? "text-gray-100" : "text-gray-800"}`}>
+                                刚刚发现一个新的DeFi协议，APY高达200%！但是大家要注意风险，高收益往往伴随高风险。DYOR！💰
+                              </p>
+                            </div>
+
+                            {/* 标签 */}
+                            <div className="flex flex-wrap gap-2 mb-4">
+                              {["DeFi", "流动性挖矿", "风险提示"].map((tag, index) => (
+                                <span 
+                                  key={index} 
+                                  className={`px-3 py-1 text-sm font-medium rounded-full cursor-pointer transition-all duration-200 ${
+                                    isDark 
+                                      ? "bg-[#00D4AA]/30 text-[#00D4AA] hover:bg-[#00D4AA]/50" 
+                                      : "bg-[#00D4AA]/10 text-[#00D4AA] hover:bg-[#00D4AA]/20"
+                                  }`}
+                                >
+                                  #{tag}
+                                </span>
+                              ))}
+                            </div>
+
+                            {/* 底部操作栏 */}
+                            <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                              <div className="flex items-center space-x-6">
+                                <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-red-500 bg-red-50 hover:bg-red-100 transition-all duration-200">
+                                  <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                  </svg>
+                                  <span className="text-sm font-medium">1876</span>
+                                </button>
+
+                                <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-gray-500 hover:text-[#00D4AA] hover:bg-[#00D4AA]/10 transition-all duration-200">
+                                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                  </svg>
+                                  <span className="text-sm font-medium">234</span>
+                                </button>
+
+                                <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-gray-500 hover:text-[#00D4AA] hover:bg-[#00D4AA]/10 transition-all duration-200">
+                                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                                  </svg>
+                                  <span className="text-sm font-medium">67</span>
+                                </button>
                               </div>
-                              <div className="flex items-center space-x-1">
-                                <span>💬</span>
-                                <span className="text-gray-400">12</span>
+
+                              {/* 数据统计 */}
+                              <div className="text-sm text-gray-400">
+                                2,177 次互动
                               </div>
                             </div>
                           </div>
