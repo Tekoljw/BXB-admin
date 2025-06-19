@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
+import GroupInfoModal from "@/components/group-info-modal"
 
 interface Contact {
   id: string
@@ -1720,10 +1721,13 @@ export default function ChatPage() {
         </div>
       ) : null}
 
-      {/* Group Info Modal - Completely New Implementation */}
-      {showGroupInfo && selectedContact?.startsWith("group-") && (
-        <>
-          {/* 点击外部区域关闭弹窗 */}
+      {/* Group Info Modal */}
+      <GroupInfoModal
+        isOpen={showGroupInfo && selectedContact?.startsWith("group-") || false}
+        onClose={handleCloseGroupInfo}
+        group={selectedContact ? groupContacts.find(c => c.id === selectedContact) || null : null}
+        isDark={isDark}
+      />
           {screenWidth >= 1440 ? (
             /* 向外弹出模式：覆盖被压缩的内容区域 */
             <div 
