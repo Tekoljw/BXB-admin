@@ -477,7 +477,7 @@ export default function WalletPage() {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => handleTabChange(tab.id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                     activeTab === tab.id
                       ? "bg-black text-white shadow-sm"
@@ -494,7 +494,13 @@ export default function WalletPage() {
           </div>
 
           {/* Mobile Content */}
-          {renderTabContent()}
+          <div className={`transition-all duration-300 transform ${
+            isAnimating 
+              ? 'translate-x-4 opacity-0 scale-95' 
+              : 'translate-x-0 opacity-100 scale-100'
+          }`}>
+            {renderTabContent()}
+          </div>
         </div>
       ) : (
         /* Desktop Layout - Left Sidebar */
@@ -508,7 +514,7 @@ export default function WalletPage() {
                   return (
                     <button
                       key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
+                      onClick={() => handleTabChange(tab.id)}
                       className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform ${
                         activeTab === tab.id
                           ? "bg-black text-white shadow-sm scale-105"
@@ -529,7 +535,13 @@ export default function WalletPage() {
           {/* Main Content */}
           <div className="flex-1 overflow-y-auto">
             <div className="container mx-auto p-6">
-              {renderTabContent()}
+              <div className={`transition-all duration-300 transform ${
+                isAnimating 
+                  ? 'translate-x-8 opacity-0 scale-95' 
+                  : 'translate-x-0 opacity-100 scale-100'
+              }`}>
+                {renderTabContent()}
+              </div>
             </div>
           </div>
         </div>
