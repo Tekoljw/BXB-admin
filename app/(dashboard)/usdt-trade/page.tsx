@@ -344,9 +344,14 @@ export default function USDTTradePage() {
     console.log('Opening publish modal')
     setPublishModalClosing(false)
     setShowPublishModal(true)
+    
+    // 延迟一帧以确保DOM元素已经渲染
     requestAnimationFrame(() => {
-      setPublishModalAnimating(true)
+      requestAnimationFrame(() => {
+        setPublishModalAnimating(true)
+      })
     })
+    
     setPublishPrice("")
     setPublishMinAmount("")
     setPublishMaxAmount("")
@@ -359,10 +364,12 @@ export default function USDTTradePage() {
     if (publishModalClosing) return
     setPublishModalClosing(true)
     setPublishModalAnimating(false)
+    
+    // 使用更长的延迟以确保动画完成
     setTimeout(() => {
       setShowPublishModal(false)
       setPublishModalClosing(false)
-    }, 300)
+    }, 400)
   }
 
   // 计算总价
@@ -1262,38 +1269,55 @@ export default function USDTTradePage() {
           {shouldUseOutwardMode ? (
             /* 向外弹出模式：覆盖被压缩的内容区域 */
             <div 
-              className="fixed left-0 top-0 z-40 transition-all duration-500"
+              className="fixed left-0 top-0 z-40"
               style={{ 
                 width: 'calc(100% - 384px)',
-                height: '100%'
+                height: '100%',
+                backgroundColor: publishModalAnimating ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+                transition: 'background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
               onClick={handleClosePublishModal}
             />
           ) : (
             /* 向内弹出模式：全屏半透明遮罩 */
             <div 
-              className="fixed inset-0 z-40 bg-black bg-opacity-30 transition-opacity duration-500"
+              className="fixed inset-0 z-40 bg-black"
+              style={{
+                opacity: publishModalAnimating ? 0.4 : 0,
+                transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
               onClick={handleClosePublishModal}
             />
           )}
           
           <div className="fixed z-[9999] overflow-hidden right-0 top-0 h-full w-96">
           <div 
-            className={`h-full w-96 transform transition-all duration-500 ${
-              publishModalAnimating 
-                ? shouldUseOutwardMode 
-                  ? "translate-x-0"      // 向外模式：显示在正常位置
-                  : "translate-x-0"      // 向内模式：显示在正常位置
+            className={`h-full w-96 ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl border-l ${
+              isDark ? "border-[#3a3d4a]" : "border-gray-200"
+            }`}
+            style={{
+              transform: publishModalAnimating 
+                ? 'translateX(0) scale(1)' 
                 : shouldUseOutwardMode 
-                  ? "-translate-x-full"  // 向外模式：隐藏在左侧，从左往右滑出
-                  : "translate-x-full"   // 向内模式：隐藏在右侧，从右往左滑入
-            } ${isDark ? "bg-[#1a1c2e]" : "bg-white"}`}
-            style={{ 
-              transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-              willChange: 'transform'
+                  ? 'translateX(-100%) scale(0.98)'
+                  : 'translateX(100%) scale(0.98)',
+              opacity: publishModalAnimating ? 1 : 0,
+              transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              transformOrigin: shouldUseOutwardMode ? 'left center' : 'right center',
+              willChange: 'transform, opacity',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden'
             }}
           >
-            <div className="p-6 h-full overflow-y-auto">
+            <div 
+              className="p-6 h-full overflow-y-auto"
+              style={{
+                transform: publishModalAnimating ? 'translateY(0)' : 'translateY(20px)',
+                opacity: publishModalAnimating ? 1 : 0,
+                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                transitionDelay: publishModalAnimating ? '0.1s' : '0s'
+              }}
+            >
               {/* 页签切换 */}
               <div className="mb-6">
                 <div className={`flex rounded-lg border ${isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"}`}>
