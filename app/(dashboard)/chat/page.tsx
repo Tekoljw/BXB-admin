@@ -1700,7 +1700,7 @@ export default function ChatPage() {
           {showGroupInfo && selectedContact?.startsWith("group-") && (
             <>
               {/* 点击外部区域关闭弹窗 */}
-              {shouldUseOutwardMode ? (
+              {screenWidth >= 1440 ? (
                 /* 向外弹出模式：覆盖被压缩的内容区域 */
                 <div 
                   className="fixed left-0 top-0 z-40"
