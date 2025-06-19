@@ -909,14 +909,14 @@ export default function ChatPage() {
                         <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
                           主要功能
                         </h3>
-                        <div className="grid grid-cols-1 gap-3">
+                        <div className="grid grid-cols-1 gap-2">
                           {currentAI.features.map((feature, index) => (
                             <div 
                               key={index}
-                              className={`${cardStyle} p-4 rounded-lg text-center space-y-2 hover:shadow-lg transition-shadow`}
+                              className={`${cardStyle} p-3 rounded-lg text-center space-y-1 hover:shadow-md transition-shadow`}
                             >
-                              <div className="text-2xl">{feature.split(' ')[0]}</div>
-                              <div className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                              <div className="text-lg">{feature.split(' ')[0]}</div>
+                              <div className={`text-xs font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}>
                                 {feature.substring(feature.indexOf(' ') + 1)}
                               </div>
                             </div>
@@ -928,9 +928,9 @@ export default function ChatPage() {
                       <div className="pt-4">
                         <button 
                           onClick={() => console.log(`开始与${currentAI.name}对话`)}
-                          className="bg-black text-white px-10 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center space-x-3 mx-auto text-lg"
+                          className="bg-black text-white px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center space-x-2 mx-auto text-sm"
                         >
-                          <MessageCircle className="w-6 h-6" />
+                          <MessageCircle className="w-4 h-4" />
                           <span>立即开始对话</span>
                         </button>
                       </div>
