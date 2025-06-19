@@ -69,6 +69,7 @@ export default function USDTTradePage() {
   const [tradeType, setTradeType] = useState<"buy" | "sell">("buy")
   const [tradeAmount, setTradeAmount] = useState("")
   const [totalPrice, setTotalPrice] = useState("")
+  const [selectedTradePaymentMethods, setSelectedTradePaymentMethods] = useState<string[]>([])
   const [publishOrderType, setPublishOrderType] = useState<"buy" | "sell">("buy")
   const [publishPrice, setPublishPrice] = useState("")
   const [publishMinAmount, setPublishMinAmount] = useState("")
@@ -358,6 +359,7 @@ export default function USDTTradePage() {
     setTradeType(type)
     setTradeAmount("")
     setTotalPrice("")
+    setSelectedTradePaymentMethods([])
     setTradeModalClosing(false)
     setShowTradeModal(true)
     requestAnimationFrame(() => {
@@ -1271,25 +1273,61 @@ export default function USDTTradePage() {
               {/* 支付方式 */}
               <div className="mb-6">
                 <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  支付方式
+                  选择支付方式
                 </label>
                 <div className="space-y-2">
                   {selectedMerchant.paymentMethods.slice(0, 3).map((method: string, index: number) => (
-                    <div key={index} className={`p-3 border rounded-lg flex items-center space-x-2 ${
-                      isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"
-                    }`}>
+                    <button
+                      key={index}
+                      onClick={() => {
+                        if (selectedTradePaymentMethods.includes(method)) {
+                          setSelectedTradePaymentMethods(selectedTradePaymentMethods.filter(p => p !== method))
+                        } else {
+                          setSelectedTradePaymentMethods([...selectedTradePaymentMethods, method])
+                        }
+                      }}
+                      className={`w-full p-3 border rounded-lg flex items-center space-x-2 transition-all ${
+                        selectedTradePaymentMethods.includes(method)
+                          ? "border-custom-green bg-custom-green/10 text-custom-green"
+                          : isDark 
+                            ? "border-[#3a3d4a] bg-[#252842] text-white hover:bg-[#2a2d42]" 
+                            : "border-gray-200 bg-gray-50 text-gray-900 hover:bg-gray-100"
+                      }`}
+                    >
                       {getPaymentIcon(method)}
-                      <span className={isDark ? "text-white" : "text-gray-900"}>{method}</span>
-                    </div>
+                      <span className="flex-1 text-left">{method}</span>
+                      {selectedTradePaymentMethods.includes(method) && (
+                        <div className="w-4 h-4 rounded-full bg-custom-green flex items-center justify-center">
+                          <div className="w-2 h-2 rounded-full bg-white"></div>
+                        </div>
+                      )}
+                    </button>
                   ))}
                 </div>
+                {selectedTradePaymentMethods.length === 0 && (
+                  <p className={`text-sm mt-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                    请至少选择一种支付方式
+                  </p>
+                )}
               </div>
 
               <TradeButton
                 type={tradeType}
                 size="lg"
                 className="w-full"
-                onClick={() => {}}
+                disabled={selectedTradePaymentMethods.length === 0 || !tradeAmount}
+                onClick={() => {
+                  if (selectedTradePaymentMethods.length > 0 && tradeAmount) {
+                    console.log('交易信息:', {
+                      type: tradeType,
+                      amount: tradeAmount,
+                      totalPrice,
+                      paymentMethods: selectedTradePaymentMethods,
+                      merchant: selectedMerchant.name
+                    })
+                    // 这里可以添加跳转到下一步的逻辑
+                  }
+                }}
               >
                 下一步
               </TradeButton>
