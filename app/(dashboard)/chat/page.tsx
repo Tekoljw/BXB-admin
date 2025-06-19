@@ -1135,7 +1135,7 @@ export default function ChatPage() {
 
                       {/* Action Buttons */}
                       <div className="grid grid-cols-3 gap-3 mb-6">
-                        <button className="bg-[#007AFF] text-white py-2.5 rounded-lg font-medium hover:bg-[#0056CC] transition-colors text-sm">
+                        <button className="bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm">
                           关注
                         </button>
                         <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
@@ -1157,7 +1157,7 @@ export default function ChatPage() {
                       {/* Tabs */}
                       <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
                         <div className="flex space-x-8">
-                          <button className={`pb-2 text-sm font-medium border-b-2 border-[#007AFF] text-[#007AFF]`}>
+                          <button className={`pb-2 text-sm font-medium border-b-2 border-black ${isDark ? "text-white" : "text-black"}`}>
                             动态
                           </button>
                           <button className={`pb-2 text-sm font-medium text-gray-400 hover:text-gray-600`}>
