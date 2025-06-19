@@ -5,6 +5,44 @@ import { Search, Star, Shield, Clock, TrendingUp, TrendingDown, Plus, MessageCir
 import { useTheme } from "@/contexts/theme-context"
 import { Button } from "@/components/ui/button"
 
+// 统一的交易按钮组件
+interface TradeButtonProps {
+  type: "buy" | "sell"
+  children: React.ReactNode
+  onClick: () => void
+  disabled?: boolean
+  size?: "sm" | "md" | "lg"
+  className?: string
+}
+
+function TradeButton({ type, children, onClick, disabled = false, size = "md", className = "" }: TradeButtonProps) {
+  const sizeClasses = {
+    sm: "px-3 py-1.5 text-xs h-8",
+    md: "px-4 py-2 text-sm h-10", 
+    lg: "px-6 py-3 text-base h-12"
+  }
+  
+  const baseClasses = `
+    rounded font-medium transition-all flex items-center justify-center
+    disabled:opacity-50 disabled:cursor-not-allowed
+    ${sizeClasses[size]}
+  `
+  
+  const typeClasses = type === "buy" 
+    ? "bg-custom-green text-white hover:bg-custom-green/90 disabled:hover:bg-custom-green"
+    : "bg-red-500 text-white hover:bg-red-600 disabled:hover:bg-red-500"
+  
+  return (
+    <button 
+      className={`${baseClasses} ${typeClasses} ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {children}
+    </button>
+  )
+}
+
 export default function USDTTradePage() {
   const { isDark } = useTheme()
   const [activeTab, setActiveTab] = useState("买入USDT")
@@ -913,16 +951,13 @@ export default function USDTTradePage() {
                           >
                             {merchant.isFriend ? <MessageCircle className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
                           </button>
-                          <button 
-                            className={`px-3 py-1.5 rounded text-xs font-medium transition-all h-8 flex items-center justify-center ${
-                              activeTab.includes("买入") 
-                                ? "bg-custom-green text-white hover:bg-custom-green/90" 
-                                : "bg-red-500 text-white hover:bg-red-600"
-                            }`}
+                          <TradeButton
+                            type={activeTab.includes("买入") ? "buy" : "sell"}
+                            size="sm"
                             onClick={() => handleOpenTradeModal(merchant, activeTab.includes("买入") ? "buy" : "sell")}
                           >
                             {activeTab.includes("买入") ? "买入" : "卖出"}
-                          </button>
+                          </TradeButton>
                         </div>
                       </div>
                     </div>
@@ -1249,13 +1284,14 @@ export default function USDTTradePage() {
                 </div>
               </div>
 
-              <button className={`w-full py-3 rounded-lg font-medium transition-all ${
-                tradeType === "buy"
-                  ? "bg-custom-green text-white hover:bg-custom-green/90"
-                  : "bg-red-500 text-white hover:bg-red-600"
-              }`}>
+              <TradeButton
+                type={tradeType}
+                size="lg"
+                className="w-full"
+                onClick={() => {}}
+              >
                 下一步
-              </button>
+              </TradeButton>
             </div>
           </div>
           </div>
@@ -1312,10 +1348,14 @@ export default function USDTTradePage() {
             <div 
               className="p-6 h-full overflow-y-auto"
               style={{
-                transform: publishModalAnimating ? 'translateY(0)' : 'translateY(20px)',
+                transform: publishModalAnimating 
+                  ? 'translateX(0)' 
+                  : shouldUseOutwardMode 
+                    ? 'translateX(-30px)' 
+                    : 'translateX(30px)',
                 opacity: publishModalAnimating ? 1 : 0,
-                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                transitionDelay: publishModalAnimating ? '0.1s' : '0s'
+                transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                transitionDelay: publishModalAnimating ? '0.15s' : '0s'
               }}
             >
               {/* 页签切换 */}
@@ -1472,9 +1512,14 @@ export default function USDTTradePage() {
                 </select>
               </div>
 
-              <button className="w-full py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition-all">
+              <TradeButton
+                type={publishOrderType}
+                size="lg"
+                className="w-full"
+                onClick={() => {}}
+              >
                 发布订单
-              </button>
+              </TradeButton>
             </div>
           </div>
           </div>
