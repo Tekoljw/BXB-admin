@@ -46,6 +46,8 @@ export default function ChatPage() {
   const [isMobile, setIsMobile] = useState(false)
   const [profileTab, setProfileTab] = useState("动态")
   const [showGroupInfo, setShowGroupInfo] = useState(false)
+  const [groupInfoAnimating, setGroupInfoAnimating] = useState(false)
+  const [groupInfoClosing, setGroupInfoClosing] = useState(false)
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -110,6 +112,43 @@ export default function ChatPage() {
   const handleCloseMenu = () => {
     setIsMenuAnimating(false)
     setTimeout(() => setShowAddMenu(false), 150)
+  }
+
+  // Screen size detection for modal animation
+  const [shouldUseOutwardMode, setShouldUseOutwardMode] = useState(false)
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setShouldUseOutwardMode(window.innerWidth >= 1440)
+    }
+    
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
+
+  // Handle group info modal
+  const handleOpenGroupInfo = () => {
+    if (groupInfoClosing) return
+    setGroupInfoClosing(false)
+    setShowGroupInfo(true)
+    
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setGroupInfoAnimating(true)
+      })
+    })
+  }
+
+  const handleCloseGroupInfo = () => {
+    if (groupInfoClosing) return
+    setGroupInfoClosing(true)
+    setGroupInfoAnimating(false)
+    
+    setTimeout(() => {
+      setShowGroupInfo(false)
+      setGroupInfoClosing(false)
+    }, 400)
   }
 
   // Handle mount and mobile detection
@@ -1537,7 +1576,7 @@ export default function ChatPage() {
                         )}
                         {isGroupChat && (
                           <button 
-                            onClick={() => setShowGroupInfo(true)}
+                            onClick={handleOpenGroupInfo}
                             className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
                               isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                             }`}
@@ -1658,11 +1697,64 @@ export default function ChatPage() {
 
           {/* Group Info Panel */}
           {showGroupInfo && selectedContact?.startsWith("group-") && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowGroupInfo(false)}>
+            <>
+              {/* 点击外部区域关闭弹窗 */}
+              {shouldUseOutwardMode ? (
+                /* 向外弹出模式：覆盖被压缩的内容区域 */
+                <div 
+                  className="fixed left-0 top-0 z-40"
+                  style={{ 
+                    width: 'calc(100% - 384px)',
+                    height: '100%',
+                    backgroundColor: groupInfoAnimating ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+                    transition: 'background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                  onClick={handleCloseGroupInfo}
+                />
+              ) : (
+                /* 向内弹出模式：全屏半透明遮罩 */
+                <div 
+                  className="fixed inset-0 z-40 bg-black"
+                  style={{
+                    opacity: groupInfoAnimating ? 0.4 : 0,
+                    transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                  onClick={handleCloseGroupInfo}
+                />
+              )}
+              
+              <div className="fixed z-[9999] overflow-hidden right-0 top-0 h-full w-96">
               <div 
-                className={`${cardStyle} rounded-lg p-6 max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto`}
-                onClick={(e) => e.stopPropagation()}
+                className={`h-full w-96 ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl border-l ${
+                  isDark ? "border-[#3a3d4a]" : "border-gray-200"
+                }`}
+                style={{
+                  transform: groupInfoAnimating 
+                    ? 'translateX(0) scale(1)' 
+                    : shouldUseOutwardMode 
+                      ? 'translateX(-100%) scale(0.98)'
+                      : 'translateX(100%) scale(0.98)',
+                  opacity: groupInfoAnimating ? 1 : 0,
+                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                  transformOrigin: shouldUseOutwardMode ? 'left center' : 'right center',
+                  willChange: 'transform, opacity',
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden'
+                }}
               >
+                <div 
+                  className="p-6 h-full overflow-y-auto"
+                  style={{
+                    transform: groupInfoAnimating 
+                      ? 'translateX(0)' 
+                      : shouldUseOutwardMode 
+                        ? 'translateX(-30px)' 
+                        : 'translateX(30px)',
+                    opacity: groupInfoAnimating ? 1 : 0,
+                    transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                    transitionDelay: groupInfoAnimating ? '0.15s' : '0s'
+                  }}
+                >
                 {(() => {
                   const currentGroup = groupContacts.find(c => c.id === selectedContact)
                   const memberCount = Math.floor(Math.random() * 50) + 10
