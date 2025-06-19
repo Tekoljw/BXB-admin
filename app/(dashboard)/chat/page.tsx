@@ -216,6 +216,29 @@ export default function ChatPage() {
           </div>
         </div>
 
+        {/* Tabs for Address Book */}
+        <div className={`${isDark ? "bg-[#252842]" : "bg-gray-100"} rounded-lg p-1 mx-4 mb-4`}>
+          <div className="flex items-center">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-all duration-300 whitespace-nowrap relative ${
+                  activeTab === tab
+                    ? isDark
+                      ? "bg-black text-white shadow-sm"
+                      : "bg-black text-white shadow-sm"
+                    : isDark
+                      ? "text-gray-300 hover:text-white hover:bg-[#1a1d29]/50"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-white/50"
+                }`}
+              >
+                <span className="relative z-10">{tab}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Contact Groups */}
         <div className="flex-1 overflow-y-auto">
           {/* New Friends Entry */}
