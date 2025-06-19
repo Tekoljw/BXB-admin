@@ -1720,7 +1720,7 @@ export default function ChatPage() {
         </div>
       ) : null}
 
-      {/* Group Info Panel - Identical to USDT publish modal */}
+      {/* Group Info Modal - Completely New Implementation */}
       {showGroupInfo && selectedContact?.startsWith("group-") && (
         <>
           {/* 点击外部区域关闭弹窗 */}
