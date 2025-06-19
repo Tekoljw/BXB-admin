@@ -1767,7 +1767,7 @@ export default function ChatPage() {
                           群组信息
                         </h2>
                         <button 
-                          onClick={() => setShowGroupInfo(false)}
+                          onClick={handleCloseGroupInfo}
                           className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
                             isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
                           }`}
@@ -1862,8 +1862,10 @@ export default function ChatPage() {
                     </>
                   )
                 })()}
+                </div>
               </div>
-            </div>
+              </div>
+            </>
           )}
         </div>
       ) : !isMobile ? (
