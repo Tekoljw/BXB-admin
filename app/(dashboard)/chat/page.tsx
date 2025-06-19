@@ -359,6 +359,24 @@ export default function ChatPage() {
       mutualFriends: ["陈浩"],
       time: "5小时前",
       status: "pending"
+    },
+    {
+      id: "req-3",
+      name: "王强",
+      avatar: "👨‍🎓",
+      message: "看到您在投资群里的分享很有见地，希望能交流学习。",
+      mutualFriends: ["李四", "张三"],
+      time: "昨天",
+      status: "accepted"
+    },
+    {
+      id: "req-4",
+      name: "李娜",
+      avatar: "👩‍🏫",
+      message: "您好，我想了解更多关于区块链投资的信息。",
+      mutualFriends: ["王五"],
+      time: "2天前",
+      status: "rejected"
     }
   ]
 
@@ -753,19 +771,38 @@ export default function ChatPage() {
                               </p>
                             </div>
                           )}
+                        </div>
+                        
+                        {/* Status and Action Buttons */}
+                        <div className="flex flex-col items-end space-y-2 flex-shrink-0">
+                          {request.status === "pending" && (
+                            <div className="flex flex-col space-y-2">
+                              <button className="bg-[#00D4AA] text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-[#00B394] transition-colors whitespace-nowrap">
+                                接受
+                              </button>
+                              <button className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+                                isDark 
+                                  ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
+                                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                              }`}>
+                                拒绝
+                              </button>
+                            </div>
+                          )}
                           
-                          <div className="flex space-x-2">
-                            <button className="flex-1 bg-[#00D4AA] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#00B394] transition-colors">
-                              接受
-                            </button>
-                            <button className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                              isDark 
-                                ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
-                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                            }`}>
-                              拒绝
-                            </button>
-                          </div>
+                          {request.status === "accepted" && (
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs text-green-500 font-medium">已接受</span>
+                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            </div>
+                          )}
+                          
+                          {request.status === "rejected" && (
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs text-red-500 font-medium">已拒绝</span>
+                              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
