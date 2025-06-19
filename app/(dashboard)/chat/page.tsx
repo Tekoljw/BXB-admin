@@ -1705,35 +1705,50 @@ export default function ChatPage() {
             </>
           )}
 
-          {/* Group Info Panel */}
-          {showGroupInfo && selectedContact?.startsWith("group-") && (
-            <>
-              {/* 点击外部区域关闭弹窗 */}
-              {screenWidth >= 1440 ? (
-                /* 向外弹出模式：覆盖被压缩的内容区域 */
-                <div 
-                  className="fixed left-0 top-0 z-40"
-                  style={{ 
-                    width: 'calc(100% - 384px)',
-                    height: '100%',
-                    backgroundColor: groupInfoAnimating ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
-                    transition: 'background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-                  }}
-                  onClick={handleCloseGroupInfo}
-                />
-              ) : (
-                /* 向内弹出模式：全屏半透明遮罩 */
-                <div 
-                  className="fixed inset-0 z-40 bg-black"
-                  style={{
-                    opacity: groupInfoAnimating ? 0.4 : 0,
-                    transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-                  }}
-                  onClick={handleCloseGroupInfo}
-                />
-              )}
-              
-              <div className="fixed z-[9999] overflow-hidden right-0 top-0 h-full w-96">
+
+
+        </div>
+      ) : !isMobile ? (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <MessageCircle className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+            <h3 className={`text-lg font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
+              选择一个联系人开始聊天
+            </h3>
+            <p className="text-gray-400">从左侧列表选择一个联系人或群组</p>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Group Info Panel - Outside main container to avoid compression issues */}
+      {showGroupInfo && selectedContact?.startsWith("group-") && (
+        <>
+          {/* 点击外部区域关闭弹窗 */}
+          {screenWidth >= 1440 ? (
+            /* 向外弹出模式：覆盖被压缩的内容区域 */
+            <div 
+              className="fixed left-0 top-0 z-40"
+              style={{ 
+                width: 'calc(100% - 384px)',
+                height: '100%',
+                backgroundColor: groupInfoAnimating ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+                transition: 'background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+              onClick={handleCloseGroupInfo}
+            />
+          ) : (
+            /* 向内弹出模式：全屏半透明遮罩 */
+            <div 
+              className="fixed inset-0 z-40 bg-black"
+              style={{
+                opacity: groupInfoAnimating ? 0.4 : 0,
+                transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+              onClick={handleCloseGroupInfo}
+            />
+          )}
+          
+          <div className="fixed z-[9999] overflow-hidden right-0 top-0 h-full w-96">
               <div 
                 className={`h-full w-96 ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl border-l ${
                   isDark ? "border-[#3a3d4a]" : "border-gray-200"
@@ -1854,6 +1869,157 @@ export default function ChatPage() {
                             </button>
                           )}
                         </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex space-x-3">
+                        <button className="flex-1 bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm">
+                          邀请朋友
+                        </button>
+                        <button className={`flex-1 py-2.5 rounded-lg font-medium transition-colors text-sm border ${
+                          isDark 
+                            ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+                            : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                        }`}>
+                          群设置
+                        </button>
+                      </div>
+                    </>
+                  )
+                })()}
+                </div>
+              </div>
+              </div>
+            </>
+          )}
+          {/* Group Info Panel */}
+          {showGroupInfo && selectedContact?.startsWith("group-") && (
+            <>
+              {/* 点击外部区域关闭弹窗 */}
+              {screenWidth >= 1440 ? (
+                /* 向外弹出模式：覆盖被压缩的内容区域 */
+                <div 
+                  className="fixed left-0 top-0 z-40"
+                  style={{ 
+                    width: 'calc(100% - 384px)',
+                    height: '100%',
+                    backgroundColor: groupInfoAnimating ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+                    transition: 'background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                  onClick={handleCloseGroupInfo}
+                />
+              ) : (
+                /* 向内弹出模式：全屏半透明遮罩 */
+                <div 
+                  className="fixed inset-0 z-40 bg-black"
+                  style={{
+                    opacity: groupInfoAnimating ? 0.4 : 0,
+                    transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                  onClick={handleCloseGroupInfo}
+                />
+              )}
+              
+              <div className="fixed z-[9999] overflow-hidden right-0 top-0 h-full w-96">
+              <div 
+                className={`h-full w-96 ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl border-l ${
+                  isDark ? "border-[#3a3d4a]" : "border-gray-200"
+                }`}
+                style={{
+                  transform: groupInfoAnimating 
+                    ? 'translateX(0) scale(1)' 
+                    : screenWidth >= 1440 
+                      ? 'translateX(-100%) scale(0.98)'
+                      : 'translateX(100%) scale(0.98)',
+                  opacity: groupInfoAnimating ? 1 : 0,
+                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                  transformOrigin: screenWidth >= 1440 ? 'left center' : 'right center',
+                  willChange: 'transform, opacity',
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden'
+                }}
+              >
+                <div 
+                  className="p-6 h-full overflow-y-auto"
+                  style={{
+                    transform: groupInfoAnimating 
+                      ? 'translateX(0)' 
+                      : screenWidth >= 1440 
+                        ? 'translateX(-30px)' 
+                        : 'translateX(30px)',
+                    opacity: groupInfoAnimating ? 1 : 0,
+                    transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                    transitionDelay: groupInfoAnimating ? '0.15s' : '0s'
+                  }}
+                >
+                {(() => {
+                  const currentGroup = groupContacts.find(c => c.id === selectedContact)
+                  const memberCount = Math.floor(Math.random() * 50) + 10
+                  
+                  return (
+                    <>
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-6">
+                        <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                          群组信息
+                        </h2>
+                        <button 
+                          onClick={handleCloseGroupInfo}
+                          className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                            isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      {/* Group Basic Info */}
+                      <div className="text-center mb-6">
+                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                          {currentGroup?.avatar}
+                        </div>
+                        <h3 className={`text-lg font-bold mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {currentGroup?.name}
+                        </h3>
+                        <p className="text-sm text-gray-400">{memberCount}位成员</p>
+                      </div>
+
+                      {/* Group Announcement */}
+                      <div className={`${isDark ? "bg-[#252842]" : "bg-gray-50"} p-4 rounded-lg mb-6`}>
+                        <h4 className={`text-sm font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          群公告
+                        </h4>
+                        <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                          欢迎加入{currentGroup?.name}！请大家文明交流，分享有价值的交易心得和市场分析。禁止发布广告和无关内容。
+                        </p>
+                      </div>
+
+                      {/* Group Actions */}
+                      <div className="space-y-3 mb-6">
+                        <button className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                          isDark ? "hover:bg-[#252842] text-gray-300" : "hover:bg-gray-50 text-gray-700"
+                        }`}>
+                          <Users className="w-5 h-5" />
+                          <span>查看群成员</span>
+                          <ChevronRight className="w-4 h-4 ml-auto" />
+                        </button>
+                        <button className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                          isDark ? "hover:bg-[#252842] text-gray-300" : "hover:bg-gray-50 text-gray-700"
+                        }`}>
+                          <Image className="w-5 h-5" />
+                          <span>聊天记录</span>
+                          <ChevronRight className="w-4 h-4 ml-auto" />
+                        </button>
+                        <button className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                          isDark ? "hover:bg-[#252842] text-gray-300" : "hover:bg-gray-50 text-gray-700"
+                        }`}>
+                          <Bell className="w-5 h-5" />
+                          <span>消息提醒</span>
+                          <div className="ml-auto flex items-center gap-2">
+                            <span className="text-sm text-gray-400">开启</span>
+                            <ChevronRight className="w-4 h-4" />
+                          </div>
+                        </button>
                       </div>
 
                       {/* Action Buttons */}
