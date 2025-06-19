@@ -1720,7 +1720,7 @@ export default function ChatPage() {
         </div>
       ) : null}
 
-      {/* Group Info Panel - Outside main container to avoid compression issues */}
+      {/* Group Info Panel - Identical to USDT publish modal */}
       {showGroupInfo && selectedContact?.startsWith("group-") && (
         <>
           {/* 点击外部区域关闭弹窗 */}
@@ -1749,37 +1749,37 @@ export default function ChatPage() {
           )}
           
           <div className="fixed z-[9999] overflow-hidden right-0 top-0 h-full w-96">
-              <div 
-                className={`h-full w-96 ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl border-l ${
-                  isDark ? "border-[#3a3d4a]" : "border-gray-200"
-                }`}
-                style={{
-                  transform: groupInfoAnimating 
-                    ? 'translateX(0) scale(1)' 
-                    : screenWidth >= 1440 
-                      ? 'translateX(-100%) scale(0.98)'
-                      : 'translateX(100%) scale(0.98)',
-                  opacity: groupInfoAnimating ? 1 : 0,
-                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                  transformOrigin: screenWidth >= 1440 ? 'left center' : 'right center',
-                  willChange: 'transform, opacity',
-                  backfaceVisibility: 'hidden',
-                  WebkitBackfaceVisibility: 'hidden'
-                }}
-              >
-                <div 
-                  className="p-6 h-full overflow-y-auto"
-                  style={{
-                    transform: groupInfoAnimating 
-                      ? 'translateX(0)' 
-                      : screenWidth >= 1440 
-                        ? 'translateX(-30px)' 
-                        : 'translateX(30px)',
-                    opacity: groupInfoAnimating ? 1 : 0,
-                    transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-                    transitionDelay: groupInfoAnimating ? '0.15s' : '0s'
-                  }}
-                >
+          <div 
+            className={`h-full w-96 ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl border-l ${
+              isDark ? "border-[#3a3d4a]" : "border-gray-200"
+            }`}
+            style={{
+              transform: groupInfoAnimating 
+                ? 'translateX(0) scale(1)' 
+                : screenWidth >= 1440 
+                  ? 'translateX(-100%) scale(0.98)'
+                  : 'translateX(100%) scale(0.98)',
+              opacity: groupInfoAnimating ? 1 : 0,
+              transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              transformOrigin: screenWidth >= 1440 ? 'left center' : 'right center',
+              willChange: 'transform, opacity',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden'
+            }}
+          >
+            <div 
+              className="p-6 h-full overflow-y-auto"
+              style={{
+                transform: groupInfoAnimating 
+                  ? 'translateX(0)' 
+                  : screenWidth >= 1440 
+                    ? 'translateX(-30px)' 
+                    : 'translateX(30px)',
+                opacity: groupInfoAnimating ? 1 : 0,
+                transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                transitionDelay: groupInfoAnimating ? '0.15s' : '0s'
+              }}
+            >
                 {(() => {
                   const currentGroup = groupContacts.find(c => c.id === selectedContact)
                   const memberCount = Math.floor(Math.random() * 50) + 10
