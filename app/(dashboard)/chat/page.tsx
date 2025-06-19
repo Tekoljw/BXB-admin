@@ -44,6 +44,7 @@ export default function ChatPage() {
   const [showMemberSidebar, setShowMemberSidebar] = useState(false)
   const [memberSidebarAnimating, setMemberSidebarAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [profileTab, setProfileTab] = useState("动态")
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -1070,7 +1071,6 @@ export default function ChatPage() {
                 }
                 
                 const currentFriend = friendProfiles[selectedContact as keyof typeof friendProfiles]
-                const [profileTab, setProfileTab] = useState("动态")
                 
                 return (
                   <div className="flex-1 overflow-y-auto">
