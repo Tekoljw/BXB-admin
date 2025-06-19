@@ -909,16 +909,16 @@ export default function ChatPage() {
                         <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
                           主要功能
                         </h3>
-                        <div className="space-y-2">
+                        <div className="grid grid-cols-1 gap-3">
                           {currentAI.features.map((feature, index) => (
                             <div 
                               key={index}
-                              className={`p-3 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"} flex items-center justify-center space-x-3`}
+                              className={`${cardStyle} p-4 rounded-lg text-center space-y-2 hover:shadow-lg transition-shadow`}
                             >
-                              <span className="text-lg">{feature.split(' ')[0]}</span>
-                              <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                              <div className="text-2xl">{feature.split(' ')[0]}</div>
+                              <div className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}>
                                 {feature.substring(feature.indexOf(' ') + 1)}
-                              </span>
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -928,7 +928,7 @@ export default function ChatPage() {
                       <div className="pt-4">
                         <button 
                           onClick={() => console.log(`开始与${currentAI.name}对话`)}
-                          className={`bg-gradient-to-r ${currentAI.gradient} text-white px-10 py-4 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center space-x-3 mx-auto text-lg`}
+                          className="bg-black text-white px-10 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center space-x-3 mx-auto text-lg"
                         >
                           <MessageCircle className="w-6 h-6" />
                           <span>立即开始对话</span>
