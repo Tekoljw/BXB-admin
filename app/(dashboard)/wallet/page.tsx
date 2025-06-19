@@ -478,12 +478,12 @@ export default function WalletPage() {
                 <button
                   key={tab.id}
                   onClick={() => handleTabChange(tab.id)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
                     activeTab === tab.id
-                      ? "bg-black text-white shadow-sm"
+                      ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
                       : isDark
-                        ? "text-gray-300 hover:text-white hover:bg-[#2a2d42]"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                        ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                        : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -515,12 +515,12 @@ export default function WalletPage() {
                     <button
                       key={tab.id}
                       onClick={() => handleTabChange(tab.id)}
-                      className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform ${
+                      className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
                         activeTab === tab.id
-                          ? "bg-black text-white shadow-sm scale-105"
+                          ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
                           : isDark
-                            ? "text-gray-300 hover:text-white hover:bg-[#2a2d42] hover:scale-102"
-                            : "text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
+                            ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42] hover:scale-102"
+                            : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
                       }`}
                     >
                       <Icon className="h-5 w-5" />
