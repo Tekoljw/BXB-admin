@@ -1072,115 +1072,140 @@ export default function ChatPage() {
                 const currentFriend = friendProfiles[selectedContact as keyof typeof friendProfiles]
                 
                 return (
-                  <div className="flex-1 flex items-center justify-center p-6 overflow-y-auto">
-                    <div className="max-w-lg w-full space-y-6">
+                  <div className="flex-1 overflow-y-auto">
+                    <div className={`${cardStyle} p-6 m-4 rounded-lg`}>
                       {/* Profile Header */}
-                      <div className="text-center space-y-4">
-                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold mx-auto">
-                          {currentFriend.avatar}
+                      <div className="flex items-start space-x-4 mb-6">
+                        <div className="relative">
+                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold">
+                            {currentFriend.avatar}
+                          </div>
+                          <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 ${
+                            isDark ? "border-[#1a1c2e]" : "border-white"
+                          } ${currentFriend.status === "在线" ? "bg-green-500" : "bg-gray-400"}`}></div>
                         </div>
-                        <div>
-                          <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                        <div className="flex-1">
+                          <h2 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
                             {currentFriend.name}
                           </h2>
-                          <div className="flex items-center justify-center space-x-2 mt-1">
-                            <div className={`w-2 h-2 rounded-full ${currentFriend.status === "在线" ? "bg-green-500" : "bg-gray-400"}`}></div>
-                            <span className={`text-sm ${currentFriend.status === "在线" ? "text-green-500" : "text-gray-400"}`}>
-                              {currentFriend.status}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Bio */}
-                      <div className={`${cardStyle} p-4 rounded-lg text-center`}>
-                        <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                          {currentFriend.bio}
-                        </p>
-                      </div>
-
-                      {/* Stats */}
-                      <div className={`${cardStyle} p-4 rounded-lg`}>
-                        <h3 className={`text-sm font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
-                          交易统计
-                        </h3>
-                        <div className="grid grid-cols-3 gap-4 text-center">
-                          <div>
-                            <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                              {currentFriend.stats.trades}
-                            </div>
-                            <div className="text-xs text-gray-400">交易次数</div>
-                          </div>
-                          <div>
-                            <div className={`text-lg font-bold text-green-500`}>
-                              {currentFriend.stats.success}
-                            </div>
-                            <div className="text-xs text-gray-400">成功率</div>
-                          </div>
-                          <div>
-                            <div className={`text-lg font-bold text-yellow-500`}>
-                              {currentFriend.stats.rating}
-                            </div>
-                            <div className="text-xs text-gray-400">评分</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Interests */}
-                      <div className={`${cardStyle} p-4 rounded-lg`}>
-                        <h3 className={`text-sm font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
-                          兴趣标签
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          {currentFriend.interests.map((interest, index) => (
-                            <span 
-                              key={index}
-                              className={`px-2 py-1 rounded-full text-xs ${
-                                isDark 
-                                  ? "bg-[#252842] text-gray-300" 
-                                  : "bg-gray-100 text-gray-600"
-                              }`}
-                            >
-                              {interest}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Additional Info */}
-                      <div className={`${cardStyle} p-4 rounded-lg space-y-3`}>
-                        <div className="flex justify-between">
-                          <span className="text-sm text-gray-400">加入时间</span>
-                          <span className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
-                            {currentFriend.joinDate}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm text-gray-400">共同好友</span>
-                          <span className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
-                            {currentFriend.mutualFriends} 位
-                          </span>
-                        </div>
-                        <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                          <span className="text-xs text-gray-400">最近活动</span>
-                          <p className={`text-sm mt-1 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                            {currentFriend.recentActivity}
+                          <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                            专业交易员
                           </p>
                         </div>
                       </div>
 
+                      {/* Bio */}
+                      <p className={`text-sm mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                        {currentFriend.bio}
+                      </p>
+
+                      {/* Location and Join Date */}
+                      <div className="flex items-center space-x-4 mb-6 text-sm text-gray-400">
+                        <div className="flex items-center space-x-1">
+                          <span>📍</span>
+                          <span>上海</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <span>📅</span>
+                          <span>{currentFriend.joinDate}加入</span>
+                        </div>
+                      </div>
+
+                      {/* Stats */}
+                      <div className="grid grid-cols-3 gap-6 mb-6">
+                        <div className="text-center">
+                          <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                            {currentFriend.stats.trades}
+                          </div>
+                          <div className="text-xs text-gray-400">动态</div>
+                        </div>
+                        <div className="text-center">
+                          <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                            12800
+                          </div>
+                          <div className="text-xs text-gray-400">粉丝</div>
+                        </div>
+                        <div className="text-center">
+                          <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                            89
+                          </div>
+                          <div className="text-xs text-gray-400">关注</div>
+                        </div>
+                      </div>
+
                       {/* Action Buttons */}
-                      <div className="flex space-x-3">
-                        <button className="flex-1 bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm">
-                          发送消息
+                      <div className="grid grid-cols-3 gap-3 mb-6">
+                        <button className="bg-[#007AFF] text-white py-2.5 rounded-lg font-medium hover:bg-[#0056CC] transition-colors text-sm">
+                          关注
                         </button>
-                        <button className={`flex-1 py-2.5 rounded-lg font-medium transition-colors text-sm ${
+                        <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
                           isDark 
-                            ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+                            : "border-gray-300 text-gray-700 hover:bg-gray-50"
                         }`}>
-                          查看动态
+                          加好友
                         </button>
+                        <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
+                          isDark 
+                            ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+                            : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                        }`}>
+                          更多
+                        </button>
+                      </div>
+
+                      {/* Tabs */}
+                      <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
+                        <div className="flex space-x-8">
+                          <button className={`pb-2 text-sm font-medium border-b-2 border-[#007AFF] text-[#007AFF]`}>
+                            动态
+                          </button>
+                          <button className={`pb-2 text-sm font-medium text-gray-400 hover:text-gray-600`}>
+                            合约交易
+                          </button>
+                          <button className={`pb-2 text-sm font-medium text-gray-400 hover:text-gray-600`}>
+                            合约跟单
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Activity Posts */}
+                      <div className="space-y-4">
+                        <div className={`p-4 rounded-lg border ${
+                          isDark ? "border-gray-700 bg-[#252842]" : "border-gray-200 bg-gray-50"
+                        }`}>
+                          <div className="text-sm text-gray-400 mb-2">今日BTC突破关键阻力位，建议关注回调机会</div>
+                          <div className="text-xs text-gray-500 mb-2">2小时前</div>
+                          <div className="flex items-center space-x-4 text-xs">
+                            <span className="text-green-500">+12.5%</span>
+                            <div className="flex items-center space-x-1">
+                              <span>❤️</span>
+                              <span className="text-gray-400">156</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <span>💬</span>
+                              <span className="text-gray-400">23</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className={`p-4 rounded-lg border ${
+                          isDark ? "border-gray-700 bg-[#252842]" : "border-gray-200 bg-gray-50"
+                        }`}>
+                          <div className="text-sm text-gray-400 mb-2">ETH/USDT 4小时级别形成看涨三角形</div>
+                          <div className="text-xs text-gray-500 mb-2">6小时前</div>
+                          <div className="flex items-center space-x-4 text-xs">
+                            <span className="text-green-500">+8.3%</span>
+                            <div className="flex items-center space-x-1">
+                              <span>❤️</span>
+                              <span className="text-gray-400">89</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <span>💬</span>
+                              <span className="text-gray-400">12</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
