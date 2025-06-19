@@ -1156,11 +1156,11 @@ export default function ChatPage() {
                       </div>
 
                       {/* Tabs */}
-                      <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
+                      <div className="border-b border-gray-200 dark:border-gray-700 mb-6 mt-8">
                         <div className="flex space-x-8">
                           <button 
                             onClick={() => setProfileTab("动态")}
-                            className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
+                            className={`pb-3 text-base font-medium border-b-2 transition-colors ${
                               profileTab === "动态" 
                                 ? `border-black ${isDark ? "text-white" : "text-black"}` 
                                 : "border-transparent text-gray-400 hover:text-gray-600"
@@ -1170,7 +1170,7 @@ export default function ChatPage() {
                           </button>
                           <button 
                             onClick={() => setProfileTab("合约交易")}
-                            className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
+                            className={`pb-3 text-base font-medium border-b-2 transition-colors ${
                               profileTab === "合约交易" 
                                 ? `border-black ${isDark ? "text-white" : "text-black"}` 
                                 : "border-transparent text-gray-400 hover:text-gray-600"
@@ -1180,7 +1180,7 @@ export default function ChatPage() {
                           </button>
                           <button 
                             onClick={() => setProfileTab("合约持仓")}
-                            className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
+                            className={`pb-3 text-base font-medium border-b-2 transition-colors ${
                               profileTab === "合约持仓" 
                                 ? `border-black ${isDark ? "text-white" : "text-black"}` 
                                 : "border-transparent text-gray-400 hover:text-gray-600"
