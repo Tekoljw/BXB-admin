@@ -942,7 +942,7 @@ export default function ChatPage() {
                 )
               })()}
             </>
-          ) : selectedContact && (selectedContact.startsWith("friend-") && !selectedContact.includes("request")) ? (
+          ) : selectedContact && activeTab === "通讯录" && (selectedContact.startsWith("friend-") && !selectedContact.includes("request")) ? (
             // Friend Profile View
             <>
               {(() => {
