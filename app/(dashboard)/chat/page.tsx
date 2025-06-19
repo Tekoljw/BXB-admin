@@ -48,6 +48,7 @@ export default function ChatPage() {
   const [showGroupInfo, setShowGroupInfo] = useState(false)
   const [groupInfoAnimating, setGroupInfoAnimating] = useState(false)
   const [groupInfoClosing, setGroupInfoClosing] = useState(false)
+  const [screenWidth, setScreenWidth] = useState(0)
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -115,11 +116,11 @@ export default function ChatPage() {
   }
 
   // Screen size detection for modal animation
-  const [shouldUseOutwardMode, setShouldUseOutwardMode] = useState(false)
-
   useEffect(() => {
     const checkScreenSize = () => {
-      setShouldUseOutwardMode(window.innerWidth >= 1440)
+      const width = window.innerWidth
+      setScreenWidth(width)
+      setIsMobile(width < 768)
     }
     
     checkScreenSize()
@@ -1731,12 +1732,12 @@ export default function ChatPage() {
                 style={{
                   transform: groupInfoAnimating 
                     ? 'translateX(0) scale(1)' 
-                    : shouldUseOutwardMode 
+                    : screenWidth >= 1440 
                       ? 'translateX(-100%) scale(0.98)'
                       : 'translateX(100%) scale(0.98)',
                   opacity: groupInfoAnimating ? 1 : 0,
                   transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                  transformOrigin: shouldUseOutwardMode ? 'left center' : 'right center',
+                  transformOrigin: screenWidth >= 1440 ? 'left center' : 'right center',
                   willChange: 'transform, opacity',
                   backfaceVisibility: 'hidden',
                   WebkitBackfaceVisibility: 'hidden'
@@ -1747,7 +1748,7 @@ export default function ChatPage() {
                   style={{
                     transform: groupInfoAnimating 
                       ? 'translateX(0)' 
-                      : shouldUseOutwardMode 
+                      : screenWidth >= 1440 
                         ? 'translateX(-30px)' 
                         : 'translateX(30px)',
                     opacity: groupInfoAnimating ? 1 : 0,
