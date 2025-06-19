@@ -454,7 +454,16 @@ export default function ChatPage() {
   ]
 
   return (
-    <div className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
+    <div 
+      className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}
+      style={{
+        transform: showGroupInfo && screenWidth >= 1440 && groupInfoAnimating 
+          ? 'translateX(-384px)' 
+          : 'translateX(0)',
+        transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+        willChange: 'transform'
+      }}
+    >
       {/* Contact List Sidebar */}
       <div 
         className={`${cardStyle} flex flex-col`}
