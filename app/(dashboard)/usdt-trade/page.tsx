@@ -77,6 +77,7 @@ export default function USDTTradePage() {
   const [publishPeriod, setPublishPeriod] = useState("24小时")
   const [customPayment, setCustomPayment] = useState("")
   const [publishCurrency, setPublishCurrency] = useState("CNY")
+  const [publishCurrencyDropdownOpen, setPublishCurrencyDropdownOpen] = useState(false)
   
   // 现金上门位置选择
   const [showLocationModal, setShowLocationModal] = useState(false)
@@ -1405,21 +1406,61 @@ export default function USDTTradePage() {
                 <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
                   法币币种
                 </label>
-                <select 
-                  value={publishCurrency}
-                  onChange={(e) => setPublishCurrency(e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
-                    isDark 
-                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                      : "bg-white border-gray-300 text-gray-900"
-                  }`}>
-                  <option value="CNY">CNY - 人民币</option>
-                  <option value="USD">USD - 美元</option>
-                  <option value="EUR">EUR - 欧元</option>
-                  <option value="HKD">HKD - 港币</option>
-                  <option value="JPY">JPY - 日元</option>
-                  <option value="KRW">KRW - 韩元</option>
-                </select>
+                <div className="relative">
+                  <button
+                    onClick={() => setPublishCurrencyDropdownOpen(!publishCurrencyDropdownOpen)}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
+                      isDark
+                        ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#2a2d42]"
+                        : "bg-white border-gray-300 text-gray-800 hover:bg-gray-50"
+                    }`}
+                  >
+                    <span className="flex items-center space-x-2">
+                      <span>{currencies.find(c => c.code === publishCurrency)?.symbol}</span>
+                      <span>{currencies.find(c => c.code === publishCurrency)?.name}</span>
+                    </span>
+                    <ChevronDown 
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        publishCurrencyDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {/* 下拉菜单 */}
+                  <div 
+                    className={`absolute top-full left-0 right-0 mt-1 z-50 rounded-lg border shadow-lg transition-all duration-200 ${
+                      publishCurrencyDropdownOpen 
+                        ? "opacity-100 visible translate-y-0" 
+                        : "opacity-0 invisible -translate-y-2"
+                    } ${
+                      isDark
+                        ? "bg-[#252842] border-[#3a3d4a]"
+                        : "bg-white border-gray-300"
+                    }`}
+                  >
+                    {currencies.map((currency) => (
+                      <button
+                        key={currency.code}
+                        onClick={() => {
+                          setPublishCurrency(currency.code)
+                          setPublishCurrencyDropdownOpen(false)
+                        }}
+                        className={`w-full flex items-center space-x-3 px-3 py-2 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                          publishCurrency === currency.code
+                            ? isDark
+                              ? "bg-custom-green/20 text-custom-green"
+                              : "bg-custom-green/10 text-custom-green"
+                            : isDark
+                              ? "text-gray-300 hover:bg-[#2a2d42]"
+                              : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        <span className="font-medium">{currency.symbol}</span>
+                        <span>{currency.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* 支付方式选择 */}
