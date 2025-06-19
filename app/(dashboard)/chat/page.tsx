@@ -727,16 +727,23 @@ export default function ChatPage() {
           {selectedContact === "friend-request-1" ? (
             // Friend Request List View
             <>
-              {/* Friend Request Header */}
-              <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center justify-between`}>
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white font-bold">
-                    👋
-                  </div>
-                  <div>
-                    <h2 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>新的朋友</h2>
-                    <p className="text-sm text-gray-400">{friendRequests.length} 个好友请求</p>
-                  </div>
+              {/* Search Box */}
+              <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
+                <div className="relative">
+                  <Search
+                    className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    }`}
+                  />
+                  <input
+                    type="text"
+                    placeholder="搜索好友请求"
+                    className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm transition-colors ${
+                      isDark
+                        ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400 focus:border-[#00D4AA]"
+                        : "bg-gray-100 border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
+                    } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+                  />
                 </div>
               </div>
 
