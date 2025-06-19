@@ -2043,18 +2043,7 @@ export default function ChatPage() {
               </div>
             </>
           )}
-        </div>
-      ) : !isMobile ? (
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <MessageCircle className="h-16 w-16 mx-auto mb-4 text-gray-300" />
-            <h3 className={`text-lg font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
-              选择一个联系人开始聊天
-            </h3>
-            <p className="text-gray-400">从左侧列表选择一个联系人或群组</p>
-          </div>
-        </div>
-      ) : null}
+      )}
     </div>
   )
 }
