@@ -1360,31 +1360,43 @@ export default function USDTTradePage() {
             >
               {/* 页签切换 */}
               <div className="mb-6">
-                <div className={`flex rounded-lg border ${isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"}`}>
-                  <button
-                    onClick={() => setPublishOrderType("buy")}
-                    className={`flex-1 py-3 px-4 text-sm font-medium transition-all rounded-l-lg ${
-                      publishOrderType === "buy"
-                        ? "bg-white text-gray-900 shadow-sm"
-                        : isDark 
-                          ? "text-gray-400 hover:text-white"
-                          : "text-gray-600 hover:text-gray-800"
-                    }`}
-                  >
-                    买入
-                  </button>
-                  <button
-                    onClick={() => setPublishOrderType("sell")}
-                    className={`flex-1 py-3 px-4 text-sm font-medium transition-all rounded-r-lg ${
-                      publishOrderType === "sell"
-                        ? "bg-white text-gray-900 shadow-sm"
-                        : isDark 
-                          ? "text-gray-400 hover:text-white"
-                          : "text-gray-600 hover:text-gray-800"
-                    }`}
-                  >
-                    卖出
-                  </button>
+                <div className="relative">
+                  <div className="flex bg-gray-200 dark:bg-[#252842] rounded-md p-1">
+                    {/* 滑动背景 */}
+                    <div
+                      className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${
+                        publishOrderType === "buy" ? "bg-custom-green left-1" : "bg-red-500 left-1/2"
+                      }`}
+                    />
+
+                    {/* 买入按钮 */}
+                    <button
+                      onClick={() => setPublishOrderType("buy")}
+                      className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
+                        publishOrderType === "buy"
+                          ? "text-white"
+                          : isDark
+                            ? "text-gray-400 hover:text-white"
+                            : "text-gray-600 hover:text-gray-800"
+                      }`}
+                    >
+                      买入
+                    </button>
+
+                    {/* 卖出按钮 */}
+                    <button
+                      onClick={() => setPublishOrderType("sell")}
+                      className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
+                        publishOrderType === "sell"
+                          ? "text-white"
+                          : isDark
+                            ? "text-gray-400 hover:text-white"
+                            : "text-gray-600 hover:text-gray-800"
+                      }`}
+                    >
+                      卖出
+                    </button>
+                  </div>
                 </div>
               </div>
 
