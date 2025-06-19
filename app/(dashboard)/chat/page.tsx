@@ -909,7 +909,7 @@ export default function ChatPage() {
                         <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
                           主要功能
                         </h3>
-                        <div className="grid grid-cols-1 gap-2">
+                        <div className="grid grid-cols-2 gap-2">
                           {currentAI.features.map((feature, index) => (
                             <div 
                               key={index}
