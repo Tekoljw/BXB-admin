@@ -753,11 +753,10 @@ export default function ChatPage() {
                           {request.avatar}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-2">
+                          <div className="mb-2">
                             <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
                               {request.name}
                             </h3>
-                            <span className="text-xs text-gray-400">{request.time}</span>
                           </div>
                           
                           <p className={`text-sm mb-3 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
@@ -776,32 +775,41 @@ export default function ChatPage() {
                         {/* Status and Action Buttons */}
                         <div className="flex flex-col items-end space-y-2 flex-shrink-0">
                           {request.status === "pending" && (
-                            <div className="flex flex-col space-y-2">
-                              <button className="bg-[#00D4AA] text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-[#00B394] transition-colors whitespace-nowrap">
-                                接受
-                              </button>
-                              <button className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
-                                isDark 
-                                  ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
-                                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                              }`}>
-                                拒绝
-                              </button>
-                            </div>
+                            <>
+                              <div className="flex space-x-2">
+                                <button className="bg-[#00D4AA] text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-[#00B394] transition-colors whitespace-nowrap">
+                                  接受
+                                </button>
+                                <button className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+                                  isDark 
+                                    ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
+                                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                }`}>
+                                  拒绝
+                                </button>
+                              </div>
+                              <span className="text-xs text-gray-400">{request.time}</span>
+                            </>
                           )}
                           
                           {request.status === "accepted" && (
-                            <div className="flex items-center space-x-2">
-                              <span className="text-xs text-green-500 font-medium">已接受</span>
-                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                            </div>
+                            <>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-sm text-green-500 font-medium">已接受</span>
+                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                              </div>
+                              <span className="text-xs text-gray-400">{request.time}</span>
+                            </>
                           )}
                           
                           {request.status === "rejected" && (
-                            <div className="flex items-center space-x-2">
-                              <span className="text-xs text-red-500 font-medium">已拒绝</span>
-                              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                            </div>
+                            <>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-sm text-red-500 font-medium">已拒绝</span>
+                                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                              </div>
+                              <span className="text-xs text-gray-400">{request.time}</span>
+                            </>
                           )}
                         </div>
                       </div>
