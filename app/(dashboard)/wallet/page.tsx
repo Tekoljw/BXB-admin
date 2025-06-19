@@ -18,14 +18,22 @@ import {
   DollarSign,
   PiggyBank
 } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
 
 export default function WalletPage() {
   const { theme } = useTheme()
   const [balanceVisible, setBalanceVisible] = useState(true)
   const [activeTab, setActiveTab] = useState("总览")
+  const [isMobile, setIsMobile] = useState(false)
   const isDark = theme === "dark"
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const walletTabs = [
     { id: "总览", label: "总览", icon: Wallet },
@@ -457,33 +465,77 @@ export default function WalletPage() {
 
   return (
     <div className={`min-h-screen ${isDark ? 'bg-[#1a1d29]' : 'bg-gray-50'}`}>
-      <div className="container mx-auto p-4 space-y-6">
-        {/* Tab Navigation */}
-        <div className="flex flex-wrap gap-2 p-1 bg-gray-200 dark:bg-[#252842] rounded-lg">
-          {walletTabs.map((tab) => {
-            const Icon = tab.icon
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                  activeTab === tab.id
-                    ? "bg-[#00D4AA] text-white shadow-sm"
-                    : isDark
-                      ? "text-gray-300 hover:text-white hover:bg-[#2a2d42]"
-                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                <span>{tab.label}</span>
-              </button>
-            )
-          })}
-        </div>
+      {isMobile ? (
+        /* Mobile Layout - Top Tabs */
+        <div className="container mx-auto p-4 space-y-6">
+          {/* Mobile Tab Navigation */}
+          <div className="flex flex-wrap gap-2 p-1 bg-gray-200 dark:bg-[#252842] rounded-lg">
+            {walletTabs.map((tab) => {
+              const Icon = tab.icon
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    activeTab === tab.id
+                      ? "bg-[#00D4AA] text-white shadow-sm"
+                      : isDark
+                        ? "text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span>{tab.label}</span>
+                </button>
+              )
+            })}
+          </div>
 
-        {/* Tab Content */}
-        {renderTabContent()}
-      </div>
+          {/* Mobile Content */}
+          {renderTabContent()}
+        </div>
+      ) : (
+        /* Desktop Layout - Left Sidebar */
+        <div className="flex h-screen">
+          {/* Left Sidebar */}
+          <div className={`w-64 ${isDark ? 'bg-[#1a1c2e]' : 'bg-white'} border-r ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'} flex flex-col`}>
+            <div className="p-6">
+              <h1 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>钱包</h1>
+            </div>
+            
+            <nav className="flex-1 px-3">
+              <div className="space-y-1">
+                {walletTabs.map((tab) => {
+                  const Icon = tab.icon
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        activeTab === tab.id
+                          ? "bg-[#00D4AA] text-white shadow-sm"
+                          : isDark
+                            ? "text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                            : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                      }`}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span>{tab.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </nav>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="container mx-auto p-6">
+              {renderTabContent()}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
