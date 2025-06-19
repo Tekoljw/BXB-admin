@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
 interface Contact {
