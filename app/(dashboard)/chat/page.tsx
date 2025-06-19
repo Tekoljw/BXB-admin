@@ -825,6 +825,123 @@ export default function ChatPage() {
                 </div>
               </div>
             </>
+          ) : selectedContact === "ai-escrow" || selectedContact === "ai-trading" || selectedContact === "ai-customer" ? (
+            // AI Assistant Detail View
+            <>
+              {(() => {
+                const aiData = {
+                  "ai-escrow": {
+                    name: "AI担保助手",
+                    avatar: "🛡️",
+                    gradient: "from-blue-500 to-cyan-500",
+                    description: "专业的担保交易助手，为您的交易提供安全保障",
+                    features: [
+                      "🔒 安全托管资金",
+                      "📋 智能合约生成",
+                      "⚖️ 争议调解服务",
+                      "📊 交易风险评估",
+                      "🕒 24/7 交易监控"
+                    ],
+                    capabilities: "我可以帮助您创建安全的担保交易，监控交易过程，并在出现争议时提供调解服务。所有交易都受到智能合约保护，确保双方利益。"
+                  },
+                  "ai-trading": {
+                    name: "AI交易助手", 
+                    avatar: "🤖",
+                    gradient: "from-green-500 to-emerald-500",
+                    description: "智能交易分析师，提供专业的市场分析和交易建议",
+                    features: [
+                      "📈 实时市场分析",
+                      "🎯 个性化交易策略",
+                      "⚠️ 风险管理建议",
+                      "📱 交易信号推送",
+                      "📊 投资组合优化"
+                    ],
+                    capabilities: "我拥有强大的市场分析能力，可以为您提供实时的价格预测、技术分析和交易建议。基于您的风险偏好定制专属交易策略。"
+                  },
+                  "ai-customer": {
+                    name: "AI客服助手",
+                    avatar: "👩‍💻", 
+                    gradient: "from-purple-500 to-pink-500",
+                    description: "贴心的客户服务专家，随时为您解答疑问",
+                    features: [
+                      "❓ 常见问题解答",
+                      "🔧 技术支持服务",
+                      "📞 人工客服转接",
+                      "📝 意见反馈收集",
+                      "🎓 平台使用教程"
+                    ],
+                    capabilities: "我可以快速解答您的疑问，提供平台使用指导，处理技术问题，并在需要时为您转接人工客服。致力于为您提供最佳的用户体验。"
+                  }
+                }
+                
+                const currentAI = aiData[selectedContact as keyof typeof aiData]
+                
+                return (
+                  <>
+                    {/* AI Assistant Header */}
+                    <div className={`p-6 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
+                      <div className="flex items-center space-x-4">
+                        <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${currentAI.gradient} flex items-center justify-center text-white text-2xl font-bold`}>
+                          {currentAI.avatar}
+                        </div>
+                        <div className="flex-1">
+                          <h2 className={`text-xl font-bold mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                            {currentAI.name}
+                          </h2>
+                          <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                            {currentAI.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* AI Assistant Content */}
+                    <div className="flex-1 p-6 overflow-y-auto">
+                      {/* Capabilities Section */}
+                      <div className="mb-8">
+                        <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          能力介绍
+                        </h3>
+                        <p className={`text-sm leading-relaxed mb-6 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                          {currentAI.capabilities}
+                        </p>
+                      </div>
+
+                      {/* Features Section */}
+                      <div className="mb-8">
+                        <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          主要功能
+                        </h3>
+                        <div className="grid gap-3">
+                          {currentAI.features.map((feature, index) => (
+                            <div 
+                              key={index}
+                              className={`p-3 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"} flex items-center space-x-3`}
+                            >
+                              <span className="text-lg">{feature.split(' ')[0]}</span>
+                              <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                                {feature.substring(feature.indexOf(' ') + 1)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Action Button */}
+                      <div className="flex justify-center">
+                        <button 
+                          onClick={() => console.log(`开始与${currentAI.name}对话`)}
+                          className={`bg-gradient-to-r ${currentAI.gradient} text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center space-x-2`}
+                        >
+                          <MessageCircle className="w-5 h-5" />
+                          <span>立即开始对话</span>
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )
+              })()}
+            </>
           ) : (
             // Regular Chat View
             <>
