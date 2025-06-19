@@ -942,6 +942,251 @@ export default function ChatPage() {
                 )
               })()}
             </>
+          ) : selectedContact && (selectedContact.startsWith("friend-") && !selectedContact.includes("request")) ? (
+            // Friend Profile View
+            <>
+              {(() => {
+                const friendProfiles = {
+                  "friend-1": {
+                    name: "张三",
+                    avatar: "👨‍💼",
+                    status: "在线",
+                    bio: "资深投资者，专注于数字货币市场分析",
+                    joinDate: "2023年1月",
+                    mutualFriends: 5,
+                    stats: {
+                      trades: 128,
+                      success: "92%",
+                      rating: 4.8
+                    },
+                    interests: ["BTC交易", "市场分析", "技术指标", "投资策略"],
+                    recentActivity: "刚刚分享了一篇关于BTC走势的分析"
+                  },
+                  "friend-2": {
+                    name: "李四", 
+                    avatar: "👩‍💼",
+                    status: "在线",
+                    bio: "量化交易专家，擅长算法交易策略",
+                    joinDate: "2022年8月",
+                    mutualFriends: 8,
+                    stats: {
+                      trades: 256,
+                      success: "95%",
+                      rating: 4.9
+                    },
+                    interests: ["量化交易", "算法策略", "风险管理", "数据分析"],
+                    recentActivity: "2小时前更新了投资组合"
+                  },
+                  "friend-3": {
+                    name: "王五",
+                    avatar: "👨‍🎓",
+                    status: "离线",
+                    bio: "区块链技术爱好者，长期价值投资者",
+                    joinDate: "2023年3月",
+                    mutualFriends: 3,
+                    stats: {
+                      trades: 67,
+                      success: "88%",
+                      rating: 4.6
+                    },
+                    interests: ["区块链技术", "价值投资", "DeFi", "NFT"],
+                    recentActivity: "昨天参与了社区讨论"
+                  },
+                  "friend-alex": {
+                    name: "Alex Chen",
+                    avatar: "👨‍💼",
+                    status: "在线",
+                    bio: "Professional trader with 5+ years experience",
+                    joinDate: "2022年12月",
+                    mutualFriends: 12,
+                    stats: {
+                      trades: 445,
+                      success: "94%",
+                      rating: 4.9
+                    },
+                    interests: ["Futures Trading", "Options", "Technical Analysis", "Risk Management"],
+                    recentActivity: "30分钟前发布了交易信号"
+                  },
+                  "friend-bob": {
+                    name: "Bob Wang",
+                    avatar: "👨‍🎓",
+                    status: "离线",
+                    bio: "Crypto enthusiast and long-term hodler",
+                    joinDate: "2023年5月",
+                    mutualFriends: 6,
+                    stats: {
+                      trades: 89,
+                      success: "90%",
+                      rating: 4.7
+                    },
+                    interests: ["HODLing", "Altcoins", "Market Research", "Community"],
+                    recentActivity: "3小时前点赞了一个交易策略"
+                  },
+                  "friend-charlie": {
+                    name: "Charlie Li",
+                    avatar: "👨‍🔬",
+                    status: "在线",
+                    bio: "Financial analyst specializing in crypto markets",
+                    joinDate: "2022年11月",
+                    mutualFriends: 9,
+                    stats: {
+                      trades: 178,
+                      success: "91%",
+                      rating: 4.8
+                    },
+                    interests: ["Market Analysis", "Financial Modeling", "Economic Indicators", "Research"],
+                    recentActivity: "1小时前发布了市场报告"
+                  },
+                  "friend-david": {
+                    name: "David Zhang",
+                    avatar: "👨‍💻",
+                    status: "离线",
+                    bio: "Software engineer turned crypto trader",
+                    joinDate: "2023年2月",
+                    mutualFriends: 4,
+                    stats: {
+                      trades: 134,
+                      success: "89%",
+                      rating: 4.6
+                    },
+                    interests: ["Automated Trading", "Programming", "Smart Contracts", "DApps"],
+                    recentActivity: "6小时前更新了交易机器人"
+                  },
+                  "friend-eric": {
+                    name: "Eric Liu",
+                    avatar: "👨‍🏫",
+                    status: "在线",
+                    bio: "Education specialist in cryptocurrency trading",
+                    joinDate: "2022年9月",
+                    mutualFriends: 15,
+                    stats: {
+                      trades: 223,
+                      success: "93%",
+                      rating: 4.8
+                    },
+                    interests: ["Trading Education", "Mentoring", "Strategy Development", "Community Building"],
+                    recentActivity: "刚刚回复了一个学习问题"
+                  }
+                }
+                
+                const currentFriend = friendProfiles[selectedContact as keyof typeof friendProfiles]
+                
+                return (
+                  <div className="flex-1 flex items-center justify-center p-6 overflow-y-auto">
+                    <div className="max-w-lg w-full space-y-6">
+                      {/* Profile Header */}
+                      <div className="text-center space-y-4">
+                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold mx-auto">
+                          {currentFriend.avatar}
+                        </div>
+                        <div>
+                          <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                            {currentFriend.name}
+                          </h2>
+                          <div className="flex items-center justify-center space-x-2 mt-1">
+                            <div className={`w-2 h-2 rounded-full ${currentFriend.status === "在线" ? "bg-green-500" : "bg-gray-400"}`}></div>
+                            <span className={`text-sm ${currentFriend.status === "在线" ? "text-green-500" : "text-gray-400"}`}>
+                              {currentFriend.status}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Bio */}
+                      <div className={`${cardStyle} p-4 rounded-lg text-center`}>
+                        <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                          {currentFriend.bio}
+                        </p>
+                      </div>
+
+                      {/* Stats */}
+                      <div className={`${cardStyle} p-4 rounded-lg`}>
+                        <h3 className={`text-sm font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          交易统计
+                        </h3>
+                        <div className="grid grid-cols-3 gap-4 text-center">
+                          <div>
+                            <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                              {currentFriend.stats.trades}
+                            </div>
+                            <div className="text-xs text-gray-400">交易次数</div>
+                          </div>
+                          <div>
+                            <div className={`text-lg font-bold text-green-500`}>
+                              {currentFriend.stats.success}
+                            </div>
+                            <div className="text-xs text-gray-400">成功率</div>
+                          </div>
+                          <div>
+                            <div className={`text-lg font-bold text-yellow-500`}>
+                              {currentFriend.stats.rating}
+                            </div>
+                            <div className="text-xs text-gray-400">评分</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Interests */}
+                      <div className={`${cardStyle} p-4 rounded-lg`}>
+                        <h3 className={`text-sm font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          兴趣标签
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          {currentFriend.interests.map((interest, index) => (
+                            <span 
+                              key={index}
+                              className={`px-2 py-1 rounded-full text-xs ${
+                                isDark 
+                                  ? "bg-[#252842] text-gray-300" 
+                                  : "bg-gray-100 text-gray-600"
+                              }`}
+                            >
+                              {interest}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Additional Info */}
+                      <div className={`${cardStyle} p-4 rounded-lg space-y-3`}>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-400">加入时间</span>
+                          <span className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
+                            {currentFriend.joinDate}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-400">共同好友</span>
+                          <span className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
+                            {currentFriend.mutualFriends} 位
+                          </span>
+                        </div>
+                        <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                          <span className="text-xs text-gray-400">最近活动</span>
+                          <p className={`text-sm mt-1 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                            {currentFriend.recentActivity}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex space-x-3">
+                        <button className="flex-1 bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm">
+                          发送消息
+                        </button>
+                        <button className={`flex-1 py-2.5 rounded-lg font-medium transition-colors text-sm ${
+                          isDark 
+                            ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}>
+                          查看动态
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })()}
+            </>
           ) : (
             // Regular Chat View
             <>
