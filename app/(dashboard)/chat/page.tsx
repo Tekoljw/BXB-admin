@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
 interface Contact {
@@ -45,6 +45,7 @@ export default function ChatPage() {
   const [memberSidebarAnimating, setMemberSidebarAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [profileTab, setProfileTab] = useState("动态")
+  const [showGroupInfo, setShowGroupInfo] = useState(false)
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -1498,27 +1499,56 @@ export default function ChatPage() {
             <>
               {/* Chat Header */}
               <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center justify-between`}>
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                    🤖
-                  </div>
-                  <div>
-                    <h2 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>交易助手</h2>
-                    <p className="text-sm text-green-500">在线</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                    isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-                  }`}>
-                    <Phone className="w-5 h-5" />
-                  </button>
-                  <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                    isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-                  }`}>
-                    <Video className="w-5 h-5" />
-                  </button>
-                </div>
+                {(() => {
+                  const isGroupChat = selectedContact?.startsWith("group-")
+                  const currentContact = isGroupChat 
+                    ? groupContacts.find(c => c.id === selectedContact)
+                    : friendContacts.find(c => c.id === selectedContact) || escrowContacts.find(c => c.id === selectedContact)
+                  
+                  return (
+                    <>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                          {currentContact?.avatar || "🤖"}
+                        </div>
+                        <div>
+                          <h2 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                            {currentContact?.name || "交易助手"}
+                          </h2>
+                          <p className="text-sm text-green-500">
+                            {isGroupChat ? `${Math.floor(Math.random() * 50) + 10}位成员` : "在线"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        {!isGroupChat && (
+                          <>
+                            <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                            }`}>
+                              <Phone className="w-5 h-5" />
+                            </button>
+                            <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                            }`}>
+                              <Video className="w-5 h-5" />
+                            </button>
+                          </>
+                        )}
+                        {isGroupChat && (
+                          <button 
+                            onClick={() => setShowGroupInfo(true)}
+                            className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                            }`}
+                          >
+                            <MoreHorizontal className="w-5 h-5" />
+                          </button>
+                        )}
+                      </div>
+                    </>
+                  )
+                })()}
               </div>
 
               {/* Messages Area */}
@@ -1624,6 +1654,124 @@ export default function ChatPage() {
                 </div>
               </div>
             </>
+          )}
+
+          {/* Group Info Panel */}
+          {showGroupInfo && selectedContact?.startsWith("group-") && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowGroupInfo(false)}>
+              <div 
+                className={`${cardStyle} rounded-lg p-6 max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {(() => {
+                  const currentGroup = groupContacts.find(c => c.id === selectedContact)
+                  const memberCount = Math.floor(Math.random() * 50) + 10
+                  
+                  return (
+                    <>
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-6">
+                        <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                          群组信息
+                        </h2>
+                        <button 
+                          onClick={() => setShowGroupInfo(false)}
+                          className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                            isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      {/* Group Basic Info */}
+                      <div className="text-center mb-6">
+                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                          {currentGroup?.avatar}
+                        </div>
+                        <h3 className={`text-lg font-bold mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {currentGroup?.name}
+                        </h3>
+                        <p className="text-sm text-gray-400">{memberCount}位成员</p>
+                      </div>
+
+                      {/* Group Announcement */}
+                      <div className={`${isDark ? "bg-[#252842]" : "bg-gray-50"} p-4 rounded-lg mb-6`}>
+                        <h4 className={`text-sm font-semibold mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          群公告
+                        </h4>
+                        <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                          欢迎加入{currentGroup?.name}！请大家文明交流，分享有价值的交易心得和市场分析。禁止发布广告和无关内容。
+                        </p>
+                        <div className="text-xs text-gray-400 mt-2">
+                          管理员 · 2024年1月15日
+                        </div>
+                      </div>
+
+                      {/* Group Members */}
+                      <div className="mb-6">
+                        <h4 className={`text-sm font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          群成员 ({memberCount})
+                        </h4>
+                        <div className="space-y-3">
+                          {[
+                            { name: "张三", avatar: "👨‍💼", role: "群主", status: "在线" },
+                            { name: "李四", avatar: "👩‍💼", role: "管理员", status: "在线" },
+                            { name: "王五", avatar: "👨‍🎓", role: "成员", status: "离线" },
+                            { name: "赵六", avatar: "👨‍💻", role: "成员", status: "在线" },
+                            { name: "钱七", avatar: "👩‍🔬", role: "成员", status: "在线" }
+                          ].map((member, index) => (
+                            <div key={index} className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                                  {member.avatar}
+                                </div>
+                                <div>
+                                  <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                    {member.name}
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <span className="text-xs text-gray-400">{member.role}</span>
+                                    <div className={`w-2 h-2 rounded-full ${member.status === "在线" ? "bg-green-500" : "bg-gray-400"}`}></div>
+                                  </div>
+                                </div>
+                              </div>
+                              {member.role !== "群主" && (
+                                <button className={`text-xs px-2 py-1 rounded transition-colors ${
+                                  isDark ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                }`}>
+                                  @{member.name}
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                          
+                          {memberCount > 5 && (
+                            <button className={`w-full text-center py-2 text-sm text-gray-400 hover:text-gray-600 transition-colors`}>
+                              查看全部 {memberCount} 位成员
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex space-x-3">
+                        <button className="flex-1 bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm">
+                          邀请朋友
+                        </button>
+                        <button className={`flex-1 py-2.5 rounded-lg font-medium transition-colors text-sm border ${
+                          isDark 
+                            ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+                            : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                        }`}>
+                          群设置
+                        </button>
+                      </div>
+                    </>
+                  )
+                })()}
+              </div>
+            </div>
           )}
         </div>
       ) : !isMobile ? (
