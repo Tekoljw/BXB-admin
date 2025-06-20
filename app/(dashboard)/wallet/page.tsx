@@ -306,14 +306,15 @@ export default function WalletPage() {
                       </div>
                       <button
                         onClick={() => setShowCurrencyModal(true)}
-                        className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-all ${
-                          isDark 
-                            ? "bg-[#252842] border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black" 
-                            : "bg-white border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white"
-                        }`}
+                        className="flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium bg-black text-white hover:bg-gray-800 transition-all"
                       >
-                        {selectedDisplayCurrency}
-                        <ChevronDown className="inline-block ml-1 h-3 w-3" />
+                        <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
+                          availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                        }`}>
+                          <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
+                        </div>
+                        <span>{selectedDisplayCurrency}</span>
+                        <ChevronDown className="h-3 w-3" />
                       </button>
                     </div>
                     <div className="text-3xl font-bold text-[#00D4AA]">
@@ -344,14 +345,15 @@ export default function WalletPage() {
                       </div>
                       <button
                         onClick={() => setShowCurrencyModal(true)}
-                        className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-all ${
-                          isDark 
-                            ? "bg-[#252842] border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black" 
-                            : "bg-white border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white"
-                        }`}
+                        className="flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium bg-black text-white hover:bg-gray-800 transition-all"
                       >
-                        {selectedDisplayCurrency}
-                        <ChevronDown className="inline-block ml-1 h-3 w-3" />
+                        <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
+                          availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                        }`}>
+                          <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
+                        </div>
+                        <span>{selectedDisplayCurrency}</span>
+                        <ChevronDown className="h-3 w-3" />
                       </button>
                     </div>
                     <div className="text-3xl font-bold text-[#00D4AA]">
