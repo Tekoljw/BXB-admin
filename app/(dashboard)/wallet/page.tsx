@@ -227,10 +227,10 @@ export default function WalletPage() {
 
   // 操作按钮配置
   const actionButtons = [
-    { id: "入金", label: "入金", icon: Download, color: "green" },
-    { id: "提币", label: "提币", icon: Upload, color: "red" },
-    { id: "买卖", label: "买卖", icon: RefreshCw, color: "blue" },
-    { id: "划转", label: "划转", icon: ArrowLeftRight, color: "purple" }
+    { id: "入金", label: "入金", icon: Download, color: "green", bgColor: "bg-green-500", hoverColor: "hover:bg-green-600" },
+    { id: "提币", label: "提币", icon: Upload, color: "red", bgColor: "bg-transparent", hoverColor: "hover:bg-gray-50" },
+    { id: "买卖", label: "买卖", icon: RefreshCw, color: "blue", bgColor: "bg-transparent", hoverColor: "hover:bg-gray-50" },
+    { id: "划转", label: "划转", icon: ArrowLeftRight, color: "purple", bgColor: "bg-transparent", hoverColor: "hover:bg-gray-50" }
   ]
 
   // 可选币种
@@ -300,21 +300,21 @@ export default function WalletPage() {
                 ) : (
                   <>
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold">现金账户</h3>
                       <div className="flex items-center space-x-2">
-                        <button
-                          onClick={() => setShowCurrencyModal(true)}
-                          className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-all ${
-                            isDark 
-                              ? "bg-[#252842] border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black" 
-                              : "bg-white border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white"
-                          }`}
-                        >
-                          {selectedDisplayCurrency}
-                          <ChevronDown className="inline-block ml-1 h-3 w-3" />
-                        </button>
                         <CreditCard className="h-6 w-6 text-[#00D4AA]" />
+                        <h3 className="text-lg font-semibold">现金账户</h3>
                       </div>
+                      <button
+                        onClick={() => setShowCurrencyModal(true)}
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-all ${
+                          isDark 
+                            ? "bg-[#252842] border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black" 
+                            : "bg-white border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white"
+                        }`}
+                      >
+                        {selectedDisplayCurrency}
+                        <ChevronDown className="inline-block ml-1 h-3 w-3" />
+                      </button>
                     </div>
                     <div className="text-3xl font-bold text-[#00D4AA]">
                       {balanceVisible ? `${convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
@@ -338,21 +338,21 @@ export default function WalletPage() {
                 ) : (
                   <>
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold">总资产</h3>
                       <div className="flex items-center space-x-2">
-                        <button
-                          onClick={() => setShowCurrencyModal(true)}
-                          className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-all ${
-                            isDark 
-                              ? "bg-[#252842] border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black" 
-                              : "bg-white border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white"
-                          }`}
-                        >
-                          {selectedDisplayCurrency}
-                          <ChevronDown className="inline-block ml-1 h-3 w-3" />
-                        </button>
                         <Wallet className="h-6 w-6 text-[#00D4AA]" />
+                        <h3 className="text-lg font-semibold">总资产</h3>
                       </div>
+                      <button
+                        onClick={() => setShowCurrencyModal(true)}
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-all ${
+                          isDark 
+                            ? "bg-[#252842] border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black" 
+                            : "bg-white border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white"
+                        }`}
+                      >
+                        {selectedDisplayCurrency}
+                        <ChevronDown className="inline-block ml-1 h-3 w-3" />
+                      </button>
                     </div>
                     <div className="text-3xl font-bold text-[#00D4AA]">
                       {balanceVisible ? `${convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
@@ -371,6 +371,8 @@ export default function WalletPage() {
                   {actionButtons.map((button) => {
                     const Icon = button.icon
                     const isSelected = selectedAction === button.id
+                    const isDeposit = button.id === "入金"
+                    
                     return (
                       <Button 
                         key={button.id}
@@ -378,9 +380,11 @@ export default function WalletPage() {
                         className={`h-12 transition-all duration-200 ${
                           isSelected 
                             ? "bg-black text-white border-black hover:bg-gray-800" 
-                            : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                            : isDeposit
+                              ? "bg-green-500 text-white border-green-500 hover:bg-green-600"
+                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                         }`}
-                        variant={isSelected ? "default" : "outline"}
+                        variant={isSelected ? "default" : isDeposit ? "default" : "outline"}
                       >
                         <Icon className="h-4 w-4 mr-2" />
                         {button.label}
@@ -423,34 +427,37 @@ export default function WalletPage() {
                         }`}
                         title="管理资产"
                       >
-                        <Settings className="h-4 w-4" />
+                        <div className="flex flex-col items-center">
+                          <Plus className="h-3 w-3" />
+                          <Minus className="h-3 w-3 -mt-1" />
+                        </div>
                       </button>
-                      <div className="flex rounded-lg border border-gray-300 dark:border-[#3a3d4a] overflow-hidden">
+                      <div className="flex rounded-lg overflow-hidden">
                         <button
                           onClick={() => {
                             setSortBy("value")
                             setSortOrder(sortOrder === "desc" ? "asc" : "desc")
                           }}
-                          className={`px-3 py-2 text-xs font-medium transition-all ${
+                          className={`px-4 py-2 text-sm font-medium transition-all ${
                             sortBy === "value"
-                              ? "bg-[#00D4AA] text-white"
-                              : isDark ? "text-gray-300 hover:bg-[#2a2d42]" : "text-gray-600 hover:bg-gray-50"
+                              ? "bg-black text-white"
+                              : "bg-white text-black border border-black hover:bg-gray-50 dark:bg-gray-800 dark:text-white dark:border-white"
                           }`}
                         >
-                          金额 {sortBy === "value" && (sortOrder === "desc" ? <TrendingDown className="inline h-3 w-3" /> : <TrendingUp className="inline h-3 w-3" />)}
+                          按余额排序 {sortBy === "value" && (sortOrder === "desc" ? <TrendingDown className="inline h-3 w-3 ml-1" /> : <TrendingUp className="inline h-3 w-3 ml-1" />)}
                         </button>
                         <button
                           onClick={() => {
                             setSortBy("marketCap")
                             setSortOrder(sortOrder === "desc" ? "asc" : "desc")
                           }}
-                          className={`px-3 py-2 text-xs font-medium transition-all ${
+                          className={`px-4 py-2 text-sm font-medium transition-all ${
                             sortBy === "marketCap"
-                              ? "bg-[#00D4AA] text-white"
-                              : isDark ? "text-gray-300 hover:bg-[#2a2d42]" : "text-gray-600 hover:bg-gray-50"
+                              ? "bg-black text-white"
+                              : "bg-white text-black border border-black hover:bg-gray-50 dark:bg-gray-800 dark:text-white dark:border-white"
                           }`}
                         >
-                          市值 {sortBy === "marketCap" && (sortOrder === "desc" ? <TrendingDown className="inline h-3 w-3" /> : <TrendingUp className="inline h-3 w-3" />)}
+                          按市值排序 {sortBy === "marketCap" && (sortOrder === "desc" ? <TrendingDown className="inline h-3 w-3 ml-1" /> : <TrendingUp className="inline h-3 w-3 ml-1" />)}
                         </button>
                       </div>
                     </div>
@@ -707,49 +714,59 @@ export default function WalletPage() {
         </div>
       )}
 
-      {/* 币种选择弹窗 */}
+      {/* 币种选择弹窗 - 从右侧滑出 */}
       {showCurrencyModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`${cardStyle} rounded-lg p-6 max-w-md w-full mx-4`}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">选择显示币种</h3>
-              <button
-                onClick={() => setShowCurrencyModal(false)}
-                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {availableCurrencies.map((currency) => (
+        <div className="fixed inset-0 z-50">
+          {/* 背景遮罩 */}
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
+            onClick={() => setShowCurrencyModal(false)}
+          />
+          {/* 侧边栏 */}
+          <div className={`absolute right-0 top-0 h-full w-80 max-w-[90vw] ${cardStyle} transform transition-transform duration-300 ${
+            showCurrencyModal ? 'translate-x-0' : 'translate-x-full'
+          }`}>
+            <div className="p-6 h-full overflow-y-auto">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-lg font-semibold">选择显示币种</h3>
                 <button
-                  key={currency.symbol}
-                  onClick={() => {
-                    setSelectedDisplayCurrency(currency.symbol)
-                    setShowCurrencyModal(false)
-                  }}
-                  className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all ${
-                    selectedDisplayCurrency === currency.symbol
-                      ? "border-[#00D4AA] bg-[#00D4AA]/10"
-                      : isDark
-                        ? "border-[#3a3d4a] hover:border-[#00D4AA]/50"
-                        : "border-gray-200 hover:border-[#00D4AA]/50"
-                  }`}
+                  onClick={() => setShowCurrencyModal(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
-                  <div className={`w-8 h-8 rounded-full ${currency.color} flex items-center justify-center`}>
-                    <span className="text-white font-bold text-sm">{currency.symbol.charAt(0)}</span>
-                  </div>
-                  <div className="text-left">
-                    <div className="font-medium">{currency.symbol}</div>
-                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {currency.name}
-                    </div>
-                  </div>
-                  {selectedDisplayCurrency === currency.symbol && (
-                    <Check className="h-4 w-4 text-[#00D4AA] ml-auto" />
-                  )}
+                  <X className="h-5 w-5" />
                 </button>
-              ))}
+              </div>
+              <div className="space-y-3">
+                {availableCurrencies.map((currency) => (
+                  <button
+                    key={currency.symbol}
+                    onClick={() => {
+                      setSelectedDisplayCurrency(currency.symbol)
+                      setShowCurrencyModal(false)
+                    }}
+                    className={`w-full flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
+                      selectedDisplayCurrency === currency.symbol
+                        ? "border-[#00D4AA] bg-[#00D4AA]/10"
+                        : isDark
+                          ? "border-[#3a3d4a] hover:border-[#00D4AA]/50 hover:bg-[#2a2d42]"
+                          : "border-gray-200 hover:border-[#00D4AA]/50 hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className={`w-10 h-10 rounded-full ${currency.color} flex items-center justify-center`}>
+                      <span className="text-white font-bold">{currency.symbol.charAt(0)}</span>
+                    </div>
+                    <div className="text-left flex-1">
+                      <div className="font-medium">{currency.symbol}</div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {currency.name}
+                      </div>
+                    </div>
+                    {selectedDisplayCurrency === currency.symbol && (
+                      <Check className="h-5 w-5 text-[#00D4AA]" />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
