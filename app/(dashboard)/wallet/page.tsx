@@ -16,7 +16,12 @@ import {
   Shield,
   Gift,
   DollarSign,
-  PiggyBank
+  PiggyBank,
+  Download,
+  Upload,
+  RefreshCw,
+  ArrowLeftRight,
+  ChevronDown
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -28,6 +33,8 @@ export default function WalletPage() {
   const [activeTab, setActiveTab] = useState("钱包总览")
   const [overviewMode, setOverviewMode] = useState("现金账户") // "现金账户" or "总资产"
   const [selectedCurrency, setSelectedCurrency] = useState("USDT")
+  const [selectedDisplayCurrency, setSelectedDisplayCurrency] = useState("USDT") // 卡片显示币种
+  const [selectedAction, setSelectedAction] = useState("") // 选中的操作按钮
   const [isMobile, setIsMobile] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [loadingSteps, setLoadingSteps] = useState({
@@ -102,15 +109,28 @@ export default function WalletPage() {
     { id: "担保账户", label: "担保账户", icon: Shield }
   ]
 
+  // 币种汇率数据
+  const exchangeRates = {
+    USDT: 1,
+    BTC: 0.000024,
+    ETH: 0.00041,
+    CNY: 7.2
+  }
+
   // 添加新的数据结构
   const accountsData = {
     现金账户: {
       balance: "8,567.89",
       currency: "USDT",
       currencies: [
-        { symbol: "USDT", balance: "5,000.00", value: "5,000.00" },
-        { symbol: "BTC", balance: "0.15", value: "2,500.00" },
-        { symbol: "ETH", balance: "2.5", value: "1,067.89" }
+        { symbol: "USDT", balance: "5,000.00", value: "5,000.00", name: "Tether" },
+        { symbol: "BTC", balance: "0.15", value: "2,500.00", name: "Bitcoin" },
+        { symbol: "ETH", balance: "2.5", value: "1,067.89", name: "Ethereum" },
+        { symbol: "BNB", balance: "15.2", value: "4,560.00", name: "Binance Coin" },
+        { symbol: "ADA", balance: "3,200.0", value: "1,280.00", name: "Cardano" },
+        { symbol: "SOL", balance: "8.5", value: "850.00", name: "Solana" },
+        { symbol: "DOT", balance: "120.0", value: "480.00", name: "Polkadot" },
+        { symbol: "MATIC", balance: "1,500.0", value: "600.00", name: "Polygon" }
       ]
     },
     总资产: {
@@ -181,6 +201,22 @@ export default function WalletPage() {
 
   // 统一的卡片样式，参考行情页面
   const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
+  
+  // 转换余额显示
+  const convertBalance = (amount, fromCurrency, toCurrency) => {
+    const numAmount = parseFloat(amount.replace(/,/g, ''))
+    if (fromCurrency === toCurrency) return amount
+    const rate = exchangeRates[toCurrency] / exchangeRates[fromCurrency]
+    return (numAmount * rate).toLocaleString()
+  }
+
+  // 操作按钮配置
+  const actionButtons = [
+    { id: "入金", label: "入金", icon: Download, color: "green" },
+    { id: "提币", label: "提币", icon: Upload, color: "red" },
+    { id: "买卖", label: "买卖", icon: RefreshCw, color: "blue" },
+    { id: "划转", label: "划转", icon: ArrowLeftRight, color: "purple" }
+  ]
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -207,10 +243,26 @@ export default function WalletPage() {
                   <>
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold">现金账户</h3>
-                      <CreditCard className="h-6 w-6 text-[#00D4AA]" />
+                      <div className="flex items-center space-x-2">
+                        <select 
+                          value={selectedDisplayCurrency}
+                          onChange={(e) => setSelectedDisplayCurrency(e.target.value)}
+                          className={`px-2 py-1 rounded text-sm border ${
+                            isDark 
+                              ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                              : "bg-white border-gray-300 text-gray-800"
+                          }`}
+                        >
+                          <option value="USDT">USDT</option>
+                          <option value="BTC">BTC</option>
+                          <option value="ETH">ETH</option>
+                          <option value="CNY">CNY</option>
+                        </select>
+                        <CreditCard className="h-6 w-6 text-[#00D4AA]" />
+                      </div>
                     </div>
                     <div className="text-3xl font-bold text-[#00D4AA]">
-                      {balanceVisible ? `${accountsData.现金账户.balance} ${selectedCurrency}` : "****"}
+                      {balanceVisible ? `${convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
                     </div>
                   </>
                 )}
@@ -232,10 +284,26 @@ export default function WalletPage() {
                   <>
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold">总资产</h3>
-                      <Wallet className="h-6 w-6 text-[#00D4AA]" />
+                      <div className="flex items-center space-x-2">
+                        <select 
+                          value={selectedDisplayCurrency}
+                          onChange={(e) => setSelectedDisplayCurrency(e.target.value)}
+                          className={`px-2 py-1 rounded text-sm border ${
+                            isDark 
+                              ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                              : "bg-white border-gray-300 text-gray-800"
+                          }`}
+                        >
+                          <option value="USDT">USDT</option>
+                          <option value="BTC">BTC</option>
+                          <option value="ETH">ETH</option>
+                          <option value="CNY">CNY</option>
+                        </select>
+                        <Wallet className="h-6 w-6 text-[#00D4AA]" />
+                      </div>
                     </div>
                     <div className="text-3xl font-bold text-[#00D4AA]">
-                      {balanceVisible ? `${accountsData.总资产.total} USDT` : "****"}
+                      {balanceVisible ? `${convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
                     </div>
                   </>
                 )}
@@ -248,22 +316,25 @@ export default function WalletPage() {
                 loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
               }`}>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <Button className="h-12 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white">
-                    <Plus className="h-4 w-4 mr-2" />
-                    入金
-                  </Button>
-                  <Button variant="outline" className="h-12">
-                    <Minus className="h-4 w-4 mr-2" />
-                    提币
-                  </Button>
-                  <Button variant="outline" className="h-12">
-                    <TrendingUp className="h-4 w-4 mr-2" />
-                    买卖
-                  </Button>
-                  <Button variant="outline" className="h-12">
-                    <ArrowUpRight className="h-4 w-4 mr-2" />
-                    划转
-                  </Button>
+                  {actionButtons.map((button) => {
+                    const Icon = button.icon
+                    const isSelected = selectedAction === button.id
+                    return (
+                      <Button 
+                        key={button.id}
+                        onClick={() => setSelectedAction(isSelected ? "" : button.id)}
+                        className={`h-12 transition-all duration-200 ${
+                          isSelected 
+                            ? "bg-black text-white border-black hover:bg-gray-800" 
+                            : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                        }`}
+                        variant={isSelected ? "default" : "outline"}
+                      >
+                        <Icon className="h-4 w-4 mr-2" />
+                        {button.label}
+                      </Button>
+                    )
+                  })}
                 </div>
               </div>
             )}
@@ -293,7 +364,7 @@ export default function WalletPage() {
                   </div>
                   <div className="space-y-4">
                     {accountsData.现金账户.currencies.map((currency, index) => (
-                      <div key={currency.symbol} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a]">
+                      <div key={currency.symbol} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all">
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
                             <span className="text-[#00D4AA] font-bold">{currency.symbol.charAt(0)}</span>
@@ -301,14 +372,14 @@ export default function WalletPage() {
                           <div>
                             <div className="font-semibold">{currency.symbol}</div>
                             <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                              {currency.symbol === 'BTC' ? 'Bitcoin' : currency.symbol === 'ETH' ? 'Ethereum' : 'Tether'}
+                              {currency.name}
                             </div>
                           </div>
                         </div>
                         <div className="text-right">
                           <div className="font-bold">{balanceVisible ? currency.balance : "****"}</div>
                           <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                            ≈ ${balanceVisible ? currency.value : "****"}
+                            ≈ ${balanceVisible ? convertBalance(currency.value, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
                           </div>
                         </div>
                       </div>
