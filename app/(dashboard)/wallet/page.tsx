@@ -782,82 +782,107 @@ export default function WalletPage() {
         </div>
       )}
 
-      {/* 资产管理弹窗 */}
+      {/* 资产管理弹窗 - 从左侧滑出 */}
       {showAssetModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`${cardStyle} rounded-lg p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto`}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">管理显示资产</h3>
-              <button
-                onClick={() => setShowAssetModal(false)}
-                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-              选择要在资产列表中显示的币种
-            </p>
-            <div className="space-y-3">
-              {accountsData.现金账户.currencies.map((currency) => (
-                <div
-                  key={currency.symbol}
-                  className={`flex items-center justify-between p-3 rounded-lg border ${
-                    isDark ? 'border-[#3a3d4a]' : 'border-gray-200'
-                  }`}
+        <div className="fixed inset-0 z-50">
+          {/* 背景遮罩 */}
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
+            onClick={() => setShowAssetModal(false)}
+          />
+          {/* 侧边栏 */}
+          <div className={`absolute left-0 top-0 h-full w-96 max-w-[90vw] ${cardStyle} transform transition-transform duration-300 ${
+            showAssetModal ? 'translate-x-0' : '-translate-x-full'
+          }`}>
+            <div className="p-6 h-full flex flex-col">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">管理显示资产</h3>
+                <button
+                  onClick={() => setShowAssetModal(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
-                      <span className="text-[#00D4AA] font-bold text-sm">{currency.symbol.charAt(0)}</span>
-                    </div>
-                    <div>
-                      <div className="font-medium">{currency.symbol}</div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {currency.name}
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                选择要在资产列表中显示的币种
+              </p>
+              
+              {/* 可滚动的资产列表 */}
+              <div className="flex-1 overflow-y-auto space-y-3 mb-6">
+                {accountsData.现金账户.currencies.map((currency) => (
+                  <div
+                    key={currency.symbol}
+                    className={`flex items-center justify-between p-4 rounded-lg border transition-all hover:shadow-md ${
+                      isDark ? 'border-[#3a3d4a] hover:border-[#00D4AA]/30' : 'border-gray-200 hover:border-[#00D4AA]/30'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                        <span className="text-[#00D4AA] font-bold">{currency.symbol.charAt(0)}</span>
+                      </div>
+                      <div>
+                        <div className="font-medium">{currency.symbol}</div>
+                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {currency.name}
+                        </div>
                       </div>
                     </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="text-right">
+                        <div className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                          ${currency.value}
+                        </div>
+                        {currency.marketCap && (
+                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                            市值: {currency.marketCap}
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => toggleAssetVisibility(currency.symbol)}
+                        className={`w-12 h-6 rounded-full transition-all duration-200 ${
+                          visibleAssets.includes(currency.symbol)
+                            ? "bg-[#00D4AA]"
+                            : isDark ? "bg-gray-600" : "bg-gray-300"
+                        }`}
+                      >
+                        <div className={`w-4 h-4 bg-white rounded-full transition-all duration-200 ${
+                          visibleAssets.includes(currency.symbol) ? "translate-x-7" : "translate-x-1"
+                        }`} />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      ${currency.value}
-                    </span>
-                    <button
-                      onClick={() => toggleAssetVisibility(currency.symbol)}
-                      className={`w-12 h-6 rounded-full transition-all ${
-                        visibleAssets.includes(currency.symbol)
-                          ? "bg-[#00D4AA]"
-                          : isDark ? "bg-gray-600" : "bg-gray-300"
-                      }`}
-                    >
-                      <div className={`w-4 h-4 bg-white rounded-full transition-all ${
-                        visibleAssets.includes(currency.symbol) ? "translate-x-7" : "translate-x-1"
-                      }`} />
-                    </button>
-                  </div>
+                ))}
+              </div>
+
+              {/* 底部操作按钮 */}
+              <div className="flex justify-between space-x-3 pt-4 border-t border-gray-200 dark:border-[#3a3d4a]">
+                <div className="flex space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setVisibleAssets(accountsData.现金账户.currencies.map(c => c.symbol))}
+                    className="text-sm"
+                  >
+                    全选
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setVisibleAssets([])}
+                    className="text-sm"
+                  >
+                    全不选
+                  </Button>
                 </div>
-              ))}
-            </div>
-            <div className="flex justify-end space-x-3 mt-6">
-              <Button
-                variant="outline"
-                onClick={() => setVisibleAssets(accountsData.现金账户.currencies.map(c => c.symbol))}
-                className="text-sm"
-              >
-                全选
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setVisibleAssets([])}
-                className="text-sm"
-              >
-                全不选
-              </Button>
-              <Button
-                onClick={() => setShowAssetModal(false)}
-                className="text-sm bg-[#00D4AA] hover:bg-[#00D4AA]/90"
-              >
-                完成
-              </Button>
+                <Button
+                  onClick={() => setShowAssetModal(false)}
+                  className="text-sm bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                >
+                  完成
+                </Button>
+              </div>
             </div>
           </div>
         </div>
