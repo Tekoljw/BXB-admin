@@ -377,11 +377,11 @@ export default function WalletPage() {
                       <Button 
                         key={button.id}
                         onClick={() => setSelectedAction(isSelected ? "" : button.id)}
-                        className={`h-12 transition-all duration-200 ${
+                        className={`h-12 transition-all duration-200 text-base font-bold ${
                           isSelected 
                             ? "bg-black text-white border-black hover:bg-gray-800" 
                             : isDeposit
-                              ? "bg-green-500 text-white border-green-500 hover:bg-green-600"
+                              ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90"
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                         }`}
                         variant={isSelected ? "default" : isDeposit ? "default" : "outline"}
