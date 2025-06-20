@@ -11,6 +11,7 @@ interface ThemeContextType {
   setLanguage: (language: Language) => void
   theme: Theme
   setTheme: (theme: Theme) => void
+  isDark: boolean
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
@@ -29,6 +30,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setLanguage,
     theme,
     setTheme,
+    isDark: theme === "dark",
   }
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
