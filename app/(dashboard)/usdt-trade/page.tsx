@@ -1385,8 +1385,8 @@ export default function USDTTradePage() {
           
           <div className="fixed z-[9999] overflow-hidden right-0 top-0 h-full w-96">
           <div 
-            className={`h-full w-96 ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-2xl border-l ${
-              isDark ? "border-[#3a3d4a]" : "border-gray-200"
+            className={`h-full w-96 ${isDark ? "bg-[#1a1d29]" : "bg-white"} shadow-2xl border-l ${
+              isDark ? "border-[#252842]" : "border-gray-200"
             }`}
             style={{
               transform: publishModalAnimating 
@@ -1537,7 +1537,9 @@ export default function USDTTradePage() {
                       }}
                       className={`px-3 py-1 rounded-full text-xs flex items-center space-x-1 transition-all ${
                         publishPayments.includes(method)
-                          ? "bg-green-100 text-green-800 border border-green-300"
+                          ? isDark
+                            ? "bg-green-900/50 text-green-300 border border-green-700"
+                            : "bg-green-100 text-green-800 border border-green-300"
                           : isDark 
                             ? "bg-[#252842] text-gray-300 border border-[#3a3d4a] hover:bg-[#2a2d42]"
                             : "bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200"
