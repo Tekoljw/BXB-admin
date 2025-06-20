@@ -679,7 +679,11 @@ export default function USDTTradePage() {
                           {advantages.map((tag, index) => (
                             <span 
                               key={`adv-${index}`}
-                              className="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-700"
+                              className={`px-2 py-0.5 rounded-full text-xs ${
+                                isDark 
+                                  ? "bg-green-900/50 text-green-300" 
+                                  : "bg-green-100 text-green-700"
+                              }`}
                             >
                               {tag}
                             </span>
@@ -687,7 +691,11 @@ export default function USDTTradePage() {
                           {disadvantages.map((tag, index) => (
                             <span 
                               key={`dis-${index}`}
-                              className="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-700"
+                              className={`px-2 py-0.5 rounded-full text-xs ${
+                                isDark 
+                                  ? "bg-red-900/50 text-red-300" 
+                                  : "bg-red-100 text-red-700"
+                              }`}
                             >
                               {tag}
                             </span>
@@ -715,7 +723,9 @@ export default function USDTTradePage() {
                           selectedPayments.includes(payment)
                             ? "border-custom-green bg-custom-green/10 text-custom-green"
                             : isCash
-                              ? "border-orange-200 bg-orange-50 text-orange-800 hover:bg-orange-100"
+                              ? isDark
+                                ? "border-orange-700 bg-orange-900/50 text-orange-300 hover:bg-orange-900/70"
+                                : "border-orange-200 bg-orange-50 text-orange-800 hover:bg-orange-100"
                               : isDark
                                 ? "border-[#3a3d4a] bg-[#2a2d42] text-gray-300 hover:bg-[#3a3d4a]"
                                 : "border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -1008,9 +1018,7 @@ export default function USDTTradePage() {
                 <div className="p-6">
                   <div className="space-y-4">
                     {paymentMethods.map((method, index) => (
-                      <div key={index} className={`rounded-lg border transition-all ${
-                        isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"
-                      }`}>
+                      <div key={index} className={`${cardStyle} rounded-lg transition-all`}>
                         {/* 卡片主体 - 横向布局 */}
                         <div 
                           className={`p-4 cursor-pointer transition-all hover:border-custom-green hover:shadow-md ${
@@ -1120,10 +1128,8 @@ export default function USDTTradePage() {
                     {otcProviders.map((provider, index) => (
                       <div 
                         key={index} 
-                        className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md hover:border-custom-green ${
-                          isDark 
-                            ? "border-[#3a3d4a] bg-[#1a1c2e] hover:bg-[#252842]" 
-                            : "border-gray-200 bg-white hover:shadow-lg"
+                        className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all hover:shadow-md hover:border-custom-green ${
+                          isDark ? "hover:bg-[#252842]" : "hover:shadow-lg"
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -1139,7 +1145,11 @@ export default function USDTTradePage() {
                                   {provider.name}
                                 </span>
                                 {provider.label && (
-                                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    isDark 
+                                      ? "bg-green-900/50 text-green-300" 
+                                      : "bg-green-100 text-green-800"
+                                  }`}>
                                     {provider.label}
                                   </span>
                                 )}
@@ -1207,7 +1217,7 @@ export default function USDTTradePage() {
                 : shouldUseOutwardMode 
                   ? "-translate-x-full"  // 向外模式：隐藏在左侧，从左往右滑出
                   : "translate-x-full"   // 向内模式：隐藏在右侧，从右往左滑入
-            } ${isDark ? "bg-[#1a1c2e]" : "bg-white"}`}
+            } ${isDark ? "bg-[#1a1d29]" : "bg-white"}`}
             style={{ 
               transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
               willChange: 'transform'
