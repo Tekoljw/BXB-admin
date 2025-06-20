@@ -175,88 +175,211 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             {/* Balance Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-500 ${
+              loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}>
               <div className={`${cardStyle} bg-gradient-to-br from-[#00D4AA]/10 to-[#00D4AA]/5 border-[#00D4AA]/20 rounded-lg p-4`}>
-                <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <h3 className="text-sm font-medium">总资产</h3>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setBalanceVisible(!balanceVisible)}
-                    className="h-6 w-6 p-0"
-                  >
-                    {balanceVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-                  </Button>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-[#00D4AA]">
-                    {balanceVisible ? `$${currentData.totalBalance}` : "****"}
+                {!loadingSteps.balance ? (
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <SkeletonLoader height="h-4" width="w-16" />
+                      <SkeletonLoader height="h-4" width="w-4" variant="circle" />
+                    </div>
+                    <SkeletonLoader height="h-8" width="w-24" />
+                    <SkeletonLoader height="h-3" width="w-12" />
                   </div>
-                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</p>
-                </div>
+                ) : (
+                  <>
+                    <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <h3 className="text-sm font-medium">总资产</h3>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setBalanceVisible(!balanceVisible)}
+                        className="h-6 w-6 p-0"
+                      >
+                        {balanceVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                      </Button>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-[#00D4AA]">
+                        {balanceVisible ? `$${currentData.totalBalance}` : "****"}
+                      </div>
+                      <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</p>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className={`${cardStyle} rounded-lg p-4`}>
-                <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <h3 className="text-sm font-medium">可用余额</h3>
-                  <CreditCard className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">
-                    {balanceVisible ? `$${currentData.availableBalance}` : "****"}
+                {!loadingSteps.balance ? (
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <SkeletonLoader height="h-4" width="w-16" />
+                      <SkeletonLoader height="h-4" width="w-4" variant="circle" />
+                    </div>
+                    <SkeletonLoader height="h-8" width="w-24" />
+                    <SkeletonLoader height="h-3" width="w-12" />
                   </div>
-                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</p>
-                </div>
+                ) : (
+                  <>
+                    <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <h3 className="text-sm font-medium">可用余额</h3>
+                      <CreditCard className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">
+                        {balanceVisible ? `$${currentData.availableBalance}` : "****"}
+                      </div>
+                      <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</p>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className={`${cardStyle} rounded-lg p-4`}>
-                <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <h3 className="text-sm font-medium">今日盈亏</h3>
-                  <TrendingUp className="h-4 w-4 text-green-500" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-green-500">
-                    {balanceVisible ? currentData.todayPnL : "****"}
+                {!loadingSteps.balance ? (
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <SkeletonLoader height="h-4" width="w-16" />
+                      <SkeletonLoader height="h-4" width="w-4" variant="circle" />
+                    </div>
+                    <SkeletonLoader height="h-8" width="w-24" />
+                    <SkeletonLoader height="h-3" width="w-12" />
                   </div>
-                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>+2.1%</p>
-                </div>
+                ) : (
+                  <>
+                    <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <h3 className="text-sm font-medium">今日盈亏</h3>
+                      <TrendingUp className="h-4 w-4 text-green-500" />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-green-500">
+                        {balanceVisible ? "+234.56" : "****"}
+                      </div>
+                      <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>+2.1%</p>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className={`${cardStyle} rounded-lg p-4`}>
-                <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <h3 className="text-sm font-medium">总盈亏</h3>
-                  <TrendingUp className="h-4 w-4 text-green-500" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-green-500">
-                    {balanceVisible ? currentData.totalPnL : "****"}
+                {!loadingSteps.balance ? (
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <SkeletonLoader height="h-4" width="w-16" />
+                      <SkeletonLoader height="h-4" width="w-4" variant="circle" />
+                    </div>
+                    <SkeletonLoader height="h-8" width="w-24" />
+                    <SkeletonLoader height="h-3" width="w-12" />
                   </div>
-                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>+11.2%</p>
-                </div>
+                ) : (
+                  <>
+                    <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <h3 className="text-sm font-medium">总盈亏</h3>
+                      <TrendingUp className="h-4 w-4 text-green-500" />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-green-500">
+                        {balanceVisible ? "+1,234.56" : "****"}
+                      </div>
+                      <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>+11.2%</p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
+            {/* Assets List */}
+            <div className={`${cardStyle} rounded-lg p-4 transition-all duration-500 delay-200 ${
+              loadingSteps.assets ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}>
+              <h3 className="text-lg font-semibold mb-4">我的资产</h3>
+              {!loadingSteps.assets ? (
+                <div className="space-y-4">
+                  {[1, 2, 3].map((item) => (
+                    <div key={item} className="flex items-center justify-between p-3 rounded-lg border">
+                      <div className="flex items-center space-x-3">
+                        <SkeletonLoader height="h-8" width="w-8" variant="circle" />
+                        <div className="space-y-2">
+                          <SkeletonLoader height="h-4" width="w-16" />
+                          <SkeletonLoader height="h-3" width="w-12" />
+                        </div>
+                      </div>
+                      <div className="text-right space-y-2">
+                        <SkeletonLoader height="h-4" width="w-20" />
+                        <SkeletonLoader height="h-3" width="w-16" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {currentData.assets.map((asset: any, index: number) => (
+                    <div key={index} className={`flex items-center justify-between p-3 rounded-lg border ${
+                      isDark ? 'border-[#3a3d4a] hover:border-[#4a4d5a]' : 'border-gray-200 hover:border-gray-300'
+                    } transition-colors`}>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                          <span className="text-sm font-medium text-[#00D4AA]">{asset.symbol}</span>
+                        </div>
+                        <div>
+                          <div className="font-medium">{asset.symbol}</div>
+                          <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                            {asset.balance}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-medium">${asset.value}</div>
+                        <div className={`text-sm ${
+                          asset.change.startsWith('+') ? 'text-green-500' : 'text-red-500'
+                        }`}>
+                          {asset.change}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Quick Actions */}
-            <div className={`${cardStyle} rounded-lg p-4`}>
-              <h3 className="text-lg font-semibold mb-4">快速操作</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Button className="bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white">
-                  <Plus className="h-4 w-4 mr-2" />
-                  充值
-                </Button>
-                <Button variant="outline">
-                  <Minus className="h-4 w-4 mr-2" />
-                  提现
-                </Button>
-                <Button variant="outline">
-                  <ArrowUpRight className="h-4 w-4 mr-2" />
-                  转账
-                </Button>
-                <Button variant="outline">
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  交易
-                </Button>
-              </div>
+            <div className={`${cardStyle} rounded-lg p-4 transition-all duration-500 delay-400 ${
+              loadingSteps.transactions ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}>
+              {!loadingSteps.transactions ? (
+                <div className="space-y-4">
+                  <SkeletonLoader height="h-6" width="w-24" />
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[1, 2, 3, 4].map((item) => (
+                      <SkeletonLoader key={item} height="h-10" width="w-full" />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <h3 className="text-lg font-semibold mb-4">快速操作</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <Button className="bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white">
+                      <Plus className="h-4 w-4 mr-2" />
+                      充值
+                    </Button>
+                    <Button variant="outline">
+                      <Minus className="h-4 w-4 mr-2" />
+                      提现
+                    </Button>
+                    <Button variant="outline">
+                      <ArrowUpRight className="h-4 w-4 mr-2" />
+                      转账
+                    </Button>
+                    <Button variant="outline">
+                      <TrendingUp className="h-4 w-4 mr-2" />
+                      交易
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )
