@@ -432,16 +432,16 @@ export default function WalletPage() {
                           <Minus className="h-3 w-3 -mt-1" />
                         </div>
                       </button>
-                      <div className="flex rounded-lg overflow-hidden">
+                      <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-100'}`}>
                         <button
                           onClick={() => {
                             setSortBy("value")
                             setSortOrder(sortOrder === "desc" ? "asc" : "desc")
                           }}
-                          className={`px-4 py-2 text-sm font-medium transition-all ${
+                          className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${
                             sortBy === "value"
-                              ? "bg-black text-white"
-                              : "bg-white text-black border border-black hover:bg-gray-50 dark:bg-gray-800 dark:text-white dark:border-white"
+                              ? "bg-black text-white shadow-sm"
+                              : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
                           }`}
                         >
                           按余额排序 {sortBy === "value" && (sortOrder === "desc" ? <TrendingDown className="inline h-3 w-3 ml-1" /> : <TrendingUp className="inline h-3 w-3 ml-1" />)}
@@ -451,10 +451,10 @@ export default function WalletPage() {
                             setSortBy("marketCap")
                             setSortOrder(sortOrder === "desc" ? "asc" : "desc")
                           }}
-                          className={`px-4 py-2 text-sm font-medium transition-all ${
+                          className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${
                             sortBy === "marketCap"
-                              ? "bg-black text-white"
-                              : "bg-white text-black border border-black hover:bg-gray-50 dark:bg-gray-800 dark:text-white dark:border-white"
+                              ? "bg-black text-white shadow-sm"
+                              : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
                           }`}
                         >
                           按市值排序 {sortBy === "marketCap" && (sortOrder === "desc" ? <TrendingDown className="inline h-3 w-3 ml-1" /> : <TrendingUp className="inline h-3 w-3 ml-1" />)}
