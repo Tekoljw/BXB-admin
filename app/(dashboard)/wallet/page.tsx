@@ -21,7 +21,13 @@ import {
   Upload,
   RefreshCw,
   ArrowLeftRight,
-  ChevronDown
+  ChevronDown,
+  Search,
+  Settings,
+  X,
+  Check,
+  ArrowUpDown,
+  TrendingDown
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -35,6 +41,12 @@ export default function WalletPage() {
   const [selectedCurrency, setSelectedCurrency] = useState("USDT")
   const [selectedDisplayCurrency, setSelectedDisplayCurrency] = useState("USDT") // 卡片显示币种
   const [selectedAction, setSelectedAction] = useState("") // 选中的操作按钮
+  const [showCurrencyModal, setShowCurrencyModal] = useState(false) // 币种选择弹窗
+  const [showAssetModal, setShowAssetModal] = useState(false) // 资产管理弹窗
+  const [searchTerm, setSearchTerm] = useState("") // 搜索关键词
+  const [sortBy, setSortBy] = useState("value") // 排序方式：value, marketCap
+  const [sortOrder, setSortOrder] = useState("desc") // 排序顺序：asc, desc
+  const [visibleAssets, setVisibleAssets] = useState(["USDT", "BTC", "ETH", "BNB", "ADA", "SOL"]) // 可见资产
   const [isMobile, setIsMobile] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [loadingSteps, setLoadingSteps] = useState({
@@ -126,11 +138,14 @@ export default function WalletPage() {
         { symbol: "USDT", balance: "5,000.00", value: "5,000.00", name: "Tether" },
         { symbol: "BTC", balance: "0.15", value: "2,500.00", name: "Bitcoin" },
         { symbol: "ETH", balance: "2.5", value: "1,067.89", name: "Ethereum" },
-        { symbol: "BNB", balance: "15.2", value: "4,560.00", name: "Binance Coin" },
-        { symbol: "ADA", balance: "3,200.0", value: "1,280.00", name: "Cardano" },
-        { symbol: "SOL", balance: "8.5", value: "850.00", name: "Solana" },
-        { symbol: "DOT", balance: "120.0", value: "480.00", name: "Polkadot" },
-        { symbol: "MATIC", balance: "1,500.0", value: "600.00", name: "Polygon" }
+        { symbol: "BNB", balance: "15.2", value: "4,560.00", name: "Binance Coin", marketCap: "88.5B" },
+        { symbol: "ADA", balance: "3,200.0", value: "1,280.00", name: "Cardano", marketCap: "15.2B" },
+        { symbol: "SOL", balance: "8.5", value: "850.00", name: "Solana", marketCap: "45.8B" },
+        { symbol: "DOT", balance: "120.0", value: "480.00", name: "Polkadot", marketCap: "8.9B" },
+        { symbol: "MATIC", balance: "1,500.0", value: "600.00", name: "Polygon", marketCap: "9.4B" },
+        { symbol: "AVAX", balance: "25.0", value: "750.00", name: "Avalanche", marketCap: "12.3B" },
+        { symbol: "LINK", balance: "45.0", value: "540.00", name: "Chainlink", marketCap: "8.7B" },
+        { symbol: "UNI", balance: "80.0", value: "400.00", name: "Uniswap", marketCap: "6.1B" }
       ]
     },
     总资产: {
@@ -218,6 +233,49 @@ export default function WalletPage() {
     { id: "划转", label: "划转", icon: ArrowLeftRight, color: "purple" }
   ]
 
+  // 可选币种
+  const availableCurrencies = [
+    { symbol: "USDT", name: "Tether", color: "bg-green-500" },
+    { symbol: "BTC", name: "Bitcoin", color: "bg-orange-500" },
+    { symbol: "ETH", name: "Ethereum", color: "bg-blue-500" },
+    { symbol: "CNY", name: "人民币", color: "bg-red-500" },
+    { symbol: "USD", name: "美元", color: "bg-green-600" },
+    { symbol: "EUR", name: "欧元", color: "bg-blue-600" }
+  ]
+
+  // 排序和过滤资产
+  const getSortedAssets = () => {
+    let assets = accountsData.现金账户.currencies.filter(asset => 
+      visibleAssets.includes(asset.symbol) &&
+      (asset.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+       asset.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    )
+
+    assets.sort((a, b) => {
+      let aValue, bValue
+      if (sortBy === "value") {
+        aValue = parseFloat(a.value.replace(/,/g, ''))
+        bValue = parseFloat(b.value.replace(/,/g, ''))
+      } else if (sortBy === "marketCap") {
+        aValue = parseFloat(a.marketCap?.replace(/[B,]/g, '') || "0")
+        bValue = parseFloat(b.marketCap?.replace(/[B,]/g, '') || "0")
+      }
+      
+      return sortOrder === "desc" ? bValue - aValue : aValue - bValue
+    })
+
+    return assets
+  }
+
+  // 切换资产可见性
+  const toggleAssetVisibility = (symbol) => {
+    setVisibleAssets(prev => 
+      prev.includes(symbol) 
+        ? prev.filter(s => s !== symbol)
+        : [...prev, symbol]
+    )
+  }
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "钱包总览":
@@ -244,20 +302,17 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold">现金账户</h3>
                       <div className="flex items-center space-x-2">
-                        <select 
-                          value={selectedDisplayCurrency}
-                          onChange={(e) => setSelectedDisplayCurrency(e.target.value)}
-                          className={`px-2 py-1 rounded text-sm border ${
+                        <button
+                          onClick={() => setShowCurrencyModal(true)}
+                          className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-all ${
                             isDark 
-                              ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                              : "bg-white border-gray-300 text-gray-800"
+                              ? "bg-[#252842] border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black" 
+                              : "bg-white border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white"
                           }`}
                         >
-                          <option value="USDT">USDT</option>
-                          <option value="BTC">BTC</option>
-                          <option value="ETH">ETH</option>
-                          <option value="CNY">CNY</option>
-                        </select>
+                          {selectedDisplayCurrency}
+                          <ChevronDown className="inline-block ml-1 h-3 w-3" />
+                        </button>
                         <CreditCard className="h-6 w-6 text-[#00D4AA]" />
                       </div>
                     </div>
@@ -285,20 +340,17 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold">总资产</h3>
                       <div className="flex items-center space-x-2">
-                        <select 
-                          value={selectedDisplayCurrency}
-                          onChange={(e) => setSelectedDisplayCurrency(e.target.value)}
-                          className={`px-2 py-1 rounded text-sm border ${
+                        <button
+                          onClick={() => setShowCurrencyModal(true)}
+                          className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-all ${
                             isDark 
-                              ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                              : "bg-white border-gray-300 text-gray-800"
+                              ? "bg-[#252842] border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black" 
+                              : "bg-white border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white"
                           }`}
                         >
-                          <option value="USDT">USDT</option>
-                          <option value="BTC">BTC</option>
-                          <option value="ETH">ETH</option>
-                          <option value="CNY">CNY</option>
-                        </select>
+                          {selectedDisplayCurrency}
+                          <ChevronDown className="inline-block ml-1 h-3 w-3" />
+                        </button>
                         <Wallet className="h-6 w-6 text-[#00D4AA]" />
                       </div>
                     </div>
@@ -347,23 +399,64 @@ export default function WalletPage() {
                 /* 现金账户模式：显示各币种余额 */
                 <div className={`${cardStyle} rounded-lg p-6`}>
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-semibold">币种资产</h3>
-                    <select 
-                      value={selectedCurrency}
-                      onChange={(e) => setSelectedCurrency(e.target.value)}
-                      className={`px-3 py-2 rounded-lg border text-sm ${
-                        isDark 
-                          ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                          : "bg-white border-gray-300 text-gray-800"
-                      }`}
-                    >
-                      <option value="USDT">USDT</option>
-                      <option value="BTC">BTC</option>
-                      <option value="ETH">ETH</option>
-                    </select>
+                    <div className="flex-1 relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="搜索币种..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
+                          isDark 
+                            ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                            : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                        }`}
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2 ml-4">
+                      <button
+                        onClick={() => setShowAssetModal(true)}
+                        className={`p-2 rounded-lg border transition-all ${
+                          isDark 
+                            ? "border-[#3a3d4a] hover:bg-[#2a2d42]" 
+                            : "border-gray-300 hover:bg-gray-50"
+                        }`}
+                        title="管理资产"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </button>
+                      <div className="flex rounded-lg border border-gray-300 dark:border-[#3a3d4a] overflow-hidden">
+                        <button
+                          onClick={() => {
+                            setSortBy("value")
+                            setSortOrder(sortOrder === "desc" ? "asc" : "desc")
+                          }}
+                          className={`px-3 py-2 text-xs font-medium transition-all ${
+                            sortBy === "value"
+                              ? "bg-[#00D4AA] text-white"
+                              : isDark ? "text-gray-300 hover:bg-[#2a2d42]" : "text-gray-600 hover:bg-gray-50"
+                          }`}
+                        >
+                          金额 {sortBy === "value" && (sortOrder === "desc" ? <TrendingDown className="inline h-3 w-3" /> : <TrendingUp className="inline h-3 w-3" />)}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSortBy("marketCap")
+                            setSortOrder(sortOrder === "desc" ? "asc" : "desc")
+                          }}
+                          className={`px-3 py-2 text-xs font-medium transition-all ${
+                            sortBy === "marketCap"
+                              ? "bg-[#00D4AA] text-white"
+                              : isDark ? "text-gray-300 hover:bg-[#2a2d42]" : "text-gray-600 hover:bg-gray-50"
+                          }`}
+                        >
+                          市值 {sortBy === "marketCap" && (sortOrder === "desc" ? <TrendingDown className="inline h-3 w-3" /> : <TrendingUp className="inline h-3 w-3" />)}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                   <div className="space-y-4">
-                    {accountsData.现金账户.currencies.map((currency, index) => (
+                    {getSortedAssets().map((currency, index) => (
                       <div key={currency.symbol} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all">
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
@@ -381,6 +474,11 @@ export default function WalletPage() {
                           <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                             ≈ ${balanceVisible ? convertBalance(currency.value, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
                           </div>
+                          {currency.marketCap && (
+                            <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                              市值: {currency.marketCap}
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -604,6 +702,135 @@ export default function WalletPage() {
               }`}>
                 {renderTabContent()}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 币种选择弹窗 */}
+      {showCurrencyModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className={`${cardStyle} rounded-lg p-6 max-w-md w-full mx-4`}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">选择显示币种</h3>
+              <button
+                onClick={() => setShowCurrencyModal(false)}
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {availableCurrencies.map((currency) => (
+                <button
+                  key={currency.symbol}
+                  onClick={() => {
+                    setSelectedDisplayCurrency(currency.symbol)
+                    setShowCurrencyModal(false)
+                  }}
+                  className={`flex items-center space-x-3 p-3 rounded-lg border-2 transition-all ${
+                    selectedDisplayCurrency === currency.symbol
+                      ? "border-[#00D4AA] bg-[#00D4AA]/10"
+                      : isDark
+                        ? "border-[#3a3d4a] hover:border-[#00D4AA]/50"
+                        : "border-gray-200 hover:border-[#00D4AA]/50"
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-full ${currency.color} flex items-center justify-center`}>
+                    <span className="text-white font-bold text-sm">{currency.symbol.charAt(0)}</span>
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium">{currency.symbol}</div>
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {currency.name}
+                    </div>
+                  </div>
+                  {selectedDisplayCurrency === currency.symbol && (
+                    <Check className="h-4 w-4 text-[#00D4AA] ml-auto" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 资产管理弹窗 */}
+      {showAssetModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className={`${cardStyle} rounded-lg p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto`}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">管理显示资产</h3>
+              <button
+                onClick={() => setShowAssetModal(false)}
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              选择要在资产列表中显示的币种
+            </p>
+            <div className="space-y-3">
+              {accountsData.现金账户.currencies.map((currency) => (
+                <div
+                  key={currency.symbol}
+                  className={`flex items-center justify-between p-3 rounded-lg border ${
+                    isDark ? 'border-[#3a3d4a]' : 'border-gray-200'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                      <span className="text-[#00D4AA] font-bold text-sm">{currency.symbol.charAt(0)}</span>
+                    </div>
+                    <div>
+                      <div className="font-medium">{currency.symbol}</div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {currency.name}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      ${currency.value}
+                    </span>
+                    <button
+                      onClick={() => toggleAssetVisibility(currency.symbol)}
+                      className={`w-12 h-6 rounded-full transition-all ${
+                        visibleAssets.includes(currency.symbol)
+                          ? "bg-[#00D4AA]"
+                          : isDark ? "bg-gray-600" : "bg-gray-300"
+                      }`}
+                    >
+                      <div className={`w-4 h-4 bg-white rounded-full transition-all ${
+                        visibleAssets.includes(currency.symbol) ? "translate-x-7" : "translate-x-1"
+                      }`} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-end space-x-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setVisibleAssets(accountsData.现金账户.currencies.map(c => c.symbol))}
+                className="text-sm"
+              >
+                全选
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setVisibleAssets([])}
+                className="text-sm"
+              >
+                全不选
+              </Button>
+              <Button
+                onClick={() => setShowAssetModal(false)}
+                className="text-sm bg-[#00D4AA] hover:bg-[#00D4AA]/90"
+              >
+                完成
+              </Button>
             </div>
           </div>
         </div>
