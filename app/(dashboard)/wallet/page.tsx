@@ -97,6 +97,7 @@ export default function WalletPage() {
     { id: "合约账户", label: "合约账户", icon: BarChart3 },
     { id: "理财账户", label: "理财账户", icon: PiggyBank },
     { id: "U卡账户", label: "U卡账户", icon: DollarSign },
+    { id: "佣金账户", label: "佣金账户", icon: Gift },
     { id: "担保账户", label: "担保账户", icon: Shield }
   ]
 
