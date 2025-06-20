@@ -151,11 +151,12 @@ export default function WalletPage() {
     总资产: {
       total: "19,134.34",
       accounts: [
-        { name: "合约账户", balance: "3,456.78", icon: BarChart3 },
-        { name: "理财账户", balance: "2,345.67", icon: PiggyBank },
-        { name: "U卡账户", balance: "1,234.56", icon: DollarSign },
-        { name: "佣金账户", balance: "567.89", icon: Gift },
-        { name: "担保账户", balance: "5,000.00", icon: Shield }
+        { name: "现金账户", balance: "8,567.89", icon: CreditCard, percentage: "44.8%" },
+        { name: "合约账户", balance: "3,456.78", icon: BarChart3, percentage: "18.1%" },
+        { name: "理财账户", balance: "2,345.67", icon: PiggyBank, percentage: "12.3%" },
+        { name: "U卡账户", balance: "1,234.56", icon: DollarSign, percentage: "6.5%" },
+        { name: "佣金账户", balance: "567.89", icon: Gift, percentage: "3.0%" },
+        { name: "担保账户", balance: "5,000.00", icon: Shield, percentage: "26.1%" }
       ]
     }
   }
@@ -503,84 +504,54 @@ export default function WalletPage() {
                 </div>
               ) : (
                 /* 总资产模式：显示各账户分配 */
-                <div className="space-y-6">
-                  <div className={`${cardStyle} rounded-lg p-6`}>
-                    <h3 className="text-lg font-semibold mb-6">账户分配</h3>
-                    <div className="space-y-4">
-                      {accountsData.总资产.accounts.map((account, index) => {
-                        const IconComponent = account.icon
-                        return (
-                          <div key={account.name} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all cursor-pointer group">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
-                                <IconComponent className="h-5 w-5 text-[#00D4AA]" />
-                              </div>
-                              <div>
-                                <div className="font-semibold">{account.name}</div>
-                                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                                  {balanceVisible ? `${account.balance} USDT` : "****"}
-                                </div>
+                <div className={`${cardStyle} rounded-lg p-6`}>
+                  <div className="space-y-4">
+                    {accountsData.总资产.accounts.map((account, index) => {
+                      const IconComponent = account.icon
+                      return (
+                        <div key={account.name} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all cursor-pointer">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                              <IconComponent className="h-5 w-5 text-[#00D4AA]" />
+                            </div>
+                            <div>
+                              <div className="font-semibold">{account.name}</div>
+                              <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                {balanceVisible ? `${account.balance} USDT` : "****"}
                               </div>
                             </div>
-                            <div className="flex items-center space-x-2">
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                              {account.percentage}
+                            </span>
+                            <div className="flex space-x-1">
                               <Button 
                                 variant="outline" 
                                 size="sm"
-                                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="h-8 px-3 text-xs border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA]/10"
+                              >
+                                记录
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="h-8 px-3 text-xs border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA]/10"
                               >
                                 划转
                               </Button>
                               <Button 
-                                variant="ghost" 
                                 size="sm"
-                                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="h-8 px-3 text-xs bg-black text-white hover:bg-gray-800"
                                 onClick={() => setActiveTab(account.name)}
                               >
-                                进入
+                                查看
                               </Button>
                             </div>
                           </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                  
-                  {/* 订单记录 */}
-                  <div className={`${cardStyle} rounded-lg p-6`}>
-                    <h3 className="text-lg font-semibold mb-6">最近记录</h3>
-                    <div className="space-y-3">
-                      {[
-                        { type: "划转", from: "现金账户", to: "合约账户", amount: "1,000.00", time: "2024-01-15 14:30" },
-                        { type: "入金", from: "银行卡", to: "现金账户", amount: "5,000.00", time: "2024-01-15 12:15" },
-                        { type: "提币", from: "现金账户", to: "外部钱包", amount: "2,000.00", time: "2024-01-14 16:45" }
-                      ].map((record, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-[#3a3d4a]">
-                          <div className="flex items-center space-x-3">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                              record.type === "入金" ? "bg-green-100 text-green-600" :
-                              record.type === "提币" ? "bg-red-100 text-red-600" :
-                              "bg-blue-100 text-blue-600"
-                            }`}>
-                              {record.type === "入金" ? <Plus className="h-4 w-4" /> :
-                               record.type === "提币" ? <Minus className="h-4 w-4" /> :
-                               <ArrowUpRight className="h-4 w-4" />}
-                            </div>
-                            <div>
-                              <div className="font-medium">{record.type}</div>
-                              <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                                {record.from} → {record.to}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-semibold">{record.amount} USDT</div>
-                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                              {record.time}
-                            </div>
-                          </div>
                         </div>
-                      ))}
-                    </div>
+                      )
+                    })}
                   </div>
                 </div>
               )}
