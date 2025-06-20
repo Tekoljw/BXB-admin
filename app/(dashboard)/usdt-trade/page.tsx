@@ -159,7 +159,7 @@ export default function USDTTradePage() {
 
 
   const cardStyle = isDark
-    ? "bg-[#1a1c2e] border border-[#2a2d42] shadow"
+    ? "bg-[#1a1d29] border border-[#252842] shadow"
     : "bg-white border border-gray-200 shadow"
 
   // 位置数据
