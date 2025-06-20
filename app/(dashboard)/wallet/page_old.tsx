@@ -26,6 +26,8 @@ export default function WalletPage() {
   const { theme } = useTheme()
   const [balanceVisible, setBalanceVisible] = useState(true)
   const [activeTab, setActiveTab] = useState("钱包总览")
+  const [overviewMode, setOverviewMode] = useState("现金账户") // "现金账户" or "总资产"
+  const [selectedCurrency, setSelectedCurrency] = useState("USDT")
   const [isMobile, setIsMobile] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [loadingSteps, setLoadingSteps] = useState({
@@ -93,7 +95,6 @@ export default function WalletPage() {
 
   const walletTabs = [
     { id: "钱包总览", label: "钱包总览", icon: Wallet },
-    { id: "现金账户", label: "现金账户", icon: CreditCard },
     { id: "合约账户", label: "合约账户", icon: BarChart3 },
     { id: "理财账户", label: "理财账户", icon: PiggyBank },
     { id: "U卡账户", label: "U卡账户", icon: DollarSign },
@@ -168,18 +169,255 @@ export default function WalletPage() {
   // 统一的卡片样式，参考行情页面
   const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
 
+  // 添加新的数据结构
+  const accountsData = {
+    现金账户: {
+      balance: "8,567.89",
+      currency: "USDT",
+      currencies: [
+        { symbol: "USDT", balance: "5,000.00", value: "5,000.00" },
+        { symbol: "BTC", balance: "0.15", value: "2,500.00" },
+        { symbol: "ETH", balance: "2.5", value: "1,067.89" }
+      ]
+    },
+    总资产: {
+      total: "19,134.34",
+      accounts: [
+        { name: "合约账户", balance: "3,456.78", icon: BarChart3 },
+        { name: "理财账户", balance: "2,345.67", icon: PiggyBank },
+        { name: "U卡账户", balance: "1,234.56", icon: DollarSign },
+        { name: "佣金账户", balance: "567.89", icon: Gift },
+        { name: "担保账户", balance: "5,000.00", icon: Shield }
+      ]
+    }
+  }
+
   const renderTabContent = () => {
     const currentData = walletData[activeTab as keyof typeof walletData]
 
     switch (activeTab) {
-      case "钱包":
+      case "钱包总览":
         return (
           <div className="space-y-6">
-            {/* Balance Overview */}
-            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-500 ${
+            {/* 主要卡片选择 */}
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-500 ${
               loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
             }`}>
-              <div className={`${cardStyle} bg-gradient-to-br from-[#00D4AA]/10 to-[#00D4AA]/5 border-[#00D4AA]/20 rounded-lg p-4`}>
+              {/* 现金账户卡片 */}
+              <div 
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all hover:shadow-lg ${
+                  overviewMode === "现金账户" ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50" : ""
+                }`}
+                onClick={() => setOverviewMode("现金账户")}
+              >
+                {!loadingSteps.balance ? (
+                  <div className="space-y-3">
+                    <SkeletonLoader height="h-6" width="w-20" />
+                    <SkeletonLoader height="h-8" width="w-32" />
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold">现金账户</h3>
+                      <CreditCard className="h-6 w-6 text-[#00D4AA]" />
+                    </div>
+                    <div className="text-3xl font-bold text-[#00D4AA]">
+                      {balanceVisible ? `${accountsData.现金账户.balance} ${selectedCurrency}` : "****"}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* 总资产卡片 */}
+              <div 
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all hover:shadow-lg ${
+                  overviewMode === "总资产" ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50" : ""
+                }`}
+                onClick={() => setOverviewMode("总资产")}
+              >
+                {!loadingSteps.balance ? (
+                  <div className="space-y-3">
+                    <SkeletonLoader height="h-6" width="w-20" />
+                    <SkeletonLoader height="h-8" width="w-32" />
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold">总资产</h3>
+                      <Wallet className="h-6 w-6 text-[#00D4AA]" />
+                    </div>
+                    <div className="text-3xl font-bold text-[#00D4AA]">
+                      {balanceVisible ? `${accountsData.总资产.total} USDT` : "****"}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* 操作按钮区域（仅现金账户时显示） */}
+            {overviewMode === "现金账户" && (
+              <div className={`transition-all duration-500 ${
+                loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+              }`}>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Button className="h-12 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white">
+                    <Plus className="h-4 w-4 mr-2" />
+                    入金
+                  </Button>
+                  <Button variant="outline" className="h-12">
+                    <Minus className="h-4 w-4 mr-2" />
+                    提币
+                  </Button>
+                  <Button variant="outline" className="h-12">
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    买卖
+                  </Button>
+                  <Button variant="outline" className="h-12">
+                    <ArrowUpRight className="h-4 w-4 mr-2" />
+                    划转
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* 详细内容区域 */}
+            <div className={`transition-all duration-500 ${
+              loadingSteps.assets ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}>
+              {overviewMode === "现金账户" ? (
+                /* 现金账户模式：显示各币种余额 */
+                <div className={`${cardStyle} rounded-lg p-6`}>
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold">币种资产</h3>
+                    <select 
+                      value={selectedCurrency}
+                      onChange={(e) => setSelectedCurrency(e.target.value)}
+                      className={`px-3 py-2 rounded-lg border text-sm ${
+                        isDark 
+                          ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                          : "bg-white border-gray-300 text-gray-800"
+                      }`}
+                    >
+                      <option value="USDT">USDT</option>
+                      <option value="BTC">BTC</option>
+                      <option value="ETH">ETH</option>
+                    </select>
+                  </div>
+                  <div className="space-y-4">
+                    {accountsData.现金账户.currencies.map((currency, index) => (
+                      <div key={currency.symbol} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a]">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                            <span className="text-[#00D4AA] font-bold">{currency.symbol.charAt(0)}</span>
+                          </div>
+                          <div>
+                            <div className="font-semibold">{currency.symbol}</div>
+                            <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {currency.symbol === 'BTC' ? 'Bitcoin' : currency.symbol === 'ETH' ? 'Ethereum' : 'Tether'}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-bold">{balanceVisible ? currency.balance : "****"}</div>
+                          <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                            ≈ ${balanceVisible ? currency.value : "****"}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                /* 总资产模式：显示各账户分配 */
+                <div className="space-y-6">
+                  <div className={`${cardStyle} rounded-lg p-6`}>
+                    <h3 className="text-lg font-semibold mb-6">账户分配</h3>
+                    <div className="space-y-4">
+                      {accountsData.总资产.accounts.map((account, index) => {
+                        const IconComponent = account.icon
+                        return (
+                          <div key={account.name} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all cursor-pointer group">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                                <IconComponent className="h-5 w-5 text-[#00D4AA]" />
+                              </div>
+                              <div>
+                                <div className="font-semibold">{account.name}</div>
+                                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                  {balanceVisible ? `${account.balance} USDT` : "****"}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                划转
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                onClick={() => setActiveTab(account.name)}
+                              >
+                                进入
+                              </Button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                  
+                  {/* 订单记录 */}
+                  <div className={`${cardStyle} rounded-lg p-6`}>
+                    <h3 className="text-lg font-semibold mb-6">最近记录</h3>
+                    <div className="space-y-3">
+                      {[
+                        { type: "划转", from: "现金账户", to: "合约账户", amount: "1,000.00", time: "2024-01-15 14:30" },
+                        { type: "入金", from: "银行卡", to: "现金账户", amount: "5,000.00", time: "2024-01-15 12:15" },
+                        { type: "提币", from: "现金账户", to: "外部钱包", amount: "2,000.00", time: "2024-01-14 16:45" }
+                      ].map((record, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-[#3a3d4a]">
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                              record.type === "入金" ? "bg-green-100 text-green-600" :
+                              record.type === "提币" ? "bg-red-100 text-red-600" :
+                              "bg-blue-100 text-blue-600"
+                            }`}>
+                              {record.type === "入金" ? <Plus className="h-4 w-4" /> :
+                               record.type === "提币" ? <Minus className="h-4 w-4" /> :
+                               <ArrowUpRight className="h-4 w-4" />}
+                            </div>
+                            <div>
+                              <div className="font-medium">{record.type}</div>
+                              <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                {record.from} → {record.to}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-semibold">{record.amount} USDT</div>
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {record.time}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      
+      case "合约账户":
+        return (
+          <div className="space-y-6">
+            <div className={`${cardStyle} bg-gradient-to-br from-[#00D4AA]/10 to-[#00D4AA]/5 border-[#00D4AA]/20 rounded-lg p-4`}>
                 {!loadingSteps.balance ? (
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
