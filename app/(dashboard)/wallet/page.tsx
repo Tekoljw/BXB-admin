@@ -494,41 +494,43 @@ export default function WalletPage() {
           </div>
         </div>
       ) : (
-        /* Desktop Layout - Side Tabs */
-        <div className="container mx-auto p-6">
-          <div className="grid grid-cols-12 gap-6">
-            {/* Left Sidebar */}
-            <div className="col-span-3">
-              <div className={`${cardStyle} rounded-lg p-1`}>
-                <div className="space-y-1">
-                  {walletTabs.map((tab) => {
-                    const Icon = tab.icon
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => handleTabChange(tab.id)}
-                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 border ${
-                          activeTab === tab.id
-                            ? isDark
-                              ? "border-white bg-white text-black shadow-sm"
-                              : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
-                            : isDark
-                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42]"
-                              : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                        }`}
-                      >
-                        <Icon className="h-5 w-5" />
-                        <span>{tab.label}</span>
-                      </button>
-                    )
-                  })}
-                </div>
+        /* Desktop Layout - Left Sidebar */
+        <div className="flex h-screen">
+          {/* Left Sidebar */}
+          <div className={`w-64 ${isDark ? 'bg-[#1a1c2e]' : 'bg-white'} border-r ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'} flex flex-col`}>
+            <nav className="flex-1 px-3 pt-6">
+              <div className="space-y-1">
+                {walletTabs.map((tab) => {
+                  const Icon = tab.icon
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => handleTabChange(tab.id)}
+                      className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
+                        activeTab === tab.id
+                          ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
+                          : isDark
+                            ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42] hover:scale-102"
+                            : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
+                      }`}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span>{tab.label}</span>
+                    </button>
+                  )
+                })}
               </div>
-            </div>
+            </nav>
+          </div>
 
-            {/* Main Content */}
-            <div className="col-span-9">
-              <div className={`transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
+          {/* Main Content */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="container mx-auto p-6">
+              <div className={`transition-all duration-300 transform ${
+                isAnimating 
+                  ? 'translate-x-8 opacity-0 scale-95' 
+                  : 'translate-x-0 opacity-100 scale-100'
+              }`}>
                 {renderTabContent()}
               </div>
             </div>
