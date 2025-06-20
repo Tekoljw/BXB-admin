@@ -476,7 +476,9 @@ export default function ChatPage() {
                   disabled={!message.trim()}
                   className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
                     message.trim()
-                      ? "bg-black text-white hover:bg-gray-800"
+                      ? isDark
+                        ? "bg-white text-black hover:bg-gray-200"
+                        : "bg-black text-white hover:bg-gray-800"
                       : "border border-gray-400 text-gray-400 cursor-not-allowed bg-transparent"
                   }`}
                 >

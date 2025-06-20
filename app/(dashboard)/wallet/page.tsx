@@ -649,7 +649,9 @@ export default function WalletPage() {
                   onClick={() => handleTabChange(tab.id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
                     activeTab === tab.id
-                      ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
+                      ? isDark
+                        ? "border-white bg-white text-black shadow-sm"
+                        : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
                       : isDark
                         ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42]"
                         : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
@@ -686,7 +688,9 @@ export default function WalletPage() {
                       onClick={() => handleTabChange(tab.id)}
                       className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
                         activeTab === tab.id
-                          ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
+                          ? isDark
+                            ? "border-white bg-white text-black shadow-sm scale-105"
+                            : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
                           : isDark
                             ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42] hover:scale-102"
                             : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"

@@ -849,7 +849,11 @@ export default function USDTTradePage() {
                 {tradeMode === "C2C" && (
                   <button 
                     onClick={handleOpenPublishModal}
-                    className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all"
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      isDark 
+                        ? "bg-white text-black hover:bg-gray-200" 
+                        : "bg-black text-white hover:bg-gray-800"
+                    }`}
                   >
                     <Plus className="w-4 h-4" />
                     <span>发布订单</span>
@@ -943,7 +947,11 @@ export default function USDTTradePage() {
                         {/* 操作按钮 */}
                         <div className="col-span-2 flex items-center justify-end space-x-2">
                           <button 
-                            className="bg-white border border-black text-black px-2 py-1.5 rounded text-xs hover:bg-gray-50 transition-all h-8 flex items-center justify-center"
+                            className={`border px-2 py-1.5 rounded text-xs transition-all h-8 flex items-center justify-center ${
+                              isDark 
+                                ? "bg-white border-white text-black hover:bg-gray-200" 
+                                : "bg-white border-black text-black hover:bg-gray-50"
+                            }`}
                             onClick={() => {
                               if (merchant.isFriend) {
                                 console.log('开始对话:', merchant.name)
