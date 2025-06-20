@@ -25,7 +25,7 @@ import SkeletonLoader from "@/components/skeleton-loader"
 export default function WalletPage() {
   const { theme } = useTheme()
   const [balanceVisible, setBalanceVisible] = useState(true)
-  const [activeTab, setActiveTab] = useState("钱包")
+  const [activeTab, setActiveTab] = useState("钱包总览")
   const [isMobile, setIsMobile] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [loadingSteps, setLoadingSteps] = useState({
@@ -92,12 +92,12 @@ export default function WalletPage() {
   }, [])
 
   const walletTabs = [
-    { id: "钱包", label: "钱包", icon: Wallet },
-    { id: "合约", label: "合约", icon: BarChart3 },
-    { id: "理财", label: "理财", icon: PiggyBank },
-    { id: "佣金", label: "佣金", icon: Gift },
-    { id: "U卡", label: "U卡", icon: DollarSign },
-    { id: "担保", label: "担保", icon: Shield }
+    { id: "钱包总览", label: "钱包总览", icon: Wallet },
+    { id: "现金账户", label: "现金账户", icon: CreditCard },
+    { id: "合约账户", label: "合约账户", icon: BarChart3 },
+    { id: "理财账户", label: "理财账户", icon: PiggyBank },
+    { id: "U卡账户", label: "U卡账户", icon: DollarSign },
+    { id: "担保账户", label: "担保账户", icon: Shield }
   ]
 
   const walletData = {
