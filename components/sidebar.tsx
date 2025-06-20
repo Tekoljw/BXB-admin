@@ -3,6 +3,7 @@
 import React from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { useRoutePreloader, instantNavigate } from "@/lib/route-preloader"
+import { useTheme } from "@/contexts/theme-context"
 import {
   MessageCircle,
   Users,
@@ -27,6 +28,8 @@ interface SidebarProps {
 export default function Sidebar({ onCloseMobile, onToggleExpanded, isExpanded = true }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
+  const { theme } = useTheme()
+  const isDark = theme === "dark"
   
   // Pre-load all routes on component mount
   useRoutePreloader()
@@ -50,16 +53,22 @@ export default function Sidebar({ onCloseMobile, onToggleExpanded, isExpanded = 
   ]
 
   return (
-    <div className="h-screen bg-black text-white flex flex-col overflow-hidden">
+    <div className={`h-screen text-white flex flex-col overflow-hidden ${
+      isDark ? "bg-[#374151]" : "bg-black"
+    }`}>
       {/* Header */}
-      <div className="h-12 flex items-center justify-between px-3 border-b border-gray-700">
+      <div className={`h-12 flex items-center justify-between px-3 border-b ${
+        isDark ? "border-gray-600" : "border-gray-700"
+      }`}>
         <div className="flex items-center space-x-2">
           <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs">U</div>
           {isExpanded && <span className="text-sm hidden md:block">用户</span>}
         </div>
         <button
           onClick={() => onToggleExpanded?.(!isExpanded)}
-          className="p-1 hover:bg-gray-700 rounded hidden md:block"
+          className={`p-1 rounded hidden md:block ${
+            isDark ? "hover:bg-gray-600" : "hover:bg-gray-700"
+          }`}
         >
           {isExpanded ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
         </button>
@@ -73,8 +82,14 @@ export default function Sidebar({ onCloseMobile, onToggleExpanded, isExpanded = 
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className={`w-full flex items-center justify-center md:justify-start p-2 rounded hover:bg-gray-700 transition-colors ${
-                isActive(item.path) ? "bg-gray-700" : ""
+              className={`w-full flex items-center justify-center md:justify-start p-2 rounded transition-colors ${
+                isActive(item.path) 
+                  ? isDark
+                    ? "bg-white text-black"
+                    : "bg-gray-700"
+                  : isDark
+                    ? "hover:bg-gray-600"
+                    : "hover:bg-gray-700"
               }`}
             >
               <Icon size={20} />
@@ -85,11 +100,17 @@ export default function Sidebar({ onCloseMobile, onToggleExpanded, isExpanded = 
       </div>
 
       {/* Footer */}
-      <div className="h-12 flex items-center justify-center gap-3 border-t border-gray-700 px-2">
-        <button className="p-2 hover:bg-gray-700 rounded">
+      <div className={`h-12 flex items-center justify-center gap-3 border-t px-2 ${
+        isDark ? "border-gray-600" : "border-gray-700"
+      }`}>
+        <button className={`p-2 rounded ${
+          isDark ? "hover:bg-gray-600" : "hover:bg-gray-700"
+        }`}>
           <Globe2 size={16} />
         </button>
-        <button className="p-2 hover:bg-gray-700 rounded">
+        <button className={`p-2 rounded ${
+          isDark ? "hover:bg-gray-600" : "hover:bg-gray-700"
+        }`}>
           <Settings size={16} />
         </button>
       </div>
