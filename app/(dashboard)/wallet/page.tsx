@@ -306,7 +306,11 @@ export default function WalletPage() {
                       </div>
                       <button
                         onClick={() => setShowCurrencyModal(true)}
-                        className="flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium bg-black text-white hover:bg-gray-800 transition-all"
+                        className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
+                          isDark 
+                            ? "bg-transparent text-white hover:bg-gray-800" 
+                            : "bg-white text-black hover:bg-gray-50"
+                        }`}
                       >
                         <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
                           availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
@@ -345,7 +349,11 @@ export default function WalletPage() {
                       </div>
                       <button
                         onClick={() => setShowCurrencyModal(true)}
-                        className="flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium bg-black text-white hover:bg-gray-800 transition-all"
+                        className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
+                          isDark 
+                            ? "bg-transparent text-white hover:bg-gray-800" 
+                            : "bg-white text-black hover:bg-gray-50"
+                        }`}
                       >
                         <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
                           availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
