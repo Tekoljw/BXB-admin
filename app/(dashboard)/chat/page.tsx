@@ -539,7 +539,9 @@ export default function ChatPage() {
             <div className={`flex ${isDark ? "bg-[#252842]" : "bg-gray-200"} rounded-md p-1`}>
               {/* Sliding background */}
               <div
-                className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out bg-black`}
+                className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${
+                  isDark ? "bg-white" : "bg-black"
+                }`}
                 style={{
                   width: `${100 / tabs.length}%`,
                   left: `${(tabs.indexOf(activeTab) * 100) / tabs.length}%`
@@ -553,7 +555,9 @@ export default function ChatPage() {
                   onClick={() => setActiveTab(tab)}
                   className={`relative z-10 flex-1 py-2 text-xs font-medium rounded-md transition-colors duration-300 whitespace-nowrap ${
                     activeTab === tab
-                      ? "text-white"
+                      ? isDark
+                        ? "text-black"
+                        : "text-white"
                       : isDark
                         ? "text-gray-400 hover:text-white"
                         : "text-gray-600 hover:text-gray-800"
