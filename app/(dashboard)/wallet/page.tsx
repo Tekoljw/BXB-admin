@@ -20,6 +20,7 @@ import {
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
+import SkeletonLoader from "@/components/skeleton-loader"
 
 export default function WalletPage() {
   const { theme } = useTheme()
@@ -27,6 +28,13 @@ export default function WalletPage() {
   const [activeTab, setActiveTab] = useState("钱包")
   const [isMobile, setIsMobile] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [loadingSteps, setLoadingSteps] = useState({
+    balance: false,
+    assets: false,
+    transactions: false,
+    charts: false
+  })
+  const [isPageLoading, setIsPageLoading] = useState(true)
   const isDark = theme === "dark"
 
   const handleTabChange = (tabId: string) => {
@@ -35,7 +43,40 @@ export default function WalletPage() {
     setTimeout(() => {
       setActiveTab(tabId)
       setIsAnimating(false)
+      // Reset loading state for new tab
+      startStepLoading()
     }, 150)
+  }
+
+  const startStepLoading = () => {
+    setIsPageLoading(true)
+    setLoadingSteps({
+      balance: false,
+      assets: false,
+      transactions: false,
+      charts: false
+    })
+
+    // Step 1: Balance info
+    setTimeout(() => {
+      setLoadingSteps(prev => ({ ...prev, balance: true }))
+    }, 200)
+
+    // Step 2: Assets
+    setTimeout(() => {
+      setLoadingSteps(prev => ({ ...prev, assets: true }))
+    }, 600)
+
+    // Step 3: Transactions
+    setTimeout(() => {
+      setLoadingSteps(prev => ({ ...prev, transactions: true }))
+    }, 1000)
+
+    // Step 4: Charts
+    setTimeout(() => {
+      setLoadingSteps(prev => ({ ...prev, charts: true }))
+      setIsPageLoading(false)
+    }, 1400)
   }
 
   useEffect(() => {
@@ -45,13 +86,18 @@ export default function WalletPage() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
+  useEffect(() => {
+    // Start loading animation on initial load
+    startStepLoading()
+  }, [])
+
   const walletTabs = [
     { id: "钱包", label: "钱包", icon: Wallet },
     { id: "合约", label: "合约", icon: BarChart3 },
     { id: "理财", label: "理财", icon: PiggyBank },
     { id: "佣金", label: "佣金", icon: Gift },
     { id: "U卡", label: "U卡", icon: DollarSign },
-    { id: "保证金", label: "保证金", icon: Shield }
+    { id: "担保", label: "担保", icon: Shield }
   ]
 
   const walletData = {
@@ -106,7 +152,7 @@ export default function WalletPage() {
         { date: "2024-01-13", merchant: "充值", amount: "+500.00", status: "已完成" }
       ]
     },
-    保证金: {
+    担保: {
       totalMargin: "5,000.00",
       usedMargin: "3,200.00",
       availableMargin: "1,800.00",
