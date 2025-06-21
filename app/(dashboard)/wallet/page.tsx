@@ -32,7 +32,8 @@ import {
   ArrowDown,
   History,
   FileText,
-  BarChart2
+  BarChart2,
+  PieChart
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -67,6 +68,22 @@ export default function WalletPage() {
     transactions: false,
     charts: false
   })
+  const [showPositionModal, setShowPositionModal] = useState(false) // 仓位分布弹窗
+  const [positionModalAnimating, setPositionModalAnimating] = useState(false) // 仓位弹窗动画状态
+
+  // 处理仓位分布弹窗
+  const handlePositionModalClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!showPositionModal) {
+      setShowPositionModal(true)
+      setTimeout(() => setPositionModalAnimating(true), 50)
+    }
+  }
+
+  const closePositionModal = () => {
+    setPositionModalAnimating(false)
+    setTimeout(() => setShowPositionModal(false), 300)
+  }
   const [isPageLoading, setIsPageLoading] = useState(true)
   const isDark = theme === "dark"
 
@@ -536,6 +553,33 @@ export default function WalletPage() {
                           clickedAction === "order-records"
                             ? "text-white"
                             : selectedAction === "order-records" 
+                              ? "text-[#00D4AA]"
+                              : "text-black dark:text-white"
+                        }`} 
+                      />
+                    </Button>
+
+                    {/* 仓位分布按钮 */}
+                    <Button
+                      onClick={handlePositionModalClick}
+                      onMouseDown={() => setClickedAction("position-distribution")}
+                      onMouseUp={() => setClickedAction("")}
+                      onMouseLeave={() => setClickedAction("")}
+                      className={`h-12 w-12 transition-all duration-200 ${
+                        clickedAction === "position-distribution"
+                          ? "bg-[#00D4AA] border-[#00D4AA]"
+                          : selectedAction === "position-distribution"
+                            ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                      }`}
+                      variant="outline"
+                      title="仓位分布"
+                    >
+                      <PieChart 
+                        className={`h-4 w-4 transition-colors ${
+                          clickedAction === "position-distribution"
+                            ? "text-white"
+                            : selectedAction === "position-distribution" 
                               ? "text-[#00D4AA]"
                               : "text-black dark:text-white"
                         }`} 
@@ -1109,6 +1153,123 @@ export default function WalletPage() {
               </div>
 
               {/* 取消底部操作按钮 */}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 仓位分布弹窗 */}
+      {showPositionModal && (
+        <div className="fixed inset-0 z-50">
+          {/* 背景遮罩 */}
+          <div 
+            className={`absolute inset-0 bg-black transition-opacity duration-300 ${
+              positionModalAnimating ? 'bg-opacity-50' : 'bg-opacity-0'
+            }`}
+            onClick={closePositionModal}
+          />
+          {/* 弹窗内容 */}
+          <div className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 max-w-[90vw] ${cardStyle} rounded-lg transition-all duration-300 ease-out ${
+            positionModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}>
+            <div className="p-6">
+              {/* 标题 */}
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold">仓位分布</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={closePositionModal}
+                  className="h-8 w-8 p-0"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+
+              {/* 饼图区域 */}
+              <div className="mb-6">
+                <div className="relative w-48 h-48 mx-auto mb-4">
+                  {/* SVG 饼图 */}
+                  <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
+                    {/* USDT - 40% */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="30"
+                      fill="transparent"
+                      stroke="#00D4AA"
+                      strokeWidth="15"
+                      strokeDasharray="75.4 188.5"
+                      strokeDashoffset="0"
+                    />
+                    {/* BTC - 30% */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="30"
+                      fill="transparent"
+                      stroke="#F7931A"
+                      strokeWidth="15"
+                      strokeDasharray="56.55 188.5"
+                      strokeDashoffset="-75.4"
+                    />
+                    {/* ETH - 20% */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="30"
+                      fill="transparent"
+                      stroke="#627EEA"
+                      strokeWidth="15"
+                      strokeDasharray="37.7 188.5"
+                      strokeDashoffset="-131.95"
+                    />
+                    {/* 其他 - 10% */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="30"
+                      fill="transparent"
+                      stroke="#8B5CF6"
+                      strokeWidth="15"
+                      strokeDasharray="18.85 188.5"
+                      strokeDashoffset="-169.65"
+                    />
+                  </svg>
+                  
+                  {/* 中心总值 */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">总资产</div>
+                      <div className="text-lg font-bold text-[#00D4AA]">$12,847</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 图例 */}
+              <div className="space-y-3">
+                {[
+                  { symbol: "USDT", percentage: "40%", value: "$5,139", color: "#00D4AA" },
+                  { symbol: "BTC", percentage: "30%", value: "$3,854", color: "#F7931A" },
+                  { symbol: "ETH", percentage: "20%", value: "$2,569", color: "#627EEA" },
+                  { symbol: "其他", percentage: "10%", value: "$1,285", color: "#8B5CF6" }
+                ].map((item) => (
+                  <div key={item.symbol} className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div 
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span className="text-sm font-medium">{item.symbol}</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-sm">
+                      <span className="text-gray-500">{item.percentage}</span>
+                      <span className="font-medium">{item.value}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
