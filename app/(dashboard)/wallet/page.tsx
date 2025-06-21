@@ -804,11 +804,12 @@ export default function WalletPage() {
             }`}>
               <div className="flex flex-col md:flex-row gap-4">
                 {/* 主要操作按钮 */}
-                <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
                   {[
                     { id: "current-positions", label: "当前持仓", icon: BarChart2 },
                     { id: "account-balance", label: "账户余额", icon: Wallet },
-                    { id: "transfer", label: "划转", icon: ArrowLeftRight }
+                    { id: "transfer", label: "划转", icon: ArrowLeftRight },
+                    { id: "trade", label: "交易", icon: TrendingUp }
                   ].map((button) => {
                     const Icon = button.icon
                     const isSelected = selectedAction === button.id
@@ -896,27 +897,114 @@ export default function WalletPage() {
               </div>
             </div>
             
+            {/* 内容区域 - 根据选中的按钮显示不同内容 */}
             <div className={`${cardStyle} rounded-lg p-6`}>
-              <div className="space-y-4">
-                {contractData.positions.map((position, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a]">
-                    <div>
-                      <div className="font-medium">{position.symbol}</div>
-                      <div className={`text-sm ${position.side === "多" ? "text-green-500" : "text-red-500"}`}>
-                        {position.side} {position.size}
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className={`font-bold ${position.pnl.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
-                        {position.pnl}
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        保证金: ${position.margin}
-                      </div>
-                    </div>
+              {selectedAction === "account-balance" ? (
+                /* 账户余额界面 */
+                <div className="space-y-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                          <th className="text-left py-3 px-4 font-medium">币种</th>
+                          <th className="text-right py-3 px-4 font-medium">账户余额</th>
+                          <th className="text-right py-3 px-4 font-medium">未实现盈亏</th>
+                          <th className="text-right py-3 px-4 font-medium">净资产余额</th>
+                          <th className="text-right py-3 px-4 font-medium">保证金余额</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          {
+                            symbol: "USDT",
+                            name: "Tether USD",
+                            accountBalance: "8,567.89",
+                            unrealizedPnL: "+234.56",
+                            netAssets: "8,802.45",
+                            marginBalance: "2,500.00"
+                          },
+                          {
+                            symbol: "BTC",
+                            name: "Bitcoin",
+                            accountBalance: "0.15234",
+                            unrealizedPnL: "-45.67",
+                            netAssets: "6,789.23",
+                            marginBalance: "1,200.00"
+                          },
+                          {
+                            symbol: "ETH",
+                            name: "Ethereum",
+                            accountBalance: "2.5678",
+                            unrealizedPnL: "+123.45",
+                            netAssets: "8,456.78",
+                            marginBalance: "800.00"
+                          },
+                          {
+                            symbol: "BNB",
+                            name: "BNB",
+                            accountBalance: "12.4567",
+                            unrealizedPnL: "+67.89",
+                            netAssets: "3,234.56",
+                            marginBalance: "500.00"
+                          }
+                        ].map((currency, index) => (
+                          <tr key={currency.symbol} className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-100'} hover:bg-gray-50 dark:hover:bg-[#2a2d42]`}>
+                            <td className="py-4 px-4">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                                  <span className="text-[#00D4AA] font-bold text-sm">{currency.symbol.charAt(0)}</span>
+                                </div>
+                                <div>
+                                  <div className="font-medium">{currency.symbol}</div>
+                                  <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    {currency.name}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="text-right py-4 px-4 font-medium">
+                              {balanceVisible ? currency.accountBalance : "****"}
+                            </td>
+                            <td className={`text-right py-4 px-4 font-medium ${
+                              currency.unrealizedPnL.startsWith('+') ? 'text-green-500' : 'text-red-500'
+                            }`}>
+                              {balanceVisible ? currency.unrealizedPnL : "****"}
+                            </td>
+                            <td className="text-right py-4 px-4 font-medium text-[#00D4AA]">
+                              {balanceVisible ? currency.netAssets : "****"}
+                            </td>
+                            <td className="text-right py-4 px-4 font-medium">
+                              {balanceVisible ? currency.marginBalance : "****"}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
-                ))}
-              </div>
+                </div>
+              ) : (
+                /* 默认显示当前持仓 */
+                <div className="space-y-4">
+                  {contractData.positions.map((position, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a]">
+                      <div>
+                        <div className="font-medium">{position.symbol}</div>
+                        <div className={`text-sm ${position.side === "多" ? "text-green-500" : "text-red-500"}`}>
+                          {position.side} {position.size}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className={`font-bold ${position.pnl.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+                          {position.pnl}
+                        </div>
+                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                          保证金: ${position.margin}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )
