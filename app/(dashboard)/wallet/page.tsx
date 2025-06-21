@@ -110,7 +110,7 @@ export default function WalletPage() {
     setTransferFrom(transferTo)
     setTransferTo(temp)
   }
-  const [isPageLoading, setIsPageLoading] = useState(true)
+  // 移除页面加载状态
   const isDark = theme === "dark"
 
   const handleTabChange = (tabId: string) => {
@@ -119,8 +119,7 @@ export default function WalletPage() {
     setTimeout(() => {
       setActiveTab(tabId)
       setIsAnimating(false)
-      // Reset loading state for new tab
-      startStepLoading()
+      // 移除加载动画
     }, 150)
   }
 
@@ -133,10 +132,7 @@ export default function WalletPage() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  useEffect(() => {
-    // Start loading animation on initial load
-    startStepLoading()
-  }, [])
+  // 移除初始加载动画
 
   const walletTabs = [
     { id: "钱包总览", label: "钱包总览", icon: Wallet },
