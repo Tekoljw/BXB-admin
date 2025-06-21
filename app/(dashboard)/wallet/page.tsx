@@ -42,6 +42,7 @@ export default function WalletPage() {
   const [selectedDisplayCurrency, setSelectedDisplayCurrency] = useState("USDT") // 卡片显示币种
   const [selectedAction, setSelectedAction] = useState("") // 选中的操作按钮
   const [showCurrencyModal, setShowCurrencyModal] = useState(false) // 币种选择弹窗
+  const [currencyModalAnimating, setCurrencyModalAnimating] = useState(false) // 币种弹窗动画状态
   const [showAssetModal, setShowAssetModal] = useState(false) // 资产管理弹窗
   const [searchTerm, setSearchTerm] = useState("") // 搜索关键词
   const [sortBy, setSortBy] = useState("value") // 排序方式：value, marketCap
@@ -275,6 +276,18 @@ export default function WalletPage() {
         ? prev.filter(s => s !== symbol)
         : [...prev, symbol]
     )
+  }
+
+  // 打开币种选择弹窗
+  const openCurrencyModal = () => {
+    setShowCurrencyModal(true)
+    setTimeout(() => setCurrencyModalAnimating(true), 10)
+  }
+
+  // 关闭币种选择弹窗
+  const closeCurrencyModal = () => {
+    setCurrencyModalAnimating(false)
+    setTimeout(() => setShowCurrencyModal(false), 300)
   }
 
   const renderTabContent = () => {
