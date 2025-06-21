@@ -66,12 +66,7 @@ export default function WalletPage() {
   const [visibleAssets, setVisibleAssets] = useState(["USDT", "BTC", "ETH", "BNB", "ADA", "SOL"]) // 可见资产
   const [isMobile, setIsMobile] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
-  const [loadingSteps, setLoadingSteps] = useState({
-    balance: false,
-    assets: false,
-    transactions: false,
-    charts: false
-  })
+  // 移除加载动画状态
   const [showPositionModal, setShowPositionModal] = useState(false) // 仓位分布弹窗
   const [positionModalAnimating, setPositionModalAnimating] = useState(false) // 仓位弹窗动画状态
   const [showTransferModal, setShowTransferModal] = useState(false) // 划转弹窗
@@ -424,19 +419,11 @@ export default function WalletPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 现金账户卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 cursor-pointer transform transition-all duration-700 ease-out hover:shadow-xl hover:scale-105 ${
-                  loadingSteps.balance 
-                    ? 'translate-y-0 opacity-100' 
-                    : 'translate-y-8 opacity-0'
-                } ${
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transform transition-all duration-300 ease-out hover:shadow-xl hover:scale-105 ${
                   overviewMode === "现金账户" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
                     : "hover:shadow-lg"
                 }`}
-                style={{ 
-                  animationDelay: loadingSteps.balance ? '100ms' : '0ms',
-                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px) scale(${overviewMode === "现金账户" ? 1.02 : 1})`
-                }}
                 onClick={() => setOverviewMode("现金账户")}
               >
                 {!loadingSteps.balance ? (
@@ -477,19 +464,11 @@ export default function WalletPage() {
 
               {/* 总资产卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 cursor-pointer transform transition-all duration-700 ease-out hover:shadow-xl hover:scale-105 ${
-                  loadingSteps.balance 
-                    ? 'translate-y-0 opacity-100' 
-                    : 'translate-y-8 opacity-0'
-                } ${
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transform transition-all duration-300 ease-out hover:shadow-xl hover:scale-105 ${
                   overviewMode === "总资产" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
                     : "hover:shadow-lg"
                 }`}
-                style={{ 
-                  animationDelay: loadingSteps.balance ? '200ms' : '0ms',
-                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px) scale(${overviewMode === "总资产" ? 1.02 : 1})`
-                }}
                 onClick={() => setOverviewMode("总资产")}
               >
                 {!loadingSteps.balance ? (
@@ -531,13 +510,7 @@ export default function WalletPage() {
 
             {/* 操作按钮区域（仅现金账户时显示） */}
             {overviewMode === "现金账户" && (
-              <div className={`transform transition-all duration-800 ease-out ${
-                loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
-              }`}
-                style={{ 
-                  animationDelay: loadingSteps.balance ? '300ms' : '0ms'
-                }}
-              >
+              <div className="transform transition-all duration-300 ease-out">
                 <div className="flex flex-col md:flex-row gap-4">
                   {/* 主要操作按钮 - 自动适配屏幕宽度 */}
                   <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -827,16 +800,7 @@ export default function WalletPage() {
             {/* 六个卡片布局 - 两排三列，增强动画效果 */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* 第一排 */}
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
-                loadingSteps.balance 
-                  ? 'translate-y-0 opacity-100' 
-                  : 'translate-y-8 opacity-0'
-              }`}
-                style={{ 
-                  animationDelay: loadingSteps.balance ? '100ms' : '0ms',
-                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
-                }}
-              >
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-medium">总余额</h3>
                   <button
@@ -861,32 +825,14 @@ export default function WalletPage() {
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
-                loadingSteps.balance 
-                  ? 'translate-y-0 opacity-100' 
-                  : 'translate-y-8 opacity-0'
-              }`}
-                style={{ 
-                  animationDelay: loadingSteps.balance ? '200ms' : '0ms',
-                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
-                }}
-              >
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
                 <h3 className="text-sm font-medium mb-2">净资产</h3>
                 <div className="text-2xl font-bold text-[#00D4AA] transition-all duration-500">
                   {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
-                loadingSteps.balance 
-                  ? 'translate-y-0 opacity-100' 
-                  : 'translate-y-8 opacity-0'
-              }`}
-                style={{ 
-                  animationDelay: loadingSteps.balance ? '300ms' : '0ms',
-                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
-                }}
-              >
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
                 <h3 className="text-sm font-medium mb-2">未实现盈亏</h3>
                 <div className="text-2xl font-bold text-green-500 transition-all duration-500">
                   {balanceVisible ? contractData.unrealizedPnL : "****"}
@@ -894,16 +840,7 @@ export default function WalletPage() {
               </div>
               
               {/* 第二排 */}
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
-                loadingSteps.balance 
-                  ? 'translate-y-0 opacity-100' 
-                  : 'translate-y-8 opacity-0'
-              }`}
-                style={{ 
-                  animationDelay: loadingSteps.balance ? '400ms' : '0ms',
-                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
-                }}
-              >
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
                 <h3 className="text-sm font-medium mb-2">已实现盈亏</h3>
                 <div className="space-y-1">
                   <div className="flex justify-between items-center">
@@ -917,32 +854,14 @@ export default function WalletPage() {
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
-                loadingSteps.balance 
-                  ? 'translate-y-0 opacity-100' 
-                  : 'translate-y-8 opacity-0'
-              }`}
-                style={{ 
-                  animationDelay: loadingSteps.balance ? '500ms' : '0ms',
-                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
-                }}
-              >
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
                 <h3 className="text-sm font-medium mb-2">已用保证金</h3>
                 <div className="text-2xl font-bold transition-all duration-500">
                   {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
-                loadingSteps.balance 
-                  ? 'translate-y-0 opacity-100' 
-                  : 'translate-y-8 opacity-0'
-              }`}
-                style={{ 
-                  animationDelay: loadingSteps.balance ? '600ms' : '0ms',
-                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
-                }}
-              >
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
                 <h3 className="text-sm font-medium mb-2">可用保证金</h3>
                 <div className="text-2xl font-bold transition-all duration-500">
                   {balanceVisible ? convertBalance(contractData.marginAvailable, "USDT", selectedDisplayCurrency) : "****"}
@@ -951,13 +870,7 @@ export default function WalletPage() {
             </div>
 
             {/* 操作按钮区域 */}
-            <div className={`transform transition-all duration-800 ease-out ${
-              loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
-            }`}
-              style={{ 
-                animationDelay: loadingSteps.balance ? '700ms' : '0ms'
-              }}
-            >
+            <div className="transform transition-all duration-300 ease-out">
               <div className="flex flex-col md:flex-row gap-4">
                 {/* 主要操作按钮 */}
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -1186,7 +1099,7 @@ export default function WalletPage() {
         /* Mobile Layout - Top Tabs */
         <div className="container mx-auto p-4 space-y-6">
           {/* 顶级页签导航 - 移动端 */}
-          <div className="relative mb-4">
+          <div className="relative mb-2">
             <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
               {/* 滑动背景 */}
               <div
@@ -1283,7 +1196,7 @@ export default function WalletPage() {
           <div className={`w-64 ${isDark ? 'bg-[#1a1c2e]' : 'bg-white'} border-r ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'} flex flex-col`}>
             {/* 顶级页签导航 - 聊天界面风格 */}
             <div className="p-3 pt-6">
-              <div className="relative mb-6">
+              <div className="relative mb-3">
                 <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                   {/* 滑动背景 */}
                   <div
