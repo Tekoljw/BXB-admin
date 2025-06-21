@@ -759,8 +759,26 @@ export default function WalletPage() {
               loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
             }`}>
               <div className={`${cardStyle} rounded-lg p-4`}>
-                <h3 className="text-sm font-medium mb-2">总余额</h3>
-                <div className="text-2xl font-bold">{balanceVisible ? `$${contractData.totalBalance}` : "****"}</div>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-medium">总余额</h3>
+                  <button
+                    onClick={handleCurrencyModalClick}
+                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all ${
+                      isDark 
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                      availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                    }`}>
+                      <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
+                    </div>
+                    <span>{selectedDisplayCurrency}</span>
+                    <ChevronDown className="h-2 w-2" />
+                  </button>
+                </div>
+                <div className="text-2xl font-bold">{balanceVisible ? `${convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}</div>
               </div>
               <div className={`${cardStyle} rounded-lg p-4`}>
                 <h3 className="text-sm font-medium mb-2">未实现盈亏</h3>
