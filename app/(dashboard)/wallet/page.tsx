@@ -124,36 +124,7 @@ export default function WalletPage() {
     }, 150)
   }
 
-  const startStepLoading = () => {
-    setIsPageLoading(true)
-    setLoadingSteps({
-      balance: false,
-      assets: false,
-      transactions: false,
-      charts: false
-    })
-
-    // Step 1: Balance info
-    setTimeout(() => {
-      setLoadingSteps(prev => ({ ...prev, balance: true }))
-    }, 200)
-
-    // Step 2: Assets
-    setTimeout(() => {
-      setLoadingSteps(prev => ({ ...prev, assets: true }))
-    }, 600)
-
-    // Step 3: Transactions
-    setTimeout(() => {
-      setLoadingSteps(prev => ({ ...prev, transactions: true }))
-    }, 1000)
-
-    // Step 4: Charts
-    setTimeout(() => {
-      setLoadingSteps(prev => ({ ...prev, charts: true }))
-      setIsPageLoading(false)
-    }, 1400)
-  }
+  // 移除加载函数
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -426,40 +397,33 @@ export default function WalletPage() {
                 }`}
                 onClick={() => setOverviewMode("现金账户")}
               >
-                {!loadingSteps.balance ? (
-                  <div className="space-y-3">
-                    <SkeletonLoader height="h-6" width="w-20" />
-                    <SkeletonLoader height="h-8" width="w-32" />
-                  </div>
-                ) : (
-                  <>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <CreditCard className="h-6 w-6 text-[#00D4AA]" />
-                        <h3 className="text-lg font-semibold">现金账户</h3>
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-2">
+                      <CreditCard className="h-6 w-6 text-[#00D4AA]" />
+                      <h3 className="text-lg font-semibold">现金账户</h3>
+                    </div>
+                    <button
+                      onClick={handleCurrencyModalClick}
+                      className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
+                        isDark 
+                          ? "bg-transparent text-white hover:bg-gray-800" 
+                          : "bg-white text-black hover:bg-gray-50"
+                      }`}
+                    >
+                      <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
+                        availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                      }`}>
+                        <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
                       </div>
-                      <button
-                        onClick={handleCurrencyModalClick}
-                        className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
-                          isDark 
-                            ? "bg-transparent text-white hover:bg-gray-800" 
-                            : "bg-white text-black hover:bg-gray-50"
-                        }`}
-                      >
-                        <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
-                          availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
-                        }`}>
-                          <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
-                        </div>
-                        <span>{selectedDisplayCurrency}</span>
-                        <ChevronDown className="h-3 w-3" />
-                      </button>
-                    </div>
-                    <div className="text-3xl font-bold text-[#00D4AA]">
-                      {balanceVisible ? `${convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
-                    </div>
-                  </>
-                )}
+                      <span>{selectedDisplayCurrency}</span>
+                      <ChevronDown className="h-3 w-3" />
+                    </button>
+                  </div>
+                  <div className="text-3xl font-bold text-[#00D4AA]">
+                    {balanceVisible ? `${convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
+                  </div>
+                </>
               </div>
 
               {/* 总资产卡片 */}
@@ -471,40 +435,33 @@ export default function WalletPage() {
                 }`}
                 onClick={() => setOverviewMode("总资产")}
               >
-                {!loadingSteps.balance ? (
-                  <div className="space-y-3">
-                    <SkeletonLoader height="h-6" width="w-20" />
-                    <SkeletonLoader height="h-8" width="w-32" />
-                  </div>
-                ) : (
-                  <>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Wallet className="h-6 w-6 text-[#00D4AA]" />
-                        <h3 className="text-lg font-semibold">总资产</h3>
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-2">
+                      <Wallet className="h-6 w-6 text-[#00D4AA]" />
+                      <h3 className="text-lg font-semibold">总资产</h3>
+                    </div>
+                    <button
+                      onClick={handleCurrencyModalClick}
+                      className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
+                        isDark 
+                          ? "bg-transparent text-white hover:bg-gray-800" 
+                          : "bg-white text-black hover:bg-gray-50"
+                      }`}
+                    >
+                      <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
+                        availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                      }`}>
+                        <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
                       </div>
-                      <button
-                        onClick={handleCurrencyModalClick}
-                        className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
-                          isDark 
-                            ? "bg-transparent text-white hover:bg-gray-800" 
-                            : "bg-white text-black hover:bg-gray-50"
-                        }`}
-                      >
-                        <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
-                          availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
-                        }`}>
-                          <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
-                        </div>
-                        <span>{selectedDisplayCurrency}</span>
-                        <ChevronDown className="h-3 w-3" />
-                      </button>
-                    </div>
-                    <div className="text-3xl font-bold text-[#00D4AA]">
-                      {balanceVisible ? `${convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
-                    </div>
-                  </>
-                )}
+                      <span>{selectedDisplayCurrency}</span>
+                      <ChevronDown className="h-3 w-3" />
+                    </button>
+                  </div>
+                  <div className="text-3xl font-bold text-[#00D4AA]">
+                    {balanceVisible ? `${convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
+                  </div>
+                </>
               </div>
             </div>
 
@@ -633,9 +590,7 @@ export default function WalletPage() {
             )}
 
             {/* 详细内容区域 */}
-            <div className={`transition-all duration-500 ${
-              loadingSteps.assets ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-            }`}>
+            <div className="transition-all duration-300">
               {overviewMode === "现金账户" ? (
                 /* 现金账户模式：显示各币种余额 */
                 <div className={`${cardStyle} rounded-lg p-6`}>
