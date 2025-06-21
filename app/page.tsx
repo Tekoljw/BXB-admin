@@ -1,461 +1,678 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/hooks/useAuth"
-import { 
-  Shield, 
-  Globe, 
-  TrendingUp, 
-  Users, 
-  Lock, 
-  Zap, 
-  CheckCircle, 
-  ArrowRight,
-  Star,
-  BarChart3,
-  Wallet,
-  CreditCard,
-  ChevronRight,
-  Menu,
-  X,
-  Bitcoin,
-  Sparkles
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
-export default function LandingPage() {
+// 支付页面翻译
+const translations = {
+  en: {
+    title: "BePay Payment Solutions",
+    subtitle: "Simple, secure, and versatile payment solutions for your business",
+    description: "Integrate our powerful payment system with just a few lines of code. Accept payments in multiple currencies including cryptocurrencies and fiat.",
+    getStarted: "Get Started",
+    documentation: "Documentation",
+    features: "Features",
+    featureList: [
+      {
+        title: "Multiple Payment Methods",
+        description: "Accept payments via credit cards, bank transfers, and over 50 cryptocurrencies"
+      },
+      {
+        title: "Low Transaction Fees",
+        description: "Competitive rates starting from just 0.5% per transaction"
+      },
+      {
+        title: "Real-time Settlement",
+        description: "Get funds settled in your account within minutes, not days"
+      },
+      {
+        title: "Advanced Security",
+        description: "Enterprise-grade security with encryption and fraud protection"
+      },
+      {
+        title: "Easy Integration",
+        description: "Simple API and plugins for popular platforms like Shopify, WooCommerce, and more"
+      },
+      {
+        title: "Global Support",
+        description: "Accept payments from customers all around the world in their local currency"
+      }
+    ],
+    integration: "Integration",
+    apiKey: "API Key",
+    getApiKey: "Get Your API Key",
+    sampleCode: "Sample Code",
+    javascript: "JavaScript",
+    python: "Python",
+    php: "PHP",
+    testimonials: "What Our Clients Say",
+    pricing: "Pricing",
+    pricingPlans: [
+      {
+        name: "Starter",
+        price: "$49",
+        period: "per month",
+        features: [
+          "1.5% per transaction",
+          "10,000 monthly transactions",
+          "Email support",
+          "Basic analytics",
+          "3 payment methods"
+        ]
+      },
+      {
+        name: "Business",
+        price: "$199",
+        period: "per month",
+        features: [
+          "1.0% per transaction",
+          "100,000 monthly transactions",
+          "Priority support",
+          "Advanced analytics",
+          "All payment methods",
+          "Custom branding"
+        ]
+      },
+      {
+        name: "Enterprise",
+        price: "Custom",
+        period: "pricing",
+        features: [
+          "Custom transaction fees",
+          "Unlimited transactions",
+          "Dedicated account manager",
+          "Full API access",
+          "Custom integration support",
+          "SLA guarantee"
+        ]
+      }
+    ],
+    contactUs: "Contact Us",
+    name: "Name",
+    email: "Email",
+    message: "Message",
+    send: "Send Message"
+  },
+  zh: {
+    title: "BePay支付解决方案",
+    subtitle: "为您的业务提供简单、安全和多功能的支付解决方案",
+    description: "只需几行代码即可集成我们强大的支付系统。接受多种货币付款，包括加密货币和法定货币。",
+    getStarted: "开始使用",
+    documentation: "文档",
+    features: "功能特点",
+    featureList: [
+      {
+        title: "多种支付方式",
+        description: "接受信用卡、银行转账和超过50种加密货币的付款"
+      },
+      {
+        title: "低交易费用",
+        description: "具有竞争力的费率，每笔交易仅从0.5%起"
+      },
+      {
+        title: "实时结算",
+        description: "资金在几分钟内而不是几天内结算到您的账户"
+      },
+      {
+        title: "高级安全性",
+        description: "具有加密和欺诈保护的企业级安全性"
+      },
+      {
+        title: "轻松集成",
+        description: "简单的API和流行平台插件，如Shopify、WooCommerce等"
+      },
+      {
+        title: "全球支持",
+        description: "接受来自世界各地客户的本地货币付款"
+      }
+    ],
+    integration: "集成",
+    apiKey: "API密钥",
+    getApiKey: "获取您的API密钥",
+    sampleCode: "示例代码",
+    javascript: "JavaScript",
+    python: "Python",
+    php: "PHP",
+    testimonials: "客户评价",
+    pricing: "定价",
+    pricingPlans: [
+      {
+        name: "入门版",
+        price: "¥349",
+        period: "每月",
+        features: [
+          "每笔交易1.5%",
+          "每月10,000笔交易",
+          "电子邮件支持",
+          "基础分析",
+          "3种支付方式"
+        ]
+      },
+      {
+        name: "商业版",
+        price: "¥1,399",
+        period: "每月",
+        features: [
+          "每笔交易1.0%",
+          "每月100,000笔交易",
+          "优先支持",
+          "高级分析",
+          "所有支付方式",
+          "自定义品牌"
+        ]
+      },
+      {
+        name: "企业版",
+        price: "定制",
+        period: "价格",
+        features: [
+          "自定义交易费用",
+          "无限交易",
+          "专属客户经理",
+          "完整API访问",
+          "自定义集成支持",
+          "SLA保证"
+        ]
+      }
+    ],
+    contactUs: "联系我们",
+    name: "姓名",
+    email: "电子邮件",
+    message: "留言",
+    send: "发送消息"
+  }
+}
+
+// 代码示例
+const codeSamples = {
+  javascript: `// BePay integration example
+const bepay = require('bepay-sdk');
+
+// Initialize with your API key
+const client = new bepay.Client('YOUR_API_KEY');
+
+// Create a payment
+async function createPayment() {
+  const payment = await client.payments.create({
+    amount: 1000, // amount in cents
+    currency: 'USD',
+    description: 'Payment for Order #1234',
+    customer: {
+      email: 'customer@example.com'
+    },
+    redirect: {
+      success_url: 'https://yoursite.com/success',
+      cancel_url: 'https://yoursite.com/cancel'
+    }
+  });
+  
+  return payment;
+}`,
+  python: `# BePay integration example
+import bepay
+
+# Initialize with your API key
+client = bepay.Client('YOUR_API_KEY')
+
+# Create a payment
+def create_payment():
+    payment = client.payments.create(
+        amount=1000,  # amount in cents
+        currency='USD',
+        description='Payment for Order #1234',
+        customer={
+            'email': 'customer@example.com'
+        },
+        redirect={
+            'success_url': 'https://yoursite.com/success',
+            'cancel_url': 'https://yoursite.com/cancel'
+        }
+    )
+    
+    return payment`,
+  php: `<?php
+// BePay integration example
+require_once('vendor/autoload.php');
+
+// Initialize with your API key
+$client = new BePay\\Client('YOUR_API_KEY');
+
+// Create a payment
+function createPayment() {
+    $payment = $client->payments->create([
+        'amount' => 1000, // amount in cents
+        'currency' => 'USD',
+        'description' => 'Payment for Order #1234',
+        'customer' => [
+            'email' => 'customer@example.com'
+        ],
+        'redirect' => [
+            'success_url' => 'https://yoursite.com/success',
+            'cancel_url' => 'https://yoursite.com/cancel'
+        ]
+    ]);
+    
+    return $payment;
+}
+?>`
+}
+
+// 客户评价
+const testimonials = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    company: "TechStart Inc.",
+    content: "BePay has revolutionized our payment processing. We've seen a 30% increase in conversion rates since switching.",
+    avatar: "/assets/images/avatar-1.jpg"
+  },
+  {
+    id: 2,
+    name: "Michael Zhang",
+    company: "Global Commerce",
+    content: "The ability to accept both fiat and crypto payments has opened up new markets for our business. Integration was seamless.",
+    avatar: "/assets/images/avatar-2.jpg"
+  },
+  {
+    id: 3,
+    name: "Elena Rodriguez",
+    company: "Fashion Forward",
+    content: "Customer support is exceptional. Any issues are resolved within hours, not days. Highly recommend for growing businesses.",
+    avatar: "/assets/images/avatar-3.jpg"
+  }
+]
+
+export default function Payment() {
+  const [currentLang, setCurrentLang] = useState('en')
+  const [activeTab, setActiveTab] = useState('javascript')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [navbarOpen, setNavbarOpen] = useState(false)
   const router = useRouter()
-  const { isAuthenticated, isLoading } = useAuth()
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-
-  // Redirect authenticated users to chat
-  useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      router.push('/chat')
-    }
-  }, [isAuthenticated, isLoading, router])
+  
+  const t = translations[currentLang as keyof typeof translations]
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
+    // Check local storage for language preference
+    const savedLang = localStorage.getItem('lang')
+    if (savedLang && (savedLang === 'en' || savedLang === 'zh')) {
+      setCurrentLang(savedLang)
     }
     
-    window.addEventListener('scroll', handleScroll)
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('mousemove', handleMouseMove)
-    }
+    // Check login status
+    const hasToken = localStorage.getItem('token')
+    setIsLoggedIn(!!hasToken)
   }, [])
 
-  const features = [
-    {
-      icon: Shield,
-      title: "担保交易保障",
-      description: "多重安全机制，资金担保，让每笔交易都有保障"
-    },
-    {
-      icon: Globe,
-      title: "全球化服务",
-      description: "覆盖全球200+国家和地区，24/7不间断服务"
-    },
-    {
-      icon: TrendingUp,
-      title: "专业交易工具",
-      description: "实时行情分析，专业K线图表，助您把握市场脉搏"
-    },
-    {
-      icon: Users,
-      title: "千万用户信赖",
-      description: "全球超过1000万用户的共同选择，交易量行业领先"
-    },
-    {
-      icon: Lock,
-      title: "银行级安全",
-      description: "采用银行级加密技术，多重身份验证，保障资产安全"
-    },
-    {
-      icon: Zap,
-      title: "极速交易",
-      description: "毫秒级撮合引擎，订单秒速成交，不错过任何机会"
+  const changeLang = (lang: string) => {
+    if (lang === 'en' || lang === 'zh') {
+      localStorage.setItem('lang', lang)
+      setCurrentLang(lang)
     }
-  ]
+  }
 
-  const stats = [
-    { number: "1000万+", label: "全球用户" },
-    { number: "200+", label: "支持国家" },
-    { number: "24/7", label: "客户服务" },
-    { number: "99.9%", label: "系统稳定性" }
-  ]
+  const handleLogin = () => {
+    // 重定向到支付后台登录页面，不使用SDK
+    window.location.href = "/auth"
+  }
 
-  const cryptoList = [
-    { symbol: "BTC", name: "Bitcoin", price: "$67,234.56", change: "+2.34%" },
-    { symbol: "ETH", name: "Ethereum", price: "$3,456.78", change: "+1.87%" },
-    { symbol: "BNB", name: "BNB", price: "$598.32", change: "-0.45%" },
-    { symbol: "ADA", name: "Cardano", price: "$0.4567", change: "+3.21%" },
-    { symbol: "SOL", name: "Solana", price: "$156.78", change: "+5.67%" },
-    { symbol: "DOT", name: "Polkadot", price: "$7.89", change: "+2.10%" }
-  ]
+  const handleAccount = () => {
+    console.log('Account clicked')
+  }
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0">
-        {/* Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-blue-900/30 to-teal-900/30" />
-        
-        {/* Animated Grid */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(rgba(0, 212, 170, 0.3) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0, 212, 170, 0.3) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-            animation: 'grid-move 20s linear infinite'
-          }} />
-        </div>
-        
-        {/* Floating Particles */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-[#00D4AA] rounded-full opacity-50"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `float ${3 + Math.random() * 4}s ease-in-out infinite ${Math.random() * 2}s`,
-                animationDelay: `${Math.random() * 5}s`
-              }}
-            />
-          ))}
-        </div>
-        
-        {/* Mouse Glow Effect */}
-        <div 
-          className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-[#00D4AA]/20 to-blue-500/20 blur-3xl pointer-events-none transition-all duration-300"
-          style={{
-            left: mousePosition.x - 192,
-            top: mousePosition.y - 192,
-          }}
-        />
-      </div>
-
-      {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        isScrolled ? 'bg-black/90 backdrop-blur-xl shadow-2xl border-b border-[#00D4AA]/20' : 'bg-transparent'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-18">
-            <div className="flex items-center space-x-3 group">
-              <div className="relative">
-                <Shield className="h-10 w-10 text-[#00D4AA] group-hover:rotate-12 transition-transform duration-300" />
-                <div className="absolute inset-0 h-10 w-10 bg-[#00D4AA]/20 rounded-full blur-lg group-hover:scale-150 transition-transform duration-300" />
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-3xl font-bold text-white tracking-tight">BeDAO</span>
-                <div className="px-2 py-1 bg-gradient-to-r from-[#00D4AA] to-blue-500 rounded-full">
-                  <span className="text-xs text-white font-bold">PRO</span>
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#050E2F] to-[#061434] text-white">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-[#051037] bg-opacity-90 backdrop-blur-sm">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center py-4">
+            <a href="/">
+              <img src="/assets/images/logo-white.svg" alt="BePay Logo" className="h-10 cursor-pointer" />
+            </a>
+            
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="/" className="text-white hover:text-blue-400 transition cursor-pointer">
+                {currentLang === 'en' ? 'Wallet' : '钱包'}
+              </a>
+              <a href="/payment" className="text-white hover:text-blue-400 transition cursor-pointer">
+                {currentLang === 'en' ? 'Payment' : '支付'}
+              </a>
+              <a href="/news" className="text-white hover:text-blue-400 transition cursor-pointer">
+                {currentLang === 'en' ? 'News' : '新闻'}
+              </a>
+              
+              <div className="relative group">
+                <button className="text-white hover:text-blue-400 transition flex items-center">
+                  {currentLang === 'en' ? 'Documents' : '文档'}
+                  <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div className="absolute left-0 mt-2 w-48 bg-[#091b5a] rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  <a href="https://whitepaper.bepay.com" className="block px-4 py-2 text-sm text-white hover:bg-[#112678] rounded-t-md">
+                    {currentLang === 'en' ? 'White Paper' : '白皮书'}
+                  </a>
+                  <a href="https://docs.bepay.com" className="block px-4 py-2 text-sm text-white hover:bg-[#112678] rounded-b-md">
+                    {currentLang === 'en' ? 'Development DOCS' : '开发文档'}
+                  </a>
                 </div>
               </div>
+              
+              <div className="relative group">
+                <button className="px-3 py-1 rounded bg-[#091b5a] text-white flex items-center">
+                  <img src={`/assets/images/icons/${currentLang === 'en' ? 'US' : 'CN'}.png`} alt={currentLang} className="w-5 h-5 mr-2" />
+                  {currentLang}
+                </button>
+                <div className="absolute right-0 mt-2 w-24 bg-[#091b5a] rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  {currentLang !== 'en' && (
+                    <button onClick={() => changeLang('en')} className="flex items-center w-full px-4 py-2 text-sm text-white hover:bg-[#112678] rounded-t-md">
+                      <img src="/assets/images/icons/US.png" alt="English" className="w-5 h-5 mr-2" />
+                      en
+                    </button>
+                  )}
+                  {currentLang !== 'zh' && (
+                    <button onClick={() => changeLang('zh')} className="flex items-center w-full px-4 py-2 text-sm text-white hover:bg-[#112678] rounded-b-md">
+                      <img src="/assets/images/icons/CN.png" alt="Chinese" className="w-5 h-5 mr-2" />
+                      zh
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              {isLoggedIn ? (
+                <button 
+                  onClick={handleAccount} 
+                  className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 transition"
+                >
+                  {currentLang === 'en' ? 'Wallet' : '钱包'}
+                </button>
+              ) : (
+                <button 
+                  onClick={handleLogin} 
+                  className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 transition"
+                >
+                  {currentLang === 'en' ? 'Login' : '登录'}
+                </button>
+              )}
             </div>
             
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-300 hover:text-[#00D4AA] transition-all duration-300 hover:scale-105 relative group">
-                功能特色
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00D4AA] group-hover:w-full transition-all duration-300"></span>
-              </a>
-              <a href="#about" className="text-gray-300 hover:text-[#00D4AA] transition-all duration-300 hover:scale-105 relative group">
-                关于我们
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00D4AA] group-hover:w-full transition-all duration-300"></span>
-              </a>
-              <a href="#security" className="text-gray-300 hover:text-[#00D4AA] transition-all duration-300 hover:scale-105 relative group">
-                安全保障
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00D4AA] group-hover:w-full transition-all duration-300"></span>
-              </a>
-              <Button 
-                onClick={() => window.location.href = '/api/login'}
-                className="bg-gradient-to-r from-[#00D4AA] to-blue-500 hover:from-[#00B894] hover:to-blue-600 text-white px-8 py-3 rounded-full transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#00D4AA]/25"
-              >
-                登录交易
-                <Sparkles className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden text-white"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            <button 
+              onClick={() => setNavbarOpen(!navbarOpen)} 
+              className="md:hidden text-white focus:outline-none"
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+              </svg>
             </button>
           </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-black/95 backdrop-blur-xl border-t border-[#00D4AA]/20">
-            <div className="px-4 py-6 space-y-6">
-              <a href="#features" className="block text-gray-300 hover:text-[#00D4AA] transition-colors py-2">功能特色</a>
-              <a href="#about" className="block text-gray-300 hover:text-[#00D4AA] transition-colors py-2">关于我们</a>
-              <a href="#security" className="block text-gray-300 hover:text-[#00D4AA] transition-colors py-2">安全保障</a>
-              <Button 
-                onClick={() => window.location.href = '/api/login'}
-                className="w-full bg-gradient-to-r from-[#00D4AA] to-blue-500 hover:from-[#00B894] hover:to-blue-600 text-white py-4 rounded-full shadow-lg"
-              >
-                登录交易
-                <Sparkles className="ml-2 h-4 w-4" />
-              </Button>
+          
+          {/* Mobile menu */}
+          {navbarOpen && (
+            <div className="md:hidden py-4 border-t border-[#112678]">
+              <a href="/" className="block py-2 text-white hover:text-blue-400 cursor-pointer">
+                {currentLang === 'en' ? 'Wallet' : '钱包'}
+              </a>
+              <a href="/payment" className="block py-2 text-white hover:text-blue-400 cursor-pointer">
+                {currentLang === 'en' ? 'Payment' : '支付'}
+              </a>
+              <a href="/news" className="block py-2 text-white hover:text-blue-400 cursor-pointer">
+                {currentLang === 'en' ? 'News' : '新闻'}
+              </a>
+              <div className="py-2">
+                <div className="block py-2 text-white">
+                  {currentLang === 'en' ? 'Documents' : '文档'}
+                </div>
+                <a href="https://whitepaper.bepay.com" className="block py-2 pl-4 text-gray-300 hover:text-blue-400">
+                  {currentLang === 'en' ? 'White Paper' : '白皮书'}
+                </a>
+                <a href="https://docs.bepay.com" className="block py-2 pl-4 text-gray-300 hover:text-blue-400">
+                  {currentLang === 'en' ? 'Development DOCS' : '开发文档'}
+                </a>
+              </div>
+              <div className="py-2 flex space-x-2">
+                <button onClick={() => changeLang('en')} className={`px-3 py-1 rounded ${currentLang === 'en' ? 'bg-[#1a46ff]' : 'bg-[#091b5a]'}`}>
+                  <img src="/assets/images/icons/US.png" alt="English" className="w-5 h-5" />
+                </button>
+                <button onClick={() => changeLang('zh')} className={`px-3 py-1 rounded ${currentLang === 'zh' ? 'bg-[#1a46ff]' : 'bg-[#091b5a]'}`}>
+                  <img src="/assets/images/icons/CN.png" alt="Chinese" className="w-5 h-5" />
+                </button>
+              </div>
             </div>
-          </div>
-        )}
-      </nav>
+          )}
+        </div>
+      </header>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center">
-            {/* Animated Title */}
-            <div className="mb-8">
-              <h1 className="text-6xl md:text-8xl font-bold text-white mb-4 leading-tight">
-                <span className="inline-block animate-pulse">全球</span>
-                <span className="inline-block bg-gradient-to-r from-[#00D4AA] to-blue-500 bg-clip-text text-transparent animate-bounce">加密货币</span>
+      <section className="py-20 md:py-32 relative overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="text-center md:text-left">
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                {t.title}
               </h1>
-              <h1 className="text-6xl md:text-8xl font-bold mb-6 leading-tight">
-                <span className="bg-gradient-to-r from-[#00D4AA] via-blue-500 to-purple-500 bg-clip-text text-transparent bg-300% animate-gradient">
-                  担保交易所
-                </span>
-              </h1>
-            </div>
-            
-            {/* Subtitle with Typewriter Effect */}
-            <p className="text-xl md:text-3xl text-gray-300 mb-12 max-w-5xl mx-auto leading-relaxed">
-              <span className="inline-block border-r-2 border-[#00D4AA] animate-pulse">
-                安全可靠的数字资产交易平台，提供专业的担保交易服务
-              </span>
-            </p>
-            
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-              <Button 
-                onClick={() => window.location.href = '/api/login'}
-                className="group bg-gradient-to-r from-[#00D4AA] to-blue-500 hover:from-[#00B894] hover:to-blue-600 text-white px-12 py-6 text-xl rounded-full transform hover:scale-110 transition-all duration-300 shadow-2xl hover:shadow-[#00D4AA]/50"
-              >
-                <span className="flex items-center">
-                  立即登录交易
-                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
-                </span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="group border-2 border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black px-12 py-6 text-xl rounded-full transform hover:scale-110 transition-all duration-300"
-              >
-                <span className="flex items-center">
-                  了解更多
-                  <Globe className="ml-3 h-6 w-6 group-hover:rotate-180 transition-transform duration-500" />
-                </span>
-              </Button>
-            </div>
-            
-            {/* Floating Elements */}
-            <div className="absolute top-20 left-10 w-16 h-16 bg-[#00D4AA]/20 rounded-full blur-lg animate-bounce" style={{ animationDelay: '0s' }} />
-            <div className="absolute top-40 right-20 w-12 h-12 bg-blue-500/20 rounded-full blur-lg animate-bounce" style={{ animationDelay: '1s' }} />
-            <div className="absolute bottom-20 left-20 w-20 h-20 bg-purple-500/20 rounded-full blur-lg animate-bounce" style={{ animationDelay: '2s' }} />
-          </div>
-
-          {/* Animated Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center group">
-                <div className="relative mb-4">
-                  <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#00D4AA] to-blue-500 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
-                    {stat.number}
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/20 to-blue-500/20 rounded-lg blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-                <div className="text-gray-300 text-lg group-hover:text-white transition-colors duration-300">{stat.label}</div>
+              <p className="text-xl md:text-2xl text-gray-300 mb-4">{t.subtitle}</p>
+              <p className="text-lg text-gray-400 mb-8">{t.description}</p>
+              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center md:justify-start">
+                <button className="px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition">
+                  {t.getStarted}
+                </button>
+                <button className="px-8 py-4 rounded-full border-2 border-blue-500 text-blue-400 text-lg font-semibold hover:bg-blue-900 hover:bg-opacity-30 transition">
+                  {t.documentation}
+                </button>
               </div>
-            ))}
+            </div>
+            <div className="relative">
+              <img src="/assets/images/payment-hero.png" alt="BePay Payment" className="rounded-lg shadow-2xl mx-auto" />
+              <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full opacity-60 blur-xl"></div>
+              <div className="absolute -left-8 top-1/2 w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full opacity-60 blur-xl"></div>
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* Live Crypto Prices - Enhanced */}
-      <section className="relative py-24 bg-gradient-to-b from-black to-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold bg-gradient-to-r from-[#00D4AA] to-blue-500 bg-clip-text text-transparent mb-4">
-              实时加密货币行情
-            </h2>
-            <p className="text-xl text-gray-400">跟踪全球主要加密货币的实时价格变动</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {cryptoList.map((crypto, index) => (
-              <div 
-                key={index} 
-                className="group relative bg-gradient-to-br from-gray-900/80 to-black/80 rounded-2xl p-8 border border-gray-800 hover:border-[#00D4AA]/50 transition-all duration-500 hover:transform hover:scale-105 backdrop-blur-xl"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {/* Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/10 to-blue-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
-                
-                <div className="relative flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="relative">
-                      <div className="w-14 h-14 bg-gradient-to-r from-[#00D4AA] to-blue-500 rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                        <span className="text-white font-bold text-lg">{crypto.symbol.charAt(0)}</span>
-                      </div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/20 to-blue-500/20 rounded-full blur-lg group-hover:scale-150 transition-transform duration-300" />
-                    </div>
-                    <div>
-                      <div className="text-white font-bold text-xl">{crypto.symbol}</div>
-                      <div className="text-gray-400">{crypto.name}</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-white font-bold text-xl group-hover:text-[#00D4AA] transition-colors duration-300">
-                      {crypto.price}
-                    </div>
-                    <div className={`text-lg font-semibold ${
-                      crypto.change.startsWith('+') 
-                        ? 'text-green-400' 
-                        : 'text-red-400'
-                    } group-hover:scale-110 transition-transform duration-300`}>
-                      {crypto.change}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* Background Decorations */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-[#00D4AA]/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-bl from-blue-500 to-purple-600 opacity-10 rounded-bl-full"></div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-20 bg-[#071435]" id="features">
+        <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">为什么选择BeDAO</h2>
-            <p className="text-xl text-gray-300">专业、安全、可靠的加密货币交易服务</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.features}</h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto"></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="bg-slate-800/50 rounded-lg p-8 border border-slate-700 hover:border-[#00D4AA]/50 transition-all hover:transform hover:scale-105">
-                <feature.icon className="h-12 w-12 text-[#00D4AA] mb-4" />
-                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                <p className="text-gray-300 leading-relaxed">{feature.description}</p>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {t.featureList.map((feature, index) => (
+              <div key={index} className="bg-[#091b5a] rounded-xl p-8 transform transition hover:-translate-y-2 hover:shadow-xl">
+                <div className="w-16 h-16 bg-[#0e2173] rounded-full flex items-center justify-center mb-6">
+                  <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
+                <p className="text-gray-400">{feature.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Security Section */}
-      <section id="security" className="py-20 bg-slate-800/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold text-white mb-6">银行级安全保障</h2>
-              <p className="text-xl text-gray-300 mb-8">
-                我们采用最先进的安全技术，多层防护机制，确保您的数字资产绝对安全。
-              </p>
-              <div className="space-y-4">
-                {[
-                  "SSL加密传输",
-                  "多重签名钱包",
-                  "冷热钱包分离",
-                  "24/7安全监控",
-                  "保险基金保障"
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 text-[#00D4AA]" />
-                    <span className="text-gray-300">{item}</span>
-                  </div>
-                ))}
+      {/* Integration Section */}
+      <section className="py-20" id="integration">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.integration}</h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto"></div>
+          </div>
+          
+          <div className="bg-[#091b5a] rounded-xl p-8 mb-12">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+              <div>
+                <h3 className="text-2xl font-semibold mb-2">{t.apiKey}</h3>
+                <p className="text-gray-400">YOUR_API_KEY</p>
+              </div>
+              <button className="mt-4 md:mt-0 px-6 py-3 bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+                {t.getApiKey}
+              </button>
+            </div>
+            
+            <h3 className="text-2xl font-semibold mb-4">{t.sampleCode}</h3>
+            <div className="bg-[#050E2F] rounded-t-lg border-b border-[#112678]">
+              <div className="flex">
+                <button 
+                  onClick={() => setActiveTab('javascript')}
+                  className={`px-4 py-2 ${activeTab === 'javascript' ? 'bg-[#091b5a] text-white' : 'text-gray-400'}`}
+                >
+                  {t.javascript}
+                </button>
+                <button 
+                  onClick={() => setActiveTab('python')}
+                  className={`px-4 py-2 ${activeTab === 'python' ? 'bg-[#091b5a] text-white' : 'text-gray-400'}`}
+                >
+                  {t.python}
+                </button>
+                <button 
+                  onClick={() => setActiveTab('php')}
+                  className={`px-4 py-2 ${activeTab === 'php' ? 'bg-[#091b5a] text-white' : 'text-gray-400'}`}
+                >
+                  {t.php}
+                </button>
               </div>
             </div>
-            <div className="lg:text-center">
-              <div className="inline-block p-8 bg-gradient-to-br from-[#00D4AA]/20 to-blue-500/20 rounded-full">
-                <Shield className="h-32 w-32 text-[#00D4AA]" />
-              </div>
-            </div>
+            <pre className="bg-[#050E2F] p-4 rounded-b-lg overflow-x-auto text-gray-300 text-sm">
+              {codeSamples[activeTab as keyof typeof codeSamples]}
+            </pre>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-[#00D4AA] to-blue-500">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-white mb-6">准备开始您的交易之旅？</h2>
-          <p className="text-xl text-white/90 mb-8">
-            加入全球数百万用户的行列，体验最安全、最专业的加密货币交易服务
-          </p>
-          <Button 
-            onClick={() => router.push('/wallet')}
-            className="bg-white text-[#00D4AA] hover:bg-gray-100 px-8 py-4 text-lg h-auto font-bold"
-          >
-            立即注册交易
-            <ChevronRight className="ml-2 h-5 w-5" />
-          </Button>
+      {/* Testimonials */}
+      <section className="py-20 bg-[#071435]" id="testimonials">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.testimonials}</h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto"></div>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial) => (
+              <div key={testimonial.id} className="bg-[#091b5a] rounded-xl p-8">
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+                    <img 
+                      src={testimonial.avatar || `/assets/images/avatar-placeholder.jpg`} 
+                      alt={testimonial.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/assets/images/avatar-placeholder.jpg';
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">{testimonial.name}</h3>
+                    <p className="text-gray-400 text-sm">{testimonial.company}</p>
+                  </div>
+                </div>
+                <p className="text-gray-300 italic">"{testimonial.content}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-20" id="pricing">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.pricing}</h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto"></div>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {t.pricingPlans.map((plan, index) => (
+              <div key={index} className={`bg-[#091b5a] rounded-xl p-8 flex flex-col ${index === 1 ? 'border-2 border-blue-500 transform md:-translate-y-4' : ''}`}>
+                <h3 className="text-2xl font-semibold mb-2">{plan.name}</h3>
+                <div className="mb-4">
+                  <span className="text-4xl font-bold">{plan.price}</span>
+                  <span className="text-gray-400"> {plan.period}</span>
+                </div>
+                <ul className="mb-8 flex-1">
+                  {plan.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start mb-3">
+                      <svg className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span className="text-gray-300">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button className={`w-full py-3 rounded-lg ${index === 1 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-[#0e2173] hover:bg-[#112678]'} transition`}>
+                  {t.getStarted}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form */}
+      <section className="py-20 bg-[#071435]" id="contact">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.contactUs}</h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto"></div>
+            </div>
+            
+            <form className="bg-[#091b5a] rounded-xl p-8">
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-gray-400 mb-2">{t.name}</label>
+                  <input 
+                    type="text" 
+                    className="w-full px-4 py-3 bg-[#0e2173] border border-[#112678] rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-400 mb-2">{t.email}</label>
+                  <input 
+                    type="email" 
+                    className="w-full px-4 py-3 bg-[#0e2173] border border-[#112678] rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+              <div className="mb-6">
+                <label className="block text-gray-400 mb-2">{t.message}</label>
+                <textarea 
+                  rows={5}
+                  className="w-full px-4 py-3 bg-[#0e2173] border border-[#112678] rounded-lg focus:outline-none focus:border-blue-500"
+                ></textarea>
+              </div>
+              <button className="w-full py-3 bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+                {t.send}
+              </button>
+            </form>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-16 bg-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <Shield className="h-8 w-8 text-[#00D4AA]" />
-                <span className="text-2xl font-bold text-white">BeDAO</span>
-              </div>
-              <p className="text-gray-400">
-                全球领先的加密货币担保交易平台
-              </p>
+      <footer className="py-12 bg-[#071435]">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-6 md:mb-0">
+              <img src="/assets/images/logo-white.svg" alt="BePay Logo" className="h-10 mb-4" />
+              <p className="text-gray-400">© 2025 BePay. {currentLang === 'en' ? 'All rights reserved.' : '保留所有权利。'}</p>
             </div>
-            <div>
-              <h3 className="text-white font-bold mb-4">产品服务</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">现货交易</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">合约交易</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">担保交易</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">理财服务</a></li>
-              </ul>
+            <div className="flex space-x-6">
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                {currentLang === 'en' ? 'Terms' : '条款'}
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                {currentLang === 'en' ? 'Privacy' : '隐私'}
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                {currentLang === 'en' ? 'Support' : '支持'}
+              </a>
             </div>
-            <div>
-              <h3 className="text-white font-bold mb-4">帮助中心</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">用户指南</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">API文档</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">费率说明</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">联系客服</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-white font-bold mb-4">关于我们</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">公司介绍</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">安全保障</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">法律声明</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">隐私政策</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-slate-700 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 BeDAO. All rights reserved. 全球加密货币担保交易所</p>
           </div>
         </div>
       </footer>
