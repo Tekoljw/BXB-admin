@@ -76,6 +76,8 @@ export default function WalletPage() {
   const [transferTo, setTransferTo] = useState("合约账户") // 划转目标账户
   const [transferCurrency, setTransferCurrency] = useState("USDT") // 划转币种
   const [transferAmount, setTransferAmount] = useState("") // 划转金额
+  const [activeTopTab, setActiveTopTab] = useState<"账户资产" | "订单记录">("账户资产") // 顶级页签
+  const [activeOrderTab, setActiveOrderTab] = useState("现货订单") // 订单记录页签
 
   // 处理仓位分布弹窗
   const handlePositionModalClick = (e: React.MouseEvent) => {
@@ -395,6 +397,13 @@ export default function WalletPage() {
     
     if (action === "划转" || action === "transfer") {
       handleTransferClick()
+    } else if (action === "交易") {
+      // 根据当前账户类型跳转到不同交易页面
+      if (overviewMode === "现金账户") {
+        window.location.href = "/usdt-trade" // 现货交易页面
+      } else {
+        window.location.href = "/futures-trade" // 合约交易页面
+      }
     } else {
       setSelectedAction(selectedAction === action ? "" : action)
     }
