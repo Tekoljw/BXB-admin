@@ -29,7 +29,9 @@ import {
   ArrowUpDown,
   TrendingDown,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
+  History,
+  TrendingUp as Trade
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -43,6 +45,7 @@ export default function WalletPage() {
   const [selectedCurrency, setSelectedCurrency] = useState("USDT")
   const [selectedDisplayCurrency, setSelectedDisplayCurrency] = useState("USDT") // 卡片显示币种
   const [selectedAction, setSelectedAction] = useState("") // 选中的操作按钮
+  const [clickedAction, setClickedAction] = useState("") // 点击的操作按钮
   const [showCurrencyModal, setShowCurrencyModal] = useState(false) // 币种选择弹窗
   const [currencyModalAnimating, setCurrencyModalAnimating] = useState(false) // 币种弹窗动画状态
   const [showAssetModal, setShowAssetModal] = useState(false) // 资产管理弹窗
@@ -340,6 +343,13 @@ export default function WalletPage() {
     }
   }
 
+  // 处理操作按钮点击
+  const handleActionClick = (action: string) => {
+    setClickedAction(action)
+    setTimeout(() => setClickedAction(""), 150)
+    setSelectedAction(selectedAction === action ? "" : action)
+  }
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "钱包总览":
@@ -441,22 +451,28 @@ export default function WalletPage() {
               <div className={`transition-all duration-500 ${
                 loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
               }`}>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   {actionButtons.map((button) => {
                     const Icon = button.icon
                     const isSelected = selectedAction === button.id
+                    const isClicked = clickedAction === button.id
                     const isDeposit = button.id === "入金"
                     
                     return (
                       <Button 
                         key={button.id}
-                        onClick={() => setSelectedAction(isSelected ? "" : button.id)}
-                        className={`h-12 transition-all duration-200 text-base font-bold ${
-                          isSelected 
-                            ? "bg-black text-white border-black hover:bg-gray-800" 
-                            : isDeposit
-                              ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90"
-                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                        onClick={() => handleActionClick(button.id)}
+                        onMouseDown={() => setClickedAction(button.id)}
+                        onMouseUp={() => setClickedAction("")}
+                        onMouseLeave={() => setClickedAction("")}
+                        className={`h-12 transition-all duration-200 text-base font-bold transform ${
+                          isClicked
+                            ? "scale-95 bg-gray-900 text-white border-gray-900"
+                            : isSelected 
+                              ? "bg-black text-white border-black hover:bg-gray-800 shadow-lg" 
+                              : isDeposit
+                                ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90 hover:scale-105"
+                                : "bg-transparent border-2 border-black text-black hover:bg-gray-50 hover:scale-105 dark:border-white dark:text-white dark:hover:bg-gray-800"
                         }`}
                         variant={isSelected ? "default" : isDeposit ? "default" : "outline"}
                       >
@@ -465,6 +481,31 @@ export default function WalletPage() {
                       </Button>
                     )
                   })}
+                  
+                  {/* 资金记录按钮 - 仅图标 */}
+                  <Button
+                    onClick={() => handleActionClick("records")}
+                    onMouseDown={() => setClickedAction("records")}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-12 w-12 p-0 transition-all duration-200 transform ${
+                      clickedAction === "records"
+                        ? "scale-95 bg-gray-900 border-gray-900"
+                        : selectedAction === "records"
+                          ? "bg-black border-black shadow-lg"
+                          : "bg-transparent border-2 border-black hover:bg-gray-50 hover:scale-105 dark:border-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                    title="资金记录/现货交易记录"
+                  >
+                    <History 
+                      className={`h-5 w-5 transition-colors ${
+                        clickedAction === "records" || selectedAction === "records" 
+                          ? "text-white" 
+                          : "text-purple-500"
+                      }`} 
+                    />
+                  </Button>
                 </div>
               </div>
             )}
