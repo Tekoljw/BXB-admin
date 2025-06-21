@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ClientProviders from "./client-providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,23 +10,6 @@ export const metadata: Metadata = {
   title: "BeDAO - 全球加密货币担保交易所",
   description: "安全可靠的数字资产交易平台，提供专业的担保交易服务",
 };
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-      retry: false,
-    },
-  },
-});
-
-function QueryProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
-  );
-}
 
 export default function RootLayout({
   children,
@@ -36,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="zh" suppressHydrationWarning>
       <body className={inter.className}>
-        <QueryProvider>
+        <ClientProviders>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -45,7 +28,7 @@ export default function RootLayout({
           >
             {children}
           </ThemeProvider>
-        </QueryProvider>
+        </ClientProviders>
       </body>
     </html>
   );

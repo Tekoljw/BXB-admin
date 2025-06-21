@@ -17,8 +17,13 @@ async function startServer() {
     // Basic JSON parsing
     server.use(express.json());
     
-    // Handle Next.js requests
-    server.all("*", (req, res) => {
+    // Simple health check route
+    server.get('/api/health', (req, res) => {
+      res.json({ status: 'ok' });
+    });
+    
+    // Handle Next.js requests - use get method to avoid path-to-regexp issues
+    server.get("*", (req, res) => {
       return handle(req, res);
     });
     
