@@ -830,6 +830,24 @@ export default function WalletPage() {
               </div>
             </div>
 
+            {/* 已实现盈亏三卡片布局 */}
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 transition-all duration-500 ${
+              loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">今日已实现盈亏</h3>
+                <div className="text-xl font-bold text-green-500">+123.45 USDT</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">本周已实现盈亏</h3>
+                <div className="text-xl font-bold text-green-500">+567.89 USDT</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">本月已实现盈亏</h3>
+                <div className="text-xl font-bold text-red-500">-234.56 USDT</div>
+              </div>
+            </div>
+
             {/* 操作按钮区域 */}
             <div className={`transition-all duration-500 ${
               loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
@@ -924,6 +942,16 @@ export default function WalletPage() {
                             : "text-black dark:text-white"
                       }`} 
                     />
+                  </Button>
+
+                  {/* 仓位分布按钮 */}
+                  <Button
+                    onClick={() => setShowPositionModal(true)}
+                    className={`h-12 w-12 transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800`}
+                    variant="outline"
+                    title="仓位分布"
+                  >
+                    <PieChart className="h-4 w-4 text-black dark:text-white" />
                   </Button>
                 </div>
               </div>
