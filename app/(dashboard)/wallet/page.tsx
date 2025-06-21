@@ -49,6 +49,7 @@ export default function WalletPage() {
   const [showAddAssetModal, setShowAddAssetModal] = useState(false) // 添加资产弹窗
   const [addAssetModalAnimating, setAddAssetModalAnimating] = useState(false) // 添加资产弹窗动画状态
   const [currencyType, setCurrencyType] = useState("crypto") // "crypto" or "fiat"
+  const [currencyTypeAnimating, setCurrencyTypeAnimating] = useState(false) // 币种类型切换动画
   const [addAssetStates, setAddAssetStates] = useState<{[key: string]: boolean}>({}) // 添加资产状态
   const [searchTerm, setSearchTerm] = useState("") // 搜索关键词
   const [sortBy, setSortBy] = useState("value") // 排序方式：value, marketCap
@@ -313,20 +314,10 @@ export default function WalletPage() {
     setTimeout(() => setShowAddAssetModal(false), 300)
   }
 
-  // 排序切换动画
+  // 排序切换动画 - 优化性能
   const handleSortChange = (newSortBy: string) => {
     if (newSortBy !== sortBy) {
-      // 添加滑动动画效果
-      const container = document.querySelector('.sort-container')
-      if (container) {
-        container.classList.add('animate-slide')
-        setTimeout(() => {
-          setSortBy(newSortBy)
-          container.classList.remove('animate-slide')
-        }, 150)
-      } else {
-        setSortBy(newSortBy)
-      }
+      setSortBy(newSortBy)
     }
   }
 
@@ -336,6 +327,17 @@ export default function WalletPage() {
       ...prev,
       [symbol]: !prev[symbol]
     }))
+  }
+
+  // 处理币种类型切换动画
+  const handleCurrencyTypeChange = (newType: string) => {
+    if (newType !== currencyType) {
+      setCurrencyTypeAnimating(true)
+      setTimeout(() => {
+        setCurrencyType(newType)
+        setCurrencyTypeAnimating(false)
+      }, 150)
+    }
   }
 
   const renderTabContent = () => {
@@ -504,16 +506,16 @@ export default function WalletPage() {
                           <Minus className="h-3 w-3 -mt-1" />
                         </div>
                       </button>
-                      <div className={`flex rounded-full p-1 sort-container ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-100'}`}>
+                      <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-100'}`}>
                         <button
                           onClick={() => {
                             handleSortChange("value")
                             setSortOrder(sortOrder === "desc" ? "asc" : "desc")
                           }}
-                          className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 transform ${
+                          className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                             sortBy === "value"
-                              ? "bg-black text-white shadow-sm scale-105"
-                              : isDark ? "text-gray-300 hover:text-white hover:scale-105" : "text-gray-600 hover:text-gray-800 hover:scale-105"
+                              ? "bg-black text-white"
+                              : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
                           }`}
                         >
                           按余额排序 {sortBy === "value" && (sortOrder === "desc" ? <ArrowDown className="inline h-3 w-3 ml-1" /> : <ArrowUp className="inline h-3 w-3 ml-1" />)}
@@ -523,10 +525,10 @@ export default function WalletPage() {
                             handleSortChange("marketCap")
                             setSortOrder(sortOrder === "desc" ? "asc" : "desc")
                           }}
-                          className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 transform ${
+                          className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                             sortBy === "marketCap"
-                              ? "bg-black text-white shadow-sm scale-105"
-                              : isDark ? "text-gray-300 hover:text-white hover:scale-105" : "text-gray-600 hover:text-gray-800 hover:scale-105"
+                              ? "bg-black text-white"
+                              : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
                           }`}
                         >
                           按市值排序 {sortBy === "marketCap" && (sortOrder === "desc" ? <ArrowDown className="inline h-3 w-3 ml-1" /> : <ArrowUp className="inline h-3 w-3 ml-1" />)}
@@ -589,8 +591,8 @@ export default function WalletPage() {
                               </span>
                               <div className="w-20 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                 <div 
-                                  className="h-full bg-[#00D4AA] transition-all duration-500 ease-out"
-                                  style={{ width: account.percentage }}
+                                  className="h-full bg-[#00D4AA] transition-all duration-500 ease-out ml-auto"
+                                  style={{ width: account.percentage, marginLeft: `calc(100% - ${account.percentage})` }}
                                 />
                               </div>
                             </div>
@@ -783,28 +785,28 @@ export default function WalletPage() {
               <div className="flex justify-center mb-6">
                 <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-100'}`}>
                   <button
-                    onClick={() => setCurrencyType("crypto")}
-                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                    onClick={() => handleCurrencyTypeChange("crypto")}
+                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 transform ${
                       currencyType === "crypto"
-                        ? "bg-black text-white"
-                        : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"
+                        ? "bg-black text-white scale-105"
+                        : isDark ? "text-gray-400 hover:text-white hover:scale-105" : "text-gray-600 hover:text-black hover:scale-105"
                     }`}
                   >
                     加密货币
                   </button>
                   <button
-                    onClick={() => setCurrencyType("fiat")}
-                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                    onClick={() => handleCurrencyTypeChange("fiat")}
+                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 transform ${
                       currencyType === "fiat"
-                        ? "bg-black text-white"
-                        : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"
+                        ? "bg-black text-white scale-105"
+                        : isDark ? "text-gray-400 hover:text-white hover:scale-105" : "text-gray-600 hover:text-black hover:scale-105"
                     }`}
                   >
                     法币
                   </button>
                 </div>
               </div>
-              <div className="space-y-3">
+              <div className={`space-y-3 transition-all duration-300 ${currencyTypeAnimating ? 'opacity-50 transform translate-x-2' : 'opacity-100 transform translate-x-0'}`}>
                 {(currencyType === "crypto" ? availableCurrencies : [
                   { symbol: "USD", name: "美元", color: "bg-green-500" },
                   { symbol: "EUR", name: "欧元", color: "bg-blue-500" },
