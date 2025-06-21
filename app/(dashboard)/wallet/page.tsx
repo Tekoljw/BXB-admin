@@ -34,7 +34,12 @@ import {
   History,
   FileText,
   BarChart2,
-  PieChart
+  PieChart,
+  ShoppingCart,
+  LineChart,
+  Banknote,
+  Percent,
+  CreditCard as CardIcon
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -144,8 +149,15 @@ export default function WalletPage() {
   ]
 
   const orderTabs = [
-    "现货订单", "合约订单", "理财订单", "U卡订单", "佣金记录", 
-    "担保记录", "充提币记录", "划转记录", "USDT买卖记录"
+    { id: "现货订单", label: "现货订单", icon: ShoppingCart },
+    { id: "合约订单", label: "合约订单", icon: LineChart },
+    { id: "理财订单", label: "理财订单", icon: PiggyBank },
+    { id: "U卡订单", label: "U卡订单", icon: CardIcon },
+    { id: "佣金记录", label: "佣金记录", icon: Percent },
+    { id: "担保记录", label: "担保记录", icon: Shield },
+    { id: "充提币记录", label: "充提币记录", icon: ArrowUpDown },
+    { id: "划转记录", label: "划转记录", icon: ArrowLeftRight },
+    { id: "USDT买卖记录", label: "USDT买卖记录", icon: Banknote }
   ]
 
   // 币种汇率数据
@@ -1104,23 +1116,27 @@ export default function WalletPage() {
             </div>
           ) : (
             <div className="flex flex-wrap gap-2 p-1 bg-gray-200 dark:bg-[#252842] rounded-lg">
-              {orderTabs.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setOrderTab(tab)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
-                    orderTab === tab
-                      ? isDark
-                        ? "border-white bg-white text-black shadow-sm"
-                        : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
-                      : isDark
-                        ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842]"
-                        : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
+              {orderTabs.map((tab) => {
+                const Icon = tab.icon
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setOrderTab(tab.id)}
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
+                      orderTab === tab.id
+                        ? isDark
+                          ? "border-white bg-white text-black shadow-sm"
+                          : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
+                        : isDark
+                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842]"
+                          : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{tab.label}</span>
+                  </button>
+                )
+              })}
             </div>
           )}
 
@@ -1204,21 +1220,25 @@ export default function WalletPage() {
               {/* 订单记录页签 */}
               {topLevelTab === "订单记录" && (
                 <div className="space-y-1">
-                  {orderTabs.map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setOrderTab(tab)}
-                      className={`w-full px-3 py-3 rounded-lg text-left text-sm font-medium transition-all duration-300 transform border ${
-                        orderTab === tab
-                          ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
-                          : isDark
-                            ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] hover:scale-102"
-                            : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
+                  {orderTabs.map((tab) => {
+                    const Icon = tab.icon
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setOrderTab(tab.id)}
+                        className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
+                          orderTab === tab.id
+                            ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
+                            : isDark
+                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] hover:scale-102"
+                              : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
+                        }`}
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{tab.label}</span>
+                      </button>
+                    )
+                  })}
                 </div>
               )}
             </nav>
