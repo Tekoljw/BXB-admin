@@ -1,0 +1,988 @@
+完整的AI体育预测系统代码
+1. 后端核心文件
+服务器主入口 (server/index.ts)
+
+import express from "express";
+import { createServer } from "http";
+import { WebSocketServer } from "ws";
+import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
+import { pool } from "./db";
+import { registerRoutes } from "./routes";
+const app = express();
+const PORT = process.env.PORT || 3000;
+app.use(express.json());
+app.use(express.static("dist"));
+// Session configuration
+const PgSession = connectPgSimple(session);
+app.use(session({
+  store: new PgSession({
+    pool: pool,
+    tableName: 'sessions'
+  }),
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false, maxAge: 30 * 24 * 60 * 60 * 1000 }
+}));
+const server = await registerRoutes(app);
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+AI预测引擎 (server/ai-predictor.ts)
+
+import axios from 'axios';
+import type { SportsEvent } from './sports-crawler';
+export interface PredictionResult {
+  eventId: string;
+  homeWinProbability: number;
+  awayWinProbability: number;
+  drawProbability?: number;
+  confidence: number;
+  analysis: string;
+  keyFactors: string[];
+  prediction: 'home' | 'away' | 'draw';
+  timestamp: Date;
+}
+export class AIPredictor {
+  private readonly DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+  async predictMatch(event: SportsEvent, apiKey?: string): Promise<PredictionResult> {
+    if (!apiKey) {
+      throw new Error('Deepseek API key is required for predictions');
+    }
+    try {
+      const prompt = this.generatePredictionPrompt(event);
+      const response = await axios.post(this.DEEPSEEK_API_URL, {
+        model: 'deepseek-chat',
+        messages: [
+          {
+            role: 'system',
+            content: '你是一名专业的体育分析师，专长足球比赛预测。基于球队表现、历史数据、当前状态和统计趋势来分析比赛。提供的概率百分比必须总和为100%。所有分析和关键因素必须用中文回答。'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 1000
+      }, {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return this.parseAIResponse(event, response.data.choices[0].message.content);
+    } catch (error) {
+      console.error('AI prediction error:', error);
+      throw new Error('Failed to generate prediction');
+    }
+  }
+  private generatePredictionPrompt(event: SportsEvent): string {
+    return `请分析这场即将到来的足球比赛并提供详细预测：
+比赛详情：
+- 联赛: ${event.league}
+- 主队: ${event.homeTeam}
+- 客队: ${event.awayTeam}
+- 比赛时间: ${event.startTime.toISOString()}
+- 场地: ${event.venue || '未知'}
+请提供以下信息：
+1. ${event.homeTeam}（主队）的胜率
+2. ${event.awayTeam}（客队）的胜率
+3. 平局概率
+4. 整体信心度（1-100）
+5. 影响预测的关键因素
+6. 简要分析说明你的推理
+请用以下JSON格式回答，所有文本内容必须是中文：
+{
+  "homeWinProbability": number,
+  "awayWinProbability": number,
+  "drawProbability": number,
+  "confidence": number,
+  "analysis": "中文分析内容",
+  "keyFactors": ["中文因素1", "中文因素2", "中文因素3"],
+  "prediction": "home|away|draw"
+}
+确保所有概率值真实且总和为100%。`;
+  }
+  private parseAIResponse(event: SportsEvent, aiResponse: string): PredictionResult {
+    try {
+      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        throw new Error('Invalid AI response format');
+      }
+      const parsed = JSON.parse(jsonMatch[0]);
+      
+      return {
+        eventId: event.id,
+        homeWinProbability: parsed.homeWinProbability,
+        awayWinProbability: parsed.awayWinProbability,
+        drawProbability: parsed.drawProbability,
+        confidence: parsed.confidence,
+        analysis: parsed.analysis,
+        keyFactors: parsed.keyFactors || [],
+        prediction: parsed.prediction,
+        timestamp: new Date()
+      };
+    } catch (error) {
+      console.error('Error parsing AI response:', error);
+      throw new Error('Failed to parse prediction results');
+    }
+  }
+  async predictMultipleMatches(events: SportsEvent[], apiKey?: string): Promise<PredictionResult[]> {
+    if (!apiKey) {
+      throw new Error('Deepseek API key is required for predictions');
+    }
+    const predictions: PredictionResult[] = [];
+    
+    for (const event of events.slice(0, 10)) {
+      try {
+        const prediction = await this.predictMatch(event, apiKey);
+        predictions.push(prediction);
+        
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      } catch (error) {
+        console.error(`Failed to predict match ${event.id}:`, error);
+      }
+    }
+    return predictions;
+  }
+}
+export const aiPredictor = new AIPredictor();
+体育数据爬取器 (server/sports-crawler.ts)
+
+import axios from 'axios';
+import { translateSportsEvent } from './sports-translation';
+export interface SportsEvent {
+  id: string;
+  sport: string;
+  league: string;
+  homeTeam: string;
+  awayTeam: string;
+  startTime: Date;
+  status: 'upcoming' | 'live' | 'finished';
+  homeScore?: number;
+  awayScore?: number;
+  odds?: {
+    home: number;
+    away: number;
+    draw?: number;
+  };
+  venue?: string;
+}
+export class SportsCrawler {
+  private readonly ODDS_API_BASE = 'https://api.the-odds-api.com/v4';
+  async getUpcomingEvents(): Promise<SportsEvent[]> {
+    try {
+      const apiKey = process.env.SPORTS_API_KEY;
+      
+      if (apiKey) {
+        console.log('Fetching sports events from The Odds API...');
+        try {
+          const events = await this.getFromOddsAPI(apiKey);
+          console.log(`The Odds API returned ${events.length} events`);
+          
+          if (events.length > 0) {
+            console.log('Translating sports data using local translation library...');
+            const translatedEvents = this.translateEventsLocally(events);
+            console.log(`Successfully translated ${translatedEvents.length} events to Chinese`);
+            return translatedEvents;
+          }
+        } catch (oddsApiError: any) {
+          console.log('The Odds API error, falling back to sample data...');
+          if (oddsApiError.response?.data?.error_code === 'OUT_OF_USAGE_CREDITS') {
+            console.log('API quota exhausted, using sample data');
+          }
+        }
+      }
+      
+      throw new Error('Sports API quota exhausted. Please provide a valid SPORTS_API_KEY with available quota to access real-time sports data.');
+    } catch (error) {
+      console.error('Error fetching sports events from all sources:', error);
+      throw new Error('Unable to fetch sports data from available sources. Please check API configuration.');
+    }
+  }
+  private translateEventsLocally(events: SportsEvent[]): SportsEvent[] {
+    return events.map(event => translateSportsEvent(event));
+  }
+  private async getFromOddsAPI(apiKey: string): Promise<SportsEvent[]> {
+    try {
+      const sportsResponse = await axios.get(`${this.ODDS_API_BASE}/sports`, {
+        params: { apiKey: apiKey }
+      });
+      const sports = sportsResponse.data;
+      console.log(`Found ${sports.length} available sports`);
+      const allEvents: SportsEvent[] = [];
+      const popularSports = sports.slice(0, 5);
+      for (const sport of popularSports) {
+        try {
+          const oddsResponse = await axios.get(`${this.ODDS_API_BASE}/sports/${sport.key}/odds`, {
+            params: {
+              apiKey: apiKey,
+              regions: 'us,uk,eu',
+              markets: 'h2h',
+              oddsFormat: 'decimal',
+              dateFormat: 'iso'
+            }
+          });
+          const events = oddsResponse.data.map((event: any) => {
+            const startTime = new Date(event.commence_time);
+            const homeTeam = event.home_team;
+            const awayTeam = event.away_team;
+            let odds = undefined;
+            if (event.bookmakers && event.bookmakers.length > 0) {
+              const bookmaker = event.bookmakers[0];
+              if (bookmaker.markets && bookmaker.markets.length > 0) {
+                const market = bookmaker.markets[0];
+                if (market.outcomes && market.outcomes.length >= 2) {
+                  const homeOdds = market.outcomes.find((o: any) => o.name === homeTeam);
+                  const awayOdds = market.outcomes.find((o: any) => o.name === awayTeam);
+                  const drawOdds = market.outcomes.find((o: any) => o.name === 'Draw');
+                  odds = {
+                    home: homeOdds?.price || 2.0,
+                    away: awayOdds?.price || 2.0,
+                    draw: drawOdds?.price
+                  };
+                }
+              }
+            }
+            return {
+              id: event.id,
+              sport: sport.title,
+              league: sport.group || sport.title,
+              homeTeam,
+              awayTeam,
+              startTime,
+              status: this.getEventStatus(startTime),
+              odds
+            } as SportsEvent;
+          });
+          allEvents.push(...events);
+          console.log(`Fetched ${events.length} events from ${sport.title}`);
+        } catch (sportError) {
+          console.error(`Error fetching events for ${sport.title}:`, sportError);
+          continue;
+        }
+      }
+      return allEvents;
+    } catch (error) {
+      console.error('The Odds API error:', error);
+      return this.generateSampleEvents();
+    }
+  }
+  private getEventStatus(startTime: Date): 'upcoming' | 'live' | 'finished' {
+    const now = new Date();
+    const timeDiff = startTime.getTime() - now.getTime();
+    
+    if (timeDiff > 2 * 60 * 60 * 1000) {
+      return 'upcoming';
+    } else if (timeDiff > -2 * 60 * 60 * 1000) {
+      return 'live';
+    } else {
+      return 'finished';
+    }
+  }
+  private generateSampleEvents(): SportsEvent[] {
+    return [
+      {
+        id: 'sample_1',
+        sport: 'Football',
+        league: 'Premier League',
+        homeTeam: 'Manchester United',
+        awayTeam: 'Liverpool',
+        startTime: new Date(Date.now() + 2 * 60 * 60 * 1000),
+        status: 'upcoming',
+        venue: 'Old Trafford',
+        odds: { home: 2.85, away: 2.45, draw: 3.20 }
+      }
+    ];
+  }
+}
+export const sportsCrawler = new SportsCrawler();
+API路由处理 (server/routes.ts - 核心预测部分)
+
+// AI Sports Prediction Routes
+app.get('/api/sports/events', async (req, res) => {
+  try {
+    const { sportsCrawler } = await import('./sports-crawler');
+    const events = await sportsCrawler.getUpcomingEvents();
+    res.json(events);
+  } catch (error: any) {
+    console.error('Failed to fetch sports events:', error);
+    
+    if (error.message?.includes('quota exhausted')) {
+      return res.status(402).json({ 
+        message: 'Sports API quota exhausted. Please provide a valid SPORTS_API_KEY to access real-time sports data.',
+        error: 'QUOTA_EXHAUSTED',
+        requiresApiKey: true
+      });
+    }
+    
+    res.status(500).json({ 
+      message: 'Failed to fetch sports events',
+      error: 'API_ERROR'
+    });
+  }
+});
+app.post('/api/sports/predict', async (req, res) => {
+  try {
+    const { eventId } = req.body;
+    const deepseekKey = process.env.DEEPSEEK_API_KEY;
+    
+    if (!deepseekKey) {
+      return res.status(400).json({ 
+        message: 'AI prediction service unavailable. Please configure API keys.',
+        error: 'MISSING_API_KEY'
+      });
+    }
+    const { sportsCrawler } = await import('./sports-crawler');
+    const { aiPredictor } = await import('./ai-predictor');
+    
+    const events = await sportsCrawler.getUpcomingEvents();
+    const event = events.find(e => e.id === eventId);
+    
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    const prediction = await aiPredictor.predictMatch(event, deepseekKey);
+    res.json(prediction);
+  } catch (error) {
+    console.error('Prediction error:', error);
+    res.status(500).json({ 
+      message: 'Failed to generate prediction',
+      error: error.message 
+    });
+  }
+});
+// User Prediction Tracking
+app.post('/api/predictions/submit', async (req, res) => {
+  try {
+    const { userId, eventId, predictedOutcome, confidence, eventStartTime } = req.body;
+    
+    if (!userId || !eventId || !predictedOutcome || !eventStartTime) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    const existingPrediction = await storage.getUserPredictionForEvent(userId, eventId);
+    if (existingPrediction) {
+      return res.status(400).json({ message: '您已经对此比赛进行过预测' });
+    }
+    const prediction = await storage.createUserPrediction({
+      userId,
+      eventId,
+      predictedOutcome,
+      confidence: confidence || 50,
+      eventStartTime: new Date(eventStartTime),
+      actualOutcome: null,
+      isCorrect: null,
+      pointsAwarded: 0
+    });
+    const pointsService = await import('./points-service');
+    const service = new pointsService.PointsService(storage);
+    await service.awardPrediction(userId, false);
+    res.json({ 
+      success: true, 
+      prediction,
+      message: '预测提交成功，获得10积分参与奖励'
+    });
+  } catch (error) {
+    console.error('Submit prediction error:', error);
+    res.status(500).json({ 
+      message: '提交预测失败',
+      error: error.message 
+    });
+  }
+});
+2. 前端核心文件
+预测页面组件 (client/src/pages/predictions.tsx)
+
+import { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { Calendar, Clock, MapPin, TrendingUp, Brain, AlertCircle, Loader2, FileText } from "lucide-react";
+import { format } from "date-fns";
+interface SportsEvent {
+  id: string;
+  sport: string;
+  league: string;
+  homeTeam: string;
+  awayTeam: string;
+  startTime: string;
+  status: 'upcoming' | 'live' | 'finished';
+  homeScore?: number;
+  awayScore?: number;
+  venue?: string;
+  odds?: {
+    home: number;
+    away: number;
+    draw?: number;
+  };
+}
+interface PredictionResult {
+  eventId: string;
+  homeWinProbability: number;
+  awayWinProbability: number;
+  drawProbability?: number;
+  confidence: number;
+  analysis: string;
+  keyFactors: string[];
+  prediction: 'home' | 'away' | 'draw';
+  timestamp: string;
+}
+export default function Predictions() {
+  const { toast } = useToast();
+  const [selectedEvent, setSelectedEvent] = useState<SportsEvent | null>(null);
+  const [prediction, setPrediction] = useState<PredictionResult | null>(null);
+  const [analyzedEvents, setAnalyzedEvents] = useState<Map<string, PredictionResult>>(new Map());
+  const [showPredictionDialog, setShowPredictionDialog] = useState(false);
+  const [currentPrediction, setCurrentPrediction] = useState<PredictionResult | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [showUserPredictionDialog, setShowUserPredictionDialog] = useState(false);
+  const [selectedUserPrediction, setSelectedUserPrediction] = useState<'home' | 'away' | 'draw' | null>(null);
+  const [predictionConfidence, setPredictionConfidence] = useState(50);
+  const [currentUserId] = useState('demo-user-123');
+  // Fetch sports events
+  const { data: events = [], isLoading, error } = useQuery<SportsEvent[]>({
+    queryKey: ['/api/sports/events'],
+    retry: false,
+  });
+  // AI prediction mutation
+  const predictMutation = useMutation<PredictionResult, Error, string>({
+    mutationFn: async (eventId: string) => {
+      const response = await apiRequest('POST', '/api/sports/predict', { eventId });
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setPrediction(data);
+      setAnalyzedEvents(prev => new Map(prev.set(data.eventId, data)));
+      toast({
+        title: "预测成功",
+        description: "AI预测分析已生成",
+      });
+    },
+    onError: (error: any) => {
+      console.error('Prediction error:', error);
+      if (error.message.includes('MISSING_API_KEY')) {
+        toast({
+          title: "API密钥缺失",
+          description: "请配置Deepseek API密钥以使用AI预测功能",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "预测失败",
+          description: "无法生成AI预测，请稍后重试",
+          variant: "destructive",
+        });
+      }
+    },
+  });
+  // Submit user prediction
+  const submitPredictionMutation = useMutation({
+    mutationFn: async (data: {
+      userId: string;
+      eventId: string;
+      predictedOutcome: string;
+      confidence: number;
+      eventStartTime: string;
+    }) => {
+      return await apiRequest("POST", "/api/predictions/submit", data);
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "预测提交成功",
+        description: data.message || "您已获得10积分参与奖励",
+      });
+      setShowUserPredictionDialog(false);
+      setSelectedUserPrediction(null);
+      setPredictionConfidence(50);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "提交失败",
+        description: error.message || "预测提交失败，请稍后重试",
+        variant: "destructive",
+      });
+    },
+  });
+  const handlePredict = (event: SportsEvent) => {
+    setSelectedEvent(event);
+    setPrediction(null);
+    predictMutation.mutate(event.id);
+  };
+  const handleViewReport = (event: SportsEvent) => {
+    const eventPrediction = analyzedEvents.get(event.id);
+    if (eventPrediction) {
+      setCurrentPrediction(eventPrediction);
+      setSelectedEvent(event);
+      setShowPredictionDialog(true);
+    }
+  };
+  const handleMakePrediction = (event: SportsEvent) => {
+    setSelectedEvent(event);
+    setShowUserPredictionDialog(true);
+  };
+  const handleSubmitUserPrediction = () => {
+    if (!selectedEvent || !selectedUserPrediction) return;
+    
+    submitPredictionMutation.mutate({
+      userId: currentUserId,
+      eventId: selectedEvent.id,
+      predictedOutcome: selectedUserPrediction,
+      confidence: predictionConfidence,
+      eventStartTime: selectedEvent.startTime,
+    });
+  };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+  if (isLoading) {
+    return (
+      <div className="p-4 max-w-md mx-auto">
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <Card key={i}>
+              <CardContent className="pt-4">
+                <div className="animate-pulse space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-8 bg-gray-200 rounded"></div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  if (error) {
+    const errorMessage = (error as any)?.message || '';
+    const isQuotaError = errorMessage.includes('quota exhausted');
+    const isApiKeyError = errorMessage.includes('API key');
+    
+    return (
+      <div className="p-6 max-w-md mx-auto">
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-center text-center">
+              <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+            </div>
+            <h3 className="text-lg font-semibold text-center mb-2">
+              {isQuotaError ? 'API配额已用完' : isApiKeyError ? '需要API密钥' : '数据获取失败'}
+            </h3>
+            <p className="text-sm text-muted-foreground text-center mb-4">
+              {isQuotaError 
+                ? '体育数据API配额已用完，需要有效的API密钥来获取实时体育数据'
+                : isApiKeyError 
+                ? '需要有效的SPORTS_API_KEY来获取真实的体育赛事数据'
+                : '无法获取体育赛事数据，请检查网络连接或稍后重试'
+              }
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+  return (
+    <div className="p-4 pb-20">
+      <div className="max-w-md mx-auto space-y-4">
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold flex items-center justify-center gap-2">
+            <Brain className="h-6 w-6 text-blue-500" />
+            AI体育预测
+          </h1>
+          <p className="text-sm text-muted-foreground mt-2">
+            基于Deepseek AI的智能体育赛事预测分析
+          </p>
+        </div>
+        <div className="space-y-4">
+          {events.map((event: SportsEvent) => (
+            <Card key={event.id} className="overflow-hidden">
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <Badge variant="outline" className="text-xs">
+                    {event.league}
+                  </Badge>
+                  <Badge 
+                    variant={event.status === 'live' ? 'destructive' : 'secondary'}
+                    className="text-xs"
+                  >
+                    {event.status === 'upcoming' ? '即将开始' : 
+                     event.status === 'live' ? '进行中' : '已结束'}
+                  </Badge>
+                </div>
+              </CardHeader>
+              
+              <CardContent className="space-y-4">
+                <div className="text-center">
+                  <div className="flex items-center justify-between text-sm font-medium">
+                    <span className="flex-1 text-left">{event.homeTeam}</span>
+                    <span className="text-muted-foreground px-2">VS</span>
+                    <span className="flex-1 text-right">{event.awayTeam}</span>
+                  </div>
+                  
+                  {event.homeScore !== undefined && event.awayScore !== undefined && (
+                    <div className="flex items-center justify-center gap-2 mt-2 text-lg font-bold">
+                      <span>{event.homeScore}</span>
+                      <span className="text-muted-foreground">-</span>
+                      <span>{event.awayScore}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-3 w-3" />
+                    {format(new Date(event.startTime), 'MM/dd')}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
+                    {format(new Date(event.startTime), 'HH:mm')}
+                  </div>
+                  {event.venue && (
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-3 w-3" />
+                      {event.venue.slice(0, 8)}...
+                    </div>
+                  )}
+                </div>
+                {event.odds && (
+                  <div className="flex justify-between text-xs bg-muted/50 p-2 rounded">
+                    <span>主胜: {event.odds.home.toFixed(2)}</span>
+                    {event.odds.draw && <span>平局: {event.odds.draw.toFixed(2)}</span>}
+                    <span>客胜: {event.odds.away.toFixed(2)}</span>
+                  </div>
+                )}
+                {analyzedEvents.has(event.id) ? (
+                  <div className="space-y-2">
+                    <div className="text-sm text-green-600 font-medium">
+                      AI已帮你分析该场比赛的概率!
+                    </div>
+                    <Button 
+                      onClick={() => handleViewReport(event)}
+                      size="sm"
+                      variant="outline"
+                      className="w-full"
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      查看报告
+                    </Button>
+                  </div>
+                ) : (
+                  <Button 
+                    onClick={() => handlePredict(event)}
+                    disabled={predictMutation.isPending && selectedEvent?.id === event.id}
+                    size="sm"
+                    className="w-full"
+                  >
+                    {predictMutation.isPending && selectedEvent?.id === event.id ? (
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <span className="text-sm">AI正在进行分析...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <TrendingUp className="h-4 w-4 mr-2" />
+                        AI预测
+                      </>
+                    )}
+                  </Button>
+                )}
+                {event.status === 'upcoming' && (
+                  <Button 
+                    onClick={() => handleMakePrediction(event)}
+                    size="sm"
+                    className="w-full mt-2"
+                    variant="secondary"
+                  >
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    我要预测 (获得积分)
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        {/* AI预测报告弹窗 */}
+        <Dialog open={showPredictionDialog} onOpenChange={setShowPredictionDialog}>
+          <DialogContent className="max-w-sm w-[90vw] max-h-[90vh] p-0 gap-0">
+            <DialogHeader className="p-4 pb-2">
+              <DialogTitle className="text-center text-base">AI分析报告</DialogTitle>
+            </DialogHeader>
+            
+            {currentPrediction && selectedEvent && (
+              <div className="max-h-[calc(90vh-80px)] overflow-y-auto px-4 pb-4">
+                <div className="space-y-3">
+                  <div className="text-center py-2">
+                    <h3 className="font-medium text-base leading-tight">
+                      {selectedEvent.homeTeam} vs {selectedEvent.awayTeam}
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {selectedEvent.league} • {selectedEvent.sport}
+                    </p>
+                  </div>
+                  <div className="text-center p-3 bg-muted rounded-lg">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <Brain className="h-4 w-4 text-blue-600" />
+                      <span className="font-medium text-sm">AI预测</span>
+                    </div>
+                    <Badge className="bg-blue-500 text-white text-xs">
+                      {currentPrediction.prediction === 'home' ? '主队获胜' : 
+                       currentPrediction.prediction === 'away' ? '客队获胜' : '平局'}
+                    </Badge>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      可信度: {currentPrediction.confidence.toFixed(1)}%
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-sm">预测概率</h4>
+                    
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">主胜</span>
+                        <div className="flex items-center gap-2">
+                          <Progress value={currentPrediction.homeWinProbability} className="w-16 h-1.5" />
+                          <span className="text-xs font-medium w-10 text-right">
+                            {currentPrediction.homeWinProbability.toFixed(1)}%
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">客胜</span>
+                        <div className="flex items-center gap-2">
+                          <Progress value={currentPrediction.awayWinProbability} className="w-16 h-1.5" />
+                          <span className="text-xs font-medium w-10 text-right">
+                            {currentPrediction.awayWinProbability.toFixed(1)}%
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {currentPrediction.drawProbability && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">平局</span>
+                          <div className="flex items-center gap-2">
+                            <Progress value={currentPrediction.drawProbability} className="w-16 h-1.5" />
+                            <span className="text-xs font-medium w-10 text-right">
+                              {currentPrediction.drawProbability.toFixed(1)}%
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-sm">分析详情</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {currentPrediction.analysis}
+                    </p>
+                  </div>
+                  {currentPrediction.keyFactors.length > 0 && (
+                    <div className="space-y-2">
+                      <h5 className="font-medium text-sm">关键因素</h5>
+                      <ul className="space-y-1">
+                        {currentPrediction.keyFactors.map((factor, index) => (
+                          <li key={index} className="text-xs text-muted-foreground flex items-start gap-2">
+                            <span className="text-blue-600 mt-0.5 text-xs">•</span>
+                            <span className="flex-1">{factor}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  <div className="text-xs text-muted-foreground text-center pt-2 border-t">
+                    分析时间: {format(new Date(currentPrediction.timestamp), 'MM-dd HH:mm')}
+                  </div>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+        {/* 用户预测弹窗 */}
+        <Dialog open={showUserPredictionDialog} onOpenChange={setShowUserPredictionDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-lg font-bold">提交预测</DialogTitle>
+            </DialogHeader>
+            
+            {selectedEvent && (
+              <div className="space-y-4">
+                <div className="text-center p-3 bg-muted/50 rounded-lg">
+                  <div className="font-medium">{selectedEvent.homeTeam} VS {selectedEvent.awayTeam}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {format(new Date(selectedEvent.startTime), 'MM/dd HH:mm')}
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <h4 className="font-medium text-sm">选择您的预测</h4>
+                  
+                  <div className="grid grid-cols-3 gap-2">
+                    <Button
+                      variant={selectedUserPrediction === 'home' ? 'default' : 'outline'}
+                      onClick={() => setSelectedUserPrediction('home')}
+                      className="h-12 text-sm"
+                    >
+                      主胜
+                    </Button>
+                    
+                    <Button
+                      variant={selectedUserPrediction === 'draw' ? 'default' : 'outline'}
+                      onClick={() => setSelectedUserPrediction('draw')}
+                      className="h-12 text-sm"
+                    >
+                      平局
+                    </Button>
+                    
+                    <Button
+                      variant={selectedUserPrediction === 'away' ? 'default' : 'outline'}
+                      onClick={() => setSelectedUserPrediction('away')}
+                      className="h-12 text-sm"
+                    >
+                      客胜
+                    </Button>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <label className="text-sm font-medium">信心度</label>
+                    <span className="text-sm text-muted-foreground">{predictionConfidence}%</span>
+                  </div>
+                  
+                  <input
+                    type="range"
+                    min="1"
+                    max="100"
+                    value={predictionConfidence}
+                    onChange={(e) => setPredictionConfidence(Number(e.target.value))}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+                <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <div className="text-sm text-blue-700 dark:text-blue-300">
+                    <div className="flex items-center gap-2 mb-1">
+                      <TrendingUp className="h-4 w-4" />
+                      积分奖励
+                    </div>
+                    <div className="text-xs">
+                      • 参与预测: +10 积分<br/>
+                      • 预测正确: +50 积分 (总计)
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-2 pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowUserPredictionDialog(false)}
+                    className="flex-1"
+                  >
+                    取消
+                  </Button>
+                  <Button
+                    onClick={handleSubmitUserPrediction}
+                    disabled={!selectedUserPrediction || submitPredictionMutation.isPending}
+                    className="flex-1"
+                  >
+                    {submitPredictionMutation.isPending ? (
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    ) : null}
+                    提交预测
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
+  );
+}
+3. 数据库模式 (shared/schema.ts - 预测相关部分)
+// 体育赛事表
+export const sportsEvents = pgTable("sports_events", {
+  id: varchar("id").primaryKey(),
+  sport: varchar("sport", { length: 50 }).notNull(),
+  league: varchar("league", { length: 100 }).notNull(),
+  homeTeam: varchar("home_team", { length: 100 }).notNull(),
+  awayTeam: varchar("away_team", { length: 100 }).notNull(),
+  startTime: timestamp("start_time").notNull(),
+  status: varchar("status", { length: 20 }).notNull(),
+  homeScore: integer("home_score"),
+  awayScore: integer("away_score"),
+  venue: varchar("venue", { length: 200 }),
+  odds: jsonb("odds").$type<{home: number, away: number, draw?: number}>(),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+});
+// AI预测表
+export const predictions = pgTable("predictions", {
+  id: serial("id").primaryKey(),
+  eventId: varchar("event_id").notNull().references(() => sportsEvents.id),
+  homeWinProbability: integer("home_win_probability").notNull(),
+  awayWinProbability: integer("away_win_probability").notNull(),
+  drawProbability: integer("draw_probability"),
+  confidence: integer("confidence").notNull(),
+  analysis: text("analysis").notNull(),
+  keyFactors: jsonb("key_factors").$type<string[]>().notNull(),
+  prediction: varchar("prediction", { length: 10 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+// 用户预测表
+export const userPredictions = pgTable("user_predictions", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id", { length: 50 }).notNull(),
+  eventId: varchar("event_id", { length: 100 }).notNull(),
+  predictedOutcome: varchar("predicted_outcome", { length: 20 }).notNull(),
+  confidence: integer("confidence"),
+  actualOutcome: varchar("actual_outcome", { length: 20 }),
+  isCorrect: boolean("is_correct"),
+  pointsAwarded: integer("points_awarded").default(0),
+  eventStartTime: timestamp("event_start_time").notNull(),
+  submittedAt: timestamp("submitted_at").defaultNow(),
+  settledAt: timestamp("settled_at"),
+});
+// 积分系统表
+export const userPoints = pgTable("user_points", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  totalPoints: integer("total_points").notNull().default(0),
+  level: integer("level").notNull().default(1),
+  streakDays: integer("streak_days").notNull().default(0),
+  lastActivityDate: timestamp("last_activity_date"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+export const pointsTransactions = pgTable("points_transactions", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  points: integer("points").notNull(),
+  action: varchar("action", { length: 50 }).notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+4. 翻译服务 (server/sports-translation.ts)
+这个文件包含了完整的体育术语中英文翻译对照表，包括：
+
+运动项目翻译 (足球、篮球、网球等)
+联赛翻译 (英超、西甲、NBA等)
+球队翻译 (曼联、巴萨、湖人等)
+球员翻译
+5. 积分服务 (server/points-service.ts)
+提供完整的积分管理功能：
+
+用户预测积分奖励
+每日登录奖励
+成就系统
+积分交易记录
+环境变量配置
+# 必需的API密钥
+DEEPSEEK_API_KEY=your_deepseek_api_key
+SPORTS_API_KEY=your_sports_api_key
+# 数据库连接
+DATABASE_URL=your_postgresql_url
+# 会话密钥
+SESSION_SECRET=your_session_secret

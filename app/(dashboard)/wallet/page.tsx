@@ -70,6 +70,12 @@ export default function WalletPage() {
   })
   const [showPositionModal, setShowPositionModal] = useState(false) // 仓位分布弹窗
   const [positionModalAnimating, setPositionModalAnimating] = useState(false) // 仓位弹窗动画状态
+  const [showTransferModal, setShowTransferModal] = useState(false) // 划转弹窗
+  const [transferModalAnimating, setTransferModalAnimating] = useState(false) // 划转弹窗动画状态
+  const [transferFrom, setTransferFrom] = useState("现货账户") // 划转来源账户
+  const [transferTo, setTransferTo] = useState("合约账户") // 划转目标账户
+  const [transferCurrency, setTransferCurrency] = useState("USDT") // 划转币种
+  const [transferAmount, setTransferAmount] = useState("") // 划转金额
 
   // 处理仓位分布弹窗
   const handlePositionModalClick = (e: React.MouseEvent) => {
@@ -83,6 +89,27 @@ export default function WalletPage() {
   const closePositionModal = () => {
     setPositionModalAnimating(false)
     setTimeout(() => setShowPositionModal(false), 300)
+  }
+
+  // 处理划转弹窗
+  const handleTransferClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!showTransferModal) {
+      setShowTransferModal(true)
+      setTimeout(() => setTransferModalAnimating(true), 50)
+    }
+  }
+
+  const closeTransferModal = () => {
+    setTransferModalAnimating(false)
+    setTimeout(() => setShowTransferModal(false), 300)
+  }
+
+  // 交换划转账户
+  const swapTransferAccounts = () => {
+    const temp = transferFrom
+    setTransferFrom(transferTo)
+    setTransferTo(temp)
   }
   const [isPageLoading, setIsPageLoading] = useState(true)
   const isDark = theme === "dark"
@@ -365,7 +392,12 @@ export default function WalletPage() {
   const handleActionClick = (action: string) => {
     setClickedAction(action)
     setTimeout(() => setClickedAction(""), 150)
-    setSelectedAction(selectedAction === action ? "" : action)
+    
+    if (action === "划转" || action === "transfer") {
+      handleTransferClick({} as React.MouseEvent)
+    } else {
+      setSelectedAction(selectedAction === action ? "" : action)
+    }
   }
 
   const renderTabContent = () => {
@@ -1477,6 +1509,159 @@ export default function WalletPage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 划转弹窗 */}
+      {showTransferModal && (
+        <div className="fixed inset-0 z-50">
+          {/* 背景遮罩 */}
+          <div 
+            className={`absolute inset-0 bg-black transition-opacity duration-300 ${
+              transferModalAnimating ? 'bg-opacity-50' : 'bg-opacity-0'
+            }`}
+            onClick={closeTransferModal}
+          />
+          {/* 弹窗内容 */}
+          <div className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 max-w-[90vw] bg-[#1a1d29] border border-[#252842] rounded-lg transition-all duration-300 ease-out ${
+            transferModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}>
+            <div className="p-6">
+              {/* 标题 */}
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-white">划转</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={closeTransferModal}
+                  className="h-8 w-8 p-0 text-gray-400 hover:text-white"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+
+              {/* 账户选择区域 */}
+              <div className="mb-6">
+                <div className="grid grid-cols-3 gap-3 items-center">
+                  {/* 从账户 */}
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">从</label>
+                    <select
+                      value={transferFrom}
+                      onChange={(e) => setTransferFrom(e.target.value)}
+                      className="w-full p-3 bg-[#252842] border border-[#3a3d4a] rounded-lg text-white text-sm focus:outline-none focus:border-[#00D4AA]"
+                    >
+                      <option value="现货账户">现货账户</option>
+                      <option value="合约账户">合约账户</option>
+                      <option value="理财账户">理财账户</option>
+                      <option value="U卡账户">U卡账户</option>
+                    </select>
+                  </div>
+
+                  {/* 交换按钮 */}
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={swapTransferAccounts}
+                      variant="ghost"
+                      size="sm"
+                      className="h-10 w-10 p-0 text-gray-400 hover:text-white hover:bg-[#2a2d42]"
+                    >
+                      <ArrowLeftRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  {/* 到账户 */}
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">到</label>
+                    <select
+                      value={transferTo}
+                      onChange={(e) => setTransferTo(e.target.value)}
+                      className="w-full p-3 bg-[#252842] border border-[#3a3d4a] rounded-lg text-white text-sm focus:outline-none focus:border-[#00D4AA]"
+                    >
+                      <option value="现货账户">现货账户</option>
+                      <option value="合约账户">合约账户</option>
+                      <option value="理财账户">理财账户</option>
+                      <option value="U卡账户">U卡账户</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* 币种选择 */}
+              <div className="mb-6">
+                <label className="block text-sm text-gray-400 mb-2">币种</label>
+                <select
+                  value={transferCurrency}
+                  onChange={(e) => setTransferCurrency(e.target.value)}
+                  className="w-full p-3 bg-[#252842] border border-[#3a3d4a] rounded-lg text-white text-sm focus:outline-none focus:border-[#00D4AA]"
+                >
+                  <option value="USDT">USDT Tether USDt</option>
+                  <option value="BTC">BTC Bitcoin</option>
+                  <option value="ETH">ETH Ethereum</option>
+                  <option value="BNB">BNB BNB</option>
+                </select>
+              </div>
+
+              {/* 币种搜索框 */}
+              <div className="mb-6">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="搜索币种"
+                    className="w-full pl-10 pr-4 py-3 bg-[#252842] border border-[#3a3d4a] rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none focus:border-[#00D4AA]"
+                  />
+                </div>
+              </div>
+
+              {/* 可用余额显示 */}
+              <div className="mb-6">
+                <div className="flex items-center justify-between p-3 bg-[#252842] rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-[#00D4AA] rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">U</span>
+                    </div>
+                    <div>
+                      <div className="text-[#00D4AA] font-medium">USDT</div>
+                      <div className="text-xs text-gray-400">Tether USDt</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-white font-medium">0.00</div>
+                    <div className="text-xs text-gray-400">$0.00</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 转账金额输入 */}
+              <div className="mb-6">
+                <div className="flex space-x-3">
+                  <input
+                    type="number"
+                    value={transferAmount}
+                    onChange={(e) => setTransferAmount(e.target.value)}
+                    placeholder="输入转账金额"
+                    className="flex-1 p-3 bg-[#252842] border border-[#3a3d4a] rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none focus:border-[#00D4AA]"
+                  />
+                  <Button
+                    variant="outline"
+                    className="px-4 py-3 text-sm border-[#3a3d4a] text-gray-400 hover:text-white hover:border-[#00D4AA]"
+                    onClick={() => setTransferAmount("0.00")}
+                  >
+                    全部
+                  </Button>
+                </div>
+              </div>
+
+              {/* 确认按钮 */}
+              <Button
+                className="w-full bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white font-medium"
+                disabled={!transferAmount || transferAmount === "0"}
+              >
+                确认划转
+              </Button>
             </div>
           </div>
         </div>
