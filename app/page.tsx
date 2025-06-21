@@ -68,6 +68,10 @@ export default function LandingPage() {
     }
   }
 
+  const handleLogin = () => {
+    router.push('/login')
+  }
+
   const cryptoTicker = [
     { symbol: 'BTC', name: 'Bitcoin', price: '$67,234.56', change: '+2.34%', isPositive: true },
     { symbol: 'ETH', name: 'Ethereum', price: '$3,456.78', change: '+1.87%', isPositive: true },
@@ -195,7 +199,7 @@ export default function LandingPage() {
               </div>
               
               <button 
-                onClick={() => router.push('/wallet')} 
+                onClick={handleLogin} 
                 className="px-6 py-2 bg-gradient-to-r from-[#00D4AA] to-emerald-500 text-black font-semibold rounded-lg hover:from-[#00B894] hover:to-emerald-600 transition-all transform hover:scale-105"
               >
                 {t.login}
@@ -215,14 +219,17 @@ export default function LandingPage() {
           {navbarOpen && (
             <div className="md:hidden border-t border-gray-800 bg-[#111827]/95 backdrop-blur-md">
               <div className="px-4 py-6 space-y-4">
-                <button onClick={() => router.push('/wallet')} className="block text-gray-300 hover:text-[#00D4AA] font-medium">
+                <button onClick={() => router.push('/wallet')} className="block py-2 text-gray-300 hover:text-[#00D4AA] font-medium">
                   {t.wallet}
                 </button>
-                <button onClick={() => router.push('/spot')} className="block text-gray-300 hover:text-[#00D4AA] font-medium">
+                <button onClick={() => router.push('/spot')} className="block py-2 text-gray-300 hover:text-[#00D4AA] font-medium">
                   {t.trading}
                 </button>
-                <button onClick={() => router.push('/market')} className="block text-gray-300 hover:text-[#00D4AA] font-medium">
+                <button onClick={() => router.push('/market')} className="block py-2 text-gray-300 hover:text-[#00D4AA] font-medium">
                   {t.market}
+                </button>
+                <button onClick={handleLogin} className="block py-2 text-gray-300 hover:text-[#00D4AA] font-medium">
+                  {t.login}
                 </button>
                 <div className="flex space-x-2 pt-4">
                   <button 
