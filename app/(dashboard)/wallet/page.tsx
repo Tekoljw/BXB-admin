@@ -44,7 +44,9 @@ export default function WalletPage() {
   const { theme } = useTheme()
   const router = useRouter()
   const [balanceVisible, setBalanceVisible] = useState(true)
+  const [topLevelTab, setTopLevelTab] = useState("账户资产") // "账户资产" or "订单记录"
   const [activeTab, setActiveTab] = useState("钱包总览")
+  const [orderTab, setOrderTab] = useState("现货订单") // 订单记录子页签
   const [overviewMode, setOverviewMode] = useState("现金账户") // "现金账户" or "总资产"
   const [selectedCurrency, setSelectedCurrency] = useState("USDT")
   const [selectedDisplayCurrency, setSelectedDisplayCurrency] = useState("USDT") // 卡片显示币种
@@ -177,6 +179,11 @@ export default function WalletPage() {
     { id: "U卡账户", label: "U卡账户", icon: DollarSign },
     { id: "佣金账户", label: "佣金账户", icon: Gift },
     { id: "担保账户", label: "担保账户", icon: Shield }
+  ]
+
+  const orderTabs = [
+    "现货订单", "合约订单", "理财订单", "U卡订单", "佣金记录", 
+    "担保记录", "充提币记录", "划转记录", "USDT买卖记录"
   ]
 
   // 币种汇率数据
@@ -1154,7 +1161,18 @@ export default function WalletPage() {
                   ? 'translate-x-8 opacity-0 scale-95' 
                   : 'translate-x-0 opacity-100 scale-100'
               }`}>
-                {renderTabContent()}
+                {topLevelTab === "账户资产" ? renderTabContent() : (
+                  <div className={`${cardStyle} rounded-lg p-6`}>
+                    <div className="text-center py-12">
+                      <div className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {orderTab}
+                      </div>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        暂无{orderTab}数据
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
