@@ -1,10 +1,9 @@
 const express = require("express");
 const { createServer } = require("http");
 const next = require("next");
-const { registerRoutes } = require("./routes");
 
 const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev, port: 5000 });
+const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const port = 5000;
@@ -15,8 +14,8 @@ async function startServer() {
     
     const server = express();
     
-    // Setup routes and auth
-    await registerRoutes(server);
+    // Basic JSON parsing
+    server.use(express.json());
     
     // Handle Next.js requests
     server.all("*", (req, res) => {

@@ -1,9 +1,7 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+const { storage } = require("./storage");
+const { setupAuth, isAuthenticated } = require("./replitAuth");
 
-export async function registerRoutes(app: Express): Promise<Server> {
+async function registerRoutes(app) {
   // Auth middleware
   await setupAuth(app);
 
@@ -25,6 +23,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "Protected route accessed", userId });
   });
 
-  const httpServer = createServer(app);
-  return httpServer;
+  return app;
 }
+
+module.exports = { registerRoutes };

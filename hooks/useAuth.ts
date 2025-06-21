@@ -1,5 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+
+async function apiRequest(endpoint: string) {
+  const response = await fetch(endpoint, {
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error(`${response.status}: ${response.statusText}`);
+  }
+
+  return response.json();
+}
 
 export function useAuth() {
   const { data: user, isLoading } = useQuery({
