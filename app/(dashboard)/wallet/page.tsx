@@ -755,7 +755,7 @@ export default function WalletPage() {
         const contractData = walletData["合约账户"]
         return (
           <div className="space-y-6">
-            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-500 ${
+            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 transition-all duration-500 ${
               loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
             }`}>
               <div className={`${cardStyle} rounded-lg p-4`}>
@@ -778,7 +778,11 @@ export default function WalletPage() {
                     <ChevronDown className="h-2 w-2" />
                   </button>
                 </div>
-                <div className="text-2xl font-bold">{balanceVisible ? `${convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}</div>
+                <div className="text-2xl font-bold">{balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}</div>
+              </div>
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">净资产余额</h3>
+                <div className="text-2xl font-bold text-[#00D4AA]">{balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}</div>
               </div>
               <div className={`${cardStyle} rounded-lg p-4`}>
                 <h3 className="text-sm font-medium mb-2">未实现盈亏</h3>
@@ -786,16 +790,113 @@ export default function WalletPage() {
               </div>
               <div className={`${cardStyle} rounded-lg p-4`}>
                 <h3 className="text-sm font-medium mb-2">已用保证金</h3>
-                <div className="text-2xl font-bold">{balanceVisible ? `$${contractData.marginUsed}` : "****"}</div>
+                <div className="text-2xl font-bold">{balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}</div>
               </div>
               <div className={`${cardStyle} rounded-lg p-4`}>
                 <h3 className="text-sm font-medium mb-2">可用保证金</h3>
-                <div className="text-2xl font-bold">{balanceVisible ? `$${contractData.marginAvailable}` : "****"}</div>
+                <div className="text-2xl font-bold">{balanceVisible ? convertBalance(contractData.marginAvailable, "USDT", selectedDisplayCurrency) : "****"}</div>
+              </div>
+            </div>
+
+            {/* 操作按钮区域 */}
+            <div className={`transition-all duration-500 ${
+              loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}>
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* 主要操作按钮 */}
+                <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {[
+                    { id: "current-positions", label: "当前持仓", icon: BarChart2 },
+                    { id: "account-balance", label: "账户余额", icon: Wallet },
+                    { id: "transfer", label: "划转", icon: ArrowLeftRight }
+                  ].map((button) => {
+                    const Icon = button.icon
+                    const isSelected = selectedAction === button.id
+                    const isClicked = clickedAction === button.id
+                    
+                    return (
+                      <Button 
+                        key={button.id}
+                        onClick={() => handleActionClick(button.id)}
+                        onMouseDown={() => setClickedAction(button.id)}
+                        onMouseUp={() => setClickedAction("")}
+                        onMouseLeave={() => setClickedAction("")}
+                        className={`h-12 transition-all duration-200 text-base font-bold ${
+                          isClicked
+                            ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                            : isSelected 
+                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                        }`}
+                        variant="outline"
+                      >
+                        <Icon className="h-4 w-4 mr-2" />
+                        {button.label}
+                      </Button>
+                    )
+                  })}
+                </div>
+                
+                {/* 记录按钮区域 */}
+                <div className="flex justify-end md:justify-center gap-3">
+                  {/* 资金记录按钮 */}
+                  <Button
+                    onClick={() => handleActionClick("contract-fund-records")}
+                    onMouseDown={() => setClickedAction("contract-fund-records")}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-12 w-12 transition-all duration-200 ${
+                      clickedAction === "contract-fund-records"
+                        ? "bg-[#00D4AA] border-[#00D4AA]"
+                        : selectedAction === "contract-fund-records"
+                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                    title="资金记录"
+                  >
+                    <FileText 
+                      className={`h-4 w-4 transition-colors ${
+                        clickedAction === "contract-fund-records"
+                          ? "text-white"
+                          : selectedAction === "contract-fund-records" 
+                            ? "text-[#00D4AA]"
+                            : "text-black dark:text-white"
+                      }`} 
+                    />
+                  </Button>
+
+                  {/* 交易记录按钮 */}
+                  <Button
+                    onClick={() => handleActionClick("contract-trade-records")}
+                    onMouseDown={() => setClickedAction("contract-trade-records")}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-12 w-12 transition-all duration-200 ${
+                      clickedAction === "contract-trade-records"
+                        ? "bg-[#00D4AA] border-[#00D4AA]"
+                        : selectedAction === "contract-trade-records"
+                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                    title="交易记录"
+                  >
+                    <BarChart2 
+                      className={`h-4 w-4 transition-colors ${
+                        clickedAction === "contract-trade-records"
+                          ? "text-white"
+                          : selectedAction === "contract-trade-records" 
+                            ? "text-[#00D4AA]"
+                            : "text-black dark:text-white"
+                      }`} 
+                    />
+                  </Button>
+                </div>
               </div>
             </div>
             
             <div className={`${cardStyle} rounded-lg p-6`}>
-              <h3 className="text-lg font-semibold mb-4">当前持仓</h3>
               <div className="space-y-4">
                 {contractData.positions.map((position, index) => (
                   <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a]">
