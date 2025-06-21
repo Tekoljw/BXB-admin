@@ -1310,9 +1310,14 @@ export default function WalletPage() {
                 onClick={() => handleCardClick("receivable")}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
-                    <ArrowDown className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
-                    应收担保金额
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
+                    <div className="flex items-center">
+                      <ArrowDown className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
+                      应收担保金额
+                    </div>
+                    <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 rounded-full">
+                      等待确认
+                    </span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -1340,9 +1345,14 @@ export default function WalletPage() {
                 onClick={() => handleCardClick("payable")}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
-                    <ArrowUp className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
-                    应付担保金额
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
+                    <div className="flex items-center">
+                      <ArrowUp className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
+                      应付担保金额
+                    </div>
+                    <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full">
+                      担保中
+                    </span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -1655,7 +1665,7 @@ export default function WalletPage() {
           <div>
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                应付担保记录
+                担保中的应付款
               </h3>
               <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                 您需要向对方支付的担保资金，等待对方确认后解除
