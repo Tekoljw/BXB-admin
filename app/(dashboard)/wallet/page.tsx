@@ -46,6 +46,8 @@ export default function WalletPage() {
   const [showAssetModal, setShowAssetModal] = useState(false) // 资产管理弹窗
   const [showAddAssetModal, setShowAddAssetModal] = useState(false) // 添加资产弹窗
   const [addAssetModalAnimating, setAddAssetModalAnimating] = useState(false) // 添加资产弹窗动画状态
+  const [currencyType, setCurrencyType] = useState("crypto") // "crypto" or "fiat"
+  const [addAssetStates, setAddAssetStates] = useState<{[key: string]: boolean}>({}) // 添加资产状态
   const [searchTerm, setSearchTerm] = useState("") // 搜索关键词
   const [sortBy, setSortBy] = useState("value") // 排序方式：value, marketCap
   const [sortOrder, setSortOrder] = useState("desc") // 排序顺序：asc, desc
@@ -314,6 +316,14 @@ export default function WalletPage() {
     setSortBy(newSortBy)
   }
 
+  // 切换添加资产状态
+  const toggleAddAsset = (symbol: string) => {
+    setAddAssetStates(prev => ({
+      ...prev,
+      [symbol]: !prev[symbol]
+    }))
+  }
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "钱包总览":
@@ -468,7 +478,7 @@ export default function WalletPage() {
                     <div className="flex items-center space-x-2 ml-4">
                       <button
                         onClick={openAddAssetModal}
-                        className={`p-3 rounded-lg border transition-all transform hover:scale-105 ${
+                        className={`w-10 h-10 rounded-lg border transition-all transform hover:scale-105 flex items-center justify-center ${
                           isDark 
                             ? "border-[#3a3d4a] hover:bg-[#2a2d42]" 
                             : "border-gray-300 hover:bg-gray-50"
@@ -476,8 +486,8 @@ export default function WalletPage() {
                         title="管理资产"
                       >
                         <div className="flex flex-col items-center">
-                          <Plus className="h-4 w-4" />
-                          <Minus className="h-4 w-4 -mt-1" />
+                          <Plus className="h-3 w-3" />
+                          <Minus className="h-3 w-3 -mt-1" />
                         </div>
                       </button>
                       <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-100'}`}>
@@ -755,17 +765,40 @@ export default function WalletPage() {
             currencyModalAnimating ? 'translate-x-0' : 'translate-x-full'
           }`}>
             <div className="p-6 h-full overflow-y-auto">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-semibold">选择显示币种</h3>
-                <button
-                  onClick={closeCurrencyModal}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+              {/* 币种类型切换 */}
+              <div className="flex justify-center mb-6">
+                <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-100'}`}>
+                  <button
+                    onClick={() => setCurrencyType("crypto")}
+                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                      currencyType === "crypto"
+                        ? "bg-[#00D4AA] text-white"
+                        : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"
+                    }`}
+                  >
+                    加密货币
+                  </button>
+                  <button
+                    onClick={() => setCurrencyType("fiat")}
+                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                      currencyType === "fiat"
+                        ? "bg-[#00D4AA] text-white"
+                        : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"
+                    }`}
+                  >
+                    法币
+                  </button>
+                </div>
               </div>
               <div className="space-y-3">
-                {availableCurrencies.map((currency) => (
+                {(currencyType === "crypto" ? availableCurrencies : [
+                  { symbol: "USD", name: "美元", color: "bg-green-500" },
+                  { symbol: "EUR", name: "欧元", color: "bg-blue-500" },
+                  { symbol: "CNY", name: "人民币", color: "bg-red-500" },
+                  { symbol: "JPY", name: "日元", color: "bg-orange-500" },
+                  { symbol: "GBP", name: "英镑", color: "bg-purple-500" },
+                  { symbol: "KRW", name: "韩元", color: "bg-gray-500" }
+                ]).map((currency) => (
                   <button
                     key={currency.symbol}
                     onClick={() => {
@@ -921,18 +954,6 @@ export default function WalletPage() {
             addAssetModalAnimating ? 'translate-x-0' : 'translate-x-full'
           }`}>
             <div className="p-6 h-full flex flex-col">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">添加资产</h3>
-                <button
-                  onClick={closeAddAssetModal}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-              <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                选择要添加到钱包的币种
-              </p>
               
               {/* 搜索框 */}
               <div className="relative mb-4">
@@ -979,27 +1000,22 @@ export default function WalletPage() {
                       <div className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                         {currency.price}
                       </div>
-                      <Button
-                        size="sm"
-                        className="mt-1 h-7 px-3 text-xs bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                      <button
+                        onClick={() => toggleAddAsset(currency.symbol)}
+                        className={`w-12 h-6 rounded-full transition-all duration-200 ${
+                          addAssetStates[currency.symbol] ? "bg-[#00D4AA]" : isDark ? "bg-gray-600" : "bg-gray-300"
+                        }`}
                       >
-                        添加
-                      </Button>
+                        <div className={`w-4 h-4 bg-white rounded-full transition-all duration-200 ${
+                          addAssetStates[currency.symbol] ? "translate-x-7" : "translate-x-1"
+                        }`} />
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* 底部操作按钮 */}
-              <div className="flex justify-end pt-4 border-t border-gray-200 dark:border-[#3a3d4a]">
-                <Button
-                  onClick={closeAddAssetModal}
-                  variant="outline"
-                  className="text-sm"
-                >
-                  完成
-                </Button>
-              </div>
+              {/* 取消底部操作按钮 */}
             </div>
           </div>
         </div>
