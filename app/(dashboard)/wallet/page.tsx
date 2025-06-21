@@ -290,6 +290,11 @@ export default function WalletPage() {
     setTimeout(() => setShowCurrencyModal(false), 300)
   }
 
+  // 处理币种选择弹窗点击
+  const handleCurrencyModalClick = () => {
+    openCurrencyModal()
+  }
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "钱包总览":
@@ -319,7 +324,7 @@ export default function WalletPage() {
                         <h3 className="text-lg font-semibold">现金账户</h3>
                       </div>
                       <button
-                        onClick={() => setShowCurrencyModal(true)}
+                        onClick={handleCurrencyModalClick}
                         className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
                           isDark 
                             ? "bg-transparent text-white hover:bg-gray-800" 
@@ -362,7 +367,7 @@ export default function WalletPage() {
                         <h3 className="text-lg font-semibold">总资产</h3>
                       </div>
                       <button
-                        onClick={() => setShowCurrencyModal(true)}
+                        onClick={handleCurrencyModalClick}
                         className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
                           isDark 
                             ? "bg-transparent text-white hover:bg-gray-800" 
