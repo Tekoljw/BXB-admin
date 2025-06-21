@@ -242,7 +242,7 @@ export default function WalletPage() {
     }
   }
 
-  // 统一的卡片样式，参考行情页面
+  // 统一的卡片样式，参考行情页面 - 使用更浅的黑夜模式颜色
   const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
   
   // 转换余额显示
@@ -1045,7 +1045,7 @@ export default function WalletPage() {
   }
 
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-[#1a1d29]' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen ${isDark ? 'bg-background' : 'bg-gray-50'}`}>
       {isMobile ? (
         /* Mobile Layout - Top Tabs */
         <div className="container mx-auto p-4 space-y-6">
@@ -1092,7 +1092,7 @@ export default function WalletPage() {
                           ? "border-white bg-white text-black shadow-sm"
                           : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
                         : isDark
-                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842]"
                           : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                     }`}
                   >
@@ -1144,7 +1144,7 @@ export default function WalletPage() {
         /* Desktop Layout - Left Sidebar */
         <div className="flex h-screen">
           {/* Left Sidebar */}
-          <div className={`w-64 ${isDark ? 'bg-[#1a1c2e]' : 'bg-white'} border-r ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'} flex flex-col`}>
+          <div className={`w-64 ${isDark ? 'bg-[#1a1d29]' : 'bg-white'} border-r ${isDark ? 'border-[#252842]' : 'border-gray-200'} flex flex-col`}>
             {/* 顶级页签导航 - 聊天界面风格 */}
             <div className="p-3 pt-6">
               <div className="relative mb-3">
