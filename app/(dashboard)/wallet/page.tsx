@@ -951,9 +951,13 @@ export default function WalletPage() {
             </div>
 
             {/* 操作按钮区域 */}
-            <div className={`transition-all duration-500 ${
-              loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-            }`}>
+            <div className={`transform transition-all duration-800 ease-out ${
+              loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
+            }`}
+              style={{ 
+                animationDelay: loadingSteps.balance ? '700ms' : '0ms'
+              }}
+            >
               <div className="flex flex-col md:flex-row gap-4">
                 {/* 主要操作按钮 */}
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
