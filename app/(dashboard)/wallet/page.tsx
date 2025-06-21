@@ -145,7 +145,7 @@ export default function WalletPage() {
     { id: "钱包总览", label: "钱包总览", icon: Wallet },
     { id: "合约账户", label: "合约账户", icon: BarChart3 },
     { id: "理财账户", label: "理财账户", icon: PiggyBank },
-    { id: "U卡账户", label: "U卡账户", icon: DollarSign },
+    { id: "U卡账户", label: "U卡账户", icon: CreditCard },
     { id: "佣金账户", label: "佣金账户", icon: Percent },
     { id: "担保账户", label: "担保账户", icon: Shield }
   ]
@@ -1430,10 +1430,10 @@ export default function WalletPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 flex items-center space-x-3">
+                  <div className="mt-3 grid grid-cols-2 gap-2">
                     <Button
                       size="sm"
-                      className="h-7 px-3 text-xs bg-black hover:bg-gray-800 text-white"
+                      className="h-7 text-xs bg-black hover:bg-gray-800 text-white"
                       onClick={() => setShowTransferModal(true)}
                     >
                       <ArrowLeftRight className="h-3 w-3 mr-1" />
@@ -1441,7 +1441,7 @@ export default function WalletPage() {
                     </Button>
                     <Button
                       size="sm"
-                      className="h-7 px-3 text-xs bg-white hover:bg-gray-100 text-black border border-black"
+                      className="h-7 text-xs bg-white hover:bg-gray-100 text-black border border-black"
                       onClick={() => router.push('/wallet?tab=order-records')}
                     >
                       <FileText className="h-3 w-3 mr-1" />
