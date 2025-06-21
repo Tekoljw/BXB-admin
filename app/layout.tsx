@@ -1,35 +1,25 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import ClientProviders from "./client-providers";
-
-const inter = Inter({ subsets: ["latin"] });
+import type React from "react"
+import type { Metadata } from "next"
+import "./globals.css"
+import "../styles/globals.css"
+import { ThemeProvider } from "@/contexts/theme-context"
 
 export const metadata: Metadata = {
-  title: "BeDAO - 全球加密货币担保交易所",
-  description: "安全可靠的数字资产交易平台，提供专业的担保交易服务",
-};
+  title: "BeDAO - Crypto Trading Platform",
+  description: "Advanced crypto trading platform with social features",
+    generator: 'v0.dev'
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="zh" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ClientProviders>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </ClientProviders>
+    <html lang="en" suppressHydrationWarning>
+      <body className="font-apple">
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
-  );
+  )
 }
