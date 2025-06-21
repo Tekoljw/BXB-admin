@@ -787,9 +787,11 @@ export default function WalletPage() {
         const contractData = walletData["合约账户"]
         return (
           <div className="space-y-6">
-            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 transition-all duration-500 ${
+            {/* 六个卡片布局 - 两排三列 */}
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 transition-all duration-500 ${
               loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
             }`}>
+              {/* 第一排 */}
               <div className={`${cardStyle} rounded-lg p-4`}>
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-medium">总余额</h3>
@@ -813,12 +815,27 @@ export default function WalletPage() {
                 <div className="text-2xl font-bold">{balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}</div>
               </div>
               <div className={`${cardStyle} rounded-lg p-4`}>
-                <h3 className="text-sm font-medium mb-2">净资产余额</h3>
+                <h3 className="text-sm font-medium mb-2">净资产</h3>
                 <div className="text-2xl font-bold text-[#00D4AA]">{balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}</div>
               </div>
               <div className={`${cardStyle} rounded-lg p-4`}>
                 <h3 className="text-sm font-medium mb-2">未实现盈亏</h3>
                 <div className="text-2xl font-bold text-green-500">{balanceVisible ? contractData.unrealizedPnL : "****"}</div>
+              </div>
+              
+              {/* 第二排 */}
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <h3 className="text-sm font-medium mb-2">已实现盈亏</h3>
+                <div className="space-y-1">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-gray-500">今日</span>
+                    <span className="text-sm font-bold text-green-500">+123.45</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-gray-500">本月</span>
+                    <span className="text-sm font-bold text-red-500">-234.56</span>
+                  </div>
+                </div>
               </div>
               <div className={`${cardStyle} rounded-lg p-4`}>
                 <h3 className="text-sm font-medium mb-2">已用保证金</h3>
@@ -827,24 +844,6 @@ export default function WalletPage() {
               <div className={`${cardStyle} rounded-lg p-4`}>
                 <h3 className="text-sm font-medium mb-2">可用保证金</h3>
                 <div className="text-2xl font-bold">{balanceVisible ? convertBalance(contractData.marginAvailable, "USDT", selectedDisplayCurrency) : "****"}</div>
-              </div>
-            </div>
-
-            {/* 已实现盈亏三卡片布局 */}
-            <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 transition-all duration-500 ${
-              loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-            }`}>
-              <div className={`${cardStyle} rounded-lg p-4`}>
-                <h3 className="text-sm font-medium mb-2">今日已实现盈亏</h3>
-                <div className="text-xl font-bold text-green-500">+123.45 USDT</div>
-              </div>
-              <div className={`${cardStyle} rounded-lg p-4`}>
-                <h3 className="text-sm font-medium mb-2">本周已实现盈亏</h3>
-                <div className="text-xl font-bold text-green-500">+567.89 USDT</div>
-              </div>
-              <div className={`${cardStyle} rounded-lg p-4`}>
-                <h3 className="text-sm font-medium mb-2">本月已实现盈亏</h3>
-                <div className="text-xl font-bold text-red-500">-234.56 USDT</div>
               </div>
             </div>
 
