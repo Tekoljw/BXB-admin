@@ -17,7 +17,9 @@ import {
   CreditCard,
   ChevronRight,
   Menu,
-  X
+  X,
+  Bitcoin,
+  Sparkles
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -25,13 +27,22 @@ export default function LandingPage() {
   const router = useRouter()
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
     }
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY })
+    }
+    
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('mousemove', handleMouseMove)
+    }
   }, [])
 
   const features = [
@@ -84,29 +95,89 @@ export default function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0">
+        {/* Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-blue-900/30 to-teal-900/30" />
+        
+        {/* Animated Grid */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(0, 212, 170, 0.3) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0, 212, 170, 0.3) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px',
+            animation: 'grid-move 20s linear infinite'
+          }} />
+        </div>
+        
+        {/* Floating Particles */}
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-[#00D4AA] rounded-full opacity-50"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `float ${3 + Math.random() * 4}s ease-in-out infinite ${Math.random() * 2}s`,
+                animationDelay: `${Math.random() * 5}s`
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Mouse Glow Effect */}
+        <div 
+          className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-[#00D4AA]/20 to-blue-500/20 blur-3xl pointer-events-none transition-all duration-300"
+          style={{
+            left: mousePosition.x - 192,
+            top: mousePosition.y - 192,
+          }}
+        />
+      </div>
+
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-slate-900/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+        isScrolled ? 'bg-black/90 backdrop-blur-xl shadow-2xl border-b border-[#00D4AA]/20' : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <Shield className="h-8 w-8 text-[#00D4AA]" />
-              <span className="text-2xl font-bold text-white">BeDAO</span>
-              <span className="text-sm text-[#00D4AA] font-medium">PRO</span>
+          <div className="flex justify-between items-center h-18">
+            <div className="flex items-center space-x-3 group">
+              <div className="relative">
+                <Shield className="h-10 w-10 text-[#00D4AA] group-hover:rotate-12 transition-transform duration-300" />
+                <div className="absolute inset-0 h-10 w-10 bg-[#00D4AA]/20 rounded-full blur-lg group-hover:scale-150 transition-transform duration-300" />
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-3xl font-bold text-white tracking-tight">BeDAO</span>
+                <div className="px-2 py-1 bg-gradient-to-r from-[#00D4AA] to-blue-500 rounded-full">
+                  <span className="text-xs text-white font-bold">PRO</span>
+                </div>
+              </div>
             </div>
             
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-300 hover:text-white transition-colors">功能特色</a>
-              <a href="#about" className="text-gray-300 hover:text-white transition-colors">关于我们</a>
-              <a href="#security" className="text-gray-300 hover:text-white transition-colors">安全保障</a>
+              <a href="#features" className="text-gray-300 hover:text-[#00D4AA] transition-all duration-300 hover:scale-105 relative group">
+                功能特色
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00D4AA] group-hover:w-full transition-all duration-300"></span>
+              </a>
+              <a href="#about" className="text-gray-300 hover:text-[#00D4AA] transition-all duration-300 hover:scale-105 relative group">
+                关于我们
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00D4AA] group-hover:w-full transition-all duration-300"></span>
+              </a>
+              <a href="#security" className="text-gray-300 hover:text-[#00D4AA] transition-all duration-300 hover:scale-105 relative group">
+                安全保障
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00D4AA] group-hover:w-full transition-all duration-300"></span>
+              </a>
               <Button 
                 onClick={() => router.push('/wallet')}
-                className="bg-[#00D4AA] hover:bg-[#00B894] text-white px-6 py-2"
+                className="bg-gradient-to-r from-[#00D4AA] to-blue-500 hover:from-[#00B894] hover:to-blue-600 text-white px-8 py-3 rounded-full transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#00D4AA]/25"
               >
                 开始交易
+                <Sparkles className="ml-2 h-4 w-4" />
               </Button>
             </div>
 
@@ -122,16 +193,17 @@ export default function LandingPage() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-slate-900/95 backdrop-blur-md">
-            <div className="px-4 py-4 space-y-4">
-              <a href="#features" className="block text-gray-300 hover:text-white">功能特色</a>
-              <a href="#about" className="block text-gray-300 hover:text-white">关于我们</a>
-              <a href="#security" className="block text-gray-300 hover:text-white">安全保障</a>
+          <div className="md:hidden bg-black/95 backdrop-blur-xl border-t border-[#00D4AA]/20">
+            <div className="px-4 py-6 space-y-6">
+              <a href="#features" className="block text-gray-300 hover:text-[#00D4AA] transition-colors py-2">功能特色</a>
+              <a href="#about" className="block text-gray-300 hover:text-[#00D4AA] transition-colors py-2">关于我们</a>
+              <a href="#security" className="block text-gray-300 hover:text-[#00D4AA] transition-colors py-2">安全保障</a>
               <Button 
                 onClick={() => router.push('/wallet')}
-                className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-white"
+                className="w-full bg-gradient-to-r from-[#00D4AA] to-blue-500 hover:from-[#00B894] hover:to-blue-600 text-white py-4 rounded-full shadow-lg"
               >
                 开始交易
+                <Sparkles className="ml-2 h-4 w-4" />
               </Button>
             </div>
           </div>
@@ -139,67 +211,116 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              全球加密货币
-              <span className="text-[#00D4AA] block">担保交易所</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
-              安全可靠的数字资产交易平台，提供专业的担保交易服务，让您的每一笔交易都有保障
+            {/* Animated Title */}
+            <div className="mb-8">
+              <h1 className="text-6xl md:text-8xl font-bold text-white mb-4 leading-tight">
+                <span className="inline-block animate-pulse">全球</span>
+                <span className="inline-block bg-gradient-to-r from-[#00D4AA] to-blue-500 bg-clip-text text-transparent animate-bounce">加密货币</span>
+              </h1>
+              <h1 className="text-6xl md:text-8xl font-bold mb-6 leading-tight">
+                <span className="bg-gradient-to-r from-[#00D4AA] via-blue-500 to-purple-500 bg-clip-text text-transparent bg-300% animate-gradient">
+                  担保交易所
+                </span>
+              </h1>
+            </div>
+            
+            {/* Subtitle with Typewriter Effect */}
+            <p className="text-xl md:text-3xl text-gray-300 mb-12 max-w-5xl mx-auto leading-relaxed">
+              <span className="inline-block border-r-2 border-[#00D4AA] animate-pulse">
+                安全可靠的数字资产交易平台，提供专业的担保交易服务
+              </span>
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
               <Button 
                 onClick={() => router.push('/wallet')}
-                className="bg-[#00D4AA] hover:bg-[#00B894] text-white px-8 py-4 text-lg h-auto"
+                className="group bg-gradient-to-r from-[#00D4AA] to-blue-500 hover:from-[#00B894] hover:to-blue-600 text-white px-12 py-6 text-xl rounded-full transform hover:scale-110 transition-all duration-300 shadow-2xl hover:shadow-[#00D4AA]/50"
               >
-                立即开始交易
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <span className="flex items-center">
+                  立即开始交易
+                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
+                </span>
               </Button>
               <Button 
                 variant="outline"
-                className="border-white text-white hover:bg-white hover:text-slate-900 px-8 py-4 text-lg h-auto"
+                className="group border-2 border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black px-12 py-6 text-xl rounded-full transform hover:scale-110 transition-all duration-300"
               >
-                了解更多
+                <span className="flex items-center">
+                  了解更多
+                  <Globe className="ml-3 h-6 w-6 group-hover:rotate-180 transition-transform duration-500" />
+                </span>
               </Button>
             </div>
+            
+            {/* Floating Elements */}
+            <div className="absolute top-20 left-10 w-16 h-16 bg-[#00D4AA]/20 rounded-full blur-lg animate-bounce" style={{ animationDelay: '0s' }} />
+            <div className="absolute top-40 right-20 w-12 h-12 bg-blue-500/20 rounded-full blur-lg animate-bounce" style={{ animationDelay: '1s' }} />
+            <div className="absolute bottom-20 left-20 w-20 h-20 bg-purple-500/20 rounded-full blur-lg animate-bounce" style={{ animationDelay: '2s' }} />
           </div>
 
-          {/* Stats */}
+          {/* Animated Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-[#00D4AA] mb-2">
-                  {stat.number}
+              <div key={index} className="text-center group">
+                <div className="relative mb-4">
+                  <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#00D4AA] to-blue-500 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
+                    {stat.number}
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/20 to-blue-500/20 rounded-lg blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-                <div className="text-gray-300">{stat.label}</div>
+                <div className="text-gray-300 text-lg group-hover:text-white transition-colors duration-300">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Live Crypto Prices */}
-      <section className="py-16 bg-slate-800/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-white mb-12">实时加密货币行情</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Live Crypto Prices - Enhanced */}
+      <section className="relative py-24 bg-gradient-to-b from-black to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold bg-gradient-to-r from-[#00D4AA] to-blue-500 bg-clip-text text-transparent mb-4">
+              实时加密货币行情
+            </h2>
+            <p className="text-xl text-gray-400">跟踪全球主要加密货币的实时价格变动</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {cryptoList.map((crypto, index) => (
-              <div key={index} className="bg-slate-900/80 rounded-lg p-6 border border-slate-700">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-[#00D4AA] rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold">{crypto.symbol.charAt(0)}</span>
+              <div 
+                key={index} 
+                className="group relative bg-gradient-to-br from-gray-900/80 to-black/80 rounded-2xl p-8 border border-gray-800 hover:border-[#00D4AA]/50 transition-all duration-500 hover:transform hover:scale-105 backdrop-blur-xl"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {/* Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/10 to-blue-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+                
+                <div className="relative flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="relative">
+                      <div className="w-14 h-14 bg-gradient-to-r from-[#00D4AA] to-blue-500 rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                        <span className="text-white font-bold text-lg">{crypto.symbol.charAt(0)}</span>
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/20 to-blue-500/20 rounded-full blur-lg group-hover:scale-150 transition-transform duration-300" />
                     </div>
                     <div>
-                      <div className="text-white font-semibold">{crypto.symbol}</div>
-                      <div className="text-gray-400 text-sm">{crypto.name}</div>
+                      <div className="text-white font-bold text-xl">{crypto.symbol}</div>
+                      <div className="text-gray-400">{crypto.name}</div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-white font-bold">{crypto.price}</div>
-                    <div className={`text-sm ${crypto.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
+                    <div className="text-white font-bold text-xl group-hover:text-[#00D4AA] transition-colors duration-300">
+                      {crypto.price}
+                    </div>
+                    <div className={`text-lg font-semibold ${
+                      crypto.change.startsWith('+') 
+                        ? 'text-green-400' 
+                        : 'text-red-400'
+                    } group-hover:scale-110 transition-transform duration-300`}>
                       {crypto.change}
                     </div>
                   </div>
@@ -208,6 +329,10 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
+        
+        {/* Background Decorations */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-[#00D4AA]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl" />
       </section>
 
       {/* Features Section */}
