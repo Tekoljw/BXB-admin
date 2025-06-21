@@ -420,15 +420,23 @@ export default function WalletPage() {
       case "钱包总览":
         return (
           <div className="space-y-6">
-            {/* 主要卡片选择 */}
-            <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-500 ${
-              loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-            }`}>
+            {/* 主要卡片选择 - 增强动画效果 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 现金账户卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all hover:shadow-lg ${
-                  overviewMode === "现金账户" ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50" : ""
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transform transition-all duration-700 ease-out hover:shadow-xl hover:scale-105 ${
+                  loadingSteps.balance 
+                    ? 'translate-y-0 opacity-100' 
+                    : 'translate-y-8 opacity-0'
+                } ${
+                  overviewMode === "现金账户" 
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
+                    : "hover:shadow-lg"
                 }`}
+                style={{ 
+                  animationDelay: loadingSteps.balance ? '100ms' : '0ms',
+                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px) scale(${overviewMode === "现金账户" ? 1.02 : 1})`
+                }}
                 onClick={() => setOverviewMode("现金账户")}
               >
                 {!loadingSteps.balance ? (
@@ -469,9 +477,19 @@ export default function WalletPage() {
 
               {/* 总资产卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all hover:shadow-lg ${
-                  overviewMode === "总资产" ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50" : ""
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transform transition-all duration-700 ease-out hover:shadow-xl hover:scale-105 ${
+                  loadingSteps.balance 
+                    ? 'translate-y-0 opacity-100' 
+                    : 'translate-y-8 opacity-0'
+                } ${
+                  overviewMode === "总资产" 
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
+                    : "hover:shadow-lg"
                 }`}
+                style={{ 
+                  animationDelay: loadingSteps.balance ? '200ms' : '0ms',
+                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px) scale(${overviewMode === "总资产" ? 1.02 : 1})`
+                }}
                 onClick={() => setOverviewMode("总资产")}
               >
                 {!loadingSteps.balance ? (
@@ -513,9 +531,13 @@ export default function WalletPage() {
 
             {/* 操作按钮区域（仅现金账户时显示） */}
             {overviewMode === "现金账户" && (
-              <div className={`transition-all duration-500 ${
-                loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-              }`}>
+              <div className={`transform transition-all duration-800 ease-out ${
+                loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
+              }`}
+                style={{ 
+                  animationDelay: loadingSteps.balance ? '300ms' : '0ms'
+                }}
+              >
                 <div className="flex flex-col md:flex-row gap-4">
                   {/* 主要操作按钮 - 自动适配屏幕宽度 */}
                   <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -802,17 +824,24 @@ export default function WalletPage() {
         const contractData = walletData["合约账户"]
         return (
           <div className="space-y-6">
-            {/* 六个卡片布局 - 两排三列 */}
-            <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 transition-all duration-500 ${
-              loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-            }`}>
+            {/* 六个卡片布局 - 两排三列，增强动画效果 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* 第一排 */}
-              <div className={`${cardStyle} rounded-lg p-4`}>
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+                loadingSteps.balance 
+                  ? 'translate-y-0 opacity-100' 
+                  : 'translate-y-8 opacity-0'
+              }`}
+                style={{ 
+                  animationDelay: loadingSteps.balance ? '100ms' : '0ms',
+                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
+                }}
+              >
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-medium">总余额</h3>
                   <button
                     onClick={handleCurrencyModalClick}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all ${
+                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300 hover:scale-105 ${
                       isDark 
                         ? "bg-transparent text-white hover:bg-gray-800" 
                         : "bg-white text-black hover:bg-gray-50"
@@ -827,38 +856,97 @@ export default function WalletPage() {
                     <ChevronDown className="h-2 w-2" />
                   </button>
                 </div>
-                <div className="text-2xl font-bold">{balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}</div>
+                <div className="text-2xl font-bold transition-all duration-500">
+                  {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
+                </div>
               </div>
-              <div className={`${cardStyle} rounded-lg p-4`}>
+              
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+                loadingSteps.balance 
+                  ? 'translate-y-0 opacity-100' 
+                  : 'translate-y-8 opacity-0'
+              }`}
+                style={{ 
+                  animationDelay: loadingSteps.balance ? '200ms' : '0ms',
+                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
+                }}
+              >
                 <h3 className="text-sm font-medium mb-2">净资产</h3>
-                <div className="text-2xl font-bold text-[#00D4AA]">{balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}</div>
+                <div className="text-2xl font-bold text-[#00D4AA] transition-all duration-500">
+                  {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
+                </div>
               </div>
-              <div className={`${cardStyle} rounded-lg p-4`}>
+              
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+                loadingSteps.balance 
+                  ? 'translate-y-0 opacity-100' 
+                  : 'translate-y-8 opacity-0'
+              }`}
+                style={{ 
+                  animationDelay: loadingSteps.balance ? '300ms' : '0ms',
+                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
+                }}
+              >
                 <h3 className="text-sm font-medium mb-2">未实现盈亏</h3>
-                <div className="text-2xl font-bold text-green-500">{balanceVisible ? contractData.unrealizedPnL : "****"}</div>
+                <div className="text-2xl font-bold text-green-500 transition-all duration-500">
+                  {balanceVisible ? contractData.unrealizedPnL : "****"}
+                </div>
               </div>
               
               {/* 第二排 */}
-              <div className={`${cardStyle} rounded-lg p-4`}>
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+                loadingSteps.balance 
+                  ? 'translate-y-0 opacity-100' 
+                  : 'translate-y-8 opacity-0'
+              }`}
+                style={{ 
+                  animationDelay: loadingSteps.balance ? '400ms' : '0ms',
+                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
+                }}
+              >
                 <h3 className="text-sm font-medium mb-2">已实现盈亏</h3>
                 <div className="space-y-1">
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-500">今日</span>
-                    <span className="text-sm font-bold text-green-500">+123.45</span>
+                    <span className="text-sm font-bold text-green-500 transition-all duration-300">+123.45</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-500">本月</span>
-                    <span className="text-sm font-bold text-red-500">-234.56</span>
+                    <span className="text-sm font-bold text-red-500 transition-all duration-300">-234.56</span>
                   </div>
                 </div>
               </div>
-              <div className={`${cardStyle} rounded-lg p-4`}>
+              
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+                loadingSteps.balance 
+                  ? 'translate-y-0 opacity-100' 
+                  : 'translate-y-8 opacity-0'
+              }`}
+                style={{ 
+                  animationDelay: loadingSteps.balance ? '500ms' : '0ms',
+                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
+                }}
+              >
                 <h3 className="text-sm font-medium mb-2">已用保证金</h3>
-                <div className="text-2xl font-bold">{balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}</div>
+                <div className="text-2xl font-bold transition-all duration-500">
+                  {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
+                </div>
               </div>
-              <div className={`${cardStyle} rounded-lg p-4`}>
+              
+              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+                loadingSteps.balance 
+                  ? 'translate-y-0 opacity-100' 
+                  : 'translate-y-8 opacity-0'
+              }`}
+                style={{ 
+                  animationDelay: loadingSteps.balance ? '600ms' : '0ms',
+                  transform: `translateY(${loadingSteps.balance ? 0 : 32}px)`
+                }}
+              >
                 <h3 className="text-sm font-medium mb-2">可用保证金</h3>
-                <div className="text-2xl font-bold">{balanceVisible ? convertBalance(contractData.marginAvailable, "USDT", selectedDisplayCurrency) : "****"}</div>
+                <div className="text-2xl font-bold transition-all duration-500">
+                  {balanceVisible ? convertBalance(contractData.marginAvailable, "USDT", selectedDisplayCurrency) : "****"}
+                </div>
               </div>
             </div>
 
