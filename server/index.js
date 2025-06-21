@@ -22,8 +22,8 @@ async function startServer() {
       res.json({ status: 'ok' });
     });
     
-    // Handle Next.js requests - use get method to avoid path-to-regexp issues
-    server.get("*", (req, res) => {
+    // Handle Next.js requests
+    server.use((req, res) => {
       return handle(req, res);
     });
     
