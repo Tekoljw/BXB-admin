@@ -151,10 +151,10 @@ export default function WalletPage() {
   ]
 
   const orderTabs = [
-    { id: "现货订单", label: "现货订单", icon: ShoppingCart },
+    { id: "现货订单", label: "现货订单", icon: () => <CandlestickIcon className="h-4 w-4" /> },
     { id: "合约订单", label: "合约订单", icon: LineChart },
     { id: "理财订单", label: "理财订单", icon: PiggyBank },
-    { id: "U卡订单", label: "U卡订单", icon: CardIcon },
+    { id: "U卡订单", label: "U卡订单", icon: CreditCard },
     { id: "佣金记录", label: "佣金记录", icon: Percent },
     { id: "担保记录", label: "担保记录", icon: Shield },
     { id: "充提币记录", label: "充提币记录", icon: ArrowUpDown },
@@ -1331,8 +1331,24 @@ export default function WalletPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 text-xs text-gray-500">
-                    2 笔担保中
+                  <div className="mt-3 space-y-2">
+                    <div className="text-xs text-gray-500">
+                      2 笔担保中
+                    </div>
+                    <div className="text-xs text-blue-600 dark:text-blue-400">
+                      24H内将释放：123,123 USDT
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">
+                        等待用户***789确认
+                      </span>
+                      <button
+                        className="text-[#00D4AA] hover:text-[#00B894] transition-colors"
+                        title="联系用户"
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -1366,8 +1382,24 @@ export default function WalletPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 text-xs text-gray-500">
-                    2 笔担保中
+                  <div className="mt-3 space-y-2">
+                    <div className="text-xs text-gray-500">
+                      2 笔担保中
+                    </div>
+                    <div className="text-xs text-blue-600 dark:text-blue-400">
+                      24H内将释放：87,654 USDT
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">
+                        等待用户***123确认
+                      </span>
+                      <button
+                        className="text-[#00D4AA] hover:text-[#00B894] transition-colors"
+                        title="联系用户"
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -1618,7 +1650,7 @@ export default function WalletPage() {
           <div>
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                应收担保记录
+                担保中的应收款
               </h3>
               <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                 当前正在担保中的资金，一旦解除担保，您将收到这些资金
