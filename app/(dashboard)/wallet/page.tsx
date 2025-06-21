@@ -1525,18 +1525,28 @@ export default function WalletPage() {
             onClick={closeTransferModal}
           />
           {/* 弹窗内容 */}
-          <div className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 max-w-[90vw] bg-[#1a1d29] border border-[#252842] rounded-lg transition-all duration-300 ease-out ${
+          <div className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 max-w-[90vw] transition-all duration-300 ease-out ${
             transferModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-          }`}>
+          } ${
+            isDark 
+              ? 'bg-[#1a1d29] border border-[#252842]' 
+              : 'bg-white border border-gray-200 shadow-xl'
+          } rounded-lg`}>
             <div className="p-6">
               {/* 标题 */}
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-white">划转</h3>
+                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  划转
+                </h3>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={closeTransferModal}
-                  className="h-8 w-8 p-0 text-gray-400 hover:text-white"
+                  className={`h-8 w-8 p-0 ${
+                    isDark 
+                      ? 'text-gray-400 hover:text-white' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -1544,29 +1554,50 @@ export default function WalletPage() {
 
               {/* 账户选择区域 */}
               <div className="mb-6">
-                <div className="grid grid-cols-3 gap-3 items-center">
+                <div className="grid grid-cols-3 gap-3 items-end">
                   {/* 从账户 */}
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">从</label>
-                    <select
-                      value={transferFrom}
-                      onChange={(e) => setTransferFrom(e.target.value)}
-                      className="w-full p-3 bg-[#252842] border border-[#3a3d4a] rounded-lg text-white text-sm focus:outline-none focus:border-[#00D4AA]"
-                    >
-                      <option value="现货账户">现货账户</option>
-                      <option value="合约账户">合约账户</option>
-                      <option value="理财账户">理财账户</option>
-                      <option value="U卡账户">U卡账户</option>
-                    </select>
+                    <label className={`block text-sm mb-2 ${
+                      isDark ? 'text-gray-400' : 'text-gray-600'
+                    }`}>
+                      从
+                    </label>
+                    <div className={`relative ${
+                      isDark 
+                        ? 'bg-[#2a2d42] border-[#3a3d4a]' 
+                        : 'bg-gray-50 border-gray-200'
+                    } border rounded-lg`}>
+                      <select
+                        value={transferFrom}
+                        onChange={(e) => setTransferFrom(e.target.value)}
+                        className={`w-full p-3 bg-transparent text-sm focus:outline-none appearance-none ${
+                          isDark 
+                            ? 'text-white focus:border-[#00D4AA]' 
+                            : 'text-gray-900 focus:border-[#00D4AA]'
+                        }`}
+                      >
+                        <option value="现货账户">现货账户</option>
+                        <option value="合约账户">合约账户</option>
+                        <option value="理财账户">理财账户</option>
+                        <option value="U卡账户">U卡账户</option>
+                      </select>
+                      <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 pointer-events-none ${
+                        isDark ? 'text-gray-400' : 'text-gray-500'
+                      }`} />
+                    </div>
                   </div>
 
                   {/* 交换按钮 */}
-                  <div className="flex justify-center">
+                  <div className="flex justify-center pb-1">
                     <Button
                       onClick={swapTransferAccounts}
                       variant="ghost"
                       size="sm"
-                      className="h-10 w-10 p-0 text-gray-400 hover:text-white hover:bg-[#2a2d42]"
+                      className={`h-10 w-10 p-0 ${
+                        isDark 
+                          ? 'text-gray-400 hover:text-white hover:bg-[#2a2d42]' 
+                          : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                      }`}
                     >
                       <ArrowLeftRight className="h-4 w-4" />
                     </Button>
@@ -1574,80 +1605,95 @@ export default function WalletPage() {
 
                   {/* 到账户 */}
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">到</label>
-                    <select
-                      value={transferTo}
-                      onChange={(e) => setTransferTo(e.target.value)}
-                      className="w-full p-3 bg-[#252842] border border-[#3a3d4a] rounded-lg text-white text-sm focus:outline-none focus:border-[#00D4AA]"
-                    >
-                      <option value="现货账户">现货账户</option>
-                      <option value="合约账户">合约账户</option>
-                      <option value="理财账户">理财账户</option>
-                      <option value="U卡账户">U卡账户</option>
-                    </select>
+                    <label className={`block text-sm mb-2 ${
+                      isDark ? 'text-gray-400' : 'text-gray-600'
+                    }`}>
+                      到
+                    </label>
+                    <div className={`relative ${
+                      isDark 
+                        ? 'bg-[#2a2d42] border-[#3a3d4a]' 
+                        : 'bg-gray-50 border-gray-200'
+                    } border rounded-lg`}>
+                      <select
+                        value={transferTo}
+                        onChange={(e) => setTransferTo(e.target.value)}
+                        className={`w-full p-3 bg-transparent text-sm focus:outline-none appearance-none ${
+                          isDark 
+                            ? 'text-white focus:border-[#00D4AA]' 
+                            : 'text-gray-900 focus:border-[#00D4AA]'
+                        }`}
+                      >
+                        <option value="现货账户">现货账户</option>
+                        <option value="合约账户">合约账户</option>
+                        <option value="理财账户">理财账户</option>
+                        <option value="U卡账户">U卡账户</option>
+                      </select>
+                      <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 pointer-events-none ${
+                        isDark ? 'text-gray-400' : 'text-gray-500'
+                      }`} />
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* 币种选择 */}
               <div className="mb-6">
-                <label className="block text-sm text-gray-400 mb-2">币种</label>
-                <select
-                  value={transferCurrency}
-                  onChange={(e) => setTransferCurrency(e.target.value)}
-                  className="w-full p-3 bg-[#252842] border border-[#3a3d4a] rounded-lg text-white text-sm focus:outline-none focus:border-[#00D4AA]"
-                >
-                  <option value="USDT">USDT Tether USDt</option>
-                  <option value="BTC">BTC Bitcoin</option>
-                  <option value="ETH">ETH Ethereum</option>
-                  <option value="BNB">BNB BNB</option>
-                </select>
-              </div>
-
-              {/* 币种搜索框 */}
-              <div className="mb-6">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="搜索币种"
-                    className="w-full pl-10 pr-4 py-3 bg-[#252842] border border-[#3a3d4a] rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none focus:border-[#00D4AA]"
-                  />
-                </div>
-              </div>
-
-              {/* 可用余额显示 */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between p-3 bg-[#252842] rounded-lg">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 bg-[#00D4AA] rounded-full flex items-center justify-center">
+                <label className={`block text-sm mb-2 ${
+                  isDark ? 'text-gray-400' : 'text-gray-600'
+                }`}>
+                  币种
+                </label>
+                <div className={`relative ${
+                  isDark 
+                    ? 'bg-[#2a2d42] border-[#3a3d4a]' 
+                    : 'bg-gray-50 border-gray-200'
+                } border rounded-lg`}>
+                  <div className="flex items-center p-3">
+                    <div className="w-6 h-6 bg-[#00D4AA] rounded-full flex items-center justify-center mr-3">
                       <span className="text-white text-xs font-bold">U</span>
                     </div>
-                    <div>
-                      <div className="text-[#00D4AA] font-medium">USDT</div>
-                      <div className="text-xs text-gray-400">Tether USDt</div>
+                    <div className="flex-1">
+                      <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        USDT
+                      </div>
+                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Tether USDt
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-white font-medium">0.00</div>
-                    <div className="text-xs text-gray-400">$0.00</div>
+                    <ChevronDown className={`h-4 w-4 ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`} />
                   </div>
                 </div>
               </div>
 
-              {/* 转账金额输入 */}
-              <div className="mb-6">
+              {/* 数量输入 */}
+              <div className="mb-4">
+                <label className={`block text-sm mb-2 ${
+                  isDark ? 'text-gray-400' : 'text-gray-600'
+                }`}>
+                  数量
+                </label>
                 <div className="flex space-x-3">
                   <input
                     type="number"
                     value={transferAmount}
                     onChange={(e) => setTransferAmount(e.target.value)}
-                    placeholder="输入转账金额"
-                    className="flex-1 p-3 bg-[#252842] border border-[#3a3d4a] rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none focus:border-[#00D4AA]"
+                    placeholder="0"
+                    className={`flex-1 p-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+                      isDark 
+                        ? 'bg-[#2a2d42] border-[#3a3d4a] text-white placeholder-gray-400' 
+                        : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                    } border`}
                   />
                   <Button
                     variant="outline"
-                    className="px-4 py-3 text-sm border-[#3a3d4a] text-gray-400 hover:text-white hover:border-[#00D4AA]"
+                    className={`px-4 py-3 text-sm ${
+                      isDark 
+                        ? 'border-[#3a3d4a] text-[#00D4AA] hover:text-white hover:border-[#00D4AA]' 
+                        : 'border-gray-200 text-[#00D4AA] hover:text-white hover:bg-[#00D4AA] hover:border-[#00D4AA]'
+                    }`}
                     onClick={() => setTransferAmount("0.00")}
                   >
                     全部
@@ -1655,12 +1701,19 @@ export default function WalletPage() {
                 </div>
               </div>
 
+              {/* 可用余额 */}
+              <div className="mb-6">
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  可用 USDT 资产: <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>0.00</span>
+                </div>
+              </div>
+
               {/* 确认按钮 */}
               <Button
-                className="w-full bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white font-medium"
+                className="w-full bg-[#4a4a4a] hover:bg-[#5a5a5a] text-white font-medium py-3 rounded-lg disabled:opacity-50"
                 disabled={!transferAmount || transferAmount === "0"}
               >
-                确认划转
+                确定
               </Button>
             </div>
           </div>
