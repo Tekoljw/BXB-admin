@@ -1807,7 +1807,7 @@ export default function WalletPage() {
                     placeholder="0"
                     className={`flex-1 p-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
                       isDark 
-                        ? 'bg-[#2a2d42] border-[#3a3d4a] text-white placeholder-gray-400' 
+                        ? 'bg-[#252842] border-[#252842] text-white placeholder-gray-400' 
                         : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
                     } border`}
                   />
