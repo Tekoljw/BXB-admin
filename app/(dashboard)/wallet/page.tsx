@@ -168,6 +168,238 @@ export default function WalletPage() {
     CNY: 7.2
   }
 
+  // 订单记录数据
+  const orderRecordsData = {
+    "现货订单": [
+      {
+        id: "SP001",
+        pair: "BTC/USDT",
+        type: "买入",
+        side: "限价",
+        price: "67,234.56",
+        amount: "0.001",
+        filled: "0.001",
+        total: "67.23",
+        status: "已完成",
+        time: "2024-01-15 14:25:30",
+        fee: "0.0675 USDT"
+      },
+      {
+        id: "SP002", 
+        pair: "ETH/USDT",
+        type: "卖出",
+        side: "市价",
+        price: "3,456.78",
+        amount: "0.1",
+        filled: "0.1",
+        total: "345.68",
+        status: "已完成",
+        time: "2024-01-15 13:45:20",
+        fee: "0.346 USDT"
+      },
+      {
+        id: "SP003",
+        pair: "BNB/USDT", 
+        type: "买入",
+        side: "限价",
+        price: "320.50",
+        amount: "1.0",
+        filled: "0.5",
+        total: "160.25",
+        status: "部分成交",
+        time: "2024-01-15 12:30:15",
+        fee: "0.160 USDT"
+      }
+    ],
+    "合约订单": [
+      {
+        id: "FU001",
+        pair: "BTCUSDT",
+        type: "开多",
+        side: "限价",
+        price: "67,150.00",
+        amount: "0.01",
+        filled: "0.01",
+        leverage: "10x",
+        margin: "67.15",
+        status: "已完成",
+        time: "2024-01-15 15:10:45",
+        pnl: "+12.50"
+      },
+      {
+        id: "FU002",
+        pair: "ETHUSDT",
+        type: "开空",
+        side: "市价",
+        price: "3,400.00",
+        amount: "0.1", 
+        filled: "0.1",
+        leverage: "5x",
+        margin: "68.00",
+        status: "已完成",
+        time: "2024-01-15 14:55:30",
+        pnl: "-5.60"
+      }
+    ],
+    "理财订单": [
+      {
+        id: "FI001",
+        product: "USDT活期理财",
+        type: "申购",
+        amount: "1,000.00",
+        apy: "8.5%",
+        duration: "活期",
+        status: "收益中",
+        time: "2024-01-10 09:30:00",
+        earned: "1.15 USDT"
+      },
+      {
+        id: "FI002",
+        product: "BTC定期理财",
+        type: "申购", 
+        amount: "0.01 BTC",
+        apy: "6.2%",
+        duration: "30天",
+        status: "收益中",
+        time: "2024-01-05 16:20:15",
+        earned: "0.000051 BTC"
+      }
+    ],
+    "U卡订单": [
+      {
+        id: "UC001",
+        type: "消费",
+        merchant: "Amazon",
+        amount: "89.99",
+        currency: "USD",
+        status: "已完成",
+        time: "2024-01-15 18:45:30",
+        cardNumber: "****1234"
+      },
+      {
+        id: "UC002",
+        type: "充值",
+        amount: "500.00",
+        currency: "USDT",
+        status: "已完成", 
+        time: "2024-01-14 10:20:15",
+        cardNumber: "****1234"
+      }
+    ],
+    "佣金记录": [
+      {
+        id: "CM001",
+        type: "推荐佣金",
+        user: "用户A",
+        amount: "+15.67 USDT",
+        rate: "20%",
+        source: "现货交易",
+        status: "已发放",
+        time: "2024-01-15 16:30:00"
+      },
+      {
+        id: "CM002",
+        type: "返佣奖励",
+        user: "用户B",
+        amount: "+8.32 USDT", 
+        rate: "15%",
+        source: "合约交易",
+        status: "已发放",
+        time: "2024-01-15 14:20:45"
+      }
+    ],
+    "担保记录": [
+      {
+        id: "GR001",
+        type: "担保交易",
+        pair: "BTC/USDT",
+        amount: "0.001 BTC",
+        guaranteeFee: "0.50 USDT",
+        status: "交易完成",
+        time: "2024-01-15 15:30:20",
+        counterparty: "用户***456"
+      },
+      {
+        id: "GR002",
+        type: "保证金冻结",
+        amount: "100.00 USDT",
+        reason: "担保交易保证金",
+        status: "已解冻",
+        time: "2024-01-15 13:15:10"
+      }
+    ],
+    "充提币记录": [
+      {
+        id: "DW001",
+        type: "充币",
+        currency: "BTC",
+        amount: "+0.01",
+        address: "bc1q...xyz",
+        txHash: "abc123...def",
+        status: "已确认",
+        time: "2024-01-15 12:45:30",
+        confirmations: "6/6"
+      },
+      {
+        id: "DW002",
+        type: "提币",
+        currency: "USDT",
+        amount: "-500.00",
+        address: "0x123...abc",
+        txHash: "def456...ghi",
+        status: "已完成",
+        time: "2024-01-14 20:30:15",
+        fee: "1.00 USDT"
+      }
+    ],
+    "划转记录": [
+      {
+        id: "TR001",
+        type: "内部划转",
+        from: "现货账户",
+        to: "合约账户",
+        currency: "USDT",
+        amount: "1,000.00",
+        status: "已完成",
+        time: "2024-01-15 14:15:45"
+      },
+      {
+        id: "TR002",
+        type: "内部划转",
+        from: "合约账户",
+        to: "理财账户",
+        currency: "USDT",
+        amount: "500.00",
+        status: "已完成",
+        time: "2024-01-15 11:30:20"
+      }
+    ],
+    "USDT买卖记录": [
+      {
+        id: "OTC001",
+        type: "买入",
+        amount: "1,000.00 USDT",
+        price: "7.20 CNY",
+        total: "7,200.00 CNY",
+        method: "银行卡",
+        status: "已完成",
+        time: "2024-01-15 16:45:30",
+        merchant: "商户A"
+      },
+      {
+        id: "OTC002",
+        type: "卖出",
+        amount: "500.00 USDT",
+        price: "7.22 CNY",
+        total: "3,610.00 CNY",
+        method: "支付宝",
+        status: "已完成",
+        time: "2024-01-14 19:20:15",
+        merchant: "商户B"
+      }
+    ]
+  }
+
   // 添加新的数据结构
   const accountsData = {
     现金账户: {
@@ -1056,6 +1288,253 @@ export default function WalletPage() {
     }
   }
 
+  // 渲染订单记录内容
+  const renderOrderContent = () => {
+    const records = orderRecordsData[orderTab] || []
+    
+    if (records.length === 0) {
+      return (
+        <div className={`${cardStyle} rounded-lg p-6`}>
+          <div className="text-center py-12">
+            <div className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              {orderTab}
+            </div>
+            <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+              暂无{orderTab}数据
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    // 根据不同类型渲染不同的表格
+    switch (orderTab) {
+      case "现货订单":
+        return (
+          <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>现货订单记录</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className={`${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                  <tr>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>订单ID</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>交易对</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>类型</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>价格</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>数量</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>成交</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>状态</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>时间</th>
+                  </tr>
+                </thead>
+                <tbody className={`${isDark ? 'bg-gray-900' : 'bg-white'} divide-y ${isDark ? 'divide-gray-700' : 'divide-gray-200'}`}>
+                  {records.map((record, index) => (
+                    <tr key={record.id} className={`hover:${isDark ? 'bg-gray-800' : 'bg-gray-50'} transition-colors`}>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {record.id}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        {record.pair}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm`}>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          record.type === "买入" 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                            : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                        }`}>
+                          {record.type} · {record.side}
+                        </span>
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        ${record.price}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        {record.amount}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        {record.filled}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm`}>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          record.status === "已完成" 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                            : record.status === "部分成交"
+                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+                            : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
+                        }`}>
+                          {record.status}
+                        </span>
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        {record.time}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )
+
+      case "合约订单":
+        return (
+          <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>合约订单记录</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className={`${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                  <tr>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>订单ID</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>合约</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>类型</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>价格</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>杠杆</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>保证金</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>盈亏</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>状态</th>
+                  </tr>
+                </thead>
+                <tbody className={`${isDark ? 'bg-gray-900' : 'bg-white'} divide-y ${isDark ? 'divide-gray-700' : 'divide-gray-200'}`}>
+                  {records.map((record, index) => (
+                    <tr key={record.id} className={`hover:${isDark ? 'bg-gray-800' : 'bg-gray-50'} transition-colors`}>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {record.id}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        {record.pair}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm`}>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          record.type.includes("开多") 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                            : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                        }`}>
+                          {record.type} · {record.side}
+                        </span>
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        ${record.price}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        {record.leverage}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        ${record.margin}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${
+                        record.pnl.startsWith('+') ? 'text-green-500' : 'text-red-500'
+                      }`}>
+                        {record.pnl}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm`}>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                          {record.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )
+
+      case "充提币记录":
+        return (
+          <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>充提币记录</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className={`${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                  <tr>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>类型</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>币种</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>数量</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>地址</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>交易哈希</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>状态</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>时间</th>
+                  </tr>
+                </thead>
+                <tbody className={`${isDark ? 'bg-gray-900' : 'bg-white'} divide-y ${isDark ? 'divide-gray-700' : 'divide-gray-200'}`}>
+                  {records.map((record, index) => (
+                    <tr key={record.id} className={`hover:${isDark ? 'bg-gray-800' : 'bg-gray-50'} transition-colors`}>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm`}>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          record.type === "充币" 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                            : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                        }`}>
+                          {record.type}
+                        </span>
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {record.currency}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        {record.amount}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'} font-mono`}>
+                        {record.address}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'} font-mono`}>
+                        {record.txHash}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm`}>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                          {record.status}
+                        </span>
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        {record.time}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )
+
+      default:
+        return (
+          <div className={`${cardStyle} rounded-lg p-6`}>
+            <div className="space-y-4">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{orderTab}</h3>
+              <div className="space-y-3">
+                {records.map((record, index) => (
+                  <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      {Object.entries(record).map(([key, value]) => (
+                        <div key={key}>
+                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
+                            {key === 'id' ? 'ID' : 
+                             key === 'type' ? '类型' :
+                             key === 'amount' ? '金额' :
+                             key === 'status' ? '状态' :
+                             key === 'time' ? '时间' : key}
+                          </div>
+                          <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium`}>
+                            {value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )
+    }
+  }
+
   return (
     <div className={`min-h-screen ${isDark ? 'bg-background' : 'bg-gray-50'}`}>
       {isMobile ? (
@@ -1142,18 +1621,7 @@ export default function WalletPage() {
 
           {/* Content */}
           <div className={`transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-            {topLevelTab === "账户资产" ? renderTabContent() : (
-              <div className={`${cardStyle} rounded-lg p-6`}>
-                <div className="text-center py-12">
-                  <div className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {orderTab}
-                  </div>
-                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                    暂无{orderTab}数据
-                  </div>
-                </div>
-              </div>
-            )}
+            {topLevelTab === "账户资产" ? renderTabContent() : renderOrderContent()}
           </div>
         </div>
       ) : (
@@ -1252,18 +1720,7 @@ export default function WalletPage() {
                   ? 'translate-x-8 opacity-0 scale-95' 
                   : 'translate-x-0 opacity-100 scale-100'
               }`}>
-                {topLevelTab === "账户资产" ? renderTabContent() : (
-                  <div className={`${cardStyle} rounded-lg p-6`}>
-                    <div className="text-center py-12">
-                      <div className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        {orderTab}
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        暂无{orderTab}数据
-                      </div>
-                    </div>
-                  </div>
-                )}
+                {topLevelTab === "账户资产" ? renderTabContent() : renderOrderContent()}
               </div>
             </div>
           </div>
