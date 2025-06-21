@@ -454,7 +454,7 @@ export default function WalletPage() {
               }`}>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {/* 主要操作按钮 */}
-                  <div className="col-span-2 md:col-span-2 grid grid-cols-4 gap-3">
+                  <div className="col-span-2 md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-3">
                     {actionButtons.map((button) => {
                       const Icon = button.icon
                       const isSelected = selectedAction === button.id
@@ -468,16 +468,16 @@ export default function WalletPage() {
                           onMouseDown={() => setClickedAction(button.id)}
                           onMouseUp={() => setClickedAction("")}
                           onMouseLeave={() => setClickedAction("")}
-                          className={`h-12 transition-all duration-200 text-base font-bold transform ${
+                          className={`h-12 transition-all duration-200 text-base font-bold ${
                             isClicked
-                              ? "scale-95 bg-gray-900 text-white border-gray-900"
+                              ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                               : isSelected 
-                                ? "bg-black text-white border-black hover:bg-gray-800 shadow-lg" 
+                                ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
                                 : isDeposit
-                                  ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90 hover:scale-105"
-                                  : "bg-transparent border-2 border-black text-black hover:bg-gray-50 hover:scale-105 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                                  ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90"
+                                  : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                           }`}
-                          variant={isSelected ? "default" : isDeposit ? "default" : "outline"}
+                          variant={isSelected ? "outline" : isDeposit ? "default" : "outline"}
                         >
                           <Icon className="h-4 w-4 mr-2" />
                           {button.label}
@@ -494,21 +494,23 @@ export default function WalletPage() {
                       onMouseDown={() => setClickedAction("fund-records")}
                       onMouseUp={() => setClickedAction("")}
                       onMouseLeave={() => setClickedAction("")}
-                      className={`h-12 transition-all duration-200 transform ${
+                      className={`h-12 w-12 transition-all duration-200 ${
                         clickedAction === "fund-records"
-                          ? "scale-95 bg-gray-900 border-gray-900"
+                          ? "bg-[#00D4AA] border-[#00D4AA]"
                           : selectedAction === "fund-records"
-                            ? "bg-black border-black shadow-lg"
-                            : "bg-transparent border-2 border-black hover:bg-gray-50 hover:scale-105 dark:border-white dark:hover:bg-gray-800"
+                            ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
                       }`}
                       variant="outline"
                       title="资金记录"
                     >
                       <FileText 
                         className={`h-4 w-4 transition-colors ${
-                          clickedAction === "fund-records" || selectedAction === "fund-records" 
-                            ? "text-white" 
-                            : "text-green-500"
+                          clickedAction === "fund-records"
+                            ? "text-white"
+                            : selectedAction === "fund-records" 
+                              ? "text-[#00D4AA]"
+                              : "text-black dark:text-white"
                         }`} 
                       />
                     </Button>
@@ -519,21 +521,23 @@ export default function WalletPage() {
                       onMouseDown={() => setClickedAction("order-records")}
                       onMouseUp={() => setClickedAction("")}
                       onMouseLeave={() => setClickedAction("")}
-                      className={`h-12 transition-all duration-200 transform ${
+                      className={`h-12 w-12 transition-all duration-200 ${
                         clickedAction === "order-records"
-                          ? "scale-95 bg-gray-900 border-gray-900"
+                          ? "bg-[#00D4AA] border-[#00D4AA]"
                           : selectedAction === "order-records"
-                            ? "bg-black border-black shadow-lg"
-                            : "bg-transparent border-2 border-black hover:bg-gray-50 hover:scale-105 dark:border-white dark:hover:bg-gray-800"
+                            ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
                       }`}
                       variant="outline"
                       title="订单记录"
                     >
                       <BarChart2 
                         className={`h-4 w-4 transition-colors ${
-                          clickedAction === "order-records" || selectedAction === "order-records" 
-                            ? "text-white" 
-                            : "text-orange-500"
+                          clickedAction === "order-records"
+                            ? "text-white"
+                            : selectedAction === "order-records" 
+                              ? "text-[#00D4AA]"
+                              : "text-black dark:text-white"
                         }`} 
                       />
                     </Button>
