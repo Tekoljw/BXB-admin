@@ -1093,16 +1093,67 @@ export default function WalletPage() {
       {isMobile ? (
         /* Mobile Layout - Top Tabs */
         <div className="container mx-auto p-4 space-y-6">
-          {/* Mobile Tab Navigation */}
-          <div className="flex flex-wrap gap-2 p-1 bg-gray-200 dark:bg-[#252842] rounded-lg">
-            {walletTabs.map((tab) => {
-              const Icon = tab.icon
-              return (
+          {/* 顶级页签导航 - 移动端 */}
+          <div className="relative mb-4">
+            <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+              {/* 滑动背景 */}
+              <div
+                className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out bg-black ${
+                  topLevelTab === "账户资产" ? "left-1" : "left-1/2"
+                }`}
+              />
+              {/* 按钮 */}
+              {["账户资产", "订单记录"].map((tab) => (
                 <button
-                  key={tab.id}
-                  onClick={() => handleTabChange(tab.id)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
-                    activeTab === tab.id
+                  key={tab}
+                  className={`relative z-10 flex-1 px-4 py-3 text-sm font-medium transition-all duration-300 ${
+                    topLevelTab === tab
+                      ? "text-white"
+                      : isDark
+                      ? "text-gray-300 hover:text-white"
+                      : "text-gray-700 hover:text-gray-900"
+                  }`}
+                  onClick={() => setTopLevelTab(tab)}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 子页签导航 */}
+          {topLevelTab === "账户资产" ? (
+            <div className="flex flex-wrap gap-2 p-1 bg-gray-200 dark:bg-[#252842] rounded-lg">
+              {walletTabs.map((tab) => {
+                const Icon = tab.icon
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => handleTabChange(tab.id)}
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
+                      activeTab === tab.id
+                        ? isDark
+                          ? "border-white bg-white text-black shadow-sm"
+                          : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
+                        : isDark
+                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                          : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{tab.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2 p-1 bg-gray-200 dark:bg-[#252842] rounded-lg">
+              {orderTabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setOrderTab(tab)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
+                    orderTab === tab
                       ? isDark
                         ? "border-white bg-white text-black shadow-sm"
                         : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
@@ -1111,16 +1162,26 @@ export default function WalletPage() {
                         : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                   }`}
                 >
-                  <Icon className="h-4 w-4" />
-                  <span>{tab.label}</span>
+                  {tab}
                 </button>
-              )
-            })}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Content */}
           <div className={`transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-            {renderTabContent()}
+            {topLevelTab === "账户资产" ? renderTabContent() : (
+              <div className={`${cardStyle} rounded-lg p-6`}>
+                <div className="text-center py-12">
+                  <div className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {orderTab}
+                  </div>
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    暂无{orderTab}数据
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (
@@ -1128,24 +1189,33 @@ export default function WalletPage() {
         <div className="flex h-screen">
           {/* Left Sidebar */}
           <div className={`w-64 ${isDark ? 'bg-[#1a1c2e]' : 'bg-white'} border-r ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'} flex flex-col`}>
-            {/* 顶级页签导航 */}
+            {/* 顶级页签导航 - 聊天界面风格 */}
             <div className="p-3 pt-6">
-              <div className="flex space-x-1 mb-6">
-                {["账户资产", "订单记录"].map((tab) => (
-                  <button
-                    key={tab}
-                    className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-                      topLevelTab === tab
-                        ? "bg-black text-white"
-                        : isDark
-                        ? "bg-[#2a2d42] text-gray-300 hover:bg-[#3a3d4a]"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              <div className="relative mb-6">
+                <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+                  {/* 滑动背景 */}
+                  <div
+                    className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out bg-black ${
+                      topLevelTab === "账户资产" ? "left-1" : "left-1/2"
                     }`}
-                    onClick={() => setTopLevelTab(tab)}
-                  >
-                    {tab}
-                  </button>
-                ))}
+                  />
+                  {/* 按钮 */}
+                  {["账户资产", "订单记录"].map((tab) => (
+                    <button
+                      key={tab}
+                      className={`relative z-10 flex-1 px-3 py-2 text-xs font-medium transition-all duration-300 ${
+                        topLevelTab === tab
+                          ? "text-white"
+                          : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-700 hover:text-gray-900"
+                      }`}
+                      onClick={() => setTopLevelTab(tab)}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
             
