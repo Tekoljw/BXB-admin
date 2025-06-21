@@ -1318,10 +1318,12 @@ export default function WalletPage() {
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        1,234.56
+                      <div className="flex items-baseline space-x-1">
+                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          1,234.56
+                        </span>
+                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                       </div>
-                      <div className="text-xs text-[#00D4AA] font-medium">USDT</div>
                     </div>
                   </div>
                   <div className="mt-3 text-xs text-gray-500">
@@ -1346,10 +1348,12 @@ export default function WalletPage() {
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        987.65
+                      <div className="flex items-baseline space-x-1">
+                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          987.65
+                        </span>
+                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                       </div>
-                      <div className="text-xs text-[#00D4AA] font-medium">USDT</div>
                     </div>
                   </div>
                   <div className="mt-3 text-xs text-gray-500">
@@ -1371,10 +1375,11 @@ export default function WalletPage() {
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-baseline space-x-2">
                         <span className={`text-2xl font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                           5,000.00
                         </span>
+                        <span className="text-xs text-[#00D4AA]/60 font-medium">USDT</span>
                         <Button
                           size="sm"
                           className="h-6 w-6 p-0 bg-white hover:bg-gray-100 text-black border border-black rounded"
@@ -1386,17 +1391,15 @@ export default function WalletPage() {
                           <Plus className="h-3 w-3" />
                         </Button>
                       </div>
-                      <div className="text-xs text-[#00D4AA]/60 font-medium">USDT</div>
                     </div>
                   </div>
-                  <div className="mt-3 flex items-center justify-between">
+                  <div className="mt-3 flex items-center space-x-2">
                     <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
                       剩余 42 天到期
                     </span>
                     <Button
-                      variant="ghost"
                       size="sm"
-                      className="h-5 px-2 text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      className="h-5 px-2 text-xs bg-black hover:bg-gray-800 text-white"
                       onClick={(e) => {
                         e.stopPropagation()
                         setShowExtendTimeModal(true)
@@ -1419,22 +1422,25 @@ export default function WalletPage() {
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className={`text-2xl font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        2,456.78
+                      <div className="flex items-baseline space-x-1">
+                        <span className={`text-2xl font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          2,456.78
+                        </span>
+                        <span className="text-xs text-[#00D4AA]/60 font-medium">USDT</span>
                       </div>
-                      <div className="text-xs text-[#00D4AA]/60 font-medium">USDT</div>
                     </div>
                   </div>
-                  <div className="mt-3 flex space-x-3">
-                    <button
-                      className="h-8 w-8 rounded-full bg-black hover:bg-gray-800 text-white flex items-center justify-center transition-colors"
+                  <div className="mt-3 flex items-center space-x-3">
+                    <Button
+                      size="sm"
+                      className="h-7 px-3 text-xs bg-black hover:bg-gray-800 text-white"
                       onClick={() => setShowTransferModal(true)}
-                      title="资金划转"
                     >
-                      <ArrowLeftRight className="h-4 w-4" />
-                    </button>
+                      <ArrowLeftRight className="h-3 w-3 mr-1" />
+                      划转
+                    </Button>
                     <button
-                      className={`h-8 w-8 rounded-full ${isDark ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'} flex items-center justify-center transition-colors`}
+                      className={`${isDark ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-800'} transition-colors`}
                       onClick={() => router.push('/wallet?tab=order-records')}
                       title="交易记录"
                     >
