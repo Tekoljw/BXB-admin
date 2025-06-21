@@ -1362,28 +1362,28 @@ export default function WalletPage() {
                 </CardContent>
               </Card>
 
-              {/* 信誉担保金额 */}
+              {/* 信誉担保金额 - 不可点击 */}
               <Card 
-                className={`${cardStyle} cursor-pointer transition-all duration-200 hover:shadow-lg ${
-                  selectedCard === "credit" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
-                }`}
-                onClick={() => handleCardClick("credit")}
+                className={`${cardStyle} ${isDark ? 'bg-gray-800/50 border-gray-700/50' : 'bg-gray-50/50 border-gray-200/50'} relative opacity-75`}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
                     信誉担保金额
+                    <span className={`ml-2 px-2 py-0.5 text-xs rounded ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'}`}>
+                      仅显示
+                    </span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      <div className={`text-2xl font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                         5,000.00
                       </div>
-                      <div className="text-xs text-[#00D4AA] font-medium">USDT</div>
+                      <div className="text-xs text-[#00D4AA]/60 font-medium">USDT</div>
                     </div>
-                    <div className="h-12 w-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                      <Shield className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    <div className="h-12 w-12 bg-blue-100/50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                      <Shield className="h-6 w-6 text-blue-400/60 dark:text-blue-500/60" />
                     </div>
                   </div>
                   <div className="mt-3 flex space-x-2">
@@ -1414,23 +1414,26 @@ export default function WalletPage() {
                 </CardContent>
               </Card>
 
-              {/* 可用余额 */}
-              <Card className={`${cardStyle}`}>
+              {/* 可用余额 - 不可点击 */}
+              <Card className={`${cardStyle} ${isDark ? 'bg-gray-800/50 border-gray-700/50' : 'bg-gray-50/50 border-gray-200/50'} relative opacity-75`}>
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
                     可用余额
+                    <span className={`ml-2 px-2 py-0.5 text-xs rounded ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'}`}>
+                      仅显示
+                    </span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      <div className={`text-2xl font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                         2,456.78
                       </div>
-                      <div className="text-xs text-[#00D4AA] font-medium">USDT</div>
+                      <div className="text-xs text-[#00D4AA]/60 font-medium">USDT</div>
                     </div>
-                    <div className="h-12 w-12 bg-[#00D4AA]/20 rounded-lg flex items-center justify-center">
-                      <DollarSign className="h-6 w-6 text-[#00D4AA]" />
+                    <div className="h-12 w-12 bg-[#00D4AA]/10 rounded-lg flex items-center justify-center">
+                      <DollarSign className="h-6 w-6 text-[#00D4AA]/60" />
                     </div>
                   </div>
                   <div className="mt-3 flex space-x-2">
