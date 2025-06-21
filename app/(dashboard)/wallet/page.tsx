@@ -1311,7 +1311,7 @@ export default function WalletPage() {
               >
                 <CardHeader className="pb-3">
                   <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
-                    <TrendingUp className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
+                    <ArrowDown className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
                     应收担保金额
                   </CardTitle>
                 </CardHeader>
@@ -1339,7 +1339,7 @@ export default function WalletPage() {
               >
                 <CardHeader className="pb-3">
                   <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
-                    <TrendingDown className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
+                    <ArrowUp className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
                     应付担保金额
                   </CardTitle>
                 </CardHeader>
@@ -1377,7 +1377,7 @@ export default function WalletPage() {
                         </span>
                         <Button
                           size="sm"
-                          className="h-6 w-6 p-0 bg-[#00D4AA] hover:bg-[#00B894] text-black rounded"
+                          className="h-6 w-6 p-0 bg-white hover:bg-gray-100 text-black border border-black rounded"
                           onClick={(e) => {
                             e.stopPropagation()
                             setShowAddCreditModal(true)
@@ -1389,20 +1389,31 @@ export default function WalletPage() {
                       <div className="text-xs text-[#00D4AA]/60 font-medium">USDT</div>
                     </div>
                   </div>
-                  <div className="mt-3 text-xs text-gray-500">
-                    到期时间: 2024-03-15
+                  <div className="mt-3 flex items-center justify-between">
+                    <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                      剩余 42 天到期
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-5 px-2 text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setShowExtendTimeModal(true)
+                      }}
+                    >
+                      延长
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* 可用余额 - 不可点击 */}
+              {/* 可用余额 */}
               <Card className={`${cardStyle} ${isDark ? 'bg-gray-800/50 border-gray-700/50' : 'bg-gray-50/50 border-gray-200/50'} relative opacity-75`}>
                 <CardHeader className="pb-3">
                   <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
+                    <DollarSign className="h-4 w-4 mr-2 text-[#00D4AA]" />
                     可用余额
-                    <span className={`ml-2 px-2 py-0.5 text-xs rounded ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'}`}>
-                      仅显示
-                    </span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -1413,28 +1424,22 @@ export default function WalletPage() {
                       </div>
                       <div className="text-xs text-[#00D4AA]/60 font-medium">USDT</div>
                     </div>
-                    <div className="h-12 w-12 bg-[#00D4AA]/10 rounded-lg flex items-center justify-center">
-                      <DollarSign className="h-6 w-6 text-[#00D4AA]/60" />
-                    </div>
                   </div>
-                  <div className="mt-3 flex space-x-2">
-                    <Button
-                      size="sm"
-                      className="h-7 px-3 text-xs bg-[#00D4AA] hover:bg-[#00B894] text-black"
+                  <div className="mt-3 flex space-x-3">
+                    <button
+                      className="h-8 w-8 rounded-full bg-black hover:bg-gray-800 text-white flex items-center justify-center transition-colors"
                       onClick={() => setShowTransferModal(true)}
+                      title="资金划转"
                     >
-                      <ArrowLeftRight className="h-3 w-3 mr-1" />
-                      划转
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 px-3 text-xs"
+                      <ArrowLeftRight className="h-4 w-4" />
+                    </button>
+                    <button
+                      className={`h-8 w-8 rounded-full ${isDark ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'} flex items-center justify-center transition-colors`}
                       onClick={() => router.push('/wallet?tab=order-records')}
+                      title="交易记录"
                     >
-                      <FileText className="h-3 w-3 mr-1" />
-                      记录
-                    </Button>
+                      <FileText className="h-4 w-4" />
+                    </button>
                   </div>
                 </CardContent>
               </Card>
