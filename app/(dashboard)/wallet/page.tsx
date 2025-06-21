@@ -30,8 +30,7 @@ import {
   TrendingDown,
   ArrowUp,
   ArrowDown,
-  History,
-  TrendingUp as Trade
+  History
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -451,7 +450,7 @@ export default function WalletPage() {
               <div className={`transition-all duration-500 ${
                 loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
               }`}>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
                   {actionButtons.map((button) => {
                     const Icon = button.icon
                     const isSelected = selectedAction === button.id
@@ -484,25 +483,50 @@ export default function WalletPage() {
                   
                   {/* 资金记录按钮 - 仅图标 */}
                   <Button
-                    onClick={() => handleActionClick("records")}
-                    onMouseDown={() => setClickedAction("records")}
+                    onClick={() => handleActionClick("fund-records")}
+                    onMouseDown={() => setClickedAction("fund-records")}
                     onMouseUp={() => setClickedAction("")}
                     onMouseLeave={() => setClickedAction("")}
                     className={`h-12 w-12 p-0 transition-all duration-200 transform ${
-                      clickedAction === "records"
+                      clickedAction === "fund-records"
                         ? "scale-95 bg-gray-900 border-gray-900"
-                        : selectedAction === "records"
+                        : selectedAction === "fund-records"
                           ? "bg-black border-black shadow-lg"
                           : "bg-transparent border-2 border-black hover:bg-gray-50 hover:scale-105 dark:border-white dark:hover:bg-gray-800"
                     }`}
                     variant="outline"
-                    title="资金记录/现货交易记录"
+                    title="资金记录"
                   >
                     <History 
                       className={`h-5 w-5 transition-colors ${
-                        clickedAction === "records" || selectedAction === "records" 
+                        clickedAction === "fund-records" || selectedAction === "fund-records" 
                           ? "text-white" 
                           : "text-purple-500"
+                      }`} 
+                    />
+                  </Button>
+
+                  {/* 交易记录按钮 - 仅图标 */}
+                  <Button
+                    onClick={() => handleActionClick("trade-records")}
+                    onMouseDown={() => setClickedAction("trade-records")}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-12 w-12 p-0 transition-all duration-200 transform ${
+                      clickedAction === "trade-records"
+                        ? "scale-95 bg-gray-900 border-gray-900"
+                        : selectedAction === "trade-records"
+                          ? "bg-black border-black shadow-lg"
+                          : "bg-transparent border-2 border-black hover:bg-gray-50 hover:scale-105 dark:border-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                    title="交易记录"
+                  >
+                    <TrendingUp 
+                      className={`h-5 w-5 transition-colors ${
+                        clickedAction === "trade-records" || selectedAction === "trade-records" 
+                          ? "text-white" 
+                          : "text-blue-500"
                       }`} 
                     />
                   </Button>
