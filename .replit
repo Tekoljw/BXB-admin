@@ -22,11 +22,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev -- --port 5000"
+args = "npm run dev"
 waitForPort = 5000
 
 [deployment]
 run = ["sh", "-c", "python -m pip install flask && python app.py"]
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
 
 [[ports]]
 localPort = 5000
