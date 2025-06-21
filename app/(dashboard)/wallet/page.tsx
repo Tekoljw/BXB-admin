@@ -146,7 +146,7 @@ export default function WalletPage() {
     { id: "合约账户", label: "合约账户", icon: BarChart3 },
     { id: "理财账户", label: "理财账户", icon: PiggyBank },
     { id: "U卡账户", label: "U卡账户", icon: DollarSign },
-    { id: "佣金账户", label: "佣金账户", icon: Gift },
+    { id: "佣金账户", label: "佣金账户", icon: Percent },
     { id: "担保账户", label: "担保账户", icon: Shield }
   ]
 
@@ -1439,13 +1439,14 @@ export default function WalletPage() {
                       <ArrowLeftRight className="h-3 w-3 mr-1" />
                       划转
                     </Button>
-                    <button
-                      className={`${isDark ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-800'} transition-colors`}
+                    <Button
+                      size="sm"
+                      className="h-7 px-3 text-xs bg-white hover:bg-gray-100 text-black border border-black"
                       onClick={() => router.push('/wallet?tab=order-records')}
-                      title="交易记录"
                     >
-                      <FileText className="h-4 w-4" />
-                    </button>
+                      <FileText className="h-3 w-3 mr-1" />
+                      记录
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -1826,7 +1827,7 @@ export default function WalletPage() {
   )
 
   const renderAddCreditModal = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className={`${cardStyle} rounded-lg w-full max-w-md`}>
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
@@ -1882,7 +1883,7 @@ export default function WalletPage() {
   )
 
   const renderExtendTimeModal = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className={`${cardStyle} rounded-lg w-full max-w-md`}>
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
