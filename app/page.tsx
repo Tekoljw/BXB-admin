@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 // 支付页面翻译
 const translations = {
@@ -181,7 +181,7 @@ const translations = {
     message: "留言",
     send: "发送消息"
   }
-}
+};
 
 // 代码示例
 const codeSamples = {
@@ -255,7 +255,7 @@ function createPayment() {
     return $payment;
 }
 ?>`
-}
+};
 
 // 客户评价
 const testimonials = [
@@ -280,44 +280,44 @@ const testimonials = [
     content: "Customer support is exceptional. Any issues are resolved within hours, not days. Highly recommend for growing businesses.",
     avatar: "/assets/images/avatar-3.jpg"
   }
-]
+];
 
 export default function Payment() {
-  const [currentLang, setCurrentLang] = useState('en')
-  const [activeTab, setActiveTab] = useState('javascript')
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [navbarOpen, setNavbarOpen] = useState(false)
-  const router = useRouter()
+  const [currentLang, setCurrentLang] = useState('en');
+  const [activeTab, setActiveTab] = useState('javascript');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [navbarOpen, setNavbarOpen] = useState(false);
   
-  const t = translations[currentLang as keyof typeof translations]
+  const t = translations[currentLang as keyof typeof translations];
 
   useEffect(() => {
     // Check local storage for language preference
-    const savedLang = localStorage.getItem('lang')
+    const savedLang = localStorage.getItem('lang');
     if (savedLang && (savedLang === 'en' || savedLang === 'zh')) {
-      setCurrentLang(savedLang)
+      setCurrentLang(savedLang);
     }
     
-    // Check login status
-    const hasToken = localStorage.getItem('token')
-    setIsLoggedIn(!!hasToken)
-  }, [])
+    // Check login status (this would be replaced with actual auth check)
+    const hasToken = localStorage.getItem('token');
+    setIsLoggedIn(!!hasToken);
+  }, []);
 
   const changeLang = (lang: string) => {
     if (lang === 'en' || lang === 'zh') {
-      localStorage.setItem('lang', lang)
-      setCurrentLang(lang)
+      localStorage.setItem('lang', lang);
+      setCurrentLang(lang);
     }
-  }
+  };
 
   const handleLogin = () => {
     // 重定向到支付后台登录页面，不使用SDK
-    window.location.href = "/auth"
-  }
+    window.location.href = "/auth";
+  };
 
   const handleAccount = () => {
-    console.log('Account clicked')
-  }
+    // This would be replaced with account management navigation
+    console.log('Account clicked');
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#050E2F] to-[#061434] text-white">
@@ -330,14 +330,20 @@ export default function Payment() {
             </a>
             
             <div className="hidden md:flex items-center space-x-8">
-              <a href="/" className="text-white hover:text-blue-400 transition cursor-pointer">
-                {currentLang === 'en' ? 'Wallet' : '钱包'}
+              <a href="/">
+                <span className="text-white hover:text-blue-400 transition cursor-pointer">
+                  {currentLang === 'en' ? 'Wallet' : '钱包'}
+                </span>
               </a>
-              <a href="/payment" className="text-white hover:text-blue-400 transition cursor-pointer">
-                {currentLang === 'en' ? 'Payment' : '支付'}
+              <a href="/payment">
+                <span className="text-white hover:text-blue-400 transition cursor-pointer">
+                  {currentLang === 'en' ? 'Payment' : '支付'}
+                </span>
               </a>
-              <a href="/news" className="text-white hover:text-blue-400 transition cursor-pointer">
-                {currentLang === 'en' ? 'News' : '新闻'}
+              <a href="/news">
+                <span className="text-white hover:text-blue-400 transition cursor-pointer">
+                  {currentLang === 'en' ? 'News' : '新闻'}
+                </span>
               </a>
               
               <div className="relative group">
@@ -408,14 +414,20 @@ export default function Payment() {
           {/* Mobile menu */}
           {navbarOpen && (
             <div className="md:hidden py-4 border-t border-[#112678]">
-              <a href="/" className="block py-2 text-white hover:text-blue-400 cursor-pointer">
-                {currentLang === 'en' ? 'Wallet' : '钱包'}
+              <a href="/">
+                <span className="block py-2 text-white hover:text-blue-400 cursor-pointer">
+                  {currentLang === 'en' ? 'Wallet' : '钱包'}
+                </span>
               </a>
-              <a href="/payment" className="block py-2 text-white hover:text-blue-400 cursor-pointer">
-                {currentLang === 'en' ? 'Payment' : '支付'}
+              <a href="/payment">
+                <span className="block py-2 text-white hover:text-blue-400 cursor-pointer">
+                  {currentLang === 'en' ? 'Payment' : '支付'}
+                </span>
               </a>
-              <a href="/news" className="block py-2 text-white hover:text-blue-400 cursor-pointer">
-                {currentLang === 'en' ? 'News' : '新闻'}
+              <a href="/news">
+                <span className="block py-2 text-white hover:text-blue-400 cursor-pointer">
+                  {currentLang === 'en' ? 'News' : '新闻'}
+                </span>
               </a>
               <div className="py-2">
                 <div className="block py-2 text-white">
@@ -677,5 +689,5 @@ export default function Payment() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
