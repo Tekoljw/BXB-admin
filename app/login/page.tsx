@@ -10,7 +10,8 @@ import {
   TrendingUp, 
   Shield,
   Zap,
-  DollarSign
+  DollarSign,
+  ArrowLeft
 } from 'lucide-react'
 
 export default function LoginPage() {
@@ -43,7 +44,7 @@ export default function LoginPage() {
     localStorage.setItem('user', JSON.stringify({ email, username: username || email }))
     
     // Redirect to chat interface after successful login
-    router.push('/chat')
+    router.push('/dashboard/chat')
   }
 
   const handleRegister = (e: React.FormEvent) => {
@@ -53,7 +54,7 @@ export default function LoginPage() {
     localStorage.setItem('user', JSON.stringify({ email, username }))
     
     // Redirect to chat interface after successful registration
-    router.push('/chat')
+    router.push('/dashboard/chat')
   }
 
   const themeClasses = isDarkMode ? {
@@ -77,10 +78,48 @@ export default function LoginPage() {
   }
 
   return (
-    <div className={`min-h-screen flex ${themeClasses.bg} transition-colors duration-300`}>
-      {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"></div>
+    <div className={`min-h-screen ${themeClasses.bg} transition-colors duration-300`}>
+      {/* Header Navigation */}
+      <header className="fixed top-0 w-full z-50 bg-white/10 backdrop-blur-md border-b border-white/20">
+        <div className="max-w-7xl mx-auto px-4 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => router.push('/')}>
+              <Shield className="h-8 w-8 text-[#00D4AA]" />
+              <span className="text-2xl font-bold text-white">BeDAO</span>
+              <span className="px-2 py-1 text-xs bg-[#00D4AA] text-black rounded-full font-semibold">PRO</span>
+            </div>
+            
+            {/* Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <button 
+                onClick={() => router.push('/')} 
+                className="text-white/80 hover:text-[#00D4AA] transition-colors font-medium"
+              >
+                首页
+              </button>
+              <button 
+                onClick={() => router.push('/wallet')} 
+                className="text-white/80 hover:text-[#00D4AA] transition-colors font-medium"
+              >
+                钱包
+              </button>
+              <button 
+                onClick={() => router.push('/market')} 
+                className="text-white/80 hover:text-[#00D4AA] transition-colors font-medium"
+              >
+                行情
+              </button>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="flex min-h-screen pt-16">
+        {/* Left Side - Branding */}
+        <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"></div>
         
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
@@ -162,10 +201,10 @@ export default function LoginPage() {
             </div>
           </div>
         </div>
-      </div>
+        </div>
 
-      {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+        {/* Right Side - Login Form */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           {/* Theme Toggle */}
           <div className="flex justify-end mb-6">
@@ -287,6 +326,7 @@ export default function LoginPage() {
               </div>
             )}
           </div>
+        </div>
         </div>
       </div>
     </div>
