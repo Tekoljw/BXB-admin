@@ -219,6 +219,23 @@ export default function WalletPage() {
     }
   }
 
+  // 操作按钮数据 - 根据账户类型动态显示
+  const getActionButtons = () => {
+    const baseButtons = [
+      { id: "入金", label: "入金", icon: ArrowDownLeft },
+      { id: "出金", label: "出金", icon: ArrowUpRight },
+      { id: "交易", label: "交易", icon: RefreshCw },
+      { id: "划转", label: "划转", icon: ArrowLeftRight },
+    ]
+    
+    // 合约账户(总资产)额外添加仓位分布按钮
+    if (overviewMode === "总资产") {
+      baseButtons.push({ id: "仓位分布", label: "仓位分布", icon: PieChart })
+    }
+    
+    return baseButtons
+  }
+
   const walletData = {
     合约账户: {
       totalBalance: "3,456.78",
@@ -404,6 +421,8 @@ export default function WalletPage() {
       } else {
         window.location.href = "/futures-trade" // 合约交易页面
       }
+    } else if (action === "仓位分布") {
+      handlePositionClick()
     } else {
       setSelectedAction(selectedAction === action ? "" : action)
     }
@@ -513,7 +532,7 @@ export default function WalletPage() {
                 <div className="flex flex-col md:flex-row gap-4">
                   {/* 主要操作按钮 - 自动适配屏幕宽度 */}
                   <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
-                    {actionButtons.map((button) => {
+                    {getActionButtons().map((button) => {
                       const Icon = button.icon
                       const isSelected = selectedAction === button.id
                       const isClicked = clickedAction === button.id
@@ -1728,6 +1747,39 @@ export default function WalletPage() {
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+// 新增订单记录内容组件
+function OrderRecordsContent({ activeOrderTab, isDark }: { activeOrderTab: string, isDark: boolean }) {
+  return (
+    <div className="space-y-6">
+      {/* 订单记录页签 */}
+      <div className="flex flex-wrap gap-2">
+        {["现货订单", "合约订单", "理财订单", "U卡订单", "佣金记录", "担保记录", "充提币记录", "划转记录"].map((tab) => (
+          <button
+            key={tab}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+              activeOrderTab === tab
+                ? "bg-[#00D4AA] text-white shadow-lg"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* 订单记录内容 */}
+      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg border p-6`}>
+        <div className="text-center py-12">
+          <div className={`text-gray-400 mb-4`}>
+            <BarChart2 className="h-12 w-12 mx-auto mb-3" />
+            <p>暂无{activeOrderTab}数据</p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
