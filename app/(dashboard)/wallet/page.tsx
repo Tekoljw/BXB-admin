@@ -1750,36 +1750,3 @@ export default function WalletPage() {
     </div>
   )
 }
-
-// 新增订单记录内容组件
-function OrderRecordsContent({ activeOrderTab, isDark }: { activeOrderTab: string, isDark: boolean }) {
-  return (
-    <div className="space-y-6">
-      {/* 订单记录页签 */}
-      <div className="flex flex-wrap gap-2">
-        {["现货订单", "合约订单", "理财订单", "U卡订单", "佣金记录", "担保记录", "充提币记录", "划转记录"].map((tab) => (
-          <button
-            key={tab}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-              activeOrderTab === tab
-                ? "bg-[#00D4AA] text-white shadow-lg"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-
-      {/* 订单记录内容 */}
-      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg border p-6`}>
-        <div className="text-center py-12">
-          <div className={`text-gray-400 mb-4`}>
-            <BarChart2 className="h-12 w-12 mx-auto mb-3" />
-            <p>暂无{activeOrderTab}数据</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
