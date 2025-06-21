@@ -713,18 +713,20 @@ export default function WalletPage() {
         <div className="fixed inset-0 z-50">
           {/* 背景遮罩 */}
           <div 
-            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
-            onClick={() => setShowCurrencyModal(false)}
+            className={`absolute inset-0 bg-black transition-opacity duration-300 ${
+              currencyModalAnimating ? 'bg-opacity-50' : 'bg-opacity-0'
+            }`}
+            onClick={closeCurrencyModal}
           />
           {/* 侧边栏 */}
-          <div className={`absolute right-0 top-0 h-full w-80 max-w-[90vw] ${cardStyle} transform transition-transform duration-300 ${
-            showCurrencyModal ? 'translate-x-0' : 'translate-x-full'
+          <div className={`absolute right-0 top-0 h-full w-80 max-w-[90vw] ${cardStyle} transform transition-transform duration-300 ease-out ${
+            currencyModalAnimating ? 'translate-x-0' : 'translate-x-full'
           }`}>
             <div className="p-6 h-full overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-lg font-semibold">选择显示币种</h3>
                 <button
-                  onClick={() => setShowCurrencyModal(false)}
+                  onClick={closeCurrencyModal}
                   className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
                   <X className="h-5 w-5" />
@@ -736,7 +738,7 @@ export default function WalletPage() {
                     key={currency.symbol}
                     onClick={() => {
                       setSelectedDisplayCurrency(currency.symbol)
-                      setShowCurrencyModal(false)
+                      closeCurrencyModal()
                     }}
                     className={`w-full flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
                       selectedDisplayCurrency === currency.symbol
