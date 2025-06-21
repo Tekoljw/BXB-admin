@@ -1128,28 +1128,73 @@ export default function WalletPage() {
         <div className="flex h-screen">
           {/* Left Sidebar */}
           <div className={`w-64 ${isDark ? 'bg-[#1a1c2e]' : 'bg-white'} border-r ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'} flex flex-col`}>
-            <nav className="flex-1 px-3 pt-6">
-              <div className="space-y-1">
-                {walletTabs.map((tab) => {
-                  const Icon = tab.icon
-                  return (
+            {/* 顶级页签导航 */}
+            <div className="p-3 pt-6">
+              <div className="flex space-x-1 mb-6">
+                {["账户资产", "订单记录"].map((tab) => (
+                  <button
+                    key={tab}
+                    className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                      topLevelTab === tab
+                        ? "bg-black text-white"
+                        : isDark
+                        ? "bg-[#2a2d42] text-gray-300 hover:bg-[#3a3d4a]"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                    onClick={() => setTopLevelTab(tab)}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            <nav className="flex-1 px-3">
+              {/* 账户资产页签 */}
+              {topLevelTab === "账户资产" && (
+                <div className="space-y-1">
+                  {walletTabs.map((tab) => {
+                    const Icon = tab.icon
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => handleTabChange(tab.id)}
+                        className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
+                          activeTab === tab.id
+                            ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
+                            : isDark
+                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42] hover:scale-102"
+                              : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
+                        }`}
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{tab.label}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
+              
+              {/* 订单记录页签 */}
+              {topLevelTab === "订单记录" && (
+                <div className="space-y-1">
+                  {orderTabs.map((tab) => (
                     <button
-                      key={tab.id}
-                      onClick={() => handleTabChange(tab.id)}
-                      className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
-                        activeTab === tab.id
+                      key={tab}
+                      onClick={() => setOrderTab(tab)}
+                      className={`w-full px-3 py-3 rounded-lg text-left text-sm font-medium transition-all duration-300 transform border ${
+                        orderTab === tab
                           ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
                           : isDark
                             ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42] hover:scale-102"
                             : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
                       }`}
                     >
-                      <Icon className="h-5 w-5" />
-                      <span>{tab.label}</span>
+                      {tab}
                     </button>
-                  )
-                })}
-              </div>
+                  ))}
+                </div>
+              )}
             </nav>
           </div>
 
