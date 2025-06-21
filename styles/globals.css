@@ -479,17 +479,3 @@ div[style*="position: fixed"]:has(img[alt*="Next"]) {
 .sort-container .animate-slide button {
   animation: slide-horizontal 0.3s ease-out;
 }
-
-/* Marquee animation for crypto ticker */
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-}
