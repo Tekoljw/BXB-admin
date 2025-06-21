@@ -27,7 +27,9 @@ import {
   X,
   Check,
   ArrowUpDown,
-  TrendingDown
+  TrendingDown,
+  ArrowUp,
+  ArrowDown
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -313,7 +315,19 @@ export default function WalletPage() {
 
   // 排序切换动画
   const handleSortChange = (newSortBy: string) => {
-    setSortBy(newSortBy)
+    if (newSortBy !== sortBy) {
+      // 添加滑动动画效果
+      const container = document.querySelector('.sort-container')
+      if (container) {
+        container.classList.add('animate-slide')
+        setTimeout(() => {
+          setSortBy(newSortBy)
+          container.classList.remove('animate-slide')
+        }, 150)
+      } else {
+        setSortBy(newSortBy)
+      }
+    }
   }
 
   // 切换添加资产状态
@@ -490,7 +504,7 @@ export default function WalletPage() {
                           <Minus className="h-3 w-3 -mt-1" />
                         </div>
                       </button>
-                      <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-100'}`}>
+                      <div className={`flex rounded-full p-1 sort-container ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-100'}`}>
                         <button
                           onClick={() => {
                             handleSortChange("value")
@@ -502,7 +516,7 @@ export default function WalletPage() {
                               : isDark ? "text-gray-300 hover:text-white hover:scale-105" : "text-gray-600 hover:text-gray-800 hover:scale-105"
                           }`}
                         >
-                          按余额排序 {sortBy === "value" && (sortOrder === "desc" ? <TrendingDown className="inline h-3 w-3 ml-1" /> : <TrendingUp className="inline h-3 w-3 ml-1" />)}
+                          按余额排序 {sortBy === "value" && (sortOrder === "desc" ? <ArrowDown className="inline h-3 w-3 ml-1" /> : <ArrowUp className="inline h-3 w-3 ml-1" />)}
                         </button>
                         <button
                           onClick={() => {
@@ -515,7 +529,7 @@ export default function WalletPage() {
                               : isDark ? "text-gray-300 hover:text-white hover:scale-105" : "text-gray-600 hover:text-gray-800 hover:scale-105"
                           }`}
                         >
-                          按市值排序 {sortBy === "marketCap" && (sortOrder === "desc" ? <TrendingDown className="inline h-3 w-3 ml-1" /> : <TrendingUp className="inline h-3 w-3 ml-1" />)}
+                          按市值排序 {sortBy === "marketCap" && (sortOrder === "desc" ? <ArrowDown className="inline h-3 w-3 ml-1" /> : <ArrowUp className="inline h-3 w-3 ml-1" />)}
                         </button>
                       </div>
                     </div>
@@ -772,7 +786,7 @@ export default function WalletPage() {
                     onClick={() => setCurrencyType("crypto")}
                     className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
                       currencyType === "crypto"
-                        ? "bg-[#00D4AA] text-white"
+                        ? "bg-black text-white"
                         : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"
                     }`}
                   >
@@ -782,7 +796,7 @@ export default function WalletPage() {
                     onClick={() => setCurrencyType("fiat")}
                     className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
                       currencyType === "fiat"
-                        ? "bg-[#00D4AA] text-white"
+                        ? "bg-black text-white"
                         : isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"
                     }`}
                   >

@@ -455,3 +455,27 @@ div[style*="position: fixed"]:has(img[alt*="Next"]) {
 .animate-float {
   animation: float ease-in-out infinite;
 }
+
+/* Sort button slide animation */
+@keyframes slide-horizontal {
+  0% {
+    transform: translateX(-10px);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(5px);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide {
+  animation: slide-horizontal 0.3s ease-out;
+}
+
+.sort-container .animate-slide button {
+  animation: slide-horizontal 0.3s ease-out;
+}
