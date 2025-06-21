@@ -610,7 +610,7 @@ export default function WalletPage() {
                         onClick={openAddAssetModal}
                         className={`w-10 h-10 rounded-lg border transition-all transform hover:scale-105 flex items-center justify-center ${
                           isDark 
-                            ? "border-[#3a3d4a] hover:bg-[#2a2d42]" 
+                            ? "border-[#252842] hover:bg-[#252842]" 
                             : "border-gray-300 hover:bg-gray-50"
                         }`}
                         title="管理资产"
@@ -620,7 +620,7 @@ export default function WalletPage() {
                           <Minus className="h-3 w-3 -mt-1" />
                         </div>
                       </button>
-                      <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-100'}`}>
+                      <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
                         <button
                           onClick={() => {
                             handleSortChange("value")
@@ -978,7 +978,7 @@ export default function WalletPage() {
                             marginBalance: "500.00"
                           }
                         ].map((currency, index) => (
-                          <tr key={currency.symbol} className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-100'} hover:bg-gray-50 dark:hover:bg-[#2a2d42]`}>
+                          <tr key={currency.symbol} className={`border-b ${isDark ? 'border-[#252842]' : 'border-gray-100'} hover:bg-gray-50 dark:hover:bg-[#252842]`}>
                             <td className="py-4 px-4">
                               <div className="flex items-center space-x-3">
                                 <div className="w-8 h-8 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
@@ -1114,7 +1114,7 @@ export default function WalletPage() {
                         ? "border-white bg-white text-black shadow-sm"
                         : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
                       : isDark
-                        ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                        ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842]"
                         : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                   }`}
                 >
@@ -1189,7 +1189,7 @@ export default function WalletPage() {
                           activeTab === tab.id
                             ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
                             : isDark
-                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42] hover:scale-102"
+                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] hover:scale-102"
                               : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
                         }`}
                       >
@@ -1212,7 +1212,7 @@ export default function WalletPage() {
                         orderTab === tab
                           ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
                           : isDark
-                            ? "border-transparent text-gray-300 hover:text-white hover:bg-[#2a2d42] hover:scale-102"
+                            ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] hover:scale-102"
                             : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
                       }`}
                     >
@@ -1267,7 +1267,7 @@ export default function WalletPage() {
             <div className="p-6 h-full overflow-y-auto">
               {/* 币种类型切换 */}
               <div className="flex justify-center mb-6">
-                <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-100'}`}>
+                <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
                   <button
                     onClick={() => handleCurrencyTypeChange("crypto")}
                     className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 transform ${
@@ -1309,7 +1309,7 @@ export default function WalletPage() {
                       selectedDisplayCurrency === currency.symbol
                         ? "border-[#00D4AA] bg-[#00D4AA]/10"
                         : isDark
-                          ? "border-[#3a3d4a] hover:border-[#00D4AA]/50 hover:bg-[#2a2d42]"
+                          ? "border-[#252842] hover:border-[#00D4AA]/50 hover:bg-[#252842]"
                           : "border-gray-200 hover:border-[#00D4AA]/50 hover:bg-gray-50"
                     }`}
                   >
@@ -1719,7 +1719,7 @@ export default function WalletPage() {
                       size="sm"
                       className={`h-10 w-10 p-0 ${
                         isDark 
-                          ? 'text-gray-400 hover:text-white hover:bg-[#2a2d42]' 
+                          ? 'text-gray-400 hover:text-white hover:bg-[#252842]' 
                           : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
                       }`}
                     >
