@@ -92,8 +92,8 @@ export default function WalletPage() {
   }
 
   // 处理划转弹窗
-  const handleTransferClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleTransferClick = (e?: React.MouseEvent) => {
+    e?.stopPropagation()
     if (!showTransferModal) {
       setShowTransferModal(true)
       setTimeout(() => setTransferModalAnimating(true), 50)
@@ -394,7 +394,7 @@ export default function WalletPage() {
     setTimeout(() => setClickedAction(""), 150)
     
     if (action === "划转" || action === "transfer") {
-      handleTransferClick({} as React.MouseEvent)
+      handleTransferClick()
     } else {
       setSelectedAction(selectedAction === action ? "" : action)
     }
