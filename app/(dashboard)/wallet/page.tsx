@@ -1310,7 +1310,8 @@ export default function WalletPage() {
                 onClick={() => handleCardClick("receivable")}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
+                    <TrendingUp className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
                     应收担保金额
                   </CardTitle>
                 </CardHeader>
@@ -1321,9 +1322,6 @@ export default function WalletPage() {
                         1,234.56
                       </div>
                       <div className="text-xs text-[#00D4AA] font-medium">USDT</div>
-                    </div>
-                    <div className="h-12 w-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-                      <TrendingUp className="h-6 w-6 text-green-600 dark:text-green-400" />
                     </div>
                   </div>
                   <div className="mt-3 text-xs text-gray-500">
@@ -1340,7 +1338,8 @@ export default function WalletPage() {
                 onClick={() => handleCardClick("payable")}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
+                    <TrendingDown className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
                     应付担保金额
                   </CardTitle>
                 </CardHeader>
@@ -1352,9 +1351,6 @@ export default function WalletPage() {
                       </div>
                       <div className="text-xs text-[#00D4AA] font-medium">USDT</div>
                     </div>
-                    <div className="h-12 w-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
-                      <TrendingDown className="h-6 w-6 text-red-600 dark:text-red-400" />
-                    </div>
                   </div>
                   <div className="mt-3 text-xs text-gray-500">
                     2 笔担保中
@@ -1362,54 +1358,39 @@ export default function WalletPage() {
                 </CardContent>
               </Card>
 
-              {/* 信誉担保金额 - 不可点击 */}
+              {/* 信誉担保金额 */}
               <Card 
                 className={`${cardStyle} ${isDark ? 'bg-gray-800/50 border-gray-700/50' : 'bg-gray-50/50 border-gray-200/50'} relative opacity-75`}
               >
                 <CardHeader className="pb-3">
                   <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
+                    <Shield className="h-4 w-4 mr-2 text-blue-400 dark:text-blue-500" />
                     信誉担保金额
-                    <span className={`ml-2 px-2 py-0.5 text-xs rounded ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'}`}>
-                      仅显示
-                    </span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className={`text-2xl font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        5,000.00
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-2xl font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          5,000.00
+                        </span>
+                        <Button
+                          size="sm"
+                          className="h-6 w-6 p-0 bg-[#00D4AA] hover:bg-[#00B894] text-black rounded"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setShowAddCreditModal(true)
+                          }}
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
                       </div>
                       <div className="text-xs text-[#00D4AA]/60 font-medium">USDT</div>
                     </div>
-                    <div className="h-12 w-12 bg-blue-100/50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                      <Shield className="h-6 w-6 text-blue-400/60 dark:text-blue-500/60" />
-                    </div>
                   </div>
-                  <div className="mt-3 flex space-x-2">
-                    <Button
-                      size="sm"
-                      className="h-7 px-3 text-xs bg-[#00D4AA] hover:bg-[#00B894] text-black"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setShowAddCreditModal(true)
-                      }}
-                    >
-                      <Plus className="h-3 w-3 mr-1" />
-                      添加金额
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 px-3 text-xs"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setShowExtendTimeModal(true)
-                      }}
-                    >
-                      <Clock className="h-3 w-3 mr-1" />
-                      延长时间
-                    </Button>
+                  <div className="mt-3 text-xs text-gray-500">
+                    到期时间: 2024-03-15
                   </div>
                 </CardContent>
               </Card>
