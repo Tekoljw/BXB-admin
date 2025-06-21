@@ -2,39 +2,38 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import SideNavigation from "@/components/side-navigation"
+import MobileSidebarToggle from "@/components/mobile-sidebar-toggle"
+import ChatInput from "@/components/chat-input"
+import { useTheme } from "@/contexts/theme-context"
 import { 
-  Send, 
   Bot, 
   User, 
-  TrendingUp, 
-  DollarSign,
-  BarChart3,
-  Bell,
-  Settings,
   LogOut
 } from 'lucide-react'
 
 interface Message {
   id: string
   content: string
-  sender: 'user' | 'bot'
+  sender: 'user' | 'assistant'
   timestamp: Date
 }
 
 export default function ChatPage() {
   const router = useRouter()
-  const [message, setMessage] = useState('')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       content: '欢迎来到UBX交易助手！我可以帮助您了解市场动态、分析交易策略和回答相关问题。请问有什么我可以帮助您的吗？',
-      sender: 'bot',
+      sender: 'assistant',
       timestamp: new Date()
     }
   ])
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState<any>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const { isDark } = useTheme()
 
   useEffect(() => {
     // Check if user is logged in
@@ -60,29 +59,25 @@ export default function ChatPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!message.trim()) return
-
+  const handleSendMessage = (message: string) => {
     const userMessage: Message = {
       id: Date.now().toString(),
       content: message,
       sender: 'user',
       timestamp: new Date()
     }
-
+    
     setMessages(prev => [...prev, userMessage])
-    setMessage('')
-
-    // Simulate bot response
+    
+    // Simulate AI response
     setTimeout(() => {
-      const botResponse: Message = {
+      const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: getBotResponse(message),
-        sender: 'bot',
+        sender: 'assistant',
         timestamp: new Date()
       }
-      setMessages(prev => [...prev, botResponse])
+      setMessages(prev => [...prev, aiMessage])
     }, 1000)
   }
 
@@ -116,124 +111,90 @@ export default function ChatPage() {
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white">正在验证登录状态...</div>
+      <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-[#1a1d29]' : 'bg-gray-50'}`}>
+        <div className={`${isDark ? 'text-white' : 'text-gray-900'}`}>正在验证登录状态...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex">
-      {/* Sidebar */}
-      <div className="w-80 bg-gray-800 border-r border-gray-700 flex flex-col">
-        {/* Header */}
-        <div className="p-6 border-b border-gray-700">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-[#00D4AA] rounded-full flex items-center justify-center">
-              <Bot className="w-6 h-6 text-black" />
-            </div>
-            <div>
-              <h1 className="text-white font-bold">UBX 交易助手</h1>
-              <p className="text-gray-400 text-sm">AI智能交易顾问</p>
-            </div>
-          </div>
+    <div className={`flex h-screen ${isDark ? 'bg-[#1a1d29]' : 'bg-gray-50'}`}>
+      <SideNavigation onCloseMobile={() => setSidebarOpen(false)} />
+      
+      <div className="flex-1 flex flex-col lg:ml-64">
+        {/* Mobile sidebar toggle */}
+        <div className="lg:hidden p-4">
+          <MobileSidebarToggle 
+            onToggle={setSidebarOpen}
+            isOpen={sidebarOpen}
+          />
         </div>
 
-        {/* Quick Actions */}
-        <div className="p-6 space-y-3">
-          <button 
-            onClick={() => router.push('/market')}
-            className="w-full flex items-center space-x-3 p-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
-          >
-            <TrendingUp className="w-5 h-5 text-[#00D4AA]" />
-            <span className="text-white">市场行情</span>
-          </button>
-          
-          <button 
-            onClick={() => router.push('/wallet')}
-            className="w-full flex items-center space-x-3 p-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
-          >
-            <DollarSign className="w-5 h-5 text-[#00D4AA]" />
-            <span className="text-white">我的钱包</span>
-          </button>
-          
-          <button 
-            onClick={() => router.push('/spot')}
-            className="w-full flex items-center space-x-3 p-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
-          >
-            <BarChart3 className="w-5 h-5 text-[#00D4AA]" />
-            <span className="text-white">现货交易</span>
-          </button>
-        </div>
-
-        {/* User Profile */}
-        <div className="mt-auto p-6 border-t border-gray-700">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-8 h-8 bg-[#00D4AA] rounded-full flex items-center justify-center">
-              <User className="w-4 h-4 text-black" />
-            </div>
-            <div className="flex-1">
-              <p className="text-white font-medium">{user?.username || user?.email}</p>
-              <p className="text-gray-400 text-sm">在线</p>
-            </div>
+        {/* Chat header */}
+        <div className={`border-b px-6 py-4 flex items-center justify-between ${isDark ? 'border-[#252842] bg-[#1a1d29]' : 'border-gray-200 bg-white'}`}>
+          <div>
+            <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              UBX AI 交易助手
+            </h1>
+            <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              专业的加密货币交易建议和市场分析
+            </p>
           </div>
           
-          <div className="flex space-x-2">
-            <button className="flex-1 flex items-center justify-center p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-              <Settings className="w-4 h-4 text-gray-300" />
-            </button>
+          <div className="flex items-center space-x-4">
+            {user && (
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-[#00D4AA] rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-black" />
+                </div>
+                <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {user.username || user.email}
+                </span>
+              </div>
+            )}
+            
             <button 
               onClick={handleLogout}
-              className="flex-1 flex items-center justify-center p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+              className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-[#252842]' : 'hover:bg-gray-100'}`}
             >
-              <LogOut className="w-4 h-4 text-gray-300" />
+              <LogOut className={`w-5 h-5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Chat Area */}
-      <div className="flex-1 flex flex-col">
-        {/* Chat Header */}
-        <div className="p-6 border-b border-gray-700 bg-gray-800">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-[#00D4AA] rounded-full flex items-center justify-center">
-                <Bot className="w-5 h-5 text-black" />
-              </div>
-              <div>
-                <h2 className="text-white font-semibold">AI交易助手</h2>
-                <p className="text-gray-400 text-sm">专业的加密货币交易建议</p>
-              </div>
-            </div>
-            <Bell className="w-5 h-5 text-gray-400" />
-          </div>
-        </div>
-
-        {/* Messages */}
+        {/* Messages area */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {messages.map((msg) => (
-            <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`flex items-start space-x-3 max-w-2xl ${msg.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div className={`flex items-start space-x-3 max-w-2xl ${message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  msg.sender === 'user' ? 'bg-blue-500' : 'bg-[#00D4AA]'
+                  message.sender === 'user' ? 'bg-blue-500' : 'bg-[#00D4AA]'
                 }`}>
-                  {msg.sender === 'user' ? (
+                  {message.sender === 'user' ? (
                     <User className="w-4 h-4 text-white" />
                   ) : (
                     <Bot className="w-4 h-4 text-black" />
                   )}
                 </div>
-                <div className={`p-4 rounded-2xl ${
-                  msg.sender === 'user' 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-800 text-white border border-gray-700'
-                }`}>
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
+                <div
+                  className={`p-4 rounded-2xl ${
+                    message.sender === 'user'
+                      ? 'bg-blue-500 text-white'
+                      : isDark 
+                        ? 'bg-[#252842] text-white border border-[#2a2f42]'
+                        : 'bg-gray-100 text-gray-900 border border-gray-200'
+                  }`}
+                >
+                  <p className="whitespace-pre-wrap">{message.content}</p>
                   <p className={`text-xs mt-2 ${
-                    msg.sender === 'user' ? 'text-blue-100' : 'text-gray-400'
+                    message.sender === 'user' 
+                      ? 'text-blue-100' 
+                      : isDark ? 'text-gray-400' : 'text-gray-500'
                   }`}>
-                    {msg.timestamp.toLocaleTimeString()}
+                    {message.timestamp.toLocaleTimeString()}
                   </p>
                 </div>
               </div>
@@ -242,42 +203,35 @@ export default function ChatPage() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Message Input */}
-        <div className="p-6 border-t border-gray-700 bg-gray-800">
-          <form onSubmit={handleSendMessage} className="flex space-x-4">
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="输入您的问题，例如：当前BTC价格如何？"
-              className="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#00D4AA] transition-colors"
-            />
-            <button
-              type="submit"
-              disabled={!message.trim()}
-              className="px-6 py-3 bg-[#00D4AA] hover:bg-[#00B894] disabled:bg-gray-600 disabled:cursor-not-allowed text-black font-semibold rounded-lg transition-colors flex items-center space-x-2"
-            >
-              <Send className="w-4 h-4" />
-              <span>发送</span>
-            </button>
-          </form>
+        {/* Chat input */}
+        <div className={`border-t p-6 ${isDark ? 'border-[#252842] bg-[#1a1d29]' : 'border-gray-200 bg-white'}`}>
+          <ChatInput 
+            onSendMessage={handleSendMessage}
+            placeholder="输入您的问题，例如：当前BTC价格如何？"
+          />
           
           <div className="flex flex-wrap gap-2 mt-4">
             <button
-              onClick={() => setMessage('当前BTC价格如何？')}
-              className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-sm rounded-full transition-colors"
+              onClick={() => handleSendMessage('当前BTC价格如何？')}
+              className={`px-3 py-1 text-sm rounded-full transition-colors ${
+                isDark ? 'bg-[#252842] hover:bg-[#2a2f42] text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              }`}
             >
               BTC价格查询
             </button>
             <button
-              onClick={() => setMessage('如何进行安全交易？')}
-              className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-sm rounded-full transition-colors"
+              onClick={() => handleSendMessage('如何进行安全交易？')}
+              className={`px-3 py-1 text-sm rounded-full transition-colors ${
+                isDark ? 'bg-[#252842] hover:bg-[#2a2f42] text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              }`}
             >
               安全交易指南
             </button>
             <button
-              onClick={() => setMessage('交易手续费是多少？')}
-              className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-sm rounded-full transition-colors"
+              onClick={() => handleSendMessage('交易手续费是多少？')}
+              className={`px-3 py-1 text-sm rounded-full transition-colors ${
+                isDark ? 'bg-[#252842] hover:bg-[#2a2f42] text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              }`}
             >
               费率查询
             </button>
