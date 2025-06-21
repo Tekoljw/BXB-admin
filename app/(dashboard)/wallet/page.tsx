@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 import { 
   Wallet, 
   CreditCard, 
@@ -41,6 +42,7 @@ import SkeletonLoader from "@/components/skeleton-loader"
 
 export default function WalletPage() {
   const { theme } = useTheme()
+  const router = useRouter()
   const [balanceVisible, setBalanceVisible] = useState(true)
   const [activeTab, setActiveTab] = useState("钱包总览")
   const [overviewMode, setOverviewMode] = useState("现金账户") // "现金账户" or "总资产"
@@ -286,7 +288,7 @@ export default function WalletPage() {
   const actionButtons = [
     { id: "入金", label: "入金", icon: Download, color: "green", bgColor: "bg-green-500", hoverColor: "hover:bg-green-600" },
     { id: "提币", label: "提币", icon: Upload, color: "red", bgColor: "bg-transparent", hoverColor: "hover:bg-gray-50" },
-    { id: "买卖", label: "买卖", icon: RefreshCw, color: "blue", bgColor: "bg-transparent", hoverColor: "hover:bg-gray-50" },
+    { id: "交易", label: "交易", icon: RefreshCw, color: "blue", bgColor: "bg-transparent", hoverColor: "hover:bg-gray-50" },
     { id: "划转", label: "划转", icon: ArrowLeftRight, color: "purple", bgColor: "bg-transparent", hoverColor: "hover:bg-gray-50" }
   ]
 
@@ -395,6 +397,12 @@ export default function WalletPage() {
     
     if (action === "划转" || action === "transfer") {
       handleTransferClick()
+    } else if (action === "交易") {
+      // 现金账户的交易按钮跳转到现货交易页面
+      router.push("/spot-trading")
+    } else if (action === "trade") {
+      // 合约账户的交易按钮跳转到合约交易页面
+      router.push("/usdt-trade")
     } else {
       setSelectedAction(selectedAction === action ? "" : action)
     }
