@@ -19,6 +19,7 @@ import {
   Moon,
   Menu,
   User,
+  Shield,
 } from "lucide-react"
 
 // Import all page components directly to avoid compilation delays
@@ -26,6 +27,7 @@ import ChatPage from "@/app/(dashboard)/chat/page"
 import MomentsPage from "@/app/(dashboard)/moments/page"
 import MallPage from "@/app/(dashboard)/mall/page"
 import WalletPage from "@/app/(dashboard)/wallet/page"
+import GuaranteePage from "@/app/(dashboard)/guarantee/page"
 import USDTTradePage from "@/app/(dashboard)/usdt-trade/page"
 import MarketPage from "@/app/(dashboard)/market/page"
 import SpotPage from "@/app/(dashboard)/spot/page"
@@ -85,6 +87,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
     { path: "/futures", icon: BarChart3, label: "合约", component: FuturesPage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
+    { path: "/guarantee", icon: Shield, label: "担保", component: GuaranteePage },
   ]
 
   const renderCurrentPage = () => {
@@ -92,6 +95,10 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentItem) {
       const Component = currentItem.component
       return <Component />
+    }
+    // Handle guarantee page specifically
+    if (currentPage === "/guarantee") {
+      return <GuaranteePage />
     }
     return <ChatPage />
   }

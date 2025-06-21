@@ -119,12 +119,18 @@ export default function WalletPage() {
   const isDark = theme === "dark"
 
   const handleTabChange = (tabId: string) => {
+    // 检查是否需要跳转到其他页面
+    const tab = walletTabs.find(t => t.id === tabId)
+    if (tab?.path) {
+      router.push(tab.path)
+      return
+    }
+    
     if (tabId === activeTab) return
     setIsAnimating(true)
     setTimeout(() => {
       setActiveTab(tabId)
       setIsAnimating(false)
-      // 移除加载动画
     }, 150)
   }
 
@@ -145,7 +151,7 @@ export default function WalletPage() {
     { id: "理财账户", label: "理财账户", icon: PiggyBank },
     { id: "U卡账户", label: "U卡账户", icon: DollarSign },
     { id: "佣金账户", label: "佣金账户", icon: Gift },
-    { id: "担保账户", label: "担保账户", icon: Shield }
+    { id: "担保账户", label: "担保账户", icon: Shield, path: "/guarantee" }
   ]
 
   const orderTabs = [
