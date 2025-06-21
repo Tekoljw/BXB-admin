@@ -452,9 +452,9 @@ export default function WalletPage() {
               <div className={`transition-all duration-500 ${
                 loadingSteps.balance ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
               }`}>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {/* 主要操作按钮 */}
-                  <div className="col-span-2 md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="flex flex-col md:flex-row gap-4">
+                  {/* 主要操作按钮 - 自动适配屏幕宽度 */}
+                  <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
                     {actionButtons.map((button) => {
                       const Icon = button.icon
                       const isSelected = selectedAction === button.id
@@ -486,8 +486,8 @@ export default function WalletPage() {
                     })}
                   </div>
                   
-                  {/* 记录按钮区域 */}
-                  <div className="col-span-2 md:col-span-1 grid grid-cols-2 gap-3">
+                  {/* 记录按钮区域 - 右对齐 */}
+                  <div className="flex justify-end md:justify-center gap-3">
                     {/* 资金记录按钮 */}
                     <Button
                       onClick={() => handleActionClick("fund-records")}
