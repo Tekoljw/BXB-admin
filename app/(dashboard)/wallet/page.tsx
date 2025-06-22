@@ -1311,14 +1311,9 @@ export default function WalletPage() {
                 onClick={() => handleCardClick("receivable")}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
-                    <div className="flex items-center">
-                      <ArrowDown className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
-                      应收担保金额
-                    </div>
-                    <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 rounded-full">
-                      等待确认
-                    </span>
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
+                    <ArrowDown className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
+                    应收担保金额
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -1352,14 +1347,9 @@ export default function WalletPage() {
                 onClick={() => handleCardClick("payable")}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
-                    <div className="flex items-center">
-                      <ArrowUp className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
-                      应付担保金额
-                    </div>
-                    <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full">
-                      担保中
-                    </span>
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
+                    <ArrowUp className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
+                    应付担保金额
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
