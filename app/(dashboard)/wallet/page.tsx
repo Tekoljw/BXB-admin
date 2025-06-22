@@ -1613,7 +1613,7 @@ export default function WalletPage() {
         return (
           <div className="space-y-4">
             {/* USDT买卖担保 */}
-            <div className={isDark ? 'bg-gray-800/50 rounded-lg border border-gray-700 shadow-sm p-6 hover:bg-gray-700/30 transition-colors' : 'bg-white rounded-lg border border-gray-200 shadow-sm p-6 hover:bg-gray-50 transition-colors'}>
+            <div className={`rounded-lg border shadow-sm p-6 transition-colors ${isDark ? 'bg-gray-800/50 border-gray-700 hover:bg-gray-700/30' : 'bg-white border-gray-200 hover:bg-gray-50'}`}>
                 <div className="space-y-4">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
@@ -1720,7 +1720,7 @@ export default function WalletPage() {
         return (
           <div className="space-y-4">
             {/* USDT买卖担保 */}
-            <div className={isDark ? 'bg-gray-800/50 rounded-lg border border-gray-700 shadow-sm p-6 hover:bg-gray-700/30 transition-colors' : 'bg-white rounded-lg border border-gray-200 shadow-sm p-6 hover:bg-gray-50 transition-colors'}>
+            <div className={`rounded-lg border shadow-sm p-6 transition-colors ${isDark ? 'bg-gray-800/50 border-gray-700 hover:bg-gray-700/30' : 'bg-white border-gray-200 hover:bg-gray-50'}`}>
                 <div className="space-y-4">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
