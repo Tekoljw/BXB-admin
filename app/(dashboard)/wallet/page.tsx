@@ -43,7 +43,8 @@ import {
   Clock,
   CheckCircle,
   Calendar,
-  MessageCircle
+  MessageCircle,
+  Users
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
