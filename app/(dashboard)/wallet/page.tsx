@@ -1290,16 +1290,7 @@ export default function WalletPage() {
       case "担保账户":
         return (
           <div className={`${cardStyle} rounded-lg p-6 space-y-6`}>
-            {/* 页面标题 */}
-            <div className="flex items-center space-x-3 mb-6">
-              <Shield className="h-8 w-8 text-[#00D4AA]" />
-              <h1 className={`text-2xl md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                担保账户
-              </h1>
-              <span className="px-2 py-1 text-xs bg-[#00D4AA] text-black rounded-full font-semibold">
-                USDT ONLY
-              </span>
-            </div>
+
 
             {/* 担保账户卡片区域 */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -1627,21 +1618,13 @@ export default function WalletPage() {
         return (
           <div>
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    担保中的应收款
-                  </h3>
-                  <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    当前正在担保中的资金，一旦解除担保，您将收到这些资金
-                  </p>
-                </div>
+              <div className="flex items-center justify-end">
                 <Button
                   variant="outline"
                   size="sm"
                   className="bg-black text-white hover:bg-gray-800 border-black text-center"
                 >
-                  查看历史记录
+                  历史记录
                 </Button>
               </div>
             </div>
