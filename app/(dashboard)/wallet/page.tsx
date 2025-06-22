@@ -1641,9 +1641,9 @@ export default function WalletPage() {
                 当前正在担保中的资金，一旦解除担保，您将收到这些资金
               </p>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
-              <div className={`${cardStyle} rounded-lg p-4`}>
+              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                 <div className="flex items-center justify-between mb-3">
                   <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
                     USDT买卖担保
@@ -1678,7 +1678,7 @@ export default function WalletPage() {
               </div>
 
               {/* 其他交易 */}
-              <div className={`${cardStyle} rounded-lg p-4`}>
+              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                 <div className="flex items-center justify-between mb-3">
                   <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
                     其他交易
