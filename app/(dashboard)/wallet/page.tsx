@@ -1388,10 +1388,10 @@ export default function WalletPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="flex items-baseline space-x-2">
-                        <span className={`text-2xl font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           5,000.00
                         </span>
-                        <span className="text-xs text-[#00D4AA]/60 font-medium">USDT</span>
+                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                         <Button
                           size="sm"
                           className="h-6 w-6 p-0 bg-white hover:bg-gray-100 text-black border border-black rounded"
