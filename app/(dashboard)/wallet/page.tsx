@@ -1876,12 +1876,14 @@ export default function WalletPage() {
                     </span>
                   </div>
                   
-                  <div className="flex items-end justify-between">
-                    <Button variant="outline" size="sm" className="h-7 text-xs">
-                      <Eye className="h-3 w-3 mr-1" />
-                      查看合同
-                    </Button>
+                  <div className="flex items-end justify-end">
                     <div className="text-right">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Button className="bg-black hover:bg-gray-800 text-white h-7 text-xs px-3">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          确认结束争议
+                        </Button>
+                      </div>
                       <span className="text-sm text-red-600">争议中，等待仲裁</span>
                     </div>
                   </div>
