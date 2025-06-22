@@ -1742,59 +1742,6 @@ export default function WalletPage() {
             </div>
           </div>
         )
-                <div className="space-y-4">
-                  <div className="flex items-start justify-between">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
-                      其他担保交易
-                    </span>
-                    <div className="flex flex-col items-end space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
-                        <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>456456</span>
-                        <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-4 w-4" />
-                        </button>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
-                        <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>456456</span>
-                        <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      2,500.00 USDT
-                    </span>
-                  </div>
-                  
-                  <div>
-                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
-                      虚拟商品交易担保，游戏道具出售，价值2500 USDT，买方已付款等待确认收货
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-end justify-between">
-                    <Button variant="outline" size="sm" className="h-7 text-xs">
-                      <Eye className="h-3 w-3 mr-1" />
-                      查看合同
-                    </Button>
-                    <div className="text-right">
-                      <span className="text-sm text-red-600">争议中，等待仲裁</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </div>
-            </div>
-          </div>
-        )
 
       case "payable":
         return (
