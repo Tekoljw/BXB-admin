@@ -641,7 +641,7 @@ export default function WalletPage() {
                 }`}
                 onClick={() => setOverviewMode("现金账户")}
               >
-                <div className="space-y-4">
+                <>
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
                       <CreditCard className="h-6 w-6 text-[#00D4AA]" />
@@ -667,7 +667,7 @@ export default function WalletPage() {
                   <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {balanceVisible ? `${convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
                   </div>
-                </div>
+                </>
               </div>
 
               {/* 总资产卡片 */}
@@ -679,7 +679,7 @@ export default function WalletPage() {
                 }`}
                 onClick={() => setOverviewMode("总资产")}
               >
-                <div className="space-y-4">
+                <>
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
                       <Wallet className="h-6 w-6 text-[#00D4AA]" />
@@ -705,7 +705,7 @@ export default function WalletPage() {
                   <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {balanceVisible ? `${convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
                   </div>
-                </div>
+                </>
               </div>
             </div>
 
@@ -1456,7 +1456,9 @@ export default function WalletPage() {
             </div>
 
             {/* 详细内容区域 */}
-            {renderGuaranteeContent()}
+            <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+              {renderGuaranteeContent()}
+            </div>
 
             {/* 模态框 */}
             {showTransferModal && renderTransferModal()}
@@ -1603,11 +1605,14 @@ export default function WalletPage() {
 
   // 渲染担保内容
   const renderGuaranteeContent = () => {
-    if (selectedCard === "receivable") {
-      return (
-        <div className="space-y-4">
-          {/* USDT买卖担保 */}
-          <div className={isDark ? 'bg-gray-800/50 rounded-lg border border-gray-700 shadow-sm p-6 hover:bg-gray-700/30 transition-colors' : 'bg-white rounded-lg border border-gray-200 shadow-sm p-6 hover:bg-gray-50 transition-colors'}>
+    switch (selectedCard) {
+      case "receivable":
+        return (
+          <div className="space-y-4">
+            <div className={`${isDark ? 'bg-gray-800/50' : 'bg-white'} rounded-lg border ${isDark ? 'border-gray-700' : 'border-gray-200'} shadow-sm`}>
+            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+              {/* USDT买卖担保 */}
+              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
@@ -1707,16 +1712,17 @@ export default function WalletPage() {
                 </div>
               </div>
               </div>
+            </div>
           </div>
-        </div>
-      )
-    }
-    
-    if (selectedCard === "payable") {
-      return (
-        <div className="space-y-4">
-            {/* USDT买卖担保 */}
-            <div className={`${isDark ? 'bg-gray-800/50' : 'bg-white'} rounded-lg border ${isDark ? 'border-gray-700' : 'border-gray-200'} shadow-sm p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors`}>
+        )
+
+      case "payable":
+        return (
+          <div className="space-y-4">
+
+            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+              {/* USDT买卖担保 */}
+              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
