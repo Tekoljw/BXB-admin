@@ -663,7 +663,7 @@ export default function WalletPage() {
                       <ChevronDown className="h-3 w-3" />
                     </button>
                   </div>
-                  <div className="text-3xl font-bold text-[#00D4AA]">
+                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {balanceVisible ? `${convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
                   </div>
                 </>
@@ -701,7 +701,7 @@ export default function WalletPage() {
                       <ChevronDown className="h-3 w-3" />
                     </button>
                   </div>
-                  <div className="text-3xl font-bold text-[#00D4AA]">
+                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {balanceVisible ? `${convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
                   </div>
                 </>
@@ -1435,10 +1435,10 @@ export default function WalletPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="flex items-baseline space-x-1">
-                        <span className={`text-2xl font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           2,456.78
                         </span>
-                        <span className="text-xs text-[#00D4AA]/60 font-medium">USDT</span>
+                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                       </div>
                     </div>
                   </div>
