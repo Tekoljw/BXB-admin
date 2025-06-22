@@ -1686,11 +1686,7 @@ export default function WalletPage() {
                     </span>
                   </div>
                   
-                  <div className="flex items-end justify-between">
-                    <Button variant="outline" size="sm" className="h-7 text-xs">
-                      <Eye className="h-3 w-3 mr-1" />
-                      查看合同
-                    </Button>
+                  <div className="flex items-end justify-end">
                     <div className="text-right">
                       <span className="text-sm text-yellow-600">等待对方确认</span>
                       <div className="text-xs text-gray-500 mt-1">自动确认：<span className="font-mono">23:45:12</span></div>
