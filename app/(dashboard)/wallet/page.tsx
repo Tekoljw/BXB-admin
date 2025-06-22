@@ -1394,20 +1394,23 @@ export default function WalletPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-6 flex items-center space-x-2">
-                    <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
-                      剩余 42 天到期
-                    </span>
-                    <Button
-                      size="sm"
-                      className="h-5 px-2 text-xs bg-black hover:bg-gray-800 text-white"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setShowExtendTimeModal(true)
-                      }}
-                    >
-                      延长
-                    </Button>
+                  <div className="mt-6 flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                        剩余 42 天到期
+                      </span>
+                      <Button
+                        size="sm"
+                        className="h-5 px-2 text-xs bg-black hover:bg-gray-800 text-white"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setShowExtendTimeModal(true)
+                        }}
+                      >
+                        延长
+                      </Button>
+                    </div>
+                    <FileText className="h-4 w-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
                   </div>
                 </CardContent>
               </Card>
