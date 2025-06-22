@@ -1321,12 +1321,16 @@ export default function WalletPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 space-y-1">
-                    <div className="text-xs text-gray-500">
-                      2 笔担保中
-                    </div>
-                    <div className="text-xs text-blue-600 dark:text-blue-400">
-                      24H内将释放：123,123 USDT
+                  <div className="mt-6 flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <span className="text-xs text-gray-500">2 笔担保中</span>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-5 px-2 text-xs bg-white hover:bg-gray-100 text-black border border-black"
+                      >
+                        历史记录
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -1358,12 +1362,16 @@ export default function WalletPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 space-y-1">
-                    <div className="text-xs text-gray-500">
-                      2 笔担保中
-                    </div>
-                    <div className="text-xs text-blue-600 dark:text-blue-400">
-                      24H内将释放：87,654 USDT
+                  <div className="mt-6 flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <span className="text-xs text-gray-500">2 笔担保中</span>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-5 px-2 text-xs bg-white hover:bg-gray-100 text-black border border-black"
+                      >
+                        历史记录
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -1402,7 +1410,7 @@ export default function WalletPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 flex items-center space-x-2">
+                  <div className="mt-6 flex items-center space-x-2">
                     <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
                       剩余 42 天到期
                     </span>
