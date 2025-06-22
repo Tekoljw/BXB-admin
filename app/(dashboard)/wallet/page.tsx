@@ -1754,21 +1754,13 @@ export default function WalletPage() {
         return (
           <div>
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    担保中的应付款
-                  </h3>
-                  <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    您需要向对方支付的担保资金，确认后对方将收到这些资金
-                  </p>
-                </div>
+              <div className="flex items-center justify-end">
                 <Button
                   variant="outline"
                   size="sm"
                   className="bg-black text-white hover:bg-gray-800 border-black text-center"
                 >
-                  查看历史记录
+                  历史记录
                 </Button>
               </div>
             </div>
