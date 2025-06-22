@@ -1339,17 +1339,7 @@ export default function WalletPage() {
                     <div className="text-xs text-blue-600 dark:text-blue-400">
                       24H内将释放：123,123 USDT
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">
-                        等待用户***789确认
-                      </span>
-                      <button
-                        className="text-[#00D4AA] hover:text-[#00B894] transition-colors"
-                        title="联系用户"
-                      >
-                        <MessageCircle className="h-4 w-4" />
-                      </button>
-                    </div>
+
                   </div>
                 </CardContent>
               </Card>
