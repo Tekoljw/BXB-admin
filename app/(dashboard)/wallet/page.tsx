@@ -1691,7 +1691,7 @@ export default function WalletPage() {
                     </Button>
                     <div className="text-right">
                       <span className="text-sm text-yellow-600">等待对方确认</span>
-                      <div className="text-xs text-gray-500 mt-1">自动确认时间 23:45:12</div>
+                      <div className="text-xs text-gray-500 mt-1">自动确认：<span className="font-mono">23:45:12</span></div>
                     </div>
                   </div>
                 </div>
@@ -1812,22 +1812,21 @@ export default function WalletPage() {
                   </div>
                   
                   <div className="flex items-end justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Button variant="outline" size="sm" className="h-7 text-xs">
-                        <Eye className="h-3 w-3 mr-1" />
-                        查看合同
-                      </Button>
-                      <Button className="bg-[#00D4AA] hover:bg-[#00B894] text-black h-7 text-xs px-3">
-                        <CheckCircle className="h-3 w-3 mr-1" />
-                        确认
-                      </Button>
-                      <Button variant="outline" className="h-7 text-xs px-3 text-red-600 border-red-600 hover:bg-red-50">
-                        请求仲裁
-                      </Button>
-                    </div>
+                    <Button variant="outline" size="sm" className="h-7 text-xs">
+                      <Eye className="h-3 w-3 mr-1" />
+                      查看合同
+                    </Button>
                     <div className="text-right">
-                      <span className="text-sm text-green-600">等待我确认</span>
-                      <div className="text-xs text-gray-500 mt-1">自动确认时间 12:34:56</div>
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Button className="bg-black hover:bg-gray-800 text-white h-7 text-xs px-3">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          确认
+                        </Button>
+                        <Button variant="outline" className="h-7 text-xs px-3 text-red-600 border-red-600 hover:bg-red-50">
+                          请求仲裁
+                        </Button>
+                      </div>
+                      <div className="text-xs text-gray-500">自动确认：<span className="font-mono">12:34:56</span></div>
                     </div>
                   </div>
                 </div>
