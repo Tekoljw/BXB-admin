@@ -1638,7 +1638,7 @@ export default function WalletPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-black text-white hover:bg-gray-800 border-black"
+                  className="bg-black text-white hover:bg-gray-800 border-black text-center"
                 >
                   查看历史记录
                 </Button>
@@ -1649,29 +1649,25 @@ export default function WalletPage() {
               <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-500">交易类型：</span>
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
                       USDT买卖担保
                     </span>
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-500">担保金额：</span>
                     <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       5,000.00 USDT
                     </span>
                   </div>
                   
                   <div>
-                    <span className="text-sm font-medium text-gray-500">交易内容简介：</span>
-                    <p className={`mt-1 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
                       购买5000 USDT，汇率7.20，总价36000元人民币，银行卡转账支付，商户信誉良好
                     </p>
                   </div>
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-gray-500">交易对象：</span>
                       <span className="text-sm">用户***789</span>
                       <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
                         <MessageCircle className="h-4 w-4" />
@@ -1681,8 +1677,8 @@ export default function WalletPage() {
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-sm font-medium text-gray-500">当前状态：</span>
-                      <span className="ml-2 text-sm text-yellow-600">等待对方确认 (23:45:12)</span>
+                      <span className="text-sm text-yellow-600">等待对方确认</span>
+                      <div className="text-xs text-gray-500 mt-1">自动确认时间 23:45:12</div>
                     </div>
                     <Button variant="outline" size="sm" className="h-7 text-xs">
                       <Eye className="h-3 w-3 mr-1" />
@@ -1696,29 +1692,25 @@ export default function WalletPage() {
               <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-500">交易类型：</span>
                     <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
                       其他担保交易
                     </span>
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-500">担保金额：</span>
                     <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       2,500.00 USDT
                     </span>
                   </div>
                   
                   <div>
-                    <span className="text-sm font-medium text-gray-500">交易内容简介：</span>
-                    <p className={`mt-1 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
                       虚拟商品交易担保，游戏道具出售，价值2500 USDT，买方已付款等待确认收货
                     </p>
                   </div>
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-gray-500">交易对象：</span>
                       <span className="text-sm">用户***456</span>
                       <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
                         <MessageCircle className="h-4 w-4" />
@@ -1728,8 +1720,7 @@ export default function WalletPage() {
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-sm font-medium text-gray-500">当前状态：</span>
-                      <span className="ml-2 text-sm text-red-600">争议中，等待仲裁</span>
+                      <span className="text-sm text-red-600">争议中，等待仲裁</span>
                     </div>
                     <Button variant="outline" size="sm" className="h-7 text-xs">
                       <Eye className="h-3 w-3 mr-1" />
@@ -1746,49 +1737,118 @@ export default function WalletPage() {
         return (
           <div>
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                担保中的应付款
-              </h3>
-              <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                您需要向对方支付的担保资金，等待对方确认后解除
-              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    担保中的应付款
+                  </h3>
+                  <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    您需要向对方支付的担保资金，确认后对方将收到这些资金
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-black text-white hover:bg-gray-800 border-black text-center"
+                >
+                  查看历史记录
+                </Button>
+              </div>
             </div>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {payableRecords.map((record) => (
-                <div key={record.id} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+              {/* USDT买卖担保 */}
+              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <span className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          {record.amount}
-                        </span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          record.status === "等待确认" 
-                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-                            : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-                        }`}>
-                          {record.status}
-                        </span>
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        <div>对方用户: {record.counterparty}</div>
-                        <div>交易描述: {record.description}</div>
-                        <div>开始时间: {record.startTime}</div>
-                        <div>预计解除: {record.estimatedRelease}</div>
-                      </div>
+                    <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
+                      USDT买卖担保
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      3,000.00 USDT
+                    </span>
+                  </div>
+                  
+                  <div>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
+                      出售3000 USDT给用户，汇率7.18，总价21540元，支付宝转账，已收到买方付款
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm">用户***123</span>
+                      <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
+                        <MessageCircle className="h-4 w-4" />
+                      </button>
                     </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleViewContract(record.contractId)}
-                      className="ml-4"
-                    >
-                      <Eye className="h-4 w-4 mr-2" />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-sm text-green-600">等待我确认</span>
+                      <div className="text-xs text-gray-500 mt-1">自动确认时间 12:34:56</div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Button variant="outline" size="sm" className="h-7 text-xs">
+                        <Eye className="h-3 w-3 mr-1" />
+                        查看合同
+                      </Button>
+                      <Button className="bg-[#00D4AA] hover:bg-[#00B894] text-black h-7 text-xs px-3">
+                        <CheckCircle className="h-3 w-3 mr-1" />
+                        确认
+                      </Button>
+                      <Button variant="outline" className="h-7 text-xs px-3 text-red-600 border-red-600 hover:bg-red-50">
+                        请求仲裁
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 其他担保交易 */}
+              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
+                      其他担保交易
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      1,200.00 USDT
+                    </span>
+                  </div>
+                  
+                  <div>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
+                      数字艺术品交易，NFT作品出售，买方质疑作品真实性，目前在仲裁阶段处理中
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm">用户***987</span>
+                      <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
+                        <MessageCircle className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-sm text-red-600">争议中，等待仲裁</span>
+                    </div>
+                    <Button variant="outline" size="sm" className="h-7 text-xs">
+                      <Eye className="h-3 w-3 mr-1" />
                       查看合同
                     </Button>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         )
