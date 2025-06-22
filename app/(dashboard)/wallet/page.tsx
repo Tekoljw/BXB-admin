@@ -1616,18 +1616,22 @@ export default function WalletPage() {
     switch (selectedCard) {
       case "receivable":
         return (
-          <div>
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-black text-white hover:bg-gray-800 border-black text-center"
-                >
-                  记录
-                </Button>
+          <div className="space-y-4">
+            <div className={`${isDark ? 'bg-gray-800/50' : 'bg-white'} rounded-lg border ${isDark ? 'border-gray-700' : 'border-gray-200'} shadow-sm`}>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    担保中的应收款
+                  </h3>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`${isDark ? 'bg-gray-700 text-white border-gray-600 hover:bg-gray-600' : 'bg-gray-100 text-gray-900 border-gray-300 hover:bg-gray-200'}`}
+                  >
+                    记录
+                  </Button>
+                </div>
               </div>
-            </div>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
               <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
@@ -1729,13 +1733,14 @@ export default function WalletPage() {
                   </div>
                 </div>
               </div>
+              </div>
             </div>
           </div>
         )
 
       case "payable":
         return (
-          <div>
+          <div className="space-y-4">
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-end">
                 <Button
