@@ -1735,17 +1735,7 @@ export default function WalletPage() {
       case "payable":
         return (
           <div className="space-y-4">
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-black text-white hover:bg-gray-800 border-black text-center"
-                >
-                  记录
-                </Button>
-              </div>
-            </div>
+
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
               <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
