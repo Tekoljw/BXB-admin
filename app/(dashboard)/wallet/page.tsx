@@ -42,7 +42,8 @@ import {
   CreditCard as CardIcon,
   Clock,
   CheckCircle,
-  Calendar
+  Calendar,
+  MessageCircle
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -151,7 +152,7 @@ export default function WalletPage() {
   ]
 
   const orderTabs = [
-    { id: "现货订单", label: "现货订单", icon: () => <CandlestickIcon className="h-4 w-4" /> },
+    { id: "现货订单", label: "现货订单", icon: BarChart2 },
     { id: "合约订单", label: "合约订单", icon: LineChart },
     { id: "理财订单", label: "理财订单", icon: PiggyBank },
     { id: "U卡订单", label: "U卡订单", icon: CreditCard },
