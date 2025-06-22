@@ -1653,19 +1653,7 @@ export default function WalletPage() {
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
                       USDT买卖担保
                     </span>
-                    <div className="flex flex-col items-end space-y-1">
-                      <div className="flex items-center space-x-1">
-                        <span className="text-xs text-gray-500">交易对象ID:</span>
-                        <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs rounded">123123</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <span className="text-xs text-gray-500">担保群ID:</span>
-                        <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs rounded">123123</span>
-                        <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="进入担保群">
-                          <Users className="h-3 w-3" />
-                        </button>
-                      </div>
-                    </div>
+
                   </div>
                   
                   <div className="flex items-center justify-between">
@@ -1674,20 +1662,20 @@ export default function WalletPage() {
                     </span>
                   </div>
                   
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex items-center space-x-1">
-                        <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
-                        <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs rounded font-mono">123789</span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
+                        <span className="px-2 py-1 bg-[#00D4AA] text-black text-sm font-bold rounded">123789</span>
                         <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-3 w-3" />
+                          <MessageCircle className="h-4 w-4" />
                         </button>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
-                        <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs rounded font-mono">123123</span>
-                        <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="进入担保群">
-                          <Users className="h-3 w-3" />
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
+                        <span className="px-2 py-1 bg-blue-500 text-white text-sm font-bold rounded">123123</span>
+                        <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
+                          <Users className="h-4 w-4" />
                         </button>
                       </div>
                     </div>
