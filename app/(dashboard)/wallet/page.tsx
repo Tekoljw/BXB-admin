@@ -1383,8 +1383,13 @@ export default function WalletPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 text-xs text-gray-500">
-                    2 笔担保中
+                  <div className="mt-3 space-y-1">
+                    <div className="text-xs text-gray-500">
+                      2 笔担保中
+                    </div>
+                    <div className="text-xs text-blue-600 dark:text-blue-400">
+                      24H内将释放：87,654 USDT
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -1657,12 +1662,9 @@ export default function WalletPage() {
                     <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       5,000.00 USDT
                     </span>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs text-gray-500">等待用户***789确认</span>
-                      <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                        <MessageCircle className="h-4 w-4" />
-                      </button>
-                    </div>
+                    <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
+                      <MessageCircle className="h-4 w-4" />
+                    </button>
                   </div>
                   <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
                     购买5000 USDT，汇率7.20，总价36000元人民币，银行卡转账支付，商户信誉良好
@@ -1692,12 +1694,9 @@ export default function WalletPage() {
                     <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       2,500.00 USDT
                     </span>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs text-gray-500">等待用户***456确认</span>
-                      <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                        <MessageCircle className="h-4 w-4" />
-                      </button>
-                    </div>
+                    <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
+                      <MessageCircle className="h-4 w-4" />
+                    </button>
                   </div>
                   <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
                     虚拟商品交易担保，游戏道具出售，价值2500 USDT，买方已付款等待确认收货
