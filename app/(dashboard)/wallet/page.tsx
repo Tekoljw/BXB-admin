@@ -1627,8 +1627,8 @@ export default function WalletPage() {
           <div className="space-y-4">
             <div className={`${isDark ? 'bg-gray-800/50' : 'bg-white'} rounded-lg border ${isDark ? 'border-gray-700' : 'border-gray-200'} shadow-sm`}>
               <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {/* USDT买卖担保 */}
-              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                {/* USDT买卖担保 */}
+                <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
@@ -1738,7 +1738,7 @@ export default function WalletPage() {
             <div className={`${isDark ? 'bg-gray-800/50' : 'bg-white'} rounded-lg border ${isDark ? 'border-gray-700' : 'border-gray-200'} shadow-sm`}>
               <div className="divide-y divide-gray-200 dark:divide-gray-700">
                 {/* USDT买卖担保 */}
-              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
