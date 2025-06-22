@@ -1311,9 +1311,12 @@ export default function WalletPage() {
                 onClick={() => handleCardClick("receivable")}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
-                    <ArrowDown className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
-                    应收担保金额
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
+                    <div className="flex items-center">
+                      <ArrowDown className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
+                      应收担保金额
+                    </div>
+                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -1323,7 +1326,6 @@ export default function WalletPage() {
                         <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           1,234.56
                         </span>
-                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                       </div>
                     </div>
                   </div>
@@ -1347,9 +1349,12 @@ export default function WalletPage() {
                 onClick={() => handleCardClick("payable")}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
-                    <ArrowUp className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
-                    应付担保金额
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
+                    <div className="flex items-center">
+                      <ArrowUp className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
+                      应付担保金额
+                    </div>
+                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -1359,7 +1364,6 @@ export default function WalletPage() {
                         <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           987.65
                         </span>
-                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                       </div>
                     </div>
                   </div>
@@ -1379,9 +1383,12 @@ export default function WalletPage() {
                 className={`${cardStyle} ${isDark ? 'bg-gray-800/50 border-gray-700/50' : 'bg-gray-50/50 border-gray-200/50'} relative opacity-75`}
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
-                    <Shield className="h-4 w-4 mr-2 text-blue-400 dark:text-blue-500" />
-                    信誉担保金额
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
+                    <div className="flex items-center">
+                      <Shield className="h-4 w-4 mr-2 text-blue-400 dark:text-blue-500" />
+                      信誉担保金额
+                    </div>
+                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -1391,7 +1398,6 @@ export default function WalletPage() {
                         <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           5,000.00
                         </span>
-                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                         <Button
                           size="sm"
                           className="h-6 w-6 p-0 bg-white hover:bg-gray-100 text-black border border-black rounded"
@@ -1426,9 +1432,12 @@ export default function WalletPage() {
               {/* 可用余额 */}
               <Card className={`${cardStyle} ${isDark ? 'bg-gray-800/50 border-gray-700/50' : 'bg-gray-50/50 border-gray-200/50'} relative opacity-75`}>
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center`}>
-                    <DollarSign className="h-4 w-4 mr-2 text-[#00D4AA]" />
-                    可用余额
+                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
+                    <div className="flex items-center">
+                      <DollarSign className="h-4 w-4 mr-2 text-[#00D4AA]" />
+                      可用余额
+                    </div>
+                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -1438,7 +1447,6 @@ export default function WalletPage() {
                         <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           2,456.78
                         </span>
-                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                       </div>
                     </div>
                   </div>
