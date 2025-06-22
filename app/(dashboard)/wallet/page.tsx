@@ -1621,8 +1621,7 @@ export default function WalletPage() {
 
   // 渲染担保内容
   const renderGuaranteeContent = () => {
-    switch (selectedCard) {
-      case "receivable":
+    if (selectedCard === "receivable") {
         return (
           <div className="space-y-4">
             <div className={`${isDark ? 'bg-gray-800/50' : 'bg-white'} rounded-lg border ${isDark ? 'border-gray-700' : 'border-gray-200'} shadow-sm`}>
@@ -1731,9 +1730,10 @@ export default function WalletPage() {
             </div>
           </div>
         )
-
-      case "payable":
-        return (
+    }
+    
+    if (selectedCard === "payable") {
+      return (
           <div className="space-y-4">
             <div className={`${isDark ? 'bg-gray-800/50' : 'bg-white'} rounded-lg border ${isDark ? 'border-gray-700' : 'border-gray-200'} shadow-sm`}>
               <div className="divide-y divide-gray-200 dark:divide-gray-700">
