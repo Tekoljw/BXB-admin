@@ -1742,7 +1742,6 @@ export default function WalletPage() {
                 </div>
               </div>
             </div>
-            </div>
             
             {/* 其他担保交易记录 - 增加到10条 */}
             {[
