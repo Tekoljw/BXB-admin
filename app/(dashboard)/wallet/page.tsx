@@ -1456,9 +1456,7 @@ export default function WalletPage() {
             </div>
 
             {/* 详细内容区域 */}
-            <div className={`${cardStyle} rounded-lg overflow-hidden`}>
-              {renderGuaranteeContent()}
-            </div>
+            {renderGuaranteeContent()}
 
             {/* 模态框 */}
             {showTransferModal && renderTransferModal()}
@@ -1608,9 +1606,7 @@ export default function WalletPage() {
     switch (selectedCard) {
       case "receivable":
         return (
-          <div className="space-y-4">
-            <div className={`${isDark ? 'bg-gray-800/50' : 'bg-white'} rounded-lg border ${isDark ? 'border-gray-700' : 'border-gray-200'} shadow-sm`}>
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
               <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                 <div className="space-y-4">
@@ -1718,9 +1714,7 @@ export default function WalletPage() {
 
       case "payable":
         return (
-          <div className="space-y-4">
-
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
               <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                 <div className="space-y-4">
