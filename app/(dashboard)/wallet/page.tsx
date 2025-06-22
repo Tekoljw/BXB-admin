@@ -1654,18 +1654,20 @@ export default function WalletPage() {
                       USDT买卖担保
                     </span>
                     <div className="flex flex-col items-end space-y-1">
-                      <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
+                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123789</span>
                         <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-3 w-3" />
+                          <MessageCircle className="h-4 w-4" />
                         </button>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
+                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123123</span>
                         <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-3 w-3" />
+                          <Users className="h-4 w-4" />
                         </button>
                       </div>
                     </div>
@@ -1705,18 +1707,20 @@ export default function WalletPage() {
                       其他担保交易
                     </span>
                     <div className="flex flex-col items-end space-y-1">
-                      <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
+                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>456456</span>
                         <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-3 w-3" />
+                          <MessageCircle className="h-4 w-4" />
                         </button>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
+                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>456456</span>
                         <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-3 w-3" />
+                          <Users className="h-4 w-4" />
                         </button>
                       </div>
                     </div>
@@ -1784,18 +1788,20 @@ export default function WalletPage() {
                       USDT买卖担保
                     </span>
                     <div className="flex flex-col items-end space-y-1">
-                      <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
+                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123456</span>
                         <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-3 w-3" />
+                          <MessageCircle className="h-4 w-4" />
                         </button>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
+                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123456</span>
                         <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-3 w-3" />
+                          <Users className="h-4 w-4" />
                         </button>
                       </div>
                     </div>
@@ -1862,18 +1868,20 @@ export default function WalletPage() {
                       其他担保交易
                     </span>
                     <div className="flex flex-col items-end space-y-1">
-                      <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
+                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>987987</span>
                         <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-3 w-3" />
+                          <MessageCircle className="h-4 w-4" />
                         </button>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
+                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>987987</span>
                         <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-3 w-3" />
+                          <Users className="h-4 w-4" />
                         </button>
                       </div>
                     </div>
