@@ -1867,9 +1867,6 @@ export default function WalletPage() {
                     <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       1,200.00 USDT
                     </span>
-                    <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                      <MessageCircle className="h-4 w-4" />
-                    </button>
                   </div>
                   
                   <div>
