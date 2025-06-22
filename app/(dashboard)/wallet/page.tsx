@@ -1320,10 +1320,10 @@ export default function WalletPage() {
                         </span>
                       </div>
                     </div>
-                    <FileText className="h-4 w-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
                   </div>
-                  <div className="mt-6">
+                  <div className="mt-6 flex items-center justify-between">
                     <div className="text-xs text-gray-500">2 笔担保中</div>
+                    <FileText className="h-4 w-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
                   </div>
                 </CardContent>
               </Card>
@@ -1355,16 +1355,8 @@ export default function WalletPage() {
                     </div>
                   </div>
                   <div className="mt-6 flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <span className="text-xs text-gray-500">2 笔担保中</span>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-5 px-2 text-xs bg-white hover:bg-gray-100 text-black border border-black"
-                      >
-                        历史记录
-                      </Button>
-                    </div>
+                    <div className="text-xs text-gray-500">2 笔担保中</div>
+                    <FileText className="h-4 w-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
                   </div>
                 </CardContent>
               </Card>
