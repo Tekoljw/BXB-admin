@@ -17,7 +17,11 @@ export default function HomePage() {
   }, [])
 
   if (!mounted) {
-    return <div className="min-h-screen bg-gray-900"></div>
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white text-lg">Loading...</div>
+      </div>
+    )
   }
 
   const handleLogin = () => {
