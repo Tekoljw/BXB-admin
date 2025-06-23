@@ -1691,100 +1691,90 @@ export default function WalletPage() {
             <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm">
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
-              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                <div className="space-y-4">
-                  <div className="flex items-start justify-between">
-                    <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
-                      USDT买卖担保
-                    </span>
-                    <div className="flex flex-col items-end space-y-1">
+              <div className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <span className="px-2 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
+                        USDT买卖担保
+                      </span>
+                      <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        5,000.00 USDT
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-3">
                       <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
+                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123789</span>
                         <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-4 w-4" />
+                          <MessageCircle className="h-3 w-3" />
                         </button>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
+                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123123</span>
                         <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-4 w-4" />
+                          <Users className="h-3 w-3" />
                         </button>
                       </div>
                     </div>
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      5,000.00 USDT
-                    </span>
-                  </div>
-                  
-                  <div>
-                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
-                      购买5000 USDT，汇率7.20，总价36000元人民币，银行卡转账支付，商户信誉良好
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-end justify-end">
+                    <div>
+                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        购买5000 USDT，汇率7.20，总价36000元人民币，银行卡转账支付，商户信誉良好
+                      </span>
+                    </div>
                     <div className="text-right">
                       <span className="text-sm text-yellow-600">等待对方确认</span>
-                      <div className="text-xs text-gray-500 mt-1">自动确认：<span className="font-mono">23:45:12</span></div>
+                      <div className="text-xs text-gray-500">自动确认：<span className="font-mono">23:45:12</span></div>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* 其他担保交易 */}
-              <div className={isDark ? "p-6 hover:bg-gray-700/30 transition-colors" : "p-6 hover:bg-gray-50 transition-colors"}>
-                <div className="space-y-4">
-                  <div className="flex items-start justify-between">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
-                      其他担保交易
-                    </span>
-                    <div className="flex flex-col items-end space-y-1">
+              <div className={isDark ? "p-4 hover:bg-gray-700/30 transition-colors" : "p-4 hover:bg-gray-50 transition-colors"}>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
+                        其他担保交易
+                      </span>
+                      <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        2,500.00 USDT
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-3">
                       <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
+                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>456456</span>
                         <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-4 w-4" />
+                          <MessageCircle className="h-3 w-3" />
                         </button>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
+                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>456456</span>
                         <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-4 w-4" />
+                          <Users className="h-3 w-3" />
                         </button>
                       </div>
                     </div>
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      2,500.00 USDT
-                    </span>
-                  </div>
-                  
-                  <div>
-                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
-                      虚拟商品交易担保，游戏道具出售，价值2500 USDT，买方已付款等待确认收货
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-end justify-between">
-                    <Button variant="outline" size="sm" className="h-7 text-xs">
-                      <Eye className="h-3 w-3 mr-1" />
-                      查看合同
-                    </Button>
-                    <div className="text-right">
+                    <div>
+                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        虚拟商品交易担保，游戏道具出售，价值2500 USDT，买方已付款等待确认收货
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Button variant="outline" size="sm" className="h-6 text-xs px-2">
+                        <Eye className="h-3 w-3 mr-1" />
+                        查看合同
+                      </Button>
                       <span className="text-sm text-red-600">争议中，等待仲裁</span>
                     </div>
                   </div>
@@ -1801,99 +1791,90 @@ export default function WalletPage() {
 
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
-              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                <div className="space-y-4">
-                  <div className="flex items-start justify-between">
-                    <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
-                      USDT买卖担保
-                    </span>
-                    <div className="flex flex-col items-end space-y-1">
+              <div className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <span className="px-2 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
+                        USDT买卖担保
+                      </span>
+                      <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        3,000.00 USDT
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-3">
                       <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
+                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123456</span>
                         <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-4 w-4" />
+                          <MessageCircle className="h-3 w-3" />
                         </button>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
+                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123456</span>
                         <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-4 w-4" />
+                          <Users className="h-3 w-3" />
                         </button>
                       </div>
                     </div>
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      3,000.00 USDT
-                    </span>
-                  </div>
-                  
-
-                  
-                  <div>
-                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
-                      出售3000 USDT给用户，汇率7.18，总价21540元，支付宝转账，已收到买方付款
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-end justify-between">
-                    <Button variant="outline" size="sm" className="h-7 text-xs">
-                      <Eye className="h-3 w-3 mr-1" />
-                      查看合同
-                    </Button>
-                    <div className="text-right">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Button className={`${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'} h-7 text-xs px-3`}>
-                          <CheckCircle className="h-3 w-3 mr-1" />
-                          确认
-                        </Button>
-                        <Button variant="outline" className={`h-7 text-xs px-3 text-red-600 ${isDark ? 'border-white hover:bg-white hover:text-red-600' : 'border-red-600 hover:bg-red-50'}`}>
-                          请求仲裁
-                        </Button>
-                      </div>
-                      <div className="text-xs text-gray-500">自动确认：<span className="font-mono">12:34:56</span></div>
+                    <div>
+                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        出售3000 USDT给用户，汇率7.18，总价21540元，支付宝转账，已收到买方付款
+                      </span>
                     </div>
+                    <div className="flex items-center space-x-2">
+                      <Button variant="outline" size="sm" className="h-6 text-xs px-2">
+                        <Eye className="h-3 w-3 mr-1" />
+                        查看合同
+                      </Button>
+                      <Button className={`${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'} h-6 text-xs px-2`}>
+                        <CheckCircle className="h-3 w-3 mr-1" />
+                        确认
+                      </Button>
+                      <Button variant="outline" className={`h-6 text-xs px-2 text-red-600 ${isDark ? 'border-white hover:bg-white hover:text-red-600' : 'border-red-600 hover:bg-red-50'}`}>
+                        请求仲裁
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <div className="text-xs text-gray-500">自动确认：<span className="font-mono">12:34:56</span></div>
                   </div>
                 </div>
               </div>
 
               {/* 其他担保交易 */}
-              <div className={isDark ? "p-6 hover:bg-gray-700/30 transition-colors" : "p-6 hover:bg-gray-50 transition-colors"}>
-                <div className="space-y-4">
-                  <div className="flex items-start justify-between">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
-                      其他担保交易
-                    </span>
-                    <div className="flex flex-col items-end space-y-1">
+              <div className={isDark ? "p-4 hover:bg-gray-700/30 transition-colors" : "p-4 hover:bg-gray-50 transition-colors"}>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
+                        其他担保交易
+                      </span>
+                      <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        1,200.00 USDT
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-3">
                       <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
+                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>987987</span>
                         <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-4 w-4" />
+                          <MessageCircle className="h-3 w-3" />
                         </button>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
+                        <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
                         <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>987987</span>
                         <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-4 w-4" />
+                          <Users className="h-3 w-3" />
                         </button>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      1,200.00 USDT
-                    </span>
                   </div>
                   
                   <div>
