@@ -603,11 +603,13 @@ export default function SocialPage() {
               <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-1 relative overflow-hidden`}>
                 {/* 滑动背景 */}
                 <div 
-                  className="absolute bg-black dark:bg-black rounded-md shadow-sm transition-all duration-300 ease-out"
+                  className={`absolute rounded-md shadow-sm transition-all duration-300 ease-out ${
+                    isDark ? "bg-white" : "bg-black"
+                  }`}
                   style={{
-                    width: `${100 / subTabs.length}%`,
+                    width: `calc(${100 / subTabs.length}% - 4px)`,
                     height: 'calc(100% - 8px)',
-                    left: `${subTabs.indexOf(activeSubTab) * (100 / subTabs.length)}%`,
+                    left: `calc(${subTabs.indexOf(activeSubTab) * (100 / subTabs.length)}% + 2px)`,
                     top: '4px',
                     transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                   }}
@@ -626,7 +628,9 @@ export default function SocialPage() {
                       onClick={() => setActiveSubTab(tab)}
                       className={`flex-1 whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 relative z-10 ${
                         activeSubTab === tab
-                          ? "text-white"
+                          ? isDark
+                            ? "text-black"
+                            : "text-white"
                           : isDark
                             ? "text-gray-300 hover:text-white"
                             : "text-gray-600 hover:text-gray-800"
