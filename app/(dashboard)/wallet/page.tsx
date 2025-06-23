@@ -49,6 +49,8 @@ import {
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
 import SkeletonLoader from "@/components/skeleton-loader"
+import TrendChart from "@/components/wallet/trend-chart"
+import KlineChart from "@/components/wallet/kline-chart"
 
 export default function WalletPage() {
   const { theme } = useTheme()
@@ -122,6 +124,39 @@ export default function WalletPage() {
   }
   // 移除页面加载状态
   const isDark = theme === "dark"
+
+  // 趋势图数据
+  const generateTrendData = (isPositive = true) => {
+    const base = 100
+    const data = []
+    for (let i = 0; i < 10; i++) {
+      const variance = Math.random() * 10 - 5
+      const trend = isPositive ? i * 2 : -i * 1.5
+      data.push(base + trend + variance)
+    }
+    return data
+  }
+
+  // K线数据
+  const generateKlineData = () => {
+    const data = []
+    let basePrice = 67000
+    for (let i = 0; i < 8; i++) {
+      const open = basePrice + (Math.random() - 0.5) * 200
+      const close = open + (Math.random() - 0.5) * 500
+      const high = Math.max(open, close) + Math.random() * 200
+      const low = Math.min(open, close) - Math.random() * 200
+      data.push({
+        open: open,
+        high: high,
+        low: low,
+        close: close,
+        volume: Math.random() * 1000
+      })
+      basePrice = close
+    }
+    return data
+  }
 
   const handleTabChange = (tabId: string) => {
     if (tabId === activeTab) return
@@ -912,16 +947,24 @@ export default function WalletPage() {
                             </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="font-bold">{balanceVisible ? currency.balance : "****"}</div>
-                          <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                            ≈ ${balanceVisible ? convertBalance(currency.value, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
+                        <div className="flex items-center gap-3">
+                          <div className="flex-shrink-0">
+                            <KlineChart 
+                              data={generateKlineData()}
+                              height={30}
+                            />
                           </div>
-                          {currency.marketCap && (
-                            <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-                              市值: {currency.marketCap}
+                          <div className="text-right">
+                            <div className="font-bold">{balanceVisible ? currency.balance : "****"}</div>
+                            <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              ≈ ${balanceVisible ? convertBalance(currency.value, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
                             </div>
-                          )}
+                            {currency.marketCap && (
+                              <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                                市值: {currency.marketCap}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}
