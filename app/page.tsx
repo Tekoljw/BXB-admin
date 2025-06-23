@@ -34,7 +34,7 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="wrapper min-h-screen bg-gray-900 text-white">
+    <div className="wrapper min-h-screen min-h-[100dvh] bg-gray-900 text-white flex flex-col">
       {/* Navbar */}
       <nav className="navbar fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm">
         <div className="container mx-auto px-4">
@@ -164,7 +164,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <main className="flex-grow pt-20">
+      <main className="flex-1 pt-20">
         <section className="hero-section overflow-hidden py-20 lg:py-32">
           <div className="container mx-auto px-4">
             <div className="flex justify-center">
@@ -290,7 +290,7 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 border-t border-gray-800 py-12">
+      <footer className="bg-gray-900 border-t border-gray-800 py-12 flex-shrink-0 w-full">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
