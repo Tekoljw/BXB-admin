@@ -585,35 +585,82 @@ export default function SocialPage() {
             </div>
           </div>
 
-          {/* 二级页签 */}
-          <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
-            <div
-              ref={scrollContainerRef}
-              className="flex items-center space-x-1 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none"
-              onMouseDown={handleMouseDown}
-              onMouseLeave={handleMouseLeave}
-              onMouseUp={handleMouseUp}
-              onMouseMove={handleMouseMove}
-            >
-              {subTabs.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveSubTab(tab)}
-                  className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
-                    activeSubTab === tab
-                      ? isDark
-                        ? "bg-white text-gray-800 shadow-sm"
-                        : "bg-white text-gray-800 shadow-sm"
-                      : isDark
-                        ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
+          {/* 二级页签 - 只在非圈子页签时显示 */}
+          {activeMainTab !== "圈子" && (
+            <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
+              <div
+                ref={scrollContainerRef}
+                className="flex items-center space-x-1 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+                onMouseDown={handleMouseDown}
+                onMouseLeave={handleMouseLeave}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+              >
+                {subTabs.map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveSubTab(tab)}
+                    className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
+                      activeSubTab === tab
+                        ? isDark
+                          ? "bg-white text-gray-800 shadow-sm"
+                          : "bg-white text-gray-800 shadow-sm"
+                        : isDark
+                          ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
+                          : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* 圈子页签内容 */}
+          {activeMainTab === "圈子" && (
+            <div className={`${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`text-base font-bold ${isDark ? "text-white" : "text-gray-800"}`}>我的圈子</div>
+                  <button
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-[#00D4AA] text-white hover:bg-[#00D4AA]/80 transition-colors"
+                    title="创建圈子"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                </div>
+                
+                {/* 圈子头像列表 */}
+                <div className="flex items-center space-x-4 overflow-x-auto pb-2">
+                  {circles.map((circle) => (
+                    <div key={circle.id} className="flex-shrink-0 text-center">
+                      <div className="relative mb-2">
+                        <img
+                          src={circle.avatar}
+                          alt={circle.name}
+                          className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
+                        />
+                        {circle.isJoined && (
+                          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#00D4AA] rounded-full flex items-center justify-center">
+                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                      <p className={`text-xs font-medium truncate w-16 ${isDark ? "text-white" : "text-gray-800"}`}>
+                        {circle.name}
+                      </p>
+                      <p className="text-xs text-gray-500">{circle.members}人</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 用户列表标题栏 - 只在非圈子页签时显示 */}
