@@ -19,9 +19,11 @@ export default function LandingPage() {
     return <div className="min-h-screen bg-gray-900"></div>
   }
 
-  const isDark = theme === "dark"
-
   const handleLogin = () => {
+    router.push("/wallet")
+  }
+
+  const handleGetStarted = () => {
     router.push("/wallet")
   }
 
@@ -171,25 +173,31 @@ export default function LandingPage() {
               <div className="max-w-4xl text-center">
                 <div className="relative z-10">
                   <p className="text-[#14C2A3] text-lg mb-4" data-aos="fade-up-sm">
-                    {language === 'zh' ? '最便捷的一站式链改+托管解决方案' : 'The most convenient one-stop chain modification+hosting solution'}
+                    {language === 'zh' ? '全球加密货币保证交易所' : 'Global Cryptocurrency Guaranteed Trading Exchange'}
                   </p>
                   <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-8" data-aos="fade-up-sm">
                     <span className="block mb-4">
-                      {language === 'zh' ? '一个SDK囊括所有Web3.0功能' : 'A single SDK that encompasses all Web3.0 functions'}
+                      {language === 'zh' ? '安全可靠的数字资产交易平台' : 'Secure & Reliable Digital Asset Trading Platform'}
                     </span>
                     <span className="text-transparent bg-gradient-to-r from-[#14C2A3] to-[#10a085] bg-clip-text">
-                      {language === 'zh' ? 'Web2.0用户的钥匙' : 'The key to Web2.0 users'}
+                      {language === 'zh' ? '您的财富增值之路' : 'Your Path to Wealth Growth'}
                     </span>
                   </h1>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16" data-aos="fade-up-sm">
-                  <button className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-colors font-medium">
+                  <button 
+                    onClick={handleLogin}
+                    className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-colors font-medium"
+                  >
+                    {language === 'zh' ? '立即登录' : 'Login Now'}
+                  </button>
+                  <a 
+                    href="#" 
+                    className="bg-transparent border-2 border-[#14C2A3] text-[#14C2A3] px-8 py-3 rounded-lg hover:bg-[#14C2A3] hover:text-white transition-colors font-medium inline-block text-center"
+                  >
                     {language === 'zh' ? '白皮书' : 'White Paper'}
-                  </button>
-                  <button className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-colors font-medium">
-                    {language === 'zh' ? '开发文档' : 'Development'}
-                  </button>
+                  </a>
                 </div>
 
                 <div data-aos="fade-up-sm" className="relative">
@@ -241,14 +249,14 @@ export default function LandingPage() {
               <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700">
                 <div className="w-16 h-16 bg-[#14C2A3]/10 rounded-2xl flex items-center justify-center mb-6">
                   <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                   </svg>
                 </div>
                 <h4 className="text-white text-xl font-semibold mb-4">
-                  {language === 'zh' ? '极速交易' : 'Lightning Fast'}
+                  {language === 'zh' ? 'USDT保证金' : 'USDT Margin'}
                 </h4>
                 <p className="text-gray-300">
-                  {language === 'zh' ? '毫秒级交易执行，支持高频交易，让您抓住每一个投资机会' : 'Millisecond transaction execution supporting high-frequency trading'}
+                  {language === 'zh' ? '专业的USDT保证金交易系统，稳定币交易更安全可靠' : 'Professional USDT margin trading system, stablecoin trading for enhanced security'}
                 </p>
               </div>
 
@@ -256,14 +264,14 @@ export default function LandingPage() {
               <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700">
                 <div className="w-16 h-16 bg-[#14C2A3]/10 rounded-2xl flex items-center justify-center mb-6">
                   <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
                 <h4 className="text-white text-xl font-semibold mb-4">
-                  {language === 'zh' ? '智能分析' : 'Smart Analytics'}
+                  {language === 'zh' ? '资产保障' : 'Asset Protection'}
                 </h4>
                 <p className="text-gray-300">
-                  {language === 'zh' ? 'AI驱动的市场分析，实时数据洞察，助您做出明智决策' : 'AI-powered market analysis with real-time insights for smart decisions'}
+                  {language === 'zh' ? '完善的保证账户体系，多重风控措施，确保您的资产安全' : 'Comprehensive guarantee account system with multiple risk controls for asset security'}
                 </p>
               </div>
             </div>
@@ -274,16 +282,16 @@ export default function LandingPage() {
         <section className="py-20 lg:py-32 bg-gradient-to-r from-[#14C2A3]/10 to-[#10a085]/10">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-white text-3xl md:text-5xl font-bold mb-8">
-              {language === 'zh' ? '准备开始您的Web3之旅？' : 'Ready to Start Your Web3 Journey?'}
+              {language === 'zh' ? '准备开始您的交易之旅？' : 'Ready to Start Your Trading Journey?'}
             </h2>
             <p className="text-gray-300 text-lg mb-12 max-w-2xl mx-auto">
-              {language === 'zh' ? '加入BeDAO全球加密货币交易平台，体验前所未有的交易体验' : 'Join BeDAO global cryptocurrency trading platform for an unprecedented trading experience'}
+              {language === 'zh' ? '加入BeDAO全球加密货币保证交易所，享受USDT保证金交易，安全、透明、可靠' : 'Join BeDAO Global Cryptocurrency Guaranteed Trading Exchange with USDT margin trading - Safe, Transparent, Reliable'}
             </p>
             <button 
-              onClick={handleLogin}
+              onClick={handleGetStarted}
               className="bg-[#14C2A3] text-white px-12 py-4 rounded-full hover:bg-[#10a085] transition-colors font-semibold text-lg"
             >
-              {language === 'zh' ? '立即开始' : 'Get Started Now'}
+              {language === 'zh' ? '立即开始交易' : 'Start Trading Now'}
             </button>
           </div>
         </section>
@@ -305,7 +313,7 @@ export default function LandingPage() {
                 }}
               />
               <p className="text-gray-400">
-                {language === 'zh' ? '全球领先的加密货币交易平台' : 'Leading global cryptocurrency trading platform'}
+                {language === 'zh' ? '全球加密货币保证交易所' : 'Global Cryptocurrency Guaranteed Trading Exchange'}
               </p>
             </div>
             <div>
