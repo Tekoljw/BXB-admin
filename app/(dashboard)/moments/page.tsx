@@ -1,8 +1,6 @@
 "use client"
 
-import type React from "react"
-
-import { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Star, Search, Heart, MessageCircle, Share, MoreHorizontal, ImageIcon, Video, Smile } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
@@ -283,7 +281,7 @@ export default function MomentsPage() {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-`
+  `;
 
   return (
     <>
@@ -828,30 +826,40 @@ export default function MomentsPage() {
                 ) : (
                   /* 交易员排行榜内容 */
                   <div>
-                    {/* 时间筛选器 - 优化的页签设计 */}
-                    <div className="flex items-center space-x-1 mb-4 overflow-x-auto">
-                      {["本周", "本月", "总收益"].map((period) => (
-                        <button
-                          key={period}
-                          onClick={() => setLeaderboardPeriod(period)}
-                          className={`px-3 py-1.5 text-xs font-medium rounded whitespace-nowrap transition-all duration-300 ${
-                            leaderboardPeriod === period
-                              ? isDark
-                                ? "bg-white text-black shadow-sm"
-                                : "bg-black text-white shadow-sm"
-                              : isDark
-                                ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                          }`}
+                    {/* 时间筛选器 - 自动适配宽度和滑动动画 */}
+                    <div className="relative mb-4">
+                      <div className="flex items-center justify-center space-x-0 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative overflow-hidden">
+                        {/* 滑动背景 */}
+                        <div 
+                          className="absolute bg-white dark:bg-white rounded-md shadow-sm transition-all duration-300 ease-out"
                           style={{
-                            transform: leaderboardPeriod === period ? 'translateY(-1px)' : 'translateY(0)',
-                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                            boxShadow: leaderboardPeriod === period ? '0 2px 4px rgba(0, 0, 0, 0.1)' : 'none'
+                            width: `${100 / 3}%`,
+                            height: 'calc(100% - 8px)',
+                            left: `${["本周", "本月", "总收益"].indexOf(leaderboardPeriod) * (100 / 3)}%`,
+                            top: '4px',
+                            transform: 'translateX(0)',
+                            transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                           }}
-                        >
-                          {period}
-                        </button>
-                      ))}
+                        />
+                        {["本周", "本月", "总收益"].map((period, index) => (
+                          <button
+                            key={period}
+                            onClick={() => setLeaderboardPeriod(period)}
+                            className={`flex-1 px-4 py-2 text-xs font-medium rounded-md whitespace-nowrap transition-all duration-300 relative z-10 ${
+                              leaderboardPeriod === period
+                                ? "text-black"
+                                : isDark
+                                  ? "text-gray-300 hover:text-white"
+                                  : "text-gray-600 hover:text-gray-800"
+                            }`}
+                            style={{
+                              transition: 'color 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                            }}
+                          >
+                            {period}
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
                     {/* 排行榜列表 - 优化排版 */}
