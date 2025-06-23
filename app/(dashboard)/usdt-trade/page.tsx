@@ -801,7 +801,7 @@ export default function USDTTradePage() {
                           // Apply filter logic here
                           console.log('Filtering with amounts:', minAmount, maxAmount)
                         }}
-                        className="w-full px-3 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all"
+                        className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-all ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}
                       >
                         筛选
                       </button>
@@ -862,7 +862,7 @@ export default function USDTTradePage() {
                     className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                       isDark 
                         ? "bg-white text-black hover:bg-gray-200" 
-                        : "bg-black text-white hover:bg-gray-800"
+                        : isDark ? "bg-white text-black hover:bg-gray-100" : "bg-black text-white hover:bg-gray-800"
                     }`}
                   >
                     <Plus className="w-4 h-4" />
@@ -960,7 +960,7 @@ export default function USDTTradePage() {
                             className={`border px-2 py-1.5 rounded text-xs transition-all h-8 flex items-center justify-center ${
                               isDark 
                                 ? "bg-white border-white text-black hover:bg-gray-200" 
-                                : "bg-white border-black text-black hover:bg-gray-50"
+                                : isDark ? "bg-transparent border-white text-white hover:bg-white hover:text-black" : "bg-white border-black text-black hover:bg-gray-50"
                             }`}
                             onClick={() => {
                               if (merchant.isFriend) {

@@ -496,7 +496,7 @@ export default function SocialPage() {
                   onClick={() => setActiveMainTab(tab)}
                   className={`text-lg transition-all duration-300 relative pb-2 ${
                     activeMainTab === tab
-                      ? "font-black text-black dark:text-white"
+                      ? "font-black text-gray-900 dark:text-white"
                       : isDark
                         ? "font-medium text-gray-400 hover:text-gray-300"
                         : "font-medium text-gray-500 hover:text-gray-700"
