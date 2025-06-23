@@ -2931,15 +2931,21 @@
 // var canvas = document.querySelector("body>canvas:last-of-type");
 // canvas.parentNode.removeChild(canvas);
 
-// Modified cleanup to work with React
+// Let the original code create canvas automatically
 const timer = setInterval(() => {
   var bodyDom = document.getElementsByTagName('body')[0]
-  const lastCanvas = bodyDom.querySelector('canvas:last-of-type')
-  
-  // Only remove canvas if it's not our React canvas (check if it has our specific class)
-  if (lastCanvas && !lastCanvas.classList.contains('absolute')) {
-    console.log('Removing auto-generated canvas, keeping React canvas')
-    bodyDom.removeChild(lastCanvas);
+  console.log(bodyDom.lastElementChild.tagName)
+  if (bodyDom.lastElementChild.tagName === 'canvas' || bodyDom.lastElementChild.tagName === 'CANVAS') {
+    // Style the canvas for the hero section
+    const canvas = bodyDom.lastElementChild
+    canvas.style.position = 'fixed'
+    canvas.style.top = '0'
+    canvas.style.left = '0'
+    canvas.style.width = '100vw'
+    canvas.style.height = '100vh'
+    canvas.style.pointerEvents = 'none'
+    canvas.style.opacity = '0.5'
+    canvas.style.zIndex = '1'
     clearInterval(timer)
   }
 }, 300)

@@ -23,69 +23,52 @@ export default function AccountDropdown() {
     setMounted(true)
   }, [])
 
-  // Calculate dropdown position when opened
-  const calculatePosition = () => {
-    if (buttonRef.current) {
-      const buttonRect = buttonRef.current.getBoundingClientRect()
-      const dropdownWidth = 224 // w-56 = 14rem = 224px
-      const dropdownHeight = 400 // estimated height
-      const margin = 8
-      
-      // Calculate position from left instead of right for better control
-      let left = buttonRect.right - dropdownWidth
-      let top = buttonRect.bottom + margin
-      
-      // Ensure dropdown doesn't go off the left edge
-      if (left < margin) {
-        left = margin
-      }
-      
-      // Ensure dropdown doesn't go off the right edge
-      if (left + dropdownWidth > window.innerWidth - margin) {
-        left = window.innerWidth - dropdownWidth - margin
-      }
-      
-      // Ensure dropdown doesn't go off the bottom edge
-      if (top + dropdownHeight > window.innerHeight - margin) {
-        top = buttonRect.top - dropdownHeight - margin
-        // If it still doesn't fit above, position it to fit within viewport
-        if (top < margin) {
-          top = margin
-        }
-      }
-      
-      setDropdownPosition({ top, left })
-    }
-  }
-
-  // Handle click outside to close dropdown and window resize
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) &&
-          buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        buttonRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false)
       }
     }
 
-    function handleResize() {
-      if (isOpen) {
-        calculatePosition()
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    window.addEventListener("resize", handleResize)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-      window.removeEventListener("resize", handleResize)
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [isOpen])
 
-  const handleSignOut = () => {
-    // Clear login state
+  const calculatePosition = () => {
+    if (!buttonRef.current) return
+
+    const buttonRect = buttonRef.current.getBoundingClientRect()
+    const dropdownWidth = 280
+    const dropdownHeight = 400
+    const padding = 16
+
+    let left = buttonRect.left + buttonRect.width / 2 - dropdownWidth / 2
+    let top = buttonRect.bottom + 8
+
+    if (left < padding) {
+      left = padding
+    } else if (left + dropdownWidth > window.innerWidth - padding) {
+      left = window.innerWidth - dropdownWidth - padding
+    }
+
+    if (top + dropdownHeight > window.innerHeight - padding) {
+      top = buttonRect.top - dropdownHeight - 8
+    }
+
+    setDropdownPosition({ top, left })
+  }
+
+  const handleLogout = () => {
+    setIsOpen(false)
     sessionStorage.removeItem("isLoggedIn")
     document.cookie = "isLoggedIn=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
-    // Redirect to login page
     router.push("/login")
   }
 
@@ -100,7 +83,9 @@ export default function AccountDropdown() {
     <div className="relative">
       <button
         ref={buttonRef}
-        className={`w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-lg ${isOpen ? "ring-2 ring-custom-green/50 scale-105" : ""}`}
+        className={`w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-lg ${
+          isOpen ? "ring-2 ring-custom-green/50 scale-105" : ""
+        }`}
         onClick={handleToggleDropdown}
       >
         <User className="h-5 w-5" />
@@ -108,75 +93,102 @@ export default function AccountDropdown() {
 
       {isOpen && mounted && createPortal(
         <>
-          {/* Backdrop */}
           <div 
             className="fixed inset-0 bg-black/20 backdrop-blur-sm"
             style={{ zIndex: 2147483646 }}
             onClick={() => setIsOpen(false)}
           />
           
-          {/* Dropdown */}
           <div 
             ref={dropdownRef}
-            className="fixed w-56 rounded-md shadow-2xl bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 animate-in fade-in slide-in-from-top-5 duration-200"
+            className="fixed bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl overflow-hidden"
             style={{
-              top: `${dropdownPosition.top}px`,
-              left: `${dropdownPosition.left}px`,
+              top: dropdownPosition.top,
+              left: dropdownPosition.left,
+              width: '280px',
               zIndex: 2147483647
             }}
           >
-          <div className="py-3 px-3 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3 flex-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2 transition-colors duration-200" onClick={() => console.log('Profile clicked')}>
-                <div className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center flex-shrink-0">
-                  <UserCircle className="h-6 w-6 text-white" />
+            <div className="p-4 border-b border-gray-100 dark:border-gray-800">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center">
+                  <User className="h-6 w-6 text-white" />
                 </div>
-                <div className="text-center flex-1">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">John Doe</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">demo@example.com</p>
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white">John Doe</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">john@example.com</p>
                 </div>
               </div>
-              <button 
-                className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white ml-2"
-                title="编辑个人资料"
+            </div>
+
+            <div className="p-2">
+              <button
+                onClick={() => {
+                  setIsOpen(false)
+                  router.push("/profile")
+                }}
+                className="w-full flex items-center space-x-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
               >
-                <Edit3 className="h-4 w-4" />
+                <UserCircle className="h-5 w-5" />
+                <span>{t("profile")}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsOpen(false)
+                  router.push("/settings")
+                }}
+                className="w-full flex items-center space-x-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <Settings className="h-5 w-5" />
+                <span>{t("settings")}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsOpen(false)
+                  router.push("/billing")
+                }}
+                className="w-full flex items-center space-x-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <CreditCard className="h-5 w-5" />
+                <span>{t("billing")}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsOpen(false)
+                  router.push("/help")
+                }}
+                className="w-full flex items-center space-x-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <HelpCircle className="h-5 w-5" />
+                <span>{t("help")}</span>
+              </button>
+
+              <div className="border-t border-gray-100 dark:border-gray-800 my-2" />
+
+              <div className="px-3 py-2">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{t("theme")}</span>
+                  <ThemeToggle />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{t("language")}</span>
+                  <LanguageToggle />
+                </div>
+              </div>
+
+              <div className="border-t border-gray-100 dark:border-gray-800 my-2" />
+
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center space-x-3 px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              >
+                <LogOut className="h-5 w-5" />
+                <span>{t("logout")}</span>
               </button>
             </div>
-          </div>
-
-          <div className="py-1">
-            <button className="flex items-center w-full px-4 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150">
-              <UserCircle className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
-              My Profile
-            </button>
-            <button className="flex items-center w-full px-4 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150">
-              <CreditCard className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
-              Billing
-            </button>
-            <button className="flex items-center w-full px-4 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150">
-              <Settings className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
-              Settings
-            </button>
-            <button className="flex items-center w-full px-4 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150">
-              <HelpCircle className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
-              Help Center
-            </button>
-          </div>
-
-          <div className="px-3 py-2 border-t border-gray-200 dark:border-gray-700 space-y-2">
-            <ThemeToggle />
-            <LanguageToggle />
-          </div>
-
-          <div className="py-1 border-t border-gray-200 dark:border-gray-700">
-            <button
-              className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-muted transition-colors duration-150"
-              onClick={handleSignOut}
-            >
-              <LogOut className="h-4 w-4 mr-3" />
-              Sign out
-            </button>
           </div>
         </>,
         document.body
