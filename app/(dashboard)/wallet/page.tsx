@@ -876,7 +876,7 @@ export default function WalletPage() {
                           }}
                           className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                             sortBy === "value"
-                              ? "bg-black text-white"
+                              ? isDark ? "bg-white text-black" : "bg-black text-white"
                               : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
                           }`}
                         >
@@ -889,7 +889,7 @@ export default function WalletPage() {
                           }}
                           className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                             sortBy === "marketCap"
-                              ? "bg-black text-white"
+                              ? isDark ? "bg-white text-black" : "bg-black text-white"
                               : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
                           }`}
                         >
@@ -2422,7 +2422,7 @@ export default function WalletPage() {
             <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
               {/* 滑动背景 */}
               <div
-                className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out bg-black ${
+                className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'} ${
                   topLevelTab === "账户资产" ? "left-1" : "left-1/2"
                 }`}
               />
@@ -2432,7 +2432,7 @@ export default function WalletPage() {
                   key={tab}
                   className={`relative z-10 flex-1 px-4 py-3 text-sm font-medium transition-all duration-300 ${
                     topLevelTab === tab
-                      ? "text-white"
+                      ? isDark ? "text-black" : "text-white"
                       : isDark
                       ? "text-gray-300 hover:text-white"
                       : "text-gray-700 hover:text-gray-900"
@@ -2512,7 +2512,7 @@ export default function WalletPage() {
                 <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                   {/* 滑动背景 */}
                   <div
-                    className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out bg-black ${
+                    className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'} ${
                       topLevelTab === "账户资产" ? "left-1" : "left-1/2"
                     }`}
                   />
@@ -2522,7 +2522,7 @@ export default function WalletPage() {
                       key={tab}
                       className={`relative z-10 flex-1 px-3 py-2 text-xs font-medium transition-all duration-300 ${
                         topLevelTab === tab
-                          ? "text-white"
+                          ? isDark ? "text-black" : "text-white"
                           : isDark
                           ? "text-gray-300 hover:text-white"
                           : "text-gray-700 hover:text-gray-900"
@@ -2626,7 +2626,7 @@ export default function WalletPage() {
                     onClick={() => handleCurrencyTypeChange("crypto")}
                     className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 transform ${
                       currencyType === "crypto"
-                        ? "bg-black text-white scale-105"
+                        ? isDark ? "bg-white text-black scale-105" : "bg-black text-white scale-105"
                         : isDark ? "text-gray-400 hover:text-white hover:scale-105" : "text-gray-600 hover:text-black hover:scale-105"
                     }`}
                   >
@@ -2636,7 +2636,7 @@ export default function WalletPage() {
                     onClick={() => handleCurrencyTypeChange("fiat")}
                     className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 transform ${
                       currencyType === "fiat"
-                        ? "bg-black text-white scale-105"
+                        ? isDark ? "bg-white text-black scale-105" : "bg-black text-white scale-105"
                         : isDark ? "text-gray-400 hover:text-white hover:scale-105" : "text-gray-600 hover:text-black hover:scale-105"
                     }`}
                   >
