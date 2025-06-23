@@ -115,14 +115,8 @@ export default function AccountDropdown() {
                   <User className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">游客用户</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">guest@example.com</p>
-                  <a 
-                    href="/api/auth/signin"
-                    className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400"
-                  >
-                    点击登录
-                  </a>
+                  <p className="font-semibold text-gray-900 dark:text-white">John Doe</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">john@example.com</p>
                 </div>
               </div>
             </div>
@@ -187,18 +181,13 @@ export default function AccountDropdown() {
 
               <div className="border-t border-gray-100 dark:border-gray-800 my-2" />
 
-              <a
-                href="/api/logout"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsOpen(false);
-                  window.location.href = '/api/logout';
-                }}
+              <button
+                onClick={handleLogout}
                 className="w-full flex items-center space-x-3 px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
               >
                 <LogOut className="h-5 w-5" />
                 <span>{t("logout")}</span>
-              </a>
+              </button>
             </div>
           </div>
         </>,
