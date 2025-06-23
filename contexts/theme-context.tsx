@@ -21,9 +21,28 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("light")
 
   useEffect(() => {
+    // Load saved preferences from localStorage
+    const savedLanguage = localStorage.getItem('language') as Language
+    const savedTheme = localStorage.getItem('theme') as Theme
+    
+    if (savedLanguage && (savedLanguage === 'zh' || savedLanguage === 'en')) {
+      setLanguage(savedLanguage)
+    }
+    if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+      setTheme(savedTheme)
+    }
+  }, [])
+
+  useEffect(() => {
     // Apply theme to document
     document.documentElement.classList.toggle("dark", theme === "dark")
+    localStorage.setItem('theme', theme)
   }, [theme])
+
+  useEffect(() => {
+    // Save language preference
+    localStorage.setItem('language', language)
+  }, [language])
 
   const value = {
     language,
