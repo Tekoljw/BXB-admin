@@ -28,7 +28,6 @@ import {
   X,
   Check,
   ArrowUpDown,
-  FileText,
   TrendingDown,
   ArrowUp,
   ArrowDown,
@@ -1460,7 +1459,9 @@ export default function WalletPage() {
             </div>
 
             {/* 详细内容区域 */}
-            {renderGuaranteeContent()}
+            <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+              {renderGuaranteeContent()}
+            </div>
 
             {/* 模态框 */}
             {showTransferModal && renderTransferModal()}
@@ -1610,10 +1611,9 @@ export default function WalletPage() {
     switch (selectedCard) {
       case "receivable":
         return (
-          <div className="space-y-4 bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {/* USDT买卖担保 */}
-              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+          <div className="space-y-4">
+            {/* USDT买卖担保 */}
+            <div className={`rounded-lg border shadow-sm p-6 transition-colors ${isDark ? 'bg-gray-800/50 border-gray-700 hover:bg-gray-700/30' : 'bg-white border-gray-200 hover:bg-gray-50'}`}>
                 <div className="space-y-4">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
@@ -1712,17 +1712,15 @@ export default function WalletPage() {
                   </div>
                 </div>
               </div>
-              </div>
             </div>
           </div>
         )
 
       case "payable":
         return (
-          <div className="space-y-4 bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {/* USDT买卖担保 */}
-              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+          <div className="space-y-4">
+            {/* USDT买卖担保 */}
+            <div className={`rounded-lg border shadow-sm p-6 transition-colors ${isDark ? 'bg-gray-800/50 border-gray-700 hover:bg-gray-700/30' : 'bg-white border-gray-200 hover:bg-gray-50'}`}>
                 <div className="space-y-4">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
