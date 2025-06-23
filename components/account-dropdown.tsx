@@ -10,7 +10,7 @@ import LanguageToggle from "./language-toggle"
 
 export default function AccountDropdown() {
   const [isOpen, setIsOpen] = useState(false)
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 })
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
   const dropdownRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const router = useRouter()
@@ -23,24 +23,36 @@ export default function AccountDropdown() {
       const buttonRect = buttonRef.current.getBoundingClientRect()
       const dropdownWidth = 224 // w-56 = 14rem = 224px
       const dropdownHeight = 400 // estimated height
+      const margin = 8
       
-      let top = buttonRect.bottom + 8
-      let right = window.innerWidth - buttonRect.right
+      // Calculate position from left instead of right for better control
+      let left = buttonRect.right - dropdownWidth
+      let top = buttonRect.bottom + margin
       
-      // Adjust if dropdown would go off screen
-      if (buttonRect.right - dropdownWidth < 0) {
-        right = 8 // minimum margin from left edge
+      // Ensure dropdown doesn't go off the left edge
+      if (left < margin) {
+        left = margin
       }
       
-      if (top + dropdownHeight > window.innerHeight) {
-        top = buttonRect.top - dropdownHeight - 8
+      // Ensure dropdown doesn't go off the right edge
+      if (left + dropdownWidth > window.innerWidth - margin) {
+        left = window.innerWidth - dropdownWidth - margin
       }
       
-      setDropdownPosition({ top, right })
+      // Ensure dropdown doesn't go off the bottom edge
+      if (top + dropdownHeight > window.innerHeight - margin) {
+        top = buttonRect.top - dropdownHeight - margin
+        // If it still doesn't fit above, position it to fit within viewport
+        if (top < margin) {
+          top = margin
+        }
+      }
+      
+      setDropdownPosition({ top, left })
     }
   }
 
-  // Handle click outside to close dropdown
+  // Handle click outside to close dropdown and window resize
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) &&
@@ -49,11 +61,19 @@ export default function AccountDropdown() {
       }
     }
 
+    function handleResize() {
+      if (isOpen) {
+        calculatePosition()
+      }
+    }
+
     document.addEventListener("mousedown", handleClickOutside)
+    window.addEventListener("resize", handleResize)
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
+      window.removeEventListener("resize", handleResize)
     }
-  }, [])
+  }, [isOpen])
 
   const handleSignOut = () => {
     // Clear login state
@@ -86,7 +106,7 @@ export default function AccountDropdown() {
           className="fixed w-56 rounded-md shadow-xl bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 z-[9999] animate-in fade-in slide-in-from-top-5 duration-200"
           style={{
             top: `${dropdownPosition.top}px`,
-            right: `${dropdownPosition.right}px`,
+            left: `${dropdownPosition.left}px`,
           }}
         >
           <div className="py-3 px-3 border-b border-gray-200 dark:border-gray-700">
