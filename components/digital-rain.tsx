@@ -16,96 +16,120 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    // Set canvas size
-    const resizeCanvas = () => {
-      const rect = canvas.getBoundingClientRect()
-      canvas.width = rect.width
-      canvas.height = rect.height
-      canvas.style.width = rect.width + 'px'
-      canvas.style.height = rect.height + 'px'
-    }
-
-    // Digital rain characters (mix of numbers, letters, and symbols)
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ¥€₿∀∃∆∇∈∉∑∏⊂⊃⊕⊗⋀⋁⋂⋃"
+    // Matrix-style characters including Japanese katakana
+    const chars = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝ012345789ZΞΦΨΩαβγδεζηθικλμνξπρστυφχψωABCDEFGHIJKLMNOPQRSTUVWXYZ$¥€"
     
-    // Wait for next tick to ensure canvas is mounted
-    setTimeout(() => {
-      resizeCanvas()
-      initDrops()
-      animate()
-    }, 100)
-    
-    window.addEventListener("resize", resizeCanvas)
-    
-    // Rain drops array
+    let width = 0
+    let height = 0
+    let columns = 0
+    const fontSize = 16
     const drops: Array<{
-      x: number
       y: number
       speed: number
-      opacity: number
-      char: string
+      chars: string[]
+      brightness: number[]
     }> = []
 
-    // Initialize drops
-    const initDrops = () => {
+    const setupCanvas = () => {
       const rect = canvas.getBoundingClientRect()
-      const columns = Math.floor(rect.width / 20)
+      width = rect.width
+      height = rect.height
+      canvas.width = width
+      canvas.height = height
+      
+      columns = Math.floor(width / fontSize)
       drops.length = 0
       
+      // Initialize drops with trails
       for (let i = 0; i < columns; i++) {
-        drops.push({
-          x: i * 20 + Math.random() * 10,
-          y: Math.random() * rect.height,
-          speed: Math.random() * 2 + 0.5,
-          opacity: Math.random() * 0.7 + 0.3,
-          char: chars[Math.floor(Math.random() * chars.length)]
-        })
+        const trailLength = Math.floor(Math.random() * 15) + 5
+        drops[i] = {
+          y: Math.random() * height - trailLength * fontSize,
+          speed: Math.random() * 3 + 1,
+          chars: Array(trailLength).fill(0).map(() => 
+            chars[Math.floor(Math.random() * chars.length)]
+          ),
+          brightness: Array(trailLength).fill(0).map((_, index) => 
+            1 - (index / trailLength) * 0.9
+          )
+        }
+      }
+    }
+
+    const draw = () => {
+      // Create fade effect
+      ctx.fillStyle = "rgba(0, 0, 0, 0.04)"
+      ctx.fillRect(0, 0, width, height)
+
+      ctx.font = `${fontSize}px 'Courier New', monospace`
+
+      // Draw each column
+      for (let i = 0; i < drops.length; i++) {
+        const drop = drops[i]
+        const x = i * fontSize
+
+        // Draw each character in the trail
+        for (let j = 0; j < drop.chars.length; j++) {
+          const y = drop.y - j * fontSize
+          
+          if (y > 0 && y < height) {
+            // Head of the trail is brightest (white/teal)
+            if (j === 0) {
+              ctx.fillStyle = "#ffffff"
+            } else if (j === 1) {
+              ctx.fillStyle = "#14C2A3"
+            } else {
+              // Fade to darker green
+              const alpha = drop.brightness[j]
+              ctx.fillStyle = `rgba(20, 194, 163, ${alpha})`
+            }
+            
+            // Random character change for flickering effect
+            if (Math.random() < 0.02) {
+              drop.chars[j] = chars[Math.floor(Math.random() * chars.length)]
+            }
+            
+            ctx.fillText(drop.chars[j], x, y)
+          }
+        }
+
+        // Move drop down
+        drop.y += drop.speed
+
+        // Reset when completely off screen
+        if (drop.y - drop.chars.length * fontSize > height) {
+          drop.y = -drop.chars.length * fontSize - Math.random() * height
+          drop.speed = Math.random() * 3 + 1
+          
+          // Regenerate characters
+          for (let j = 0; j < drop.chars.length; j++) {
+            drop.chars[j] = chars[Math.floor(Math.random() * chars.length)]
+          }
+        }
       }
     }
 
     let animationId: number
-
+    
     const animate = () => {
-      const rect = canvas.getBoundingClientRect()
-      
-      // Clear canvas with fade effect for trailing effect
-      ctx.fillStyle = "rgba(0, 0, 0, 0.1)"
-      ctx.fillRect(0, 0, rect.width, rect.height)
-
-      // Draw rain drops
-      drops.forEach((drop, index) => {
-        // Random character change for flickering effect
-        if (Math.random() < 0.05) {
-          drop.char = chars[Math.floor(Math.random() * chars.length)]
-        }
-
-        // Draw main character with teal green
-        ctx.fillStyle = `rgba(20, 194, 163, ${drop.opacity})`
-        ctx.font = "bold 14px 'Courier New', monospace"
-        ctx.fillText(drop.char, drop.x, drop.y)
-        
-        // Add subtle glow effect
-        ctx.fillStyle = `rgba(20, 194, 163, ${drop.opacity * 0.5})`
-        ctx.font = "bold 16px 'Courier New', monospace"
-        ctx.fillText(drop.char, drop.x - 0.5, drop.y - 0.5)
-
-        // Update position
-        drop.y += drop.speed
-        
-        // Reset when off screen
-        if (drop.y > rect.height + 50) {
-          drop.y = -30 - Math.random() * 100
-          drop.x = (index * 20) + Math.random() * 15
-          drop.speed = Math.random() * 3 + 1
-          drop.opacity = Math.random() * 0.8 + 0.4
-        }
-      })
-
+      draw()
       animationId = requestAnimationFrame(animate)
     }
 
+    // Wait for canvas to be ready
+    setTimeout(() => {
+      setupCanvas()
+      animate()
+    }, 100)
+
+    const handleResize = () => {
+      setupCanvas()
+    }
+
+    window.addEventListener("resize", handleResize)
+
     return () => {
-      window.removeEventListener("resize", resizeCanvas)
+      window.removeEventListener("resize", handleResize)
       if (animationId) {
         cancelAnimationFrame(animationId)
       }
@@ -119,7 +143,7 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
       style={{ 
         width: "100%", 
         height: "100%",
-        opacity: 0.6,
+        opacity: 0.5,
         zIndex: 1
       }}
     />
