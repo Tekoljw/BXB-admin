@@ -11,11 +11,16 @@ import LanguageToggle from "./language-toggle"
 export default function AccountDropdown() {
   const [isOpen, setIsOpen] = useState(false)
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
+  const [mounted, setMounted] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const router = useRouter()
   const { isDark } = useTheme()
   const { t } = useTranslation()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Calculate dropdown position when opened
   const calculatePosition = () => {
@@ -100,15 +105,25 @@ export default function AccountDropdown() {
         <User className="h-5 w-5" />
       </button>
 
-      {isOpen && (
-        <div 
-          ref={dropdownRef}
-          className="fixed w-56 rounded-md shadow-xl bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 z-[9999] animate-in fade-in slide-in-from-top-5 duration-200"
-          style={{
-            top: `${dropdownPosition.top}px`,
-            left: `${dropdownPosition.left}px`,
-          }}
-        >
+      {isOpen && mounted && createPortal(
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm"
+            style={{ zIndex: 2147483646 }}
+            onClick={() => setIsOpen(false)}
+          />
+          
+          {/* Dropdown */}
+          <div 
+            ref={dropdownRef}
+            className="fixed w-56 rounded-md shadow-2xl bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 animate-in fade-in slide-in-from-top-5 duration-200"
+            style={{
+              top: `${dropdownPosition.top}px`,
+              left: `${dropdownPosition.left}px`,
+              zIndex: 2147483647
+            }}
+          >
           <div className="py-3 px-3 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3 flex-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2 transition-colors duration-200" onClick={() => console.log('Profile clicked')}>
@@ -162,7 +177,8 @@ export default function AccountDropdown() {
               Sign out
             </button>
           </div>
-        </div>
+        </>,
+        document.body
       )}
     </div>
   )
