@@ -1,553 +1,353 @@
 "use client"
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { 
-  Shield, 
-  Globe, 
-  TrendingUp, 
-  Users, 
-  Lock, 
-  Zap, 
-  CheckCircle, 
-  ArrowRight,
-  Menu,
-  X,
-  ChevronDown,
-  Bitcoin,
-  DollarSign,
-  CreditCard,
-  Activity
-} from "lucide-react"
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useTheme } from "@/contexts/theme-context"
 
-// Crypto icons data
-const CryptoIcon = ({ symbol, className = "w-4 h-4" }: { symbol: string; className?: string }) => {
-  const colors = {
-    BTC: "bg-orange-500",
-    ETH: "bg-blue-500", 
-    ETC: "bg-green-600",
-    EXP: "bg-purple-500",
-    XMR: "bg-orange-600",
-    GAME: "bg-blue-600",
-    SBD: "bg-green-500",
-    NLG: "bg-yellow-500",
-    USD: "bg-green-700"
-  }
-  
-  return (
-    <div className={`${colors[symbol as keyof typeof colors] || 'bg-gray-500'} rounded-full ${className} flex items-center justify-center`}>
-      <span className="text-white text-xs font-bold">{symbol.charAt(0)}</span>
-    </div>
-  )
-}
-
-// Modern dark design with CSS-inspired layout
 export default function LandingPage() {
+  const { theme, language, setLanguage } = useTheme()
   const router = useRouter()
-  const [currentLang, setCurrentLang] = useState('zh')
-  const [navbarOpen, setNavbarOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const savedLang = localStorage.getItem('lang')
-    if (savedLang && (savedLang === 'en' || savedLang === 'zh')) {
-      setCurrentLang(savedLang)
-    }
-
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    setMounted(true)
   }, [])
 
-  const changeLang = (lang: string) => {
-    if (lang === 'en' || lang === 'zh') {
-      localStorage.setItem('lang', lang)
-      setCurrentLang(lang)
-    }
+  if (!mounted) {
+    return <div className="min-h-screen bg-gray-900"></div>
   }
 
-  const cryptoTicker = [
-    { symbol: 'BTC', name: 'Bitcoin', price: '$67,234.56', change: '+2.34%', isPositive: true },
-    { symbol: 'ETH', name: 'Ethereum', price: '$3,456.78', change: '+1.87%', isPositive: true },
-    { symbol: 'ETC', name: 'Ethereum Classic', price: '$24.56', change: '-0.12%', isPositive: false },
-    { symbol: 'EXP', name: 'Expanse', price: '$0.89', change: '+5.67%', isPositive: true },
-    { symbol: 'XMR', name: 'Monero', price: '$156.78', change: '+3.21%', isPositive: true },
-    { symbol: 'GAME', name: 'GameCredits', price: '$0.045', change: '-1.23%', isPositive: false },
-    { symbol: 'SBD', name: 'Steem Dollar', price: '$1.02', change: '+0.98%', isPositive: true },
-    { symbol: 'NLG', name: 'Gulden', price: '$0.023', change: '+2.45%', isPositive: true },
-    { symbol: 'USD', name: 'US Dollar', price: '$1.00', change: '0.00%', isPositive: true }
-  ]
+  const isDark = theme === "dark"
 
-  const t = {
-    title: currentLang === 'zh' ? '全球加密货币担保交易所' : 'Global Cryptocurrency Guaranteed Trading Exchange',
-    subtitle: currentLang === 'zh' ? 
-      '专业、安全、有保障的全球数字资产交易平台' : 
-      'Professional, secure, and guaranteed digital asset trading platform',
-    heroDescription: currentLang === 'zh' ? 
-      '体验最先进的加密货币交易技术，享受银行级安全保障，全球24/7专业服务' :
-      'Experience cutting-edge cryptocurrency trading technology with bank-grade security and 24/7 global professional service',
-    startTrading: currentLang === 'zh' ? '立即开始交易' : 'Start Trading Now',
-    learnMore: currentLang === 'zh' ? '了解更多' : 'Learn More',
-    wallet: currentLang === 'zh' ? '钱包' : 'Wallet',
-    trading: currentLang === 'zh' ? '交易' : 'Trading', 
-    market: currentLang === 'zh' ? '行情' : 'Market',
-    documents: currentLang === 'zh' ? '文档' : 'Documents',
-    login: currentLang === 'zh' ? '登录' : 'Login',
-    features: currentLang === 'zh' ? '核心特色' : 'Core Features',
-    guarantee: currentLang === 'zh' ? '担保交易' : 'Guaranteed Trading',
-    guaranteeDesc: currentLang === 'zh' ? '每笔交易都有多重保障机制，确保资金安全' : 'Multiple security mechanisms for every transaction to ensure fund safety',
-    global: currentLang === 'zh' ? '全球服务' : 'Global Service',
-    globalDesc: currentLang === 'zh' ? '覆盖200+国家，24/7不间断专业服务' : 'Covering 200+ countries with 24/7 uninterrupted professional service',
-    security: currentLang === 'zh' ? '银行级安全' : 'Bank-Grade Security',
-    securityDesc: currentLang === 'zh' ? '采用最高级别的加密技术和安全标准' : 'Utilizing highest level encryption technology and security standards',
-    speed: currentLang === 'zh' ? '极速执行' : 'Lightning Speed',
-    speedDesc: currentLang === 'zh' ? '毫秒级订单撮合，瞬间完成交易' : 'Millisecond order matching for instant trade execution',
-    stats1: currentLang === 'zh' ? '1000万+' : '10M+',
-    stats1Label: currentLang === 'zh' ? '全球用户' : 'Global Users',
-    stats2: currentLang === 'zh' ? '200+' : '200+', 
-    stats2Label: currentLang === 'zh' ? '支持国家' : 'Countries',
-    stats3: currentLang === 'zh' ? '99.9%' : '99.9%',
-    stats3Label: currentLang === 'zh' ? '系统稳定性' : 'Uptime',
-    stats4: currentLang === 'zh' ? '24/7' : '24/7',
-    stats4Label: currentLang === 'zh' ? '客户服务' : 'Support',
-    liveMarket: currentLang === 'zh' ? '实时行情' : 'Live Market Data',
-    copyright: currentLang === 'zh' ? 
-      '© 2024 BeDAO. 保留所有权利. 全球加密货币担保交易所' :
-      '© 2024 BeDAO. All rights reserved. Global Cryptocurrency Guaranteed Trading Exchange'
+  const handleLogin = () => {
+    router.push("/wallet")
+  }
+
+  const toggleNav = () => {
+    setNavOpen(!navOpen)
+  }
+
+  const changeLang = (lang: string) => {
+    setLanguage(lang as "en" | "zh")
   }
 
   return (
-    <div className="min-h-screen bg-[#111827] text-white overflow-x-hidden">
-      {/* Fixed Header */}
-      <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-[#111827]/95 backdrop-blur-md border-b border-gray-800' : 'bg-transparent'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+    <div className="wrapper min-h-screen bg-gray-900 text-white">
+      {/* Navbar */}
+      <nav className="navbar fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => router.push('/')}>
-              <Shield className="h-8 w-8 text-[#00D4AA]" />
-              <span className="text-2xl font-bold text-white">BeDAO</span>
-              <span className="px-2 py-1 text-xs bg-[#00D4AA] text-black rounded-full font-semibold">PRO</span>
-            </div>
-            
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <button 
-                onClick={() => router.push('/wallet')} 
-                className="text-gray-300 hover:text-[#00D4AA] transition-colors font-medium"
-              >
-                {t.wallet}
-              </button>
-              <button 
-                onClick={() => router.push('/spot')} 
-                className="text-gray-300 hover:text-[#00D4AA] transition-colors font-medium"
-              >
-                {t.trading}
-              </button>
-              <button 
-                onClick={() => router.push('/market')} 
-                className="text-gray-300 hover:text-[#00D4AA] transition-colors font-medium"
-              >
-                {t.market}
-              </button>
-              
-              <div className="relative group">
-                <button className="text-gray-300 hover:text-[#00D4AA] transition-colors font-medium flex items-center">
-                  {t.documents}
-                  <ChevronDown className="ml-1 w-4 h-4" />
-                </button>
-                <div className="absolute top-full left-0 mt-2 w-48 bg-[#1f2937] rounded-lg shadow-xl border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                  <a href="#" className="block px-4 py-3 text-sm text-gray-300 hover:text-[#00D4AA] hover:bg-gray-800 rounded-t-lg">
-                    {currentLang === 'zh' ? '白皮书' : 'White Paper'}
-                  </a>
-                  <a href="#" className="block px-4 py-3 text-sm text-gray-300 hover:text-[#00D4AA] hover:bg-gray-800 rounded-b-lg">
-                    {currentLang === 'zh' ? 'API文档' : 'API Docs'}
-                  </a>
-                </div>
-              </div>
-              
-              <div className="relative group">
-                <button className="px-3 py-2 bg-gray-800 rounded-lg text-gray-300 hover:text-white flex items-center transition-colors">
-                  <Globe className="w-4 h-4 mr-2" />
-                  {currentLang.toUpperCase()}
-                </button>
-                <div className="absolute top-full right-0 mt-2 w-20 bg-[#1f2937] rounded-lg shadow-xl border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                  {currentLang !== 'en' && (
-                    <button 
-                      onClick={() => changeLang('en')} 
-                      className="block w-full px-3 py-2 text-sm text-gray-300 hover:text-[#00D4AA] hover:bg-gray-800 rounded-t-lg text-center"
-                    >
-                      EN
-                    </button>
-                  )}
-                  {currentLang !== 'zh' && (
-                    <button 
-                      onClick={() => changeLang('zh')} 
-                      className="block w-full px-3 py-2 text-sm text-gray-300 hover:text-[#00D4AA] hover:bg-gray-800 rounded-b-lg text-center"
-                    >
-                      中文
-                    </button>
-                  )}
-                </div>
-              </div>
-              
-              <button 
-                onClick={() => router.push('/wallet')} 
-                className="px-6 py-2 bg-gradient-to-r from-[#00D4AA] to-emerald-500 text-black font-semibold rounded-lg hover:from-[#00B894] hover:to-emerald-600 transition-all transform hover:scale-105"
-              >
-                {t.login}
-              </button>
-            </nav>
-            
-            {/* Mobile Menu Button */}
+            <Link href="/" className="navbar-brand">
+              <img 
+                src="/logo.png" 
+                alt="BeDAO" 
+                width={180} 
+                height={40}
+                className="h-10 w-auto"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTgwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0ZXh0IHg9IjEwIiB5PSIyNSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzAwRDRBQSI+QmVEQU88L3RleHQ+PC9zdmc+"
+                }}
+              />
+            </Link>
+
+            {/* Mobile menu button */}
             <button 
-              onClick={() => setNavbarOpen(!navbarOpen)} 
-              className="md:hidden text-gray-300 hover:text-white"
+              onClick={toggleNav}
+              className="md:hidden p-2"
             >
-              {navbarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              <div className="navbar-toggler-icon">
+                <span className="block w-6 h-0.5 bg-white mb-1"></span>
+                <span className="block w-6 h-0.5 bg-white mb-1"></span>
+                <span className="block w-6 h-0.5 bg-white"></span>
+              </div>
             </button>
-          </div>
-          
-          {/* Mobile Menu */}
-          {navbarOpen && (
-            <div className="md:hidden border-t border-gray-800 bg-[#111827]/95 backdrop-blur-md">
-              <div className="px-4 py-6 space-y-4">
-                <button onClick={() => router.push('/wallet')} className="block text-gray-300 hover:text-[#00D4AA] font-medium">
-                  {t.wallet}
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              <Link href="#" className="nav-link text-white hover:text-[#14C2A3] transition-colors">
+                Wallet
+              </Link>
+              <Link href="#" className="nav-link text-[#14C2A3] font-medium">
+                SDK&API
+              </Link>
+              <Link href="#" className="nav-link text-white hover:text-[#14C2A3] transition-colors">
+                Card
+              </Link>
+              <Link href="#" className="nav-link text-white hover:text-[#14C2A3] transition-colors">
+                Tokenomic
+              </Link>
+              <Link href="#" className="nav-link text-white hover:text-[#14C2A3] transition-colors">
+                News
+              </Link>
+              
+              {/* Documents Dropdown */}
+              <div className="relative group">
+                <button className="nav-link text-white hover:text-[#14C2A3] transition-colors flex items-center">
+                  Documents
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
                 </button>
-                <button onClick={() => router.push('/spot')} className="block text-gray-300 hover:text-[#00D4AA] font-medium">
-                  {t.trading}
+                <div className="absolute top-full left-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                  <Link href="#" className="block px-4 py-2 text-white hover:bg-gray-700 rounded-lg">
+                    White Paper
+                  </Link>
+                  <Link href="#" className="block px-4 py-2 text-white hover:bg-gray-700 rounded-lg">
+                    Development DOCS
+                  </Link>
+                </div>
+              </div>
+
+              {/* Language Dropdown */}
+              <div className="relative group">
+                <button className="nav-link flex items-center">
+                  <img 
+                    width={24} 
+                    src={language === 'zh' ? "/icons/CN.png" : "/icons/US.png"} 
+                    alt="" 
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0iIzAwRDRBQSIvPjx0ZXh0IHg9IjEyIiB5PSIxNiIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+e2xhbmd1YWdlID09PSAnemgnID8gJ0NOJyA6ICdVUyd9PC90ZXh0Pjwvc3ZnPg=="
+                    }}
+                  />
                 </button>
-                <button onClick={() => router.push('/market')} className="block text-gray-300 hover:text-[#00D4AA] font-medium">
-                  {t.market}
-                </button>
-                <div className="flex space-x-2 pt-4">
+                <div className="absolute top-full right-0 mt-2 w-40 bg-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                   <button 
-                    onClick={() => changeLang('en')} 
-                    className={`px-3 py-1 rounded ${currentLang === 'en' ? 'bg-[#00D4AA] text-black' : 'bg-gray-800 text-gray-300'}`}
+                    onClick={() => changeLang('en')}
+                    className="w-full flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
                   >
-                    EN
+                    <img width={24} src="/icons/US.png" alt="" className="mr-2" />
+                    English
                   </button>
                   <button 
-                    onClick={() => changeLang('zh')} 
-                    className={`px-3 py-1 rounded ${currentLang === 'zh' ? 'bg-[#00D4AA] text-black' : 'bg-gray-800 text-gray-300'}`}
+                    onClick={() => changeLang('zh')}
+                    className="w-full flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
                   >
-                    中文
+                    <img width={24} src="/icons/CN.png" alt="" className="mr-2" />
+                    简体中文
                   </button>
                 </div>
+              </div>
+
+              {/* Login Button */}
+              <button 
+                onClick={handleLogin}
+                className="bg-[#14C2A3] text-white px-6 py-2 rounded-full hover:bg-[#10a085] transition-colors font-medium"
+              >
+                Login
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Navigation Menu */}
+          {navOpen && (
+            <div className="md:hidden absolute top-16 left-0 right-0 bg-gray-800 shadow-lg">
+              <div className="flex flex-col space-y-2 p-4">
+                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">Wallet</Link>
+                <Link href="#" className="text-[#14C2A3] py-2">SDK&API</Link>
+                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">Card</Link>
+                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">Tokenomic</Link>
+                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">News</Link>
+                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">Documents</Link>
+                <button 
+                  onClick={handleLogin}
+                  className="bg-[#14C2A3] text-white px-6 py-2 rounded-full hover:bg-[#10a085] transition-colors font-medium mt-4"
+                >
+                  Login
+                </button>
               </div>
             </div>
           )}
         </div>
-      </header>
-
-      {/* Crypto Ticker - Floating at top */}
-      <div className="fixed top-16 left-0 w-full bg-gray-900/90 backdrop-blur-sm border-b border-gray-800 z-40 overflow-hidden">
-        <div className="flex animate-marquee whitespace-nowrap py-2">
-          {cryptoTicker.concat(cryptoTicker).map((crypto, index) => (
-            <div key={index} className="flex items-center space-x-2 mx-6">
-              <CryptoIcon symbol={crypto.symbol} className="w-4 h-4" />
-              <span className="text-gray-300 text-sm font-medium">{crypto.symbol}</span>
-              <span className="text-white text-sm font-bold">{crypto.price}</span>
-              <span className={`text-sm font-medium ${crypto.isPositive ? 'text-green-400' : 'text-red-400'}`}>
-                {crypto.change}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+      </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 lg:px-8 overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00D4AA]/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto relative">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Content */}
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
-                  <span className="text-white">{currentLang === 'zh' ? '全球' : 'Global'}</span>
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#00D4AA] to-emerald-400">
-                    {currentLang === 'zh' ? '加密货币' : 'Cryptocurrency'}
-                  </span>
-                  <span className="block text-white">{currentLang === 'zh' ? '担保交易所' : 'Guaranteed Exchange'}</span>
-                </h1>
-                <p className="text-xl lg:text-2xl text-gray-300 max-w-2xl leading-relaxed">
-                  {t.heroDescription}
+      <main className="flex-grow pt-20">
+        <section className="hero-section overflow-hidden py-20 lg:py-32">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-center">
+              <div className="max-w-4xl text-center">
+                <div className="relative z-10">
+                  <p className="text-[#14C2A3] text-lg mb-4" data-aos="fade-up-sm">
+                    {language === 'zh' ? '最便捷的一站式链改+托管解决方案' : 'The most convenient one-stop chain modification+hosting solution'}
+                  </p>
+                  <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-8" data-aos="fade-up-sm">
+                    <span className="block mb-4">
+                      {language === 'zh' ? '一个SDK囊括所有Web3.0功能' : 'A single SDK that encompasses all Web3.0 functions'}
+                    </span>
+                    <span className="text-transparent bg-gradient-to-r from-[#14C2A3] to-[#10a085] bg-clip-text">
+                      {language === 'zh' ? 'Web2.0用户的钥匙' : 'The key to Web2.0 users'}
+                    </span>
+                  </h1>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16" data-aos="fade-up-sm">
+                  <button className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-colors font-medium">
+                    {language === 'zh' ? '白皮书' : 'White Paper'}
+                  </button>
+                  <button className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-colors font-medium">
+                    {language === 'zh' ? '开发文档' : 'Development'}
+                  </button>
+                </div>
+
+                <div data-aos="fade-up-sm" className="relative">
+                  <div className="relative z-10">
+                    <img 
+                      className="w-full max-w-4xl mx-auto rounded-2xl border-2 border-[#14C2A3] shadow-2xl"
+                      src="https://scource-static.funibet.com/beingfi/images/bg/screen-1.png" 
+                      alt="Dashboard Preview"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQ1MCIgdmlld0JveD0iMCAwIDgwMCA0NTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0NTAiIGZpbGw9IiMxRTI5M0IiLz48dGV4dCB4PSI0MDAiIHk9IjIyNSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmaWxsPSIjMDBENEFBIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5EYXNoYm9hcmQgUHJldmlldyA8L3RleHQ+PC9zdmc+"
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-20 lg:py-32">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-[#14C2A3] text-lg mb-4">
+                {language === 'zh' ? '核心特性' : 'Core Features'}
+              </h2>
+              <h3 className="text-white text-3xl md:text-5xl font-bold">
+                {language === 'zh' ? '为什么选择BeDAO' : 'Why Choose BeDAO'}
+              </h3>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Feature 1 */}
+              <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700">
+                <div className="w-16 h-16 bg-[#14C2A3]/10 rounded-2xl flex items-center justify-center mb-6">
+                  <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <h4 className="text-white text-xl font-semibold mb-4">
+                  {language === 'zh' ? '安全保障' : 'Security Guarantee'}
+                </h4>
+                <p className="text-gray-300">
+                  {language === 'zh' ? '全球领先的加密技术，多重安全防护，为您的资产保驾护航' : 'Leading encryption technology with multiple security layers to protect your assets'}
                 </p>
               </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button 
-                  onClick={() => router.push('/wallet')}
-                  className="px-8 py-4 bg-gradient-to-r from-[#00D4AA] to-emerald-500 text-black font-bold text-lg rounded-xl hover:from-[#00B894] hover:to-emerald-600 transition-all transform hover:scale-105 flex items-center justify-center"
-                >
-                  {t.startTrading}
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </button>
-                <button className="px-8 py-4 border-2 border-[#00D4AA] text-[#00D4AA] font-bold text-lg rounded-xl hover:bg-[#00D4AA] hover:text-black transition-all">
-                  {t.learnMore}
-                </button>
-              </div>
-            </div>
-            
-            {/* Right Content - Enhanced Visual */}
-            <div className="relative">
-              <div className="relative w-full h-96 lg:h-[500px] bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl border border-gray-700 backdrop-blur-sm overflow-hidden">
-                {/* Trading Interface Mockup */}
-                <div className="absolute inset-4 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Activity className="w-5 h-5 text-[#00D4AA]" />
-                      <span className="text-sm font-semibold text-white">
-                        {currentLang === 'zh' ? '实时交易' : 'Live Trading'}
-                      </span>
-                    </div>
-                    <div className="flex space-x-1">
-                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gray-800/70 rounded-lg p-4">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <CryptoIcon symbol="BTC" className="w-6 h-6" />
-                        <span className="text-white font-bold">BTC/USDT</span>
-                      </div>
-                      <div className="text-2xl font-bold text-white">$67,234.56</div>
-                      <div className="text-green-400 text-sm">+2.34%</div>
-                    </div>
-                    
-                    <div className="bg-gray-800/70 rounded-lg p-4">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <CryptoIcon symbol="ETH" className="w-6 h-6" />
-                        <span className="text-white font-bold">ETH/USDT</span>
-                      </div>
-                      <div className="text-2xl font-bold text-white">$3,456.78</div>
-                      <div className="text-green-400 text-sm">+1.87%</div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-gray-800/70 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-gray-300 text-sm">
-                        {currentLang === 'zh' ? '担保交易状态' : 'Guaranteed Trading Status'}
-                      </span>
-                      <span className="text-[#00D4AA] text-sm font-semibold">
-                        {currentLang === 'zh' ? '已启用' : 'ENABLED'}
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
-                      <div className="bg-[#00D4AA] h-2 rounded-full w-full"></div>
-                    </div>
-                    <div className="text-xs text-gray-400">
-                      {currentLang === 'zh' ? '100% 资金保障' : '100% Fund Protection'}
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Floating elements */}
-                <div className="absolute top-8 right-8 w-12 h-12 bg-[#00D4AA]/20 rounded-full flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-[#00D4AA]" />
-                </div>
-                <div className="absolute bottom-8 left-8 w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-blue-400" />
-                </div>
-              </div>
-              
-              {/* Decorative elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#00D4AA]/20 rounded-full blur-xl"></div>
-              <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-blue-500/20 rounded-full blur-xl"></div>
-            </div>
-          </div>
-          
-          {/* Stats Section */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-20 pt-12 border-t border-gray-800">
-            <div className="text-center">
-              <div className="text-4xl lg:text-5xl font-bold text-[#00D4AA] mb-2">{t.stats1}</div>
-              <div className="text-gray-400 font-medium">{t.stats1Label}</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl lg:text-5xl font-bold text-[#00D4AA] mb-2">{t.stats2}</div>
-              <div className="text-gray-400 font-medium">{t.stats2Label}</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl lg:text-5xl font-bold text-[#00D4AA] mb-2">{t.stats3}</div>
-              <div className="text-gray-400 font-medium">{t.stats3Label}</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl lg:text-5xl font-bold text-[#00D4AA] mb-2">{t.stats4}</div>
-              <div className="text-gray-400 font-medium">{t.stats4Label}</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Features Section */}
-      <section className="py-20 px-4 lg:px-8 bg-gray-900/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">{t.features}</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-[#00D4AA] to-emerald-400 mx-auto"></div>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-gray-800/70 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-[#00D4AA]/50 transition-all hover:transform hover:scale-105">
-              <div className="w-16 h-16 bg-[#00D4AA]/20 rounded-xl flex items-center justify-center mb-6">
-                <Shield className="w-8 h-8 text-[#00D4AA]" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">{t.guarantee}</h3>
-              <p className="text-gray-400 leading-relaxed">{t.guaranteeDesc}</p>
-            </div>
-            
-            <div className="bg-gray-800/70 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-[#00D4AA]/50 transition-all hover:transform hover:scale-105">
-              <div className="w-16 h-16 bg-[#00D4AA]/20 rounded-xl flex items-center justify-center mb-6">
-                <Globe className="w-8 h-8 text-[#00D4AA]" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">{t.global}</h3>
-              <p className="text-gray-400 leading-relaxed">{t.globalDesc}</p>
-            </div>
-            
-            <div className="bg-gray-800/70 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-[#00D4AA]/50 transition-all hover:transform hover:scale-105">
-              <div className="w-16 h-16 bg-[#00D4AA]/20 rounded-xl flex items-center justify-center mb-6">
-                <Lock className="w-8 h-8 text-[#00D4AA]" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">{t.security}</h3>
-              <p className="text-gray-400 leading-relaxed">{t.securityDesc}</p>
-            </div>
-            
-            <div className="bg-gray-800/70 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-[#00D4AA]/50 transition-all hover:transform hover:scale-105">
-              <div className="w-16 h-16 bg-[#00D4AA]/20 rounded-xl flex items-center justify-center mb-6">
-                <Zap className="w-8 h-8 text-[#00D4AA]" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">{t.speed}</h3>
-              <p className="text-gray-400 leading-relaxed">{t.speedDesc}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Live Market Section */}
-      <section className="py-20 px-4 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">{t.liveMarket}</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-[#00D4AA] to-emerald-400 mx-auto"></div>
-          </div>
-          
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700 overflow-hidden">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-700">
-              {cryptoTicker.slice(0, 6).map((crypto, index) => (
-                <div key={index} className="p-6 hover:bg-gray-700/30 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <CryptoIcon symbol={crypto.symbol} className="w-10 h-10" />
-                      <div>
-                        <div className="text-white font-bold">{crypto.symbol}</div>
-                        <div className="text-gray-400 text-sm">{crypto.name}</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-white font-bold text-lg">{crypto.price}</div>
-                      <div className={`text-sm font-medium ${crypto.isPositive ? 'text-green-400' : 'text-red-400'}`}>
-                        {crypto.change}
-                      </div>
-                    </div>
-                  </div>
+              {/* Feature 2 */}
+              <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700">
+                <div className="w-16 h-16 bg-[#14C2A3]/10 rounded-2xl flex items-center justify-center mb-6">
+                  <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
                 </div>
-              ))}
+                <h4 className="text-white text-xl font-semibold mb-4">
+                  {language === 'zh' ? '极速交易' : 'Lightning Fast'}
+                </h4>
+                <p className="text-gray-300">
+                  {language === 'zh' ? '毫秒级交易执行，支持高频交易，让您抓住每一个投资机会' : 'Millisecond transaction execution supporting high-frequency trading'}
+                </p>
+              </div>
+
+              {/* Feature 3 */}
+              <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700">
+                <div className="w-16 h-16 bg-[#14C2A3]/10 rounded-2xl flex items-center justify-center mb-6">
+                  <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h4 className="text-white text-xl font-semibold mb-4">
+                  {language === 'zh' ? '智能分析' : 'Smart Analytics'}
+                </h4>
+                <p className="text-gray-300">
+                  {language === 'zh' ? 'AI驱动的市场分析，实时数据洞察，助您做出明智决策' : 'AI-powered market analysis with real-time insights for smart decisions'}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 lg:px-8 bg-gradient-to-r from-[#00D4AA] to-emerald-500">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">
-            {currentLang === 'zh' ? '开启您的数字资产之旅' : 'Start Your Digital Asset Journey'}
-          </h2>
-          <p className="text-xl text-black/80 mb-8 max-w-2xl mx-auto">
-            {currentLang === 'zh' 
-              ? '加入全球千万用户，体验最安全、最专业的加密货币交易平台' 
-              : 'Join millions of global users and experience the safest, most professional cryptocurrency trading platform'
-            }
-          </p>
-          <button 
-            onClick={() => router.push('/wallet')}
-            className="px-10 py-4 bg-black text-white font-bold text-lg rounded-xl hover:bg-gray-900 transition-all transform hover:scale-105 inline-flex items-center"
-          >
-            {t.startTrading}
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </button>
-        </div>
-      </section>
+        {/* CTA Section */}
+        <section className="py-20 lg:py-32 bg-gradient-to-r from-[#14C2A3]/10 to-[#10a085]/10">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-white text-3xl md:text-5xl font-bold mb-8">
+              {language === 'zh' ? '准备开始您的Web3之旅？' : 'Ready to Start Your Web3 Journey?'}
+            </h2>
+            <p className="text-gray-300 text-lg mb-12 max-w-2xl mx-auto">
+              {language === 'zh' ? '加入BeDAO全球加密货币交易平台，体验前所未有的交易体验' : 'Join BeDAO global cryptocurrency trading platform for an unprecedented trading experience'}
+            </p>
+            <button 
+              onClick={handleLogin}
+              className="bg-[#14C2A3] text-white px-12 py-4 rounded-full hover:bg-[#10a085] transition-colors font-semibold text-lg"
+            >
+              {language === 'zh' ? '立即开始' : 'Get Started Now'}
+            </button>
+          </div>
+        </section>
+      </main>
 
       {/* Footer */}
-      <footer className="py-16 px-4 lg:px-8 bg-gray-900 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-3 mb-4">
-                <Shield className="h-8 w-8 text-[#00D4AA]" />
-                <span className="text-2xl font-bold text-white">BeDAO</span>
-                <span className="px-2 py-1 text-xs bg-[#00D4AA] text-black rounded-full font-semibold">PRO</span>
-              </div>
-              <p className="text-gray-400 max-w-md leading-relaxed">
-                {currentLang === 'zh' 
-                  ? '全球领先的加密货币担保交易平台，为用户提供最安全、最专业的数字资产交易服务。' 
-                  : 'The world\'s leading cryptocurrency guaranteed trading platform, providing users with the safest and most professional digital asset trading services.'
-                }
+      <footer className="bg-gray-900 border-t border-gray-800 py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <img 
+                src="/logo.png" 
+                alt="BeDAO" 
+                width={120} 
+                height={30}
+                className="mb-4"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMwIiB2aWV3Qm94PSIwIDAgMTIwIDMwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0ZXh0IHg9IjEwIiB5PSIyMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzAwRDRBQSI+QmVEQU88L3RleHQ+PC9zdmc+"
+                }}
+              />
+              <p className="text-gray-400">
+                {language === 'zh' ? '全球领先的加密货币交易平台' : 'Leading global cryptocurrency trading platform'}
               </p>
             </div>
-            
             <div>
-              <h3 className="text-white font-bold mb-4">
-                {currentLang === 'zh' ? '产品服务' : 'Products'}
-              </h3>
+              <h4 className="text-white font-semibold mb-4">
+                {language === 'zh' ? '产品' : 'Products'}
+              </h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-[#00D4AA] transition-colors">
-                  {currentLang === 'zh' ? '现货交易' : 'Spot Trading'}
-                </a></li>
-                <li><a href="#" className="hover:text-[#00D4AA] transition-colors">
-                  {currentLang === 'zh' ? '担保交易' : 'Guaranteed Trading'}
-                </a></li>
-                <li><a href="#" className="hover:text-[#00D4AA] transition-colors">
-                  {currentLang === 'zh' ? '数字钱包' : 'Digital Wallet'}
-                </a></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">Wallet</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">SDK&API</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">Card</Link></li>
               </ul>
             </div>
-            
             <div>
-              <h3 className="text-white font-bold mb-4">
-                {currentLang === 'zh' ? '支持' : 'Support'}
-              </h3>
+              <h4 className="text-white font-semibold mb-4">
+                {language === 'zh' ? '资源' : 'Resources'}
+              </h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-[#00D4AA] transition-colors">
-                  {currentLang === 'zh' ? '帮助中心' : 'Help Center'}
-                </a></li>
-                <li><a href="#" className="hover:text-[#00D4AA] transition-colors">
-                  {currentLang === 'zh' ? '联系我们' : 'Contact Us'}
-                </a></li>
-                <li><a href="#" className="hover:text-[#00D4AA] transition-colors">
-                  {currentLang === 'zh' ? 'API文档' : 'API Docs'}
-                </a></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '白皮书' : 'White Paper'}</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '开发文档' : 'Documentation'}</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '新闻' : 'News'}</Link></li>
               </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">
+                {language === 'zh' ? '联系我们' : 'Contact'}
+              </h4>
+              <div className="flex space-x-4">
+                <a href="#" className="text-gray-400 hover:text-[#14C2A3]">
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                  </svg>
+                </a>
+                <a href="#" className="text-gray-400 hover:text-[#14C2A3]">
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
-          
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>{t.copyright}</p>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 BeDAO. {language === 'zh' ? '保留所有权利。' : 'All rights reserved.'}</p>
           </div>
         </div>
       </footer>

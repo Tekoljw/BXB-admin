@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Title -->
+    <title>BePay</title>
+
+    <!-- SEO meta tags -->
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/favicon.png" type="image/svg+xml" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/plugins.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="assets/funibox-sdk/FuniBox.min.css" />
+</head>
+
+
+<body>
+
+    <div id="app" class="wrapper d-flex flex-column justify-between">
+        <!-- Navbar -->
+        <nav style="opacity: 1;" class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="dark">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand" :href=INDEXURL+"index.html">
+                    <img class="logoImg" src="assets/images/logo.png" alt="" width="250" height="55" />
+                </a>
+
+                <!-- Navbar toggler button -->
+                <button @click="close" class="navbar-toggler" type="button">
+                    <div class="navbar-toggler-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+
+                <!-- Navbar content -->
+                <div v-cloak class=" navbar-collapse" v-show='navshow'>
+                    <div
+                        class="navbar-content-inner ms-lg-auto d-flex flex-column flex-lg-row align-lg-center gap-4 gap-lg-10 p-2 p-lg-0">
+                        <ul class="navbar-nav gap-lg-2 gap-xl-5">
+
+
+                            <li class="nav-item ">
+                                <a class="nav-link  " :href=INDEXURL+"index.html" i18n="wallet_NFT_1">
+                                    Wallet
+                                </a>
+                                <!-- <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="index.html">Home one</a></li>
+                                    <li><a class="dropdown-item" href="index-lite.html">Home one lite</a></li>
+                                    <li><a class="dropdown-item" href="index-2.html">Home two</a></li>
+                                    <li><a class="dropdown-item" href="index-2-lite.html">Home two lite</a></li>
+                                </ul> -->
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link active" :href=SDK i18n="wallet_NFT_2">SDK&API</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " :href=URL i18n="wallet_NFT_3">Card</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " :href="TOKEN" i18n="wallet_NFT_4">Tokenomic</a>
+                            </li>
+                            <!--    <li class="nav-item">
+                                <a class="nav-link" :href=INDEXURL+"Earn.html" i18n="wallet_NFT_5">Earn</a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link" :href=INDEXURL+"news.html" i18n="wallet_NFT_7">News</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false" i18n="wallet_NFT_8">
+                                    Documents
+                                </a>
+                                <ul class="dropdown-menu megamenu mt-3">
+                                    <li><a class="dropdown-item " style=" margin: 0 auto;cursor: pointer "
+                                            @click="openHrefWhitePaper" i18n="wallet_NFT_9">White
+                                            Paper</a>
+                                    </li>
+                                    <li><a class="dropdown-item " style="margin: 0 auto; " v-bind:href=lang=='zh'?'https://czapi.bepay.one':'https://enapi.bepay.one'
+                                            i18n="wallet_NFT_10">Development
+                                            DOCS
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <img width="24" class="btnShou txtBrightness" :src="guoQi[lang]" alt="" />
+                                </a>
+                                <ul class="dropdown-menu megamenu mt-3">
+                                    <li @click="changeLang('en')"><a class="dropdown-item btnShou"
+                                            style=" margin: 0 auto; "><img width="24" src="assets/images/icons/US.png"
+                                                alt="" style="margin-right: 10px;" />English</a>
+                                    </li>
+                                    <li @click="changeLang('zh')"><a class="dropdown-item btnShou"
+                                            style="margin: 0 auto;"><img width="24" src="assets/images/icons/CN.png"
+                                                alt="" style="margin-right: 10px;" />简体中文
+                                        </a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <!-- <div v-show="islogin=='' || islogin == 'undefined'" class="" @click="onlogin">
+                            <a class="btn btn-outline-primary-dark" i18n="wallet_NFT_11"
+                                style="min-width: 100px;">login</a>
+                        </div> -->
+                    </div>
+                </div>
+
+
+
+                <!-- {{balance}} -->
+                <div v-cloak v-show="islogin!= '' && islogin!= 'undefined'" class="walletSty walletSty2"
+                    style="width: 300px;  height: 40px; border-radius: 30px; background-color: #1E293B; padding: 0px 2px 0px 14px;">
+                    <div @click="goAccount" class="walletSty btnShou" style="width: 180px;">
+                        <div style="color: #ffffff; height: 40px; line-height: 40px; font-size: 16px; ">
+                            {{symbol}}
+                        </div>
+
+                        <div
+                            style="color: #ffffff; height: 40px; width: 80px; overflow: hidden; line-height: 40px; font-size: 16px; ">
+                            {{balance}}
+                        </div>
+
+                        <div style="border-radius: 100px; margin-top: 8px;">
+                            <img style="border-radius: 100px;" width="24" :src=img />
+                        </div>
+
+                        <div style="margin-top: 8px; border-radius: 100px;">
+                            <img width="24" src="assets/images/icons/jianTou.png" />
+                        </div>
+                    </div>
+                    <div @click="goHome" class="btnShou txtBrightness"
+                        style="width: 100px;height: 36px; line-height: 36px; text-align: center; font-size: 18px; border-radius: 30px; margin-top: 2px; background-color: #14C2A3; color: #ffffff; ">
+                        Wallet
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+
+        <main class="flex-grow-1">
+            <!-- Hero -->
+            <section class="hero-section style-1 overflow-hidden  py-10 py-lg-15" data-bs-theme="dark">
+                <div class="container">
+                    <div class="row justify-center apiPt">
+                        <div class="col-lg-9">
+                            <div class="text-center">
+                                <div class="position-relative z-1">
+                                    <p class="" data-aos="fade-up-sm" style="color: #14C2A3;" i18n="wallet_NFT_89">
+                                        The most convenient one-stop chain modification+hosting solution
+                                    </p>
+                                    <h1 class="text-white mb-8" data-aos="fade-up-sm" data-aos-delay="150">
+                                        <span i18n="wallet_NFT_90">A single SDK that encompasses all Web3.0 functions
+                                        </span> <br />
+                                        <span class="text-gradient-2 typed-animation phoneSmallText" data-strings='["The key to Web2.0 users","The Bridge to Web3.0 world"]' i18n=""></span>
+                                    </h1>
+                                </div>
+
+                                <div class="d-flex threeBtn z-1  px-2" data-aos="fade-up-sm" data-aos-delay="200"
+                                    style=" justify-content: space-between; margin: 0 auto;z-index: 999; position: relative;">
+                                    <div class="text-center  z-1" style="z-index: 999;">
+                                        <a @click="openHrefWhitePaper" target="_blank" class="btn btn-primary-dark btnShou txtBrightness"
+                                            style="color: #ffffff; width:150px; z-index: 999;" i18n="wallet_NFT_9">white
+                                            paper</a>
+                                    </div>
+                                    <div class="text-center  z-1" style="z-index: 999;">
+                                        <a v-bind:href=lang=='zh'?'https://czapi.bepay.one':'https://enapi.bepay.one'
+                                            class="btn btn-primary-dark  btnShou txtBrightness"
+                                            style="color: #ffffff; width:150px; z-index: 999;"
+                                            i18n="wallet_NFT_60">Development</a>
+                                    </div>
+                                </div>
+
+                                <div data-aos="fade-up-sm" data-aos-delay="300">
+                                    <div class="image-with-shape">
+                                        <img src="assets/images/shapes/blurry-shape-2.png" alt=""
+                                            class="shape animate-scale" />
+                                        <div class="mt-12  overflow-hidden position-relative z-1">
+                                            <img class="img-fluid d-inline-block"
+                                                style="border-radius:15px; border: 2px solid #14C2A3; "
+                                                src="https://scource-static.funibet.com/beingfi/images/bg/screen-1.png" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div data-aos="fade-up-sm" data-aos-delay="300">
+                                    <div class="image-with-shape">
+                                        <div
+                                            class="mt-12  border-primary-dark shadow-lg overflow-hidden position-relative z-1">
+                                            <img class="img-fluid "
+                                                src="assets/images/screens/screen-1.png"
+                                                style="border-radius:15px; border: 2px solid #14C2A3; " alt="" />
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Features -->
+            <section class="py-5 py-lg-15">
+                <div class="container">
+                    <div class="text-center mb-18">
+                        <h5 class="mb-0 " data-aos="fade-up-sm" data-aos-delay="50" style="color: #14C2A3;">
+                            <span i18n="wallet_NFT_92">●Integrated 20+decentralized wallets</span> &nbsp; <span
+                                i18n="wallet_NFT_93">●supporting
+                                100+cryptocurrencies</span> &nbsp;<span i18n="wallet_NFT_94">●50+NFTs</span>
+                            &nbsp;<span i18n="wallet_NFT_95">●100+fiat</span>
+                        </h5>
+                    </div>
+
+                    <div class="phoneShow">
+                        <img class="phoneWidth" src="assets/images/icons/wallet_1.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_2.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_3.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_4.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_5.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_6.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_7.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_8.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_9.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_10.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_11.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_12.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_13.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_14.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_15.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_16.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_17.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_18.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_19.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_20.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_21.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_22.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_23.png" alt="" />
+                        <img class="phoneWidth" src="assets/images/icons/wallet_24.png" alt="" />
+                    </div>
+
+
+                    <div class="text-center mb-18">
+                        <h2 class="mb-0 text-white" data-aos="fade-up-sm" data-aos-delay="50" i18n="wallet_NFT_96">
+                            BePay ensures that your assets are protected by industry-leading levels of security
+                        </h2>
+                    </div>
+
+                    <div class="row g-6 g-xl-14">
+                        <div class="col-lg-4" data-aos="fade-up-sm" data-aos-delay="200">
+                            <div class="d-flex flex-column gap-6 flex-lg-row">
+                                <div
+                                    class="icon w-14 h-14 flex-shrink-0 d-flex align-center justify-center rounded-3 p-2 border bg-gradient-3 text-primary-dark border-white border-opacity-10">
+                                    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 40 40">
+                                        <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2">
+                                            <path
+                                                d="M30.167 10c-1.833 4.855-3.167 8.188-4 10m0 0c-3.132 6.813-6.188 10-10 10-4 0-8-4-8-10s4-10 8-10c3.778 0 6.892 3.31 10 10Zm0 0c.853 1.837 2.187 5.17 4 10" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="content">
+                                    <h4 class="mb-4 text-white" i18n="wallet_NFT_22">2FA validation</h4>
+                                    <p i18n="wallet_NFT_23">
+                                        2FA (Two Factor Authentication) is a security measure that requires users to
+                                        provide two authentication elements, usually passwords and dynamic verification
+                                        codes, when logging in or performing sensitive operations. Added an additional
+                                        security layer to enhance account protection.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" data-aos="fade-up-sm" data-aos-delay="250">
+                            <div class="d-flex flex-column gap-6 flex-lg-row">
+                                <div
+                                    class="icon w-14 h-14 flex-shrink-0 d-flex align-center justify-center rounded-3 p-2 border bg-gradient-3 text-primary-dark border-white border-opacity-10">
+                                    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 40 40">
+                                        <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2">
+                                            <path d="M3.333 20 20 32.37 36.666 20" />
+                                            <path
+                                                d="M11.667 15 20 21.667 28.334 15m-10.001-5L20 11.333 21.666 10 20 8.666 18.333 10Z" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="content">
+                                    <h4 class="mb-4 text-white" i18n="wallet_NFT_24">Separation of hot and cold wallets
+                                    </h4>
+                                    <p i18n="wallet_NFT_25">
+                                        Cold and hot wallet separation is a cryptocurrency storage strategy that stores
+                                        most of the funds in offline cold storage devices (cold wallets) and only
+                                        retains a small amount of funds for daily transactions on online hot storage
+                                        devices (hot wallets). Improved the security of funds and prevented network
+                                        attacks and hacker intrusions.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" data-aos="fade-up-sm" data-aos-delay="300">
+                            <div class="d-flex flex-column gap-6 flex-lg-row">
+                                <div
+                                    class="icon w-14 h-14 flex-shrink-0 d-flex align-center justify-center rounded-3 p-2 border bg-gradient-3 text-primary-dark border-white border-opacity-10">
+                                    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 40 40">
+                                        <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2">
+                                            <path
+                                                d="M10 29.334 6.667 27.5v-4.166m0-6.668V12.5L10 10.666m6.667-3.833L20 5l3.334 1.833M30 10.666l3.333 1.834v4.166m0 6.668V27.5L30 29.367m-6.666 3.799L20 35l-3.333-1.834M20 20l3.333-1.834M30 14.333l3.333-1.833M20 20v4.167m0 6.667V35m0-15-3.333-1.867M10 14.333 6.667 12.5" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="content">
+                                    <h4 class="mb-4 text-white" i18n="wallet_NFT_26">MPC encryption technology</h4>
+                                    <p i18n="wallet_NFT_28">
+                                        MPC (Multi-Party Computation) is a cryptographic technique that securely
+                                        processes and stores sensitive data, ensuring privacy and security. It enables
+                                        multiple participants to perform computations without disclosing individual
+                                        inputs. In the realm of cryptocurrencies, MPC technology enhances security and
+                                        protection by facilitating key management and transaction signing.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- Features -->
+            <section class="py-10 py-lg-15 @extraClassList" id="Features1">
+                <div class="container">
+                    <div class="row g-6 gx-lg-14 gx-xl-20 align-center">
+                        <div class="col-lg-6" data-aos="fade-up-sm" data-aos-delay="150">
+                            <div class="content">
+                                <p class="" style="color: #14C2A3;" i18n="wallet_NFT_29">Features 1</p>
+                                <h1 class="text-white mb-8" i18n="wallet_NFT_98">
+                                    Manage Your Assets with Ease
+                                </h1>
+                                <ul class="list-unstyled list-check mb-8">
+                                    <li>
+                                        <span i18n="wallet_NFT_99">● BePay's embedded wallet provides access to over
+                                            15 Web3.0 wallets,
+                                            making integration with decentralized wallets easy.</span>
+                                    </li>
+                                    <li>
+                                        <span i18n="wallet_NFT_100">● BePay's embedded wallet offers in-app access to
+                                            CEX and Swap
+                                            functions,
+                                            supports over 100 mainstream tokens, and ensures the security of users'
+                                            assets with both hot and cold wallets</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-6" data-aos="fade-up-sm" data-aos-delay="250">
+                            <div class="feature-img">
+                                <img src="https://scource-static.funibet.com/beingfi/images/bg/za.png" alt="" class="img-fluid" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-6 gx-lg-14 gx-xl-20 align-center mt-10 flex-row-reverse">
+                        <div class="col-lg-6 col-xl-6" data-aos="fade-up-sm" data-aos-delay="150">
+                            <div class="content">
+                                <p class="" style="color: #14C2A3;" i18n="wallet_NFT_38">Features 2</p>
+                                <h1 class="text-white mb-8" i18n="wallet_NFT_101">
+                                    Functions for Gaming Apps
+                                </h1>
+                                <ul class="list-unstyled list-check mb-8">
+                                    <li>
+                                        <span i18n="wallet_NFT_102">● BePay's SDK includes Web3.0 DApp functions, NFT
+                                            trading market, login
+                                            integration, and NFT blind box/cultivation systems.</span>
+                                    </li>
+                                    <li>
+                                        <span i18n="wallet_NFT_103">● Developers can easily integrate these features
+                                            into their gaming apps,
+                                            creating a more engaging and innovative user experience for players.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-6" data-aos="fade-up-sm" data-aos-delay="250">
+                            <div class="feature-img">
+                                <img src="https://scource-static.funibet.com/beingfi/images/bg/zb.png" alt="" class="img-fluid" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-6 gx-lg-14 gx-xl-20 align-center mt-10">
+                        <div class="col-lg-6" data-aos="fade-up-sm" data-aos-delay="150">
+                            <div class="content">
+                                <p class="" style="color: #14C2A3;" i18n="wallet_NFT_41">Features 3</p>
+                                <h1 class="text-white mb-8" i18n="wallet_NFT_104">
+                                    Multiple Payment Options with BePay
+                                </h1>
+                                <ul class="list-unstyled list-check mb-8">
+                                    <li>
+                                        <span i18n="wallet_NFT_105">● BePay supports deposit and withdrawal of over 50
+                                            fiat
+                                            currencies,including French currency.</span>
+                                    </li>
+                                    <li>
+                                        <span i18n="wallet_NFT_106">● BePay offers seamless payment services with over
+                                            30 third-party
+                                            payment
+                                            APIs,secure payment options, and the ability to exchange fiat currencies
+                                            into stable cryptocurrencies.</span>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6" data-aos="fade-up-sm" data-aos-delay="250">
+                            <div class="feature-img">
+                                <img src="https://scource-static.funibet.com/beingfi/images/bg/zc.png" alt="" class="img-fluid" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Use cases -->
+            <section class="bg-striped bg-striped-sm bg-striped-bottom bg-dark-blue-4 py-20">
+                <div class="container">
+                    <div class="row justify-center mb-18">
+                        <div class="col-lg-9">
+                            <div class="text-center">
+                                <h1 class="text-white mb-0" data-aos="fade-up-sm" data-aos-delay="100"
+                                    i18n="wallet_NFT_97">
+                                    Product Framework Design
+                                </h1>
+                            </div>
+
+                            <section class="hero-section style-1 overflow-hidden  pb-10 mt-10" data-bs-theme="dark"
+                                style="border-radius: 15px;">
+                                <div class="container ">
+                                    <div class="row justify-center  ">
+                                        <div class="">
+                                            <div class="text-center">
+                                                <div data-aos="fade-up-sm" data-aos-delay="300">
+                                                    <div class="image-with-shape">
+                                                        <div
+                                                            class="mt-12  border-primary-dark shadow-lg overflow-hidden position-relative z-1">
+                                                            <img class="img-fluid d-inline-block frameworkBorder"
+                                                                src="https://scource-static.funibet.com/beingfi/images/bg/zdz.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+            <section class="pt-10 pt-lg-15 pb-20 pb-lg-30" id="Function">
+                <div class="container">
+                    <div class="row justify-center mb-18">
+                        <div class="col-lg-9">
+                            <div class="text-center">
+                                <h1 class="text-white mb-0" data-aos="fade-up-sm" data-aos-delay="100"
+                                    i18n="wallet_NFT_50">
+                                    Powerful Inapp built-in features
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row justify-center row-cols-1 row-cols-md-2 row-cols-lg-3 gx-8 gy-14">
+
+                        <div class="col justify-content" data-aos="fade-up-sm" data-aos-delay="50">
+                            <div class="d-flex flex-column justify-between gap-6 h-full text-center">
+                                <div class="content flex-grow-1 btnBrightness"
+                                    style="width: 350px; height: 343px;background-image: url(assets/images/illustrations/bg1.png);background-repeat: no-repeat;">
+                                    <h2 style="position: fixed; bottom: 5%; left: 0;right: 0;margin: 0px; color: #ABADC1;"
+                                        class=" mb-4" i18n="wallet_NFT_51">
+                                        Exchange</h2>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col justify-content" data-aos="fade-up-sm" data-aos-delay="50">
+                            <div class="d-flex flex-column gap-6 h-full text-center justify-content1 ">
+                                <div class=" content flex-grow-1 btnBrightness"
+                                    style=" width: 350px; height: 343px;background-image: url(assets/images/illustrations/bg2.png);background-repeat: no-repeat;">
+                                    <h3 style="position: fixed; bottom: 5%; left: 0;right: 0; margin: 0px; color: #ABADC1;"
+                                        class=" mb-4" i18n="wallet_NFT_52">
+                                        NFT Marketplace</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col justify-content" data-aos="fade-up-sm" data-aos-delay="50">
+                            <div class="d-flex flex-column justify-between gap-6 h-full text-center">
+                                <div class="content flex-grow-1 btnBrightness"
+                                    style="width: 350px; height: 343px;background-image: url(assets/images/illustrations/bg3.png);background-repeat: no-repeat;">
+                                    <h2 style="position: fixed; bottom: 5%; left: 0;right: 0;margin: 0px; color: #ABADC1;"
+                                        class=" mb-4" i18n="wallet_NFT_53">
+                                        OTC</h2>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col justify-content" data-aos="fade-up-sm" data-aos-delay="50">
+                            <div class="d-flex flex-column justify-between gap-6 h-full text-center">
+                                <div class="content flex-grow-1 btnBrightness"
+                                    style="width: 350px; height: 343px;background-image: url(assets/images/illustrations/bg4.png);background-repeat: no-repeat;">
+                                    <h2 style="position: fixed; bottom: 5%; left: 0;right: 0;margin: 0px; color: #ABADC1;"
+                                        class=" mb-4" i18n="wallet_NFT_54">
+                                        Fiat Payment</h2>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col justify-content" data-aos="fade-up-sm" data-aos-delay="50">
+                            <div class="d-flex flex-column gap-6 h-full text-center justify-content1 ">
+                                <div class="content flex-grow-1 btnBrightness "
+                                    style=" width: 350px; height: 343px;background-image: url(assets/images/illustrations/bg5.png);background-repeat: no-repeat;">
+                                    <h3 style="position: fixed; bottom: 5%; left: 0;right: 0; margin: 0px; color: #ABADC1;"
+                                        class=" mb-4" i18n="wallet_NFT_55">
+                                        DeFi Borrow+Pool</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col justify-content" data-aos="fade-up-sm" data-aos-delay="50">
+                            <div class="d-flex flex-column justify-between gap-6 h-full text-center">
+                                <div class="content flex-grow-1 btnBrightness"
+                                    style="width: 350px; height: 343px;background-image: url(assets/images/illustrations/bg6.png);background-repeat: no-repeat;">
+                                    <h2 style="position: fixed; bottom: 5%; left: 0;right: 0;margin: 0px; color: #ABADC1;"
+                                        class=" mb-4" i18n="wallet_NFT_55">
+                                        Chat+AI</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+            <section class="" id="Pricing">
+                <div class="container">
+                    <div class="row justify-center mb-14">
+                        <div class="col-lg-10">
+                            <div class="text-center">
+                                <p data-aos="fade-up-sm" data-aos-delay="50" style="color: #14C2A3;"
+                                    i18n="wallet_NFT_57">
+                                    Assets
+                                </p>
+                                <h2 class="text-white mb-5" data-aos="fade-up-sm" data-aos-delay="100"
+                                    i18n="wallet_NFT_58">
+                                    50+blockchain networks, 800+cryptocurrencies, 50+NFTs, 100+fiat currencies
+                                </h2>
+                                <p class="mb-0" data-aos="fade-up-sm" data-aos-delay="150" i18n="wallet_NFT_59">
+                                    Continuously increasing...
+                                </p>
+                            </div>
+
+                            <div class="text-center mt-24" data-aos="fade-up-sm" data-aos-delay="200">
+                                <div class="switch-wrapper border d-inline-flex rounded p-2 bg-dark-blue-4">
+
+                                    <label class="txtBrightness" id="CryptoBtn" onclick="fiatClick('Crypto')"
+                                        style="color: #14C2A3;" i18n="wallet_NFT_84">Crypto</label>
+                                    <label class="txtBrightness" id="NFTBtn" onclick="fiatClick('NFT')"
+                                        style="color: #A7AABC;" i18n="wallet_NFT_3">NFT</label>
+                                    <label class="txtBrightness" id="FiatBtn" onclick="fiatClick('Fiat')"
+                                        style="color: #A7AABC;" i18n="wallet_NFT_85">Fiat</label>
+
+                                    <span class="highliteer"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <section class="bg-dark-blue-4  py-lg-10">
+                <div class="webTop">
+
+                    <div id="Crypto1" style="width: 100%;" class="webHead">
+                        <img class="web3" src="assets/images/web3/1.png" alt="" />
+                        <img class="web3" src="assets/images/web3/2.png" alt="" />
+                        <img class="web3" src="assets/images/web3/3.png" alt="" />
+                        <img class="web3" src="assets/images/web3/4.png" alt="" />
+                        <img class="web3" src="assets/images/web3/5.png" alt="" />
+                        <img class="web3" src="assets/images/web3/6.png" alt="" />
+                        <img class="web3" src="assets/images/web3/7.png" alt="" />
+                        <img class="web3" src="assets/images/web3/8.png" alt="" />
+                        <img class="web3" src="assets/images/web3/9.png" alt="" />
+                        <img class="web3" src="assets/images/web3/10.png" alt="" />
+                        <img class="web3" src="assets/images/web3/11.png" alt="" />
+                        <img class="web3" src="assets/images/web3/12.png" alt="" />
+                        <img class="web3" src="assets/images/web3/14.png" alt="" />
+                        <img class="web3" src="assets/images/web3/15.png" alt="" />
+                        <img class="web3" src="assets/images/web3/17.png" alt="" />
+                        <img class="web3" src="assets/images/web3/18.png" alt="" />
+                        <img class="web3" src="assets/images/web3/20.png" alt="" />
+                        <img class="web3" src="assets/images/web3/21.png" alt="" />
+                        <img class="web3" src="assets/images/web3/23.png" alt="" />
+                        <img class="web3" src="assets/images/web3/22.png" alt="" />
+                        <img class="web3" src="assets/images/web3/16.png" alt="" />
+                        <img class="web3" src="assets/images/web3/13.png" alt="" />
+                        <img class="web3" src="assets/images/web3/19.png" alt="" />
+                        <img class="web3" src="assets/images/web3/24.png" alt="" />
+                    </div>
+
+
+                    <div id="NFT2" style="width: 100%; display: none;" class="webHead">
+                        <img class="web3" src="assets/images/web4/1.png" alt="" />
+                        <img class="web3" src="assets/images/web4/2.png" alt="" />
+                        <img class="web3" src="assets/images/web4/3.png" alt="" />
+                        <img class="web3" src="assets/images/web4/4.png" alt="" />
+                        <img class="web3" src="assets/images/web4/5.png" alt="" />
+                        <img class="web3" src="assets/images/web4/6.png" alt="" />
+                        <img class="web3" src="assets/images/web4/7.png" alt="" />
+                        <img class="web3" src="assets/images/web4/8.png" alt="" />
+                        <img class="web3" src="assets/images/web4/9.png" alt="" />
+                        <img class="web3" src="assets/images/web4/10.png" alt="" />
+                        <img class="web3" src="assets/images/web4/11.png" alt="" />
+                        <img class="web3" src="assets/images/web4/12.png" alt="" />
+                        <img class="web3" src="assets/images/web4/14.png" alt="" />
+                        <img class="web3" src="assets/images/web4/15.png" alt="" />
+                        <img class="web3" src="assets/images/web4/17.png" alt="" />
+                        <img class="web3" src="assets/images/web4/18.png" alt="" />
+                        <img class="web3" src="assets/images/web4/20.png" alt="" />
+                        <img class="web3" src="assets/images/web4/21.png" alt="" />
+                        <img class="web3" src="assets/images/web4/23.png" alt="" />
+                        <img class="web3" src="assets/images/web4/22.png" alt="" />
+                        <img class="web3" src="assets/images/web4/16.png" alt="" />
+                        <img class="web3" src="assets/images/web4/13.png" alt="" />
+                        <img class="web3" src="assets/images/web4/19.png" alt="" />
+                        <img class="web3" src="assets/images/web4/24.png" alt="" />
+                    </div>
+
+                    <div id="Fiat3" style="width: 100%;display: none;" class="webHead">
+                        <img class="web3" src="assets/images/web5/1.png" alt="" />
+                        <img class="web3" src="assets/images/web5/2.png" alt="" />
+                        <img class="web3" src="assets/images/web5/3.png" alt="" />
+                        <img class="web3" src="assets/images/web5/4.png" alt="" />
+                        <img class="web3" src="assets/images/web5/5.png" alt="" />
+                        <img class="web3" src="assets/images/web5/6.png" alt="" />
+                        <img class="web3" src="assets/images/web5/7.png" alt="" />
+                        <img class="web3" src="assets/images/web5/8.png" alt="" />
+                        <img class="web3" src="assets/images/web5/9.png" alt="" />
+                        <img class="web3" src="assets/images/web5/10.png" alt="" />
+                        <img class="web3" src="assets/images/web5/11.png" alt="" />
+                        <img class="web3" src="assets/images/web5/12.png" alt="" />
+                        <img class="web3" src="assets/images/web5/14.png" alt="" />
+                        <img class="web3" src="assets/images/web5/15.png" alt="" />
+                        <img class="web3" src="assets/images/web5/17.png" alt="" />
+                        <img class="web3" src="assets/images/web5/18.png" alt="" />
+                        <img class="web3" src="assets/images/web5/20.png" alt="" />
+                        <img class="web3" src="assets/images/web5/21.png" alt="" />
+                        <img class="web3" src="assets/images/web5/23.png" alt="" />
+                        <img class="web3" src="assets/images/web5/22.png" alt="" />
+                        <img class="web3" src="assets/images/web5/16.png" alt="" />
+                        <img class="web3" src="assets/images/web5/13.png" alt="" />
+                        <img class="web3" src="assets/images/web5/19.png" alt="" />
+                        <img class="web3" src="assets/images/web5/24.png" alt="" />
+                    </div>
+
+                </div>
+            </section>
+
+
+
+
+
+
+
+
+            <!-- FAQ -->
+            <section class="py-10 py-lg-15" id="FAQ">
+                <div class="container">
+                    <div class="row justify-center mb-18">
+                        <div class="col-lg-10">
+                            <div class="text-center">
+                                <h1 class="mb-0 text-white" data-aos="fade-up-sm" data-aos-delay="50">
+                                    <span i18n="wallet_NFT_61"> Questions About our BePay?</span> <br
+                                        class="d-none d-md-block" />
+                                    <span i18n="wallet_NFT_62"> We have Answers!</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row justify-center">
+                        <div class="col-lg-8" data-aos="fade-up-sm" data-aos-delay="100">
+                            <div class="accordion accordion-flush d-flex flex-column gap-6" id="faqAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#faq-collapseOne" aria-expanded="false"
+                                            aria-controls="faq-collapseOne" i18n="wallet_NFT_63">
+                                            <span class="icon"></span>
+                                            Centralized Wallet Basic Functions
+                                        </button>
+                                    </h2>
+                                    <div id="faq-collapseOne" class="accordion-collapse collapse show"
+                                        data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body" i18n="wallet_NFT_64">
+                                            It supports more than 100+ mainstream Crypto and 50+ mainstream NFT deposits
+                                            and withdrawals, and adopts hot and cold wallet separation technology.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#faq-collapseTwo"
+                                            aria-expanded="false" aria-controls="faq-collapseTwo" i18n="wallet_NFT_65">
+                                            <span class="icon"></span>
+                                            Connect fiat currency and Crypto
+                                        </button>
+                                    </h2>
+                                    <div id="faq-collapseTwo" class="accordion-collapse collapse"
+                                        data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body" i18n="wallet_NFT_66">
+                                            Integrate Top20 fiat currency purchase channels, 50+ fiat currency payment
+                                            channels, built-in OTC trading section, covering 100+ mainstream fiat
+                                            currencies around the world
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#faq-collapseThree"
+                                            aria-expanded="false" aria-controls="faq-collapseThree"
+                                            i18n="wallet_NFT_67">
+                                            <span class="icon"></span>
+                                            Integrate decentralized wallet
+                                        </button>
+                                    </h2>
+                                    <div id="faq-collapseThree" class="accordion-collapse collapse"
+                                        data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body" i18n="wallet_NFT_68">
+                                            Integrating 15+ decentralized wallets, users can choose either a centralized
+                                            wallet or a decentralized wallet.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#faq-collapseFour"
+                                            aria-expanded="false" aria-controls="faq-collapseFour" i18n="wallet_NFT_69">
+                                            <span class="icon"></span>
+                                            Built-in Web3.0 function library
+                                        </button>
+                                    </h2>
+                                    <div id="faq-collapseFour" class="accordion-collapse collapse"
+                                        data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body" i18n="wallet_NFT_70">
+                                            Coin issuance + Swap + DeFi construction + NFT trading market + NFT issuance
+                                            + lending model + wealth management module + mining template
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- CTA -->
+            <section class="cta-section py-10 py-lg-15" data-aos="fade-up-sm" data-aos-offset="150">
+                <div class="container">
+                    <div class="rounded-5 border position-relative z-1 bg-dark-blue-4">
+                        <div class="animate-scale position-absolute w-full h-full z-n1">
+                            <img src="assets/images/shapes/blurry-shape-4.svg" alt="" class="bg-shape img-fluid" />
+                        </div>
+                        <div class="row justify-center">
+                            <div class="col-lg-10">
+                                <div class="text-center pt-6 px-6 pt-md-10 px-md-10 pt-lg-18 px-lg-18">
+                                    <h2 class="mb-6 text-white" i18n="wallet_NFT_107">
+                                        The world's first solution that is compatible with both managed and unmanaged
+                                        wallets
+                                    </h2>
+                                    <a @click="goHome" class="btn btn-primary-dark" i18n="wallet_NFT_72">Get Started
+                                        Free</a>
+                                    <div class="cta-image-container mt-10">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 34 90"
+                                            class="text-primary-dark arrow-shape">
+                                            <path fill="currentColor"
+                                                d="M3.724 2.303c8.095 4.54 13.968 13.648 16.408 22.434 2.336 8.415 2.426 20.276-5.705 25.79-2.961 2.01-7.092 2.24-8.781-1.444-1.571-3.422.29-7.096 3.683-8.452 9.162-3.663 16.334 8.02 18.234 15.324a30.563 30.563 0 0 1 .279 14.195c-.952 4.334-2.866 9.283-6.298 12.254-.494.427-1.3-.29-.971-.84 1.77-2.928 3.677-5.571 4.79-8.851 1.155-3.405 1.62-7.048 1.44-10.626-.358-7.103-3.568-15.745-10.125-19.354-3.476-1.912-10.316-1.353-10.055 3.973.107 2.158 1.647 4.035 3.933 3.81 2.086-.209 4.001-1.766 5.333-3.279 5.427-6.16 4.857-15.89 2.67-23.215a39.21 39.21 0 0 0-5.682-11.577c-2.69-3.76-6.017-6.61-9.592-9.472-.35-.277.039-.896.44-.67Z" />
+                                            <path fill="currentColor"
+                                                d="M1.562.977c9.931 2.79 17.058 11.508 19.312 21.4 1.085 4.762 1.187 9.7.548 14.54-.653 4.937-1.854 10.549-4.949 14.589-2.156 2.82-7.305 5.961-10.266 2.388-2.608-3.142-2.18-9.094.45-12.093 2.945-3.356 8.048-2.969 11.491-.718 4.112 2.688 6.675 7.596 8.265 12.12 3.48 9.905 2.395 21.33-3.11 30.327-.527.858-1.947.203-1.423-.676 3.935-6.565 5.559-14.253 4.688-21.84-.443-3.864-1.552-7.677-3.306-11.147-2.011-3.973-5.078-8.396-9.854-8.994-5.273-.66-7.99 4.089-7.3 8.82.403 2.76 1.938 4.99 5.042 4.079 2.519-.74 4.35-3.051 5.51-5.296 3.708-7.194 4.563-16.802 3.066-24.658C17.848 13.969 11.217 4.92 1.373 1.995.736 1.812.917.797 1.563.977Z" />
+                                            <path fill="currentColor"
+                                                d="M21.218 73.052c.375 2.062.446 4.204.634 6.29.088.987.18 1.975.266 2.964.04.457-.025 2.873.383 3.085.21.11 2.177-1.456 2.452-1.64l2.452-1.641c1.595-1.065 3.329-2.678 5.205-3.148.671-.169 1.174.542.746 1.106-.792 1.05-1.99 1.644-3.08 2.36-1.23.812-2.464 1.62-3.695 2.432-1.142.748-3.43 3.037-4.974 2.3-1.476-.7-.955-3.793-1.042-5.105-.198-2.945-.602-5.957-.531-8.906a.595.595 0 0 1 1.184-.097Z" />
+                                            <path fill="currentColor"
+                                                d="M21.773 73.169c-.032 2.254-.679 4.55-.972 6.789-.338 2.597-.601 5.224-.564 7.844-.465-.225-.933-.454-1.398-.68a76.772 76.772 0 0 0 6.002-4.227c1.876-1.465 3.568-3.521 5.632-4.678.6-.336 1.581.26 1.137.983-1.181 1.924-3.415 3.456-5.165 4.844a64.808 64.808 0 0 1-6.607 4.574c-.694.421-1.465-.14-1.385-.91.27-2.565.462-5.128.849-7.683.348-2.297.616-4.895 1.59-7.019.19-.398.887-.308.88.163Z" />
+                                            <path fill="currentColor"
+                                                d="M22.85 71.546c-.873 5.764-1.778 11.525-2.588 17.298-.462-.304-.922-.605-1.384-.91 2.439-1.254 4.864-2.527 7.207-3.954 2.158-1.317 4.212-3.127 6.536-4.109.733-.31 1.331.688.841 1.25-1.713 1.972-4.396 3.318-6.619 4.634-2.326 1.378-4.712 2.663-7.172 3.78-.633.287-1.294-.395-1.174-1.015 1.098-5.725 2.104-11.464 3.137-17.2.137-.79 1.337-.563 1.215.226Z" />
+                                        </svg>
+                                        <div class="cta-img rounded-top-4" style="background: none;">
+                                            <img class="imgWidth" src="assets/images/screens/screen-11.png"
+                                                style="border-radius:15px; border: 2px solid #14C2A3;" alt=""
+                                                class="img-fluid w-full h-full object-cover" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer bg-color-blur pt-10 pt-lg-15">
+            <div class="container">
+                <div class="row g-10">
+                    <div class="col-lg-9 col-xl-8 order-lg-2">
+                        <div class="row g-6">
+                            <div class="col-md-4 col-lg-4 newwarp">
+                                <div class="footer-widget text-center text-md-start">
+                                    <h6 class="text-white mb-2">BePAY</h6>
+
+                                    <ul class="link-list list-unstyled mb-0">
+                                        <li>
+                                            <a :href=INDEXURL+"index.html" i18n="wallet_NFT_1">Wallet</a>
+                                        </li>
+                                        <li>
+                                            <a :href=SDK i18n="wallet_NFT_2">SDK&API</a>
+                                        </li>
+                                        <li>
+                                            <a :href=URL i18n="wallet_NFT_3">Card</a>
+                                        </li>
+                                        <li>
+                                            <a :href="TOKEN" i18n="wallet_NFT_4">Tokenomic</a>
+                                        </li>
+                                        <li>
+                                            <a :href=INDEXURL+"Earn.html" i18n="wallet_NFT_5">Earn</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-lg-4 newwarp">
+                                <div class="footer-widget text-center text-md-start">
+                                    <h6 class="text-white mb-2" i18n="wallet_NFT_74">Guide</h6>
+                                    <ul class="link-list list-unstyled mb-0">
+                                        <li>
+                                            <a href="#" i18n="wallet_NFT_75">Banner</a>
+                                        </li>
+                                        <li>
+                                            <a href="#Features1" i18n="wallet_NFT_76">Features</a>
+                                        </li>
+                                        <li>
+                                            <a href="#Function" i18n="wallet_NFT_77">Function</a>
+                                        </li>
+                                        <li>
+                                            <a href="#Pricing" i18n="wallet_NFT_78">Asset</a>
+                                        </li>
+                                        <li>
+                                            <a href="#FAQ" i18n="wallet_NFT_79">FAQ</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-lg-4">
+                                <div class="footer-widget text-center text-md-start">
+                                    <h6 class="text-white mb-4" i18n="wallet_NFT_80">News & Update</h6>
+                                    <form action="#">
+                                        <div class="input-group">
+                                            <input type="email" class="form-control" placeholder="Enter your email" />
+                                            <a :href=INDEXURL+"news.html">
+                                                <button class="btn btn-primary-dark px-4" type="button">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" width="24" height="24">
+                                                        <path stroke="currentColor" stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="1.5"
+                                                            d="m4.031 8.917 15.477-4.334a.5.5 0 0 1 .616.617l-4.333 15.476a.5.5 0 0 1-.94.067l-3.248-7.382a.5.5 0 0 0-.256-.257L3.965 9.856a.5.5 0 0 1 .066-.94v0Z" />
+                                                    </svg>
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </form>
+                                    <ul  class="list-unstyled d-flex flex-wrap align-center justify-center justify-md-start gap-3 social-list mb-0 mt-5">
+                                        <li>
+                                            <a @click="openHrefTG" style="cursor:pointer">
+                                                <svg data-v-7b01d8bb="" stroke-width="0" viewBox="0 0 24 24" height="32"
+                                                    width="32" xmlns="http://www.w3.org/2000/svg">
+                                                    <path data-v-7b01d8bb="" fill-opacity=".7" fill="white"
+                                                        fill-rule="evenodd"
+                                                        d="M24 12c0 6.627-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0s12 5.373 12 12zM12.43 8.859c-1.167.485-3.5 1.49-6.998 3.014-.568.226-.866.447-.893.663-.046.366.412.51 1.034.705.085.027.173.054.263.084.613.199 1.437.432 1.865.441.389.008.823-.152 1.302-.48 3.268-2.207 4.955-3.322 5.061-3.346.075-.017.179-.038.249.024s.063.18.056.212c-.046.193-1.84 1.862-2.77 2.726-.29.269-.495.46-.537.504-.094.097-.19.19-.282.279-.57.548-.996.96.024 1.632.49.323.882.59 1.273.856.427.291.853.581 1.405.943.14.092.274.187.405.28.497.355.944.673 1.496.623.32-.03.652-.331.82-1.23.397-2.126 1.179-6.73 1.36-8.628a2.111 2.111 0 00-.02-.472.506.506 0 00-.172-.325c-.143-.117-.365-.142-.465-.14-.451.008-1.143.249-4.476 1.635z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a :href=twitter>
+                                                <svg data-v-7b01d8bb="" stroke-width="0" viewBox="0 0 24 24" height="32"
+                                                    width="32" xmlns="http://www.w3.org/2000/svg">
+                                                    <path data-v-7b01d8bb="" fill-opacity=".7" fill="white"
+                                                        fill-rule="evenodd"
+                                                        d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12zm5.974-13.911c0 4.065-3.096 8.755-8.755 8.755A8.73 8.73 0 014.5 17.46a6.169 6.169 0 004.558-1.273 3.083 3.083 0 01-2.874-2.138c.461.089.936.07 1.389-.053a3.076 3.076 0 01-2.47-3.018v-.038a3.08 3.08 0 001.395.384 3.08 3.08 0 01-.952-4.107 8.74 8.74 0 006.341 3.213 3.081 3.081 0 015.246-2.806 6.186 6.186 0 001.954-.746 3.094 3.094 0 01-1.353 1.701 6.068 6.068 0 001.766-.483 6.25 6.25 0 01-1.535 1.593c.006.132.009.267.009.399z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a :href=discord style="cursor:pointer">
+                                                <img style="width: 20px; height: 20px;"
+                                                    src="assets/images/brands/3.png" />
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a :href=gitHub>
+                                                <img style="width: 20px; height: 20px;"
+                                                src="assets/images/brands/5.png" />
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a :href=medium>
+                                                <svg data-v-7b01d8bb="" stroke-width="0" viewBox="0 0 24 24" height="32"
+                                                    width="32" xmlns="http://www.w3.org/2000/svg">
+                                                    <path data-v-7b01d8bb="" fill-opacity=".7" fill="white"
+                                                        fill-rule="evenodd"
+                                                        d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12zm.96-12.108c0 2.357-1.893 4.268-4.23 4.268-2.336 0-4.23-1.911-4.23-4.268 0-2.356 1.894-4.267 4.23-4.267 2.337 0 4.23 1.91 4.23 4.267zm4.642 0c0 2.219-.947 4.018-2.116 4.018-1.168 0-2.115-1.8-2.115-4.018s.947-4.017 2.115-4.017c1.169 0 2.116 1.798 2.116 4.017zm1.898 0c0 1.987-.333 3.6-.744 3.6-.41 0-.744-1.612-.744-3.6 0-1.987.333-3.599.744-3.599.41 0 .744 1.612.744 3.6z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a @click="openHrefDocs" style="cursor:pointer">
+                                                <svg data-v-7b01d8bb="" stroke-width="0" viewBox="0 0 24 24" height="32"
+                                                    width="32" xmlns="http://www.w3.org/2000/svg">
+                                                    <path data-v-7b01d8bb="" fill-opacity=".7" fill="white"
+                                                        fill-rule="evenodd"
+                                                        d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12zm-3.667-5.666h8A1.333 1.333 0 0017.667 17V9.667l-.002-.013V9.65a.068.068 0 01-.005-.02.65.65 0 00-.033-.171l-.006-.02a.656.656 0 00-.149-.24l-4-3.998a.658.658 0 00-.195-.134.284.284 0 00-.035-.028H13.214a.677.677 0 00-.173-.034.1.1 0 01-.019-.004h-.004A.07.07 0 0013 5H8.333C7.597 5 7 5.598 7 6.334V17c0 .736.597 1.333 1.333 1.333zM13 9.667V6.334l3.333 3.333H13z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 order-lg-1 me-auto">
+                        <div class="footer-widget text-center text-lg-start">
+                            <a href="">
+                                <img src="assets/images/logo.png" alt="" class="img-fluid" width="135" />
+                            </a>
+                            <p class="fs-sm mb-0 mt-4" i18n="wallet_NFT_73">
+                                This is a versatile wallet that combines centralized and decentralized features in
+                                one app. It offers free and comprehensive encryption capabilities, providing users with
+                                a convenient, fast, and secure journey into encryption while bridging the gap between
+                                Web 2.0 and Web 3.0.
+                            </p>
+                            <div class="flex paiZhaoSty mt-6">
+                                <a target="_blank" href="https://static-scource.funibet.com/licensePlate/dpz1.png"><img
+                                        src="assets/images/bg/pz1.png" width="30" /></a>
+                                <a target="_blank" href="https://static-scource.funibet.com/licensePlate/dpz2.png"><img
+                                        src="assets/images/bg/pz2.png" width="30" /></a>
+                                <a target="_blank" href="https://static-scource.funibet.com/licensePlate/dpz3.png"><img
+                                        src="assets/images/bg/pz3.png" width="30" /></a>
+                                <a target="_blank" href="https://static-scource.funibet.com/licensePlate/dpz4.png"><img
+                                        src="assets/images/bg/pz4.png" width="30" /></a>
+                                <a target="_blank" href="https://static-scource.funibet.com/licensePlate/dpz5.png"><img
+                                        src="assets/images/bg/pz5.png" width="30" /></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center py-6 mt-8">
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <!-- JS -->
+    <script src="assets/js/vue.min.js"></script>
+    <script src="assets/funibox-sdk/FuniBox.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/plugins.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/digitalrain.js"></script>
+    <script type="text/javascript" src="assets/js/jq.js"></script>
+    <script src="assets/js/jq-i18n.js"></script>
+
+
+
+    <script type="text/javascript" charset="UTF-8">
+        function fiatClick(label) {
+            if (label === 'Crypto') {
+                $('#Crypto1').fadeIn()
+                $('#NFT2').hide()
+                $('#Fiat3').hide()
+                $('#CryptoBtn').css('color', '#14C2A3')
+                $('#NFTBtn').css('color', '#A7AABC')
+                $('#FiatBtn').css('color', '#A7AABC')
+            } else if (label === 'NFT') {
+                $('#Crypto1').hide()
+                $('#NFT2').fadeIn()
+                $('#Fiat3').hide()
+                $('#CryptoBtn').css('color', '#A7AABC')
+                $('#NFTBtn').css('color', '#14C2A3')
+                $('#FiatBtn').css('color', '#A7AABC')
+            } else if (label === 'Fiat') {
+                $('#Crypto1').hide()
+                $('#NFT2').hide()
+                $('#Fiat3').fadeIn()
+                $('#CryptoBtn').css('color', '#A7AABC')
+                $('#NFTBtn').css('color', '#A7AABC')
+                $('#FiatBtn').css('color', '#14C2A3')
+            }
+        }
+    </script>
+
+</body>
+
+</html>
