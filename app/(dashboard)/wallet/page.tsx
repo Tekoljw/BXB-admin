@@ -28,6 +28,7 @@ import {
   X,
   Check,
   ArrowUpDown,
+  FileText,
   TrendingDown,
   ArrowUp,
   ArrowDown,
@@ -1606,13 +1607,10 @@ export default function WalletPage() {
 
   // 渲染担保内容
   const renderGuaranteeContent = () => {
-    const cardBg = isDark ? 'bg-gray-800/50' : 'bg-white'
-    const cardBorder = isDark ? 'border-gray-700' : 'border-gray-200'
-    
     switch (selectedCard) {
       case "receivable":
         return (
-          <div className={`space-y-4 ${cardBg} rounded-lg border ${cardBorder} shadow-sm`}>
+          <div className="space-y-4 bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
               <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
@@ -1721,7 +1719,7 @@ export default function WalletPage() {
 
       case "payable":
         return (
-          <div className={`space-y-4 ${cardBg} rounded-lg border ${cardBorder} shadow-sm`}>
+          <div className="space-y-4 bg-white dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
               <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
