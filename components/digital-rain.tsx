@@ -37,14 +37,16 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
       canvas.width = width
       canvas.height = height
       
-      columns = Math.floor(width / fontSize)
+      // Ensure proper spacing between columns
+      const spacing = fontSize * 1.2 // Add 20% spacing
+      columns = Math.floor(width / spacing)
       drops.length = 0
       
-      // Initialize drops with trails
+      // Initialize drops with trails, evenly spaced
       for (let i = 0; i < columns; i++) {
-        const trailLength = Math.floor(Math.random() * 12) + 4
+        const trailLength = Math.floor(Math.random() * 10) + 3
         drops[i] = {
-          y: Math.random() * height - trailLength * fontSize,
+          y: Math.random() * height - trailLength * fontSize - Math.random() * height * 2,
           speed: Math.random() * 2 + 0.75,
           chars: Array(trailLength).fill(0).map(() => 
             chars[Math.floor(Math.random() * chars.length)]
@@ -63,10 +65,11 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
 
       ctx.font = `${fontSize}px 'Courier New', monospace`
 
-      // Draw each column
+      // Draw each column with proper spacing
       for (let i = 0; i < drops.length; i++) {
         const drop = drops[i]
-        const x = i * fontSize
+        const spacing = fontSize * 1.2
+        const x = i * spacing + (spacing - fontSize) / 2
 
         // Draw each character in the trail
         for (let j = 0; j < drop.chars.length; j++) {
@@ -98,7 +101,7 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
 
         // Reset when completely off screen
         if (drop.y - drop.chars.length * fontSize > height) {
-          drop.y = -drop.chars.length * fontSize - Math.random() * height
+          drop.y = -drop.chars.length * fontSize - Math.random() * height * 2
           drop.speed = Math.random() * 2 + 0.75
           
           // Regenerate characters
