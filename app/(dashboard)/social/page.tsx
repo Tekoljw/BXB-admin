@@ -115,6 +115,9 @@ export default function SocialPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [favorites, setFavorites] = useState<string[]>(["user-1", "user-3"])
   const [activeMainTab, setActiveMainTab] = useState("圈子")
+  const [rightSidebarTab, setRightSidebarTab] = useState("推荐关注")
+  const [leaderboardPeriod, setLeaderboardPeriod] = useState("本周")
+  const [leftSidebarTab, setLeftSidebarTab] = useState("热门话题")
   const [activeSubTab, setActiveSubTab] = useState("全部")
   const [mounted, setMounted] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -603,12 +606,17 @@ export default function SocialPage() {
                     className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
                       activeSubTab === tab
                         ? isDark
-                          ? "bg-white text-gray-800 shadow-sm"
-                          : "bg-white text-gray-800 shadow-sm"
+                          ? "bg-white text-black shadow-sm"
+                          : "bg-black text-white shadow-sm"
                         : isDark
                           ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
                           : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
                     }`}
+                    style={{
+                      transform: activeSubTab === tab ? 'translateY(-2px)' : 'translateY(0)',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      boxShadow: activeSubTab === tab ? '0 4px 8px rgba(0, 0, 0, 0.1)' : 'none'
+                    }}
                   >
                     {tab}
                   </button>

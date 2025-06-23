@@ -358,9 +358,11 @@ export default function MomentsPage() {
                         className="p-3 hover:bg-muted/30 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
                       >
                         <div className="flex items-start space-x-3">
-                          <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-sm flex-shrink-0">
-                            {circle.avatar}
-                          </div>
+                          <img
+                            src={circleData.find(c => c.name === circle.name)?.avatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face"}
+                            alt={circle.name}
+                            className="w-12 h-12 rounded-full object-cover shadow-sm flex-shrink-0"
+                          />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-1">
                               <h4 className={`font-semibold text-sm truncate ${isDark ? "text-white" : "text-gray-800"}`}>
@@ -459,19 +461,24 @@ export default function MomentsPage() {
                     onMouseUp={handleMouseUp}
                     onMouseMove={handleMouseMove}
                   >
-                    {subTabs.map((tab) => (
+                    {subTabs.map((tab, index) => (
                       <button
                         key={tab}
                         onClick={() => setActiveSubTab(tab)}
                         className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 pointer-events-auto ${
                           activeSubTab === tab
                             ? isDark
-                              ? "bg-black text-white shadow-sm"
+                              ? "bg-white text-black shadow-sm"
                               : "bg-black text-white shadow-sm"
                             : isDark
                               ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
                               : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
                         }`}
+                        style={{
+                          transform: activeSubTab === tab ? 'translateY(-2px)' : 'translateY(0)',
+                          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                          boxShadow: activeSubTab === tab ? '0 4px 8px rgba(0, 0, 0, 0.1)' : 'none'
+                        }}
                       >
                         {tab}
                       </button>
