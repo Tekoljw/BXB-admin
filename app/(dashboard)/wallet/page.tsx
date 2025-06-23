@@ -1289,15 +1289,13 @@ export default function WalletPage() {
 
       case "担保账户":
         return (
-          <div className={`${cardStyle} rounded-lg p-6 space-y-6`}>
-
-
+          <div className="space-y-6">
             {/* 担保账户卡片区域 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               
               {/* 应收担保金额 */}
               <Card 
-                className={`${cardStyle} cursor-pointer transition-all duration-200 hover:shadow-lg ${
+                className={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer ${
                   selectedCard === "receivable" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
                 }`}
                 onClick={() => handleCardClick("receivable")}
@@ -1330,7 +1328,7 @@ export default function WalletPage() {
 
               {/* 应付担保金额 */}
               <Card 
-                className={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 ${
+                className={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer ${
                   selectedCard === "payable" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
                 }`}
                 onClick={() => handleCardClick("payable")}
