@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { createPortal } from "react-dom"
 import { User, LogOut, Settings, UserCircle, CreditCard, HelpCircle, Edit3 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
