@@ -1,3 +1,7 @@
+html {
+  zoom: 1.25; /* 100/80 = 1.25 to make 80% zoom appear as 100% */
+}
+
 /* Force immediate button responses */
 button, .btn-optimized, [role="button"] {
   transition: none !important;

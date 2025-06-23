@@ -17,6 +17,21 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    fontSize: {
+      'xs': ['0.9rem', { lineHeight: '1.25rem' }], // 12px -> 15px
+      'sm': ['1.05rem', { lineHeight: '1.5rem' }], // 14px -> 17.5px
+      'base': ['1.2rem', { lineHeight: '1.8rem' }], // 16px -> 20px
+      'lg': ['1.35rem', { lineHeight: '2rem' }], // 18px -> 22.5px
+      'xl': ['1.5rem', { lineHeight: '2.25rem' }], // 20px -> 25px
+      '2xl': ['1.8rem', { lineHeight: '2.4rem' }], // 24px -> 30px
+      '3xl': ['2.25rem', { lineHeight: '2.7rem' }], // 30px -> 37.5px
+      '4xl': ['2.7rem', { lineHeight: '3rem' }], // 36px -> 45px
+      '5xl': ['3.6rem', { lineHeight: '1' }], // 48px -> 60px
+      '6xl': ['4.5rem', { lineHeight: '1' }], // 60px -> 75px
+      '7xl': ['6rem', { lineHeight: '1' }], // 72px -> 90px
+      '8xl': ['7.2rem', { lineHeight: '1' }], // 96px -> 120px
+      '9xl': ['9.6rem', { lineHeight: '1' }], // 128px -> 160px
+    },
     extend: {
       fontFamily: {
         apple: [
