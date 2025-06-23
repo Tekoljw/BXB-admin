@@ -17,7 +17,7 @@ export default function MomentsPage() {
   const [startX, setStartX] = useState(0)
   const [scrollLeft, setScrollLeft] = useState(0)
   const [rightSidebarTab, setRightSidebarTab] = useState("推荐关注")
-  const [leaderboardPeriod, setLeaderboardPeriod] = useState("单日")
+  const [leaderboardPeriod, setLeaderboardPeriod] = useState("本周")
   const [leftSidebarTab, setLeftSidebarTab] = useState("热门话题")
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const isDark = theme === "dark"
@@ -233,10 +233,19 @@ export default function MomentsPage() {
     // 处理点赞逻辑
   }
 
-  // 过滤动态数据
+  // 过滤动态数据 - 根据选择的圈子过滤
   const filteredPosts = postsData.filter((post) => {
     const searchText = `${post.author} ${post.content}`.toLowerCase()
-    return searchText.includes(searchTerm.toLowerCase())
+    const matchesSearch = searchText.includes(searchTerm.toLowerCase())
+    
+    // 如果选择了特定圈子作为子页签，只显示该圈子的动态
+    if (circleData.some(circle => circle.name === activeSubTab)) {
+      // 这里可以根据实际数据结构过滤特定圈子的动态
+      // 暂时返回所有匹配搜索的动态
+      return matchesSearch
+    }
+    
+    return matchesSearch
   })
 
   // 统一的卡片样式
@@ -291,7 +300,9 @@ export default function MomentsPage() {
                   onClick={() => setLeftSidebarTab("热门话题")}
                   className={`flex-1 py-3 px-4 text-sm transition-colors ${
                     leftSidebarTab === "热门话题"
-                      ? "text-black font-bold border-b-2 border-black bg-transparent"
+                      ? isDark 
+                        ? "text-white font-bold border-b-2 border-white bg-transparent"
+                        : "text-black font-bold border-b-2 border-black bg-transparent"
                       : isDark
                         ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
                         : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
@@ -300,16 +311,18 @@ export default function MomentsPage() {
                   热门话题
                 </button>
                 <button
-                  onClick={() => setLeftSidebarTab("圈子")}
+                  onClick={() => setLeftSidebarTab("热门圈子")}
                   className={`flex-1 py-3 px-4 text-sm transition-colors ${
-                    leftSidebarTab === "圈子"
-                      ? "text-black font-bold border-b-2 border-black bg-transparent"
+                    leftSidebarTab === "热门圈子"
+                      ? isDark 
+                        ? "text-white font-bold border-b-2 border-white bg-transparent"
+                        : "text-black font-bold border-b-2 border-black bg-transparent"
                       : isDark
                         ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
                         : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
                   }`}
                 >
-                  圈子
+                  热门圈子
                 </button>
               </div>
 
@@ -519,7 +532,12 @@ export default function MomentsPage() {
                     key={circle.id}
                     className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border ${isDark ? "border-[#252842]" : "border-gray-300"} rounded-lg transition-all duration-200 hover:${
                       isDark ? "bg-[#1e2332]" : "bg-gray-50"
-                    }`}
+                    } cursor-pointer`}
+                    onClick={() => {
+                      // 切换到该圈子的动态内容
+                      setActiveMainTab("关注")
+                      setActiveSubTab(circle.name)
+                    }}
                   >
                     <div className="p-4">
                       <div className="flex items-center justify-between">
@@ -538,6 +556,10 @@ export default function MomentsPage() {
                           </div>
                         </div>
                         <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            // 处理加入/退出圈子逻辑
+                          }}
                           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                             circle.isJoined
                               ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -726,8 +748,9 @@ export default function MomentsPage() {
                     </div>
                   </div>
                 )
-              })}
-            </div>
+                })}
+              </div>
+            )}
           </div>
 
           {/* 右侧边栏 - 推荐关注与交易员排行榜 */}
@@ -739,7 +762,9 @@ export default function MomentsPage() {
                   onClick={() => setRightSidebarTab("推荐关注")}
                   className={`flex-1 py-3 px-4 text-sm transition-colors ${
                     rightSidebarTab === "推荐关注"
-                      ? "text-black font-bold border-b-2 border-black bg-transparent"
+                      ? isDark 
+                        ? "text-white font-bold border-b-2 border-white bg-transparent"
+                        : "text-black font-bold border-b-2 border-black bg-transparent"
                       : isDark
                         ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
                         : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
@@ -748,16 +773,18 @@ export default function MomentsPage() {
                   推荐关注
                 </button>
                 <button
-                  onClick={() => setRightSidebarTab("交易员排行榜")}
+                  onClick={() => setRightSidebarTab("TOP")}
                   className={`flex-1 py-3 px-4 text-sm transition-colors ${
-                    rightSidebarTab === "交易员排行榜"
-                      ? "text-black font-bold border-b-2 border-black bg-transparent"
+                    rightSidebarTab === "TOP"
+                      ? isDark 
+                        ? "text-white font-bold border-b-2 border-white bg-transparent"
+                        : "text-black font-bold border-b-2 border-black bg-transparent"
                       : isDark
                         ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
                         : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
                   }`}
                 >
-                  交易员排行榜
+                  TOP
                 </button>
               </div>
 
