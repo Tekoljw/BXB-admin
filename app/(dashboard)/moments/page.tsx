@@ -239,10 +239,12 @@ export default function MomentsPage() {
     const matchesSearch = searchText.includes(searchTerm.toLowerCase())
     
     // 如果选择了特定圈子作为子页签，只显示该圈子的动态
-    if (circleData.some(circle => circle.name === activeSubTab)) {
-      // 这里可以根据实际数据结构过滤特定圈子的动态
-      // 暂时返回所有匹配搜索的动态
-      return matchesSearch
+    if (activeSubTab.includes("圈动态")) {
+      const circleName = activeSubTab.replace("圈动态", "")
+      // 根据圈子名称过滤动态（这里可以根据实际数据结构调整）
+      const isCirclePost = post.tags?.some(tag => tag.includes(circleName.substring(0, 3))) || 
+                          post.content.includes(circleName.substring(0, 3))
+      return matchesSearch && isCirclePost
     }
     
     return matchesSearch
@@ -475,9 +477,10 @@ export default function MomentsPage() {
                               : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
                         }`}
                         style={{
-                          transform: activeSubTab === tab ? 'translateY(-2px)' : 'translateY(0)',
-                          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                          boxShadow: activeSubTab === tab ? '0 4px 8px rgba(0, 0, 0, 0.1)' : 'none'
+                          transform: activeSubTab === tab ? 'translateY(-2px) scale(1.05)' : 'translateY(0) scale(1)',
+                          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                          boxShadow: activeSubTab === tab ? '0 8px 16px rgba(0, 0, 0, 0.15)' : 'none',
+                          zIndex: activeSubTab === tab ? 10 : 1
                         }}
                       >
                         {tab}
@@ -543,7 +546,7 @@ export default function MomentsPage() {
                     onClick={() => {
                       // 切换到该圈子的动态内容
                       setActiveMainTab("关注")
-                      setActiveSubTab(circle.name)
+                      setActiveSubTab(circle.name + "圈动态")
                     }}
                   >
                     <div className="p-4">
@@ -620,10 +623,21 @@ export default function MomentsPage() {
               </div>
             )}
 
-            {/* 动态列表 - 重新设计的卡片布局 - 只在非圈子页签时显示 */}
-            {activeMainTab !== "圈子" && (
-              <div className="space-y-6">
-                {filteredPosts.map((post) => {
+            {/* 动态列表 - 显示所有动态或特定圈子的动态 */}
+            <div className="space-y-6">
+              {activeMainTab === "圈子" ? (
+                /* 圈子页面不显示动态列表，只显示圈子选择 */
+                <div className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border ${isDark ? "border-[#252842]" : "border-gray-300"} rounded-lg p-8 text-center`}>
+                  <div className={`text-lg font-medium ${isDark ? "text-gray-300" : "text-gray-600"} mb-2`}>
+                    选择一个圈子查看其动态
+                  </div>
+                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                    点击上方的圈子卡片来查看该圈子内的分享动态
+                  </div>
+                </div>
+              ) : (
+                /* 显示动态列表 */
+                filteredPosts.map((post) => {
                   const isFavorite = favorites.includes(post.id)
 
                 return (

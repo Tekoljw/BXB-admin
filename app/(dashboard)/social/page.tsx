@@ -613,9 +613,10 @@ export default function SocialPage() {
                           : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
                     }`}
                     style={{
-                      transform: activeSubTab === tab ? 'translateY(-2px)' : 'translateY(0)',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      boxShadow: activeSubTab === tab ? '0 4px 8px rgba(0, 0, 0, 0.1)' : 'none'
+                      transform: activeSubTab === tab ? 'translateY(-2px) scale(1.05)' : 'translateY(0) scale(1)',
+                      transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                      boxShadow: activeSubTab === tab ? '0 8px 16px rgba(0, 0, 0, 0.15)' : 'none',
+                      zIndex: activeSubTab === tab ? 10 : 1
                     }}
                   >
                     {tab}
