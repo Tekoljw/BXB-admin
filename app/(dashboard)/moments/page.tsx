@@ -284,7 +284,7 @@ export default function MomentsPage() {
   `;
 
   return (
-    <>
+    <div>
       <style dangerouslySetInnerHTML={{ __html: scrollbarHideStyle }} />
       <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
         {/* 三栏布局 */}
@@ -910,6 +910,6 @@ export default function MomentsPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
