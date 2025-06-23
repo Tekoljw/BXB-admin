@@ -48,6 +48,7 @@ import {
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
+import { useTranslation } from "@/hooks/use-translation"
 import SkeletonLoader from "@/components/skeleton-loader"
 import TrendChart from "@/components/wallet/trend-chart"
 import KlineChart from "@/components/wallet/kline-chart"

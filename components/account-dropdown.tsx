@@ -3,11 +3,17 @@
 import { useState, useRef, useEffect } from "react"
 import { User, LogOut, Settings, UserCircle, CreditCard, HelpCircle, Edit3 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useTheme } from "@/contexts/theme-context"
+import { useTranslation } from "@/hooks/use-translation"
+import ThemeToggle from "./theme-toggle"
+import LanguageToggle from "./language-toggle"
 
 export default function AccountDropdown() {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
+  const { isDark } = useTheme()
+  const { t } = useTranslation()
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -79,6 +85,11 @@ export default function AccountDropdown() {
               <HelpCircle className="h-4 w-4 mr-3 text-muted-foreground" />
               Help Center
             </button>
+          </div>
+
+          <div className="px-3 py-2 border-t border-border space-y-2">
+            <ThemeToggle />
+            <LanguageToggle />
           </div>
 
           <div className="py-1 border-t border-border">

@@ -39,6 +39,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
   const pathname = usePathname()
   const router = useRouter()
   const { language, setLanguage, theme } = useTheme()
+  const { t } = useTranslation()
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false)
   const [isExpanded, setIsExpanded] = useState(propIsExpanded || false)
@@ -56,35 +57,17 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
     onToggleExpanded?.(newExpanded)
   }
 
-  // 翻译对象
-  const t = {
-    en: {
-      chat: "Chat",
-      moments: "Moments",
-      usdtTrade: "USDT Trade",
-      statistics: "Market",
-      spot: "Spot",
-      futures: "Futures",
-      languageToggle: "Language",
-      themeToggle: "Theme",
-      notifications: "Notifications",
-      markAllAsRead: "Mark all as read",
-      settings: "Settings",
-    },
-    zh: {
-      chat: "聊天",
-      moments: "朋友圈",
-      usdtTrade: "USDT买卖",
-      statistics: "行情",
-      spot: "现货",
-      futures: "合约",
-      languageToggle: "语言",
-      themeToggle: "主题",
-      notifications: "通知",
-      markAllAsRead: "全部已读",
-      settings: "设置",
-    },
-  }[language]
+  // Navigation items with translations
+  const navigationItems = [
+    { id: "wallet", icon: Wallet, label: t("nav.wallet"), href: "/wallet" },
+    { id: "market", icon: BarChart2, label: t("nav.market"), href: "/market" },
+    { id: "spot", icon: Coins, label: t("nav.spot"), href: "/spot" },
+    { id: "futures", icon: LineChart, label: t("nav.futures"), href: "/futures" },
+    { id: "usdt-trade", icon: DollarSign, label: t("nav.usdt_trade"), href: "/usdt-trade" },
+    { id: "social", icon: Users, label: t("nav.social"), href: "/social" },
+    { id: "chat", icon: MessageCircle, label: t("nav.chat"), href: "/chat" },
+    { id: "guarantee", icon: ShoppingBag, label: t("nav.guarantee"), href: "/guarantee" },
+  ]
 
   const isActive = (path: string) => {
     return pathname === path
