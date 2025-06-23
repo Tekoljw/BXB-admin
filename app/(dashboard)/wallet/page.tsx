@@ -1381,7 +1381,7 @@ export default function WalletPage() {
                         </span>
                         <Button
                           size="sm"
-                          className="h-6 w-6 p-0 bg-white hover:bg-gray-100 text-black border border-black rounded"
+                          className={`h-6 w-6 p-0 rounded ${isDark ? 'bg-white hover:bg-gray-100 text-black border border-white' : 'bg-white hover:bg-gray-100 text-black border border-black'}`}
                           onClick={(e) => {
                             e.stopPropagation()
                             setShowAddCreditModal(true)
@@ -1399,7 +1399,7 @@ export default function WalletPage() {
                       </span>
                       <Button
                         size="sm"
-                        className="h-5 px-2 text-xs bg-black hover:bg-gray-800 text-white"
+                        className={`h-5 px-2 text-xs ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'}`}
                         onClick={(e) => {
                           e.stopPropagation()
                           setShowExtendTimeModal(true)
@@ -1771,11 +1771,11 @@ export default function WalletPage() {
                     </Button>
                     <div className="text-right">
                       <div className="flex items-center space-x-2 mb-2">
-                        <Button className="bg-black hover:bg-gray-800 text-white h-7 text-xs px-3">
+                        <Button className={`${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'} h-7 text-xs px-3`}>
                           <CheckCircle className="h-3 w-3 mr-1" />
                           确认
                         </Button>
-                        <Button variant="outline" className="h-7 text-xs px-3 text-red-600 border-red-600 hover:bg-red-50">
+                        <Button variant="outline" className={`h-7 text-xs px-3 text-red-600 ${isDark ? 'border-white hover:bg-white hover:text-red-600' : 'border-red-600 hover:bg-red-50'}`}>
                           请求仲裁
                         </Button>
                       </div>
@@ -1828,7 +1828,7 @@ export default function WalletPage() {
                   <div className="flex items-end justify-end">
                     <div className="text-right">
                       <div className="flex items-center space-x-2 mb-2">
-                        <Button className="bg-black hover:bg-gray-800 text-white h-7 text-xs px-3">
+                        <Button className={`${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'} h-7 text-xs px-3`}>
                           <CheckCircle className="h-3 w-3 mr-1" />
                           确认结束争议
                         </Button>
