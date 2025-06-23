@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
+import DigitalRain from "@/components/digital-rain"
 
 export default function HomePage() {
   const { language, setLanguage } = useTheme()
@@ -141,38 +142,67 @@ export default function HomePage() {
       </nav>
 
       <main className="flex-1 pt-20">
-        {/* Hero Section */}
-        <section className="hero-section overflow-hidden py-20 lg:py-32">
-          <div className="container mx-auto px-4">
+        {/* Hero Section with Digital Rain */}
+        <section className="hero-section relative overflow-hidden py-20 lg:py-32">
+          {/* Digital Rain Background */}
+          <DigitalRain />
+          
+          {/* Gradient Light Effects */}
+          <div className="absolute inset-0 overflow-hidden">
+            {/* Main gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-gray-900/95 via-gray-900/90 to-gray-900/95"></div>
+            
+            {/* Animated light beams */}
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#14C2A3]/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-[#10a085]/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+            <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-[#14C2A3]/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+            
+            {/* Radial gradient from center */}
+            <div className="absolute inset-0 bg-gradient-radial from-[#14C2A3]/5 via-transparent to-transparent"></div>
+            
+            {/* Floating particles */}
+            <div className="absolute top-20 left-20 w-2 h-2 bg-[#14C2A3] rounded-full animate-bounce opacity-60" style={{ animationDelay: '0.5s' }}></div>
+            <div className="absolute top-40 right-32 w-1.5 h-1.5 bg-[#10a085] rounded-full animate-bounce opacity-40" style={{ animationDelay: '1.5s' }}></div>
+            <div className="absolute bottom-32 left-1/4 w-1 h-1 bg-[#14C2A3] rounded-full animate-bounce opacity-50" style={{ animationDelay: '2.5s' }}></div>
+            <div className="absolute top-1/2 right-20 w-2 h-2 bg-[#14C2A3] rounded-full animate-ping opacity-30" style={{ animationDelay: '3s' }}></div>
+            
+            {/* Geometric light patterns */}
+            <div className="absolute top-1/4 right-1/3 w-32 h-0.5 bg-gradient-to-r from-transparent via-[#14C2A3]/50 to-transparent transform rotate-45 animate-pulse"></div>
+            <div className="absolute bottom-1/3 left-1/4 w-24 h-0.5 bg-gradient-to-r from-transparent via-[#10a085]/40 to-transparent transform -rotate-45 animate-pulse" style={{ animationDelay: '1s' }}></div>
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
             <div className="flex justify-center">
               <div className="max-w-4xl text-center">
                 <div className="relative z-10">
-                  <p className="text-[#14C2A3] text-lg mb-4">
+                  <p className="text-[#14C2A3] text-lg mb-4 animate-fade-in-up">
                     {language === 'zh' ? '最便捷的一站式链改+托管解决方案' : 'The most convenient one-stop chain modification+hosting solution'}
                   </p>
-                  <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-8">
+                  <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                     <span className="block mb-4">
                       {language === 'zh' ? '一个SDK囊括所有Web3.0功能' : 'A single SDK that encompasses all Web3.0 functions'}
                     </span>
-                    <span className="text-transparent bg-gradient-to-r from-[#14C2A3] to-[#10a085] bg-clip-text">
+                    <span className="text-transparent bg-gradient-to-r from-[#14C2A3] to-[#10a085] bg-clip-text animate-glow">
                       {language === 'zh' ? 'Web2.0用户的钥匙' : 'The key to Web2.0 users'}
                     </span>
                   </h1>
                 </div>
 
-                <div className="flex justify-center space-x-4 mb-16">
-                  <button className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-colors font-medium">
+                <div className="flex justify-center space-x-4 mb-16 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                  <button className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-all duration-300 font-medium hover:scale-105 hover:shadow-lg hover:shadow-[#14C2A3]/25">
                     {language === 'zh' ? '白皮书' : 'White Paper'}
                   </button>
-                  <button className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-colors font-medium">
+                  <button className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-all duration-300 font-medium hover:scale-105 hover:shadow-lg hover:shadow-[#14C2A3]/25">
                     {language === 'zh' ? '开发文档' : 'Development'}
                   </button>
                 </div>
 
-                <div className="relative">
+                <div className="relative animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
                   <div className="relative z-10">
+                    {/* Glowing border effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#14C2A3]/50 to-[#10a085]/50 rounded-2xl blur-sm animate-pulse"></div>
                     <img 
-                      className="w-full max-w-4xl mx-auto rounded-2xl border-2 border-[#14C2A3] shadow-2xl"
+                      className="relative w-full max-w-4xl mx-auto rounded-2xl border-2 border-[#14C2A3] shadow-2xl shadow-[#14C2A3]/20 hover:shadow-[#14C2A3]/30 transition-all duration-300"
                       src="https://scource-static.funibet.com/beingfi/images/bg/screen-1.png" 
                       alt="Dashboard Preview"
                       onError={(e) => {
