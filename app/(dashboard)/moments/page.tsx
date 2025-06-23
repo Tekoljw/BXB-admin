@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Star, Search, Heart, MessageCircle, Share, MoreHorizontal, ImageIcon, Video, Smile } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
@@ -283,7 +283,7 @@ export default function MomentsPage() {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-`
+  `;
 
   return (
     <div>
