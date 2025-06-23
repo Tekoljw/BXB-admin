@@ -409,7 +409,7 @@ div[style*="position: fixed"][style*="bottom"][style*="left"][style*="z-index"] 
 }
 
 /* Hide all elements with Next.js related attributes */
-*[data-nextjs] {
+*[data-nextjs*] {
   display: none !important;
 }
 

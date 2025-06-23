@@ -543,37 +543,28 @@ export default function SocialPage() {
         <div className="mb-6">
           {/* 一级页签和搜索框 */}
           <div className="flex items-center justify-between mb-4">
-            <div className="relative">
-              <div className="flex items-center space-x-0 bg-gray-100 dark:bg-gray-800 rounded-xl p-1 relative overflow-hidden">
-                {/* 滑动背景 */}
-                <div 
-                  className="absolute bg-white dark:bg-white rounded-lg shadow-sm transition-all duration-300 ease-out"
-                  style={{
-                    width: `${100 / mainTabs.length}%`,
-                    height: 'calc(100% - 8px)',
-                    left: `${mainTabs.indexOf(activeMainTab) * (100 / mainTabs.length)}%`,
-                    top: '4px',
-                    transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                  }}
-                />
-                {mainTabs.map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveMainTab(tab)}
-                    className={`flex-1 px-6 py-3 text-lg font-medium rounded-lg whitespace-nowrap transition-all duration-300 relative z-10 ${
-                      activeMainTab === tab
-                        ? "text-black"
-                        : isDark
-                          ? "text-gray-300 hover:text-white"
-                          : "text-gray-600 hover:text-gray-800"
+            <div className="flex items-center space-x-8 relative">
+              {mainTabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveMainTab(tab)}
+                  className={`text-lg transition-all duration-300 relative pb-2 ${
+                    activeMainTab === tab
+                      ? "font-black text-gray-900 dark:text-white"
+                      : isDark
+                        ? "font-medium text-gray-400 hover:text-gray-300"
+                        : "font-medium text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  {tab}
+                  {/* 下划线动画 */}
+                  <div
+                    className={`absolute bottom-0 left-0 h-0.5 bg-blue-500 transition-all duration-300 ease-out ${
+                      activeMainTab === tab ? "w-full opacity-100" : "w-0 opacity-0"
                     }`}
-                    style={{
-                      transition: 'color 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                    }}
-                  >
-                    {tab}
-                  </button>
-                ))}
+                  />
+                </button>
+              ))}
             </div>
 
             {/* 搜索框 */}
@@ -599,50 +590,37 @@ export default function SocialPage() {
 
           {/* 二级页签 - 只在非圈子页签时显示 */}
           {activeMainTab !== "圈子" && (
-            <div className="relative">
-              <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-1 relative overflow-hidden`}>
-                {/* 滑动背景 */}
-                <div 
-                  className={`absolute rounded-md shadow-sm transition-all duration-300 ease-out ${
-                    isDark ? "bg-white" : "bg-black"
-                  }`}
-                  style={{
-                    width: `${100 / subTabs.length}%`,
-                    height: 'calc(100% - 8px)',
-                    left: `${subTabs.indexOf(activeSubTab) * (100 / subTabs.length)}%`,
-                    top: '4px',
-                    transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                  }}
-                />
-                <div
-                  ref={scrollContainerRef}
-                  className="flex space-x-0 overflow-x-auto scrollbar-hide relative z-10 cursor-grab active:cursor-grabbing select-none"
-                  onMouseDown={handleMouseDown}
-                  onMouseLeave={handleMouseLeave}
-                  onMouseUp={handleMouseUp}
-                  onMouseMove={handleMouseMove}
-                >
-                  {subTabs.map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveSubTab(tab)}
-                      className={`flex-1 whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 relative z-10 ${
-                        activeSubTab === tab
-                          ? isDark
-                            ? "text-black"
-                            : "text-white"
-                          : isDark
-                            ? "text-gray-300 hover:text-white"
-                            : "text-gray-600 hover:text-gray-800"
-                      }`}
-                      style={{
-                        transition: 'color 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                      }}
-                    >
-                      {tab}
-                    </button>
-                  ))}
-                </div>
+            <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
+              <div
+                ref={scrollContainerRef}
+                className="flex items-center space-x-1 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+                onMouseDown={handleMouseDown}
+                onMouseLeave={handleMouseLeave}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+              >
+                {subTabs.map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveSubTab(tab)}
+                    className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
+                      activeSubTab === tab
+                        ? isDark
+                          ? "bg-white text-black shadow-sm"
+                          : "bg-black text-white shadow-sm"
+                        : isDark
+                          ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
+                          : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
+                    }`}
+                    style={{
+                      transform: activeSubTab === tab ? 'translateY(-2px)' : 'translateY(0)',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      boxShadow: activeSubTab === tab ? '0 4px 8px rgba(0, 0, 0, 0.1)' : 'none'
+                    }}
+                  >
+                    {tab}
+                  </button>
+                ))}
               </div>
             </div>
           )}
