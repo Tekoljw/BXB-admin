@@ -35,22 +35,73 @@ export default function MomentsPage() {
   // 一级页签
   const mainTabs = ["关注", "圈子", "最新"]
 
-  // 二级页签
-  const subTabs = [
-    "全部",
-    "交易心得",
-    "市场分析",
-    "技术分享",
-    "新手教学",
-    "DeFi",
-    "NFT",
-    "GameFi",
-    "Layer2",
-    "Meme币",
-    "AI概念",
-    "公链生态",
-    "投资策略",
-    "风险提示",
+  // 二级页签 - 根据主页签变化
+  const getSubTabs = () => {
+    if (activeMainTab === "圈子") {
+      return [] // 圈子页签不需要二级页签，会显示圈子列表
+    }
+    return [
+      "全部",
+      "交易心得",
+      "市场分析",
+      "技术分享",
+      "新手教学",
+      "DeFi",
+      "NFT",
+      "GameFi",
+      "Layer2",
+      "Meme币",
+      "AI概念",
+      "公链生态",
+      "投资策略",
+      "风险提示",
+    ]
+  }
+
+  const subTabs = getSubTabs()
+
+  // 圈子数据 - 更新为与社交页面一致的格式
+  const circleData = [
+    {
+      id: "circle-1",
+      name: "DeFi精英圈",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face",
+      members: 2856,
+      isJoined: true,
+      description: "专注DeFi协议分析与投资策略"
+    },
+    {
+      id: "circle-2", 
+      name: "NFT收藏家",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b829?w=64&h=64&fit=crop&crop=face",
+      members: 1234,
+      isJoined: false,
+      description: "发现优质NFT项目，分享收藏心得"
+    },
+    {
+      id: "circle-3",
+      name: "链游公会",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face", 
+      members: 3421,
+      isJoined: true,
+      description: "GameFi项目测评与攻略分享"
+    },
+    {
+      id: "circle-4",
+      name: "技术开发者",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face",
+      members: 892,
+      isJoined: false,
+      description: "区块链技术讨论与代码分享"
+    },
+    {
+      id: "circle-5",
+      name: "投资策略",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=64&h=64&fit=crop&crop=face",
+      members: 5678,
+      isJoined: true,
+      description: "市场分析与投资策略分享"
+    }
   ]
 
   // 热门话题数据
@@ -383,78 +434,168 @@ export default function MomentsPage() {
                 </div>
               </div>
 
-              {/* 二级页签 */}
-              <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
-                <div
-                  ref={scrollContainerRef}
-                  className="flex items-center space-x-1 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none"
-                  style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                  onMouseDown={handleMouseDown}
-                  onMouseLeave={handleMouseLeave}
-                  onMouseUp={handleMouseUp}
-                  onMouseMove={handleMouseMove}
-                >
-                  {subTabs.map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveSubTab(tab)}
-                      className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 pointer-events-auto ${
-                        activeSubTab === tab
-                          ? isDark
-                            ? "bg-black text-white shadow-sm"
-                            : "bg-black text-white shadow-sm"
-                          : isDark
-                            ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
-                            : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
+              {/* 二级页签 - 只在非圈子页签时显示 */}
+              {activeMainTab !== "圈子" && (
+                <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
+                  <div
+                    ref={scrollContainerRef}
+                    className="flex items-center space-x-1 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                    onMouseDown={handleMouseDown}
+                    onMouseLeave={handleMouseLeave}
+                    onMouseUp={handleMouseUp}
+                    onMouseMove={handleMouseMove}
+                  >
+                    {subTabs.map((tab) => (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveSubTab(tab)}
+                        className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 pointer-events-auto ${
+                          activeSubTab === tab
+                            ? isDark
+                              ? "bg-black text-white shadow-sm"
+                              : "bg-black text-white shadow-sm"
+                            : isDark
+                              ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
+                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
+                        }`}
+                      >
+                        {tab}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* 圈子页签内容 */}
+              {activeMainTab === "圈子" && (
+                <div className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border ${isDark ? "border-[#252842]" : "border-gray-300"} rounded-lg p-4 mb-4`}>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`text-base font-bold ${isDark ? "text-white" : "text-gray-800"}`}>我的圈子</div>
+                    <button
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-[#00D4AA] text-white hover:bg-[#00D4AA]/80 transition-colors"
+                      title="创建圈子"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  {/* 圈子头像列表 */}
+                  <div className="flex items-center space-x-4 overflow-x-auto pb-2">
+                    {circleData.map((circle) => (
+                      <div key={circle.id} className="flex-shrink-0 text-center">
+                        <div className="relative mb-2">
+                          <img
+                            src={circle.avatar}
+                            alt={circle.name}
+                            className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
+                          />
+                          {circle.isJoined && (
+                            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#00D4AA] rounded-full flex items-center justify-center">
+                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                        <p className={`text-xs font-medium truncate w-16 ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {circle.name}
+                        </p>
+                        <p className="text-xs text-gray-500">{circle.members}人</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* 发布动态区域 */}
-            <div className={`${cardStyle} rounded-lg mb-6`}>
-              <div className="p-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center text-black font-medium">
-                    我
-                  </div>
-                  <div className="flex-1">
-                    <textarea
-                      placeholder="分享你的交易心得或市场观点..."
-                      className={`w-full bg-muted rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm ${
-                        isDark ? "bg-[#2a2d3a] text-white" : "bg-gray-100 text-gray-800"
-                      }`}
-                      rows={3}
-                    />
-                    <div className="flex items-center justify-between mt-3">
-                      <div className="flex items-center space-x-3">
-                        <button className="p-2 hover:bg-muted rounded-lg transition-colors">
-                          <ImageIcon className="h-5 w-5 text-muted-foreground" />
-                        </button>
-                        <button className="p-2 hover:bg-muted rounded-lg transition-colors">
-                          <Video className="h-5 w-5 text-muted-foreground" />
-                        </button>
-                        <button className="p-2 hover:bg-muted rounded-lg transition-colors">
-                          <Smile className="h-5 w-5 text-muted-foreground" />
+            {/* 圈子详细列表 - 只在圈子页签时显示 */}
+            {activeMainTab === "圈子" && (
+              <div className="space-y-4 mb-6">
+                {circleData.map((circle) => (
+                  <div
+                    key={circle.id}
+                    className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border ${isDark ? "border-[#252842]" : "border-gray-300"} rounded-lg transition-all duration-200 hover:${
+                      isDark ? "bg-[#1e2332]" : "bg-gray-50"
+                    }`}
+                  >
+                    <div className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          <img
+                            src={circle.avatar}
+                            alt={circle.name}
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                          <div>
+                            <h3 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                              {circle.name}
+                            </h3>
+                            <p className="text-gray-500 text-sm">{circle.description}</p>
+                            <p className="text-gray-400 text-xs">{circle.members} 位成员</p>
+                          </div>
+                        </div>
+                        <button
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                            circle.isJoined
+                              ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                              : "bg-[#00D4AA] text-white hover:bg-[#00D4AA]/80"
+                          }`}
+                        >
+                          {circle.isJoined ? "已加入" : "加入"}
                         </button>
                       </div>
-                      <button className="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                        发布
-                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* 发布动态区域 - 只在非圈子页签时显示 */}
+            {activeMainTab !== "圈子" && (
+              <div className={`${cardStyle} rounded-lg mb-6`}>
+                <div className="p-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center text-black font-medium">
+                      我
+                    </div>
+                    <div className="flex-1">
+                      <textarea
+                        placeholder="分享你的交易心得或市场观点..."
+                        className={`w-full bg-muted rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm ${
+                          isDark ? "bg-[#2a2d3a] text-white" : "bg-gray-100 text-gray-800"
+                        }`}
+                        rows={3}
+                      />
+                      <div className="flex items-center justify-between mt-3">
+                        <div className="flex items-center space-x-3">
+                          <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+                            <ImageIcon className="h-5 w-5 text-muted-foreground" />
+                          </button>
+                          <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+                            <Video className="h-5 w-5 text-muted-foreground" />
+                          </button>
+                          <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+                            <Smile className="h-5 w-5 text-muted-foreground" />
+                          </button>
+                        </div>
+                        <button className="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                          发布
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* 动态列表 - 重新设计的卡片布局 */}
-            <div className="space-y-6">
-              {filteredPosts.map((post) => {
-                const isFavorite = favorites.includes(post.id)
+            {/* 动态列表 - 重新设计的卡片布局 - 只在非圈子页签时显示 */}
+            {activeMainTab !== "圈子" && (
+              <div className="space-y-6">
+                {filteredPosts.map((post) => {
+                  const isFavorite = favorites.includes(post.id)
 
                 return (
                   <div
