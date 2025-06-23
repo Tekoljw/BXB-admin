@@ -1295,7 +1295,7 @@ export default function WalletPage() {
               
               {/* 应收担保金额 */}
               <Card 
-                className={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer ${
+                className={`bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer ${
                   selectedCard === "receivable" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
                 }`}
                 onClick={() => handleCardClick("receivable")}
@@ -1328,7 +1328,7 @@ export default function WalletPage() {
 
               {/* 应付担保金额 */}
               <Card 
-                className={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer ${
+                className={`bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer ${
                   selectedCard === "payable" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
                 }`}
                 onClick={() => handleCardClick("payable")}
@@ -1361,7 +1361,7 @@ export default function WalletPage() {
 
               {/* 信誉担保金额 */}
               <Card 
-                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-lg transition-all duration-200"
+                className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200"
               >
                 <CardHeader className="pb-3">
                   <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
@@ -1414,7 +1414,7 @@ export default function WalletPage() {
               </Card>
 
               {/* 可用余额 */}
-              <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-lg transition-all duration-200">
+              <Card className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200">
                 <CardHeader className="pb-3">
                   <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
                     <div className="flex items-center">
@@ -1437,7 +1437,7 @@ export default function WalletPage() {
                   <div className="mt-4 grid grid-cols-2 gap-2">
                     <Button
                       size="sm"
-                      className="h-7 text-xs bg-black hover:bg-gray-800 text-white"
+                      className={`h-7 text-xs ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'}`}
                       onClick={() => setShowTransferModal(true)}
                     >
                       <ArrowLeftRight className="h-3 w-3 mr-1" />
@@ -1445,7 +1445,7 @@ export default function WalletPage() {
                     </Button>
                     <Button
                       size="sm"
-                      className="h-7 text-xs bg-white hover:bg-gray-100 text-black border border-black"
+                      className={`h-7 text-xs ${isDark ? 'bg-transparent text-white border border-white hover:bg-white hover:text-black' : 'bg-white hover:bg-gray-100 text-black border border-black'}`}
                       onClick={() => router.push('/wallet?tab=order-records')}
                     >
                       <FileText className="h-3 w-3 mr-1" />
@@ -1457,7 +1457,7 @@ export default function WalletPage() {
             </div>
 
             {/* 详细内容区域 */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
               {renderGuaranteeContent()}
             </div>
 
@@ -1610,7 +1610,7 @@ export default function WalletPage() {
       case "receivable":
         return (
           <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
+            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm">
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
               <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
