@@ -1,37 +1,38 @@
 html {
-  zoom: 0.9; /* Make everything appear 10% smaller */
-  min-height: 100vh;
-  height: auto;
+  transform: scale(0.9);
+  transform-origin: 0 0;
+  width: 111.11%; /* 100 / 0.9 */
+  height: 111.11%; /* 100 / 0.9 */
+  overflow-x: hidden;
 }
 
 body {
-  min-height: 100vh;
-  height: auto;
   margin: 0;
   padding: 0;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 #__next {
+  width: 100%;
   min-height: 100vh;
-  height: auto;
 }
 
-/* Ensure proper viewport handling after zoom */
+/* Ensure proper viewport handling after transform */
 .wrapper {
+  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Fix for mobile viewport after zoom */
+/* Fix for mobile viewport after transform */
 @media screen and (max-width: 768px) {
   html {
-    zoom: 0.85; /* Slightly smaller zoom for mobile */
-  }
-  
-  body {
-    min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height for mobile */
+    transform: scale(0.85);
+    width: 117.65%; /* 100 / 0.85 */
+    height: 117.65%; /* 100 / 0.85 */
   }
 }
 
