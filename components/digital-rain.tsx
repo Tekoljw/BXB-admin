@@ -18,16 +18,24 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
 
     // Set canvas size
     const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth * window.devicePixelRatio
-      canvas.height = canvas.offsetHeight * window.devicePixelRatio
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+      const rect = canvas.getBoundingClientRect()
+      canvas.width = rect.width
+      canvas.height = rect.height
+      canvas.style.width = rect.width + 'px'
+      canvas.style.height = rect.height + 'px'
     }
 
-    resizeCanvas()
-    window.addEventListener("resize", resizeCanvas)
-
     // Digital rain characters (mix of numbers, letters, and symbols)
-    const chars = "01Ɱ†ⰭⱵȻⱾȺ¥€₿₽₹₦₩∃∀∴∵∞∆∇∈∉∋∌∑∏∐∪∩⊂⊃⊆⊇⊊⊋⊕⊗⊙⊛⊜⊝⊞⊟⊠⊡⊢⊣⊤⊥⊦⊧⊨⊩⊪⊫⊬⊭⊮⊯⊰⊱⊲⊳⊴⊵⊶⊷⊸⊹⊺⊻⊼⊽⊾⊿⋀⋁⋂⋃⋄⋅⋆⋇⋈⋉⋊⋋⋌⋍⋎⋏⋐⋑⋒⋓⋔⋕⋖⋗⋘⋙⋚⋛⋜⋝⋞⋟⋠⋡⋢⋣⋤⋥⋦⋧⋨⋩⋪⋫⋬⋭⋮⋯⋰⋱⋲⋳⋴⋵⋶⋷⋸⋹⋺⋻⋼⋽⋾⋿ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ¥€₿∀∃∆∇∈∉∑∏⊂⊃⊕⊗⋀⋁⋂⋃"
+    
+    // Wait for next tick to ensure canvas is mounted
+    setTimeout(() => {
+      resizeCanvas()
+      initDrops()
+      animate()
+    }, 100)
+    
+    window.addEventListener("resize", resizeCanvas)
     
     // Rain drops array
     const drops: Array<{
@@ -40,59 +48,67 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
 
     // Initialize drops
     const initDrops = () => {
-      const columns = Math.floor(canvas.offsetWidth / 20)
+      const rect = canvas.getBoundingClientRect()
+      const columns = Math.floor(rect.width / 20)
       drops.length = 0
       
       for (let i = 0; i < columns; i++) {
         drops.push({
-          x: i * 20,
-          y: Math.random() * canvas.offsetHeight,
-          speed: Math.random() * 3 + 1,
-          opacity: Math.random() * 0.8 + 0.2,
+          x: i * 20 + Math.random() * 10,
+          y: Math.random() * rect.height,
+          speed: Math.random() * 2 + 0.5,
+          opacity: Math.random() * 0.7 + 0.3,
           char: chars[Math.floor(Math.random() * chars.length)]
         })
       }
     }
 
-    initDrops()
+    let animationId: number
 
     const animate = () => {
-      // Clear canvas with fade effect
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)"
-      ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
+      const rect = canvas.getBoundingClientRect()
+      
+      // Clear canvas with fade effect for trailing effect
+      ctx.fillStyle = "rgba(0, 0, 0, 0.1)"
+      ctx.fillRect(0, 0, rect.width, rect.height)
 
       // Draw rain drops
       drops.forEach((drop, index) => {
-        // Random character change
+        // Random character change for flickering effect
         if (Math.random() < 0.05) {
           drop.char = chars[Math.floor(Math.random() * chars.length)]
         }
 
-        // Set color with teal green theme
-        const alpha = drop.opacity * 0.8
-        ctx.fillStyle = `rgba(20, 194, 163, ${alpha})`
-        ctx.font = "14px monospace"
+        // Draw main character with teal green
+        ctx.fillStyle = `rgba(20, 194, 163, ${drop.opacity})`
+        ctx.font = "bold 14px 'Courier New', monospace"
         ctx.fillText(drop.char, drop.x, drop.y)
+        
+        // Add subtle glow effect
+        ctx.fillStyle = `rgba(20, 194, 163, ${drop.opacity * 0.5})`
+        ctx.font = "bold 16px 'Courier New', monospace"
+        ctx.fillText(drop.char, drop.x - 0.5, drop.y - 0.5)
 
         // Update position
         drop.y += drop.speed
         
         // Reset when off screen
-        if (drop.y > canvas.offsetHeight) {
-          drop.y = -20
-          drop.x = Math.random() * canvas.offsetWidth
+        if (drop.y > rect.height + 50) {
+          drop.y = -30 - Math.random() * 100
+          drop.x = (index * 20) + Math.random() * 15
           drop.speed = Math.random() * 3 + 1
-          drop.opacity = Math.random() * 0.8 + 0.2
+          drop.opacity = Math.random() * 0.8 + 0.4
         }
       })
 
-      requestAnimationFrame(animate)
+      animationId = requestAnimationFrame(animate)
     }
-
-    animate()
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
     }
   }, [])
 
@@ -103,7 +119,8 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
       style={{ 
         width: "100%", 
         height: "100%",
-        opacity: 0.3
+        opacity: 0.6,
+        zIndex: 1
       }}
     />
   )
