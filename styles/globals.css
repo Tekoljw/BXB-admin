@@ -1,9 +1,14 @@
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 html {
-  transform: scale(0.9);
-  transform-origin: 0 0;
-  width: 111.11%; /* 100 / 0.9 */
-  height: 111.11%; /* 100 / 0.9 */
+  font-size: 14.4px; /* 16px * 0.9 = 14.4px to achieve 90% effect */
   overflow-x: hidden;
+  height: 100%;
 }
 
 body {
@@ -12,6 +17,7 @@ body {
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
+  font-size: 1rem; /* Will inherit the scaled font-size from html */
 }
 
 #__next {
@@ -19,7 +25,7 @@ body {
   min-height: 100vh;
 }
 
-/* Ensure proper viewport handling after transform */
+/* Ensure proper viewport handling */
 .wrapper {
   width: 100%;
   min-height: 100vh;
@@ -27,18 +33,11 @@ body {
   flex-direction: column;
 }
 
-/* Fix for mobile viewport after transform */
+/* Mobile adjustments */
 @media screen and (max-width: 768px) {
   html {
-    transform: scale(0.85);
-    width: 117.65%; /* 100 / 0.85 */
-    height: 117.65%; /* 100 / 0.85 */
+    font-size: 13.6px; /* 16px * 0.85 = 13.6px for mobile */
   }
-}
-
-/* Prevent content from being cut off */
-* {
-  box-sizing: border-box;
 }
 
 main {

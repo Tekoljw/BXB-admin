@@ -17,21 +17,7 @@ module.exports = {
         "2xl": "1400px",
       },
     },
-    fontSize: {
-      'xs': ['0.675rem', { lineHeight: '1rem' }], // 12px -> 10.8px
-      'sm': ['0.788rem', { lineHeight: '1.125rem' }], // 14px -> 12.6px
-      'base': ['0.9rem', { lineHeight: '1.35rem' }], // 16px -> 14.4px
-      'lg': ['1.013rem', { lineHeight: '1.463rem' }], // 18px -> 16.2px
-      'xl': ['1.125rem', { lineHeight: '1.575rem' }], // 20px -> 18px
-      '2xl': ['1.35rem', { lineHeight: '1.8rem' }], // 24px -> 21.6px
-      '3xl': ['1.688rem', { lineHeight: '2.025rem' }], // 30px -> 27px
-      '4xl': ['2.025rem', { lineHeight: '2.25rem' }], // 36px -> 32.4px
-      '5xl': ['2.7rem', { lineHeight: '1' }], // 48px -> 43.2px
-      '6xl': ['3.375rem', { lineHeight: '1' }], // 60px -> 54px
-      '7xl': ['4.05rem', { lineHeight: '1' }], // 72px -> 64.8px
-      '8xl': ['5.4rem', { lineHeight: '1' }], // 96px -> 86.4px
-      '9xl': ['7.2rem', { lineHeight: '1' }], // 128px -> 115.2px
-    },
+
     extend: {
       fontFamily: {
         apple: [
