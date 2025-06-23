@@ -3,23 +3,21 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useTheme } from "@/contexts/theme-context"
+import DigitalRain from "@/components/digital-rain"
 
 export default function HomePage() {
+  const { language, setLanguage } = useTheme()
   const router = useRouter()
   const [navOpen, setNavOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [language, setLanguage] = useState<"en" | "zh">("zh")
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   if (!mounted) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-lg">Loading...</div>
-      </div>
-    )
+    return <div className="min-h-screen bg-gray-900"></div>
   }
 
   const handleLogin = () => {
@@ -147,7 +145,7 @@ export default function HomePage() {
         {/* Hero Section with Digital Rain */}
         <section className="hero-section relative overflow-hidden py-20 lg:py-32">
           {/* Digital Rain Background */}
-          {/* <DigitalRain /> */}
+          <DigitalRain />
           
           {/* Gradient Light Effects */}
           <div className="absolute inset-0 overflow-hidden">
