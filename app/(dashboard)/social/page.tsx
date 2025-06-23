@@ -607,9 +607,9 @@ export default function SocialPage() {
                     isDark ? "bg-white" : "bg-black"
                   }`}
                   style={{
-                    width: `calc(${100 / subTabs.length}% - 4px)`,
+                    width: `${100 / subTabs.length}%`,
                     height: 'calc(100% - 8px)',
-                    left: `calc(${subTabs.indexOf(activeSubTab) * (100 / subTabs.length)}% + 2px)`,
+                    left: `${subTabs.indexOf(activeSubTab) * (100 / subTabs.length)}%`,
                     top: '4px',
                     transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                   }}
