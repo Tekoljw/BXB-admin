@@ -5,8 +5,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
 
-export default function LandingPage() {
-  const { theme, language, setLanguage } = useTheme()
+export default function HomePage() {
+  const { language, setLanguage } = useTheme()
   const router = useRouter()
   const [navOpen, setNavOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -23,10 +23,6 @@ export default function LandingPage() {
     router.push("/wallet")
   }
 
-  const handleGetStarted = () => {
-    router.push("/wallet")
-  }
-
   const toggleNav = () => {
     setNavOpen(!navOpen)
   }
@@ -36,128 +32,107 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="wrapper min-h-screen min-h-[100dvh] bg-gray-900 text-white flex flex-col">
-      {/* Navbar */}
-      <nav className="navbar fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm">
+    <div className="wrapper min-h-screen bg-gray-900 text-white flex flex-col">
+      {/* Navigation */}
+      <nav className="navbar fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href="/" className="navbar-brand">
-              <img 
-                src="/logo.png" 
-                alt="BeDAO" 
-                width={180} 
-                height={40}
-                className="h-10 w-auto"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTgwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0ZXh0IHg9IjEwIiB5PSIyNSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzAwRDRBQSI+QmVEQU88L3RleHQ+PC9zdmc+"
-                }}
-              />
+            <Link href="/" className="text-2xl font-bold text-[#14C2A3]">
+              BePay
             </Link>
 
-            {/* Mobile menu button */}
             <button 
               onClick={toggleNav}
               className="md:hidden p-2"
             >
-              <div className="navbar-toggler-icon">
+              <div className="w-6 h-6 flex flex-col justify-center">
                 <span className="block w-6 h-0.5 bg-white mb-1"></span>
                 <span className="block w-6 h-0.5 bg-white mb-1"></span>
                 <span className="block w-6 h-0.5 bg-white"></span>
               </div>
             </button>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="#" className="nav-link text-white hover:text-[#14C2A3] transition-colors">
-                Wallet
+              <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
+                {language === 'zh' ? '钱包' : 'Wallet'}
               </Link>
-              <Link href="#" className="nav-link text-[#14C2A3] font-medium">
+              <Link href="#" className="text-[#14C2A3] font-medium">
                 SDK&API
               </Link>
-              <Link href="#" className="nav-link text-white hover:text-[#14C2A3] transition-colors">
-                Card
+              <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
+                {language === 'zh' ? '卡片' : 'Card'}
               </Link>
-              <Link href="#" className="nav-link text-white hover:text-[#14C2A3] transition-colors">
-                Tokenomic
+              <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
+                {language === 'zh' ? '代币经济' : 'Tokenomic'}
               </Link>
-              <Link href="#" className="nav-link text-white hover:text-[#14C2A3] transition-colors">
-                News
+              <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
+                {language === 'zh' ? '新闻' : 'News'}
               </Link>
               
-              {/* Documents Dropdown */}
               <div className="relative group">
-                <button className="nav-link text-white hover:text-[#14C2A3] transition-colors flex items-center">
-                  Documents
+                <button className="text-white hover:text-[#14C2A3] transition-colors flex items-center">
+                  {language === 'zh' ? '文档' : 'Documents'}
                   <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
                 <div className="absolute top-full left-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                   <Link href="#" className="block px-4 py-2 text-white hover:bg-gray-700 rounded-lg">
-                    White Paper
+                    {language === 'zh' ? '白皮书' : 'White Paper'}
                   </Link>
                   <Link href="#" className="block px-4 py-2 text-white hover:bg-gray-700 rounded-lg">
-                    Development DOCS
+                    {language === 'zh' ? '开发文档' : 'Development DOCS'}
                   </Link>
                 </div>
               </div>
 
-              {/* Language Dropdown */}
               <div className="relative group">
-                <button className="nav-link flex items-center">
-                  <img 
-                    width={24} 
-                    src={language === 'zh' ? "/icons/CN.png" : "/icons/US.png"} 
-                    alt="" 
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0iIzAwRDRBQSIvPjx0ZXh0IHg9IjEyIiB5PSIxNiIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+e2xhbmd1YWdlID09PSAnemgnID8gJ0NOJyA6ICdVUyd9PC90ZXh0Pjwvc3ZnPg=="
-                    }}
-                  />
+                <button className="flex items-center">
+                  <span className="w-6 h-6 bg-[#14C2A3] rounded-full flex items-center justify-center text-xs text-white">
+                    {language === 'zh' ? 'CN' : 'US'}
+                  </span>
                 </button>
                 <div className="absolute top-full right-0 mt-2 w-40 bg-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                   <button 
                     onClick={() => changeLang('en')}
                     className="w-full flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
                   >
-                    <img width={24} src="/icons/US.png" alt="" className="mr-2" />
+                    <span className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs mr-2">US</span>
                     English
                   </button>
                   <button 
                     onClick={() => changeLang('zh')}
                     className="w-full flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
                   >
-                    <img width={24} src="/icons/CN.png" alt="" className="mr-2" />
+                    <span className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-xs mr-2">CN</span>
                     简体中文
                   </button>
                 </div>
               </div>
 
-              {/* Login Button */}
               <button 
                 onClick={handleLogin}
                 className="bg-[#14C2A3] text-white px-6 py-2 rounded-full hover:bg-[#10a085] transition-colors font-medium"
               >
-                Login
+                {language === 'zh' ? '登录' : 'Login'}
               </button>
             </div>
           </div>
 
-          {/* Mobile Navigation Menu */}
           {navOpen && (
             <div className="md:hidden absolute top-16 left-0 right-0 bg-gray-800 shadow-lg">
               <div className="flex flex-col space-y-2 p-4">
-                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">Wallet</Link>
+                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">{language === 'zh' ? '钱包' : 'Wallet'}</Link>
                 <Link href="#" className="text-[#14C2A3] py-2">SDK&API</Link>
-                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">Card</Link>
-                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">Tokenomic</Link>
-                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">News</Link>
-                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">Documents</Link>
+                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">{language === 'zh' ? '卡片' : 'Card'}</Link>
+                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">{language === 'zh' ? '代币经济' : 'Tokenomic'}</Link>
+                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">{language === 'zh' ? '新闻' : 'News'}</Link>
+                <Link href="#" className="text-white hover:text-[#14C2A3] py-2">{language === 'zh' ? '文档' : 'Documents'}</Link>
                 <button 
                   onClick={handleLogin}
                   className="bg-[#14C2A3] text-white px-6 py-2 rounded-full hover:bg-[#10a085] transition-colors font-medium mt-4"
                 >
-                  Login
+                  {language === 'zh' ? '登录' : 'Login'}
                 </button>
               </div>
             </div>
@@ -165,42 +140,36 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <main className="flex-1 pt-20">
+        {/* Hero Section */}
         <section className="hero-section overflow-hidden py-20 lg:py-32">
           <div className="container mx-auto px-4">
             <div className="flex justify-center">
               <div className="max-w-4xl text-center">
                 <div className="relative z-10">
-                  <p className="text-[#14C2A3] text-lg mb-4" data-aos="fade-up-sm">
-                    {language === 'zh' ? '全球加密货币保证交易所' : 'Global Cryptocurrency Guaranteed Trading Exchange'}
+                  <p className="text-[#14C2A3] text-lg mb-4">
+                    {language === 'zh' ? '最便捷的一站式链改+托管解决方案' : 'The most convenient one-stop chain modification+hosting solution'}
                   </p>
-                  <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-8" data-aos="fade-up-sm">
+                  <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-8">
                     <span className="block mb-4">
-                      {language === 'zh' ? '安全可靠的数字资产交易平台' : 'Secure & Reliable Digital Asset Trading Platform'}
+                      {language === 'zh' ? '一个SDK囊括所有Web3.0功能' : 'A single SDK that encompasses all Web3.0 functions'}
                     </span>
                     <span className="text-transparent bg-gradient-to-r from-[#14C2A3] to-[#10a085] bg-clip-text">
-                      {language === 'zh' ? '您的财富增值之路' : 'Your Path to Wealth Growth'}
+                      {language === 'zh' ? 'Web2.0用户的钥匙' : 'The key to Web2.0 users'}
                     </span>
                   </h1>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16" data-aos="fade-up-sm">
-                  <button 
-                    onClick={handleLogin}
-                    className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-colors font-medium"
-                  >
-                    {language === 'zh' ? '立即登录' : 'Login Now'}
-                  </button>
-                  <a 
-                    href="#" 
-                    className="bg-transparent border-2 border-[#14C2A3] text-[#14C2A3] px-8 py-3 rounded-lg hover:bg-[#14C2A3] hover:text-white transition-colors font-medium inline-block text-center"
-                  >
+                <div className="flex justify-center space-x-4 mb-16">
+                  <button className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-colors font-medium">
                     {language === 'zh' ? '白皮书' : 'White Paper'}
-                  </a>
+                  </button>
+                  <button className="bg-[#14C2A3] text-white px-8 py-3 rounded-lg hover:bg-[#10a085] transition-colors font-medium">
+                    {language === 'zh' ? '开发文档' : 'Development'}
+                  </button>
                 </div>
 
-                <div data-aos="fade-up-sm" className="relative">
+                <div className="relative">
                   <div className="relative z-10">
                     <img 
                       className="w-full max-w-4xl mx-auto rounded-2xl border-2 border-[#14C2A3] shadow-2xl"
@@ -217,20 +186,28 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Features */}
         <section className="py-20 lg:py-32">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-[#14C2A3] text-lg mb-4">
-                {language === 'zh' ? '核心特性' : 'Core Features'}
-              </h2>
-              <h3 className="text-white text-3xl md:text-5xl font-bold">
-                {language === 'zh' ? '为什么选择BeDAO' : 'Why Choose BeDAO'}
-              </h3>
+              <h5 className="text-[#14C2A3] text-lg mb-4">
+                <span>{language === 'zh' ? '●集成20+去中心化钱包' : '●Integrated 20+decentralized wallets'}</span>
+                &nbsp;
+                <span>{language === 'zh' ? '●支持100+加密货币' : '●supporting 100+cryptocurrencies'}</span>
+                &nbsp;
+                <span>{language === 'zh' ? '●50+NFTs' : '●50+NFTs'}</span>
+                &nbsp;
+                <span>{language === 'zh' ? '●100+法币' : '●100+fiat'}</span>
+              </h5>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Feature 1 */}
+            <div className="text-center mb-16">
+              <h2 className="text-white text-3xl md:text-5xl font-bold">
+                {language === 'zh' ? 'BePay确保您的资产受到行业领先的安全级别保护' : 'BePay ensures that your assets are protected by industry-leading levels of security'}
+              </h2>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
               <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700">
                 <div className="w-16 h-16 bg-[#14C2A3]/10 rounded-2xl flex items-center justify-center mb-6">
                   <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -238,29 +215,27 @@ export default function LandingPage() {
                   </svg>
                 </div>
                 <h4 className="text-white text-xl font-semibold mb-4">
-                  {language === 'zh' ? '安全保障' : 'Security Guarantee'}
+                  {language === 'zh' ? '2FA验证' : '2FA validation'}
                 </h4>
                 <p className="text-gray-300">
-                  {language === 'zh' ? '全球领先的加密技术，多重安全防护，为您的资产保驾护航' : 'Leading encryption technology with multiple security layers to protect your assets'}
+                  {language === 'zh' ? '2FA（双因素认证）是一种安全措施，要求用户在登录或执行敏感操作时提供两个认证要素，通常是密码和动态验证码。增加了额外的安全层以增强账户保护。' : '2FA (Two Factor Authentication) is a security measure that requires users to provide two authentication elements, usually passwords and dynamic verification codes, when logging in or performing sensitive operations. Added an additional security layer to enhance account protection.'}
                 </p>
               </div>
 
-              {/* Feature 2 */}
               <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700">
                 <div className="w-16 h-16 bg-[#14C2A3]/10 rounded-2xl flex items-center justify-center mb-6">
                   <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                   </svg>
                 </div>
                 <h4 className="text-white text-xl font-semibold mb-4">
-                  {language === 'zh' ? 'USDT保证金' : 'USDT Margin'}
+                  {language === 'zh' ? '冷热钱包分离' : 'Separation of hot and cold wallets'}
                 </h4>
                 <p className="text-gray-300">
-                  {language === 'zh' ? '专业的USDT保证金交易系统，稳定币交易更安全可靠' : 'Professional USDT margin trading system, stablecoin trading for enhanced security'}
+                  {language === 'zh' ? '冷热钱包分离是一种加密货币存储策略，将大部分资金存储在离线冷存储设备（冷钱包）中，只在在线热存储设备（热钱包）中保留少量资金用于日常交易。提高了资金安全性，防止网络攻击和黑客入侵。' : 'Cold and hot wallet separation is a cryptocurrency storage strategy that stores most of the funds in offline cold storage devices (cold wallets) and only retains a small amount of funds for daily transactions on online hot storage devices (hot wallets). Improved the security of funds and prevented network attacks and hacker intrusions.'}
                 </p>
               </div>
 
-              {/* Feature 3 */}
               <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700">
                 <div className="w-16 h-16 bg-[#14C2A3]/10 rounded-2xl flex items-center justify-center mb-6">
                   <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,10 +243,10 @@ export default function LandingPage() {
                   </svg>
                 </div>
                 <h4 className="text-white text-xl font-semibold mb-4">
-                  {language === 'zh' ? '资产保障' : 'Asset Protection'}
+                  {language === 'zh' ? 'MPC加密技术' : 'MPC encryption technology'}
                 </h4>
                 <p className="text-gray-300">
-                  {language === 'zh' ? '完善的保证账户体系，多重风控措施，确保您的资产安全' : 'Comprehensive guarantee account system with multiple risk controls for asset security'}
+                  {language === 'zh' ? 'MPC（多方计算）是一种密码学技术，安全地处理和存储敏感数据，确保隐私和安全。它使多个参与者能够在不泄露个人输入的情况下执行计算。在加密货币领域，MPC技术通过促进密钥管理和交易签名来增强安全性和保护。' : 'MPC (Multi-Party Computation) is a cryptographic technique that securely processes and stores sensitive data, ensuring privacy and security. It enables multiple participants to perform computations without disclosing individual inputs. In the realm of cryptocurrencies, MPC technology enhances security and protection by facilitating key management and transaction signing.'}
                 </p>
               </div>
             </div>
@@ -282,64 +257,52 @@ export default function LandingPage() {
         <section className="py-20 lg:py-32 bg-gradient-to-r from-[#14C2A3]/10 to-[#10a085]/10">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-white text-3xl md:text-5xl font-bold mb-8">
-              {language === 'zh' ? '准备开始您的交易之旅？' : 'Ready to Start Your Trading Journey?'}
+              {language === 'zh' ? '准备开始您的Web3之旅？' : 'Ready to Start Your Web3 Journey?'}
             </h2>
             <p className="text-gray-300 text-lg mb-12 max-w-2xl mx-auto">
-              {language === 'zh' ? '加入BeDAO全球加密货币保证交易所，享受USDT保证金交易，安全、透明、可靠' : 'Join BeDAO Global Cryptocurrency Guaranteed Trading Exchange with USDT margin trading - Safe, Transparent, Reliable'}
+              {language === 'zh' ? '加入BePay全球加密货币平台，体验前所未有的区块链服务' : 'Join BePay global cryptocurrency platform for an unprecedented blockchain experience'}
             </p>
             <button 
-              onClick={handleGetStarted}
+              onClick={handleLogin}
               className="bg-[#14C2A3] text-white px-12 py-4 rounded-full hover:bg-[#10a085] transition-colors font-semibold text-lg"
             >
-              {language === 'zh' ? '立即开始交易' : 'Start Trading Now'}
+              {language === 'zh' ? '立即开始' : 'Get Started Now'}
             </button>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 border-t border-gray-800 py-12 flex-shrink-0 w-full">
+      <footer className="bg-gray-900 border-t border-gray-800 py-12">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <img 
-                src="/logo.png" 
-                alt="BeDAO" 
-                width={120} 
-                height={30}
-                className="mb-4"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMwIiB2aWV3Qm94PSIwIDAgMTIwIDMwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0ZXh0IHg9IjEwIiB5PSIyMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzAwRDRBQSI+QmVEQU88L3RleHQ+PC9zdmc+"
-                }}
-              />
+              <div className="text-2xl font-bold text-[#14C2A3] mb-4">BePay</div>
               <p className="text-gray-400">
-                {language === 'zh' ? '全球加密货币保证交易所' : 'Global Cryptocurrency Guaranteed Trading Exchange'}
+                {language === 'zh' ? '最便捷的一站式Web3解决方案' : 'The most convenient one-stop Web3 solution'}
               </p>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">
-                {language === 'zh' ? '产品' : 'Products'}
-              </h4>
+              <h4 className="text-white font-semibold mb-4">BePAY</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="#" className="hover:text-[#14C2A3]">Wallet</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '钱包' : 'Wallet'}</Link></li>
                 <li><Link href="#" className="hover:text-[#14C2A3]">SDK&API</Link></li>
-                <li><Link href="#" className="hover:text-[#14C2A3]">Card</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '卡片' : 'Card'}</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '代币经济' : 'Tokenomic'}</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">
-                {language === 'zh' ? '资源' : 'Resources'}
-              </h4>
+              <h4 className="text-white font-semibold mb-4">{language === 'zh' ? '指南' : 'Guide'}</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '白皮书' : 'White Paper'}</Link></li>
-                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '开发文档' : 'Documentation'}</Link></li>
-                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '新闻' : 'News'}</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '横幅' : 'Banner'}</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '特性' : 'Features'}</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '功能' : 'Function'}</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '资产' : 'Asset'}</Link></li>
+                <li><Link href="#" className="hover:text-[#14C2A3]">FAQ</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">
-                {language === 'zh' ? '联系我们' : 'Contact'}
-              </h4>
+              <h4 className="text-white font-semibold mb-4">{language === 'zh' ? '关注我们' : 'Follow Us'}</h4>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-[#14C2A3]">
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -355,7 +318,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 BeDAO. {language === 'zh' ? '保留所有权利。' : 'All rights reserved.'}</p>
+            <p>&copy; 2024 BePay. {language === 'zh' ? '保留所有权利。' : 'All rights reserved.'}</p>
           </div>
         </div>
       </footer>
