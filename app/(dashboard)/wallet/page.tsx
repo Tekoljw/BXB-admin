@@ -699,15 +699,15 @@ export default function WalletPage() {
                       <ChevronDown className="h-3 w-3" />
                     </button>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center justify-between">
                     <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       {balanceVisible ? `${convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
                     </div>
                     <div className="flex-shrink-0">
                       <TrendChart 
-                        data={generateTrendData(true)} 
                         isPositive={true}
                         height={32}
+                        width={64}
                       />
                     </div>
                   </div>
@@ -746,17 +746,18 @@ export default function WalletPage() {
                       <ChevronDown className="h-3 w-3" />
                     </button>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center justify-between">
                     <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       {balanceVisible ? `${convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
                     </div>
                     <div className="flex-shrink-0">
                       <TrendChart 
-                        data={generateTrendData(true)} 
                         isPositive={true}
                         height={32}
+                        width={64}
                       />
                     </div>
+                  </div>
                   </div>
                 </>
               </div>
