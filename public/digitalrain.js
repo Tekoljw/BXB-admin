@@ -2931,54 +2931,17 @@
 // var canvas = document.querySelector("body>canvas:last-of-type");
 // canvas.parentNode.removeChild(canvas);
 
-// Wrapper for React integration
-window.initDigitalRain = function(targetCanvas) {
-  if (!targetCanvas) return;
+// Modified cleanup to work with React
+const timer = setInterval(() => {
+  var bodyDom = document.getElementsByTagName('body')[0]
+  const lastCanvas = bodyDom.querySelector('canvas:last-of-type')
   
-  // Prevent the original code from creating its own canvas
-  const originalCreateElement = document.createElement;
-  let canvasCreated = false;
-  
-  document.createElement = function(tagName) {
-    if (tagName.toLowerCase() === 'canvas' && !canvasCreated) {
-      canvasCreated = true;
-      return targetCanvas;
-    }
-    return originalCreateElement.call(document, tagName);
-  };
-  
-  // Prevent the original cleanup code from running
-  const originalSetInterval = setInterval;
-  setInterval = function(callback, delay) {
-    if (delay === 300 && callback.toString().includes('bodyDom.lastElementChild.tagName')) {
-      return; // Skip the cleanup timer
-    }
-    return originalSetInterval.call(window, callback, delay);
-  };
-  
-  // Run the main digital rain code
-  try {
-    // The Go compiled code will run and create the effect on our target canvas
-    main && main();
-  } catch (e) {
-    console.warn('Digital rain initialization:', e);
+  // Only remove canvas if it's not our React canvas (check if it has our specific class)
+  if (lastCanvas && !lastCanvas.classList.contains('absolute')) {
+    console.log('Removing auto-generated canvas, keeping React canvas')
+    bodyDom.removeChild(lastCanvas);
+    clearInterval(timer)
   }
-  
-  // Restore original functions
-  document.createElement = originalCreateElement;
-  setInterval = originalSetInterval;
-  
-  return {
-    start: function() {
-      // Already started by main()
-    },
-    stop: function() {
-      // Add stop functionality if needed
-    },
-    cleanup: function() {
-      // Add cleanup if needed
-    }
-  };
-};
+}, 300)
 
 //# sourceMappingURL=digitalrain.js.map

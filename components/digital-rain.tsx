@@ -1,79 +1,68 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import Script from "next/script"
 
 interface DigitalRainProps {
   className?: string
 }
 
-declare global {
-  interface Window {
-    initDigitalRain: (canvas: HTMLCanvasElement) => {
-      start: () => void
-      stop: () => void
-      cleanup: () => void
-    }
-  }
-}
-
 export default function DigitalRain({ className = "" }: DigitalRainProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const rainControlRef = useRef<ReturnType<typeof window.initDigitalRain> | null>(null)
+  const scriptLoadedRef = useRef(false)
 
   useEffect(() => {
-    const initRain = () => {
-      const canvas = canvasRef.current
-      if (!canvas || !window.initDigitalRain) return
+    const loadAndInitialize = async () => {
+      if (!canvasRef.current) return
 
-      // Cleanup previous instance
-      if (rainControlRef.current) {
-        rainControlRef.current.cleanup()
+      // Load the script if not already loaded
+      if (!scriptLoadedRef.current) {
+        const script = document.createElement('script')
+        script.src = '/digitalrain.js'
+        script.async = true
+        
+        await new Promise((resolve, reject) => {
+          script.onload = resolve
+          script.onerror = reject
+          document.head.appendChild(script)
+        })
+        
+        scriptLoadedRef.current = true
       }
 
-      // Initialize new rain effect
-      rainControlRef.current = window.initDigitalRain(canvas)
-      rainControlRef.current.start()
-    }
-
-    // Check if script is already loaded
-    if (window.initDigitalRain) {
-      initRain()
-    } else {
-      // Wait for script to load
-      const checkScript = setInterval(() => {
-        if (window.initDigitalRain) {
-          clearInterval(checkScript)
-          initRain()
+      // Wait a bit for the script to initialize
+      setTimeout(() => {
+        // The digital rain script will automatically create and manage its canvas
+        // We just need to ensure our canvas element is properly sized and positioned
+        const canvas = canvasRef.current
+        if (canvas) {
+          const rect = canvas.parentElement?.getBoundingClientRect()
+          if (rect) {
+            canvas.width = rect.width
+            canvas.height = rect.height
+            canvas.style.width = rect.width + 'px'
+            canvas.style.height = rect.height + 'px'
+          }
         }
-      }, 100)
-
-      return () => clearInterval(checkScript)
+      }, 500)
     }
+
+    loadAndInitialize().catch(console.error)
 
     return () => {
-      if (rainControlRef.current) {
-        rainControlRef.current.cleanup()
-      }
+      // Cleanup will be handled by the original script
     }
   }, [])
 
   return (
-    <>
-      <Script
-        src="/digitalrain.js"
-        strategy="beforeInteractive"
-      />
-      <canvas
-        ref={canvasRef}
-        className={`absolute inset-0 pointer-events-none ${className}`}
-        style={{ 
-          width: "100%", 
-          height: "100%",
-          opacity: 0.5,
-          zIndex: 1
-        }}
-      />
-    </>
+    <canvas
+      ref={canvasRef}
+      className={`absolute inset-0 pointer-events-none ${className}`}
+      style={{ 
+        width: "100%", 
+        height: "100%",
+        opacity: 0.6,
+        zIndex: 1
+      }}
+    />
   )
 }
