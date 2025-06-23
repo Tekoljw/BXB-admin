@@ -55,10 +55,11 @@ import KlineChart from "@/components/wallet/kline-chart"
 
 export default function WalletPage() {
   const { theme } = useTheme()
+  const { t } = useTranslation()
   const router = useRouter()
   const [balanceVisible, setBalanceVisible] = useState(true)
   const [topLevelTab, setTopLevelTab] = useState("账户资产") // "账户资产" or "订单记录"
-  const [activeTab, setActiveTab] = useState("钱包总览")
+  const [activeTab, setActiveTab] = useState(t("wallet.title"))
   const [orderTab, setOrderTab] = useState("现货订单") // 订单记录子页签
   const [overviewMode, setOverviewMode] = useState("现金账户") // "现金账户" or "总资产"
   const [selectedCurrency, setSelectedCurrency] = useState("USDT")
