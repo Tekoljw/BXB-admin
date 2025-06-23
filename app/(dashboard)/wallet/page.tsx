@@ -699,8 +699,17 @@ export default function WalletPage() {
                       <ChevronDown className="h-3 w-3" />
                     </button>
                   </div>
-                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {balanceVisible ? `${convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
+                  <div className="flex items-center gap-4">
+                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {balanceVisible ? `${convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
+                    </div>
+                    <div className="flex-shrink-0">
+                      <TrendChart 
+                        data={generateTrendData(true)} 
+                        isPositive={true}
+                        height={32}
+                      />
+                    </div>
                   </div>
                 </>
               </div>
@@ -737,8 +746,17 @@ export default function WalletPage() {
                       <ChevronDown className="h-3 w-3" />
                     </button>
                   </div>
-                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {balanceVisible ? `${convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
+                  <div className="flex items-center gap-4">
+                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {balanceVisible ? `${convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
+                    </div>
+                    <div className="flex-shrink-0">
+                      <TrendChart 
+                        data={generateTrendData(true)} 
+                        isPositive={true}
+                        height={32}
+                      />
+                    </div>
                   </div>
                 </>
               </div>
@@ -1117,7 +1135,7 @@ export default function WalletPage() {
                 {/* 主要操作按钮 */}
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
                   {[
-                    { id: "current-positions", label: "当前持仓", icon: BarChart2 },
+                    { id: "current-positions", label: "当前持仓", icon: BarChart2, isGreen: true },
                     { id: "account-balance", label: "账户余额", icon: Wallet },
                     { id: "transfer", label: "划转", icon: ArrowLeftRight },
                     { id: "trade", label: "交易", icon: TrendingUp }
@@ -1125,6 +1143,7 @@ export default function WalletPage() {
                     const Icon = button.icon
                     const isSelected = selectedAction === button.id
                     const isClicked = clickedAction === button.id
+                    const isGreenButton = button.isGreen
                     
                     return (
                       <Button 
@@ -1138,9 +1157,11 @@ export default function WalletPage() {
                             ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                             : isSelected 
                               ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
-                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                              : isGreenButton
+                                ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90"
+                                : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                         }`}
-                        variant="outline"
+                        variant={isGreenButton ? "default" : "outline"}
                       >
                         <Icon className="h-4 w-4 mr-2" />
                         {button.label}
@@ -1307,19 +1328,33 @@ export default function WalletPage() {
                 /* 默认显示当前持仓 */
                 <div className="space-y-4">
                   {contractData.positions.map((position, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a]">
-                      <div>
-                        <div className="font-medium">{position.symbol}</div>
-                        <div className={`text-sm ${position.side === "多" ? "text-green-500" : "text-red-500"}`}>
-                          {position.side} {position.size}
+                    <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                          <span className="text-[#00D4AA] font-bold">{position.symbol.substring(0, 3).charAt(0)}</span>
+                        </div>
+                        <div>
+                          <div className="font-medium">{position.symbol}</div>
+                          <div className={`text-sm ${position.side === "多" ? "text-green-500" : "text-red-500"}`}>
+                            {position.side} {position.size}
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className={`font-bold ${position.pnl.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
-                          {position.pnl}
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0">
+                          <TrendChart 
+                            data={generateTrendData(position.pnl.startsWith('+'))} 
+                            isPositive={position.pnl.startsWith('+')}
+                            height={30}
+                          />
                         </div>
-                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                          保证金: ${position.margin}
+                        <div className="text-right">
+                          <div className={`font-bold ${position.pnl.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+                            {position.pnl}
+                          </div>
+                          <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                            保证金: ${position.margin}
+                          </div>
                         </div>
                       </div>
                     </div>
