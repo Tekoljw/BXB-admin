@@ -5,8 +5,8 @@ import "../styles/globals.css"
 import { ThemeProvider } from "@/contexts/theme-context"
 
 export const metadata: Metadata = {
-  title: "BeDAO - Crypto Trading Platform",
-  description: "Advanced crypto trading platform with social features",
+  title: "BeDAO - Global Cryptocurrency Guaranteed Trading Exchange",
+  description: "BeDAO Global Cryptocurrency Guaranteed Trading Exchange - Advanced crypto trading platform with comprehensive guarantee account system",
     generator: 'v0.dev'
 }
 

@@ -37,8 +37,8 @@ export default function HomePage() {
       <nav className="navbar fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="text-2xl font-bold text-[#14C2A3]">
-              BePay
+            <Link href="/" className="flex items-center">
+              <img src="/bedao-logo.png" alt="BeDAO" className="h-8" />
             </Link>
 
             <button 
@@ -203,7 +203,7 @@ export default function HomePage() {
 
             <div className="text-center mb-16">
               <h2 className="text-white text-3xl md:text-5xl font-bold">
-                {language === 'zh' ? 'BePay确保您的资产受到行业领先的安全级别保护' : 'BePay ensures that your assets are protected by industry-leading levels of security'}
+                {language === 'zh' ? 'BeDAO确保您的资产受到行业领先的安全级别保护' : 'BeDAO ensures that your assets are protected by industry-leading levels of security'}
               </h2>
             </div>
 
@@ -260,7 +260,7 @@ export default function HomePage() {
               {language === 'zh' ? '准备开始您的Web3之旅？' : 'Ready to Start Your Web3 Journey?'}
             </h2>
             <p className="text-gray-300 text-lg mb-12 max-w-2xl mx-auto">
-              {language === 'zh' ? '加入BePay全球加密货币平台，体验前所未有的区块链服务' : 'Join BePay global cryptocurrency platform for an unprecedented blockchain experience'}
+              {language === 'zh' ? '加入BeDAO全球加密货币平台，体验前所未有的区块链服务' : 'Join BeDAO global cryptocurrency platform for an unprecedented blockchain experience'}
             </p>
             <button 
               onClick={handleLogin}
@@ -277,13 +277,15 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="text-2xl font-bold text-[#14C2A3] mb-4">BePay</div>
+              <div className="mb-4">
+                <img src="/bedao-logo.png" alt="BeDAO" className="h-8" />
+              </div>
               <p className="text-gray-400">
                 {language === 'zh' ? '最便捷的一站式Web3解决方案' : 'The most convenient one-stop Web3 solution'}
               </p>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">BePAY</h4>
+              <h4 className="text-white font-semibold mb-4">BeDAO</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><Link href="#" className="hover:text-[#14C2A3]">{language === 'zh' ? '钱包' : 'Wallet'}</Link></li>
                 <li><Link href="#" className="hover:text-[#14C2A3]">SDK&API</Link></li>
