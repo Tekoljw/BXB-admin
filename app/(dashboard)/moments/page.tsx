@@ -10,7 +10,7 @@ export default function MomentsPage() {
   const { theme } = useTheme()
   const [searchTerm, setSearchTerm] = useState("")
   const [favorites, setFavorites] = useState<string[]>(["post-1", "post-3"])
-  const [activeMainTab, setActiveMainTab] = useState("推荐")
+  const [activeMainTab, setActiveMainTab] = useState("圈子")
   const [activeSubTab, setActiveSubTab] = useState("全部")
   const [mounted, setMounted] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -33,7 +33,7 @@ export default function MomentsPage() {
   }
 
   // 一级页签
-  const mainTabs = ["关注", "推荐", "热门"]
+  const mainTabs = ["关注", "圈子", "最新"]
 
   // 二级页签
   const subTabs = [

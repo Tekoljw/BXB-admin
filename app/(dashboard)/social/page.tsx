@@ -114,7 +114,7 @@ export default function SocialPage() {
   const { theme } = useTheme()
   const [searchTerm, setSearchTerm] = useState("")
   const [favorites, setFavorites] = useState<string[]>(["user-1", "user-3"])
-  const [activeMainTab, setActiveMainTab] = useState("热门")
+  const [activeMainTab, setActiveMainTab] = useState("圈子")
   const [activeSubTab, setActiveSubTab] = useState("全部")
   const [mounted, setMounted] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -134,24 +134,75 @@ export default function SocialPage() {
   }
 
   // 一级页签
-  const mainTabs = ["关注", "热门", "最新"]
+  const mainTabs = ["关注", "圈子", "最新"]
 
-  // 二级页签
-  const subTabs = [
-    "全部",
-    "交易员",
-    "分析师",
-    "KOL",
-    "机构",
-    "新手",
-    "BTC",
-    "ETH",
-    "DeFi",
-    "NFT",
-    "GameFi",
-    "Layer2",
-    "Meme",
-    "AI",
+  // 二级页签 - 根据主页签变化
+  const getSubTabs = () => {
+    if (activeMainTab === "圈子") {
+      return [] // 圈子页签不需要二级页签，会显示圈子列表
+    }
+    return [
+      "全部",
+      "交易员",
+      "分析师", 
+      "KOL",
+      "机构",
+      "新手",
+      "BTC",
+      "ETH",
+      "DeFi",
+      "NFT",
+      "GameFi",
+      "Layer2",
+      "Meme",
+      "AI",
+    ]
+  }
+
+  const subTabs = getSubTabs()
+
+  // 圈子数据
+  const circles = [
+    {
+      id: "circle-1",
+      name: "DeFi精英圈",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face",
+      members: 2856,
+      isJoined: true,
+      description: "专注DeFi协议分析与投资策略"
+    },
+    {
+      id: "circle-2", 
+      name: "NFT收藏家",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b829?w=64&h=64&fit=crop&crop=face",
+      members: 1234,
+      isJoined: false,
+      description: "发现优质NFT项目，分享收藏心得"
+    },
+    {
+      id: "circle-3",
+      name: "链游公会",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face", 
+      members: 3421,
+      isJoined: true,
+      description: "GameFi项目测评与攻略分享"
+    },
+    {
+      id: "circle-4",
+      name: "技术开发者",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face",
+      members: 892,
+      isJoined: false,
+      description: "区块链技术讨论与代码分享"
+    },
+    {
+      id: "circle-5",
+      name: "投资策略",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=64&h=64&fit=crop&crop=face",
+      members: 5678,
+      isJoined: true,
+      description: "市场分析与投资策略分享"
+    }
   ]
 
   // 顶部热门用户数据
@@ -565,33 +616,78 @@ export default function SocialPage() {
           </div>
         </div>
 
-        {/* 用户列表标题栏 */}
-        <div className={`${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
-          <div className="flex items-center justify-between p-4">
-            <div className={`text-base font-bold ${isDark ? "text-white" : "text-gray-800"}`}>推荐用户</div>
-            <button
-              className={`flex items-center px-3 py-1 rounded-md text-sm ${
-                isDark ? "bg-[#252842] text-white" : "bg-gray-100 text-gray-800"
-              }`}
-            >
-              <Filter className="h-4 w-4 mr-2" />
-              筛选
-            </button>
+        {/* 用户列表标题栏 - 只在非圈子页签时显示 */}
+        {activeMainTab !== "圈子" && (
+          <div className={`${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
+            <div className="flex items-center justify-between p-4">
+              <div className={`text-base font-bold ${isDark ? "text-white" : "text-gray-800"}`}>推荐用户</div>
+              <button
+                className={`flex items-center px-3 py-1 rounded-md text-sm ${
+                  isDark ? "bg-[#252842] text-white" : "bg-gray-100 text-gray-800"
+                }`}
+              >
+                <Filter className="h-4 w-4 mr-2" />
+                筛选
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* 用户列表 */}
-        <div className="space-y-3">
-          {filteredUsers.map((user) => {
-            const isFavorite = favorites.includes(user.id)
-
-            return (
+        {/* 圈子详细列表 - 只在圈子页签时显示 */}
+        {activeMainTab === "圈子" && (
+          <div className="space-y-3">
+            {circles.map((circle) => (
               <div
-                key={user.id}
+                key={circle.id}
                 className={`${cardStyle} rounded-lg transition-all duration-200 hover:${
                   isDark ? "bg-[#252842]" : "bg-gray-50"
                 }`}
               >
+                <div className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <img
+                        src={circle.avatar}
+                        alt={circle.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div>
+                        <h3 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                          {circle.name}
+                        </h3>
+                        <p className="text-gray-500 text-sm">{circle.description}</p>
+                        <p className="text-gray-400 text-xs">{circle.members} 位成员</p>
+                      </div>
+                    </div>
+                    <button
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        circle.isJoined
+                          ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                          : "bg-[#00D4AA] text-white hover:bg-[#00D4AA]/80"
+                      }`}
+                    >
+                      {circle.isJoined ? "已加入" : "加入"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* 用户列表 - 只在非圈子页签时显示 */}
+        {activeMainTab !== "圈子" && (
+          <div className="space-y-3">
+            {filteredUsers.map((user) => {
+              const isFavorite = favorites.includes(user.id)
+
+              return (
+                <div
+                  key={user.id}
+                  className={`${cardStyle} rounded-lg transition-all duration-200 hover:${
+                    isDark ? "bg-[#252842]" : "bg-gray-50"
+                  }`}
+                >
                 <div className="p-4">
                   <div className="flex items-start">
                     {/* 用户头像和信息 */}
