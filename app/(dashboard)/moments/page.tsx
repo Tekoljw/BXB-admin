@@ -770,8 +770,8 @@ export default function MomentsPage() {
                   </div>
                 )
                 })}
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* 右侧边栏 - 推荐关注与交易员排行榜 */}
@@ -844,7 +844,7 @@ export default function MomentsPage() {
                   <div>
                     {/* 时间筛选器 - 黑色方形小页签 */}
                     <div className="flex items-center space-x-1 mb-4 overflow-x-auto">
-                      {["单日", "本周", "本月", "总收益", "胜率"].map((period) => (
+                      {["本周", "本月", "总收益"].map((period) => (
                         <button
                           key={period}
                           onClick={() => setLeaderboardPeriod(period)}
