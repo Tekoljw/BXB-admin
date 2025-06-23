@@ -968,8 +968,8 @@ export default function WalletPage() {
                         <div className="flex items-center gap-3">
                           <div className="flex-shrink-0">
                             <KlineChart 
-                              data={generateKlineData()}
-                              height={30}
+                              height={28}
+                              width={64}
                             />
                           </div>
                           <div className="text-right">
@@ -1343,9 +1343,9 @@ export default function WalletPage() {
                       <div className="flex items-center gap-3">
                         <div className="flex-shrink-0">
                           <TrendChart 
-                            data={generateTrendData(position.pnl.startsWith('+'))} 
                             isPositive={position.pnl.startsWith('+')}
-                            height={30}
+                            height={28}
+                            width={64}
                           />
                         </div>
                         <div className="text-right">
