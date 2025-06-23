@@ -1,5 +1,5 @@
 html {
-  zoom: 1.25; /* 100/80 = 1.25 to make 80% zoom appear as 100% */
+  zoom: 0.9; /* Make everything appear 10% smaller */
 }
 
 /* Force immediate button responses */

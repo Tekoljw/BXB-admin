@@ -18,19 +18,19 @@ module.exports = {
       },
     },
     fontSize: {
-      'xs': ['0.9rem', { lineHeight: '1.25rem' }], // 12px -> 15px
-      'sm': ['1.05rem', { lineHeight: '1.5rem' }], // 14px -> 17.5px
-      'base': ['1.2rem', { lineHeight: '1.8rem' }], // 16px -> 20px
-      'lg': ['1.35rem', { lineHeight: '2rem' }], // 18px -> 22.5px
-      'xl': ['1.5rem', { lineHeight: '2.25rem' }], // 20px -> 25px
-      '2xl': ['1.8rem', { lineHeight: '2.4rem' }], // 24px -> 30px
-      '3xl': ['2.25rem', { lineHeight: '2.7rem' }], // 30px -> 37.5px
-      '4xl': ['2.7rem', { lineHeight: '3rem' }], // 36px -> 45px
-      '5xl': ['3.6rem', { lineHeight: '1' }], // 48px -> 60px
-      '6xl': ['4.5rem', { lineHeight: '1' }], // 60px -> 75px
-      '7xl': ['6rem', { lineHeight: '1' }], // 72px -> 90px
-      '8xl': ['7.2rem', { lineHeight: '1' }], // 96px -> 120px
-      '9xl': ['9.6rem', { lineHeight: '1' }], // 128px -> 160px
+      'xs': ['0.675rem', { lineHeight: '1rem' }], // 12px -> 10.8px
+      'sm': ['0.788rem', { lineHeight: '1.125rem' }], // 14px -> 12.6px
+      'base': ['0.9rem', { lineHeight: '1.35rem' }], // 16px -> 14.4px
+      'lg': ['1.013rem', { lineHeight: '1.463rem' }], // 18px -> 16.2px
+      'xl': ['1.125rem', { lineHeight: '1.575rem' }], // 20px -> 18px
+      '2xl': ['1.35rem', { lineHeight: '1.8rem' }], // 24px -> 21.6px
+      '3xl': ['1.688rem', { lineHeight: '2.025rem' }], // 30px -> 27px
+      '4xl': ['2.025rem', { lineHeight: '2.25rem' }], // 36px -> 32.4px
+      '5xl': ['2.7rem', { lineHeight: '1' }], // 48px -> 43.2px
+      '6xl': ['3.375rem', { lineHeight: '1' }], // 60px -> 54px
+      '7xl': ['4.05rem', { lineHeight: '1' }], // 72px -> 64.8px
+      '8xl': ['5.4rem', { lineHeight: '1' }], // 96px -> 86.4px
+      '9xl': ['7.2rem', { lineHeight: '1' }], // 128px -> 115.2px
     },
     extend: {
       fontFamily: {
