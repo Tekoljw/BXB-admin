@@ -22,7 +22,7 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
     let width = 0
     let height = 0
     let columns = 0
-    const fontSize = 16
+    const fontSize = 24
     const drops: Array<{
       y: number
       speed: number
@@ -42,10 +42,10 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
       
       // Initialize drops with trails
       for (let i = 0; i < columns; i++) {
-        const trailLength = Math.floor(Math.random() * 15) + 5
+        const trailLength = Math.floor(Math.random() * 12) + 4
         drops[i] = {
           y: Math.random() * height - trailLength * fontSize,
-          speed: Math.random() * 3 + 1,
+          speed: Math.random() * 4 + 1.5,
           chars: Array(trailLength).fill(0).map(() => 
             chars[Math.floor(Math.random() * chars.length)]
           ),
@@ -99,7 +99,7 @@ export default function DigitalRain({ className = "" }: DigitalRainProps) {
         // Reset when completely off screen
         if (drop.y - drop.chars.length * fontSize > height) {
           drop.y = -drop.chars.length * fontSize - Math.random() * height
-          drop.speed = Math.random() * 3 + 1
+          drop.speed = Math.random() * 4 + 1.5
           
           // Regenerate characters
           for (let j = 0; j < drop.chars.length; j++) {
