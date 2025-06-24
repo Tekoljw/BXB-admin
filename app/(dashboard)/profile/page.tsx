@@ -255,12 +255,8 @@ export default function ProfilePage() {
       <div className="grid grid-cols-12 gap-6">
         {/* Left Sidebar - Navigation */}
         <div className="col-span-3">
-          <div className={`${cardStyle} rounded-lg p-4 border sticky top-6`}>
-            <h2 className={`text-lg font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-              个人中心
-            </h2>
-            
-            <nav className="space-y-1">
+          <div className={`${cardStyle} rounded-lg border sticky top-6 overflow-hidden`}>
+            <nav className="p-2">
               {menuItems.map((item) => {
                 const Icon = item.icon
                 const isActive = activeSection === item.id
@@ -269,21 +265,18 @@ export default function ProfilePage() {
                   <button
                     key={item.id}
                     onClick={() => setActiveSection(item.id)}
-                    className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
+                    className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 ${
                       isActive
                         ? isDark
-                          ? "bg-[#252842] text-white"
-                          : "bg-gray-100 text-gray-900"
+                          ? "bg-white text-black font-medium"
+                          : "bg-black text-white font-medium"
                         : isDark
-                          ? "text-gray-300 hover:bg-[#252842] hover:text-white"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                          ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
+                          : "text-gray-600 hover:text-gray-800 hover:bg-gray-100 font-normal"
                     }`}
                   >
-                    <div className="flex items-center space-x-3">
-                      <Icon className="w-5 h-5" />
-                      <span className="font-medium">{item.name}</span>
-                    </div>
-                    {isActive && <ChevronRight className="w-4 h-4" />}
+                    <Icon className="w-5 h-5" />
+                    <span>{item.name}</span>
                   </button>
                 )
               })}
