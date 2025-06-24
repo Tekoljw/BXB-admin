@@ -88,7 +88,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
     { path: "/futures", icon: BarChart3, label: "合约", component: FuturesPage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
-    { path: "/profile", icon: User, label: "个人", component: ProfilePage },
   ]
 
   const renderCurrentPage = () => {
@@ -96,6 +95,11 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentItem) {
       const Component = currentItem.component
       return <Component />
+    }
+
+    // Handle profile page separately
+    if (currentPage === "/profile") {
+      return <ProfilePage />
     }
 
     return <ChatPage />
