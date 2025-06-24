@@ -19,7 +19,7 @@ import {
   Compass,
   Coins,
 } from "lucide-react"
-import { usePathname } from "next/navigation"
+
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
@@ -36,7 +36,7 @@ interface SideNavigationProps {
 }
 
 export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpanded: propIsExpanded }: SideNavigationProps) {
-  const pathname = usePathname()
+  const [currentPath, setCurrentPath] = useState("/chat")
   const router = useRouter()
   const { language, setLanguage, theme } = useTheme()
   const { t } = useTranslation()

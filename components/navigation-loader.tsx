@@ -1,12 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { usePathname } from "next/navigation"
+
 import CreativeLoader from "./creative-loader"
 
 export default function NavigationLoader() {
   const [loading, setLoading] = useState(false)
-  const pathname = usePathname()
+  const [currentPath, setCurrentPath] = useState("/chat")
 
   useEffect(() => {
     const handleStart = () => setLoading(true)

@@ -43,7 +43,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const [currentPage, setCurrentPage] = useState("/chat")
   const [isExpanded, setIsExpanded] = useState(false)
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
-  const pathname = usePathname()
   const { theme, setTheme, language, setLanguage } = useTheme()
 
   useEffect(() => {
