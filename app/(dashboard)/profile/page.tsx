@@ -53,13 +53,29 @@ export default function ProfilePage() {
           <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
             专业交易员
           </p>
+          
+          {/* Edit Button */}
+          <button className={`mt-2 px-3 py-1 text-xs rounded-full border transition-colors ${
+            isDark 
+              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+              : "border-gray-300 text-gray-600 hover:bg-gray-50"
+          }`}>
+            编辑
+          </button>
         </div>
 
-        {/* Bio Text */}
+        {/* Bio Text - Editable */}
         <div className="text-center mb-4">
-          <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-            Professional trader with 5+ years experience
-          </p>
+          <div className="group relative">
+            <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"} group-hover:bg-gray-100 dark:group-hover:bg-gray-700 p-2 rounded transition-colors cursor-pointer`}>
+              Professional trader with 5+ years experience
+            </p>
+            <button className={`absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity text-xs px-2 py-1 rounded ${
+              isDark ? "bg-gray-600 text-white" : "bg-gray-200 text-gray-600"
+            }`}>
+              编辑
+            </button>
+          </div>
         </div>
 
         {/* Location and Join Date */}
@@ -96,26 +112,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Three Action Buttons */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <button className="bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm">
-            关注
-          </button>
-          <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
-            isDark 
-              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
-              : "border-gray-300 text-gray-700 hover:bg-gray-50"
-          }`}>
-            加好友
-          </button>
-          <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
-            isDark 
-              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
-              : "border-gray-300 text-gray-700 hover:bg-gray-50"
-          }`}>
-            跟单
-          </button>
-        </div>
+
 
         {/* Tab Navigation */}
         <div className="mb-6">
@@ -124,10 +121,10 @@ export default function ProfilePage() {
               动态
             </button>
             <button className={`px-4 py-3 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              合约交易
+              收藏
             </button>
             <button className={`px-4 py-3 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              合约持仓
+              我的圈子
             </button>
           </div>
         </div>
