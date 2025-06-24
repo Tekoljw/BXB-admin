@@ -124,6 +124,10 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Updated all black buttons to white buttons in dark mode
   - Implemented TOP leaderboard with auto-width sliding tabs (本周, 本月, 总收益)
   - Enhanced dark mode styling with proper button contrast
+  - Created three-tier profile structure with dedicated navigation menu
+  - Added reputation guarantee tags "信誉担保$123K" after usernames in sharing pages
+  - Implemented follow buttons with follower counts in bottom-right corner of posts
+  - Order: "已有XX人跟单" text followed by "跟单" button
 
 ## User Preferences
 

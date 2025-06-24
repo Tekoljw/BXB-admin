@@ -537,6 +537,9 @@ export default function SocialPage() {
                         
                         {/* 跟单按钮和人数 - 移动到底部右侧 */}
                         <div className="flex items-center space-x-2 ml-auto">
+                          <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                            已有{Math.floor(Math.random() * 300 + 50)}人跟单
+                          </span>
                           <button className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
                             isDark 
                               ? "bg-white text-black hover:bg-gray-200" 
@@ -544,9 +547,6 @@ export default function SocialPage() {
                           }`}>
                             跟单
                           </button>
-                          <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                            {Math.floor(Math.random() * 300 + 50)}人
-                          </span>
                         </div>
                       </div>
                     </div>
