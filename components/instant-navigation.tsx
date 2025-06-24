@@ -27,6 +27,7 @@ import ChatPage from "@/app/(dashboard)/chat/page"
 import MomentsPage from "@/app/(dashboard)/moments/page"
 import MallPage from "@/app/(dashboard)/mall/page"
 import WalletPage from "@/app/(dashboard)/wallet/page"
+import ProfilePage from "@/app/(dashboard)/profile/page"
 
 import USDTTradePage from "@/app/(dashboard)/usdt-trade/page"
 import MarketPage from "@/app/(dashboard)/market/page"
@@ -87,6 +88,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
     { path: "/futures", icon: BarChart3, label: "合约", component: FuturesPage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
+    { path: "/profile", icon: User, label: "个人", component: ProfilePage },
   ]
 
   const renderCurrentPage = () => {
