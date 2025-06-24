@@ -256,7 +256,7 @@ export default function ProfilePage() {
         {/* Left Sidebar - Navigation */}
         <div className="col-span-3">
           <div className={`${cardStyle} rounded-lg border sticky top-6 overflow-hidden`}>
-            <nav className="p-2">
+            <div className="space-y-1 p-2">
               {menuItems.map((item) => {
                 const Icon = item.icon
                 const isActive = activeSection === item.id
@@ -265,22 +265,20 @@ export default function ProfilePage() {
                   <button
                     key={item.id}
                     onClick={() => setActiveSection(item.id)}
-                    className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
                       isActive
-                        ? isDark
-                          ? "bg-white text-black font-medium"
-                          : "bg-black text-white font-medium"
+                        ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
                         : isDark
-                          ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
-                          : "text-gray-600 hover:text-gray-800 hover:bg-gray-100 font-normal"
+                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] hover:scale-102"
+                          : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
                     }`}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="h-5 w-5" />
                     <span>{item.name}</span>
                   </button>
                 )
               })}
-            </nav>
+            </div>
           </div>
         </div>
 
