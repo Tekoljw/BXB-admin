@@ -130,6 +130,14 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Order: "已有XX人跟单" text followed by "跟单" button
   - Added three-dot menu dropdowns with 关注/屏蔽/举报 options on posts
   - Fixed left sidebar navigation filtering for "全部" and category tabs
+- January 24, 2025. Enhanced chat financial features:
+  - Removed all titles from wallet order record pages
+  - Updated order record tabs to black/white button styling
+  - Added transfer functionality for private chats with ArrowRightLeft icon
+  - Added airdrop functionality for group chats with Zap icon (renamed from red packets)
+  - Implemented premium card designs with gradient backgrounds and glass morphism
+  - Added cryptocurrency selection (USDT, BTC, ETH, BNB, ADA, SOL) for both features
+  - Created interactive claim buttons with progress tracking and animations
 
 ## User Preferences
 
