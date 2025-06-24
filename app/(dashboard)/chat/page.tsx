@@ -1,8 +1,32 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
+
+// Custom Transfer Icon (Plane with Coin)
+const TransferIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5">
+    {/* Airplane body */}
+    <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="currentColor"/>
+    {/* Coin */}
+    <circle cx="18" cy="6" r="3" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M18 4.5v3M16.5 6h3" stroke="currentColor" strokeWidth="1"/>
+  </svg>
+)
+
+// Custom Airdrop Icon (Parachute)
+const AirdropIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5">
+    {/* Parachute canopy */}
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 0 0 1 0 1h14s0-1 0-1c0-3.87-3.13-7-7-7z" fill="currentColor" opacity="0.8"/>
+    {/* Parachute lines */}
+    <path d="M7 10l3 6M12 10v6M17 10l-3 6"/>
+    {/* Person/payload */}
+    <circle cx="12" cy="18" r="2" fill="currentColor"/>
+    <path d="M12 16v-2" strokeWidth="1"/>
+  </svg>
+)
 
 interface Contact {
   id: string
@@ -1793,7 +1817,7 @@ export default function ChatPage() {
                                   ? 'bg-white/20 backdrop-blur-sm' 
                                   : 'bg-[#4F46E5] shadow-lg'
                               }`}>
-                                <ArrowRightLeft className={`w-6 h-6 ${
+                                <TransferIcon className={`w-6 h-6 ${
                                   msg.senderId === 'user' ? 'text-white' : 'text-white'
                                 }`} />
                               </div>
@@ -1899,7 +1923,7 @@ export default function ChatPage() {
                                     ? 'bg-red-600 shadow-lg'
                                     : 'bg-red-500 shadow-lg'
                               }`}>
-                                <Zap className={`w-6 h-6 ${
+                                <AirdropIcon className={`w-6 h-6 ${
                                   msg.senderId === 'user' ? 'text-yellow-100' : 'text-white'
                                 }`} />
                               </div>
@@ -2086,7 +2110,7 @@ export default function ChatPage() {
                               }`}
                               title="转账"
                             >
-                              <ArrowRightLeft className="w-5 h-5" />
+                              <TransferIcon className="w-5 h-5" />
                             </button>
                           )}
                           
@@ -2100,7 +2124,7 @@ export default function ChatPage() {
                               }`}
                               title="发空投"
                             >
-                              <Zap className="w-5 h-5" />
+                              <AirdropIcon className="w-5 h-5" />
                             </button>
                           )}
                         </div>
