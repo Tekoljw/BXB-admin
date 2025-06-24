@@ -2376,12 +2376,14 @@ export default function WalletPage() {
                   <button
                     key={key}
                     onClick={() => setSecondaryTab(key)}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
                       secondaryTab === key
-                        ? "bg-[#00D4AA] text-black"
+                        ? isDark 
+                          ? "bg-white text-black border-white" 
+                          : "bg-black text-white border-black"
                         : isDark
-                          ? "bg-[#252842] text-gray-300 hover:text-white hover:bg-[#2a2d42]"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                          : "bg-transparent text-black border-black hover:bg-black hover:text-white"
                     }`}
                   >
                     {label}
@@ -2412,18 +2414,19 @@ export default function WalletPage() {
           <div className={`${cardStyle} rounded-lg overflow-hidden`}>
             {/* 二级页签导航 */}
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>现货订单记录</h3>
               <div className="flex flex-wrap gap-2">
                 {Object.entries(currentCategory.tabs).map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => setSecondaryTab(key)}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
                       secondaryTab === key
-                        ? "bg-[#00D4AA] text-black"
+                        ? isDark 
+                          ? "bg-white text-black border-white" 
+                          : "bg-black text-white border-black"
                         : isDark
-                          ? "bg-[#252842] text-gray-300 hover:text-white hover:bg-[#2a2d42]"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                          : "bg-transparent text-black border-black hover:bg-black hover:text-white"
                     }`}
                   >
                     {label}
@@ -2499,18 +2502,19 @@ export default function WalletPage() {
           <div className={`${cardStyle} rounded-lg overflow-hidden`}>
             {/* 二级页签导航 */}
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>合约订单记录</h3>
               <div className="flex flex-wrap gap-2">
                 {Object.entries(currentCategory.tabs).map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => setSecondaryTab(key)}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
                       secondaryTab === key
-                        ? "bg-[#00D4AA] text-black"
+                        ? isDark 
+                          ? "bg-white text-black border-white" 
+                          : "bg-black text-white border-black"
                         : isDark
-                          ? "bg-[#252842] text-gray-300 hover:text-white hover:bg-[#2a2d42]"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                          : "bg-transparent text-black border-black hover:bg-black hover:text-white"
                     }`}
                   >
                     {label}
@@ -2582,18 +2586,19 @@ export default function WalletPage() {
           <div className={`${cardStyle} rounded-lg overflow-hidden`}>
             {/* 二级页签导航 */}
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>充提币记录</h3>
               <div className="flex flex-wrap gap-2">
                 {Object.entries(currentCategory.tabs).map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => setSecondaryTab(key)}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
                       secondaryTab === key
-                        ? "bg-[#00D4AA] text-black"
+                        ? isDark 
+                          ? "bg-white text-black border-white" 
+                          : "bg-black text-white border-black"
                         : isDark
-                          ? "bg-[#252842] text-gray-300 hover:text-white hover:bg-[#2a2d42]"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                          : "bg-transparent text-black border-black hover:bg-black hover:text-white"
                     }`}
                   >
                     {label}
@@ -2660,18 +2665,19 @@ export default function WalletPage() {
             {/* 二级页签导航 */}
             {currentCategory && Object.keys(currentCategory.tabs).length > 1 && (
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>{orderTab}</h3>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(currentCategory.tabs).map(([key, label]) => (
                     <button
                       key={key}
                       onClick={() => setSecondaryTab(key)}
-                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
                         secondaryTab === key
-                          ? "bg-[#00D4AA] text-black"
+                          ? isDark 
+                            ? "bg-white text-black border-white" 
+                            : "bg-black text-white border-black"
                           : isDark
-                            ? "bg-[#252842] text-gray-300 hover:text-white hover:bg-[#2a2d42]"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                            : "bg-transparent text-black border-black hover:bg-black hover:text-white"
                       }`}
                     >
                       {label}
@@ -2683,9 +2689,6 @@ export default function WalletPage() {
             
             <div className="p-6">
               <div className="space-y-4">
-                {!currentCategory || Object.keys(currentCategory.tabs).length <= 1 ? (
-                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{orderTab}</h3>
-                ) : null}
                 <div className="space-y-3">
                   {records.map((record, index) => (
                     <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
