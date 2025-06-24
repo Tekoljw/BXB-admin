@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
 interface Contact {
@@ -49,6 +49,15 @@ export default function ChatPage() {
   const [groupInfoAnimating, setGroupInfoAnimating] = useState(false)
   const [groupInfoClosing, setGroupInfoClosing] = useState(false)
   const [screenWidth, setScreenWidth] = useState(0)
+  const [showTransferModal, setShowTransferModal] = useState(false)
+  const [showRedPacketModal, setShowRedPacketModal] = useState(false)
+  const [transferAmount, setTransferAmount] = useState("")
+  const [transferNote, setTransferNote] = useState("")
+  const [redPacketAmount, setRedPacketAmount] = useState("")
+  const [redPacketCount, setRedPacketCount] = useState("1")
+  const [redPacketNote, setRedPacketNote] = useState("")
+  const [selectedCurrency, setSelectedCurrency] = useState("USDT")
+  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false)
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -178,6 +187,46 @@ export default function ChatPage() {
     const handleClickOutside = (event: MouseEvent) => {
       if (addMenuRef.current && !addMenuRef.current.contains(event.target as Node)) {
         handleCloseMenu()
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
+
+  // Available cryptocurrencies
+  const currencies = [
+    { symbol: "USDT", name: "Tether", icon: "₮", color: "bg-green-500" },
+    { symbol: "BTC", name: "Bitcoin", icon: "₿", color: "bg-orange-500" },
+    { symbol: "ETH", name: "Ethereum", icon: "Ξ", color: "bg-blue-500" },
+    { symbol: "BNB", name: "Binance Coin", icon: "B", color: "bg-yellow-500" },
+    { symbol: "ADA", name: "Cardano", icon: "₳", color: "bg-blue-600" },
+    { symbol: "SOL", name: "Solana", icon: "◎", color: "bg-purple-500" }
+  ]
+
+  // Handle transfer/red packet functions
+  const handleTransfer = () => {
+    console.log("Transfer:", { amount: transferAmount, currency: selectedCurrency, note: transferNote })
+    setShowTransferModal(false)
+    setTransferAmount("")
+    setTransferNote("")
+  }
+
+  const handleRedPacket = () => {
+    console.log("Red Packet:", { amount: redPacketAmount, count: redPacketCount, currency: selectedCurrency, note: redPacketNote })
+    setShowRedPacketModal(false)
+    setRedPacketAmount("")
+    setRedPacketCount("1")
+    setRedPacketNote("")
+  }
+
+  // Close currency dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (currencyDropdownRef.current && !currencyDropdownRef.current.contains(event.target as Node)) {
+        setShowCurrencyDropdown(false)
       }
     }
 
