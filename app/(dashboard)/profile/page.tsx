@@ -28,18 +28,16 @@ export default function ProfilePage() {
 
   const renderPersonalHomepage = () => (
     <div className="space-y-6">
-      {/* Profile Header - Exact Match to Friend Profile */}
+      {/* Profile Header - Exact Copy from Friend Profile */}
       <div className={`${cardStyle} rounded-lg p-6 border`}>
-        {/* Centered Profile Photo */}
+        {/* Avatar */}
         <div className="text-center mb-4">
-          <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold mx-auto">
+          <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold mx-auto mb-3">
             我
             <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
           </div>
-        </div>
-
-        {/* Name and Title */}
-        <div className="text-center mb-4">
+          
+          {/* Name with verification badge */}
           <div className="flex items-center justify-center space-x-2 mb-1">
             <h1 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
               交易达人
@@ -50,32 +48,18 @@ export default function ProfilePage() {
               </svg>
             </div>
           </div>
-          <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+          
+          {/* Title */}
+          <p className={`text-sm mb-4 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
             专业交易员
           </p>
-          
-          {/* Edit Button */}
-          <button className={`mt-2 px-3 py-1 text-xs rounded-full border transition-colors ${
-            isDark 
-              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
-              : "border-gray-300 text-gray-600 hover:bg-gray-50"
-          }`}>
-            编辑
-          </button>
         </div>
 
-        {/* Bio Text - Editable */}
+        {/* Bio */}
         <div className="text-center mb-4">
-          <div className="group relative">
-            <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"} group-hover:bg-gray-100 dark:group-hover:bg-gray-700 p-2 rounded transition-colors cursor-pointer`}>
-              Professional trader with 5+ years experience
-            </p>
-            <button className={`absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity text-xs px-2 py-1 rounded ${
-              isDark ? "bg-gray-600 text-white" : "bg-gray-200 text-gray-600"
-            }`}>
-              编辑
-            </button>
-          </div>
+          <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+            Professional trader with 5+ years experience
+          </p>
         </div>
 
         {/* Location and Join Date */}
@@ -90,7 +74,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Three Column Stats */}
+        {/* Stats - Exactly like friend profile */}
         <div className="grid grid-cols-3 gap-6 mb-6">
           <div className="text-center">
             <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
@@ -112,7 +96,26 @@ export default function ProfilePage() {
           </div>
         </div>
 
-
+        {/* Personal profile buttons */}
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          <button className="bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm">
+            编辑资料
+          </button>
+          <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
+            isDark 
+              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+              : "border-gray-300 text-gray-700 hover:bg-gray-50"
+          }`}>
+            分享主页
+          </button>
+          <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
+            isDark 
+              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+              : "border-gray-300 text-gray-700 hover:bg-gray-50"
+          }`}>
+            设置
+          </button>
+        </div>
 
         {/* Tab Navigation */}
         <div className="mb-6">
@@ -178,88 +181,6 @@ export default function ProfilePage() {
             </div>
             <span className="text-xs text-gray-400">2,177 次互动</span>
           </div>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className={`${cardStyle} rounded-lg p-4 border`}>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-[#00D4AA] mb-1">1,234</div>
-            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>关注者</div>
-          </div>
-        </div>
-        
-        <div className={`${cardStyle} rounded-lg p-4 border`}>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-[#00D4AA] mb-1">567</div>
-            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>关注中</div>
-          </div>
-        </div>
-        
-        <div className={`${cardStyle} rounded-lg p-4 border`}>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-[#00D4AA] mb-1">89</div>
-            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>动态</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Trading Performance */}
-      <div className={`${cardStyle} rounded-lg p-6 border`}>
-        <h3 className={`text-lg font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-          交易表现
-        </h3>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-xl font-bold text-green-500 mb-1">+156.8%</div>
-            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>总收益率</div>
-          </div>
-          
-          <div className="text-center">
-            <div className="text-xl font-bold text-[#00D4AA] mb-1">78.5%</div>
-            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>胜率</div>
-          </div>
-          
-          <div className="text-center">
-            <div className="text-xl font-bold text-blue-500 mb-1">1,567</div>
-            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>交易次数</div>
-          </div>
-          
-          <div className="text-center">
-            <div className="text-xl font-bold text-purple-500 mb-1">2.1M</div>
-            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>交易量 USDT</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Activity */}
-      <div className={`${cardStyle} rounded-lg p-6 border`}>
-        <h3 className={`text-lg font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-          最近活动
-        </h3>
-        
-        <div className="space-y-3">
-          {[
-            { action: "发布了新的交易策略", time: "2小时前", type: "post" },
-            { action: "跟单 BTC/USDT 多单", time: "4小时前", type: "trade" },
-            { action: "关注了 DeFi专家", time: "1天前", type: "follow" },
-            { action: "发布了市场分析", time: "2天前", type: "post" }
-          ].map((activity, index) => (
-            <div key={index} className="flex items-center space-x-3 py-2">
-              <div className={`w-2 h-2 rounded-full ${
-                activity.type === 'trade' ? 'bg-green-500' : 
-                activity.type === 'follow' ? 'bg-blue-500' : 'bg-purple-500'
-              }`}></div>
-              <div className="flex-1">
-                <span className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
-                  {activity.action}
-                </span>
-              </div>
-              <span className="text-xs text-gray-400">{activity.time}</span>
-            </div>
-          ))}
         </div>
       </div>
     </div>
