@@ -23,6 +23,21 @@ interface Message {
   text: string
   time: string
   isRead: boolean
+  type?: 'text' | 'transfer' | 'redpacket'
+  transferData?: {
+    amount: string
+    currency: string
+    note: string
+    claimed?: boolean
+  }
+  redpacketData?: {
+    totalAmount: string
+    count: string
+    currency: string
+    note: string
+    claimed?: number
+    claimedBy?: string[]
+  }
 }
 
 export default function ChatPage() {
@@ -35,6 +50,12 @@ export default function ChatPage() {
   const [activeTab, setActiveTab] = useState("好友")
   const [selectedContact, setSelectedContact] = useState<string | null>("contact-1")
   const [message, setMessage] = useState("")
+  const [messages, setMessages] = useState<{[key: string]: Message[]}>({
+    "contact-1": [
+      { id: "1", senderId: "bot", text: "您好！我是您的专属交易助手，有什么可以帮您的吗？", time: "14:30", isRead: true, type: 'text' },
+      { id: "2", senderId: "user", text: "最近BTC走势如何？", time: "14:32", isRead: true, type: 'text' }
+    ]
+  })
   const [favorites, setFavorites] = useState<string[]>(["contact-1", "contact-3"])
   const [showAddMenu, setShowAddMenu] = useState(false)
   const [isMenuAnimating, setIsMenuAnimating] = useState(false)
@@ -108,7 +129,21 @@ export default function ChatPage() {
   // Handle send message
   const handleSendMessage = (e?: React.FormEvent) => {
     e?.preventDefault()
-    if (!message.trim()) return
+    if (!message.trim() || !selectedContact) return
+    
+    const newMessage: Message = {
+      id: `msg-${Date.now()}`,
+      senderId: "user",
+      text: message,
+      time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+      isRead: false,
+      type: 'text'
+    }
+    
+    setMessages(prev => ({
+      ...prev,
+      [selectedContact]: [...(prev[selectedContact] || []), newMessage]
+    }))
     
     console.log(`发送消息到 ${selectedContact}: ${message}`)
     setMessage("")
@@ -209,18 +244,105 @@ export default function ChatPage() {
 
   // Handle transfer/red packet functions
   const handleTransfer = () => {
-    console.log("Transfer:", { amount: transferAmount, currency: selectedCurrency, note: transferNote })
+    if (!transferAmount || !selectedContact) return
+    
+    const newMessage: Message = {
+      id: `transfer-${Date.now()}`,
+      senderId: "user",
+      text: "",
+      time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+      isRead: false,
+      type: 'transfer',
+      transferData: {
+        amount: transferAmount,
+        currency: selectedCurrency,
+        note: transferNote,
+        claimed: false
+      }
+    }
+    
+    console.log("Transfer:", newMessage.transferData)
+    
+    // Add message to chat
+    setMessages(prev => ({
+      ...prev,
+      [selectedContact]: [...(prev[selectedContact] || []), newMessage]
+    }))
+    
     setShowTransferModal(false)
     setTransferAmount("")
     setTransferNote("")
   }
 
   const handleRedPacket = () => {
-    console.log("Red Packet:", { amount: redPacketAmount, count: redPacketCount, currency: selectedCurrency, note: redPacketNote })
+    if (!redPacketAmount || !redPacketCount || !selectedContact) return
+    
+    const newMessage: Message = {
+      id: `redpacket-${Date.now()}`,
+      senderId: "user", 
+      text: "",
+      time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+      isRead: false,
+      type: 'redpacket',
+      redpacketData: {
+        totalAmount: redPacketAmount,
+        count: redPacketCount,
+        currency: selectedCurrency,
+        note: redPacketNote || "恭喜发财，大吉大利！",
+        claimed: 0,
+        claimedBy: []
+      }
+    }
+    
+    console.log("Red Packet:", newMessage.redpacketData)
+    
+    // Add message to chat
+    setMessages(prev => ({
+      ...prev,
+      [selectedContact]: [...(prev[selectedContact] || []), newMessage]
+    }))
+    
     setShowRedPacketModal(false)
     setRedPacketAmount("")
     setRedPacketCount("1")
     setRedPacketNote("")
+  }
+
+  const handleClaimTransfer = (messageId: string) => {
+    console.log("Claiming transfer:", messageId)
+    
+    if (!selectedContact) return
+    
+    setMessages(prev => ({
+      ...prev,
+      [selectedContact]: prev[selectedContact]?.map(msg => 
+        msg.id === messageId && msg.transferData 
+          ? { ...msg, transferData: { ...msg.transferData, claimed: true }}
+          : msg
+      ) || []
+    }))
+  }
+
+  const handleClaimRedPacket = (messageId: string) => {
+    console.log("Claiming red packet:", messageId)
+    
+    if (!selectedContact) return
+    
+    setMessages(prev => ({
+      ...prev,
+      [selectedContact]: prev[selectedContact]?.map(msg => 
+        msg.id === messageId && msg.redpacketData 
+          ? { 
+              ...msg, 
+              redpacketData: { 
+                ...msg.redpacketData, 
+                claimed: (msg.redpacketData.claimed || 0) + 1,
+                claimedBy: [...(msg.redpacketData.claimedBy || []), "current-user"]
+              }
+            }
+          : msg
+      ) || []
+    }))
   }
 
   // Close currency dropdown on outside click
@@ -472,25 +594,7 @@ export default function ChatPage() {
     }
   ]
 
-  // Message data
-  const messages: { [key: string]: Message[] } = {
-    "contact-1": [
-      {
-        id: "msg-1",
-        senderId: "contact-1",
-        text: "您好，我是您的AI交易助手，有什么可以帮您的吗？",
-        time: "09:30",
-        isRead: true,
-      },
-      {
-        id: "msg-2",
-        senderId: "user",
-        text: "你好，我想了解一下比特币最近的走势",
-        time: "09:31",
-        isRead: true,
-      },
-    ],
-  }
+  // Contact data for chat display (use state messages for actual messaging)
 
   const filteredContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -1662,24 +1766,198 @@ export default function ChatPage() {
                       key={msg.id}
                       className={`flex ${msg.senderId === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
-                      <div
-                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                      {/* Render different message types */}
+                      {msg.type === 'transfer' ? (
+                        /* Transfer Card */
+                        <div className={`max-w-xs lg:max-w-md rounded-lg overflow-hidden ${
                           msg.senderId === 'user'
-                            ? 'bg-[#00D4AA] text-white'
+                            ? 'bg-gradient-to-r from-blue-500 to-blue-600'
                             : isDark
-                              ? 'bg-[#252842] text-white'
-                              : 'bg-gray-100 text-gray-800'
-                        }`}
-                      >
-                        <p className="text-sm">{msg.text}</p>
-                        <p className={`text-xs mt-1 ${
-                          msg.senderId === 'user' 
-                            ? 'text-green-100' 
-                            : 'text-gray-400'
+                              ? 'bg-[#252842] border border-gray-600'
+                              : 'bg-white border border-gray-200 shadow-sm'
                         }`}>
-                          {msg.time}
-                        </p>
-                      </div>
+                          <div className="p-4">
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                msg.senderId === 'user' ? 'bg-white/20' : 'bg-blue-500'
+                              }`}>
+                                <Wallet className={`w-5 h-5 ${
+                                  msg.senderId === 'user' ? 'text-white' : 'text-white'
+                                }`} />
+                              </div>
+                              <div>
+                                <h4 className={`font-medium ${
+                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
+                                }`}>
+                                  转账
+                                </h4>
+                                <p className={`text-sm ${
+                                  msg.senderId === 'user' ? 'text-white/80' : 'text-gray-500'
+                                }`}>
+                                  {msg.transferData?.note || '无备注'}
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div className={`text-center py-3 rounded-lg ${
+                              msg.senderId === 'user' ? 'bg-white/10' : isDark ? 'bg-gray-700' : 'bg-gray-50'
+                            }`}>
+                              <div className="flex items-center justify-center gap-2 mb-1">
+                                <div className={`w-6 h-6 rounded-full ${
+                                  currencies.find(c => c.symbol === msg.transferData?.currency)?.color
+                                } flex items-center justify-center text-white text-sm font-bold`}>
+                                  {currencies.find(c => c.symbol === msg.transferData?.currency)?.icon}
+                                </div>
+                                <span className={`text-2xl font-bold ${
+                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
+                                }`}>
+                                  {msg.transferData?.amount}
+                                </span>
+                                <span className={`text-lg ${
+                                  msg.senderId === 'user' ? 'text-white/80' : 'text-gray-500'
+                                }`}>
+                                  {msg.transferData?.currency}
+                                </span>
+                              </div>
+                            </div>
+                            
+                            {msg.senderId !== 'user' && !msg.transferData?.claimed && (
+                              <button
+                                onClick={() => handleClaimTransfer(msg.id)}
+                                className="w-full mt-3 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition-colors"
+                              >
+                                领取转账
+                              </button>
+                            )}
+                            
+                            {msg.transferData?.claimed && (
+                              <div className="mt-3 text-center">
+                                <span className={`text-sm ${
+                                  msg.senderId === 'user' ? 'text-white/60' : 'text-gray-400'
+                                }`}>
+                                  已领取
+                                </span>
+                              </div>
+                            )}
+                            
+                            <div className="mt-2 text-right">
+                              <span className={`text-xs ${
+                                msg.senderId === 'user' ? 'text-white/60' : 'text-gray-400'
+                              }`}>
+                                {msg.time}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ) : msg.type === 'redpacket' ? (
+                        /* Red Packet Card */
+                        <div className={`max-w-xs lg:max-w-md rounded-lg overflow-hidden ${
+                          msg.senderId === 'user'
+                            ? 'bg-gradient-to-r from-red-500 to-red-600'
+                            : isDark
+                              ? 'bg-[#252842] border border-gray-600'
+                              : 'bg-white border border-gray-200 shadow-sm'
+                        }`}>
+                          <div className="p-4">
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                msg.senderId === 'user' ? 'bg-white/20' : 'bg-red-500'
+                              }`}>
+                                <Gift className={`w-5 h-5 ${
+                                  msg.senderId === 'user' ? 'text-white' : 'text-white'
+                                }`} />
+                              </div>
+                              <div>
+                                <h4 className={`font-medium ${
+                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
+                                }`}>
+                                  红包
+                                </h4>
+                                <p className={`text-sm ${
+                                  msg.senderId === 'user' ? 'text-white/80' : 'text-gray-500'
+                                }`}>
+                                  {msg.redpacketData?.note}
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div className={`text-center py-3 rounded-lg ${
+                              msg.senderId === 'user' ? 'bg-white/10' : isDark ? 'bg-gray-700' : 'bg-gray-50'
+                            }`}>
+                              <div className="flex items-center justify-center gap-2 mb-1">
+                                <div className={`w-6 h-6 rounded-full ${
+                                  currencies.find(c => c.symbol === msg.redpacketData?.currency)?.color
+                                } flex items-center justify-center text-white text-sm font-bold`}>
+                                  {currencies.find(c => c.symbol === msg.redpacketData?.currency)?.icon}
+                                </div>
+                                <span className={`text-2xl font-bold ${
+                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
+                                }`}>
+                                  {msg.redpacketData?.totalAmount}
+                                </span>
+                                <span className={`text-lg ${
+                                  msg.senderId === 'user' ? 'text-white/80' : 'text-gray-500'
+                                }`}>
+                                  {msg.redpacketData?.currency}
+                                </span>
+                              </div>
+                              <p className={`text-sm ${
+                                msg.senderId === 'user' ? 'text-white/60' : 'text-gray-400'
+                              }`}>
+                                {msg.redpacketData?.claimed || 0}/{msg.redpacketData?.count}个已领取
+                              </p>
+                            </div>
+                            
+                            {msg.senderId !== 'user' && 
+                             (msg.redpacketData?.claimed || 0) < parseInt(msg.redpacketData?.count || '0') && (
+                              <button
+                                onClick={() => handleClaimRedPacket(msg.id)}
+                                className="w-full mt-3 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-medium transition-colors"
+                              >
+                                领取红包
+                              </button>
+                            )}
+                            
+                            {(msg.redpacketData?.claimed || 0) >= parseInt(msg.redpacketData?.count || '0') && (
+                              <div className="mt-3 text-center">
+                                <span className={`text-sm ${
+                                  msg.senderId === 'user' ? 'text-white/60' : 'text-gray-400'
+                                }`}>
+                                  红包已抢完
+                                </span>
+                              </div>
+                            )}
+                            
+                            <div className="mt-2 text-right">
+                              <span className={`text-xs ${
+                                msg.senderId === 'user' ? 'text-white/60' : 'text-gray-400'
+                              }`}>
+                                {msg.time}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        /* Regular Text Message */
+                        <div
+                          className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                            msg.senderId === 'user'
+                              ? 'bg-[#00D4AA] text-white'
+                              : isDark
+                                ? 'bg-[#252842] text-white'
+                                : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          <p className="text-sm">{msg.text}</p>
+                          <p className={`text-xs mt-1 ${
+                            msg.senderId === 'user' 
+                              ? 'text-green-100' 
+                              : 'text-gray-400'
+                          }`}>
+                            {msg.time}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
