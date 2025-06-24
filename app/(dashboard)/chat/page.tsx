@@ -4,12 +4,22 @@ import { useState, useRef, useCallback, useEffect } from "react"
 import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
-// Custom Transfer Icon (Wallet)
+// Custom Transfer Icon (Money Transfer)
 const TransferIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5">
-    <path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
-    <path d="M16 12h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4"/>
-    <circle cx="18" cy="14" r="1" fill="currentColor"/>
+    {/* Left hand holding money */}
+    <path d="M3 12c0-1 0-2 2-2h4c1 0 2 1 2 2v0c0 1-1 2-2 2H5c-2 0-2-1-2-2z" fill="currentColor" opacity="0.3"/>
+    <circle cx="7" cy="12" r="1.5" fill="currentColor"/>
+    <text x="7" y="13" fontSize="1.5" textAnchor="middle" fill="white">$</text>
+    
+    {/* Arrow indicating transfer */}
+    <path d="M12 8l4 4-4 4" strokeWidth="2"/>
+    <path d="M12 12h6" strokeWidth="2"/>
+    
+    {/* Right hand receiving money */}
+    <path d="M21 12c0-1 0-2-2-2h-4c-1 0-2 1-2 2v0c0 1 1 2 2 2h4c2 0 2-1 2-2z" fill="currentColor" opacity="0.3"/>
+    <circle cx="17" cy="12" r="1.5" fill="currentColor"/>
+    <text x="17" y="13" fontSize="1.5" textAnchor="middle" fill="white">$</text>
   </svg>
 )
 
@@ -1790,40 +1800,59 @@ export default function ChatPage() {
                     >
                       {/* Render different message types */}
                       {msg.type === 'transfer' ? (
-                        /* Transfer Card - Horizontal Layout */
+                        /* Transfer Card - Money Transfer Design */
                         <div 
-                          className={`max-w-sm lg:max-w-lg rounded-xl overflow-hidden shadow-lg cursor-pointer transition-all duration-200 hover:shadow-xl hover:scale-[1.02] ${
+                          className={`max-w-sm lg:max-w-lg rounded-xl overflow-hidden shadow-lg cursor-pointer transition-all duration-200 hover:shadow-xl hover:scale-[1.02] relative ${
                             msg.senderId === 'user'
-                              ? 'bg-gradient-to-r from-[#4F46E5] to-[#7C3AED]'
+                              ? 'bg-gradient-to-r from-green-500 to-emerald-600'
                               : isDark
-                                ? 'bg-gradient-to-r from-[#1E293B] to-[#334155] border border-[#475569] hover:border-[#00D4AA]'
-                                : 'bg-gradient-to-r from-white to-gray-50 border border-gray-200 hover:border-[#00D4AA]'
+                                ? 'bg-gradient-to-r from-green-800 to-emerald-800 border border-green-700 hover:border-[#00D4AA]'
+                                : 'bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 hover:border-[#00D4AA]'
                           }`}
                           onClick={() => msg.senderId !== 'user' && !msg.transferData?.claimed && handleClaimTransfer(msg.id)}
                         >
-                          <div className="flex items-center p-4 gap-4">
-                            {/* Icon */}
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                          {/* Money flow animation background */}
+                          <div className="absolute inset-0 opacity-20">
+                            <div className="w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
+                          </div>
+                          
+                          <div className="relative flex items-center p-4 gap-4">
+                            {/* Transfer Icon with Money Symbol */}
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 relative ${
                               msg.senderId === 'user' 
                                 ? 'bg-white/20 backdrop-blur-sm' 
                                 : isDark
-                                  ? 'bg-[#4F46E5] shadow-lg'
-                                  : 'bg-[#4F46E5] shadow-lg'
+                                  ? 'bg-green-600 shadow-lg'
+                                  : 'bg-green-500 shadow-lg'
                             }`}>
-                              <TransferIcon className={`w-6 h-6 text-white`} />
+                              <div className="flex items-center gap-1">
+                                <span className="text-white text-lg font-bold">💸</span>
+                                <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                                  <path d="M5 12h14m-7-7l7 7-7 7"/>
+                                </svg>
+                              </div>
                             </div>
                             
                             {/* Content */}
                             <div className="flex-1 min-w-0">
-                              {/* Currency and Amount */}
+                              {/* Transfer Label */}
                               <div className="flex items-center gap-2 mb-1">
-                                <div className={`w-6 h-6 rounded-full ${
+                                <span className={`text-sm font-medium ${
+                                  msg.senderId === 'user' ? 'text-white/90' : isDark ? 'text-green-300' : 'text-green-700'
+                                }`}>
+                                  💰 转账
+                                </span>
+                                <div className={`w-5 h-5 rounded-full ${
                                   currencies.find(c => c.symbol === msg.transferData?.currency)?.color
-                                } flex items-center justify-center text-white text-sm font-bold`}>
+                                } flex items-center justify-center text-white text-xs font-bold`}>
                                   {currencies.find(c => c.symbol === msg.transferData?.currency)?.icon}
                                 </div>
-                                <span className={`text-lg font-bold ${
-                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
+                              </div>
+                              
+                              {/* Amount Display */}
+                              <div className="mb-1">
+                                <span className={`text-xl font-bold ${
+                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-green-800'
                                 }`}>
                                   {msg.transferData?.amount} {msg.transferData?.currency}
                                 </span>
@@ -1831,7 +1860,7 @@ export default function ChatPage() {
                               
                               {/* Note */}
                               <p className={`text-sm truncate ${
-                                msg.senderId === 'user' ? 'text-white/80' : isDark ? 'text-gray-300' : 'text-gray-600'
+                                msg.senderId === 'user' ? 'text-white/80' : isDark ? 'text-green-200' : 'text-green-600'
                               }`}>
                                 {msg.transferData?.note || '转账备注'}
                               </p>
@@ -1839,17 +1868,17 @@ export default function ChatPage() {
                               {/* Status */}
                               <div className="mt-2">
                                 {msg.senderId !== 'user' && !msg.transferData?.claimed && (
-                                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                    isDark ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-600'
+                                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium animate-pulse ${
+                                    isDark ? 'bg-green-900/50 text-green-300 border border-green-700' : 'bg-green-100 text-green-700 border border-green-300'
                                   }`}>
-                                    💰 点击领取
+                                    💰 点击领取转账
                                   </span>
                                 )}
                                 {msg.transferData?.claimed && (
                                   <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                                     isDark ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'
                                   }`}>
-                                    ✅ 已领取
+                                    ✅ 转账已领取
                                   </span>
                                 )}
                               </div>
@@ -1858,7 +1887,7 @@ export default function ChatPage() {
                             {/* Time */}
                             <div className="text-right flex-shrink-0">
                               <span className={`text-xs ${
-                                msg.senderId === 'user' ? 'text-white/60' : isDark ? 'text-gray-500' : 'text-gray-400'
+                                msg.senderId === 'user' ? 'text-white/60' : isDark ? 'text-green-400' : 'text-green-600'
                               }`}>
                                 {msg.time}
                               </span>
