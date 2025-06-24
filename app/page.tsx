@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
-import DigitalRain from "@/components/digital-rain"
+
 
 export default function HomePage() {
   const { language, setLanguage } = useTheme()
@@ -145,7 +145,7 @@ export default function HomePage() {
         {/* Hero Section with Digital Rain */}
         <section className="hero-section relative overflow-hidden py-20 lg:py-32">
           {/* Digital Rain Background */}
-          <DigitalRain />
+
           
           {/* Gradient Light Effects */}
           <div className="absolute inset-0 overflow-hidden">
