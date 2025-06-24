@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Check } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
 interface Contact {
@@ -15,6 +15,7 @@ interface Contact {
   isActive?: boolean
   isSpecial?: boolean
   isAI?: boolean
+  isGuarantee?: boolean
 }
 
 interface Message {
@@ -48,6 +49,22 @@ export default function ChatPage() {
   const [showGroupInfo, setShowGroupInfo] = useState(false)
   const [groupInfoAnimating, setGroupInfoAnimating] = useState(false)
   const [groupInfoClosing, setGroupInfoClosing] = useState(false)
+  
+  // Guarantee process states
+  const [showGuaranteeFlow, setShowGuaranteeFlow] = useState(false)
+  const [guaranteeStep, setGuaranteeStep] = useState(1) // 1: 发起担保, 2: 设置条件, 3: 确认条件, 4: 执行中, 5: 完成
+  const [guaranteeData, setGuaranteeData] = useState({
+    amount: "",
+    currency: "USDT",
+    tradePair: "",
+    tradeAmount: "",
+    guaranteePeriod: "3",
+    description: "",
+    paymentMethod: "",
+    guarantorId: "",
+    beneficiaryId: "",
+    contractTerms: []
+  })
   const [screenWidth, setScreenWidth] = useState(0)
   
   // All refs
