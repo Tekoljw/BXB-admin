@@ -251,41 +251,39 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
-      <div className="grid grid-cols-12 gap-6">
-        {/* Left Sidebar - Navigation */}
-        <div className="col-span-3">
-          <div className={`${cardStyle} rounded-lg border sticky top-6 overflow-hidden`}>
-            <div className="space-y-1 p-2">
-              {menuItems.map((item) => {
-                const Icon = item.icon
-                const isActive = activeSection === item.id
-                
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveSection(item.id)}
-                    className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
-                      isActive
-                        ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
-                        : isDark
-                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] hover:scale-102"
-                          : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span>{item.name}</span>
-                  </button>
-                )
-              })}
-            </div>
+    <div className={`flex min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+      {/* Left Sidebar - Navigation - Full Height */}
+      <div className="w-80 flex-shrink-0">
+        <div className={`${cardStyle} h-screen border-r overflow-hidden`}>
+          <div className="space-y-1 p-2">
+            {menuItems.map((item) => {
+              const Icon = item.icon
+              const isActive = activeSection === item.id
+              
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveSection(item.id)}
+                  className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
+                    isActive
+                      ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
+                      : isDark
+                        ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] hover:scale-102"
+                        : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span>{item.name}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
+      </div>
 
-        {/* Right Content Area */}
-        <div className="col-span-9">
-          {renderContent()}
-        </div>
+      {/* Right Content Area */}
+      <div className="flex-1 p-6">
+        {renderContent()}
       </div>
     </div>
   )
