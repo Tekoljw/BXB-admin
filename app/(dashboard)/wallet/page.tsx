@@ -46,7 +46,7 @@ import {
   MessageCircle,
   Users
 } from "lucide-react"
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
 import { useTranslation } from "@/hooks/use-translation"
 import SkeletonLoader from "@/components/skeleton-loader"
@@ -307,13 +307,13 @@ export default function WalletPage() {
   }
 
   // 初始化二级页签
-  React.useEffect(() => {
+  useEffect(() => {
     const categoryKey = getCategoryKey(orderTab)
     const firstSubTab = Object.keys(orderCategories[categoryKey]?.tabs || {})[0]
     if (firstSubTab && secondaryTab === "current" && !orderCategories[categoryKey]?.tabs[secondaryTab]) {
       setSecondaryTab(firstSubTab)
     }
-  }, [orderTab])
+  }, [orderTab, secondaryTab])
 
   // 币种汇率数据
   const exchangeRates = {
