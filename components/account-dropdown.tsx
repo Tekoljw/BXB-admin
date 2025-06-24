@@ -75,7 +75,6 @@ export default function AccountDropdown() {
   const handleProfileClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    console.log('Profile click triggered')
     router.push('/profile')
   }
 
