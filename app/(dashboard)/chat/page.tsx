@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
 interface Contact {
@@ -288,7 +288,7 @@ export default function ChatPage() {
         totalAmount: redPacketAmount,
         count: redPacketCount,
         currency: selectedCurrency,
-        note: redPacketNote || "恭喜发财，大吉大利！",
+        note: redPacketNote || "感谢支持，空投奖励！",
         claimed: 0,
         claimedBy: []
       }
@@ -1793,7 +1793,7 @@ export default function ChatPage() {
                                   ? 'bg-white/20 backdrop-blur-sm' 
                                   : 'bg-[#4F46E5] shadow-lg'
                               }`}>
-                                <Wallet className={`w-6 h-6 ${
+                                <ArrowRightLeft className={`w-6 h-6 ${
                                   msg.senderId === 'user' ? 'text-white' : 'text-white'
                                 }`} />
                               </div>
@@ -1899,7 +1899,7 @@ export default function ChatPage() {
                                     ? 'bg-red-600 shadow-lg'
                                     : 'bg-red-500 shadow-lg'
                               }`}>
-                                <Gift className={`w-6 h-6 ${
+                                <Zap className={`w-6 h-6 ${
                                   msg.senderId === 'user' ? 'text-yellow-100' : 'text-white'
                                 }`} />
                               </div>
@@ -1907,7 +1907,7 @@ export default function ChatPage() {
                                 <h4 className={`font-bold text-lg ${
                                   msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-red-800'
                                 }`}>
-                                  🧧 恭喜发财
+                                  ⚡ 空投奖励
                                 </h4>
                                 <p className={`text-sm ${
                                   msg.senderId === 'user' ? 'text-yellow-100' : isDark ? 'text-red-200' : 'text-red-600'
@@ -1964,7 +1964,7 @@ export default function ChatPage() {
                               <p className={`text-sm font-medium ${
                                 msg.senderId === 'user' ? 'text-yellow-200' : isDark ? 'text-red-300' : 'text-red-600'
                               }`}>
-                                {msg.redpacketData?.claimed || 0}/{msg.redpacketData?.count} 个红包已被领取
+                                {msg.redpacketData?.claimed || 0}/{msg.redpacketData?.count} 个空投已被领取
                               </p>
                             </div>
                             
@@ -1974,7 +1974,7 @@ export default function ChatPage() {
                                 onClick={() => handleClaimRedPacket(msg.id)}
                                 className="w-full mt-4 bg-gradient-to-r from-[#DC2626] to-[#EF4444] hover:from-[#B91C1C] hover:to-[#DC2626] text-white py-3 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] relative overflow-hidden"
                               >
-                                <span className="relative z-10">🧧 抢红包</span>
+                                <span className="relative z-10">⚡ 领取空投</span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent animate-pulse"></div>
                               </button>
                             )}
@@ -1982,7 +1982,7 @@ export default function ChatPage() {
                             {(msg.redpacketData?.claimed || 0) >= parseInt(msg.redpacketData?.count || '0') && (
                               <div className="mt-4 text-center py-3 rounded-xl bg-gray-100 dark:bg-gray-800">
                                 <span className={`font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                  🎉 红包已被抢完
+                                  🎉 空投已被领完
                                 </span>
                               </div>
                             )}
@@ -2086,7 +2086,7 @@ export default function ChatPage() {
                               }`}
                               title="转账"
                             >
-                              <Wallet className="w-5 h-5" />
+                              <ArrowRightLeft className="w-5 h-5" />
                             </button>
                           )}
                           
@@ -2098,9 +2098,9 @@ export default function ChatPage() {
                               className={`p-2 rounded-lg transition-colors ${
                                 isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
                               }`}
-                              title="发红包"
+                              title="发空投"
                             >
-                              <Gift className="w-5 h-5" />
+                              <Zap className="w-5 h-5" />
                             </button>
                           )}
                         </div>
@@ -2607,7 +2607,7 @@ export default function ChatPage() {
           <div className={`${cardStyle} rounded-xl p-6 w-96 mx-4`}>
             <div className="flex items-center justify-between mb-6">
               <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
-                发红包
+                发空投
               </h3>
               <button
                 onClick={() => setShowRedPacketModal(false)}
@@ -2673,13 +2673,13 @@ export default function ChatPage() {
             {/* Total Amount Input */}
             <div className="mb-4">
               <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                红包总金额
+                空投总金额
               </label>
               <input
                 type="number"
                 value={redPacketAmount}
                 onChange={(e) => setRedPacketAmount(e.target.value)}
-                placeholder="请输入红包总金额"
+                placeholder="请输入空投总金额"
                 className={`w-full p-3 border rounded-lg transition-colors ${
                   isDark 
                     ? "border-gray-600 bg-[#252842] text-white placeholder-gray-400" 
@@ -2691,13 +2691,13 @@ export default function ChatPage() {
             {/* Red Packet Count */}
             <div className="mb-4">
               <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                红包个数
+                空投份数
               </label>
               <input
                 type="number"
                 value={redPacketCount}
                 onChange={(e) => setRedPacketCount(e.target.value)}
-                placeholder="请输入红包个数"
+                placeholder="请输入空投份数"
                 min="1"
                 max="100"
                 className={`w-full p-3 border rounded-lg transition-colors ${
@@ -2711,13 +2711,13 @@ export default function ChatPage() {
             {/* Note Input */}
             <div className="mb-6">
               <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                红包祝福语
+                空投描述
               </label>
               <input
                 type="text"
                 value={redPacketNote}
                 onChange={(e) => setRedPacketNote(e.target.value)}
-                placeholder="恭喜发财，大吉大利！"
+                placeholder="感谢支持，空投奖励！"
                 className={`w-full p-3 border rounded-lg transition-colors ${
                   isDark 
                     ? "border-gray-600 bg-[#252842] text-white placeholder-gray-400" 
@@ -2749,7 +2749,7 @@ export default function ChatPage() {
                     : "bg-gray-400 text-gray-600 cursor-not-allowed"
                 }`}
               >
-                发送红包
+                发送空投
               </button>
             </div>
           </div>
