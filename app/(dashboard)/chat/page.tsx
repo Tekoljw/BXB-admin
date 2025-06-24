@@ -4,14 +4,12 @@ import { useState, useRef, useCallback, useEffect } from "react"
 import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
-// Custom Transfer Icon (Plane with Coin)
+// Custom Transfer Icon (Wallet)
 const TransferIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5">
-    {/* Airplane body */}
-    <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="currentColor"/>
-    {/* Coin */}
-    <circle cx="18" cy="6" r="3" fill="none" stroke="currentColor" strokeWidth="1.5"/>
-    <path d="M18 4.5v3M16.5 6h3" stroke="currentColor" strokeWidth="1"/>
+    <path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
+    <path d="M16 12h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4"/>
+    <circle cx="18" cy="14" r="1" fill="currentColor"/>
   </svg>
 )
 
@@ -1792,103 +1790,75 @@ export default function ChatPage() {
                     >
                       {/* Render different message types */}
                       {msg.type === 'transfer' ? (
-                        /* Transfer Card */
-                        <div className={`max-w-xs lg:max-w-md rounded-2xl overflow-hidden shadow-lg ${
-                          msg.senderId === 'user'
-                            ? 'bg-gradient-to-br from-[#4F46E5] via-[#7C3AED] to-[#EC4899]'
-                            : isDark
-                              ? 'bg-gradient-to-br from-[#1E293B] to-[#334155] border border-[#475569]'
-                              : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200'
-                        }`}>
-                          {/* Header with pattern background */}
-                          <div className={`relative p-4 ${
-                            msg.senderId === 'user' 
-                              ? 'bg-black/10' 
-                              : isDark 
-                                ? 'bg-white/5' 
-                                : 'bg-gray-100/80'
-                          }`}>
-                            <div className="absolute inset-0 opacity-10">
-                              <div className="w-full h-full bg-gradient-to-br from-transparent via-white/20 to-transparent"></div>
-                            </div>
-                            <div className="relative flex items-center gap-3">
-                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                                msg.senderId === 'user' 
-                                  ? 'bg-white/20 backdrop-blur-sm' 
-                                  : 'bg-[#4F46E5] shadow-lg'
-                              }`}>
-                                <TransferIcon className={`w-6 h-6 ${
-                                  msg.senderId === 'user' ? 'text-white' : 'text-white'
-                                }`} />
-                              </div>
-                              <div>
-                                <h4 className={`font-bold text-lg ${
-                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
-                                }`}>
-                                  转账
-                                </h4>
-                                <p className={`text-sm ${
-                                  msg.senderId === 'user' ? 'text-white/80' : isDark ? 'text-gray-300' : 'text-gray-600'
-                                }`}>
-                                  {msg.transferData?.note || '转账备注'}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          {/* Amount Display */}
-                          <div className="p-6">
-                            <div className={`text-center py-6 rounded-xl ${
+                        /* Transfer Card - Horizontal Layout */
+                        <div 
+                          className={`max-w-sm lg:max-w-lg rounded-xl overflow-hidden shadow-lg cursor-pointer transition-all duration-200 hover:shadow-xl hover:scale-[1.02] ${
+                            msg.senderId === 'user'
+                              ? 'bg-gradient-to-r from-[#4F46E5] to-[#7C3AED]'
+                              : isDark
+                                ? 'bg-gradient-to-r from-[#1E293B] to-[#334155] border border-[#475569] hover:border-[#00D4AA]'
+                                : 'bg-gradient-to-r from-white to-gray-50 border border-gray-200 hover:border-[#00D4AA]'
+                          }`}
+                          onClick={() => msg.senderId !== 'user' && !msg.transferData?.claimed && handleClaimTransfer(msg.id)}
+                        >
+                          <div className="flex items-center p-4 gap-4">
+                            {/* Icon */}
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
                               msg.senderId === 'user' 
-                                ? 'bg-white/10 backdrop-blur-sm border border-white/20' 
-                                : isDark 
-                                  ? 'bg-[#0F172A] border border-[#334155]' 
-                                  : 'bg-gradient-to-br from-gray-50 to-white border border-gray-200'
+                                ? 'bg-white/20 backdrop-blur-sm' 
+                                : isDark
+                                  ? 'bg-[#4F46E5] shadow-lg'
+                                  : 'bg-[#4F46E5] shadow-lg'
                             }`}>
-                              <div className="flex items-center justify-center gap-3 mb-2">
-                                <div className={`w-8 h-8 rounded-full ${
+                              <TransferIcon className={`w-6 h-6 text-white`} />
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="flex-1 min-w-0">
+                              {/* Currency and Amount */}
+                              <div className="flex items-center gap-2 mb-1">
+                                <div className={`w-6 h-6 rounded-full ${
                                   currencies.find(c => c.symbol === msg.transferData?.currency)?.color
-                                } flex items-center justify-center text-white text-lg font-bold shadow-lg`}>
+                                } flex items-center justify-center text-white text-sm font-bold`}>
                                   {currencies.find(c => c.symbol === msg.transferData?.currency)?.icon}
                                 </div>
-                                <span className={`text-3xl font-bold ${
+                                <span className={`text-lg font-bold ${
                                   msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
                                 }`}>
-                                  {msg.transferData?.amount}
-                                </span>
-                                <span className={`text-xl font-medium ${
-                                  msg.senderId === 'user' ? 'text-white/80' : isDark ? 'text-gray-300' : 'text-gray-600'
-                                }`}>
-                                  {msg.transferData?.currency}
+                                  {msg.transferData?.amount} {msg.transferData?.currency}
                                 </span>
                               </div>
-                              <p className={`text-sm ${
-                                msg.senderId === 'user' ? 'text-white/60' : isDark ? 'text-gray-400' : 'text-gray-500'
+                              
+                              {/* Note */}
+                              <p className={`text-sm truncate ${
+                                msg.senderId === 'user' ? 'text-white/80' : isDark ? 'text-gray-300' : 'text-gray-600'
                               }`}>
-                                点击下方按钮领取
+                                {msg.transferData?.note || '转账备注'}
                               </p>
+                              
+                              {/* Status */}
+                              <div className="mt-2">
+                                {msg.senderId !== 'user' && !msg.transferData?.claimed && (
+                                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                    isDark ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-600'
+                                  }`}>
+                                    💰 点击领取
+                                  </span>
+                                )}
+                                {msg.transferData?.claimed && (
+                                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                    isDark ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'
+                                  }`}>
+                                    ✅ 已领取
+                                  </span>
+                                )}
+                              </div>
                             </div>
                             
-                            {msg.senderId !== 'user' && !msg.transferData?.claimed && (
-                              <button
-                                onClick={() => handleClaimTransfer(msg.id)}
-                                className="w-full mt-4 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] hover:from-[#4338CA] hover:to-[#6D28D9] text-white py-3 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
-                              >
-                                💰 立即领取转账
-                              </button>
-                            )}
-                            
-                            {msg.transferData?.claimed && (
-                              <div className="mt-4 text-center py-3 rounded-xl bg-green-100 dark:bg-green-900/30">
-                                <span className="text-green-600 dark:text-green-400 font-medium">
-                                  ✅ 转账已成功领取
-                                </span>
-                              </div>
-                            )}
-                            
-                            <div className="mt-3 text-right">
+                            {/* Time */}
+                            <div className="text-right flex-shrink-0">
                               <span className={`text-xs ${
-                                msg.senderId === 'user' ? 'text-white/50' : isDark ? 'text-gray-500' : 'text-gray-400'
+                                msg.senderId === 'user' ? 'text-white/60' : isDark ? 'text-gray-500' : 'text-gray-400'
                               }`}>
                                 {msg.time}
                               </span>
@@ -1896,86 +1866,65 @@ export default function ChatPage() {
                           </div>
                         </div>
                       ) : msg.type === 'redpacket' ? (
-                        /* Red Packet Card */
-                        <div className={`max-w-xs lg:max-w-md rounded-2xl overflow-hidden shadow-lg ${
-                          msg.senderId === 'user'
-                            ? 'bg-gradient-to-br from-[#DC2626] via-[#EF4444] to-[#F97316]'
-                            : isDark
-                              ? 'bg-gradient-to-br from-[#7F1D1D] to-[#991B1B] border border-red-800'
-                              : 'bg-gradient-to-br from-red-50 to-red-100 border border-red-200'
-                        }`}>
-                          {/* Header with Chinese pattern */}
-                          <div className={`relative p-4 ${
-                            msg.senderId === 'user' 
-                              ? 'bg-black/10' 
-                              : isDark 
-                                ? 'bg-white/5' 
-                                : 'bg-red-200/50'
-                          }`}>
-                            <div className="absolute inset-0 opacity-20">
-                              <div className="w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTAiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuMyIvPgo8L3N2Zz4K')] repeat"></div>
-                            </div>
-                            <div className="relative flex items-center gap-3">
-                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                                msg.senderId === 'user' 
-                                  ? 'bg-yellow-400/30 backdrop-blur-sm border border-yellow-300/30' 
-                                  : isDark
-                                    ? 'bg-red-600 shadow-lg'
-                                    : 'bg-red-500 shadow-lg'
-                              }`}>
-                                <AirdropIcon className={`w-6 h-6 ${
-                                  msg.senderId === 'user' ? 'text-yellow-100' : 'text-white'
-                                }`} />
-                              </div>
-                              <div>
-                                <h4 className={`font-bold text-lg ${
-                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-red-800'
-                                }`}>
-                                  ⚡ 空投奖励
-                                </h4>
-                                <p className={`text-sm ${
-                                  msg.senderId === 'user' ? 'text-yellow-100' : isDark ? 'text-red-200' : 'text-red-600'
-                                }`}>
-                                  {msg.redpacketData?.note}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          {/* Amount and Progress */}
-                          <div className="p-6">
-                            <div className={`text-center py-6 rounded-xl ${
+                        /* Airdrop Card - Horizontal Layout */
+                        <div 
+                          className={`max-w-sm lg:max-w-lg rounded-xl overflow-hidden shadow-lg cursor-pointer transition-all duration-200 hover:shadow-xl hover:scale-[1.02] ${
+                            msg.senderId === 'user'
+                              ? 'bg-gradient-to-r from-[#DC2626] to-[#EF4444]'
+                              : isDark
+                                ? 'bg-gradient-to-r from-[#7F1D1D] to-[#991B1B] border border-red-800 hover:border-[#00D4AA]'
+                                : 'bg-gradient-to-r from-red-50 to-red-100 border border-red-200 hover:border-[#00D4AA]'
+                          }`}
+                          onClick={() => {
+                            if (msg.senderId !== 'user' && (msg.redpacketData?.claimed || 0) < parseInt(msg.redpacketData?.count || '0')) {
+                              handleClaimRedPacket(msg.id)
+                            }
+                          }}
+                        >
+                          <div className="flex items-center p-4 gap-4">
+                            {/* Icon */}
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
                               msg.senderId === 'user' 
-                                ? 'bg-yellow-400/20 backdrop-blur-sm border border-yellow-300/30' 
-                                : isDark 
-                                  ? 'bg-red-950/50 border border-red-800' 
-                                  : 'bg-white/80 border border-red-200'
+                                ? 'bg-yellow-400/30 backdrop-blur-sm border border-yellow-300/30' 
+                                : isDark
+                                  ? 'bg-red-600 shadow-lg'
+                                  : 'bg-red-500 shadow-lg'
                             }`}>
-                              <div className="flex items-center justify-center gap-3 mb-3">
-                                <div className={`w-8 h-8 rounded-full ${
+                              <AirdropIcon className={`w-6 h-6 ${
+                                msg.senderId === 'user' ? 'text-yellow-100' : 'text-white'
+                              }`} />
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="flex-1 min-w-0">
+                              {/* Currency and Amount */}
+                              <div className="flex items-center gap-2 mb-1">
+                                <div className={`w-6 h-6 rounded-full ${
                                   currencies.find(c => c.symbol === msg.redpacketData?.currency)?.color
-                                } flex items-center justify-center text-white text-lg font-bold shadow-lg`}>
+                                } flex items-center justify-center text-white text-sm font-bold`}>
                                   {currencies.find(c => c.symbol === msg.redpacketData?.currency)?.icon}
                                 </div>
-                                <span className={`text-3xl font-bold ${
-                                  msg.senderId === 'user' ? 'text-yellow-100' : isDark ? 'text-white' : 'text-red-800'
+                                <span className={`text-lg font-bold ${
+                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-red-800'
                                 }`}>
-                                  {msg.redpacketData?.totalAmount}
-                                </span>
-                                <span className={`text-xl font-medium ${
-                                  msg.senderId === 'user' ? 'text-yellow-200' : isDark ? 'text-red-200' : 'text-red-600'
-                                }`}>
-                                  {msg.redpacketData?.currency}
+                                  {msg.redpacketData?.totalAmount} {msg.redpacketData?.currency}
                                 </span>
                               </div>
                               
-                              {/* Progress Bar */}
-                              <div className="mb-3">
-                                <div className={`w-full h-2 rounded-full ${
+                              {/* Note */}
+                              <p className={`text-sm truncate mb-2 ${
+                                msg.senderId === 'user' ? 'text-yellow-100' : isDark ? 'text-red-200' : 'text-red-600'
+                              }`}>
+                                ⚡ {msg.redpacketData?.note}
+                              </p>
+                              
+                              {/* Progress */}
+                              <div className="flex items-center gap-2">
+                                <div className={`flex-1 h-1.5 rounded-full ${
                                   msg.senderId === 'user' ? 'bg-yellow-600/30' : isDark ? 'bg-red-900' : 'bg-red-200'
                                 }`}>
                                   <div 
-                                    className={`h-full rounded-full ${
+                                    className={`h-full rounded-full transition-all duration-300 ${
                                       msg.senderId === 'user' ? 'bg-yellow-400' : isDark ? 'bg-red-400' : 'bg-red-500'
                                     }`}
                                     style={{ 
@@ -1983,35 +1932,35 @@ export default function ChatPage() {
                                     }}
                                   ></div>
                                 </div>
-                              </div>
-                              
-                              <p className={`text-sm font-medium ${
-                                msg.senderId === 'user' ? 'text-yellow-200' : isDark ? 'text-red-300' : 'text-red-600'
-                              }`}>
-                                {msg.redpacketData?.claimed || 0}/{msg.redpacketData?.count} 个空投已被领取
-                              </p>
-                            </div>
-                            
-                            {msg.senderId !== 'user' && 
-                             (msg.redpacketData?.claimed || 0) < parseInt(msg.redpacketData?.count || '0') && (
-                              <button
-                                onClick={() => handleClaimRedPacket(msg.id)}
-                                className="w-full mt-4 bg-gradient-to-r from-[#DC2626] to-[#EF4444] hover:from-[#B91C1C] hover:to-[#DC2626] text-white py-3 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] relative overflow-hidden"
-                              >
-                                <span className="relative z-10">⚡ 领取空投</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent animate-pulse"></div>
-                              </button>
-                            )}
-                            
-                            {(msg.redpacketData?.claimed || 0) >= parseInt(msg.redpacketData?.count || '0') && (
-                              <div className="mt-4 text-center py-3 rounded-xl bg-gray-100 dark:bg-gray-800">
-                                <span className={`font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                  🎉 空投已被领完
+                                <span className={`text-xs font-medium ${
+                                  msg.senderId === 'user' ? 'text-yellow-200' : isDark ? 'text-red-300' : 'text-red-600'
+                                }`}>
+                                  {msg.redpacketData?.claimed || 0}/{msg.redpacketData?.count}
                                 </span>
                               </div>
-                            )}
+                              
+                              {/* Status */}
+                              <div className="mt-2">
+                                {msg.senderId !== 'user' && 
+                                 (msg.redpacketData?.claimed || 0) < parseInt(msg.redpacketData?.count || '0') && (
+                                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                    isDark ? 'bg-red-900/30 text-red-400' : 'bg-red-100 text-red-600'
+                                  }`}>
+                                    ⚡ 点击领取空投
+                                  </span>
+                                )}
+                                {(msg.redpacketData?.claimed || 0) >= parseInt(msg.redpacketData?.count || '0') && (
+                                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                    isDark ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'
+                                  }`}>
+                                    🎉 已领完
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                             
-                            <div className="mt-3 text-right">
+                            {/* Time */}
+                            <div className="text-right flex-shrink-0">
                               <span className={`text-xs ${
                                 msg.senderId === 'user' ? 'text-yellow-200/70' : isDark ? 'text-red-400' : 'text-red-500'
                               }`}>
