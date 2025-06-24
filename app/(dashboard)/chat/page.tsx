@@ -491,7 +491,7 @@ export default function ChatPage() {
       {
         id: "msg-2",
         senderId: "ai-escrow",
-        text: "我可以帮您：\n1. 发起担保交易\n2. 查看担保记录\n3. 解答担保相关问题\n\n输入"担保"开始流程",
+        text: "我可以帮您：1. 发起担保交易 2. 查看担保记录 3. 解答担保相关问题 输入担保开始流程",
         time: "10:01",
         isRead: true,
       },
@@ -508,6 +508,12 @@ export default function ChatPage() {
     { icon: Shield, label: "担保交易", action: () => console.log("担保交易") },
     { icon: BookOpen, label: "通讯录", action: () => console.log("通讯录") },
   ]
+
+  if (!mounted) {
+    return <div className="min-h-screen bg-[#f5f8fa] dark:bg-background"></div>
+  }
+
+  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
 
   return (
     <div 
