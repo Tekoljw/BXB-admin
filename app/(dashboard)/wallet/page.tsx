@@ -306,6 +306,15 @@ export default function WalletPage() {
     setSecondaryTab(firstSubTab || "current")
   }
 
+  // 初始化二级页签
+  React.useEffect(() => {
+    const categoryKey = getCategoryKey(orderTab)
+    const firstSubTab = Object.keys(orderCategories[categoryKey]?.tabs || {})[0]
+    if (firstSubTab && secondaryTab === "current" && !orderCategories[categoryKey]?.tabs[secondaryTab]) {
+      setSecondaryTab(firstSubTab)
+    }
+  }, [orderTab])
+
   // 币种汇率数据
   const exchangeRates = {
     USDT: 1,
