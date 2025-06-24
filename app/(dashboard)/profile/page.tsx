@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useTheme } from "@/contexts/theme-context"
-import { User, Shield, Key, CreditCard, Settings, Home, ChevronRight } from "lucide-react"
+import { User, Shield, Key, CreditCard, Settings, Home, ChevronRight, Camera, X } from "lucide-react"
 
 interface ProfileMenuItem {
   id: string
