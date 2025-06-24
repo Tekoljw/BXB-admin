@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { useRouter, usePathname } from "next/navigation"
+
 import { useTheme } from "@/contexts/theme-context"
 import AccountDropdown from "@/components/account-dropdown"
 import {
@@ -136,7 +136,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         {/* User Section with Account Dropdown */}
         <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-0 py-4'} backdrop-blur-sm`}>
           <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'} transition-all duration-500`}>
-            <AccountDropdown onNavigate={navigateTo} />
+            <AccountDropdown onNavigate={navigate} />
             {isExpanded && (
               <div 
                 className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"

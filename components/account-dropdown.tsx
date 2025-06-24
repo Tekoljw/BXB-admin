@@ -131,7 +131,9 @@ export default function AccountDropdown({ onNavigate }: AccountDropdownProps) {
               <button
                 onClick={() => {
                   setIsOpen(false)
-                  router.push("/profile")
+                  if (onNavigate) {
+                    onNavigate("/profile")
+                  }
                 }}
                 className="w-full flex items-center space-x-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
               >
@@ -142,7 +144,9 @@ export default function AccountDropdown({ onNavigate }: AccountDropdownProps) {
               <button
                 onClick={() => {
                   setIsOpen(false)
-                  router.push("/settings")
+                  if (onNavigate) {
+                    onNavigate("/settings")
+                  }
                 }}
                 className="w-full flex items-center space-x-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
               >
@@ -153,7 +157,9 @@ export default function AccountDropdown({ onNavigate }: AccountDropdownProps) {
               <button
                 onClick={() => {
                   setIsOpen(false)
-                  router.push("/billing")
+                  if (onNavigate) {
+                    onNavigate("/billing")
+                  }
                 }}
                 className="w-full flex items-center space-x-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
               >
@@ -164,7 +170,9 @@ export default function AccountDropdown({ onNavigate }: AccountDropdownProps) {
               <button
                 onClick={() => {
                   setIsOpen(false)
-                  router.push("/help")
+                  if (onNavigate) {
+                    onNavigate("/help")
+                  }
                 }}
                 className="w-full flex items-center space-x-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
               >
