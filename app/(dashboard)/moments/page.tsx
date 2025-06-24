@@ -8,7 +8,7 @@ export default function MomentsPage() {
   const { theme } = useTheme()
   const [searchTerm, setSearchTerm] = useState("")
   const [favorites, setFavorites] = useState<string[]>(["post-1", "post-3"])
-  const [activeMainTab, setActiveMainTab] = useState("圈子")
+  const [activeMainTab, setActiveMainTab] = useState("推荐")
   const [activeSubTab, setActiveSubTab] = useState("全部")
   const [mounted, setMounted] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -237,10 +237,26 @@ export default function MomentsPage() {
     const searchText = `${post.author} ${post.content}`.toLowerCase()
     const matchesSearch = searchText.includes(searchTerm.toLowerCase())
     
-    // 如果选择了特定圈子作为子页签，只显示该圈子的动态
-    if (circleData.some(circle => circle.name === activeSubTab)) {
-      // 这里可以根据实际数据结构过滤特定圈子的动态
-      // 暂时返回所有匹配搜索的动态
+    // 根据主页签过滤
+    if (activeMainTab === "圈子") {
+      return matchesSearch
+    }
+    
+    // 根据二级页签过滤内容
+    if (activeSubTab === "全部") {
+      return matchesSearch
+    } else if (activeSubTab === "交易心得") {
+      return matchesSearch && (post.tags?.includes("交易心得") || post.content.includes("交易") || post.content.includes("心得"))
+    } else if (activeSubTab === "市场分析") {
+      return matchesSearch && (post.tags?.includes("市场分析") || post.content.includes("分析") || post.content.includes("市场"))
+    } else if (activeSubTab === "技术分析") {
+      return matchesSearch && (post.tags?.includes("技术分析") || post.content.includes("技术"))
+    } else if (activeSubTab === "DeFi") {
+      return matchesSearch && (post.tags?.includes("DeFi") || post.content.toLowerCase().includes("defi"))
+    } else if (activeSubTab === "NFT") {
+      return matchesSearch && (post.tags?.includes("NFT") || post.content.toLowerCase().includes("nft"))
+    } else if (circleData.some(circle => circle.name === activeSubTab)) {
+      // 特定圈子的动态过滤
       return matchesSearch
     }
     
