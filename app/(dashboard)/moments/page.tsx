@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Star, Search, Heart, MessageCircle, Share, MoreHorizontal, ImageIcon, Video, Smile } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
@@ -281,10 +281,10 @@ export default function MomentsPage() {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-  `;
+  `
 
   return (
-    <React.Fragment>
+    <div>
       <style dangerouslySetInnerHTML={{ __html: scrollbarHideStyle }} />
       <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
         {/* 三栏布局 */}
@@ -916,6 +916,6 @@ export default function MomentsPage() {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </div>
   )
 }
