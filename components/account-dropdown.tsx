@@ -72,7 +72,10 @@ export default function AccountDropdown() {
     router.push("/login")
   }
 
-  const handleProfileClick = () => {
+  const handleProfileClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log('Profile click triggered')
     router.push('/profile')
   }
 
@@ -80,8 +83,10 @@ export default function AccountDropdown() {
     <div className="relative">
       <button
         ref={buttonRef}
-        className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-lg"
+        type="button"
+        className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer"
         onClick={handleProfileClick}
+        style={{ zIndex: 10 }}
       >
         <User className="h-5 w-5" />
       </button>
