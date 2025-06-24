@@ -61,6 +61,8 @@ export default function WalletPage() {
   const [topLevelTab, setTopLevelTab] = useState("账户资产") // "账户资产" or "订单记录"
   const [activeTab, setActiveTab] = useState(t("wallet.title"))
   const [orderTab, setOrderTab] = useState("现货订单") // 订单记录子页签
+  const [activeOrderCategory, setActiveOrderCategory] = useState('spot')
+  const [activeOrderSubTab, setActiveOrderSubTab] = useState('current')
   const [overviewMode, setOverviewMode] = useState("现金账户") // "现金账户" or "总资产"
   const [selectedCurrency, setSelectedCurrency] = useState("USDT")
   const [selectedDisplayCurrency, setSelectedDisplayCurrency] = useState("USDT") // 卡片显示币种
@@ -200,6 +202,100 @@ export default function WalletPage() {
     { id: "划转记录", label: "划转记录", icon: ArrowLeftRight },
     { id: "USDT买卖记录", label: "USDT买卖记录", icon: Banknote }
   ]
+
+  // 二级页签配置
+  const orderCategories = {
+    spot: {
+      name: '现货订单',
+      tabs: {
+        current: '当前委托',
+        history: '历史委托', 
+        trades: '成交明细'
+      }
+    },
+    futures: {
+      name: '合约订单',
+      tabs: {
+        current: '当前委托',
+        plan: '计划委托',
+        history: '历史委托',
+        trades: '成交明细',
+        funding: '资金记录',
+        fees: '资金费用'
+      }
+    },
+    wealth: {
+      name: '理财订单',
+      tabs: {
+        invest: '投资订单',
+        exchange: '闪兑记录',
+        earnings: '理财收益记录'
+      }
+    },
+    ucard: {
+      name: 'U卡订单',
+      tabs: {
+        open: '开卡记录',
+        recharge: '充值记录',
+        consume: '消费记录',
+        refund: '退款记录'
+      }
+    },
+    commission: {
+      name: '佣金记录',
+      tabs: {
+        futures: '合约佣金',
+        wealth: '理财佣金',
+        payment: '支付佣金',
+        ucard: 'U卡佣金'
+      }
+    },
+    guarantee: {
+      name: '担保记录',
+      tabs: {
+        receive: '担保收款记录',
+        payment: '担保付款记录',
+        credit: '信用担保资金记录'
+      }
+    },
+    deposit: {
+      name: '充提币记录',
+      tabs: {
+        deposit: '入金记录',
+        withdraw: '提币记录'
+      }
+    },
+    transfer: {
+      name: '划转记录',
+      tabs: {
+        records: '划转记录'
+      }
+    },
+    usdt: {
+      name: 'USDT买卖记录',
+      tabs: {
+        c2c: 'C2C记录',
+        otc: 'OTC记录',
+        quick: '快捷买卖记录'
+      }
+    }
+  }
+
+  // 根据主页签ID获取对应的category key
+  const getCategoryKey = (orderTabId: string) => {
+    const mapping = {
+      "现货订单": "spot",
+      "合约订单": "futures", 
+      "理财订单": "wealth",
+      "U卡订单": "ucard",
+      "佣金记录": "commission",
+      "担保记录": "guarantee",
+      "充提币记录": "deposit",
+      "划转记录": "transfer",
+      "USDT买卖记录": "usdt"
+    }
+    return mapping[orderTabId] || "spot"
+  }
 
   // 币种汇率数据
   const exchangeRates = {
