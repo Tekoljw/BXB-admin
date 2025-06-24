@@ -84,7 +84,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Location and Join Date */}
-            <div className="flex items-center space-x-4 mb-4 text-sm text-gray-400">
+            <div className="flex items-center space-x-4 text-sm text-gray-400">
               <div className="flex items-center space-x-1">
                 <span>📍</span>
                 <span>上海</span>
@@ -94,7 +94,31 @@ export default function ProfilePage() {
                 <span>2022年12月加入</span>
               </div>
             </div>
+          </div>
 
+          {/* Right Side - Stats and Edit Button */}
+          <div className="flex flex-col items-end">
+            <div className="flex space-x-8 mb-4">
+              <div className="text-center">
+                <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                  445
+                </div>
+                <div className="text-xs text-gray-400">动态</div>
+              </div>
+              <div className="text-center">
+                <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                  12800
+                </div>
+                <div className="text-xs text-gray-400">粉丝</div>
+              </div>
+              <div className="text-center">
+                <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                  89
+                </div>
+                <div className="text-xs text-gray-400">关注</div>
+              </div>
+            </div>
+            
             {/* Edit Button */}
             <button 
               onClick={() => setShowEditModal(true)}
@@ -102,28 +126,6 @@ export default function ProfilePage() {
             >
               编辑资料
             </button>
-          </div>
-
-          {/* Right Side - Stats */}
-          <div className="flex space-x-8">
-            <div className="text-center">
-              <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                445
-              </div>
-              <div className="text-xs text-gray-400">动态</div>
-            </div>
-            <div className="text-center">
-              <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                12800
-              </div>
-              <div className="text-xs text-gray-400">粉丝</div>
-            </div>
-            <div className="text-center">
-              <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                89
-              </div>
-              <div className="text-xs text-gray-400">关注</div>
-            </div>
           </div>
         </div>
 
