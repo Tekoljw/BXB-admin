@@ -98,7 +98,10 @@ export default function ProfilePage() {
 
         {/* Personal profile buttons */}
         <div className="grid grid-cols-3 gap-3 mb-6">
-          <button className="bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm">
+          <button 
+            onClick={() => setShowEditModal(true)}
+            className="bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm"
+          >
             编辑资料
           </button>
           <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
