@@ -265,12 +265,14 @@ export default function ProfilePage() {
                   <button
                     key={item.id}
                     onClick={() => setActiveSection(item.id)}
-                    className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
+                    className={`w-full flex items-center space-x-2 px-2 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                       isActive
-                        ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
+                        ? isDark
+                          ? "bg-white text-black"
+                          : "bg-black text-white"
                         : isDark
-                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] hover:scale-102"
-                          : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
+                          ? "text-gray-300 hover:text-white hover:bg-[#252842]"
+                          : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                     }`}
                   >
                     <Icon className="h-5 w-5" />
