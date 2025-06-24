@@ -60,7 +60,8 @@ export default function WalletPage() {
   const [balanceVisible, setBalanceVisible] = useState(true)
   const [topLevelTab, setTopLevelTab] = useState("账户资产") // "账户资产" or "订单记录"
   const [activeTab, setActiveTab] = useState(t("wallet.title"))
-  const [orderTab, setOrderTab] = useState("现货订单") // 订单记录子页签
+  const [orderTab, setOrderTab] = useState("现货订单")
+  const [secondaryTab, setSecondaryTab] = useState<string>("current") // 二级页签状态 // 订单记录子页签
   const [activeOrderCategory, setActiveOrderCategory] = useState('spot')
   const [activeOrderSubTab, setActiveOrderSubTab] = useState('current')
   const [overviewMode, setOverviewMode] = useState("现金账户") // "现金账户" or "总资产"
@@ -295,6 +296,14 @@ export default function WalletPage() {
       "USDT买卖记录": "usdt"
     }
     return mapping[orderTabId] || "spot"
+  }
+
+  // 切换主页签时重置二级页签
+  const handleOrderTabChange = (newTab: string) => {
+    setOrderTab(newTab)
+    const categoryKey = getCategoryKey(newTab)
+    const firstSubTab = Object.keys(orderCategories[categoryKey]?.tabs || {})[0]
+    setSecondaryTab(firstSubTab || "current")
   }
 
   // 币种汇率数据
@@ -2344,16 +2353,43 @@ export default function WalletPage() {
   // 渲染订单记录内容
   const renderOrderContent = () => {
     const records = orderRecordsData[orderTab] || []
+    const categoryKey = getCategoryKey(orderTab)
+    const currentCategory = orderCategories[categoryKey]
     
     if (records.length === 0) {
       return (
-        <div className={`${cardStyle} rounded-lg p-6`}>
-          <div className="text-center py-12">
-            <div className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {orderTab}
+        <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+          {/* 二级页签导航 */}
+          {currentCategory && Object.keys(currentCategory.tabs).length > 1 && (
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(currentCategory.tabs).map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSecondaryTab(key)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                      secondaryTab === key
+                        ? "bg-[#00D4AA] text-black"
+                        : isDark
+                          ? "bg-[#252842] text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-              暂无{orderTab}数据
+          )}
+          
+          <div className="p-6">
+            <div className="text-center py-12">
+              <div className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                {currentCategory?.tabs[secondaryTab] || orderTab}
+              </div>
+              <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                暂无{currentCategory?.tabs[secondaryTab] || orderTab}数据
+              </div>
             </div>
           </div>
         </div>
@@ -2365,8 +2401,26 @@ export default function WalletPage() {
       case "现货订单":
         return (
           <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+            {/* 二级页签导航 */}
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>现货订单记录</h3>
+              <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>现货订单记录</h3>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(currentCategory.tabs).map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSecondaryTab(key)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                      secondaryTab === key
+                        ? "bg-[#00D4AA] text-black"
+                        : isDark
+                          ? "bg-[#252842] text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -2434,8 +2488,26 @@ export default function WalletPage() {
       case "合约订单":
         return (
           <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+            {/* 二级页签导航 */}
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>合约订单记录</h3>
+              <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>合约订单记录</h3>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(currentCategory.tabs).map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSecondaryTab(key)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                      secondaryTab === key
+                        ? "bg-[#00D4AA] text-black"
+                        : isDark
+                          ? "bg-[#252842] text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -2499,8 +2571,26 @@ export default function WalletPage() {
       case "充提币记录":
         return (
           <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+            {/* 二级页签导航 */}
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>充提币记录</h3>
+              <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>充提币记录</h3>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(currentCategory.tabs).map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSecondaryTab(key)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                      secondaryTab === key
+                        ? "bg-[#00D4AA] text-black"
+                        : isDark
+                          ? "bg-[#252842] text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -2557,30 +2647,58 @@ export default function WalletPage() {
 
       default:
         return (
-          <div className={`${cardStyle} rounded-lg p-6`}>
-            <div className="space-y-4">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{orderTab}</h3>
-              <div className="space-y-3">
-                {records.map((record, index) => (
-                  <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                      {Object.entries(record).map(([key, value]) => (
-                        <div key={key}>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
-                            {key === 'id' ? 'ID' : 
-                             key === 'type' ? '类型' :
-                             key === 'amount' ? '金额' :
-                             key === 'status' ? '状态' :
-                             key === 'time' ? '时间' : key}
+          <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+            {/* 二级页签导航 */}
+            {currentCategory && Object.keys(currentCategory.tabs).length > 1 && (
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>{orderTab}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(currentCategory.tabs).map(([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => setSecondaryTab(key)}
+                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                        secondaryTab === key
+                          ? "bg-[#00D4AA] text-black"
+                          : isDark
+                            ? "bg-[#252842] text-gray-300 hover:text-white hover:bg-[#2a2d42]"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            <div className="p-6">
+              <div className="space-y-4">
+                {!currentCategory || Object.keys(currentCategory.tabs).length <= 1 ? (
+                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{orderTab}</h3>
+                ) : null}
+                <div className="space-y-3">
+                  {records.map((record, index) => (
+                    <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        {Object.entries(record).map(([key, value]) => (
+                          <div key={key}>
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
+                              {key === 'id' ? 'ID' : 
+                               key === 'type' ? '类型' :
+                               key === 'amount' ? '金额' :
+                               key === 'status' ? '状态' :
+                               key === 'time' ? '时间' : key}
+                            </div>
+                            <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium`}>
+                              {value}
+                            </div>
                           </div>
-                          <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium`}>
-                            {value}
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -2653,7 +2771,7 @@ export default function WalletPage() {
                 return (
                   <button
                     key={tab.id}
-                    onClick={() => setOrderTab(tab.id)}
+                    onClick={() => handleOrderTabChange(tab.id)}
                     className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
                       orderTab === tab.id
                         ? isDark
