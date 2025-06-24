@@ -612,12 +612,29 @@ export default function MomentsPage() {
                                 </svg>
                               </div>
                             )}
+                            {/* 信誉担保标签 */}
+                            <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                              信誉担保$123K
+                            </span>
                           </div>
                           <div className="text-sm text-gray-500">{post.timestamp}</div>
                         </div>
                       </div>
                       
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-3">
+                        {/* 跟单按钮和人数 */}
+                        <div className="flex items-center space-x-2">
+                          <button className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                            isDark 
+                              ? "bg-white text-black hover:bg-gray-200" 
+                              : "bg-black text-white hover:bg-gray-800"
+                          }`}>
+                            跟单
+                          </button>
+                          <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                            已有{Math.floor(Math.random() * 500 + 100)}人跟单
+                          </span>
+                        </div>
                         <button
                           onClick={() => toggleFavorite(post.id)}
                           className={`p-2 rounded-full transition-all duration-200 ${
