@@ -8,7 +8,7 @@ export default function MomentsPage() {
   const { theme } = useTheme()
   const [searchTerm, setSearchTerm] = useState("")
   const [favorites, setFavorites] = useState<string[]>(["post-1", "post-3"])
-  const [activeMainTab, setActiveMainTab] = useState("圈子")
+  const [activeMainTab, setActiveMainTab] = useState("关注")
   const [activeSubTab, setActiveSubTab] = useState("全部")
   const [mounted, setMounted] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -211,8 +211,8 @@ export default function MomentsPage() {
             <div className={`${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
               <div className="p-4">
                 {/* 主页签导航 */}
-                <div className="grid grid-cols-2 gap-1 mb-4">
-                  {["热门话题", "圈子"].map((tab) => (
+                <div className="grid grid-cols-3 gap-1 mb-4">
+                  {["关注", "圈子", "热门"].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveMainTab(tab)}
@@ -231,8 +231,8 @@ export default function MomentsPage() {
                   ))}
                 </div>
 
-                {/* 二级页签 - 只在非圈子页签时显示 */}
-                {activeMainTab !== "圈子" && (
+                {/* 二级页签 - 只在热门页签时显示 */}
+                {activeMainTab === "热门" && (
                   <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
                     <div
                       ref={scrollContainerRef}
@@ -316,6 +316,17 @@ export default function MomentsPage() {
                 )}
               </div>
             </div>
+
+            {/* 动态内容 - 关注和热门页签显示 */}
+            {(activeMainTab === "关注" || activeMainTab === "热门") && (
+              <div className="space-y-4">
+                <div className={`${cardStyle} rounded-lg p-4`}>
+                  <div className={`text-center py-8 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                    {activeMainTab === "关注" ? "暂无关注的用户动态" : "暂无热门内容"}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* 圈子详细列表 - 只在圈子页签时显示 */}
             {activeMainTab === "圈子" && (
