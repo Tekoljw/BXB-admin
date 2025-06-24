@@ -17,7 +17,7 @@ export default function NavigationLoader() {
     const timer = setTimeout(handleComplete, 100)
 
     return () => clearTimeout(timer)
-  }, [pathname])
+  }, [currentPath])
 
   if (!loading) return null
 

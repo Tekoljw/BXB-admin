@@ -70,7 +70,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
   ]
 
   const isActive = (path: string) => {
-    return pathname === path
+    return currentPath === path
   }
 
   const handleNavClick = useCallback((path: string) => {

@@ -46,8 +46,10 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const { theme, setTheme, language, setLanguage } = useTheme()
 
   useEffect(() => {
-    setCurrentPage(pathname)
-  }, [pathname])
+    // Initialize current page from URL on mount
+    const path = window.location.pathname
+    setCurrentPage(path || "/chat")
+  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
