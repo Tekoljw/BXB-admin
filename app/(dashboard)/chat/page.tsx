@@ -1769,80 +1769,102 @@ export default function ChatPage() {
                       {/* Render different message types */}
                       {msg.type === 'transfer' ? (
                         /* Transfer Card */
-                        <div className={`max-w-xs lg:max-w-md rounded-lg overflow-hidden ${
+                        <div className={`max-w-xs lg:max-w-md rounded-2xl overflow-hidden shadow-lg ${
                           msg.senderId === 'user'
-                            ? 'bg-gradient-to-r from-blue-500 to-blue-600'
+                            ? 'bg-gradient-to-br from-[#4F46E5] via-[#7C3AED] to-[#EC4899]'
                             : isDark
-                              ? 'bg-[#252842] border border-gray-600'
-                              : 'bg-white border border-gray-200 shadow-sm'
+                              ? 'bg-gradient-to-br from-[#1E293B] to-[#334155] border border-[#475569]'
+                              : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200'
                         }`}>
-                          <div className="p-4">
-                            <div className="flex items-center gap-3 mb-3">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                                msg.senderId === 'user' ? 'bg-white/20' : 'bg-blue-500'
+                          {/* Header with pattern background */}
+                          <div className={`relative p-4 ${
+                            msg.senderId === 'user' 
+                              ? 'bg-black/10' 
+                              : isDark 
+                                ? 'bg-white/5' 
+                                : 'bg-gray-100/80'
+                          }`}>
+                            <div className="absolute inset-0 opacity-10">
+                              <div className="w-full h-full bg-gradient-to-br from-transparent via-white/20 to-transparent"></div>
+                            </div>
+                            <div className="relative flex items-center gap-3">
+                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                                msg.senderId === 'user' 
+                                  ? 'bg-white/20 backdrop-blur-sm' 
+                                  : 'bg-[#4F46E5] shadow-lg'
                               }`}>
-                                <Wallet className={`w-5 h-5 ${
+                                <Wallet className={`w-6 h-6 ${
                                   msg.senderId === 'user' ? 'text-white' : 'text-white'
                                 }`} />
                               </div>
                               <div>
-                                <h4 className={`font-medium ${
+                                <h4 className={`font-bold text-lg ${
                                   msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
                                 }`}>
                                   转账
                                 </h4>
                                 <p className={`text-sm ${
-                                  msg.senderId === 'user' ? 'text-white/80' : 'text-gray-500'
+                                  msg.senderId === 'user' ? 'text-white/80' : isDark ? 'text-gray-300' : 'text-gray-600'
                                 }`}>
-                                  {msg.transferData?.note || '无备注'}
+                                  {msg.transferData?.note || '转账备注'}
                                 </p>
                               </div>
                             </div>
-                            
-                            <div className={`text-center py-3 rounded-lg ${
-                              msg.senderId === 'user' ? 'bg-white/10' : isDark ? 'bg-gray-700' : 'bg-gray-50'
+                          </div>
+                          
+                          {/* Amount Display */}
+                          <div className="p-6">
+                            <div className={`text-center py-6 rounded-xl ${
+                              msg.senderId === 'user' 
+                                ? 'bg-white/10 backdrop-blur-sm border border-white/20' 
+                                : isDark 
+                                  ? 'bg-[#0F172A] border border-[#334155]' 
+                                  : 'bg-gradient-to-br from-gray-50 to-white border border-gray-200'
                             }`}>
-                              <div className="flex items-center justify-center gap-2 mb-1">
-                                <div className={`w-6 h-6 rounded-full ${
+                              <div className="flex items-center justify-center gap-3 mb-2">
+                                <div className={`w-8 h-8 rounded-full ${
                                   currencies.find(c => c.symbol === msg.transferData?.currency)?.color
-                                } flex items-center justify-center text-white text-sm font-bold`}>
+                                } flex items-center justify-center text-white text-lg font-bold shadow-lg`}>
                                   {currencies.find(c => c.symbol === msg.transferData?.currency)?.icon}
                                 </div>
-                                <span className={`text-2xl font-bold ${
+                                <span className={`text-3xl font-bold ${
                                   msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
                                 }`}>
                                   {msg.transferData?.amount}
                                 </span>
-                                <span className={`text-lg ${
-                                  msg.senderId === 'user' ? 'text-white/80' : 'text-gray-500'
+                                <span className={`text-xl font-medium ${
+                                  msg.senderId === 'user' ? 'text-white/80' : isDark ? 'text-gray-300' : 'text-gray-600'
                                 }`}>
                                   {msg.transferData?.currency}
                                 </span>
                               </div>
+                              <p className={`text-sm ${
+                                msg.senderId === 'user' ? 'text-white/60' : isDark ? 'text-gray-400' : 'text-gray-500'
+                              }`}>
+                                点击下方按钮领取
+                              </p>
                             </div>
                             
                             {msg.senderId !== 'user' && !msg.transferData?.claimed && (
                               <button
                                 onClick={() => handleClaimTransfer(msg.id)}
-                                className="w-full mt-3 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition-colors"
+                                className="w-full mt-4 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] hover:from-[#4338CA] hover:to-[#6D28D9] text-white py-3 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                               >
-                                领取转账
+                                💰 立即领取转账
                               </button>
                             )}
                             
                             {msg.transferData?.claimed && (
-                              <div className="mt-3 text-center">
-                                <span className={`text-sm ${
-                                  msg.senderId === 'user' ? 'text-white/60' : 'text-gray-400'
-                                }`}>
-                                  已领取
+                              <div className="mt-4 text-center py-3 rounded-xl bg-green-100 dark:bg-green-900/30">
+                                <span className="text-green-600 dark:text-green-400 font-medium">
+                                  ✅ 转账已成功领取
                                 </span>
                               </div>
                             )}
                             
-                            <div className="mt-2 text-right">
+                            <div className="mt-3 text-right">
                               <span className={`text-xs ${
-                                msg.senderId === 'user' ? 'text-white/60' : 'text-gray-400'
+                                msg.senderId === 'user' ? 'text-white/50' : isDark ? 'text-gray-500' : 'text-gray-400'
                               }`}>
                                 {msg.time}
                               </span>
@@ -1851,60 +1873,98 @@ export default function ChatPage() {
                         </div>
                       ) : msg.type === 'redpacket' ? (
                         /* Red Packet Card */
-                        <div className={`max-w-xs lg:max-w-md rounded-lg overflow-hidden ${
+                        <div className={`max-w-xs lg:max-w-md rounded-2xl overflow-hidden shadow-lg ${
                           msg.senderId === 'user'
-                            ? 'bg-gradient-to-r from-red-500 to-red-600'
+                            ? 'bg-gradient-to-br from-[#DC2626] via-[#EF4444] to-[#F97316]'
                             : isDark
-                              ? 'bg-[#252842] border border-gray-600'
-                              : 'bg-white border border-gray-200 shadow-sm'
+                              ? 'bg-gradient-to-br from-[#7F1D1D] to-[#991B1B] border border-red-800'
+                              : 'bg-gradient-to-br from-red-50 to-red-100 border border-red-200'
                         }`}>
-                          <div className="p-4">
-                            <div className="flex items-center gap-3 mb-3">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                                msg.senderId === 'user' ? 'bg-white/20' : 'bg-red-500'
+                          {/* Header with Chinese pattern */}
+                          <div className={`relative p-4 ${
+                            msg.senderId === 'user' 
+                              ? 'bg-black/10' 
+                              : isDark 
+                                ? 'bg-white/5' 
+                                : 'bg-red-200/50'
+                          }`}>
+                            <div className="absolute inset-0 opacity-20">
+                              <div className="w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTAiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuMyIvPgo8L3N2Zz4K')] repeat"></div>
+                            </div>
+                            <div className="relative flex items-center gap-3">
+                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                                msg.senderId === 'user' 
+                                  ? 'bg-yellow-400/30 backdrop-blur-sm border border-yellow-300/30' 
+                                  : isDark
+                                    ? 'bg-red-600 shadow-lg'
+                                    : 'bg-red-500 shadow-lg'
                               }`}>
-                                <Gift className={`w-5 h-5 ${
-                                  msg.senderId === 'user' ? 'text-white' : 'text-white'
+                                <Gift className={`w-6 h-6 ${
+                                  msg.senderId === 'user' ? 'text-yellow-100' : 'text-white'
                                 }`} />
                               </div>
                               <div>
-                                <h4 className={`font-medium ${
-                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
+                                <h4 className={`font-bold text-lg ${
+                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-red-800'
                                 }`}>
-                                  红包
+                                  🧧 恭喜发财
                                 </h4>
                                 <p className={`text-sm ${
-                                  msg.senderId === 'user' ? 'text-white/80' : 'text-gray-500'
+                                  msg.senderId === 'user' ? 'text-yellow-100' : isDark ? 'text-red-200' : 'text-red-600'
                                 }`}>
                                   {msg.redpacketData?.note}
                                 </p>
                               </div>
                             </div>
-                            
-                            <div className={`text-center py-3 rounded-lg ${
-                              msg.senderId === 'user' ? 'bg-white/10' : isDark ? 'bg-gray-700' : 'bg-gray-50'
+                          </div>
+                          
+                          {/* Amount and Progress */}
+                          <div className="p-6">
+                            <div className={`text-center py-6 rounded-xl ${
+                              msg.senderId === 'user' 
+                                ? 'bg-yellow-400/20 backdrop-blur-sm border border-yellow-300/30' 
+                                : isDark 
+                                  ? 'bg-red-950/50 border border-red-800' 
+                                  : 'bg-white/80 border border-red-200'
                             }`}>
-                              <div className="flex items-center justify-center gap-2 mb-1">
-                                <div className={`w-6 h-6 rounded-full ${
+                              <div className="flex items-center justify-center gap-3 mb-3">
+                                <div className={`w-8 h-8 rounded-full ${
                                   currencies.find(c => c.symbol === msg.redpacketData?.currency)?.color
-                                } flex items-center justify-center text-white text-sm font-bold`}>
+                                } flex items-center justify-center text-white text-lg font-bold shadow-lg`}>
                                   {currencies.find(c => c.symbol === msg.redpacketData?.currency)?.icon}
                                 </div>
-                                <span className={`text-2xl font-bold ${
-                                  msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-gray-800'
+                                <span className={`text-3xl font-bold ${
+                                  msg.senderId === 'user' ? 'text-yellow-100' : isDark ? 'text-white' : 'text-red-800'
                                 }`}>
                                   {msg.redpacketData?.totalAmount}
                                 </span>
-                                <span className={`text-lg ${
-                                  msg.senderId === 'user' ? 'text-white/80' : 'text-gray-500'
+                                <span className={`text-xl font-medium ${
+                                  msg.senderId === 'user' ? 'text-yellow-200' : isDark ? 'text-red-200' : 'text-red-600'
                                 }`}>
                                   {msg.redpacketData?.currency}
                                 </span>
                               </div>
-                              <p className={`text-sm ${
-                                msg.senderId === 'user' ? 'text-white/60' : 'text-gray-400'
+                              
+                              {/* Progress Bar */}
+                              <div className="mb-3">
+                                <div className={`w-full h-2 rounded-full ${
+                                  msg.senderId === 'user' ? 'bg-yellow-600/30' : isDark ? 'bg-red-900' : 'bg-red-200'
+                                }`}>
+                                  <div 
+                                    className={`h-full rounded-full ${
+                                      msg.senderId === 'user' ? 'bg-yellow-400' : isDark ? 'bg-red-400' : 'bg-red-500'
+                                    }`}
+                                    style={{ 
+                                      width: `${((msg.redpacketData?.claimed || 0) / parseInt(msg.redpacketData?.count || '1')) * 100}%` 
+                                    }}
+                                  ></div>
+                                </div>
+                              </div>
+                              
+                              <p className={`text-sm font-medium ${
+                                msg.senderId === 'user' ? 'text-yellow-200' : isDark ? 'text-red-300' : 'text-red-600'
                               }`}>
-                                {msg.redpacketData?.claimed || 0}/{msg.redpacketData?.count}个已领取
+                                {msg.redpacketData?.claimed || 0}/{msg.redpacketData?.count} 个红包已被领取
                               </p>
                             </div>
                             
@@ -1912,25 +1972,24 @@ export default function ChatPage() {
                              (msg.redpacketData?.claimed || 0) < parseInt(msg.redpacketData?.count || '0') && (
                               <button
                                 onClick={() => handleClaimRedPacket(msg.id)}
-                                className="w-full mt-3 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-medium transition-colors"
+                                className="w-full mt-4 bg-gradient-to-r from-[#DC2626] to-[#EF4444] hover:from-[#B91C1C] hover:to-[#DC2626] text-white py-3 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] relative overflow-hidden"
                               >
-                                领取红包
+                                <span className="relative z-10">🧧 抢红包</span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent animate-pulse"></div>
                               </button>
                             )}
                             
                             {(msg.redpacketData?.claimed || 0) >= parseInt(msg.redpacketData?.count || '0') && (
-                              <div className="mt-3 text-center">
-                                <span className={`text-sm ${
-                                  msg.senderId === 'user' ? 'text-white/60' : 'text-gray-400'
-                                }`}>
-                                  红包已抢完
+                              <div className="mt-4 text-center py-3 rounded-xl bg-gray-100 dark:bg-gray-800">
+                                <span className={`font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  🎉 红包已被抢完
                                 </span>
                               </div>
                             )}
                             
-                            <div className="mt-2 text-right">
+                            <div className="mt-3 text-right">
                               <span className={`text-xs ${
-                                msg.senderId === 'user' ? 'text-white/60' : 'text-gray-400'
+                                msg.senderId === 'user' ? 'text-yellow-200/70' : isDark ? 'text-red-400' : 'text-red-500'
                               }`}>
                                 {msg.time}
                               </span>
