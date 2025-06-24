@@ -72,26 +72,22 @@ export default function AccountDropdown() {
     router.push("/login")
   }
 
-  const handleToggleDropdown = () => {
-    if (!isOpen) {
-      calculatePosition()
-    }
-    setIsOpen(!isOpen)
+  const handleProfileClick = () => {
+    router.push('/profile')
   }
 
   return (
     <div className="relative">
       <button
         ref={buttonRef}
-        className={`w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-lg ${
-          isOpen ? "ring-2 ring-custom-green/50 scale-105" : ""
-        }`}
-        onClick={handleToggleDropdown}
+        className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-lg"
+        onClick={handleProfileClick}
       >
         <User className="h-5 w-5" />
       </button>
 
-      {isOpen && mounted && createPortal(
+      {/* Removed dropdown popup - now redirects to profile page */}
+      {false && isOpen && mounted && createPortal(
         <>
           <div 
             className="fixed inset-0 bg-black/20 backdrop-blur-sm"
