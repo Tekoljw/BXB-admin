@@ -28,66 +28,158 @@ export default function ProfilePage() {
 
   const renderPersonalHomepage = () => (
     <div className="space-y-6">
-      {/* Profile Header */}
+      {/* Profile Header - Exact Match to Friend Profile */}
       <div className={`${cardStyle} rounded-lg p-6 border`}>
-        <div className="flex items-start space-x-6">
-          <div className="relative">
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+        {/* Centered Profile Photo */}
+        <div className="text-center mb-4">
+          <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold mx-auto">
+            我
+            <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+          </div>
+        </div>
+
+        {/* Name and Title */}
+        <div className="text-center mb-4">
+          <div className="flex items-center justify-center space-x-2 mb-1">
+            <h1 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+              交易达人
+            </h1>
+            <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div>
+          <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+            专业交易员
+          </p>
+        </div>
+
+        {/* Bio Text */}
+        <div className="text-center mb-4">
+          <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+            Professional trader with 5+ years experience
+          </p>
+        </div>
+
+        {/* Location and Join Date */}
+        <div className="flex items-center justify-center space-x-4 mb-6 text-sm text-gray-400">
+          <div className="flex items-center space-x-1">
+            <span>📍</span>
+            <span>上海</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <span>📅</span>
+            <span>2022年12月加入</span>
+          </div>
+        </div>
+
+        {/* Three Column Stats */}
+        <div className="grid grid-cols-3 gap-6 mb-6">
+          <div className="text-center">
+            <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+              445
+            </div>
+            <div className="text-xs text-gray-400">动态</div>
+          </div>
+          <div className="text-center">
+            <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+              12800
+            </div>
+            <div className="text-xs text-gray-400">粉丝</div>
+          </div>
+          <div className="text-center">
+            <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+              89
+            </div>
+            <div className="text-xs text-gray-400">关注</div>
+          </div>
+        </div>
+
+        {/* Three Action Buttons */}
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          <button className="bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm">
+            关注
+          </button>
+          <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
+            isDark 
+              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+              : "border-gray-300 text-gray-700 hover:bg-gray-50"
+          }`}>
+            加好友
+          </button>
+          <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
+            isDark 
+              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+              : "border-gray-300 text-gray-700 hover:bg-gray-50"
+          }`}>
+            跟单
+          </button>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="mb-6">
+          <div className="flex border-b border-gray-200 dark:border-gray-700">
+            <button className="px-4 py-3 text-sm font-medium border-b-2 border-black text-black dark:border-white dark:text-white">
+              动态
+            </button>
+            <button className={`px-4 py-3 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+              合约交易
+            </button>
+            <button className={`px-4 py-3 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+              合约持仓
+            </button>
+          </div>
+        </div>
+
+        {/* Sample Post Content */}
+        <div className={`${isDark ? "bg-[#252842]" : "bg-gray-50"} rounded-lg p-4`}>
+          <div className="flex items-start space-x-3 mb-4">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
               我
             </div>
-            <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
+            <div className="flex-1">
+              <div className="flex items-center space-x-2">
+                <span className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                  交易达人
+                </span>
+                <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <span className="text-xs text-gray-400">4小时前</span>
+              </div>
+              <div className="mt-2">
+                <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  刚刚发现一个新的DeFi协议，APY高达200%！但是大家要注意风险，高收益往往伴随高风险。DYOR! 💰
+                </p>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  <span className="px-2 py-1 bg-[#00D4AA]/20 text-[#00D4AA] rounded text-xs">#DeFi</span>
+                  <span className="px-2 py-1 bg-yellow-500/20 text-yellow-600 rounded text-xs">#高收益挖矿</span>
+                  <span className="px-2 py-1 bg-blue-500/20 text-blue-600 rounded text-xs">#风险提示</span>
+                </div>
+              </div>
+            </div>
           </div>
           
-          <div className="flex-1">
-            <div className="flex items-center space-x-3 mb-2">
-              <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                交易达人
-              </h1>
-              <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-            </div>
-            
-            <p className={`text-lg mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-              专业交易员・资深投资顾问
-            </p>
-
-            {/* Bio */}
-            <p className={`text-sm mb-4 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-              专注数字货币交易5年，擅长技术分析和风险管理。致力于为用户提供专业的投资建议和交易策略。
-            </p>
-
-            {/* Location and Join Date */}
-            <div className="flex items-center space-x-4 mb-6 text-sm text-gray-400">
-              <div className="flex items-center space-x-1">
-                <span>📍</span>
-                <span>上海</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <span>📅</span>
-                <span>2019年加入</span>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-center space-x-3">
-              <button className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                isDark 
-                  ? "bg-white text-black hover:bg-gray-200" 
-                  : "bg-black text-white hover:bg-gray-800"
-              }`}>
-                编辑资料
+          {/* Post Actions */}
+          <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center space-x-6">
+              <button className="flex items-center space-x-1 text-red-500">
+                <span>❤️</span>
+                <span className="text-sm">1876</span>
               </button>
-              <button className={`px-6 py-2 rounded-lg border transition-colors ${
-                isDark 
-                  ? "border-[#252842] text-white hover:bg-[#252842]" 
-                  : "border-gray-300 text-gray-700 hover:bg-gray-50"
-              }`}>
-                分享主页
+              <button className="flex items-center space-x-1 text-gray-400">
+                <span>💬</span>
+                <span className="text-sm">234</span>
+              </button>
+              <button className="flex items-center space-x-1 text-gray-400">
+                <span>🔄</span>
+                <span className="text-sm">67</span>
               </button>
             </div>
+            <span className="text-xs text-gray-400">2,177 次互动</span>
           </div>
         </div>
       </div>
