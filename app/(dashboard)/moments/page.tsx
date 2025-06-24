@@ -30,19 +30,26 @@ export default function MomentsPage() {
     return <div className="min-h-screen bg-[#f5f8fa] dark:bg-background"></div>
   }
 
-  // 一级页签
-  const mainTabs = ["关注", "圈子", "最新"]
+  const cardStyle = isDark ? "bg-[#1a1d29] border-[#252842]" : "bg-white border-gray-200"
 
-  // 二级页签 - 根据主页签变化
   const getSubTabs = () => {
-    if (activeMainTab === "圈子") {
-      return [] // 圈子页签不需要二级页签，会显示圈子列表
+    if (activeMainTab === "热门话题") {
+      return [
+        "全部",
+        "BTC",
+        "ETH", 
+        "DeFi",
+        "NFT",
+        "GameFi",
+        "Layer2",
+        "Meme币",
+        "AI概念",
+        "公链生态",
+        "投资策略",
+        "风险提示",
+      ]
     }
     return [
-      "全部",
-      "交易心得",
-      "市场分析",
-      "技术分享",
       "新手教学",
       "DeFi",
       "NFT",
@@ -87,7 +94,7 @@ export default function MomentsPage() {
     {
       id: "circle-4",
       name: "技术开发者",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d50?w=64&h=64&fit=crop&crop=face",
       members: 892,
       isJoined: false,
       description: "区块链技术讨论与代码分享"
@@ -102,437 +109,212 @@ export default function MomentsPage() {
     }
   ]
 
-  // 热门话题数据
-  const trendingTopics = [
-    { tag: "BTC突破", posts: "1.2K", change: "+19.15%" },
-    { tag: "DeFi挖矿", posts: "856", change: "+15.32%" },
-    { tag: "NFT艺术", posts: "634", change: "+12.87%" },
-    { tag: "ETH升级", posts: "423", change: "+11.45%" },
-    { tag: "Layer2", posts: "312", change: "+9.23%" },
-    { tag: "Meme币", posts: "289", change: "+8.76%" },
-    { tag: "GameFi", posts: "245", change: "+7.65%" },
-    { tag: "Web3", posts: "198", change: "+6.43%" },
-  ]
-
-  // 圈子数据
-  const circles = [
-    { name: "量化交易圈", members: "2.3K", posts: "456", avatar: "📊", isJoined: true },
-    { name: "DeFi研究院", members: "1.8K", posts: "234", avatar: "🏛️", isJoined: false },
-    { name: "NFT收藏家", members: "1.5K", posts: "189", avatar: "🎨", isJoined: true },
-    { name: "区块链技术", members: "3.1K", posts: "567", avatar: "⛓️", isJoined: false },
-    { name: "Web3创业者", members: "987", posts: "123", avatar: "🚀", isJoined: true },
-    { name: "加密投资", members: "2.7K", posts: "345", avatar: "💰", isJoined: false },
-    { name: "Layer2生态", members: "1.2K", posts: "98", avatar: "🌐", isJoined: false },
-    { name: "Meme币社区", members: "856", posts: "67", avatar: "🐕", isJoined: true },
-  ]
-
-  // 推荐用户数据
-  const recommendedUsers = [
-    { name: "V神", avatar: "V", posts: "234", change: "+19.15%" },
-    { name: "CZ", avatar: "C", posts: "189", change: "+15.32%" },
-    { name: "加密女王", avatar: "👸", posts: "156", change: "+12.87%" },
-    { name: "区块链教授", avatar: "👨‍🏫", posts: "143", change: "+11.45%" },
-    { name: "DeFi专家", avatar: "💎", posts: "128", change: "+10.23%" },
-  ]
-
-  // 交易员排行榜数据
-  const traderLeaderboard = [
-    { rank: 1, name: "量化大师", avatar: "#FFD700", followers: "12.8K", trades: "1,234", return: "+158.7%", color: "bg-yellow-500" },
-    { rank: 2, name: "趋势猎手", avatar: "#4F46E5", followers: "9.5K", trades: "987", return: "+142.3%", color: "bg-blue-500" },
-    { rank: 3, name: "波段王者", avatar: "#22C55E", followers: "7.2K", trades: "756", return: "+128.9%", color: "bg-green-500" },
-    { rank: 4, name: "价值投资者", avatar: "#A855F7", followers: "15.3K", trades: "543", return: "+115.4%", color: "bg-purple-500" },
-    { rank: 5, name: "短线高手", avatar: "#EF4444", followers: "6.8K", trades: "2,156", return: "+98.7%", color: "bg-red-500" },
-    { rank: 6, name: "套利专家", avatar: "#3B82F6", followers: "4.9K", trades: "678", return: "+87.2%", color: "bg-blue-600" },
-    { rank: 7, name: "技术分析师", avatar: "#EC4899", followers: "8.1K", trades: "892", return: "+76.8%", color: "bg-pink-500" },
-    { rank: 8, name: "风险控制师", avatar: "#10B981", followers: "11.2K", trades: "421", return: "+65.3%", color: "bg-emerald-500" },
-  ]
-
-  // 完整动态数据
-  const postsData = [
-    {
-      id: "post-1",
-      author: "CryptoAnalyst",
-      avatar: "🔍",
-      verified: true,
-      content:
-        "🚀 比特币突破关键阻力位！从技术分析角度看，BTC已经突破了长期下降趋势线，成交量也在放大。这可能是新一轮上涨的开始。",
-      images: ["/placeholder.svg?height=300&width=400&text=BTC技术分析图"],
-      timestamp: "2小时前",
-      likes: 2543,
-      comments: 156,
-      shares: 89,
-      isLiked: false,
-      tags: ["BTC", "技术分析", "突破"],
-    },
-    {
-      id: "post-2",
-      author: "DeFiGuru",
-      avatar: "🧙‍♂️",
-      verified: true,
-      content: "刚刚发现一个新的DeFi协议，APY高达200%！但是大家要注意风险，高收益往往伴随高风险。DYOR！💰",
-      timestamp: "4小时前",
-      likes: 1876,
-      comments: 234,
-      shares: 67,
-      isLiked: true,
-      tags: ["DeFi", "流动性挖矿", "风险提示"],
-    },
-    {
-      id: "post-3",
-      author: "NFTCollector",
-      avatar: "🎨",
-      verified: false,
-      content: "这个NFT系列太惊艳了！艺术家将区块链技术与传统艺术完美结合，每一个作品都讲述了一个关于数字未来的故事。",
-      images: [
-        "/placeholder.svg?height=300&width=300&text=NFT作品1",
-        "/placeholder.svg?height=300&width=300&text=NFT作品2",
-      ],
-      timestamp: "6小时前",
-      likes: 1234,
-      comments: 89,
-      shares: 45,
-      isLiked: false,
-      tags: ["NFT", "数字艺术", "收藏"],
-    },
-    {
-      id: "post-4",
-      author: "TradingPro",
-      avatar: "📈",
-      verified: true,
-      content:
-        "市场分析：以太坊正在形成一个强劲的上升趋势，技术指标显示可能会在短期内突破4,000美元。关注RSI和MACD指标的交叉点。",
-      timestamp: "8小时前",
-      likes: 3156,
-      comments: 445,
-      shares: 178,
-      isLiked: true,
-      tags: ["ETH", "技术分析", "价格预测"],
-    },
-    {
-      id: "post-5",
-      author: "区块链新手",
-      avatar: "🔰",
-      verified: false,
-      content: "刚入圈的新手，想请教一下大家，现在适合定投BTC和ETH吗？预算不多，每月1000元左右。求指导！🙏",
-      timestamp: "10小时前",
-      likes: 567,
-      comments: 123,
-      shares: 23,
-      isLiked: false,
-      tags: ["新手", "定投", "求助"],
-    },
-  ]
-
-  const toggleFavorite = (postId: string) => {
-    setFavorites((prev) => (prev.includes(postId) ? prev.filter((f) => f !== postId) : [...prev, postId]))
-  }
-
-  const handleLike = (postId: string) => {
-    // 处理点赞逻辑
-  }
-
-  // 过滤动态数据 - 根据选择的圈子过滤
-  const filteredPosts = postsData.filter((post) => {
-    const searchText = `${post.author} ${post.content}`.toLowerCase()
-    const matchesSearch = searchText.includes(searchTerm.toLowerCase())
-    
-    // 如果选择了特定圈子作为子页签，只显示该圈子的动态
-    if (circleData.some(circle => circle.name === activeSubTab)) {
-      // 这里可以根据实际数据结构过滤特定圈子的动态
-      // 暂时返回所有匹配搜索的动态
-      return matchesSearch
-    }
-    
-    return matchesSearch
-  })
-
-  // 统一的卡片样式
-  const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!scrollContainerRef.current) return
-    setIsDragging(true)
-    setStartX(e.pageX - scrollContainerRef.current.offsetLeft)
-    setScrollLeft(scrollContainerRef.current.scrollLeft)
-  }
-
-  const handleMouseLeave = () => {
-    setIsDragging(false)
-  }
-
-  const handleMouseUp = () => {
-    setIsDragging(false)
-  }
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !scrollContainerRef.current) return
-    e.preventDefault()
-    const x = e.pageX - scrollContainerRef.current.offsetLeft
-    const walk = (x - startX) * 2
-    scrollContainerRef.current.scrollLeft = scrollLeft - walk
-  }
-
-  // 添加隐藏滚动条的样式
-  const scrollbarHideStyle = `
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  `
-
   return (
-    <div>
-      <style dangerouslySetInnerHTML={{ __html: scrollbarHideStyle }} />
-      <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
-        {/* 三栏布局 */}
-        <div className="grid grid-cols-12 gap-6">
-          {/* 左侧边栏 - 热门话题与圈子 */}
-          <div className="col-span-3">
-            <div className={`${cardStyle} rounded-lg sticky top-6 overflow-hidden`}>
-              {/* 页签导航 */}
-              <div className="flex border-b border-gray-100 dark:border-gray-700">
-                <button
-                  onClick={() => setLeftSidebarTab("热门话题")}
-                  className={`flex-1 py-3 px-4 text-sm transition-colors ${
-                    leftSidebarTab === "热门话题"
-                      ? isDark 
-                        ? "text-white font-bold border-b-2 border-white bg-transparent"
-                        : "text-black font-bold border-b-2 border-black bg-transparent"
-                      : isDark
-                        ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
-                  }`}
-                >
-                  热门话题
-                </button>
-                <button
-                  onClick={() => setLeftSidebarTab("热门圈子")}
-                  className={`flex-1 py-3 px-4 text-sm transition-colors ${
-                    leftSidebarTab === "热门圈子"
-                      ? isDark 
-                        ? "text-white font-bold border-b-2 border-white bg-transparent"
-                        : "text-black font-bold border-b-2 border-black bg-transparent"
-                      : isDark
-                        ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
-                  }`}
-                >
-                  热门圈子
-                </button>
-              </div>
+    <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+        `
+      }} />
+      
+      {/* 三栏布局 */}
+      <div className="grid grid-cols-12 gap-6">
+        {/* 左侧边栏 - 热门话题与圈子 */}
+        <div className="col-span-3">
+          <div className={`${cardStyle} rounded-lg sticky top-6 overflow-hidden`}>
+            {/* 页签导航 */}
+            <div className="flex border-b border-gray-100 dark:border-gray-700">
+              <button
+                onClick={() => setLeftSidebarTab("热门话题")}
+                className={`flex-1 py-3 px-4 text-sm transition-colors ${
+                  leftSidebarTab === "热门话题"
+                    ? isDark
+                      ? "bg-[#252842] text-white border-b-2 border-[#00D4AA]"
+                      : "bg-gray-50 text-gray-800 border-b-2 border-[#00D4AA]"
+                    : isDark
+                      ? "text-gray-400 hover:text-white hover:bg-[#1e2332]"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                }`}
+              >
+                热门话题
+              </button>
+              <button
+                onClick={() => setLeftSidebarTab("热门圈子")}
+                className={`flex-1 py-3 px-4 text-sm transition-colors ${
+                  leftSidebarTab === "热门圈子"
+                    ? isDark
+                      ? "bg-[#252842] text-white border-b-2 border-[#00D4AA]"
+                      : "bg-gray-50 text-gray-800 border-b-2 border-[#00D4AA]"
+                    : isDark
+                      ? "text-gray-400 hover:text-white hover:bg-[#1e2332]"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                }`}
+              >
+                热门圈子
+              </button>
+            </div>
 
-              {/* 内容区域 */}
-              <div className="p-6">
-                {leftSidebarTab === "热门话题" ? (
-                  /* 热门话题内容 */
-                  <div className="space-y-3">
-                    {trendingTopics.map((topic, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between hover:bg-muted/50 p-2 rounded cursor-pointer"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <span className="text-lg">#</span>
-                          <div>
-                            <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium block`}>
-                              {topic.tag}
-                            </span>
-                            <span className="text-gray-400 text-xs">{topic.posts} 条动态</span>
-                          </div>
-                        </div>
-                        <span className="text-[#00D4AA] text-sm font-medium">{topic.change}</span>
+            {/* 左侧边栏内容 */}
+            <div className="p-4 max-h-[600px] overflow-y-auto">
+              {leftSidebarTab === "热门话题" ? (
+                <div className="space-y-3">
+                  {[
+                    { tag: "BTC突破", posts: "1.2K", change: "+19.15%" },
+                    { tag: "DeFi挖矿", posts: "856", change: "+15.32%" },
+                    { tag: "NFT艺术", posts: "634", change: "+12.87%" },
+                    { tag: "ETH升级", posts: "423", change: "+11.45%" },
+                    { tag: "Layer2", posts: "312", change: "+9.23%" },
+                    { tag: "Meme币", posts: "289", change: "+8.76%" },
+                    { tag: "GameFi", posts: "245", change: "+7.65%" },
+                    { tag: "Web3", posts: "198", change: "+6.43%" },
+                  ].map((topic, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-[#252842] transition-colors cursor-pointer">
+                      <div>
+                        <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>#{topic.tag}</div>
+                        <div className="text-sm text-gray-500">{topic.posts} 条动态</div>
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  /* 圈子内容 */
-                  <div className="space-y-2">
-                    {circles.map((circle, index) => (
-                      <div
-                        key={index}
-                        className="p-3 hover:bg-muted/30 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
-                      >
-                        <div className="flex items-start space-x-3">
-                          <img
-                            src={circleData.find(c => c.name === circle.name)?.avatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face"}
-                            alt={circle.name}
-                            className="w-12 h-12 rounded-full object-cover shadow-sm flex-shrink-0"
-                          />
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-1">
-                              <h4 className={`font-semibold text-sm truncate ${isDark ? "text-white" : "text-gray-800"}`}>
-                                {circle.name}
-                              </h4>
-                              <button 
-                                className={`text-xs px-2 py-1 rounded transition-colors flex-shrink-0 ${
-                                  circle.isJoined
-                                    ? "bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300"
-                                    : "bg-black text-white hover:bg-gray-800"
-                                }`}
-                              >
-                                {circle.isJoined ? "已加入" : "加入"}
-                              </button>
-                            </div>
-                            <div className="flex items-center space-x-3 text-xs text-gray-400">
-                              <span className="flex items-center">
-                                <span className="w-1 h-1 bg-gray-400 rounded-full mr-1"></span>
-                                {circle.members} 成员
-                              </span>
-                              <span className="flex items-center">
-                                <span className="w-1 h-1 bg-gray-400 rounded-full mr-1"></span>
-                                {circle.posts} 条动态
-                              </span>
-                            </div>
-                          </div>
-                        </div>
+                      <div className="text-sm text-green-500 font-medium">{topic.change}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {circleData.slice(0, 5).map((circle) => (
+                    <div key={circle.id} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-[#252842] transition-colors cursor-pointer">
+                      <img
+                        src={circle.avatar}
+                        alt={circle.name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                      <div className="flex-1">
+                        <div className={`font-medium text-sm ${isDark ? "text-white" : "text-gray-800"}`}>{circle.name}</div>
+                        <div className="text-xs text-gray-500">{circle.members} 位成员</div>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
+        </div>
 
-          {/* 中间主内容区 */}
-          <div className="col-span-6">
-            {/* 两级页签导航和搜索框 */}
-            <div className="mb-6">
-              {/* 一级页签和搜索框 */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-8 relative">
-                  {mainTabs.map((tab) => (
+        {/* 中央内容区域 */}
+        <div className="col-span-6">
+          <div className="space-y-4">
+            {/* 主页签 */}
+            <div className={`${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
+              <div className="p-4">
+                {/* 主页签导航 */}
+                <div className="grid grid-cols-2 gap-1 mb-4">
+                  {["热门话题", "圈子"].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveMainTab(tab)}
-                      className={`text-lg transition-all duration-300 relative pb-2 ${
+                      className={`py-3 px-4 text-sm font-medium rounded-lg transition-all duration-200 ${
                         activeMainTab === tab
-                          ? "font-black text-black dark:text-white"
+                          ? isDark
+                            ? "bg-white text-black"
+                            : "bg-black text-white"
                           : isDark
-                            ? "font-medium text-gray-400 hover:text-gray-300"
-                            : "font-medium text-gray-500 hover:text-gray-700"
+                            ? "text-gray-300 hover:text-white hover:bg-[#252842]"
+                            : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                       }`}
                     >
                       {tab}
-                      {/* 下划线动画 */}
-                      <div
-                        className={`absolute bottom-0 left-0 h-0.5 bg-[#00D4AA] transition-all duration-300 ease-out ${
-                          activeMainTab === tab ? "w-full opacity-100" : "w-0 opacity-0"
-                        }`}
-                      />
                     </button>
                   ))}
                 </div>
 
-                {/* 搜索框 */}
-                <div className="relative">
-                  <Search
-                    className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
-                      isDark ? "text-gray-400" : "text-gray-500"
-                    }`}
-                  />
-                  <input
-                    type="text"
-                    placeholder="搜索动态"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`pl-10 pr-4 py-2 w-64 rounded-lg border text-sm transition-colors ${
-                      isDark
-                        ? "bg-[#1a1d29] border-[#252842] text-white placeholder-gray-400 focus:border-[#00D4AA]"
-                        : "bg-white border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
-                    } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
-                  />
-                </div>
-              </div>
-
-              {/* 二级页签 - 只在非圈子页签时显示 */}
-              {activeMainTab !== "圈子" && (
-                <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
-                  <div
-                    ref={scrollContainerRef}
-                    className="flex items-center space-x-1 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none"
-                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                    onMouseDown={handleMouseDown}
-                    onMouseLeave={handleMouseLeave}
-                    onMouseUp={handleMouseUp}
-                    onMouseMove={handleMouseMove}
-                  >
-                    {subTabs.map((tab, index) => (
-                      <button
-                        key={tab}
-                        onClick={() => setActiveSubTab(tab)}
-                        className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 pointer-events-auto ${
-                          activeSubTab === tab
-                            ? isDark
-                              ? "bg-white text-black shadow-sm"
-                              : "bg-black text-white shadow-sm"
-                            : isDark
-                              ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
-                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
-                        }`}
-                        style={{
-                          transform: activeSubTab === tab ? 'translateY(-2px)' : 'translateY(0)',
-                          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                          boxShadow: activeSubTab === tab ? '0 4px 8px rgba(0, 0, 0, 0.1)' : 'none'
-                        }}
-                      >
-                        {tab}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 圈子页签内容 */}
-              {activeMainTab === "圈子" && (
-                <div className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border ${isDark ? "border-[#252842]" : "border-gray-300"} rounded-lg p-4 mb-4`}>
-                  <div className="mb-4">
-                    <div className={`text-base font-bold ${isDark ? "text-white" : "text-gray-800"} mb-4`}>我的圈子</div>
-                    
-                    {/* 圈子头像列表 */}
-                    <div className="flex items-center space-x-4 overflow-x-auto pb-2">
-                      {circleData.map((circle) => (
-                      <div key={circle.id} className="flex-shrink-0 text-center">
-                        <div className="relative mb-2">
-                          <img
-                            src={circle.avatar}
-                            alt={circle.name}
-                            className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
-                          />
-                          {circle.isJoined && (
-                            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#00D4AA] rounded-full flex items-center justify-center">
-                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                              </svg>
-                            </div>
-                          )}
-                        </div>
-                        <p className={`text-xs font-medium truncate w-16 ${isDark ? "text-white" : "text-gray-800"}`}>
-                          {circle.name}
-                        </p>
-                        <p className="text-xs text-gray-500">{circle.members}人</p>
-                      </div>
-                    ))}
-                    
-                    {/* 创建圈子按钮 - 大圆形黑色按钮 */}
-                    <div className="flex-shrink-0 text-center">
-                      <button
-                        className="flex items-center justify-center w-16 h-16 rounded-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors shadow-lg"
-                        title="创建圈子"
-                      >
-                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                        </svg>
-                      </button>
-                      <p className={`text-xs mt-2 ${isDark ? "text-white" : "text-gray-800"}`}>
-                        创建圈子
-                      </p>
+                {/* 二级页签 - 只在非圈子页签时显示 */}
+                {activeMainTab !== "圈子" && (
+                  <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
+                    <div
+                      ref={scrollContainerRef}
+                      className="flex items-center space-x-1 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+                      style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                    >
+                      {subTabs.map((tab, index) => (
+                        <button
+                          key={tab}
+                          onClick={() => setActiveSubTab(tab)}
+                          className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 pointer-events-auto ${
+                            activeSubTab === tab
+                              ? isDark
+                                ? "bg-white text-black shadow-sm"
+                                : "bg-black text-white shadow-sm"
+                              : isDark
+                                ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
+                                : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
+                          }`}
+                          style={{
+                            transform: activeSubTab === tab ? 'translateY(-2px)' : 'translateY(0)',
+                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                            boxShadow: activeSubTab === tab ? '0 4px 8px rgba(0, 0, 0, 0.1)' : 'none'
+                          }}
+                        >
+                          {tab}
+                        </button>
+                      ))}
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+
+                {/* 圈子页签内容 */}
+                {activeMainTab === "圈子" && (
+                  <div className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border ${isDark ? "border-[#252842]" : "border-gray-300"} rounded-lg p-4 mb-4`}>
+                    <div className="mb-4">
+                      <div className={`text-base font-bold ${isDark ? "text-white" : "text-gray-800"} mb-4`}>我的圈子</div>
+                      
+                      {/* 圈子头像列表 */}
+                      <div className="flex items-center space-x-4 overflow-x-auto pb-2">
+                        {circleData.map((circle) => (
+                          <div key={circle.id} className="flex-shrink-0 text-center">
+                            <div className="relative mb-2">
+                              <img
+                                src={circle.avatar}
+                                alt={circle.name}
+                                className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
+                              />
+                              {circle.isJoined && (
+                                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#00D4AA] rounded-full flex items-center justify-center">
+                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                  </svg>
+                                </div>
+                              )}
+                            </div>
+                            <p className={`text-xs font-medium truncate w-16 ${isDark ? "text-white" : "text-gray-800"}`}>
+                              {circle.name}
+                            </p>
+                            <p className="text-xs text-gray-500">{circle.members}人</p>
+                          </div>
+                        ))}
+                        
+                        {/* 创建圈子按钮 - 大圆形黑色按钮 */}
+                        <div className="flex-shrink-0 text-center">
+                          <button
+                            className="flex items-center justify-center w-16 h-16 rounded-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors shadow-lg"
+                            title="创建圈子"
+                          >
+                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            </svg>
+                          </button>
+                          <p className={`text-xs mt-2 ${isDark ? "text-white" : "text-gray-800"}`}>
+                            创建圈子
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* 圈子详细列表 - 只在圈子页签时显示 */}
@@ -543,12 +325,7 @@ export default function MomentsPage() {
                     key={circle.id}
                     className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border ${isDark ? "border-[#252842]" : "border-gray-300"} rounded-lg transition-all duration-200 hover:${
                       isDark ? "bg-[#1e2332]" : "bg-gray-50"
-                    } cursor-pointer`}
-                    onClick={() => {
-                      // 切换到该圈子的动态内容
-                      setActiveMainTab("关注")
-                      setActiveSubTab(circle.name)
-                    }}
+                    }`}
                   >
                     <div className="p-4">
                       <div className="flex items-center justify-between">
@@ -567,10 +344,6 @@ export default function MomentsPage() {
                           </div>
                         </div>
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            // 处理加入/退出圈子逻辑
-                          }}
                           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                             circle.isJoined
                               ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -585,333 +358,132 @@ export default function MomentsPage() {
                 ))}
               </div>
             )}
-
-            {/* 发布动态区域 - 只在非圈子页签时显示 */}
-            {activeMainTab !== "圈子" && (
-              <div className={`${cardStyle} rounded-lg mb-6`}>
-                <div className="p-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center text-black font-medium">
-                      我
-                    </div>
-                    <div className="flex-1">
-                      <textarea
-                        placeholder="分享你的交易心得或市场观点..."
-                        className={`w-full bg-muted rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm ${
-                          isDark ? "bg-[#2a2d3a] text-white" : "bg-gray-100 text-gray-800"
-                        }`}
-                        rows={3}
-                      />
-                      <div className="flex items-center justify-between mt-3">
-                        <div className="flex items-center space-x-3">
-                          <button className="p-2 hover:bg-muted rounded-lg transition-colors">
-                            <ImageIcon className="h-5 w-5 text-muted-foreground" />
-                          </button>
-                          <button className="p-2 hover:bg-muted rounded-lg transition-colors">
-                            <Video className="h-5 w-5 text-muted-foreground" />
-                          </button>
-                          <button className="p-2 hover:bg-muted rounded-lg transition-colors">
-                            <Smile className="h-5 w-5 text-muted-foreground" />
-                          </button>
-                        </div>
-                        <button className="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                          发布
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 动态列表 - 重新设计的卡片布局 - 只在非圈子页签时显示 */}
-            {activeMainTab !== "圈子" && (
-              <div className="space-y-6">
-                {filteredPosts.map((post) => {
-                  const isFavorite = favorites.includes(post.id)
-
-                return (
-                  <div
-                    key={post.id}
-                    className={`${cardStyle} rounded-xl p-6 transition-all duration-200 hover:shadow-lg hover:${
-                      isDark ? "bg-[#1e2332]" : "bg-gray-50"
-                    }`}
-                  >
-                    {/* 头部 - 用户信息和操作 */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold shadow-lg">
-                          {post.avatar}
-                        </div>
-                        <div>
-                          <div className="flex items-center space-x-2">
-                            <span className={`font-bold text-base ${isDark ? "text-white" : "text-gray-900"}`}>
-                              {post.author}
-                            </span>
-                            {post.verified && (
-                              <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
-                                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                </svg>
-                              </div>
-                            )}
-                          </div>
-                          <div className="text-sm text-gray-500">{post.timestamp}</div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <button
-                          onClick={() => toggleFavorite(post.id)}
-                          className={`p-2 rounded-full transition-all duration-200 ${
-                            isFavorite 
-                              ? "text-yellow-500 bg-yellow-50 hover:bg-yellow-100" 
-                              : "text-gray-400 hover:text-yellow-500 hover:bg-gray-50"
-                          }`}
-                        >
-                          <Star className="h-5 w-5" fill={isFavorite ? "currentColor" : "none"} />
-                        </button>
-                        <button className="p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all duration-200">
-                          <MoreHorizontal className="h-5 w-5" />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* 内容 */}
-                    <div className="mb-4">
-                      <p className={`text-base leading-relaxed ${isDark ? "text-gray-100" : "text-gray-800"}`}>
-                        {post.content}
-                      </p>
-                    </div>
-
-                    {/* 标签 */}
-                    {post.tags && (
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {post.tags.map((tag, index) => (
-                          <span 
-                            key={index} 
-                            className={`px-3 py-1 text-sm font-medium rounded-full cursor-pointer transition-all duration-200 ${
-                              isDark 
-                                ? "bg-[#00D4AA]/30 text-[#00D4AA] hover:bg-[#00D4AA]/50" 
-                                : "bg-[#00D4AA]/10 text-[#00D4AA] hover:bg-[#00D4AA]/20"
-                            }`}
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* 图片 */}
-                    {post.images && (
-                      <div className="mb-4">
-                        {post.images.length === 1 ? (
-                          <img
-                            src={post.images[0] || "/placeholder.svg"}
-                            alt="Post image"
-                            className="w-full max-h-96 object-cover rounded-lg shadow-sm"
-                          />
-                        ) : (
-                          <div className="grid grid-cols-2 gap-3">
-                            {post.images.slice(0, 4).map((image, index) => (
-                              <img
-                                key={index}
-                                src={image || "/placeholder.svg"}
-                                alt={`Post image ${index + 1}`}
-                                className="w-full h-48 object-cover rounded-lg shadow-sm"
-                              />
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* 底部操作栏 */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
-                      <div className="flex items-center space-x-6">
-                        <button
-                          onClick={() => handleLike(post.id)}
-                          className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200 ${
-                            post.isLiked 
-                              ? "text-red-500 bg-red-50 hover:bg-red-100" 
-                              : "text-gray-500 hover:text-red-500 hover:bg-red-50"
-                          }`}
-                        >
-                          <Heart className={`h-5 w-5 ${post.isLiked ? "fill-current" : ""}`} />
-                          <span className="text-sm font-medium">{post.likes}</span>
-                        </button>
-
-                        <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-gray-500 hover:text-[#00D4AA] hover:bg-[#00D4AA]/10 transition-all duration-200">
-                          <MessageCircle className="h-5 w-5" />
-                          <span className="text-sm font-medium">{post.comments}</span>
-                        </button>
-
-                        <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-gray-500 hover:text-[#00D4AA] hover:bg-[#00D4AA]/10 transition-all duration-200">
-                          <Share className="h-5 w-5" />
-                          <span className="text-sm font-medium">{post.shares}</span>
-                        </button>
-                      </div>
-
-                      {/* 数据统计 */}
-                      <div className="text-sm text-gray-400">
-                        {(post.likes + post.comments + post.shares).toLocaleString()} 次互动
-                      </div>
-                    </div>
-                  </div>
-                )
-                })}
-              </div>
-            )}
           </div>
+        </div>
 
-          {/* 右侧边栏 - 推荐关注与交易员排行榜 */}
-          <div className="col-span-3">
-            <div className={`${cardStyle} rounded-lg sticky top-6 overflow-hidden`}>
-              {/* 页签导航 */}
-              <div className="flex border-b border-gray-100 dark:border-gray-700">
-                <button
-                  onClick={() => setRightSidebarTab("推荐关注")}
-                  className={`flex-1 py-3 px-4 text-sm transition-colors ${
-                    rightSidebarTab === "推荐关注"
-                      ? isDark 
-                        ? "text-white font-bold border-b-2 border-white bg-transparent"
-                        : "text-black font-bold border-b-2 border-black bg-transparent"
-                      : isDark
-                        ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
-                  }`}
-                >
-                  推荐关注
-                </button>
-                <button
-                  onClick={() => setRightSidebarTab("TOP")}
-                  className={`flex-1 py-3 px-4 text-sm transition-colors ${
-                    rightSidebarTab === "TOP"
-                      ? isDark 
-                        ? "text-white font-bold border-b-2 border-white bg-transparent"
-                        : "text-black font-bold border-b-2 border-black bg-transparent"
-                      : isDark
-                        ? "text-gray-300 hover:text-white hover:bg-gray-700 font-normal"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-50 font-normal"
-                  }`}
-                >
-                  TOP
-                </button>
-              </div>
+        {/* 右侧边栏 */}
+        <div className="col-span-3">
+          <div className={`${cardStyle} rounded-lg sticky top-6`}>
+            {/* 顶部tabs导航 */}
+            <div className="flex border-b border-gray-100 dark:border-gray-700">
+              <button
+                onClick={() => setRightSidebarTab("推荐关注")}
+                className={`flex-1 py-3 px-4 text-sm transition-colors ${
+                  rightSidebarTab === "推荐关注"
+                    ? isDark
+                      ? "bg-[#252842] text-white border-b-2 border-[#00D4AA]"
+                      : "bg-gray-50 text-gray-800 border-b-2 border-[#00D4AA]"
+                    : isDark
+                      ? "text-gray-400 hover:text-white hover:bg-[#1e2332]"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                }`}
+              >
+                推荐关注
+              </button>
+              <button
+                onClick={() => setRightSidebarTab("TOP")}
+                className={`flex-1 py-3 px-4 text-sm transition-colors ${
+                  rightSidebarTab === "TOP"
+                    ? isDark
+                      ? "bg-[#252842] text-white border-b-2 border-[#00D4AA]"
+                      : "bg-gray-50 text-gray-800 border-b-2 border-[#00D4AA]"
+                    : isDark
+                      ? "text-gray-400 hover:text-white hover:bg-[#1e2332]"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                }`}
+              >
+                TOP
+              </button>
+            </div>
 
-              {/* 内容区域 */}
-              <div className="p-6">
-                {rightSidebarTab === "推荐关注" ? (
-                  /* 推荐关注内容 */
-                  <div className="space-y-3">
-                    {recommendedUsers.map((user, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between hover:bg-muted/50 p-3 rounded-lg cursor-pointer transition-colors"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                            {user.avatar}
+            <div className="p-4">
+              {rightSidebarTab === "推荐关注" ? (
+                <div className="space-y-4">
+                  {[
+                    { name: "CryptoAnalyst", username: "@crypto_guru", followers: "125K", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face", verified: true },
+                    { name: "DeFi Master", username: "@defi_master", followers: "89K", avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b829?w=40&h=40&fit=crop&crop=face", verified: false },
+                    { name: "NFT Collector", username: "@nft_collector", followers: "67K", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face", verified: true },
+                    { name: "Blockchain Dev", username: "@blockchain_dev", followers: "45K", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d50?w=40&h=40&fit=crop&crop=face", verified: false },
+                  ].map((user, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full object-cover" />
+                        <div>
+                          <div className="flex items-center space-x-1">
+                            <span className={`font-medium text-sm ${isDark ? "text-white" : "text-gray-800"}`}>{user.name}</span>
+                            {user.verified && <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>}
                           </div>
-                          <div>
-                            <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium block`}>
-                              {user.name}
-                            </span>
-                            <span className="text-gray-400 text-xs">{user.posts} 条动态</span>
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-end">
-                          <span className="text-[#00D4AA] text-sm font-medium">{user.change}</span>
-                          <button className="text-xs bg-black text-white px-3 py-1 rounded-full hover:bg-gray-800 mt-1 transition-colors">
-                            关注
-                          </button>
+                          <div className="text-xs text-gray-500">{user.username} • {user.followers}</div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  /* 交易员排行榜内容 */
-                  <div>
-                    {/* 时间筛选器 - 自动适配宽度和滑动动画 */}
-                    <div className="relative mb-4">
-                      <div className="flex items-center justify-center space-x-0 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative overflow-hidden">
-                        {/* 滑动背景 */}
-                        <div 
-                          className="absolute bg-white dark:bg-white rounded-md shadow-sm transition-all duration-300 ease-out"
-                          style={{
-                            width: `${100 / 3}%`,
-                            height: 'calc(100% - 8px)',
-                            left: `${["本周", "本月", "总收益"].indexOf(leaderboardPeriod) * (100 / 3)}%`,
-                            top: '4px',
-                            transform: 'translateX(0)',
-                            transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                          }}
-                        />
-                        {["本周", "本月", "总收益"].map((period, index) => (
-                          <button
-                            key={period}
-                            onClick={() => setLeaderboardPeriod(period)}
-                            className={`flex-1 px-4 py-2 text-xs font-medium rounded-md whitespace-nowrap transition-all duration-300 relative z-10 ${
-                              leaderboardPeriod === period
-                                ? "text-black"
-                                : isDark
-                                  ? "text-gray-300 hover:text-white"
-                                  : "text-gray-600 hover:text-gray-800"
-                            }`}
-                            style={{
-                              transition: 'color 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                            }}
-                          >
-                            {period}
-                          </button>
-                        ))}
-                      </div>
+                      <button className="px-3 py-1 bg-[#00D4AA] text-white text-xs rounded-md hover:bg-[#00D4AA]/80 transition-colors">
+                        关注
+                      </button>
                     </div>
-
-                    {/* 排行榜列表 - 优化排版 */}
-                    <div className="space-y-2">
-                      {traderLeaderboard.map((trader) => (
-                        <div
-                          key={trader.rank}
-                          className="flex items-center p-2 hover:bg-muted/30 rounded-lg cursor-pointer transition-colors"
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* TOP 子页签 */}
+                  <div className="relative">
+                    <div className="flex items-center justify-center space-x-1 bg-gray-100 dark:bg-[#2a2d3a] rounded-lg p-1 relative">
+                      {/* 滑动背景 */}
+                      <div 
+                        className="absolute top-1 bottom-1 bg-white dark:bg-[#1a1d29] rounded-md transition-all duration-300 ease-out shadow-sm"
+                        style={{
+                          left: leaderboardPeriod === "本周" ? "4px" : leaderboardPeriod === "本月" ? "33.33%" : "66.66%",
+                          width: "calc(33.33% - 4px)"
+                        }}
+                      />
+                      {["本周", "本月", "总收益"].map((period) => (
+                        <button
+                          key={period}
+                          onClick={() => setLeaderboardPeriod(period)}
+                          className={`flex-1 py-2 text-xs font-bold rounded-md transition-all duration-300 relative z-10 ${
+                            leaderboardPeriod === period
+                              ? isDark
+                                ? "text-white"
+                                : "text-gray-800"
+                              : isDark
+                                ? "text-gray-400 hover:text-gray-300"
+                                : "text-gray-600 hover:text-gray-700"
+                          }`}
                         >
-                          {/* 排名 */}
-                          <div className="w-5 flex items-center justify-center mr-2">
-                            <span className={`text-xs font-bold ${
-                              trader.rank <= 3 ? "text-yellow-500" : isDark ? "text-gray-400" : "text-gray-500"
-                            }`}>
-                              {trader.rank}
-                            </span>
-                          </div>
-                          
-                          {/* 头像 */}
-                          <div className={`w-8 h-8 rounded-full ${trader.color} flex items-center justify-center text-white font-bold text-xs mr-2`}>
-                            {trader.name.charAt(0)}
-                          </div>
-                          
-                          {/* 交易员信息 */}
-                          <div className="flex-1 min-w-0">
-                            <div className={`text-sm font-medium truncate ${isDark ? "text-white" : "text-gray-800"}`}>
-                              {trader.name}
-                            </div>
-                            <div className="text-xs text-gray-400 truncate">
-                              {trader.followers} 关注者　{trader.trades} 笔交易
-                            </div>
-                          </div>
-                          
-                          {/* 收益率和跟单按钮 */}
-                          <div className="flex flex-col items-end ml-2">
-                            <span className="text-[#00D4AA] text-xs font-bold mb-1">{trader.return}</span>
-                            <button className="text-xs bg-black text-white px-2 py-0.5 rounded hover:bg-gray-800 transition-colors">
-                              跟单
-                            </button>
-                          </div>
-                        </div>
+                          {period}
+                        </button>
                       ))}
                     </div>
                   </div>
-                )}
-              </div>
+
+                  {/* TOP 排行榜内容 */}
+                  <div className="space-y-3">
+                    {[
+                      { rank: 1, name: "CryptoKing", profit: "+247.8%", amount: "$125,430", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" },
+                      { rank: 2, name: "DeFiQueen", profit: "+189.2%", amount: "$89,760", avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b829?w=32&h=32&fit=crop&crop=face" },
+                      { rank: 3, name: "TradeWizard", profit: "+156.7%", amount: "$67,890", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face" },
+                      { rank: 4, name: "TokenMaster", profit: "+134.5%", amount: "$54,320", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d50?w=32&h=32&fit=crop&crop=face" },
+                      { rank: 5, name: "CoinSage", profit: "+98.3%", amount: "$42,150", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=32&h=32&fit=crop&crop=face" },
+                    ].map((trader) => (
+                      <div key={trader.rank} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-[#252842] transition-colors">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                          trader.rank === 1 ? "bg-yellow-500 text-white" :
+                          trader.rank === 2 ? "bg-gray-400 text-white" :
+                          trader.rank === 3 ? "bg-amber-600 text-white" :
+                          "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+                        }`}>
+                          {trader.rank}
+                        </div>
+                        <img src={trader.avatar} alt={trader.name} className="w-8 h-8 rounded-full object-cover" />
+                        <div className="flex-1">
+                          <div className={`font-medium text-sm ${isDark ? "text-white" : "text-gray-800"}`}>{trader.name}</div>
+                          <div className="text-xs text-gray-500">{trader.amount}</div>
+                        </div>
+                        <div className="text-xs font-bold text-green-500">{trader.profit}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
