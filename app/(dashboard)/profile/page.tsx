@@ -46,96 +46,85 @@ export default function ProfilePage() {
 
   const renderPersonalHomepage = () => (
     <div className="space-y-6">
-      {/* Profile Header - Exact Copy from Friend Profile */}
+      {/* Profile Header - New Left-Right Layout */}
       <div className={`${cardStyle} rounded-lg p-6 border`}>
-        {/* Avatar */}
-        <div className="text-center mb-4">
-          <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold mx-auto mb-3">
-            我
-            <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+        <div className="flex items-start justify-between">
+          {/* Left Side - Profile Info */}
+          <div className="flex-1">
+            {/* Avatar and Basic Info */}
+            <div className="flex items-start space-x-4 mb-4">
+              <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold">
+                我
+                <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+              </div>
+              
+              <div className="flex-1">
+                {/* Name with verification badge */}
+                <div className="flex items-center space-x-2 mb-1">
+                  <h1 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                    交易达人
+                  </h1>
+                  <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+                
+                {/* Title */}
+                <p className={`text-sm mb-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                  专业交易员
+                </p>
+                
+                {/* Bio */}
+                <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  Professional trader with 5+ years experience
+                </p>
+              </div>
+            </div>
+
+            {/* Location and Join Date */}
+            <div className="flex items-center space-x-4 mb-4 text-sm text-gray-400">
+              <div className="flex items-center space-x-1">
+                <span>📍</span>
+                <span>上海</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <span>📅</span>
+                <span>2022年12月加入</span>
+              </div>
+            </div>
+
+            {/* Edit Button */}
+            <button 
+              onClick={() => setShowEditModal(true)}
+              className="bg-black text-white py-2.5 px-4 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm"
+            >
+              编辑资料
+            </button>
           </div>
-          
-          {/* Name with verification badge */}
-          <div className="flex items-center justify-center space-x-2 mb-1">
-            <h1 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-              交易达人
-            </h1>
-            <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
+
+          {/* Right Side - Stats */}
+          <div className="flex space-x-8">
+            <div className="text-center">
+              <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                445
+              </div>
+              <div className="text-xs text-gray-400">动态</div>
+            </div>
+            <div className="text-center">
+              <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                12800
+              </div>
+              <div className="text-xs text-gray-400">粉丝</div>
+            </div>
+            <div className="text-center">
+              <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                89
+              </div>
+              <div className="text-xs text-gray-400">关注</div>
             </div>
           </div>
-          
-          {/* Title */}
-          <p className={`text-sm mb-4 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-            专业交易员
-          </p>
-        </div>
-
-        {/* Bio */}
-        <div className="text-center mb-4">
-          <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-            Professional trader with 5+ years experience
-          </p>
-        </div>
-
-        {/* Location and Join Date */}
-        <div className="flex items-center justify-center space-x-4 mb-6 text-sm text-gray-400">
-          <div className="flex items-center space-x-1">
-            <span>📍</span>
-            <span>上海</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <span>📅</span>
-            <span>2022年12月加入</span>
-          </div>
-        </div>
-
-        {/* Stats - Exactly like friend profile */}
-        <div className="grid grid-cols-3 gap-6 mb-6">
-          <div className="text-center">
-            <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-              445
-            </div>
-            <div className="text-xs text-gray-400">动态</div>
-          </div>
-          <div className="text-center">
-            <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-              12800
-            </div>
-            <div className="text-xs text-gray-400">粉丝</div>
-          </div>
-          <div className="text-center">
-            <div className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-              89
-            </div>
-            <div className="text-xs text-gray-400">关注</div>
-          </div>
-        </div>
-
-        {/* Personal profile buttons */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <button 
-            onClick={() => setShowEditModal(true)}
-            className="bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm"
-          >
-            编辑资料
-          </button>
-          <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
-            isDark 
-              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
-              : "border-gray-300 text-gray-700 hover:bg-gray-50"
-          }`}>
-            分享主页
-          </button>
-          <button className={`py-2.5 rounded-lg font-medium transition-colors text-sm border ${
-            isDark 
-              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
-              : "border-gray-300 text-gray-700 hover:bg-gray-50"
-          }`}>
-            设置
-          </button>
         </div>
 
         {/* Tab Navigation */}
