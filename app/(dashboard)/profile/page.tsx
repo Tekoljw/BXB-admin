@@ -14,6 +14,24 @@ interface ProfileMenuItem {
 export default function ProfilePage() {
   const { isDark } = useTheme()
   const [activeSection, setActiveSection] = useState("personal")
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editForm, setEditForm] = useState({
+    nickname: '交易达人',
+    bio: 'Professional trader with 5+ years experience',
+    avatar: null as File | null
+  })
+
+  const handleSaveProfile = () => {
+    console.log('Saving profile:', editForm)
+    setShowEditModal(false)
+  }
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setEditForm(prev => ({ ...prev, avatar: file }))
+    }
+  }
 
   const cardStyle = isDark ? "bg-[#1a1d29] border-[#252842]" : "bg-white border-gray-200"
 
@@ -124,10 +142,13 @@ export default function ProfilePage() {
         <div className="mb-6">
           <div className="flex border-b border-gray-200 dark:border-gray-700">
             <button className="px-4 py-3 text-sm font-medium border-b-2 border-black text-black dark:border-white dark:text-white">
-              动态
+              我的动态
             </button>
             <button className={`px-4 py-3 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              收藏
+              我的收藏
+            </button>
+            <button className={`px-4 py-3 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+              我的点赞
             </button>
             <button className={`px-4 py-3 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
               我的圈子
@@ -265,6 +286,106 @@ export default function ProfilePage() {
 
   return (
     <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+      {/* Edit Profile Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`${cardStyle} rounded-lg w-full max-w-md border`}>
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+              <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                编辑资料
+              </h3>
+              <button 
+                onClick={() => setShowEditModal(false)}
+                className={`p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${isDark ? "text-gray-400" : "text-gray-600"}`}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-4 space-y-4">
+              {/* Avatar Upload */}
+              <div className="text-center">
+                <div className="relative w-20 h-20 mx-auto mb-3">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold">
+                    我
+                  </div>
+                  <label className="absolute bottom-0 right-0 w-6 h-6 bg-[#00D4AA] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#00C097] transition-colors">
+                    <Camera className="w-3 h-3 text-white" />
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={handleAvatarChange}
+                      className="hidden" 
+                    />
+                  </label>
+                </div>
+                <p className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                  点击相机图标更换头像
+                </p>
+              </div>
+
+              {/* Nickname */}
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-700"}`}>
+                  昵称
+                </label>
+                <input
+                  type="text"
+                  value={editForm.nickname}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, nickname: e.target.value }))}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent ${
+                    isDark 
+                      ? "bg-[#252842] border-gray-600 text-white" 
+                      : "bg-white border-gray-300 text-gray-900"
+                  }`}
+                  placeholder="输入昵称"
+                />
+              </div>
+
+              {/* Bio */}
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-700"}`}>
+                  简介
+                </label>
+                <textarea
+                  value={editForm.bio}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, bio: e.target.value }))}
+                  rows={3}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent resize-none ${
+                    isDark 
+                      ? "bg-[#252842] border-gray-600 text-white" 
+                      : "bg-white border-gray-300 text-gray-900"
+                  }`}
+                  placeholder="介绍一下自己..."
+                />
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex space-x-3 p-4 border-t border-gray-200 dark:border-gray-700">
+              <button
+                onClick={() => setShowEditModal(false)}
+                className={`flex-1 py-2 px-4 border rounded-lg font-medium transition-colors ${
+                  isDark 
+                    ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                取消
+              </button>
+              <button
+                onClick={handleSaveProfile}
+                className="flex-1 py-2 px-4 bg-[#00D4AA] text-white rounded-lg font-medium hover:bg-[#00C097] transition-colors"
+              >
+                保存
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-12 gap-6">
         {/* Left Sidebar - Navigation */}
         <div className="col-span-3">
