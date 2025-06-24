@@ -656,6 +656,21 @@ export default function SocialPage() {
                       <p className="text-xs text-gray-500">{circle.members}人</p>
                     </div>
                   ))}
+                  
+                  {/* 创建圈子按钮 - 大圆形黑色按钮 */}
+                  <div className="flex-shrink-0 text-center">
+                    <button
+                      className="flex items-center justify-center w-16 h-16 rounded-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors shadow-lg"
+                      title="创建圈子"
+                    >
+                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                    </button>
+                    <p className={`text-xs mt-2 ${isDark ? "text-white" : "text-gray-800"}`}>
+                      创建圈子
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
