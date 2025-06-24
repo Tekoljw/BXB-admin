@@ -115,9 +115,30 @@ export default function ChatPage() {
   // Handle send message
   const handleSendMessage = (e?: React.FormEvent) => {
     e?.preventDefault()
-    if (!message.trim()) return
+    if (!message.trim() || !selectedContact) return
     
-    console.log(`发送消息到 ${selectedContact}: ${message}`)
+    const newMessage: Message = {
+      id: `msg-${Date.now()}`,
+      senderId: "me",
+      text: message.trim(),
+      time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+      isRead: true
+    }
+    
+    setMessages(prev => ({
+      ...prev,
+      [selectedContact]: [...(prev[selectedContact] || []), newMessage]
+    }))
+    
+    // Check if this is guarantee chat and trigger guarantee flow
+    const contact = getContactsByTab().find(c => c.id === selectedContact)
+    if (contact?.isGuarantee && message.trim().includes("担保")) {
+      setTimeout(() => {
+        setShowGuaranteeFlow(true)
+        setGuaranteeStep(1)
+      }, 1000)
+    }
+    
     setMessage("")
   }
 
@@ -319,6 +340,8 @@ export default function ChatPage() {
       time: "在线",
       isOnline: true,
       isAI: true,
+      isGuarantee: true,
+      isAI: true,
     },
     {
       id: "ai-trading",
@@ -440,7 +463,7 @@ export default function ChatPage() {
   ]
 
   // Message data
-  const messages: { [key: string]: Message[] } = {
+  const [messages, setMessages] = useState<{ [key: string]: Message[] }>({
     "contact-1": [
       {
         id: "msg-1",
@@ -457,7 +480,23 @@ export default function ChatPage() {
         isRead: true,
       },
     ],
-  }
+    "ai-escrow": [
+      {
+        id: "msg-1",
+        senderId: "ai-escrow",
+        text: "您好！我是AI担保助手，可以为您提供安全可靠的担保交易服务。请告诉我您需要什么帮助？",
+        time: "10:00",
+        isRead: true,
+      },
+      {
+        id: "msg-2",
+        senderId: "ai-escrow",
+        text: "我可以帮您：\n1. 发起担保交易\n2. 查看担保记录\n3. 解答担保相关问题\n\n输入"担保"开始流程",
+        time: "10:01",
+        isRead: true,
+      },
+    ]
+  })
 
   const filteredContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -1659,6 +1698,57 @@ export default function ChatPage() {
                 style={{ height: `${inputHeight}px` }}
               >
                 <div className="h-full flex flex-col">
+                  {/* Guarantee Flow Quick Actions */}
+                  {selectedContact && getContactsByTab().find(c => c.id === selectedContact)?.isGuarantee && (
+                    <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={startGuaranteeFlow}
+                          className="px-3 py-2 text-xs bg-[#00D4AA] text-black rounded-lg hover:bg-[#00B894] transition-colors"
+                        >
+                          <Shield className="h-3 w-3 mr-1 inline" />
+                          发起担保
+                        </button>
+                        <button className="px-3 py-2 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                          查看担保记录
+                        </button>
+                        <button className="px-3 py-2 text-xs bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                          担保帮助
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="flex-1 p-4">
+                    <form onSubmit={handleSendMessage} className="flex items-end space-x-3">
+                      <div className="flex-1 relative">
+                        <textarea
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                              e.preventDefault()
+                              handleSendMessage(e as any)
+                            }
+                          }}
+                          placeholder="输入消息..."
+                          className={`w-full px-4 py-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                            isDark 
+                              ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400' 
+                              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                          }`}
+                          style={{ height: '44px', maxHeight: '120px' }}
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className="p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                      >
+                        <ArrowUp className="h-4 w-4" />
+                      </button>
+                    </form>
+                  </div>
+                </div>
                   <div 
                     ref={resizeRef}
                     onMouseDown={handleTextareaMouseDown}
@@ -2030,6 +2120,361 @@ export default function ChatPage() {
                           isDark ? "hover:bg-[#252842] text-gray-300" : "hover:bg-gray-50 text-gray-700"
                         }`}>
                           <Image className="w-5 h-5" />
+                          <span>群相册</span>
+                          <ChevronRight className="w-4 h-4 ml-auto" />
+                        </button>
+                      </div>
+                    </>
+                  )
+                })()}
+                </div>
+              </div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Guarantee Flow Modal */}
+      {showGuaranteeFlow && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`${isDark ? 'bg-[#1a1d29]' : 'bg-white'} rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto`}>
+            {/* Header */}
+            <div className={`p-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Shield className="h-6 w-6 text-[#00D4AA]" />
+                  <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    担保交易流程
+                  </h2>
+                </div>
+                <button
+                  onClick={closeGuaranteeFlow}
+                  className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              
+              {/* Progress Steps */}
+              <div className="mt-6 flex items-center justify-between">
+                {[
+                  { step: 1, title: "发起担保" },
+                  { step: 2, title: "设置条件" },
+                  { step: 3, title: "确认条件" },
+                  { step: 4, title: "执行中" },
+                  { step: 5, title: "完成" }
+                ].map((item, index) => (
+                  <div key={item.step} className="flex items-center">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                      guaranteeStep >= item.step
+                        ? "bg-[#00D4AA] text-black"
+                        : isDark
+                          ? "bg-gray-700 text-gray-400"
+                          : "bg-gray-200 text-gray-500"
+                    }`}>
+                      {item.step}
+                    </div>
+                    <span className={`ml-2 text-sm ${
+                      guaranteeStep >= item.step
+                        ? isDark ? 'text-white' : 'text-gray-900'
+                        : isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
+                      {item.title}
+                    </span>
+                    {index < 4 && (
+                      <div className={`w-8 h-0.5 mx-4 ${
+                        guaranteeStep > item.step
+                          ? "bg-[#00D4AA]"
+                          : isDark ? "bg-gray-700" : "bg-gray-200"
+                      }`} />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              {guaranteeStep === 1 && (
+                <div className="space-y-6">
+                  <h3 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    发起担保交易
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        担保金额
+                      </label>
+                      <div className="flex">
+                        <input
+                          type="number"
+                          value={guaranteeData.amount}
+                          onChange={(e) => updateGuaranteeData('amount', e.target.value)}
+                          placeholder="输入金额"
+                          className={`flex-1 px-3 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+                            isDark 
+                              ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                              : 'bg-white border-gray-300 text-gray-900'
+                          }`}
+                        />
+                        <select
+                          value={guaranteeData.currency}
+                          onChange={(e) => updateGuaranteeData('currency', e.target.value)}
+                          className={`px-3 py-2 border-l-0 border rounded-r-lg focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+                            isDark 
+                              ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                              : 'bg-white border-gray-300 text-gray-900'
+                          }`}
+                        >
+                          <option value="USDT">USDT</option>
+                          <option value="BTC">BTC</option>
+                          <option value="ETH">ETH</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        担保期限
+                      </label>
+                      <select
+                        value={guaranteeData.guaranteePeriod}
+                        onChange={(e) => updateGuaranteeData('guaranteePeriod', e.target.value)}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+                          isDark 
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      >
+                        <option value="1">1天</option>
+                        <option value="3">3天</option>
+                        <option value="7">7天</option>
+                        <option value="15">15天</option>
+                        <option value="30">30天</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      交易描述
+                    </label>
+                    <textarea
+                      value={guaranteeData.description}
+                      onChange={(e) => updateGuaranteeData('description', e.target.value)}
+                      placeholder="描述交易内容和要求..."
+                      rows={3}
+                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+                        isDark 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {guaranteeStep === 2 && (
+                <div className="space-y-6">
+                  <h3 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    设置交易条件
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        交易对
+                      </label>
+                      <input
+                        type="text"
+                        value={guaranteeData.tradePair}
+                        onChange={(e) => updateGuaranteeData('tradePair', e.target.value)}
+                        placeholder="如: BTC/USDT"
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+                          isDark 
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                    </div>
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        交易数量
+                      </label>
+                      <input
+                        type="text"
+                        value={guaranteeData.tradeAmount}
+                        onChange={(e) => updateGuaranteeData('tradeAmount', e.target.value)}
+                        placeholder="如: 0.1 BTC"
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+                          isDark 
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      支付方式
+                    </label>
+                    <select
+                      value={guaranteeData.paymentMethod}
+                      onChange={(e) => updateGuaranteeData('paymentMethod', e.target.value)}
+                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+                        isDark 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    >
+                      <option value="">选择支付方式</option>
+                      <option value="支付宝">支付宝</option>
+                      <option value="微信支付">微信支付</option>
+                      <option value="银行转账">银行转账</option>
+                      <option value="数字货币">数字货币</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {guaranteeStep === 3 && (
+                <div className="space-y-6">
+                  <h3 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    确认担保条件
+                  </h3>
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-[#252842]' : 'border-gray-200 bg-gray-50'}`}>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className={`font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>担保金额:</span>
+                        <span className={`${isDark ? 'text-white' : 'text-gray-900'}`}>{guaranteeData.amount} {guaranteeData.currency}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className={`font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>担保期限:</span>
+                        <span className={`${isDark ? 'text-white' : 'text-gray-900'}`}>{guaranteeData.guaranteePeriod}天</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className={`font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>交易对:</span>
+                        <span className={`${isDark ? 'text-white' : 'text-gray-900'}`}>{guaranteeData.tradePair}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className={`font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>交易数量:</span>
+                        <span className={`${isDark ? 'text-white' : 'text-gray-900'}`}>{guaranteeData.tradeAmount}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className={`font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>支付方式:</span>
+                        <span className={`${isDark ? 'text-white' : 'text-gray-900'}`}>{guaranteeData.paymentMethod}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`p-4 rounded-lg border border-yellow-200 bg-yellow-50 dark:border-yellow-600 dark:bg-yellow-900/20`}>
+                    <p className={`text-sm ${isDark ? 'text-yellow-200' : 'text-yellow-800'}`}>
+                      <strong>注意:</strong> 一旦确认担保条件，担保金额将被冻结直到交易完成或争议解决。
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {guaranteeStep === 4 && (
+                <div className="space-y-6">
+                  <h3 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    担保执行中
+                  </h3>
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-[#00D4AA] rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Shield className="h-8 w-8 text-black" />
+                    </div>
+                    <p className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      担保正在执行中
+                    </p>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      资金已冻结，等待交易双方完成交易
+                    </p>
+                  </div>
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-[#252842]' : 'border-gray-200 bg-gray-50'}`}>
+                    <h4 className={`font-medium mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>担保状态</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>担保ID:</span>
+                        <span className={`text-sm font-mono ${isDark ? 'text-white' : 'text-gray-900'}`}>GT{Date.now().toString().slice(-6)}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>创建时间:</span>
+                        <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>{new Date().toLocaleString('zh-CN')}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>预计到期:</span>
+                        <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {new Date(Date.now() + parseInt(guaranteeData.guaranteePeriod) * 24 * 60 * 60 * 1000).toLocaleString('zh-CN')}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {guaranteeStep === 5 && (
+                <div className="space-y-6">
+                  <h3 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    担保完成
+                  </h3>
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Check className="h-8 w-8 text-white" />
+                    </div>
+                    <p className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      担保交易已完成
+                    </p>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      资金已释放，交易成功完成
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className={`p-6 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'} flex justify-between`}>
+              <button
+                onClick={prevGuaranteeStep}
+                disabled={guaranteeStep === 1}
+                className={`px-4 py-2 rounded-lg transition-colors ${
+                  guaranteeStep === 1
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : isDark
+                      ? 'bg-gray-700 text-white hover:bg-gray-600'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                上一步
+              </button>
+              <div className="flex space-x-3">
+                <button
+                  onClick={closeGuaranteeFlow}
+                  className={`px-4 py-2 rounded-lg border transition-colors ${
+                    isDark
+                      ? 'border-gray-600 text-gray-300 hover:bg-gray-800'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  取消
+                </button>
+                <button
+                  onClick={nextGuaranteeStep}
+                  disabled={guaranteeStep === 5}
+                  className={`px-4 py-2 rounded-lg transition-colors ${
+                    guaranteeStep === 5
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-[#00D4AA] text-black hover:bg-[#00B894]'
+                  }`}
+                >
+                  {guaranteeStep === 3 ? '确认担保' : guaranteeStep === 4 ? '完成担保' : '下一步'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
                           <span>聊天记录</span>
                           <ChevronRight className="w-4 h-4 ml-auto" />
                         </button>
