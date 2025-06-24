@@ -629,21 +629,12 @@ export default function SocialPage() {
           {activeMainTab === "圈子" && (
             <div className={`${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
               <div className="p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`text-base font-bold ${isDark ? "text-white" : "text-gray-800"}`}>我的圈子</div>
-                  <button
-                    className="flex items-center justify-center w-10 h-10 rounded-full bg-[#00D4AA] text-white hover:bg-[#00D4AA]/80 transition-colors"
-                    title="创建圈子"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                  </button>
-                </div>
-                
-                {/* 圈子头像列表 */}
-                <div className="flex items-center space-x-4 overflow-x-auto pb-2">
-                  {circles.map((circle) => (
+                <div className="mb-4">
+                  <div className={`text-base font-bold ${isDark ? "text-white" : "text-gray-800"} mb-4`}>我的圈子</div>
+                  
+                  {/* 圈子头像列表 */}
+                  <div className="flex items-center space-x-4 overflow-x-auto pb-2">
+                    {circles.map((circle) => (
                     <div key={circle.id} className="flex-shrink-0 text-center">
                       <div className="relative mb-2">
                         <img
