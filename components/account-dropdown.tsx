@@ -3,19 +3,21 @@
 import { useState, useRef, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { User, LogOut, Settings, UserCircle, CreditCard, HelpCircle, Edit3 } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
 import { useTranslation } from "@/hooks/use-translation"
 import ThemeToggle from "./theme-toggle"
 import LanguageToggle from "./language-toggle"
 
-export default function AccountDropdown() {
+interface AccountDropdownProps {
+  onNavigate?: (path: string) => void
+}
+
+export default function AccountDropdown({ onNavigate }: AccountDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
   const [mounted, setMounted] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const router = useRouter()
   const { isDark } = useTheme()
   const { t } = useTranslation()
 
@@ -69,13 +71,17 @@ export default function AccountDropdown() {
     setIsOpen(false)
     sessionStorage.removeItem("isLoggedIn")
     document.cookie = "isLoggedIn=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
-    router.push("/login")
+    if (onNavigate) {
+      onNavigate("/login")
+    }
   }
 
   const handleProfileClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    router.push('/profile')
+    if (onNavigate) {
+      onNavigate('/profile')
+    }
   }
 
   return (
