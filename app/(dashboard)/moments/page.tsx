@@ -516,7 +516,11 @@ export default function MomentsPage() {
                     {/* 创建圈子的大图标 */}
                     <div className="flex-shrink-0 text-center">
                       <button
-                        className="flex items-center justify-center w-16 h-16 rounded-full bg-[#00D4AA] text-white hover:bg-[#00D4AA]/80 transition-colors mb-2"
+                        className={`flex items-center justify-center w-16 h-16 rounded-full border-2 bg-transparent transition-colors mb-2 ${
+                          isDark
+                            ? "border-white text-white hover:bg-white/10"
+                            : "border-black text-black hover:bg-black/10"
+                        }`}
                         title="创建圈子"
                       >
                         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -612,7 +616,11 @@ export default function MomentsPage() {
                             <Smile className="h-5 w-5 text-muted-foreground" />
                           </button>
                         </div>
-                        <button className="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                        <button className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                          isDark 
+                            ? "bg-white text-black hover:bg-gray-200" 
+                            : "bg-black text-white hover:bg-gray-800"
+                        }`}>
                           发布
                         </button>
                       </div>
@@ -820,7 +828,11 @@ export default function MomentsPage() {
                         </div>
                         <div className="flex flex-col items-end">
                           <span className="text-[#00D4AA] text-sm font-medium">{user.change}</span>
-                          <button className="text-xs bg-black text-white px-3 py-1 rounded-full hover:bg-gray-800 mt-1 transition-colors">
+                          <button className={`text-xs px-3 py-1 rounded-full mt-1 transition-colors ${
+                            isDark 
+                              ? "bg-white text-black hover:bg-gray-200" 
+                              : "bg-black text-white hover:bg-gray-800"
+                          }`}>
                             关注
                           </button>
                         </div>

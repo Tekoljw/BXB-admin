@@ -629,18 +629,6 @@ export default function SocialPage() {
           {activeMainTab === "圈子" && (
             <div className={`${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
               <div className="p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`text-base font-bold ${isDark ? "text-white" : "text-gray-800"}`}>我的圈子</div>
-                  <button
-                    className="flex items-center justify-center w-10 h-10 rounded-full bg-[#00D4AA] text-white hover:bg-[#00D4AA]/80 transition-colors"
-                    title="创建圈子"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                  </button>
-                </div>
-                
                 {/* 圈子头像列表 */}
                 <div className="flex items-center space-x-4 overflow-x-auto pb-2">
                   {circles.map((circle) => (
@@ -665,6 +653,26 @@ export default function SocialPage() {
                       <p className="text-xs text-gray-500">{circle.members}人</p>
                     </div>
                   ))}
+                  
+                  {/* 创建圈子的大图标 */}
+                  <div className="flex-shrink-0 text-center">
+                    <button
+                      className={`flex items-center justify-center w-16 h-16 rounded-full border-2 bg-transparent transition-colors mb-2 ${
+                        isDark
+                          ? "border-white text-white hover:bg-white/10"
+                          : "border-black text-black hover:bg-black/10"
+                      }`}
+                      title="创建圈子"
+                    >
+                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                    </button>
+                    <p className={`text-xs font-medium w-16 ${isDark ? "text-white" : "text-gray-800"}`}>
+                      创建圈子
+                    </p>
+                    <p className="text-xs text-gray-500">&nbsp;</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -790,7 +798,11 @@ export default function SocialPage() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                               </svg>
                             </button>
-                            <button className="px-4 py-1.5 text-sm bg-[#00D4AA] text-white rounded-lg hover:bg-[#00D4AA]/80 transition-colors">
+                            <button className={`px-4 py-1.5 text-sm rounded-lg transition-colors ${
+                              isDark 
+                                ? "bg-white text-black hover:bg-gray-200" 
+                                : "bg-black text-white hover:bg-gray-800"
+                            }`}>
                               关注
                             </button>
                           </div>
