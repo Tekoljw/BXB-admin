@@ -64,6 +64,7 @@ export default function ChatPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const addMenuRef = useRef<HTMLDivElement>(null)
   const resizeRef = useRef<HTMLDivElement>(null)
+  const currencyDropdownRef = useRef<HTMLDivElement>(null)
 
   // Handle resize
   const handleMouseDown = useCallback(() => {
@@ -1737,6 +1738,34 @@ export default function ChatPage() {
                           >
                             <Paperclip className="w-5 h-5" />
                           </button>
+                          
+                          {/* Transfer button for private chats */}
+                          {selectedContact && !selectedContact.startsWith("group-") && (
+                            <button
+                              type="button"
+                              onClick={() => setShowTransferModal(true)}
+                              className={`p-2 rounded-lg transition-colors ${
+                                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                              }`}
+                              title="转账"
+                            >
+                              <Wallet className="w-5 h-5" />
+                            </button>
+                          )}
+                          
+                          {/* Red packet button for group chats */}
+                          {selectedContact && selectedContact.startsWith("group-") && (
+                            <button
+                              type="button"
+                              onClick={() => setShowRedPacketModal(true)}
+                              className={`p-2 rounded-lg transition-colors ${
+                                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                              }`}
+                              title="发红包"
+                            >
+                              <Gift className="w-5 h-5" />
+                            </button>
+                          )}
                         </div>
                         
                         <button
@@ -2098,6 +2127,296 @@ export default function ChatPage() {
               </div>
             </>
           )}
+      )}
+
+      {/* Transfer Modal */}
+      {showTransferModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className={`${cardStyle} rounded-xl p-6 w-96 mx-4`}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                转账
+              </h3>
+              <button
+                onClick={() => setShowTransferModal(false)}
+                className={`p-1 rounded-lg transition-colors ${
+                  isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                }`}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Currency Selection */}
+            <div className="mb-4">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                币种
+              </label>
+              <div className="relative" ref={currencyDropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+                  className={`w-full flex items-center justify-between p-3 border rounded-lg transition-colors ${
+                    isDark 
+                      ? "border-gray-600 bg-[#252842] text-white hover:border-gray-500" 
+                      : "border-gray-300 bg-white text-gray-800 hover:border-gray-400"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className={`w-6 h-6 rounded-full ${currencies.find(c => c.symbol === selectedCurrency)?.color} flex items-center justify-center text-white text-sm font-bold`}>
+                      {currencies.find(c => c.symbol === selectedCurrency)?.icon}
+                    </div>
+                    <span>{selectedCurrency}</span>
+                  </div>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+
+                {showCurrencyDropdown && (
+                  <div className={`absolute top-full left-0 right-0 mt-1 border rounded-lg shadow-lg z-10 ${
+                    isDark ? "border-gray-600 bg-[#252842]" : "border-gray-300 bg-white"
+                  }`}>
+                    {currencies.map((currency) => (
+                      <button
+                        key={currency.symbol}
+                        onClick={() => {
+                          setSelectedCurrency(currency.symbol)
+                          setShowCurrencyDropdown(false)
+                        }}
+                        className={`w-full flex items-center gap-2 p-3 transition-colors ${
+                          isDark ? "hover:bg-[#2a2d42] text-white" : "hover:bg-gray-50 text-gray-800"
+                        }`}
+                      >
+                        <div className={`w-6 h-6 rounded-full ${currency.color} flex items-center justify-center text-white text-sm font-bold`}>
+                          {currency.icon}
+                        </div>
+                        <span>{currency.symbol}</span>
+                        <span className="text-sm text-gray-400 ml-auto">{currency.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Amount Input */}
+            <div className="mb-4">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                转账金额
+              </label>
+              <input
+                type="number"
+                value={transferAmount}
+                onChange={(e) => setTransferAmount(e.target.value)}
+                placeholder="请输入转账金额"
+                className={`w-full p-3 border rounded-lg transition-colors ${
+                  isDark 
+                    ? "border-gray-600 bg-[#252842] text-white placeholder-gray-400" 
+                    : "border-gray-300 bg-white text-gray-800 placeholder-gray-500"
+                }`}
+              />
+            </div>
+
+            {/* Note Input */}
+            <div className="mb-6">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                转账备注
+              </label>
+              <input
+                type="text"
+                value={transferNote}
+                onChange={(e) => setTransferNote(e.target.value)}
+                placeholder="请输入转账备注（可选）"
+                className={`w-full p-3 border rounded-lg transition-colors ${
+                  isDark 
+                    ? "border-gray-600 bg-[#252842] text-white placeholder-gray-400" 
+                    : "border-gray-300 bg-white text-gray-800 placeholder-gray-500"
+                }`}
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setShowTransferModal(false)}
+                className={`flex-1 py-2.5 rounded-lg font-medium transition-colors border ${
+                  isDark 
+                    ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                取消
+              </button>
+              <button
+                onClick={handleTransfer}
+                disabled={!transferAmount}
+                className={`flex-1 py-2.5 rounded-lg font-medium transition-colors ${
+                  transferAmount
+                    ? isDark
+                      ? "bg-white text-black hover:bg-gray-200"
+                      : "bg-black text-white hover:bg-gray-800"
+                    : "bg-gray-400 text-gray-600 cursor-not-allowed"
+                }`}
+              >
+                确认转账
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Red Packet Modal */}
+      {showRedPacketModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className={`${cardStyle} rounded-xl p-6 w-96 mx-4`}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                发红包
+              </h3>
+              <button
+                onClick={() => setShowRedPacketModal(false)}
+                className={`p-1 rounded-lg transition-colors ${
+                  isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                }`}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Currency Selection */}
+            <div className="mb-4">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                币种
+              </label>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+                  className={`w-full flex items-center justify-between p-3 border rounded-lg transition-colors ${
+                    isDark 
+                      ? "border-gray-600 bg-[#252842] text-white hover:border-gray-500" 
+                      : "border-gray-300 bg-white text-gray-800 hover:border-gray-400"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className={`w-6 h-6 rounded-full ${currencies.find(c => c.symbol === selectedCurrency)?.color} flex items-center justify-center text-white text-sm font-bold`}>
+                      {currencies.find(c => c.symbol === selectedCurrency)?.icon}
+                    </div>
+                    <span>{selectedCurrency}</span>
+                  </div>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+
+                {showCurrencyDropdown && (
+                  <div className={`absolute top-full left-0 right-0 mt-1 border rounded-lg shadow-lg z-10 ${
+                    isDark ? "border-gray-600 bg-[#252842]" : "border-gray-300 bg-white"
+                  }`}>
+                    {currencies.map((currency) => (
+                      <button
+                        key={currency.symbol}
+                        onClick={() => {
+                          setSelectedCurrency(currency.symbol)
+                          setShowCurrencyDropdown(false)
+                        }}
+                        className={`w-full flex items-center gap-2 p-3 transition-colors ${
+                          isDark ? "hover:bg-[#2a2d42] text-white" : "hover:bg-gray-50 text-gray-800"
+                        }`}
+                      >
+                        <div className={`w-6 h-6 rounded-full ${currency.color} flex items-center justify-center text-white text-sm font-bold`}>
+                          {currency.icon}
+                        </div>
+                        <span>{currency.symbol}</span>
+                        <span className="text-sm text-gray-400 ml-auto">{currency.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Total Amount Input */}
+            <div className="mb-4">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                红包总金额
+              </label>
+              <input
+                type="number"
+                value={redPacketAmount}
+                onChange={(e) => setRedPacketAmount(e.target.value)}
+                placeholder="请输入红包总金额"
+                className={`w-full p-3 border rounded-lg transition-colors ${
+                  isDark 
+                    ? "border-gray-600 bg-[#252842] text-white placeholder-gray-400" 
+                    : "border-gray-300 bg-white text-gray-800 placeholder-gray-500"
+                }`}
+              />
+            </div>
+
+            {/* Red Packet Count */}
+            <div className="mb-4">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                红包个数
+              </label>
+              <input
+                type="number"
+                value={redPacketCount}
+                onChange={(e) => setRedPacketCount(e.target.value)}
+                placeholder="请输入红包个数"
+                min="1"
+                max="100"
+                className={`w-full p-3 border rounded-lg transition-colors ${
+                  isDark 
+                    ? "border-gray-600 bg-[#252842] text-white placeholder-gray-400" 
+                    : "border-gray-300 bg-white text-gray-800 placeholder-gray-500"
+                }`}
+              />
+            </div>
+
+            {/* Note Input */}
+            <div className="mb-6">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                红包祝福语
+              </label>
+              <input
+                type="text"
+                value={redPacketNote}
+                onChange={(e) => setRedPacketNote(e.target.value)}
+                placeholder="恭喜发财，大吉大利！"
+                className={`w-full p-3 border rounded-lg transition-colors ${
+                  isDark 
+                    ? "border-gray-600 bg-[#252842] text-white placeholder-gray-400" 
+                    : "border-gray-300 bg-white text-gray-800 placeholder-gray-500"
+                }`}
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setShowRedPacketModal(false)}
+                className={`flex-1 py-2.5 rounded-lg font-medium transition-colors border ${
+                  isDark 
+                    ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                取消
+              </button>
+              <button
+                onClick={handleRedPacket}
+                disabled={!redPacketAmount || !redPacketCount}
+                className={`flex-1 py-2.5 rounded-lg font-medium transition-colors ${
+                  redPacketAmount && redPacketCount
+                    ? isDark
+                      ? "bg-white text-black hover:bg-gray-200"
+                      : "bg-black text-white hover:bg-gray-800"
+                    : "bg-gray-400 text-gray-600 cursor-not-allowed"
+                }`}
+              >
+                发送红包
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
