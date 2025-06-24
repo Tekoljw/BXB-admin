@@ -17,6 +17,7 @@ export default function MomentsPage() {
   const [rightSidebarTab, setRightSidebarTab] = useState("推荐关注")
   const [leaderboardPeriod, setLeaderboardPeriod] = useState("本周")
   const [leftSidebarTab, setLeftSidebarTab] = useState("热门话题")
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const isDark = theme === "dark"
 
@@ -632,9 +633,65 @@ export default function MomentsPage() {
                         >
                           <Star className="h-5 w-5" fill={isFavorite ? "currentColor" : "none"} />
                         </button>
-                        <button className="p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all duration-200">
-                          <MoreHorizontal className="h-5 w-5" />
-                        </button>
+                        <div className="relative">
+                          <button 
+                            onClick={() => setOpenDropdown(openDropdown === post.id ? null : post.id)}
+                            className="p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all duration-200"
+                          >
+                            <MoreHorizontal className="h-5 w-5" />
+                          </button>
+                          
+                          {/* 三点菜单弹窗 */}
+                          {openDropdown === post.id && (
+                            <div className={`absolute right-0 top-full mt-2 w-32 rounded-lg shadow-lg border z-50 ${
+                              isDark 
+                                ? "bg-[#1a1d29] border-[#252842]" 
+                                : "bg-white border-gray-200"
+                            }`}>
+                              <div className="py-1">
+                                <button 
+                                  onClick={() => {
+                                    setOpenDropdown(null)
+                                    // 处理关注逻辑
+                                  }}
+                                  className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                                    isDark 
+                                      ? "text-white hover:bg-[#252842]" 
+                                      : "text-gray-700 hover:bg-gray-50"
+                                  }`}
+                                >
+                                  关注
+                                </button>
+                                <button 
+                                  onClick={() => {
+                                    setOpenDropdown(null)
+                                    // 处理屏蔽逻辑
+                                  }}
+                                  className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                                    isDark 
+                                      ? "text-white hover:bg-[#252842]" 
+                                      : "text-gray-700 hover:bg-gray-50"
+                                  }`}
+                                >
+                                  屏蔽
+                                </button>
+                                <button 
+                                  onClick={() => {
+                                    setOpenDropdown(null)
+                                    // 处理举报逻辑
+                                  }}
+                                  className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                                    isDark 
+                                      ? "text-red-400 hover:bg-[#252842]" 
+                                      : "text-red-600 hover:bg-gray-50"
+                                  }`}
+                                >
+                                  举报
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
 
