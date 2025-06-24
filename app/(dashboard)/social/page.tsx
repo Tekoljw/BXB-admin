@@ -726,7 +726,9 @@ export default function SocialPage() {
                       className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                         circle.isJoined
                           ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-                          : "bg-[#00D4AA] text-white hover:bg-[#00D4AA]/80"
+                          : isDark
+                            ? "bg-white text-black hover:bg-gray-200"
+                            : "bg-black text-white hover:bg-gray-800"
                       }`}
                     >
                       {circle.isJoined ? "已加入" : "加入"}
