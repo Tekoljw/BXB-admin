@@ -696,52 +696,10 @@ export default function SocialPage() {
           </div>
         )}
 
-        {/* 圈子详细列表 - 只在圈子页签时显示 */}
-        {activeMainTab === "圈子" && (
-          <div className="space-y-3">
-            {circles.map((circle) => (
-              <div
-                key={circle.id}
-                className={`${cardStyle} rounded-lg transition-all duration-200 hover:${
-                  isDark ? "bg-[#252842]" : "bg-gray-50"
-                }`}
-              >
-                <div className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <img
-                        src={circle.avatar}
-                        alt={circle.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                      <div>
-                        <h3 className={`font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-                          {circle.name}
-                        </h3>
-                        <p className="text-gray-500 text-sm">{circle.description}</p>
-                        <p className="text-gray-400 text-xs">{circle.members} 位成员</p>
-                      </div>
-                    </div>
-                    <button
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        circle.isJoined
-                          ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-                          : isDark
-                            ? "bg-white text-black hover:bg-gray-200"
-                            : "bg-black text-white hover:bg-gray-800"
-                      }`}
-                    >
-                      {circle.isJoined ? "已加入" : "加入"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
 
-        {/* 用户列表 - 只在非圈子页签时显示 */}
-        {activeMainTab !== "圈子" && (
+
+        {/* 用户列表 */}
+        {(
           <div className="space-y-3">
             {filteredUsers.map((user) => {
               const isFavorite = favorites.includes(user.id)
