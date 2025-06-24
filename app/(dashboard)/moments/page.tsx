@@ -621,20 +621,7 @@ export default function MomentsPage() {
                         </div>
                       </div>
                       
-                      <div className="flex items-center space-x-3">
-                        {/* 跟单按钮和人数 */}
-                        <div className="flex items-center space-x-2">
-                          <button className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                            isDark 
-                              ? "bg-white text-black hover:bg-gray-200" 
-                              : "bg-black text-white hover:bg-gray-800"
-                          }`}>
-                            跟单
-                          </button>
-                          <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                            已有{Math.floor(Math.random() * 500 + 100)}人跟单
-                          </span>
-                        </div>
+                      <div className="flex items-center space-x-2">
                         <button
                           onClick={() => toggleFavorite(post.id)}
                           className={`p-2 rounded-full transition-all duration-200 ${
@@ -726,9 +713,18 @@ export default function MomentsPage() {
                         </button>
                       </div>
 
-                      {/* 数据统计 */}
-                      <div className="text-sm text-gray-400">
-                        {(post.likes + post.comments + post.shares).toLocaleString()} 次互动
+                      {/* 跟单按钮和人数 - 移动到底部右侧 */}
+                      <div className="flex items-center space-x-2">
+                        <button className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          isDark 
+                            ? "bg-white text-black hover:bg-gray-200" 
+                            : "bg-black text-white hover:bg-gray-800"
+                        }`}>
+                          跟单
+                        </button>
+                        <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                          已有{Math.floor(Math.random() * 500 + 100)}人跟单
+                        </span>
                       </div>
                     </div>
                   </div>

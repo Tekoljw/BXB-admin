@@ -514,24 +514,9 @@ export default function SocialPage() {
                         <span className="mx-1 text-gray-400">·</span>
                         <span className="text-gray-400 text-sm">{post.time}</span>
                       </div>
-                      <div className="flex items-center justify-between mt-2">
-                        <p className={`text-sm line-clamp-2 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                          {post.content}
-                        </p>
-                        {/* 跟单按钮和人数 */}
-                        <div className="flex items-center space-x-2 ml-4">
-                          <button className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                            isDark 
-                              ? "bg-white text-black hover:bg-gray-200" 
-                              : "bg-black text-white hover:bg-gray-800"
-                          }`}>
-                            跟单
-                          </button>
-                          <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                            {Math.floor(Math.random() * 300 + 50)}人
-                          </span>
-                        </div>
-                      </div>
+                      <p className={`text-sm mt-1 line-clamp-2 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                        {post.content}
+                      </p>
                       <div className="flex items-center space-x-4 mt-2">
                         <button
                           className={`flex items-center text-xs ${
@@ -549,6 +534,20 @@ export default function SocialPage() {
                           <Share2 className="h-4 w-4 mr-1" />
                           {post.shares}
                         </button>
+                        
+                        {/* 跟单按钮和人数 - 移动到底部右侧 */}
+                        <div className="flex items-center space-x-2 ml-auto">
+                          <button className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                            isDark 
+                              ? "bg-white text-black hover:bg-gray-200" 
+                              : "bg-black text-white hover:bg-gray-800"
+                          }`}>
+                            跟单
+                          </button>
+                          <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                            {Math.floor(Math.random() * 300 + 50)}人
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
