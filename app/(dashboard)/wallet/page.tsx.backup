@@ -2034,6 +2034,7 @@ export default function WalletPage() {
                     </>
                   )}
                 </div>
+              </div>
             </div>
 
             {/* 页签内容 */}
