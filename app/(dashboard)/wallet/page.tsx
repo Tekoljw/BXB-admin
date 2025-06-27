@@ -1926,16 +1926,16 @@ export default function WalletPage() {
             </div>
 
             {/* 页签选择 */}
-            <div className="flex flex-wrap gap-2 p-1 rounded-lg bg-gray-100 dark:bg-[#252842]">
+            <div className="flex flex-wrap gap-3">
               {selectedPaymentCard === "fiat" ? (
                 fiatTabs.map(tab => (
                   <button
                     key={tab}
                     onClick={() => setFiatTab(tab)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 border-2 ${
                       fiatTab === tab
-                        ? 'bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm'
-                        : isDark ? 'text-gray-300 hover:text-white hover:bg-[#2a2d3a]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                        ? 'bg-[#00D4AA] text-white border-[#00D4AA]'
+                        : 'bg-transparent border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800'
                     }`}
                   >
                     {tab}
@@ -1946,10 +1946,10 @@ export default function WalletPage() {
                   <button
                     key={tab}
                     onClick={() => setCryptoTab(tab)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 border-2 ${
                       cryptoTab === tab
-                        ? 'bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm'
-                        : isDark ? 'text-gray-300 hover:text-white hover:bg-[#2a2d3a]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                        ? 'bg-[#00D4AA] text-white border-[#00D4AA]'
+                        : 'bg-transparent border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800'
                     }`}
                   >
                     {tab}
