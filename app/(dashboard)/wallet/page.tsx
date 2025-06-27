@@ -2472,13 +2472,13 @@ export default function WalletPage() {
                               ))}
                               <button
                                 onClick={() => setShowMoreCurrencies(true)}
-                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                className={`w-10 h-10 rounded-lg transition-all duration-200 flex items-center justify-center ${
                                   isDark
-                                    ? "text-gray-300 hover:text-white"
-                                    : "text-gray-700 hover:text-gray-900"
+                                    ? "text-gray-300 hover:text-white hover:bg-[#2a2d3a]"
+                                    : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
                                 }`}
                               >
-                                更多
+                                <Plus className="h-4 w-4" />
                               </button>
                             </div>
 
