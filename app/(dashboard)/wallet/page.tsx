@@ -2215,10 +2215,244 @@ export default function WalletPage() {
                   )}
                   
                   {fiatTab === "通道配置" && (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4">法币通道配置</h3>
-                      <div className="text-center py-12 text-gray-500">
-                        通道配置功能开发中...
+                    <div className="space-y-6">
+                      {/* 通道状态概览 */}
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className={`${cardStyle} rounded-lg p-4`}>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm text-gray-500">活跃通道</p>
+                              <p className="text-2xl font-bold text-green-500">12</p>
+                            </div>
+                            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                              <CheckCircle className="h-5 w-5 text-green-500" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className={`${cardStyle} rounded-lg p-4`}>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm text-gray-500">维护中</p>
+                              <p className="text-2xl font-bold text-yellow-500">3</p>
+                            </div>
+                            <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                              <Clock className="h-5 w-5 text-yellow-500" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className={`${cardStyle} rounded-lg p-4`}>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm text-gray-500">异常通道</p>
+                              <p className="text-2xl font-bold text-red-500">1</p>
+                            </div>
+                            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                              <X className="h-5 w-5 text-red-500" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className={`${cardStyle} rounded-lg p-4`}>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm text-gray-500">成功率</p>
+                              <p className="text-2xl font-bold text-blue-500">96.8%</p>
+                            </div>
+                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                              <TrendingUp className="h-5 w-5 text-blue-500" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 通道列表 */}
+                      <div className={`${cardStyle} rounded-lg p-6`}>
+                        <div className="flex items-center justify-between mb-6">
+                          <h3 className="text-lg font-semibold">支付通道管理</h3>
+                          <Button 
+                            className="bg-[#00D4AA] hover:bg-[#00B89A] text-white"
+                            size="sm"
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            添加通道
+                          </Button>
+                        </div>
+                        
+                        <div className="space-y-4">
+                          {[
+                            {
+                              name: "银行卡快捷支付",
+                              type: "银行卡",
+                              status: "正常",
+                              successRate: "98.2%",
+                              dailyLimit: "500万",
+                              singleLimit: "50万",
+                              fee: "0.5%",
+                              color: "green"
+                            },
+                            {
+                              name: "支付宝扫码",
+                              type: "第三方支付",
+                              status: "正常",
+                              successRate: "97.5%",
+                              dailyLimit: "200万",
+                              singleLimit: "5万",
+                              fee: "0.3%",
+                              color: "green"
+                            },
+                            {
+                              name: "微信支付",
+                              type: "第三方支付",
+                              status: "维护中",
+                              successRate: "95.8%",
+                              dailyLimit: "300万",
+                              singleLimit: "5万",
+                              fee: "0.3%",
+                              color: "yellow"
+                            },
+                            {
+                              name: "网银转账",
+                              type: "银行转账",
+                              status: "正常",
+                              successRate: "99.1%",
+                              dailyLimit: "1000万",
+                              singleLimit: "100万",
+                              fee: "0.8%",
+                              color: "green"
+                            },
+                            {
+                              name: "USDT-TRC20",
+                              type: "数字货币",
+                              status: "异常",
+                              successRate: "89.2%",
+                              dailyLimit: "无限制",
+                              singleLimit: "无限制",
+                              fee: "1.0%",
+                              color: "red"
+                            }
+                          ].map((channel, index) => (
+                            <div key={index} className="flex items-center justify-between p-4 border border-gray-200 dark:border-[#3a3d4a] rounded-lg hover:shadow-md transition-all">
+                              <div className="flex items-center space-x-4">
+                                <div className={`w-3 h-3 rounded-full ${
+                                  channel.color === 'green' ? 'bg-green-500' :
+                                  channel.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'
+                                }`}></div>
+                                <div>
+                                  <div className="font-semibold">{channel.name}</div>
+                                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    {channel.type} • 成功率 {channel.successRate}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-6 text-sm">
+                                <div className="text-center">
+                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>日限额</div>
+                                  <div className="font-semibold">{channel.dailyLimit}</div>
+                                </div>
+                                <div className="text-center">
+                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>单笔限额</div>
+                                  <div className="font-semibold">{channel.singleLimit}</div>
+                                </div>
+                                <div className="text-center">
+                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>手续费</div>
+                                  <div className="font-semibold">{channel.fee}</div>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="h-8 px-3 text-xs"
+                                  >
+                                    配置
+                                  </Button>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="h-8 px-3 text-xs"
+                                  >
+                                    测试
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 通道配置设置 */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* 风控设置 */}
+                        <div className={`${cardStyle} rounded-lg p-6`}>
+                          <h3 className="text-lg font-semibold mb-4">风控设置</h3>
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <span>单日交易限额预警</span>
+                              <input 
+                                type="text" 
+                                defaultValue="80%"
+                                className={`w-20 px-2 py-1 text-sm border rounded ${
+                                  isDark 
+                                    ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                                    : "bg-white border-gray-300"
+                                }`}
+                              />
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span>异常交易监控</span>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="h-8 px-3 text-xs bg-green-50 border-green-200 text-green-700"
+                              >
+                                已启用
+                              </Button>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span>自动切换通道</span>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="h-8 px-3 text-xs bg-green-50 border-green-200 text-green-700"
+                              >
+                                已启用
+                              </Button>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span>通道故障切换时间</span>
+                              <input 
+                                type="text" 
+                                defaultValue="30秒"
+                                className={`w-20 px-2 py-1 text-sm border rounded ${
+                                  isDark 
+                                    ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                                    : "bg-white border-gray-300"
+                                }`}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* 通道优先级 */}
+                        <div className={`${cardStyle} rounded-lg p-6`}>
+                          <h3 className="text-lg font-semibold mb-4">通道优先级</h3>
+                          <div className="space-y-3">
+                            {[
+                              { name: "银行卡快捷支付", priority: "1", weight: "40%" },
+                              { name: "网银转账", priority: "2", weight: "30%" },
+                              { name: "支付宝扫码", priority: "3", weight: "20%" },
+                              { name: "微信支付", priority: "4", weight: "10%" }
+                            ].map((item, index) => (
+                              <div key={index} className="flex items-center justify-between p-3 border border-gray-200 dark:border-[#3a3d4a] rounded">
+                                <div className="flex items-center space-x-3">
+                                  <span className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">
+                                    {item.priority}
+                                  </span>
+                                  <span className="font-medium">{item.name}</span>
+                                </div>
+                                <span className="text-sm text-gray-500">{item.weight}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
