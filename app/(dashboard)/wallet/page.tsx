@@ -109,6 +109,7 @@ export default function WalletPage() {
   const [currencyTab, setCurrencyTab] = useState("CNY") // 通道配置币种页签
   const [paymentMethodTab, setPaymentMethodTab] = useState("代收") // 通道配置支付方式页签
   const [showMoreCurrencies, setShowMoreCurrencies] = useState(false) // 显示更多币种弹窗
+  const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
   
   // 代付备用金充值弹窗状态
   const [showStandbyRechargeModal, setShowStandbyRechargeModal] = useState(false)
@@ -179,6 +180,9 @@ export default function WalletPage() {
     // 这里可以添加成功提示
     console.log("兑换订单已生成:", exchangeOrder)
   }
+
+  // 更多币种列表
+  const moreCurrencies = ["CNY", "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "CHF", "SEK", "NOK"]
 
   // 获取支付方式列表 - 只有代收/代付
   const getPaymentMethods = (currency: string) => {
@@ -2439,16 +2443,12 @@ export default function WalletPage() {
                           <div className="flex items-center justify-between">
                             {/* 左侧 - 币种页签 */}
                             <div className="flex items-center space-x-2">
-                              {["CNY", "USD", "EUR", "GBP", "JPY", "更多"].map((currency, index) => (
+                              {selectedCurrencies.map((currency, index) => (
                                 <button
                                   key={currency}
                                   onClick={() => {
-                                    if (currency === "更多") {
-                                      setShowMoreCurrencies(true);
-                                    } else {
-                                      setCurrencyTab(currency);
-                                      setPaymentMethodTab("代收");
-                                    }
+                                    setCurrencyTab(currency);
+                                    setPaymentMethodTab("代收");
                                   }}
                                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                                     currencyTab === currency
@@ -2463,6 +2463,16 @@ export default function WalletPage() {
                                   {currency}
                                 </button>
                               ))}
+                              <button
+                                onClick={() => setShowMoreCurrencies(true)}
+                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                  isDark
+                                    ? "text-gray-300 hover:text-white"
+                                    : "text-gray-700 hover:text-gray-900"
+                                }`}
+                              >
+                                更多
+                              </button>
                             </div>
 
                             {/* 右侧 - 代收/代付页签 */}
@@ -4925,7 +4935,7 @@ export default function WalletPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className={`${cardStyle} rounded-lg p-6 max-w-md w-full mx-4`}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">选择币种</h3>
+              <h3 className="text-lg font-semibold">选择显示币种</h3>
               <Button
                 variant="ghost"
                 size="sm"
@@ -4935,26 +4945,78 @@ export default function WalletPage() {
                 <X className="h-4 w-4" />
               </Button>
             </div>
-            <div className="grid grid-cols-3 gap-3">
-              {["CNY", "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "CHF", "SEK", "NOK", "DKK", "SGD"].map((currency) => (
-                <Button
-                  key={currency}
-                  variant={currencyTab === currency ? "default" : "outline"}
-                  size="sm"
-                  className={`h-10 ${
-                    currencyTab === currency
-                      ? "bg-[#00D4AA] hover:bg-[#00B89A] text-white"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    setCurrencyTab(currency)
-                    setPaymentMethodTab("代收")
-                    setShowMoreCurrencies(false)
-                  }}
-                >
-                  {currency}
-                </Button>
-              ))}
+            
+            {/* 多选提示 */}
+            <div className="mb-4 text-sm text-gray-500">
+              最多可选择5个币种 ({selectedCurrencies.length}/5)
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              {moreCurrencies.map((currency) => {
+                const isSelected = selectedCurrencies.includes(currency);
+                return (
+                  <button
+                    key={currency}
+                    onClick={() => {
+                      if (isSelected) {
+                        // 取消选择
+                        setSelectedCurrencies(prev => prev.filter(c => c !== currency));
+                      } else if (selectedCurrencies.length < 5) {
+                        // 添加选择
+                        setSelectedCurrencies(prev => [...prev, currency]);
+                      }
+                    }}
+                    disabled={!isSelected && selectedCurrencies.length >= 5}
+                    className={`p-3 rounded-lg border-2 text-center transition-all flex items-center space-x-2 ${
+                      isSelected
+                        ? "border-[#00D4AA] bg-[#00D4AA]/10 text-[#00D4AA]"
+                        : selectedCurrencies.length >= 5
+                          ? "border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed"
+                          : isDark
+                            ? "border-transparent bg-transparent hover:border-[#00D4AA]/50 hover:bg-[#00D4AA]/5"
+                            : "border-transparent bg-transparent hover:border-[#00D4AA]/50 hover:bg-[#00D4AA]/5"
+                    }`}
+                  >
+                    {/* 法币图标 */}
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                      currency === 'CNY' ? 'bg-red-500' :
+                      currency === 'USD' ? 'bg-green-500' :
+                      currency === 'EUR' ? 'bg-blue-500' :
+                      currency === 'GBP' ? 'bg-purple-500' :
+                      currency === 'JPY' ? 'bg-orange-500' :
+                      currency === 'CAD' ? 'bg-red-400' :
+                      currency === 'AUD' ? 'bg-green-400' :
+                      currency === 'CHF' ? 'bg-red-600' :
+                      currency === 'SEK' ? 'bg-blue-400' :
+                      currency === 'NOK' ? 'bg-blue-600' :
+                      'bg-gray-500'
+                    }`}>
+                      <span className="text-white">{currency.charAt(0)}</span>
+                    </div>
+                    <div className="text-sm font-medium">{currency}</div>
+                  </button>
+                );
+              })}
+            </div>
+            
+            {/* 确认按钮 */}
+            <div className="mt-6 flex justify-end space-x-3">
+              <button
+                onClick={() => setShowMoreCurrencies(false)}
+                className={`px-4 py-2 rounded-lg border transition-all ${
+                  isDark 
+                    ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]" 
+                    : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                取消
+              </button>
+              <button
+                onClick={() => setShowMoreCurrencies(false)}
+                className="px-4 py-2 rounded-lg bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90 transition-all"
+              >
+                确认
+              </button>
             </div>
           </div>
         </div>
