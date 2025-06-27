@@ -2129,42 +2129,6 @@ export default function WalletPage() {
             </div>
           </div>
         )
-                              </div>
-                              <Button 
-                                size="sm" 
-                                className="bg-[#00D4AA] hover:bg-[#00B89A] text-white border-0"
-                                variant="outline"
-                              >
-                                管理
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {cryptoTab === "地址管理" && (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4">地址管理</h3>
-                      <div className="text-center py-12 text-gray-500">
-                        地址管理功能开发中...
-                      </div>
-                    </div>
-                  )}
-                  
-                  {cryptoTab === "通道配置" && (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4">加密货币通道配置</h3>
-                      <div className="text-center py-12 text-gray-500">
-                        通道配置功能开发中...
-                      </div>
-                    </div>
-                  )}
-                  
-                  {cryptoTab === "划转" && (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4">加密货币划转</h3>
                       <div className="text-center py-12 text-gray-500">
                         划转功能开发中...
                       </div>
