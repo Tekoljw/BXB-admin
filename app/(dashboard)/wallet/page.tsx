@@ -1964,36 +1964,33 @@ export default function WalletPage() {
                 <div>
                   {fiatTab === "商户资产" && (
                     <div className="space-y-4">
-                      {/* 搜索框和币种筛选按钮 */}
-                      <div className="flex items-center space-x-3 mb-6">
+                      <div className="flex items-center justify-between mb-6">
                         <div className="flex-1 relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                           <input
                             type="text"
                             placeholder="搜索法币..."
-                            className={`w-full pl-10 pr-4 py-2 border rounded-lg ${
+                            className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
                               isDark 
-                                ? 'bg-[#2a2d3a] border-[#3a3d4a] text-white placeholder-gray-400' 
-                                : 'bg-white border-gray-300 text-gray-900'
+                                ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                                : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
                             }`}
                           />
                         </div>
-                        
-                        <div className="flex space-x-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className={`px-3 py-2 ${isDark ? 'border-[#3a3d4a] text-gray-300' : 'border-gray-300'}`}
+                        <div className="flex items-center space-x-2 ml-4">
+                          <button
+                            className={`w-10 h-10 rounded-lg border transition-all transform hover:scale-105 flex items-center justify-center ${
+                              isDark 
+                                ? "border-[#252842] hover:bg-[#252842]" 
+                                : "border-gray-300 hover:bg-gray-50"
+                            }`}
+                            title="管理资产"
                           >
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className={`px-3 py-2 ${isDark ? 'border-[#3a3d4a] text-gray-300' : 'border-gray-300'}`}
-                          >
-                            <Minus className="h-4 w-4" />
-                          </Button>
+                            <div className="flex flex-col items-center">
+                              <Plus className="h-3 w-3" />
+                              <Minus className="h-3 w-3 -mt-1" />
+                            </div>
+                          </button>
                         </div>
                       </div>
 
