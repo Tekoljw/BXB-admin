@@ -2042,32 +2042,7 @@ export default function WalletPage() {
         )
 
       case "BePAY账户":
-        // 定义法币和加密货币页签
-        const fiatTabs = [
-          { id: "商户资产", label: "商户资产", icon: Landmark },
-          { id: "通道配置", label: "通道配置", icon: Network },
-          { id: "法币下发", label: "法币下发", icon: Repeat },
-          { id: "代付金充值", label: "代付金充值", icon: Plus }
-        ]
-        const fiatIconTabs = [
-          { id: "资金记录", icon: FileText },
-          { id: "订单记录", icon: BarChart2 },
-          { id: "资产分布", icon: PieChart }
-        ]
-        
-        const cryptoTabs = [
-          { id: "商户资产", label: "商户资产", icon: Landmark },
-          { id: "地址管理", label: "地址管理", icon: Link },
-          { id: "通道配置", label: "通道配置", icon: Network },
-          { id: "划转", label: "划转", icon: ArrowLeftRight }
-        ]
-        const cryptoIconTabs = [
-          { id: "划转记录", icon: FileText },
-          { id: "订单记录", icon: BarChart2 },
-          { id: "资产分布", icon: PieChart }
-        ]
-        
-        return (
+        return renderBePayAccount()
           <div className="space-y-6">
             {/* 顶部卡片：法币总余额和加密货币总余额 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -2606,7 +2581,7 @@ export default function WalletPage() {
             </div>
           </div>
         )
-        })()
+      }
 
       default:
         return <div>内容加载中...</div>
