@@ -2129,35 +2129,6 @@ export default function WalletPage() {
             </div>
           </div>
         )
-                      <h3 className="text-lg font-semibold mb-4">划转记录</h3>
-                      <div className="text-center py-12 text-gray-500">
-                        划转记录功能开发中...
-                      </div>
-                    </div>
-                  )}
-                  
-                  {cryptoTab === "订单记录" && (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4">加密货币订单记录</h3>
-                      <div className="text-center py-12 text-gray-500">
-                        订单记录功能开发中...
-                      </div>
-                    </div>
-                  )}
-                  
-                  {cryptoTab === "资产分布" && (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4">加密货币资产分布</h3>
-                      <div className="text-center py-12 text-gray-500">
-                        资产分布图表功能开发中...
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        )
 
       default:
         return <div>内容加载中...</div>
