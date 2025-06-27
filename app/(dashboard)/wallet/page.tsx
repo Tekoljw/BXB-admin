@@ -107,7 +107,7 @@ export default function WalletPage() {
   const [fiatTab, setFiatTab] = useState("商户资产") // 法币卡片页签
   const [cryptoTab, setCryptoTab] = useState("商户资产") // 加密货币卡片页签
   const [currencyTab, setCurrencyTab] = useState("CNY") // 通道配置币种页签
-  const [paymentMethodTab, setPaymentMethodTab] = useState("全部") // 通道配置支付方式页签
+  const [paymentMethodTab, setPaymentMethodTab] = useState("代收") // 通道配置支付方式页签
   const [showMoreCurrencies, setShowMoreCurrencies] = useState(false) // 显示更多币种弹窗
   
   // 代付备用金充值弹窗状态
@@ -180,45 +180,28 @@ export default function WalletPage() {
     console.log("兑换订单已生成:", exchangeOrder)
   }
 
-  // 获取支付方式列表
+  // 获取支付方式列表 - 只有代收/代付
   const getPaymentMethods = (currency: string) => {
-    const methodMap: { [key: string]: string[] } = {
-      "CNY": ["全部", "支付宝", "微信支付", "银行卡", "网银转账"],
-      "USD": ["全部", "银行卡", "PayPal", "信用卡", "电汇"],
-      "EUR": ["全部", "银行卡", "SEPA转账", "信用卡"],
-      "USDT": ["全部", "TRC20", "ERC20", "BEP20"],
-      "BTC": ["全部", "主网转账", "闪电网络"],
-      "ETH": ["全部", "ERC20", "主网转账"]
-    }
-    return methodMap[currency] || ["全部"]
+    return ["代收", "代付"]
   }
 
-  // 获取通道数据
+  // 获取通道数据 - 只支持法币币种，区分代收/代付
   const getChannelsByCategory = (currency: string, method: string) => {
     const allChannels = [
+      // CNY 代收通道
       {
         name: "支付宝扫码",
         type: "第三方支付",
         status: "正常",
         successRate: "97.5%",
         dailyLimit: "200万",
-        singleLimit: "5万",
+        minLimit: "10",
+        maxLimit: "5万",
         fee: "0.3%",
         color: "green",
         currency: "CNY",
-        method: "支付宝"
-      },
-      {
-        name: "支付宝转账",
-        type: "第三方支付",
-        status: "正常",
-        successRate: "98.1%",
-        dailyLimit: "500万",
-        singleLimit: "10万",
-        fee: "0.2%",
-        color: "green",
-        currency: "CNY",
-        method: "支付宝"
+        method: "代收",
+        enabled: true
       },
       {
         name: "微信扫码",
@@ -226,11 +209,13 @@ export default function WalletPage() {
         status: "维护中",
         successRate: "95.8%",
         dailyLimit: "300万",
-        singleLimit: "5万",
+        minLimit: "10",
+        maxLimit: "5万",
         fee: "0.3%",
         color: "yellow",
         currency: "CNY",
-        method: "微信支付"
+        method: "代收",
+        enabled: false
       },
       {
         name: "银行卡快捷支付",
@@ -238,11 +223,28 @@ export default function WalletPage() {
         status: "正常",
         successRate: "98.2%",
         dailyLimit: "500万",
-        singleLimit: "50万",
+        minLimit: "100",
+        maxLimit: "50万",
         fee: "0.5%",
         color: "green",
         currency: "CNY",
-        method: "银行卡"
+        method: "代收",
+        enabled: true
+      },
+      // CNY 代付通道
+      {
+        name: "支付宝转账",
+        type: "第三方支付",
+        status: "正常",
+        successRate: "98.1%",
+        dailyLimit: "500万",
+        minLimit: "10",
+        maxLimit: "10万",
+        fee: "0.2%",
+        color: "green",
+        currency: "CNY",
+        method: "代付",
+        enabled: true
       },
       {
         name: "网银转账",
@@ -250,53 +252,93 @@ export default function WalletPage() {
         status: "正常",
         successRate: "99.1%",
         dailyLimit: "1000万",
-        singleLimit: "100万",
+        minLimit: "100",
+        maxLimit: "100万",
         fee: "0.8%",
         color: "green",
         currency: "CNY",
-        method: "网银转账"
+        method: "代付",
+        enabled: true
       },
+      // USD 代收通道
       {
         name: "USD银行卡",
         type: "银行卡",
         status: "正常",
         successRate: "96.5%",
         dailyLimit: "$100万",
-        singleLimit: "$10万",
+        minLimit: "$10",
+        maxLimit: "$10万",
         fee: "1.0%",
         color: "green",
         currency: "USD",
-        method: "银行卡"
+        method: "代收",
+        enabled: true
       },
       {
-        name: "USDT-TRC20",
-        type: "数字货币",
+        name: "PayPal收款",
+        type: "第三方支付",
         status: "正常",
-        successRate: "99.5%",
-        dailyLimit: "无限制",
-        singleLimit: "无限制",
-        fee: "1.0%",
+        successRate: "94.2%",
+        dailyLimit: "$50万",
+        minLimit: "$5",
+        maxLimit: "$5万",
+        fee: "2.5%",
         color: "green",
-        currency: "USDT",
-        method: "TRC20"
+        currency: "USD",
+        method: "代收",
+        enabled: true
       },
+      // USD 代付通道
       {
-        name: "USDT-ERC20",
-        type: "数字货币",
-        status: "异常",
-        successRate: "89.2%",
-        dailyLimit: "无限制",
-        singleLimit: "无限制",
-        fee: "2.0%",
-        color: "red",
-        currency: "USDT",
-        method: "ERC20"
+        name: "USD电汇",
+        type: "银行转账",
+        status: "正常",
+        successRate: "98.8%",
+        dailyLimit: "$200万",
+        minLimit: "$100",
+        maxLimit: "$50万",
+        fee: "1.5%",
+        color: "green",
+        currency: "USD",
+        method: "代付",
+        enabled: true
+      },
+      // EUR 代收通道
+      {
+        name: "EUR银行卡",
+        type: "银行卡",
+        status: "正常",
+        successRate: "97.1%",
+        dailyLimit: "€80万",
+        minLimit: "€10",
+        maxLimit: "€8万",
+        fee: "1.2%",
+        color: "green",
+        currency: "EUR",
+        method: "代收",
+        enabled: true
+      },
+      // EUR 代付通道
+      {
+        name: "SEPA转账",
+        type: "银行转账",
+        status: "正常",
+        successRate: "98.5%",
+        dailyLimit: "€150万",
+        minLimit: "€50",
+        maxLimit: "€20万",
+        fee: "0.8%",
+        color: "green",
+        currency: "EUR",
+        method: "代付",
+        enabled: true
       }
     ]
 
     return allChannels.filter(channel => {
       const currencyMatch = channel.currency === currency
-      const methodMatch = method === "全部" || channel.method === method
+      const methodMatch = channel.method === method
       return currencyMatch && methodMatch
     })
   }
@@ -2390,21 +2432,12 @@ export default function WalletPage() {
 
                       {/* 通道列表 */}
                       <div className={`${cardStyle} rounded-lg p-6`}>
-                        <div className="flex items-center justify-between mb-6">
-                          <h3 className="text-lg font-semibold">支付通道管理</h3>
-                          <Button 
-                            className="bg-[#00D4AA] hover:bg-[#00B89A] text-white"
-                            size="sm"
-                          >
-                            <Plus className="h-4 w-4 mr-2" />
-                            添加通道
-                          </Button>
-                        </div>
+
                         
-                        {/* 一级页签 - 币种 */}
+                        {/* 一级页签 - 币种（只显示法币） */}
                         <div className="mb-6">
                           <div className="flex items-center space-x-1 overflow-x-auto">
-                            {["CNY", "USD", "EUR", "USDT", "BTC", "ETH", "更多"].map((currency, index) => (
+                            {["CNY", "USD", "EUR", "GBP", "JPY", "更多"].map((currency, index) => (
                               <Button
                                 key={currency}
                                 variant={currencyTab === currency ? "default" : "ghost"}
@@ -2421,7 +2454,7 @@ export default function WalletPage() {
                                     setShowMoreCurrencies(true);
                                   } else {
                                     setCurrencyTab(currency);
-                                    setPaymentMethodTab("全部");
+                                    setPaymentMethodTab("代收");
                                   }
                                 }}
                               >
@@ -2431,7 +2464,7 @@ export default function WalletPage() {
                           </div>
                         </div>
 
-                        {/* 二级页签 - 支付方式 */}
+                        {/* 二级页签 - 代收/代付 */}
                         <div className="mb-6">
                           <div className="flex items-center space-x-1 overflow-x-auto">
                             {getPaymentMethods(currencyTab).map((method, index) => (
@@ -2476,27 +2509,43 @@ export default function WalletPage() {
                                 </div>
                                 <div className="text-center">
                                   <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>单笔限额</div>
-                                  <div className="font-semibold">{channel.singleLimit}</div>
+                                  <div className="font-semibold">{channel.minLimit}~{channel.maxLimit}</div>
                                 </div>
                                 <div className="text-center">
                                   <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>手续费</div>
                                   <div className="font-semibold">{channel.fee}</div>
                                 </div>
-                                <div className="flex items-center space-x-2">
+                                <div className="flex items-center space-x-3">
                                   <Button 
                                     variant="outline" 
                                     size="sm"
                                     className="h-8 px-3 text-xs"
-                                  >
-                                    配置
-                                  </Button>
-                                  <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    className="h-8 px-3 text-xs"
+                                    onClick={() => {
+                                      // 打开收银台测试页面
+                                      window.open('/test-cashier?channel=' + encodeURIComponent(channel.name), '_blank');
+                                    }}
                                   >
                                     测试
                                   </Button>
+                                  <div className="flex items-center">
+                                    <button
+                                      onClick={() => {
+                                        // 切换通道开关状态的逻辑
+                                        console.log(`切换 ${channel.name} 状态:`, !channel.enabled);
+                                      }}
+                                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                                        channel.enabled 
+                                          ? 'bg-[#00D4AA]' 
+                                          : isDark ? 'bg-gray-600' : 'bg-gray-300'
+                                      }`}
+                                    >
+                                      <span
+                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                          channel.enabled ? 'translate-x-6' : 'translate-x-1'
+                                        }`}
+                                      />
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -4890,7 +4939,7 @@ export default function WalletPage() {
               </Button>
             </div>
             <div className="grid grid-cols-3 gap-3">
-              {["CNY", "USD", "EUR", "GBP", "JPY", "USDT", "BTC", "ETH", "BNB", "ADA", "SOL", "DOGE"].map((currency) => (
+              {["CNY", "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "CHF", "SEK", "NOK", "DKK", "SGD"].map((currency) => (
                 <Button
                   key={currency}
                   variant={currencyTab === currency ? "default" : "outline"}
@@ -4902,7 +4951,7 @@ export default function WalletPage() {
                   }`}
                   onClick={() => {
                     setCurrencyTab(currency)
-                    setPaymentMethodTab("全部")
+                    setPaymentMethodTab("代收")
                     setShowMoreCurrencies(false)
                   }}
                 >
