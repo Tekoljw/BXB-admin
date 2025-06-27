@@ -2095,6 +2095,7 @@ export default function WalletPage() {
                         </div>
                         <div className="flex items-center space-x-2 ml-4">
                           <button
+                            onClick={() => setShowAssetModal(true)}
                             className={`w-10 h-10 rounded-lg border transition-all transform hover:scale-105 flex items-center justify-center ${
                               isDark 
                                 ? "border-[#252842] hover:bg-[#252842]" 
