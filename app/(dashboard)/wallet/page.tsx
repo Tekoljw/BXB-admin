@@ -2434,7 +2434,7 @@ export default function WalletPage() {
                       <div className={`${cardStyle} rounded-lg p-6`}>
 
                         
-                        {/* 一级页签 - 币种（使用顶级导航样式） */}
+                        {/* 一级页签 - 币种（匹配钱包顶级导航样式） */}
                         <div className="mb-6">
                           <div className="flex items-center space-x-2">
                             {["CNY", "USD", "EUR", "GBP", "JPY", "更多"].map((currency, index) => (
@@ -2454,8 +2454,8 @@ export default function WalletPage() {
                                       ? "bg-white text-black"
                                       : "bg-black text-white"
                                     : isDark
-                                      ? "text-gray-300 hover:text-white hover:bg-[#2a2d3a]"
-                                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                                      ? "text-gray-300 hover:text-white"
+                                      : "text-gray-700 hover:text-gray-900"
                                 }`}
                               >
                                 {currency}
@@ -2464,19 +2464,17 @@ export default function WalletPage() {
                           </div>
                         </div>
 
-                        {/* 二级页签 - 代收/代付（使用排序按钮样式） */}
+                        {/* 二级页签 - 代收/代付（匹配排序按钮样式） */}
                         <div className="mb-6">
-                          <div className="flex items-center space-x-4">
+                          <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
                             {getPaymentMethods(currencyTab).map((method, index) => (
                               <button
                                 key={method}
                                 onClick={() => setPaymentMethodTab(method)}
-                                className={`text-sm font-medium transition-all duration-200 ${
+                                className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                                   paymentMethodTab === method
-                                    ? "text-[#00D4AA] border-b-2 border-[#00D4AA] pb-1"
-                                    : isDark
-                                      ? "text-gray-400 hover:text-white"
-                                      : "text-gray-500 hover:text-gray-900"
+                                    ? isDark ? "bg-white text-black" : "bg-black text-white"
+                                    : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
                                 }`}
                               >
                                 {method}
