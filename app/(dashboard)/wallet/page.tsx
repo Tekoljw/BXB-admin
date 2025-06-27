@@ -93,6 +93,9 @@ export default function WalletPage() {
   const [transferTo, setTransferTo] = useState("合约账户") // 划转目标账户
   const [transferCurrency, setTransferCurrency] = useState("USDT") // 划转币种
   const [transferAmount, setTransferAmount] = useState("") // 划转金额
+  const [selectedPaymentCard, setSelectedPaymentCard] = useState<"fiat" | "crypto">("fiat") // BePAY支付卡片选择
+  const [fiatTab, setFiatTab] = useState("商户资产") // 法币卡片页签
+  const [cryptoTab, setCryptoTab] = useState("商户资产") // 加密货币卡片页签
 
   // 处理仓位分布弹窗
   const handlePositionModalClick = (e: React.MouseEvent) => {
@@ -1782,37 +1785,73 @@ export default function WalletPage() {
       case "BePAY账户":
         return (
           <div className="space-y-6">
-            {/* 顶部卡片：商户资产和代付备用金 */}
+            {/* 顶部卡片：法币总余额和加密货币总余额 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* 商户资产卡片 */}
-              <div className={`${cardStyle} rounded-lg p-6`}>
+              {/* 法币总余额卡片 */}
+              <div 
+                onClick={() => setSelectedPaymentCard("fiat")}
+                className={`cursor-pointer transition-all duration-300 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white transform hover:scale-105 ${
+                  selectedPaymentCard === "fiat" ? "ring-4 ring-blue-300 ring-opacity-50 shadow-2xl" : "shadow-lg"
+                }`}
+              >
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <Receipt className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">商户资产</h3>
+                  <div>
+                    <h3 className="text-lg font-semibold">法币总余额</h3>
+                    <p className="text-blue-100 text-sm">换算美元 (可切换币种)</p>
                   </div>
+                  <DollarSign className="h-8 w-8 text-blue-200" />
                 </div>
-                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? `${walletData.BePAY账户.merchantAssets} USDT` : "****"}
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-green-500 text-sm font-medium">今日收益: {walletData.BePAY账户.todayRevenue}</span>
+                <div className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    {balanceVisible ? "$125,860.00" : "****"}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-blue-100 text-sm">可用余额: $98,430.50</span>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-white hover:bg-white/20 text-xs"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      切换币种
+                    </Button>
+                  </div>
                 </div>
               </div>
 
-              {/* 代付备用金卡片 */}
-              <div className={`${cardStyle} rounded-lg p-6`}>
+              {/* 加密货币总余额卡片 */}
+              <div 
+                onClick={() => setSelectedPaymentCard("crypto")}
+                className={`cursor-pointer transition-all duration-300 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white transform hover:scale-105 ${
+                  selectedPaymentCard === "crypto" ? "ring-4 ring-purple-300 ring-opacity-50 shadow-2xl" : "shadow-lg"
+                }`}
+              >
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <PiggyBank className="h-6 w-6 text-[#3B82F6]" />
-                    <h3 className="text-lg font-semibold">代付备用金</h3>
+                  <div>
+                    <h3 className="text-lg font-semibold">加密货币总余额</h3>
+                    <p className="text-purple-100 text-sm">换算USDT (可切换币种)</p>
                   </div>
+                  <Bitcoin className="h-8 w-8 text-purple-200" />
                 </div>
-                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? `${walletData.BePAY账户.standbyFunds} USDT` : "****"}
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-blue-500 text-sm font-medium">本月收益: {walletData.BePAY账户.monthRevenue}</span>
+                <div className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    {balanceVisible ? "₮ 89,650.25" : "****"}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-purple-100 text-sm">可用余额: ₮ 76,320.18</span>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-white hover:bg-white/20 text-xs"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      切换币种
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
