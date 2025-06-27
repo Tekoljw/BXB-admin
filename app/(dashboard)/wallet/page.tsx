@@ -2223,6 +2223,37 @@ export default function WalletPage() {
                 <div>
                   {cryptoTab === "商户资产" && (
                     <div className="space-y-4">
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="flex-1 relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <input
+                            type="text"
+                            placeholder="搜索加密货币..."
+                            className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
+                              isDark 
+                                ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                                : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                            }`}
+                          />
+                        </div>
+                        <div className="flex items-center space-x-2 ml-4">
+                          <button
+                            onClick={() => setShowAssetModal(true)}
+                            className={`w-10 h-10 rounded-lg border transition-all transform hover:scale-105 flex items-center justify-center ${
+                              isDark 
+                                ? "border-[#252842] hover:bg-[#252842]" 
+                                : "border-gray-300 hover:bg-gray-50"
+                            }`}
+                            title="管理资产"
+                          >
+                            <div className="flex flex-col items-center">
+                              <Plus className="h-3 w-3" />
+                              <Minus className="h-3 w-3 -mt-1" />
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+
                       <div className="grid gap-4">
                         {[
                           { currency: "USDT", balance: "45,230.50", symbol: "₮", color: "bg-green-500" },
