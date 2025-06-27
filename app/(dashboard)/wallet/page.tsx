@@ -2254,8 +2254,11 @@ export default function WalletPage() {
             </div>
 
             {/* 功能按钮组 */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              <Button 
+                onClick={handlePositionModalClick}
+                className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
+              >
                 <PieChart className="h-6 w-6 mb-2 text-[#00D4AA]" />
                 <span className="text-sm font-medium">资产分布</span>
               </Button>
@@ -2273,6 +2276,20 @@ export default function WalletPage() {
               >
                 <ArrowLeftRight className="h-6 w-6 mb-2 text-[#00D4AA]" />
                 <span className="text-sm font-medium">划转</span>
+              </Button>
+              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
+                <History className="h-6 w-6 mb-2 text-[#00D4AA]" />
+                <span className="text-sm font-medium">资金记录</span>
+              </Button>
+              <Button 
+                onClick={() => {
+                  setTopLevelTab("订单记录")
+                  setOrderTab("支付订单")
+                }}
+                className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
+              >
+                <Receipt className="h-6 w-6 mb-2 text-[#00D4AA]" />
+                <span className="text-sm font-medium">订单记录</span>
               </Button>
             </div>
 
@@ -2307,72 +2324,7 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 资产分布饼图 */}
-            <div className={`${cardStyle} rounded-lg p-6`}>
-              <h3 className="text-lg font-semibold mb-4">资产分布</h3>
-              <div className="flex items-center justify-center">
-                <div className="relative w-48 h-48">
-                  <svg viewBox="0 0 42 42" className="w-full h-full">
-                    <circle
-                      cx="21"
-                      cy="21"
-                      r="15.915"
-                      fill="transparent"
-                      stroke="#e2e8f0"
-                      strokeWidth="3"
-                    />
-                    <circle
-                      cx="21"
-                      cy="21"
-                      r="15.915"
-                      fill="transparent"
-                      stroke="#00D4AA"
-                      strokeWidth="3"
-                      strokeDasharray="28.7 71.3"
-                      strokeDashoffset="25"
-                      transform="rotate(-90 21 21)"
-                    />
-                    <circle
-                      cx="21"
-                      cy="21"
-                      r="15.915"
-                      fill="transparent"
-                      stroke="#3B82F6"
-                      strokeWidth="3"
-                      strokeDasharray="71.3 28.7"
-                      strokeDashoffset="-3.7"
-                      transform="rotate(-90 21 21)"
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        {walletData.BePAY账户.totalBalance}
-                      </div>
-                      <div className="text-sm text-gray-500">总资产</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="ml-8 space-y-3">
-                  {walletData.BePAY账户.assetDistribution.map((item, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <div 
-                        className="w-4 h-4 rounded-full" 
-                        style={{ backgroundColor: item.color }}
-                      ></div>
-                      <div className="flex-1">
-                        <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          {item.name}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {item.value.toLocaleString()} USDT ({item.percentage}%)
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+
 
             {/* 支付通道状态 */}
             <div className={`${cardStyle} rounded-lg p-6`}>
