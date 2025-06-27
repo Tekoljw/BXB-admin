@@ -100,6 +100,16 @@ export default function WalletPage() {
   const [fiatTab, setFiatTab] = useState("商户资产") // 法币卡片页签
   const [cryptoTab, setCryptoTab] = useState("商户资产") // 加密货币卡片页签
   
+  // BePAY 弹窗状态
+  const [showFiatDepositModal, setShowFiatDepositModal] = useState(false)
+  const [showFiatWithdrawModal, setShowFiatWithdrawModal] = useState(false)
+  const [showCryptoDepositModal, setShowCryptoDepositModal] = useState(false)
+  const [showCryptoWithdrawModal, setShowCryptoWithdrawModal] = useState(false)
+  const [fiatDepositModalAnimating, setFiatDepositModalAnimating] = useState(false)
+  const [fiatWithdrawModalAnimating, setFiatWithdrawModalAnimating] = useState(false)
+  const [cryptoDepositModalAnimating, setCryptoDepositModalAnimating] = useState(false)
+  const [cryptoWithdrawModalAnimating, setCryptoWithdrawModalAnimating] = useState(false)
+  
   // 兑换USDT弹窗状态
   const [showExchangeModal, setShowExchangeModal] = useState(false)
   const [selectedFiatCurrency, setSelectedFiatCurrency] = useState("")
@@ -252,6 +262,34 @@ export default function WalletPage() {
   }, [])
 
   // 移除初始加载动画
+
+  // BePAY 法币入金弹窗处理
+  const handleFiatDepositClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowFiatDepositModal(true)
+    setTimeout(() => setFiatDepositModalAnimating(true), 50)
+  }
+
+  // BePAY 法币出金弹窗处理
+  const handleFiatWithdrawClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowFiatWithdrawModal(true)
+    setTimeout(() => setFiatWithdrawModalAnimating(true), 50)
+  }
+
+  // BePAY 加密货币入金弹窗处理
+  const handleCryptoDepositClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowCryptoDepositModal(true)
+    setTimeout(() => setCryptoDepositModalAnimating(true), 50)
+  }
+
+  // BePAY 加密货币出金弹窗处理
+  const handleCryptoWithdrawClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowCryptoWithdrawModal(true)
+    setTimeout(() => setCryptoWithdrawModalAnimating(true), 50)
+  }
 
   const walletTabs = [
     { id: "钱包总览", label: "钱包总览", icon: Wallet },
@@ -1904,8 +1942,24 @@ export default function WalletPage() {
                 <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? "$125,860.00" : "****"}
                 </div>
-                <div className="text-gray-500 text-sm">
-                  代付备用金：$38,520.00
+                <div className="flex items-center justify-between">
+                  <div className="text-gray-500 text-sm">
+                    代付备用金：$38,520.00
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={handleFiatDepositClick}
+                      className={`w-8 h-8 rounded-full bg-[#00D4AA] hover:bg-[#00B894] transition-colors flex items-center justify-center`}
+                    >
+                      <Plus className="h-4 w-4 text-white" />
+                    </button>
+                    <button
+                      onClick={handleFiatWithdrawClick}
+                      className={`w-8 h-8 rounded-full ${isDark ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-200 hover:bg-gray-300'} transition-colors flex items-center justify-center`}
+                    >
+                      <Minus className="h-4 w-4 text-gray-700" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1941,8 +1995,24 @@ export default function WalletPage() {
                 <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? "45,230.50 USDT" : "****"}
                 </div>
-                <div className="text-gray-500 text-sm">
-                  其他币种：28.95 ETH + 1.26 BTC
+                <div className="flex items-center justify-between">
+                  <div className="text-gray-500 text-sm">
+                    其他币种：28.95 ETH + 1.26 BTC
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={handleCryptoDepositClick}
+                      className={`w-8 h-8 rounded-full bg-[#00D4AA] hover:bg-[#00B894] transition-colors flex items-center justify-center`}
+                    >
+                      <Plus className="h-4 w-4 text-white" />
+                    </button>
+                    <button
+                      onClick={handleCryptoWithdrawClick}
+                      className={`w-8 h-8 rounded-full ${isDark ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-200 hover:bg-gray-300'} transition-colors flex items-center justify-center`}
+                    >
+                      <Minus className="h-4 w-4 text-gray-700" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
