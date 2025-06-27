@@ -1798,7 +1798,7 @@ export default function WalletPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <DollarSign className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">商户法币资产</h3>
+                    <h3 className="text-lg font-semibold">法币资产</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -1836,7 +1836,7 @@ export default function WalletPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <Coins className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">商户加密货币资产</h3>
+                    <h3 className="text-lg font-semibold">加密货币资产</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -1872,7 +1872,7 @@ export default function WalletPage() {
                 <div className="flex flex-wrap gap-2">
                   {selectedPaymentCard === "fiat" ? (
                     <>
-                      {["商户资产", "代付备用金", "通道配置", "结算/充值"].map((tab) => (
+                      {["商户资产", "通道配置", "法币换U", "代付充值"].map((tab) => (
                         <Button
                           key={tab}
                           onClick={() => setFiatTab(tab)}
@@ -2046,10 +2046,10 @@ export default function WalletPage() {
                     <div className="space-y-4">
                       <div className="grid gap-4">
                         {[
-                          { currency: "USD", balance: "85,430.50", symbol: "$" },
-                          { currency: "EUR", balance: "12,680.25", symbol: "€" },
-                          { currency: "GBP", balance: "8,950.75", symbol: "£" },
-                          { currency: "JPY", balance: "2,580,000", symbol: "¥" }
+                          { currency: "USD", merchantBalance: "85,430.50", standbyBalance: "25,430.50", symbol: "$" },
+                          { currency: "EUR", merchantBalance: "12,680.25", standbyBalance: "8,680.25", symbol: "€" },
+                          { currency: "GBP", merchantBalance: "8,950.75", standbyBalance: "3,950.75", symbol: "£" },
+                          { currency: "JPY", merchantBalance: "2,580,000", standbyBalance: "890,000", symbol: "¥" }
                         ].map((asset) => (
                           <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
                             <div className="flex items-center space-x-3">
@@ -2058,58 +2058,23 @@ export default function WalletPage() {
                               </div>
                               <div>
                                 <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
-                                <div className="text-sm text-gray-500">可用余额</div>
+                                <div className="text-sm text-gray-500">商户资产：{asset.merchantBalance} | 代付备用金：{asset.standbyBalance}</div>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-3">
-                              <div className="text-right">
-                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.balance}</div>
-                                <div className="text-sm text-gray-500">余额</div>
-                              </div>
+                            <div className="flex items-center space-x-2">
                               <Button 
                                 size="sm" 
                                 className="bg-[#00D4AA] hover:bg-[#00B89A] text-white border-0"
                                 variant="outline"
                               >
-                                结算
+                                换U
                               </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {fiatTab === "代付备用金" && (
-                    <div className="space-y-4">
-                      <div className="grid gap-4">
-                        {[
-                          { currency: "USD", balance: "25,430.50", symbol: "$" },
-                          { currency: "EUR", balance: "8,680.25", symbol: "€" },
-                          { currency: "GBP", balance: "3,950.75", symbol: "£" },
-                          { currency: "JPY", balance: "890,000", symbol: "¥" }
-                        ].map((asset) => (
-                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-blue-500`}>
-                                {asset.symbol}
-                              </div>
-                              <div>
-                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
-                                <div className="text-sm text-gray-500">备用金余额</div>
-                              </div>
-                            </div>
-                            <div className="flex items-center space-x-3">
-                              <div className="text-right">
-                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.balance}</div>
-                                <div className="text-sm text-gray-500">余额</div>
-                              </div>
                               <Button 
                                 size="sm" 
                                 className="bg-blue-500 hover:bg-blue-600 text-white border-0"
                                 variant="outline"
                               >
-                                充值
+                                代付充值
                               </Button>
                             </div>
                           </div>
@@ -2117,6 +2082,7 @@ export default function WalletPage() {
                       </div>
                     </div>
                   )}
+
                   
                   {fiatTab === "通道配置" && (
                     <div className="space-y-4">
@@ -2127,11 +2093,20 @@ export default function WalletPage() {
                     </div>
                   )}
                   
-                  {fiatTab === "结算/充值" && (
+                  {fiatTab === "法币换U" && (
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4">结算/充值管理</h3>
+                      <h3 className="text-lg font-semibold mb-4">法币换U</h3>
                       <div className="text-center py-12 text-gray-500">
-                        结算充值功能开发中...
+                        法币换U功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {fiatTab === "代付充值" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">代付充值</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        代付充值功能开发中...
                       </div>
                     </div>
                   )}
