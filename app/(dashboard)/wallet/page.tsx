@@ -1788,7 +1788,7 @@ export default function WalletPage() {
           <div className="space-y-6">
             {/* 顶部卡片：法币总余额和加密货币总余额 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* 法币总余额卡片 */}
+              {/* 商户法币资产卡片 */}
               <div 
                 onClick={() => setSelectedPaymentCard("fiat")}
                 className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
@@ -1798,14 +1798,8 @@ export default function WalletPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <DollarSign className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">法币总余额</h3>
+                    <h3 className="text-lg font-semibold">商户法币资产</h3>
                   </div>
-                </div>
-                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? "$125,860.00" : "****"}
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-500 text-sm">换算美元</span>
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -1824,9 +1818,15 @@ export default function WalletPage() {
                     <ChevronDown className="h-2 w-2" />
                   </button>
                 </div>
+                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? "$125,860.00" : "****"}
+                </div>
+                <div className="text-gray-500 text-sm">
+                  代付备用金：$38,520.00
+                </div>
               </div>
 
-              {/* 加密货币总余额卡片 */}
+              {/* 商户加密货币资产卡片 */}
               <div 
                 onClick={() => setSelectedPaymentCard("crypto")}
                 className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
@@ -1836,14 +1836,8 @@ export default function WalletPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <Coins className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">加密货币总余额</h3>
+                    <h3 className="text-lg font-semibold">商户加密货币资产</h3>
                   </div>
-                </div>
-                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? "₮ 89,650.25" : "****"}
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-500 text-sm">换算USDT</span>
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -1861,6 +1855,12 @@ export default function WalletPage() {
                     <span>USDT</span>
                     <ChevronDown className="h-2 w-2" />
                   </button>
+                </div>
+                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? "₮ 89,650.25" : "****"}
+                </div>
+                <div className="text-gray-500 text-sm">
+                  地址总数：42
                 </div>
               </div>
             </div>
@@ -2741,27 +2741,33 @@ export default function WalletPage() {
             </div>
 
             {/* 功能按钮组 */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              <Button 
-                onClick={handlePositionModalClick}
-                className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-              >
-                <PieChart className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">资产分布</span>
-              </Button>
-
-              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
-                <Settings className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">通道配置</span>
-              </Button>
-              <Button 
-                onClick={handleTransferClick}
-                className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-              >
-                <ArrowLeftRight className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">划转</span>
-              </Button>
-
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* 主要操作按钮 - 自动适配屏幕宽度 */}
+              <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-3">
+                <Button 
+                  onClick={handlePositionModalClick}
+                  className="h-12 transition-all duration-200 text-base font-bold bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  variant="outline"
+                >
+                  <PieChart className="h-4 w-4 mr-2" />
+                  资产分布
+                </Button>
+                <Button 
+                  className="h-12 transition-all duration-200 text-base font-bold bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  variant="outline"
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  通道配置
+                </Button>
+                <Button 
+                  onClick={handleTransferClick}
+                  className="h-12 transition-all duration-200 text-base font-bold bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  variant="outline"
+                >
+                  <ArrowLeftRight className="h-4 w-4 mr-2" />
+                  划转
+                </Button>
+              </div>
             </div>
 
             {/* 统计信息 */}
