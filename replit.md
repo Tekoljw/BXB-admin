@@ -145,6 +145,8 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Added payment statistics dashboard and channel monitoring system
   - Integrated 支付订单 category to order records with payment transaction data
   - Configured payment order sub-categories: 收款记录, 代付记录, 退款记录
+  - Fixed BePAY account rendering issue by properly placing case within renderTabContent function
+  - Updated function button layout to match wallet overview page design pattern
 
 ## User Preferences
 
