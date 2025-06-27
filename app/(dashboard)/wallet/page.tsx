@@ -2,10 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import { useRouter } from "next/navigation"
 import { 
   Wallet, 
@@ -4404,92 +4401,109 @@ export default function WalletPage() {
       )}
 
       {/* 兑换USDT弹窗 */}
-      <Dialog open={showExchangeModal} onOpenChange={setShowExchangeModal}>
-        <DialogContent className={`sm:max-w-md ${isDark ? 'bg-[#1a1b23] border-[#3a3d4a]' : 'bg-white border-gray-200'}`}>
-          <DialogHeader>
-            <DialogTitle className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              兑换成USDT
-            </DialogTitle>
-          </DialogHeader>
+      {showExchangeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* 背景遮罩 */}
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50"
+            onClick={() => setShowExchangeModal(false)}
+          />
           
-          <div className="space-y-6">
-            {/* 选择法币资产 */}
-            <div className="space-y-2">
-              <Label htmlFor="fiat-currency" className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                选择法币资产
-              </Label>
-              <Select value={selectedFiatCurrency} onValueChange={handleFiatCurrencyChange}>
-                <SelectTrigger className={`w-full ${isDark ? 'bg-[#2a2d3a] border-[#3a3d4a] text-white' : 'bg-white border-gray-300'}`}>
-                  <SelectValue placeholder="选择法币" />
-                </SelectTrigger>
-                <SelectContent className={isDark ? 'bg-[#2a2d3a] border-[#3a3d4a]' : 'bg-white border-gray-300'}>
-                  <SelectItem value="USD" className={isDark ? 'text-white hover:bg-[#3a3d4a]' : 'text-gray-900'}>USD - 美元</SelectItem>
-                  <SelectItem value="EUR" className={isDark ? 'text-white hover:bg-[#3a3d4a]' : 'text-gray-900'}>EUR - 欧元</SelectItem>
-                  <SelectItem value="GBP" className={isDark ? 'text-white hover:bg-[#3a3d4a]' : 'text-gray-900'}>GBP - 英镑</SelectItem>
-                  <SelectItem value="JPY" className={isDark ? 'text-white hover:bg-[#3a3d4a]' : 'text-gray-900'}>JPY - 日元</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* 输入金额 */}
-            <div className="space-y-2">
-              <Label htmlFor="exchange-amount" className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                输入金额
-              </Label>
-              <Input
-                id="exchange-amount"
-                type="number"
-                placeholder="请输入兑换金额"
-                value={exchangeAmount}
-                onChange={(e) => handleExchangeAmountChange(e.target.value)}
-                className={`w-full ${isDark ? 'bg-[#2a2d3a] border-[#3a3d4a] text-white placeholder-gray-400' : 'bg-white border-gray-300'}`}
-              />
-            </div>
-
-            {/* 今日汇率显示 */}
-            {selectedFiatCurrency && (
-              <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d3a]' : 'bg-gray-50'}`}>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  今日汇率
+          {/* 弹窗内容 */}
+          <div className={`relative w-full max-w-md mx-4 rounded-lg shadow-lg ${isDark ? 'bg-[#1a1b23] border border-[#3a3d4a]' : 'bg-white border border-gray-200'}`}>
+            <div className="p-6">
+              {/* 标题 */}
+              <div className="flex justify-between items-center mb-6">
+                <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  兑换成USDT
+                </h2>
+                <button
+                  onClick={() => setShowExchangeModal(false)}
+                  className={`p-2 rounded-lg hover:bg-opacity-80 ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                {/* 选择法币资产 */}
+                <div className="space-y-2">
+                  <label className={`text-sm font-medium block ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    选择法币资产
+                  </label>
+                  <select
+                    value={selectedFiatCurrency}
+                    onChange={(e) => handleFiatCurrencyChange(e.target.value)}
+                    className={`w-full p-3 rounded-lg border ${isDark ? 'bg-[#2a2d3a] border-[#3a3d4a] text-white' : 'bg-white border-gray-300'}`}
+                  >
+                    <option value="">选择法币</option>
+                    <option value="USD">USD - 美元</option>
+                    <option value="EUR">EUR - 欧元</option>
+                    <option value="GBP">GBP - 英镑</option>
+                    <option value="JPY">JPY - 日元</option>
+                  </select>
                 </div>
-                <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  1 {selectedFiatCurrency} = {exchangeRates[selectedFiatCurrency as keyof typeof exchangeRates]} USDT
+
+                {/* 输入金额 */}
+                <div className="space-y-2">
+                  <label className={`text-sm font-medium block ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    输入金额
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="请输入兑换金额"
+                    value={exchangeAmount}
+                    onChange={(e) => handleExchangeAmountChange(e.target.value)}
+                    className={`w-full p-3 rounded-lg border ${isDark ? 'bg-[#2a2d3a] border-[#3a3d4a] text-white placeholder-gray-400' : 'bg-white border-gray-300'}`}
+                  />
+                </div>
+
+                {/* 今日汇率显示 */}
+                {selectedFiatCurrency && (
+                  <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d3a]' : 'bg-gray-50'}`}>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      今日汇率
+                    </div>
+                    <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      1 {selectedFiatCurrency} = {exchangeRates[selectedFiatCurrency as keyof typeof exchangeRates]} USDT
+                    </div>
+                  </div>
+                )}
+
+                {/* 估算USDT金额 */}
+                {estimatedUSDT && (
+                  <div className={`p-3 rounded-lg ${isDark ? 'bg-[#00D4AA]/10 border border-[#00D4AA]/30' : 'bg-[#00D4AA]/10 border border-[#00D4AA]/30'}`}>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      预计可兑换
+                    </div>
+                    <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {estimatedUSDT} USDT
+                    </div>
+                  </div>
+                )}
+
+                {/* 确认按钮 */}
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowExchangeModal(false)}
+                    className={`flex-1 ${isDark ? 'border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d3a]' : 'border-gray-300'}`}
+                  >
+                    取消
+                  </Button>
+                  <Button
+                    onClick={handleExchangeConfirm}
+                    disabled={!selectedFiatCurrency || !exchangeAmount || !estimatedUSDT}
+                    className="flex-1 bg-[#00D4AA] hover:bg-[#00B895] text-white disabled:opacity-50"
+                  >
+                    确认兑换
+                  </Button>
                 </div>
               </div>
-            )}
-
-            {/* 估算USDT金额 */}
-            {estimatedUSDT && (
-              <div className={`p-3 rounded-lg ${isDark ? 'bg-[#00D4AA]/10 border border-[#00D4AA]/30' : 'bg-[#00D4AA]/10 border border-[#00D4AA]/30'}`}>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  预计可兑换
-                </div>
-                <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {estimatedUSDT} USDT
-                </div>
-              </div>
-            )}
-
-            {/* 确认按钮 */}
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setShowExchangeModal(false)}
-                className={`flex-1 ${isDark ? 'border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d3a]' : 'border-gray-300'}`}
-              >
-                取消
-              </Button>
-              <Button
-                onClick={handleExchangeConfirm}
-                disabled={!selectedFiatCurrency || !exchangeAmount || !estimatedUSDT}
-                className="flex-1 bg-[#00D4AA] hover:bg-[#00B895] text-white disabled:opacity-50"
-              >
-                确认兑换
-              </Button>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      )}
     </div>
   )
 }
