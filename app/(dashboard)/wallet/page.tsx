@@ -1881,7 +1881,7 @@ export default function WalletPage() {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
-                    <DollarSign className="h-6 w-6 text-[#00D4AA]" />
+                    <Banknote className="h-6 w-6 text-[#00D4AA]" />
                     <h3 className="text-lg font-semibold">法币资产</h3>
                   </div>
                   <button
@@ -1918,7 +1918,7 @@ export default function WalletPage() {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
-                    <PiggyBank className="h-6 w-6 text-[#3B82F6]" />
+                    <Coins className="h-6 w-6 text-[#3B82F6]" />
                     <h3 className="text-lg font-semibold">加密货币资产</h3>
                   </div>
                   <button
