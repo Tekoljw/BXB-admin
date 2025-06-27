@@ -2434,21 +2434,12 @@ export default function WalletPage() {
                       <div className={`${cardStyle} rounded-lg p-6`}>
 
                         
-                        {/* 一级页签 - 币种（只显示法币） */}
+                        {/* 一级页签 - 币种（使用顶级导航样式） */}
                         <div className="mb-6">
-                          <div className="flex items-center space-x-1 overflow-x-auto">
+                          <div className="flex items-center space-x-2">
                             {["CNY", "USD", "EUR", "GBP", "JPY", "更多"].map((currency, index) => (
-                              <Button
+                              <button
                                 key={currency}
-                                variant={currencyTab === currency ? "default" : "ghost"}
-                                size="sm"
-                                className={`flex-shrink-0 h-8 px-3 text-xs ${
-                                  currencyTab === currency
-                                    ? "bg-[#00D4AA] hover:bg-[#00B89A] text-white"
-                                    : isDark 
-                                      ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]" 
-                                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                                }`}
                                 onClick={() => {
                                   if (currency === "更多") {
                                     setShowMoreCurrencies(true);
@@ -2457,32 +2448,39 @@ export default function WalletPage() {
                                     setPaymentMethodTab("代收");
                                   }
                                 }}
+                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                  currencyTab === currency
+                                    ? isDark 
+                                      ? "bg-white text-black"
+                                      : "bg-black text-white"
+                                    : isDark
+                                      ? "text-gray-300 hover:text-white hover:bg-[#2a2d3a]"
+                                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                                }`}
                               >
                                 {currency}
-                              </Button>
+                              </button>
                             ))}
                           </div>
                         </div>
 
-                        {/* 二级页签 - 代收/代付 */}
+                        {/* 二级页签 - 代收/代付（使用排序按钮样式） */}
                         <div className="mb-6">
-                          <div className="flex items-center space-x-1 overflow-x-auto">
+                          <div className="flex items-center space-x-4">
                             {getPaymentMethods(currencyTab).map((method, index) => (
-                              <Button
+                              <button
                                 key={method}
-                                variant={paymentMethodTab === method ? "default" : "ghost"}
-                                size="sm"
-                                className={`flex-shrink-0 h-8 px-3 text-xs ${
-                                  paymentMethodTab === method
-                                    ? "bg-[#00D4AA] hover:bg-[#00B89A] text-white"
-                                    : isDark 
-                                      ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]" 
-                                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                                }`}
                                 onClick={() => setPaymentMethodTab(method)}
+                                className={`text-sm font-medium transition-all duration-200 ${
+                                  paymentMethodTab === method
+                                    ? "text-[#00D4AA] border-b-2 border-[#00D4AA] pb-1"
+                                    : isDark
+                                      ? "text-gray-400 hover:text-white"
+                                      : "text-gray-500 hover:text-gray-900"
+                                }`}
                               >
                                 {method}
-                              </Button>
+                              </button>
                             ))}
                           </div>
                         </div>
