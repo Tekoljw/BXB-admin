@@ -48,8 +48,6 @@ import {
   Users,
   Receipt,
   Coins,
-  Building,
-  Network,
   MapPin,
   Building2
 } from "lucide-react"
@@ -1875,8 +1873,8 @@ export default function WalletPage() {
         ]
         
         const cryptoTabs = [
-          { id: "商户资产", label: "商户资产", icon: Building },
-          { id: "地址管理", label: "地址管理", icon: Network },
+          { id: "商户资产", label: "商户资产", icon: Building2 },
+          { id: "地址管理", label: "地址管理", icon: MapPin },
           { id: "通道配置", label: "通道配置", icon: CreditCard },
           { id: "划转", label: "划转", icon: ArrowLeftRight }
         ]
@@ -2256,88 +2254,37 @@ export default function WalletPage() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid gap-4">
                         {[
-                          { 
-                            currency: "USDT", 
-                            balance: "45,230.50", 
-                            symbol: "₮", 
-                            color: "bg-green-500",
-                            change: "+2.45%",
-                            isPositive: true,
-                            marketCap: "95.2B"
-                          },
-                          { 
-                            currency: "BTC", 
-                            balance: "1.25680", 
-                            symbol: "₿", 
-                            color: "bg-orange-500",
-                            change: "+5.12%",
-                            isPositive: true,
-                            marketCap: "1.2T"
-                          },
-                          { 
-                            currency: "ETH", 
-                            balance: "28.9520", 
-                            symbol: "Ξ", 
-                            color: "bg-blue-500",
-                            change: "-1.23%",
-                            isPositive: false,
-                            marketCap: "412.8B"
-                          },
-                          { 
-                            currency: "BNB", 
-                            balance: "156.750", 
-                            symbol: "B", 
-                            color: "bg-yellow-500",
-                            change: "+3.78%",
-                            isPositive: true,
-                            marketCap: "98.4B"
-                          }
+                          { currency: "USDT", balance: "45,230.50", symbol: "₮", color: "bg-green-500" },
+                          { currency: "BTC", balance: "1.25680", symbol: "₿", color: "bg-orange-500" },
+                          { currency: "ETH", balance: "28.9520", symbol: "Ξ", color: "bg-blue-500" },
+                          { currency: "BNB", balance: "156.750", symbol: "B", color: "bg-yellow-500" }
                         ].map((asset) => (
-                          <Card key={asset.currency} className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200">
-                            <CardHeader className="pb-3">
-                              <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
-                                <div className="flex items-center">
-                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm mr-2 ${asset.color}`}>
-                                    {asset.symbol}
-                                  </div>
-                                  {asset.currency}
-                                </div>
-                                <span className={`text-xs font-medium ${asset.isPositive ? 'text-green-500' : 'text-red-500'}`}>
-                                  {asset.change}
-                                </span>
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <div className="flex items-baseline space-x-1">
-                                    <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                      {asset.balance}
-                                    </span>
-                                  </div>
-                                  <div className="text-xs text-gray-500 mt-1">市值: {asset.marketCap}</div>
-                                </div>
+                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${asset.color}`}>
+                                {asset.symbol}
                               </div>
-                              <div className="mt-4 grid grid-cols-2 gap-2">
-                                <Button
-                                  size="sm"
-                                  className={`h-7 text-xs ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'}`}
-                                >
-                                  <ArrowLeftRight className="h-3 w-3 mr-1" />
-                                  划转
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  className={`h-7 text-xs ${isDark ? 'bg-transparent text-white border border-white hover:bg-white hover:text-black' : 'bg-white hover:bg-gray-100 text-black border border-black'}`}
-                                >
-                                  <Settings className="h-3 w-3 mr-1" />
-                                  管理
-                                </Button>
+                              <div>
+                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
+                                <div className="text-sm text-gray-500">可用余额</div>
                               </div>
-                            </CardContent>
-                          </Card>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <div className="text-right">
+                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.balance}</div>
+                                <div className="text-sm text-gray-500">余额</div>
+                              </div>
+                              <Button 
+                                size="sm" 
+                                className="bg-[#00D4AA] hover:bg-[#00B89A] text-white border-0"
+                                variant="outline"
+                              >
+                                管理
+                              </Button>
+                            </div>
+                          </div>
                         ))}
                       </div>
                     </div>
