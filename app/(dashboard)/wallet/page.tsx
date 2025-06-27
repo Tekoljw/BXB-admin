@@ -1856,139 +1856,384 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 功能按钮组 - 匹配钱包总览页面设计 */}
-            <div className="transform transition-all duration-300 ease-out">
-              <div className="flex flex-col md:flex-row gap-4">
-                {/* 主要操作按钮 - 自动适配屏幕宽度 */}
-                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <Button 
-                    onClick={handlePositionModalClick}
-                    onMouseDown={() => setClickedAction("asset-distribution")}
-                    onMouseUp={() => setClickedAction("")}
-                    onMouseLeave={() => setClickedAction("")}
-                    className={`h-12 transition-all duration-200 text-base font-bold ${
-                      clickedAction === "asset-distribution"
-                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
-                        : selectedAction === "asset-distribution"
-                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                  >
-                    <PieChart className="h-4 w-4 mr-2" />
-                    资产分布
-                  </Button>
-                  <Button 
-                    onMouseDown={() => setClickedAction("success-analysis")}
-                    onMouseUp={() => setClickedAction("")}
-                    onMouseLeave={() => setClickedAction("")}
-                    className={`h-12 transition-all duration-200 text-base font-bold ${
-                      clickedAction === "success-analysis"
-                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
-                        : selectedAction === "success-analysis"
-                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                  >
-                    <BarChart3 className="h-4 w-4 mr-2" />
-                    成功率分析
-                  </Button>
-                  <Button 
-                    onMouseDown={() => setClickedAction("channel-config")}
-                    onMouseUp={() => setClickedAction("")}
-                    onMouseLeave={() => setClickedAction("")}
-                    className={`h-12 transition-all duration-200 text-base font-bold ${
-                      clickedAction === "channel-config"
-                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
-                        : selectedAction === "channel-config"
-                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                  >
-                    <Settings className="h-4 w-4 mr-2" />
-                    通道配置
-                  </Button>
-                  <Button 
-                    onClick={handleTransferClick}
-                    onMouseDown={() => setClickedAction("transfer")}
-                    onMouseUp={() => setClickedAction("")}
-                    onMouseLeave={() => setClickedAction("")}
-                    className={`h-12 transition-all duration-200 text-base font-bold ${
-                      clickedAction === "transfer"
-                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
-                        : selectedAction === "transfer"
-                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                  >
-                    <ArrowLeftRight className="h-4 w-4 mr-2" />
-                    划转
-                  </Button>
+            {/* 页签导航 - 根据选中的卡片显示不同的页签 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/* 文字页签 */}
+                <div className="flex flex-wrap gap-2">
+                  {selectedPaymentCard === "fiat" ? (
+                    <>
+                      {["商户资产", "代付备用金", "通道配置", "结算/充值"].map((tab) => (
+                        <Button
+                          key={tab}
+                          onClick={() => setFiatTab(tab)}
+                          className={`transition-all duration-200 text-base font-bold ${
+                            fiatTab === tab
+                              ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                          }`}
+                          variant="outline"
+                        >
+                          {tab}
+                        </Button>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {["商户资产", "地址管理", "通道配置", "划转"].map((tab) => (
+                        <Button
+                          key={tab}
+                          onClick={() => setCryptoTab(tab)}
+                          className={`transition-all duration-200 text-base font-bold ${
+                            cryptoTab === tab
+                              ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                          }`}
+                          variant="outline"
+                        >
+                          {tab}
+                        </Button>
+                      ))}
+                    </>
+                  )}
                 </div>
                 
-                {/* 记录按钮区域 - 右对齐 */}
-                <div className="flex justify-end md:justify-center gap-3">
-                  {/* 资金记录按钮 */}
-                  <Button
-                    onClick={() => handleActionClick("fund-records")}
-                    onMouseDown={() => setClickedAction("fund-records")}
-                    onMouseUp={() => setClickedAction("")}
-                    onMouseLeave={() => setClickedAction("")}
-                    className={`h-12 w-12 transition-all duration-200 ${
-                      clickedAction === "fund-records"
-                        ? "bg-[#00D4AA] border-[#00D4AA]"
-                        : selectedAction === "fund-records"
-                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                    title="资金记录"
-                  >
-                    <History 
-                      className={`h-4 w-4 transition-colors ${
-                        clickedAction === "fund-records"
-                          ? "text-white"
-                          : selectedAction === "fund-records" 
-                            ? "text-[#00D4AA]"
-                            : "text-black dark:text-white"
-                      }`} 
-                    />
-                  </Button>
-
-                  {/* 订单记录按钮 */}
-                  <Button
-                    onClick={() => {
-                      setTopLevelTab("订单记录")
-                      setOrderTab("支付订单")
-                    }}
-                    onMouseDown={() => setClickedAction("order-records")}
-                    onMouseUp={() => setClickedAction("")}
-                    onMouseLeave={() => setClickedAction("")}
-                    className={`h-12 w-12 transition-all duration-200 ${
-                      clickedAction === "order-records"
-                        ? "bg-[#00D4AA] border-[#00D4AA]"
-                        : selectedAction === "order-records"
-                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                    title="订单记录"
-                  >
-                    <Receipt 
-                      className={`h-4 w-4 transition-colors ${
-                        clickedAction === "order-records"
-                          ? "text-white"
-                          : selectedAction === "order-records" 
-                            ? "text-[#00D4AA]"
-                            : "text-black dark:text-white"
-                      }`} 
-                    />
-                  </Button>
+                {/* 图标页签 - 右对齐 */}
+                <div className="flex justify-end lg:justify-center gap-3 ml-auto">
+                  {selectedPaymentCard === "fiat" ? (
+                    <>
+                      {/* 结算记录 */}
+                      <Button
+                        onClick={() => setFiatTab("结算记录")}
+                        className={`h-12 w-12 transition-all duration-200 ${
+                          fiatTab === "结算记录"
+                            ? "bg-[#00D4AA] border-[#00D4AA]"
+                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                        }`}
+                        variant="outline"
+                        title="结算记录"
+                      >
+                        <Receipt 
+                          className={`h-4 w-4 transition-colors ${
+                            fiatTab === "结算记录"
+                              ? "text-white"
+                              : "text-black dark:text-white"
+                          }`} 
+                        />
+                      </Button>
+                      
+                      {/* 订单记录 */}
+                      <Button
+                        onClick={() => setFiatTab("订单记录")}
+                        className={`h-12 w-12 transition-all duration-200 ${
+                          fiatTab === "订单记录"
+                            ? "bg-[#00D4AA] border-[#00D4AA]"
+                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                        }`}
+                        variant="outline"
+                        title="订单记录"
+                      >
+                        <History 
+                          className={`h-4 w-4 transition-colors ${
+                            fiatTab === "订单记录"
+                              ? "text-white"
+                              : "text-black dark:text-white"
+                          }`} 
+                        />
+                      </Button>
+                      
+                      {/* 资产分布 */}
+                      <Button
+                        onClick={() => setFiatTab("资产分布")}
+                        className={`h-12 w-12 transition-all duration-200 ${
+                          fiatTab === "资产分布"
+                            ? "bg-[#00D4AA] border-[#00D4AA]"
+                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                        }`}
+                        variant="outline"
+                        title="资产分布"
+                      >
+                        <PieChart 
+                          className={`h-4 w-4 transition-colors ${
+                            fiatTab === "资产分布"
+                              ? "text-white"
+                              : "text-black dark:text-white"
+                          }`} 
+                        />
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      {/* 划转记录 */}
+                      <Button
+                        onClick={() => setCryptoTab("划转记录")}
+                        className={`h-12 w-12 transition-all duration-200 ${
+                          cryptoTab === "划转记录"
+                            ? "bg-[#00D4AA] border-[#00D4AA]"
+                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                        }`}
+                        variant="outline"
+                        title="划转记录"
+                      >
+                        <ArrowLeftRight 
+                          className={`h-4 w-4 transition-colors ${
+                            cryptoTab === "划转记录"
+                              ? "text-white"
+                              : "text-black dark:text-white"
+                          }`} 
+                        />
+                      </Button>
+                      
+                      {/* 订单记录 */}
+                      <Button
+                        onClick={() => setCryptoTab("订单记录")}
+                        className={`h-12 w-12 transition-all duration-200 ${
+                          cryptoTab === "订单记录"
+                            ? "bg-[#00D4AA] border-[#00D4AA]"
+                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                        }`}
+                        variant="outline"
+                        title="订单记录"
+                      >
+                        <History 
+                          className={`h-4 w-4 transition-colors ${
+                            cryptoTab === "订单记录"
+                              ? "text-white"
+                              : "text-black dark:text-white"
+                          }`} 
+                        />
+                      </Button>
+                      
+                      {/* 资产分布 */}
+                      <Button
+                        onClick={() => setCryptoTab("资产分布")}
+                        className={`h-12 w-12 transition-all duration-200 ${
+                          cryptoTab === "资产分布"
+                            ? "bg-[#00D4AA] border-[#00D4AA]"
+                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                        }`}
+                        variant="outline"
+                        title="资产分布"
+                      >
+                        <PieChart 
+                          className={`h-4 w-4 transition-colors ${
+                            cryptoTab === "资产分布"
+                              ? "text-white"
+                              : "text-black dark:text-white"
+                          }`} 
+                        />
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
+            </div>
+
+            {/* 页签内容 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              {selectedPaymentCard === "fiat" ? (
+                <div>
+                  {fiatTab === "商户资产" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">法币商户资产</h3>
+                      <div className="grid gap-4">
+                        {[
+                          { currency: "USD", balance: "85,430.50", icon: "💵" },
+                          { currency: "EUR", balance: "12,680.25", icon: "💶" },
+                          { currency: "GBP", balance: "8,950.75", icon: "💷" },
+                          { currency: "JPY", balance: "2,580,000", icon: "💴" }
+                        ].map((asset) => (
+                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'}`}>
+                            <div className="flex items-center space-x-3">
+                              <span className="text-2xl">{asset.icon}</span>
+                              <div>
+                                <div className="font-semibold">{asset.currency}</div>
+                                <div className="text-sm text-gray-500">可用余额</div>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <div className="text-right">
+                                <div className="font-semibold">{asset.balance}</div>
+                                <div className="text-sm text-gray-500">余额</div>
+                              </div>
+                              <Button size="sm" className="bg-[#00D4AA] hover:bg-[#00B89A] text-white">
+                                结算
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {fiatTab === "代付备用金" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">代付备用金</h3>
+                      <div className="grid gap-4">
+                        {[
+                          { currency: "USD", balance: "25,430.50", icon: "💵" },
+                          { currency: "EUR", balance: "8,680.25", icon: "💶" },
+                          { currency: "GBP", balance: "3,950.75", icon: "💷" },
+                          { currency: "JPY", balance: "890,000", icon: "💴" }
+                        ].map((asset) => (
+                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'}`}>
+                            <div className="flex items-center space-x-3">
+                              <span className="text-2xl">{asset.icon}</span>
+                              <div>
+                                <div className="font-semibold">{asset.currency}</div>
+                                <div className="text-sm text-gray-500">备用金余额</div>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <div className="text-right">
+                                <div className="font-semibold">{asset.balance}</div>
+                                <div className="text-sm text-gray-500">余额</div>
+                              </div>
+                              <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white">
+                                充值
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {fiatTab === "通道配置" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">法币通道配置</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        通道配置功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {fiatTab === "结算/充值" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">结算/充值管理</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        结算充值功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {fiatTab === "结算记录" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">结算记录</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        结算记录功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {fiatTab === "订单记录" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">法币订单记录</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        订单记录功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {fiatTab === "资产分布" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">法币资产分布</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        资产分布图表功能开发中...
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  {cryptoTab === "商户资产" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">加密货币商户资产</h3>
+                      <div className="grid gap-4">
+                        {[
+                          { currency: "USDT", balance: "45,230.50", icon: "₮" },
+                          { currency: "BTC", balance: "1.25680", icon: "₿" },
+                          { currency: "ETH", balance: "28.9520", icon: "Ξ" },
+                          { currency: "BNB", balance: "156.750", icon: "🔶" }
+                        ].map((asset) => (
+                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'}`}>
+                            <div className="flex items-center space-x-3">
+                              <span className="text-2xl">{asset.icon}</span>
+                              <div>
+                                <div className="font-semibold">{asset.currency}</div>
+                                <div className="text-sm text-gray-500">可用余额</div>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <div className="text-right">
+                                <div className="font-semibold">{asset.balance}</div>
+                                <div className="text-sm text-gray-500">余额</div>
+                              </div>
+                              <Button size="sm" className="bg-[#00D4AA] hover:bg-[#00B89A] text-white">
+                                管理
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {cryptoTab === "地址管理" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">地址管理</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        地址管理功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {cryptoTab === "通道配置" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">加密货币通道配置</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        通道配置功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {cryptoTab === "划转" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">加密货币划转</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        划转功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {cryptoTab === "划转记录" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">划转记录</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        划转记录功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {cryptoTab === "订单记录" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">加密货币订单记录</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        订单记录功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {cryptoTab === "资产分布" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">加密货币资产分布</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        资产分布图表功能开发中...
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* 统计信息 */}
