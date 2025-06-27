@@ -54,7 +54,8 @@ import {
   Link,
   Zap,
   Landmark,
-  Network
+  Network,
+  Repeat
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -1868,7 +1869,7 @@ export default function WalletPage() {
         const fiatTabs = [
           { id: "商户资产", label: "商户资产", icon: Landmark },
           { id: "通道配置", label: "通道配置", icon: Network },
-          { id: "法币下发", label: "法币下发", icon: ArrowUpDown },
+          { id: "法币下发", label: "法币下发", icon: Repeat },
           { id: "代付金充值", label: "代付金充值", icon: Plus }
         ]
         const fiatIconTabs = [
