@@ -1919,7 +1919,7 @@ export default function WalletPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <PiggyBank className="h-6 w-6 text-[#3B82F6]" />
-                    <h3 className="text-lg font-semibold">加密货币总余额</h3>
+                    <h3 className="text-lg font-semibold">加密货币资产</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -2007,7 +2007,7 @@ export default function WalletPage() {
                       return (
                         <Button
                           key={tab.id}
-                          onClick={() => setFiatTab(tab.id)}
+                          onClick={tab.id === "资产分布" ? handlePositionModalClick : () => setFiatTab(tab.id)}
                           className={`h-12 w-12 transition-all duration-200 ${
                             isSelected
                               ? "bg-[#00D4AA]/10 border-[#00D4AA]"
@@ -2034,7 +2034,7 @@ export default function WalletPage() {
                       return (
                         <Button
                           key={tab.id}
-                          onClick={() => setCryptoTab(tab.id)}
+                          onClick={tab.id === "资产分布" ? handlePositionModalClick : () => setCryptoTab(tab.id)}
                           className={`h-12 w-12 transition-all duration-200 ${
                             isSelected
                               ? "bg-[#00D4AA]/10 border-[#00D4AA]"
