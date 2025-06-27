@@ -1842,6 +1842,10 @@ export default function WalletPage() {
         )
 
       case "BePAY账户":
+        // 定义法币和加密货币页签
+        const fiatTabs = ["商户资产", "代付备用金", "通道配置", "结算", "充值", "资金记录", "订单记录"]
+        const cryptoTabs = ["商户资产", "地址管理", "通道配置", "划转", "划转记录", "订单记录", "资产分布"]
+        
         return (
           <div className="space-y-6">
             {/* 顶部卡片：法币总余额和加密货币总余额 */}
