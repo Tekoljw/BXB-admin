@@ -2042,9 +2042,52 @@ export default function WalletPage() {
                 <div>
                   {fiatTab === "商户资产" && (
                     <div className="space-y-4">
+                      {/* USD 资产和代付备用金分成两个卡片 */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* 左边：USD资产卡片 */}
+                        <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                              $
+                            </div>
+                            <div>
+                              <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>USD资产</div>
+                              <div className="text-sm text-gray-500">85,430.50</div>
+                            </div>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                            variant="outline"
+                          >
+                            换U
+                          </Button>
+                        </div>
+
+                        {/* 右边：USD代付备用金卡片 */}
+                        <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                              $
+                            </div>
+                            <div>
+                              <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>USD代付备用金</div>
+                              <div className="text-sm text-gray-500">25,430.50</div>
+                            </div>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0"
+                            variant="outline"
+                          >
+                            充值
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* 其他币种保持原有格式 */}
                       <div className="grid gap-4">
                         {[
-                          { currency: "USD", merchantBalance: "85,430.50", standbyBalance: "25,430.50", symbol: "$" },
                           { currency: "EUR", merchantBalance: "12,680.25", standbyBalance: "8,680.25", symbol: "€" },
                           { currency: "GBP", merchantBalance: "8,950.75", standbyBalance: "3,950.75", symbol: "£" },
                           { currency: "JPY", merchantBalance: "2,580,000", standbyBalance: "890,000", symbol: "¥" }
