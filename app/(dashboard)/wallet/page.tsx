@@ -1866,8 +1866,8 @@ export default function WalletPage() {
       case "BePAY账户":
         // 定义法币和加密货币页签
         const fiatTabs = [
-          { id: "商户资产", label: "商户资产", icon: Building2 },
-          { id: "通道配置", label: "通道配置", icon: CreditCard },
+          { id: "商户资产", label: "商户资产", icon: Landmark },
+          { id: "通道配置", label: "通道配置", icon: Network },
           { id: "法币下发", label: "法币下发", icon: ArrowUpDown },
           { id: "代付金充值", label: "代付金充值", icon: Plus }
         ]
