@@ -23,6 +23,7 @@ import {
   Upload,
   RefreshCw,
   ArrowLeftRight,
+  ArrowRightLeft,
   ChevronDown,
   Search,
   Settings,
@@ -110,6 +111,8 @@ export default function WalletPage() {
   const [paymentMethodTab, setPaymentMethodTab] = useState("代收") // 通道配置支付方式页签
   const [showMoreCurrencies, setShowMoreCurrencies] = useState(false) // 显示更多币种弹窗
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
+  const [selectedChannelCurrency, setSelectedChannelCurrency] = useState("USD") // BePAY通道币种
+  const [selectedChannelType, setSelectedChannelType] = useState("代收") // BePAY通道类型
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
@@ -2719,13 +2722,6 @@ export default function WalletPage() {
 
   // BePAY merchant account rendering function
   const renderBePayAccount = () => {
-    const [selectedPaymentCard, setSelectedPaymentCard] = useState("fiat")
-    const [fiatTab, setFiatTab] = useState("商户资产")
-    const [cryptoTab, setCryptoTab] = useState("商户资产")
-    const [selectedChannelCurrency, setSelectedChannelCurrency] = useState("USD")
-    const [selectedChannelType, setSelectedChannelType] = useState("代收")
-    const [showCurrencyModal, setShowCurrencyModal] = useState(false)
-    const [showAssetModal, setShowAssetModal] = useState(false)
 
     const fiatTabs = [
       { id: "商户资产", label: "商户资产", icon: Building2 },
