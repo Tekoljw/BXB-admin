@@ -188,6 +188,99 @@ export default function WalletPage() {
     console.log("兑换订单已生成:", exchangeOrder)
   }
 
+  // 地址管理相关状态
+  const [selectedAddressCoin, setSelectedAddressCoin] = useState("全部")
+  const [showAddAddressModal, setShowAddAddressModal] = useState(false)
+  const [newAddress, setNewAddress] = useState({
+    currency: "",
+    label: "",
+    address: "",
+    type: "充值",
+    isDefault: false
+  })
+
+  // 地址列表数据
+  const addressList = [
+    {
+      id: "addr001",
+      currency: "USDT",
+      label: "主钱包",
+      address: "TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE",
+      type: "充值",
+      isDefault: true,
+      totalDeposits: "15,230.50 USDT",
+      totalWithdrawals: "8,450.20 USDT",
+      usageCount: 156,
+      createdAt: "2024-01-15"
+    },
+    {
+      id: "addr002", 
+      currency: "BTC",
+      label: "交易所钱包",
+      address: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+      type: "提现",
+      isDefault: false,
+      totalDeposits: "2.45 BTC",
+      totalWithdrawals: "1.89 BTC",
+      usageCount: 43,
+      createdAt: "2024-01-20"
+    },
+    {
+      id: "addr003",
+      currency: "ETH", 
+      label: "DeFi钱包",
+      address: "0x742d35Cc6634C0532925a3b8D09C1F1c3b3e6d1F",
+      type: "充值",
+      isDefault: true,
+      totalDeposits: "12.8 ETH",
+      totalWithdrawals: "7.2 ETH", 
+      usageCount: 89,
+      createdAt: "2024-01-18"
+    },
+    {
+      id: "addr004",
+      currency: "BNB",
+      label: "BSC钱包",
+      address: "bnb1grpf0955h0ykzq3ar5nmum7y6gdfl6lxfn46h2",
+      type: "提现",
+      isDefault: false,
+      totalDeposits: "456.7 BNB",
+      totalWithdrawals: "234.1 BNB",
+      usageCount: 67,
+      createdAt: "2024-01-22"
+    }
+  ]
+
+  // 地址管理相关函数
+  const handleAddAddress = () => {
+    if (!newAddress.currency || !newAddress.label || !newAddress.address) {
+      return
+    }
+    
+    console.log("添加新地址:", newAddress)
+    setShowAddAddressModal(false)
+    setNewAddress({
+      currency: "",
+      label: "",
+      address: "",
+      type: "充值",
+      isDefault: false
+    })
+  }
+
+  const handleEditAddress = (address: any) => {
+    console.log("编辑地址:", address)
+  }
+
+  const handleDeleteAddress = (addressId: string) => {
+    console.log("删除地址:", addressId)
+  }
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+    console.log("已复制到剪贴板:", text)
+  }
+
   // 更多币种列表
   const moreCurrencies = ["CNY", "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "CHF", "SEK", "NOK"]
 
@@ -2594,6 +2687,274 @@ export default function WalletPage() {
                           </div>
                         ))}
                       </div>
+                    </div>
+                  )}
+                  
+                  {cryptoTab === "地址管理" && (
+                    <div className="space-y-6">
+                      {/* 顶部操作栏 */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1 relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <input
+                            type="text"
+                            placeholder="搜索地址或标签..."
+                            className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
+                              isDark 
+                                ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                                : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                            }`}
+                          />
+                        </div>
+                        <div className="flex items-center space-x-2 ml-4">
+                          <button
+                            onClick={() => setShowAddAddressModal(true)}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all transform hover:scale-105 ${
+                              isDark 
+                                ? "bg-[#00D4AA] text-black hover:bg-[#00B894]" 
+                                : "bg-[#00D4AA] text-white hover:bg-[#00B894]"
+                            }`}
+                          >
+                            <Plus className="h-4 w-4 mr-2 inline" />
+                            添加地址
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* 币种筛选 */}
+                      <div className="flex items-center space-x-2 overflow-x-auto pb-2">
+                        {["全部", "USDT", "BTC", "ETH", "BNB", "ADA", "SOL"].map((coin) => (
+                          <button
+                            key={coin}
+                            onClick={() => setSelectedAddressCoin(coin)}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                              selectedAddressCoin === coin
+                                ? isDark 
+                                  ? "bg-[#00D4AA] text-black" 
+                                  : "bg-[#00D4AA] text-white"
+                                : isDark 
+                                  ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
+                                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            }`}
+                          >
+                            {coin}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* 地址列表 */}
+                      <div className="space-y-3">
+                        {addressList
+                          .filter(addr => selectedAddressCoin === "全部" || addr.currency === selectedAddressCoin)
+                          .map((address, index) => (
+                          <div key={index} className={`${cardStyle} rounded-lg p-4 hover:shadow-md transition-all`}>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-4 flex-1">
+                                {/* 币种图标 */}
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                  address.currency === 'USDT' ? 'bg-green-100 text-green-600' :
+                                  address.currency === 'BTC' ? 'bg-orange-100 text-orange-600' :
+                                  address.currency === 'ETH' ? 'bg-blue-100 text-blue-600' :
+                                  address.currency === 'BNB' ? 'bg-yellow-100 text-yellow-600' :
+                                  'bg-purple-100 text-purple-600'
+                                }`}>
+                                  <Coins className="h-5 w-5" />
+                                </div>
+                                
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-2">
+                                    <span className="font-semibold">{address.label}</span>
+                                    <span className={`px-2 py-1 rounded-full text-xs ${
+                                      address.type === "充值" 
+                                        ? "bg-green-100 text-green-600" 
+                                        : "bg-blue-100 text-blue-600"
+                                    }`}>
+                                      {address.type}
+                                    </span>
+                                    {address.isDefault && (
+                                      <span className="px-2 py-1 rounded-full text-xs bg-[#00D4AA] text-white">
+                                        默认
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className={`text-sm font-mono ${isDark ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
+                                    {address.address.slice(0, 20)}...{address.address.slice(-10)}
+                                  </div>
+                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mt-1`}>
+                                    {address.currency} • 创建时间: {address.createdAt}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* 操作按钮 */}
+                              <div className="flex items-center space-x-2">
+                                <button
+                                  onClick={() => copyToClipboard(address.address)}
+                                  className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
+                                    isDark ? 'text-gray-400' : 'text-gray-500'
+                                  }`}
+                                  title="复制地址"
+                                >
+                                  <FileText className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleEditAddress(address)}
+                                  className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
+                                    isDark ? 'text-gray-400' : 'text-gray-500'
+                                  }`}
+                                  title="编辑"
+                                >
+                                  <Settings className="h-4 w-4" />
+                                </button>
+                                {!address.isDefault && (
+                                  <button
+                                    onClick={() => handleDeleteAddress(address.id)}
+                                    className={`p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20 transition-all text-red-500`}
+                                    title="删除"
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* 统计信息 */}
+                            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-[#3a3d4a]">
+                              <div className="grid grid-cols-3 gap-4 text-center">
+                                <div>
+                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>累计充值</div>
+                                  <div className="font-semibold text-sm">{address.totalDeposits}</div>
+                                </div>
+                                <div>
+                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>累计提现</div>
+                                  <div className="font-semibold text-sm">{address.totalWithdrawals}</div>
+                                </div>
+                                <div>
+                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>使用次数</div>
+                                  <div className="font-semibold text-sm">{address.usageCount}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 添加地址模态框 */}
+                      {showAddAddressModal && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowAddAddressModal(false)}>
+                          <div className={`${cardStyle} rounded-lg p-6 w-full max-w-md mx-4`} onClick={e => e.stopPropagation()}>
+                            <div className="flex items-center justify-between mb-4">
+                              <h3 className="text-lg font-semibold">添加新地址</h3>
+                              <button onClick={() => setShowAddAddressModal(false)}>
+                                <X className="h-5 w-5" />
+                              </button>
+                            </div>
+                            
+                            <div className="space-y-4">
+                              <div>
+                                <label className="block text-sm font-medium mb-2">币种</label>
+                                <select 
+                                  value={newAddress.currency}
+                                  onChange={(e) => setNewAddress({...newAddress, currency: e.target.value})}
+                                  className={`w-full p-3 rounded-lg border text-sm ${
+                                    isDark 
+                                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                                      : "bg-white border-gray-300 text-gray-800"
+                                  }`}
+                                >
+                                  <option value="">选择币种</option>
+                                  <option value="USDT">USDT</option>
+                                  <option value="BTC">BTC</option>
+                                  <option value="ETH">ETH</option>
+                                  <option value="BNB">BNB</option>
+                                  <option value="ADA">ADA</option>
+                                  <option value="SOL">SOL</option>
+                                </select>
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium mb-2">地址标签</label>
+                                <input
+                                  type="text"
+                                  value={newAddress.label}
+                                  onChange={(e) => setNewAddress({...newAddress, label: e.target.value})}
+                                  placeholder="例如：主钱包、交易所钱包"
+                                  className={`w-full p-3 rounded-lg border text-sm ${
+                                    isDark 
+                                      ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                                      : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                                  }`}
+                                />
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium mb-2">钱包地址</label>
+                                <textarea
+                                  value={newAddress.address}
+                                  onChange={(e) => setNewAddress({...newAddress, address: e.target.value})}
+                                  placeholder="输入或粘贴钱包地址"
+                                  rows={3}
+                                  className={`w-full p-3 rounded-lg border text-sm font-mono ${
+                                    isDark 
+                                      ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                                      : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                                  }`}
+                                />
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium mb-2">地址类型</label>
+                                <select 
+                                  value={newAddress.type}
+                                  onChange={(e) => setNewAddress({...newAddress, type: e.target.value})}
+                                  className={`w-full p-3 rounded-lg border text-sm ${
+                                    isDark 
+                                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                                      : "bg-white border-gray-300 text-gray-800"
+                                  }`}
+                                >
+                                  <option value="充值">充值地址</option>
+                                  <option value="提现">提现地址</option>
+                                </select>
+                              </div>
+                              
+                              <div className="flex items-center">
+                                <input
+                                  type="checkbox"
+                                  id="setDefault"
+                                  checked={newAddress.isDefault}
+                                  onChange={(e) => setNewAddress({...newAddress, isDefault: e.target.checked})}
+                                  className="rounded border-gray-300"
+                                />
+                                <label htmlFor="setDefault" className="ml-2 text-sm">设为默认地址</label>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center space-x-3 mt-6">
+                              <button
+                                onClick={() => setShowAddAddressModal(false)}
+                                className={`flex-1 px-4 py-2 rounded-lg border text-sm font-medium transition-all ${
+                                  isDark 
+                                    ? "border-[#3a3d4a] text-gray-300 hover:bg-[#3a3d4a]" 
+                                    : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                                }`}
+                              >
+                                取消
+                              </button>
+                              <button
+                                onClick={handleAddAddress}
+                                className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                                  isDark 
+                                    ? "bg-[#00D4AA] text-black hover:bg-[#00B894]" 
+                                    : "bg-[#00D4AA] text-white hover:bg-[#00B894]"
+                                }`}
+                              >
+                                添加地址
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                   
