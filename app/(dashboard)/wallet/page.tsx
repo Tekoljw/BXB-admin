@@ -2393,115 +2393,63 @@ export default function WalletPage() {
                   
                   {fiatTab === "通道配置" && (
                     <div className="space-y-6">
-                      {/* 通道状态概览 */}
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div className={`${cardStyle} rounded-lg p-4`}>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-gray-500">活跃通道</p>
-                              <p className="text-2xl font-bold text-green-500">12</p>
-                            </div>
-                            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                              <CheckCircle className="h-5 w-5 text-green-500" />
-                            </div>
+                      {/* 页签导航 - 币种和代收/代付在同一行 */}
+                      <div className="mb-6">
+                        <div className="flex items-center justify-between">
+                          {/* 左侧 - 币种页签 */}
+                          <div className="flex items-center space-x-2">
+                            {selectedCurrencies.map((currency, index) => (
+                              <button
+                                key={currency}
+                                onClick={() => {
+                                  setCurrencyTab(currency);
+                                  setPaymentMethodTab("代收");
+                                }}
+                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                  currencyTab === currency
+                                    ? isDark 
+                                      ? "bg-white text-black"
+                                      : "bg-black text-white"
+                                    : isDark
+                                      ? "text-gray-300 hover:text-white"
+                                      : "text-gray-700 hover:text-gray-900"
+                                }`}
+                              >
+                                {currency}
+                              </button>
+                            ))}
+                            <button
+                              onClick={() => setShowMoreCurrencies(true)}
+                              className={`w-10 h-10 rounded-lg transition-all duration-200 flex items-center justify-center ${
+                                isDark
+                                  ? "text-gray-300 hover:text-white hover:bg-[#2a2d3a]"
+                                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                              }`}
+                            >
+                              <Plus className="h-4 w-4" />
+                            </button>
                           </div>
-                        </div>
-                        <div className={`${cardStyle} rounded-lg p-4`}>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-gray-500">维护中</p>
-                              <p className="text-2xl font-bold text-yellow-500">3</p>
-                            </div>
-                            <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                              <Clock className="h-5 w-5 text-yellow-500" />
-                            </div>
-                          </div>
-                        </div>
-                        <div className={`${cardStyle} rounded-lg p-4`}>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-gray-500">异常通道</p>
-                              <p className="text-2xl font-bold text-red-500">1</p>
-                            </div>
-                            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                              <X className="h-5 w-5 text-red-500" />
-                            </div>
-                          </div>
-                        </div>
-                        <div className={`${cardStyle} rounded-lg p-4`}>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-gray-500">成功率</p>
-                              <p className="text-2xl font-bold text-blue-500">96.8%</p>
-                            </div>
-                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                              <TrendingUp className="h-5 w-5 text-blue-500" />
-                            </div>
+
+                          {/* 右侧 - 代收/代付页签 */}
+                          <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
+                            {getPaymentMethods(currencyTab).map((method, index) => (
+                              <button
+                                key={method}
+                                onClick={() => setPaymentMethodTab(method)}
+                                className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                                  paymentMethodTab === method
+                                    ? isDark ? "bg-white text-black" : "bg-black text-white"
+                                    : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
+                                }`}
+                              >
+                                {method}
+                              </button>
+                            ))}
                           </div>
                         </div>
                       </div>
-
-                      {/* 通道列表 */}
-                      <div className={`${cardStyle} rounded-lg p-6`}>
-
-                        
-                        {/* 页签导航 - 币种和代收/代付在同一行 */}
-                        <div className="mb-6">
-                          <div className="flex items-center justify-between">
-                            {/* 左侧 - 币种页签 */}
-                            <div className="flex items-center space-x-2">
-                              {selectedCurrencies.map((currency, index) => (
-                                <button
-                                  key={currency}
-                                  onClick={() => {
-                                    setCurrencyTab(currency);
-                                    setPaymentMethodTab("代收");
-                                  }}
-                                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                                    currencyTab === currency
-                                      ? isDark 
-                                        ? "bg-white text-black"
-                                        : "bg-black text-white"
-                                      : isDark
-                                        ? "text-gray-300 hover:text-white"
-                                        : "text-gray-700 hover:text-gray-900"
-                                  }`}
-                                >
-                                  {currency}
-                                </button>
-                              ))}
-                              <button
-                                onClick={() => setShowMoreCurrencies(true)}
-                                className={`w-10 h-10 rounded-lg transition-all duration-200 flex items-center justify-center ${
-                                  isDark
-                                    ? "text-gray-300 hover:text-white hover:bg-[#2a2d3a]"
-                                    : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
-                                }`}
-                              >
-                                <Plus className="h-4 w-4" />
-                              </button>
-                            </div>
-
-                            {/* 右侧 - 代收/代付页签 */}
-                            <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
-                              {getPaymentMethods(currencyTab).map((method, index) => (
-                                <button
-                                  key={method}
-                                  onClick={() => setPaymentMethodTab(method)}
-                                  className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
-                                    paymentMethodTab === method
-                                      ? isDark ? "bg-white text-black" : "bg-black text-white"
-                                      : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
-                                  }`}
-                                >
-                                  {method}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-4">
+                      
+                      <div className="space-y-4">
                           {getChannelsByCategory(currencyTab, paymentMethodTab).map((channel, index) => (
                             <div key={index} className="flex items-center justify-between p-4 border border-gray-200 dark:border-[#3a3d4a] rounded-lg hover:shadow-md transition-all">
                               <div className="flex items-center space-x-4">
@@ -2658,6 +2606,7 @@ export default function WalletPage() {
             </div>
           </div>
         )
+        })()
 
       default:
         return <div>内容加载中...</div>
