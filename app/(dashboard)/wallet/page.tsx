@@ -1920,196 +1920,215 @@ export default function WalletPage() {
                 </div>
               </div>
             </div>
-                  selectedPaymentCard === "crypto" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
-                }`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <Coins className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">加密货币资产</h3>
-                  </div>
+
+            {/* 页签选择 */}
+            <div className="flex flex-wrap gap-2 p-1 rounded-lg bg-gray-100 dark:bg-[#252842]">
+              {selectedPaymentCard === "fiat" ? (
+                fiatTabs.map(tab => (
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleCurrencyModalClick()
-                    }}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
-                      isDark 
-                        ? "bg-transparent text-white hover:bg-gray-800" 
-                        : "bg-white text-black hover:bg-gray-50"
+                    key={tab}
+                    onClick={() => setFiatTab(tab)}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      fiatTab === tab
+                        ? 'bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm'
+                        : isDark ? 'text-gray-300 hover:text-white hover:bg-[#2a2d3a]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
-                    <div className="w-3 h-3 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold">
-                      <span className="text-white text-[8px]">₮</span>
-                    </div>
-                    <span>USDT</span>
-                    <ChevronDown className="h-2 w-2" />
+                    {tab}
                   </button>
-                </div>
-                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? "₮ 89,650.25" : "****"}
-                </div>
-                <div className="text-gray-500 text-sm">
-                  地址总数：42
-                </div>
-              </div>
+                ))
+              ) : (
+                cryptoTabs.map(tab => (
+                  <button
+                    key={tab}
+                    onClick={() => setCryptoTab(tab)}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      cryptoTab === tab
+                        ? 'bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm'
+                        : isDark ? 'text-gray-300 hover:text-white hover:bg-[#2a2d3a]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))
+              )}
             </div>
 
-            {/* 页签导航 - 根据选中的卡片显示不同的页签 */}
-            <div className="flex flex-col md:flex-row gap-4">
-                {/* 主要操作按钮 - 自动适配屏幕宽度 */}
-                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {selectedPaymentCard === "fiat" ? (
-                    <>
-                      {["商户资产", "通道配置", "法币换U", "代付充值"].map((tab) => (
+            {/* 页签内容 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              {selectedPaymentCard === "fiat" ? (
+                <div>
+                  {fiatTab === "商户资产" && (
+                    <div className="space-y-4">
+                      {/* 搜索框和币种筛选按钮 */}
+                      <div className="flex items-center space-x-3 mb-6">
+                        <div className="flex-1 relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                          <input
+                            type="text"
+                            placeholder="搜索法币..."
+                            className={`w-full pl-10 pr-4 py-2 border rounded-lg ${
+                              isDark 
+                                ? 'bg-[#2a2d3a] border-[#3a3d4a] text-white placeholder-gray-400' 
+                                : 'bg-white border-gray-300 text-gray-900'
+                            }`}
+                          />
+                        </div>
+                        
+                        <div className="flex space-x-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className={`px-3 py-2 ${isDark ? 'border-[#3a3d4a] text-gray-300' : 'border-gray-300'}`}
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className={`px-3 py-2 ${isDark ? 'border-[#3a3d4a] text-gray-300' : 'border-gray-300'}`}
+                          >
+                            <Minus className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* 法币资产列表 */}
+                      <div className="grid gap-4">
+                        {[
+                          { currency: "USD", merchantBalance: "85,430.50", standbyBalance: "25,430.50", symbol: "$" },
+                          { currency: "EUR", merchantBalance: "12,680.25", standbyBalance: "8,680.25", symbol: "€" },
+                          { currency: "GBP", merchantBalance: "8,950.75", standbyBalance: "3,950.75", symbol: "£" },
+                          { currency: "JPY", merchantBalance: "2,580,000", standbyBalance: "890,000", symbol: "¥" }
+                        ].map((asset) => (
+                          <div key={asset.currency} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* 商户资产卡片 */}
+                            <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}
+                                 onClick={() => {
+                                   setSelectedFiatCurrency(asset.currency)
+                                   setShowExchangeModal(true)
+                                 }}>
+                              <div className="flex items-center space-x-3">
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                                  {asset.symbol}
+                                </div>
+                                <div className="flex-1">
+                                  <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
+                                  <div className="text-sm text-gray-500">商户资产</div>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-6">
+                                <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.merchantBalance}</div>
+                                <Button 
+                                  size="sm" 
+                                  className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 w-10 h-10 p-0"
+                                  variant="outline"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    setSelectedFiatCurrency(asset.currency)
+                                    setShowExchangeModal(true)
+                                  }}
+                                >
+                                  <ArrowUpRight className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+
+                            {/* 代付备用金卡片 */}
+                            <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
+                              <div className="flex items-center space-x-3">
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                                  {asset.symbol}
+                                </div>
+                                <div className="flex-1">
+                                  <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
+                                  <div className="text-sm text-gray-500">代付备用金</div>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-6">
+                                <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.standbyBalance}</div>
+                                <Button 
+                                  size="sm" 
+                                  className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-10 h-10 p-0"
+                                  variant="outline"
+                                >
+                                  <ArrowDownLeft className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 加载更多按钮 */}
+                      <div className="text-center pt-4">
                         <Button
-                          key={tab}
-                          onClick={() => setFiatTab(tab)}
-                          className={`h-12 transition-all duration-200 text-base font-bold ${
-                            fiatTab === tab
-                              ? "bg-[#00D4AA] text-white border-[#00D4AA]"
-                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                          }`}
                           variant="outline"
+                          className={`px-6 py-2 ${isDark ? 'border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d3a]' : 'border-gray-300'}`}
                         >
-                          {tab}
+                          加载更多 (4)
                         </Button>
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      {["商户资产", "地址管理", "通道配置", "划转"].map((tab) => (
-                        <Button
-                          key={tab}
-                          onClick={() => setCryptoTab(tab)}
-                          className={`h-12 transition-all duration-200 text-base font-bold ${
-                            cryptoTab === tab
-                              ? "bg-[#00D4AA] text-white border-[#00D4AA]"
-                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                          }`}
-                          variant="outline"
-                        >
-                          {tab}
-                        </Button>
-                      ))}
-                    </>
+                      </div>
+                    </div>
                   )}
+                  
+                  {fiatTab === "通道配置" && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold mb-4">法币通道配置</h3>
+                      <div className="text-center py-12 text-gray-500">
+                        通道配置功能开发中...
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* 其他法币功能页签内容 */}
                 </div>
-                
-                {/* 图标页签 - 右对齐 */}
-                <div className="flex justify-end lg:justify-center gap-3 ml-auto">
-                  {selectedPaymentCard === "fiat" ? (
-                    <>
-                      {/* 结算记录 */}
-                      <Button
-                        onClick={() => setFiatTab("结算记录")}
-                        className={`h-12 w-12 transition-all duration-200 ${
-                          fiatTab === "结算记录"
-                            ? "bg-[#00D4AA] border-[#00D4AA]"
-                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                        }`}
-                        variant="outline"
-                        title="结算记录"
-                      >
-                        <Receipt 
-                          className={`h-4 w-4 transition-colors ${
-                            fiatTab === "结算记录"
-                              ? "text-white"
-                              : "text-black dark:text-white"
-                          }`} 
-                        />
-                      </Button>
-                      
-                      {/* 订单记录 */}
-                      <Button
-                        onClick={() => setFiatTab("订单记录")}
-                        className={`h-12 w-12 transition-all duration-200 ${
-                          fiatTab === "订单记录"
-                            ? "bg-[#00D4AA] border-[#00D4AA]"
-                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                        }`}
-                        variant="outline"
-                        title="订单记录"
-                      >
-                        <History 
-                          className={`h-4 w-4 transition-colors ${
-                            fiatTab === "订单记录"
-                              ? "text-white"
-                              : "text-black dark:text-white"
-                          }`} 
-                        />
-                      </Button>
-                      
-                      {/* 资产分布 */}
-                      <Button
-                        onClick={() => setFiatTab("资产分布")}
-                        className={`h-12 w-12 transition-all duration-200 ${
-                          fiatTab === "资产分布"
-                            ? "bg-[#00D4AA] border-[#00D4AA]"
-                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                        }`}
-                        variant="outline"
-                        title="资产分布"
-                      >
-                        <PieChart 
-                          className={`h-4 w-4 transition-colors ${
-                            fiatTab === "资产分布"
-                              ? "text-white"
-                              : "text-black dark:text-white"
-                          }`} 
-                        />
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      {/* 划转记录 */}
-                      <Button
-                        onClick={() => setCryptoTab("划转记录")}
-                        className={`h-12 w-12 transition-all duration-200 ${
-                          cryptoTab === "划转记录"
-                            ? "bg-[#00D4AA] border-[#00D4AA]"
-                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                        }`}
-                        variant="outline"
-                        title="划转记录"
-                      >
-                        <ArrowLeftRight 
-                          className={`h-4 w-4 transition-colors ${
-                            cryptoTab === "划转记录"
-                              ? "text-white"
-                              : "text-black dark:text-white"
-                          }`} 
-                        />
-                      </Button>
-                      
-                      {/* 订单记录 */}
-                      <Button
-                        onClick={() => setCryptoTab("订单记录")}
-                        className={`h-12 w-12 transition-all duration-200 ${
-                          cryptoTab === "订单记录"
-                            ? "bg-[#00D4AA] border-[#00D4AA]"
-                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                        }`}
-                        variant="outline"
-                        title="订单记录"
-                      >
-                        <History 
-                          className={`h-4 w-4 transition-colors ${
-                            cryptoTab === "订单记录"
-                              ? "text-white"
-                              : "text-black dark:text-white"
-                          }`} 
-                        />
-                      </Button>
-                      
-                      {/* 资产分布 */}
-                      <Button
-                        onClick={() => setCryptoTab("资产分布")}
-                        className={`h-12 w-12 transition-all duration-200 ${
-                          cryptoTab === "资产分布"
-                            ? "bg-[#00D4AA] border-[#00D4AA]"
-                            : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                        }`}
+              ) : (
+                <div>
+                  {cryptoTab === "商户资产" && (
+                    <div className="space-y-4">
+                      <div className="grid gap-4">
+                        {[
+                          { currency: "USDT", balance: "45,230.50", symbol: "₮", color: "bg-green-500" },
+                          { currency: "BTC", balance: "1.25680", symbol: "₿", color: "bg-orange-500" },
+                          { currency: "ETH", balance: "28.9520", symbol: "Ξ", color: "bg-blue-500" },
+                          { currency: "BNB", balance: "156.750", symbol: "B", color: "bg-yellow-500" }
+                        ].map((asset) => (
+                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${asset.color}`}>
+                                {asset.symbol}
+                              </div>
+                              <div>
+                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
+                                <div className="text-sm text-gray-500">可用余额</div>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <div className="text-right">
+                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.balance}</div>
+                                <div className="text-sm text-gray-500">余额</div>
+                              </div>
+                              <Button 
+                                size="sm" 
+                                className="bg-[#00D4AA] hover:bg-[#00B89A] text-white border-0"
+                                variant="outline"
+                              >
+                                管理
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* 其他加密货币功能页签内容 */}
+                </div>
+              )}
+            </div>
+          </div>
+        )
                         variant="outline"
                         title="资产分布"
                       >
