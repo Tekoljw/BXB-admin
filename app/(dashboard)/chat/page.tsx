@@ -2266,17 +2266,42 @@ export default function ChatPage() {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex space-x-3">
-                        <button className="flex-1 bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm">
-                          邀请朋友
-                        </button>
-                        <button className={`flex-1 py-2.5 rounded-lg font-medium transition-colors text-sm border ${
-                          isDark 
-                            ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
-                            : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                        }`}>
-                          群设置
-                        </button>
+                      <div className="space-y-3">
+                        {/* Primary Actions */}
+                        <div className="flex space-x-3">
+                          <button className={`flex-1 py-2.5 rounded-lg font-medium transition-colors text-sm ${
+                            isDark 
+                              ? "bg-white text-black hover:bg-gray-200" 
+                              : "bg-black text-white hover:bg-gray-800"
+                          }`}>
+                            邀请朋友
+                          </button>
+                          <button className={`flex-1 py-2.5 rounded-lg font-medium transition-colors text-sm border ${
+                            isDark 
+                              ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+                              : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                          }`}>
+                            群设置
+                          </button>
+                        </div>
+                        
+                        {/* Secondary Actions */}
+                        <div className="flex space-x-3">
+                          <button className={`flex-1 py-2.5 rounded-lg font-medium transition-colors text-sm border ${
+                            isDark 
+                              ? "border-yellow-600 text-yellow-400 hover:bg-yellow-900/20" 
+                              : "border-yellow-500 text-yellow-600 hover:bg-yellow-50"
+                          }`}>
+                            屏蔽群组
+                          </button>
+                          <button className={`flex-1 py-2.5 rounded-lg font-medium transition-colors text-sm border ${
+                            isDark 
+                              ? "border-red-600 text-red-400 hover:bg-red-900/20" 
+                              : "border-red-500 text-red-600 hover:bg-red-50"
+                          }`}>
+                            退出群组
+                          </button>
+                        </div>
                       </div>
                     </>
                   )
