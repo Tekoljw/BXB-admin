@@ -101,6 +101,13 @@ export default function WalletPage() {
   const [fiatTab, setFiatTab] = useState("商户资产") // 法币卡片页签
   const [cryptoTab, setCryptoTab] = useState("商户资产") // 加密货币卡片页签
   
+  // 代付备用金充值弹窗状态
+  const [showStandbyRechargeModal, setShowStandbyRechargeModal] = useState(false)
+  const [standbyRechargeAnimating, setStandbyRechargeAnimating] = useState(false)
+  const [standbyRechargeCurrency, setStandbyRechargeCurrency] = useState("USD") // 选择的充值币种
+  const [standbyRechargeTab, setStandbyRechargeTab] = useState("法币充值") // 充值方式：法币充值/USDT充值
+  const [standbyRechargeAmount, setStandbyRechargeAmount] = useState("") // 充值金额
+  
   // 兑换USDT弹窗状态
   const [showExchangeModal, setShowExchangeModal] = useState(false)
   const [selectedFiatCurrency, setSelectedFiatCurrency] = useState("")
