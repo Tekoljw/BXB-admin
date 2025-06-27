@@ -180,6 +180,14 @@ export default function WalletPage() {
     }
   }
 
+  const handleStandbyRechargeClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!showStandbyRechargeModal) {
+      setShowStandbyRechargeModal(true)
+      setTimeout(() => setStandbyRechargeAnimating(true), 50)
+    }
+  }
+
   const closePositionModal = () => {
     setPositionModalAnimating(false)
     setTimeout(() => setShowPositionModal(false), 300)
@@ -2144,7 +2152,13 @@ export default function WalletPage() {
                             </div>
 
                             {/* 代付备用金卡片 */}
-                            <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
+                            <div 
+                              className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}
+                              onClick={(e) => {
+                                setStandbyRechargeCurrency(asset.currency)
+                                handleStandbyRechargeClick(e)
+                              }}
+                            >
                               <div className="flex items-center space-x-3">
                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
                                   {asset.symbol}
@@ -2160,6 +2174,7 @@ export default function WalletPage() {
                                   size="sm" 
                                   className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-10 h-10 p-0"
                                   variant="outline"
+                                  onClick={(e) => e.stopPropagation()}
                                 >
                                   <ArrowDownLeft className="h-4 w-4" />
                                 </Button>
@@ -4354,6 +4369,163 @@ export default function WalletPage() {
                     确认兑换
                   </Button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 代付备用金充值弹窗 */}
+      {showStandbyRechargeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`relative max-w-md w-full max-h-[90vh] overflow-y-auto ${
+            standbyRechargeAnimating 
+              ? "transform transition-all duration-300 ease-out scale-100 opacity-100" 
+              : "transform scale-95 opacity-0"
+          }`}>
+            <div className={`${cardStyle} rounded-lg p-6 relative`}>
+              {/* 标题栏 */}
+              <div className="flex items-center justify-between mb-6">
+                <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  充值代付备用金
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setStandbyRechargeAnimating(false)
+                    setTimeout(() => setShowStandbyRechargeModal(false), 200)
+                  }}
+                  className={`h-8 w-8 p-0 ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+
+              {/* 币种选择 */}
+              <div className="mb-6">
+                <label className={`block text-sm mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  选择充值币种
+                </label>
+                <div className={`relative ${isDark ? 'bg-[#2a2d42] border-[#3a3d4a]' : 'bg-gray-50 border-gray-200'} border rounded-lg`}>
+                  <select
+                    value={standbyRechargeCurrency}
+                    onChange={(e) => setStandbyRechargeCurrency(e.target.value)}
+                    className={`w-full p-3 bg-transparent text-sm focus:outline-none appearance-none ${
+                      isDark ? 'text-white focus:border-[#00D4AA]' : 'text-gray-900 focus:border-[#00D4AA]'
+                    }`}
+                  >
+                    <option value="USD">USD - 美元</option>
+                    <option value="EUR">EUR - 欧元</option>
+                    <option value="GBP">GBP - 英镑</option>
+                    <option value="JPY">JPY - 日元</option>
+                  </select>
+                  <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 pointer-events-none ${
+                    isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`} />
+                </div>
+              </div>
+
+              {/* 充值方式选择 */}
+              <div className="mb-6">
+                <div className="flex space-x-1 p-1 rounded-lg bg-gray-100 dark:bg-[#252842]">
+                  {["法币充值", "USDT充值"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setStandbyRechargeTab(tab)}
+                      className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                        standbyRechargeTab === tab
+                          ? 'bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm'
+                          : isDark ? 'text-gray-300 hover:text-white hover:bg-[#2a2d3a]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 当前余额显示 */}
+              <div className="mb-4">
+                <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-50'}`}>
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    {standbyRechargeTab === "法币充值" ? `当前${standbyRechargeCurrency}余额` : "当前USDT余额"}
+                  </div>
+                  <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {standbyRechargeTab === "法币充值" 
+                      ? `${standbyRechargeCurrency === "USD" ? "$85,430.50" : 
+                          standbyRechargeCurrency === "EUR" ? "€12,680.25" : 
+                          standbyRechargeCurrency === "GBP" ? "£8,950.75" : "¥2,580,000"}`
+                      : "45,890.50 USDT"
+                    }
+                  </div>
+                </div>
+              </div>
+
+              {/* 充值金额输入 */}
+              <div className="mb-4">
+                <label className={`block text-sm mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  充值金额
+                </label>
+                <div className={`relative ${isDark ? 'bg-[#2a2d42] border-[#3a3d4a]' : 'bg-white border-gray-200'} border rounded-lg`}>
+                  <input
+                    type="number"
+                    value={standbyRechargeAmount}
+                    onChange={(e) => setStandbyRechargeAmount(e.target.value)}
+                    placeholder={standbyRechargeTab === "法币充值" ? `输入${standbyRechargeCurrency}金额` : "输入USDT金额"}
+                    className={`w-full p-3 bg-transparent text-sm focus:outline-none ${
+                      isDark ? 'text-white placeholder-gray-500' : 'text-gray-900 placeholder-gray-400'
+                    }`}
+                  />
+                  <div className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-sm ${
+                    isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
+                  </div>
+                </div>
+              </div>
+
+              {/* USDT充值时显示汇率和计算结果 */}
+              {standbyRechargeTab === "USDT充值" && standbyRechargeAmount && (
+                <div className="mb-4">
+                  <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d42]' : 'bg-blue-50'} border ${isDark ? 'border-[#3a3d4a]' : 'border-blue-200'}`}>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-blue-600'} mb-1`}>
+                      今日汇率：1 USDT = {exchangeRates[standbyRechargeCurrency as keyof typeof exchangeRates] || 1} {standbyRechargeCurrency}
+                    </div>
+                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-blue-800'}`}>
+                      可充值：{(parseFloat(standbyRechargeAmount) * (exchangeRates[standbyRechargeCurrency as keyof typeof exchangeRates] || 1)).toFixed(2)} {standbyRechargeCurrency}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 确认按钮 */}
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setStandbyRechargeAnimating(false)
+                    setTimeout(() => setShowStandbyRechargeModal(false), 200)
+                  }}
+                  className={`flex-1 ${isDark ? 'border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d3a]' : 'border-gray-300'}`}
+                >
+                  取消
+                </Button>
+                <Button
+                  onClick={() => {
+                    console.log("代付备用金充值确认:", {
+                      currency: standbyRechargeCurrency,
+                      method: standbyRechargeTab,
+                      amount: standbyRechargeAmount
+                    })
+                    setStandbyRechargeAnimating(false)
+                    setTimeout(() => setShowStandbyRechargeModal(false), 200)
+                  }}
+                  disabled={!standbyRechargeAmount}
+                  className="flex-1 bg-[#00D4AA] hover:bg-[#00B895] text-white disabled:opacity-50"
+                >
+                  确认充值
+                </Button>
               </div>
             </div>
           </div>
