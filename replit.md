@@ -155,6 +155,9 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Built interactive asset management with currency-specific action buttons (结算 for fiat, 充值 for standby funds)
   - Enhanced visual feedback with gradient backgrounds, ring highlighting, and hover effects
   - Implemented comprehensive multi-currency support (USD, EUR, GBP, JPY for fiat; USDT, BTC, ETH, BNB for crypto)
+  - Updated button layouts with full-screen width adaptation and enhanced shadow effects for selected cards
+  - Refined balance display to show merchant assets and standby funds on separate lines
+  - Standardized action button styling with "法币换U" (transparent) and "代付充值" (solid black) variants
 
 ## User Preferences
 

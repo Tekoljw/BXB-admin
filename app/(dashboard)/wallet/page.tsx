@@ -1792,7 +1792,9 @@ export default function WalletPage() {
               <div 
                 onClick={() => setSelectedPaymentCard("fiat")}
                 className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
-                  selectedPaymentCard === "fiat" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
+                  selectedPaymentCard === "fiat" 
+                    ? "ring-2 ring-[#00D4AA] ring-opacity-50 shadow-xl shadow-[#00D4AA]/20" 
+                    : "shadow-lg hover:shadow-xl"
                 }`}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -1830,7 +1832,9 @@ export default function WalletPage() {
               <div 
                 onClick={() => setSelectedPaymentCard("crypto")}
                 className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
-                  selectedPaymentCard === "crypto" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
+                  selectedPaymentCard === "crypto" 
+                    ? "ring-2 ring-[#00D4AA] ring-opacity-50 shadow-xl shadow-[#00D4AA]/20" 
+                    : "shadow-lg hover:shadow-xl"
                 }`}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -2060,17 +2064,15 @@ export default function WalletPage() {
                                 <div className="text-sm text-gray-500">代付备用金：{asset.standbyBalance}</div>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex space-x-2 w-full">
                               <Button 
-                                size="sm" 
-                                className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                                className="flex-1 bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                                 variant="outline"
                               >
                                 法币换U
                               </Button>
                               <Button 
-                                size="sm" 
-                                className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0"
+                                className="flex-1 bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0"
                                 variant="outline"
                               >
                                 代付充值
