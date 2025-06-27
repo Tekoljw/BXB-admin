@@ -2254,35 +2254,43 @@ export default function WalletPage() {
                         </div>
                       </div>
 
-                      <div className="grid gap-4">
+                      <div className="space-y-4">
                         {[
-                          { currency: "USDT", balance: "45,230.50", symbol: "₮", color: "bg-green-500" },
-                          { currency: "BTC", balance: "1.25680", symbol: "₿", color: "bg-orange-500" },
-                          { currency: "ETH", balance: "28.9520", symbol: "Ξ", color: "bg-blue-500" },
-                          { currency: "BNB", balance: "156.750", symbol: "B", color: "bg-yellow-500" }
-                        ].map((asset) => (
-                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
+                          { symbol: "USDT", name: "Tether", balance: "45,230.50", value: "45,230.50", marketCap: "117.9B" },
+                          { symbol: "BTC", name: "Bitcoin", balance: "1.25680", value: "62,450.00", marketCap: "1.2T" },
+                          { symbol: "ETH", name: "Ethereum", balance: "28.9520", value: "89,756.30", marketCap: "400.8B" },
+                          { symbol: "BNB", name: "BNB", balance: "156.750", value: "67,043.75", marketCap: "85.6B" }
+                        ].map((currency, index) => (
+                          <div key={currency.symbol} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all">
                             <div className="flex items-center space-x-3">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${asset.color}`}>
-                                {asset.symbol}
+                              <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                                <span className="text-[#00D4AA] font-bold">{currency.symbol.charAt(0)}</span>
                               </div>
                               <div>
-                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
-                                <div className="text-sm text-gray-500">可用余额</div>
+                                <div className="font-semibold">{currency.symbol}</div>
+                                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                  {currency.name}
+                                </div>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-3">
-                              <div className="text-right">
-                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.balance}</div>
-                                <div className="text-sm text-gray-500">余额</div>
+                            <div className="flex items-center gap-3">
+                              <div className="flex-shrink-0">
+                                <KlineChart 
+                                  height={28}
+                                  width={64}
+                                />
                               </div>
-                              <Button 
-                                size="sm" 
-                                className="bg-[#00D4AA] hover:bg-[#00B89A] text-white border-0"
-                                variant="outline"
-                              >
-                                管理
-                              </Button>
+                              <div className="text-right">
+                                <div className="font-bold">{balanceVisible ? currency.balance : "****"}</div>
+                                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                  ≈ ${balanceVisible ? convertBalance(currency.value, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
+                                </div>
+                                {currency.marketCap && (
+                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                                    市值: {currency.marketCap}
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           </div>
                         ))}
