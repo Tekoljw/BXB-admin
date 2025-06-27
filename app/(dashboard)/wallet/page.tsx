@@ -2050,18 +2050,21 @@ export default function WalletPage() {
                             <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
                               $
                             </div>
-                            <div>
-                              <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>USD资产</div>
-                              <div className="text-sm text-gray-500">85,430.50</div>
+                            <div className="flex-1">
+                              <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>USD</div>
+                              <div className="text-sm text-gray-500">商户资产</div>
                             </div>
                           </div>
-                          <Button 
-                            size="sm" 
-                            className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                            variant="outline"
-                          >
-                            换U
-                          </Button>
+                          <div className="flex items-center space-x-3">
+                            <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>85,430.50</div>
+                            <Button 
+                              size="sm" 
+                              className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 w-10 h-10 p-0"
+                              variant="outline"
+                            >
+                              <ArrowUpRight className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
 
                         {/* 右边：USD代付备用金卡片 */}
@@ -2070,18 +2073,21 @@ export default function WalletPage() {
                             <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
                               $
                             </div>
-                            <div>
-                              <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>USD代付备用金</div>
-                              <div className="text-sm text-gray-500">25,430.50</div>
+                            <div className="flex-1">
+                              <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>USD</div>
+                              <div className="text-sm text-gray-500">代付备用金</div>
                             </div>
                           </div>
-                          <Button 
-                            size="sm" 
-                            className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0"
-                            variant="outline"
-                          >
-                            充值
-                          </Button>
+                          <div className="flex items-center space-x-3">
+                            <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>25,430.50</div>
+                            <Button 
+                              size="sm" 
+                              className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-10 h-10 p-0"
+                              variant="outline"
+                            >
+                              <ArrowDownLeft className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
                       </div>
 
