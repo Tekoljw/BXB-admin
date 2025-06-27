@@ -44,7 +44,8 @@ import {
   CheckCircle,
   Calendar,
   MessageCircle,
-  Users
+  Users,
+  Receipt
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -189,7 +190,8 @@ export default function WalletPage() {
     { id: "理财账户", label: "理财账户", icon: PiggyBank },
     { id: "U卡账户", label: "U卡账户", icon: CreditCard },
     { id: "佣金账户", label: "佣金账户", icon: Percent },
-    { id: "担保账户", label: "担保账户", icon: Shield }
+    { id: "担保账户", label: "担保账户", icon: Shield },
+    { id: "BePAY账户", label: "BePAY账户", icon: Receipt }
   ]
 
   const orderTabs = [
@@ -199,6 +201,7 @@ export default function WalletPage() {
     { id: "U卡订单", label: "U卡订单", icon: CreditCard },
     { id: "佣金记录", label: "佣金记录", icon: Percent },
     { id: "担保记录", label: "担保记录", icon: Shield },
+    { id: "支付订单", label: "支付订单", icon: Receipt },
     { id: "入金提币记录", label: "入金提币记录", icon: ArrowUpDown },
     { id: "内转记录", label: "内转记录", icon: ArrowLeftRight },
     { id: "划转记录", label: "划转记录", icon: ArrowLeftRight },
@@ -491,6 +494,41 @@ export default function WalletPage() {
         time: "2024-01-15 13:15:10"
       }
     ],
+    "支付订单": [
+      {
+        id: "PAY001",
+        type: "收款",
+        merchant: "商户A",
+        amount: "1,250.00 USDT",
+        channel: "支付宝",
+        status: "已完成",
+        time: "2024-01-15 16:30:25",
+        orderNo: "P202401151630001",
+        fee: "3.75 USDT"
+      },
+      {
+        id: "PAY002", 
+        type: "代付",
+        merchant: "商户B",
+        amount: "850.00 USDT",
+        channel: "微信支付",
+        status: "处理中",
+        time: "2024-01-15 14:20:18",
+        orderNo: "P202401151420002",
+        fee: "2.55 USDT"
+      },
+      {
+        id: "PAY003",
+        type: "退款",
+        merchant: "商户C",
+        amount: "320.00 USDT",
+        channel: "银行卡",
+        status: "已完成",
+        time: "2024-01-15 11:45:30",
+        orderNo: "P202401151145003",
+        fee: "0.96 USDT"
+      }
+    ],
     "充提币记录": [
       {
         id: "DW001",
@@ -620,12 +658,13 @@ export default function WalletPage() {
     总资产: {
       total: "19,134.34",
       accounts: [
-        { name: "现金账户", balance: "8,567.89", icon: CreditCard, percentage: "44.8%" },
-        { name: "合约账户", balance: "3,456.78", icon: BarChart3, percentage: "18.1%" },
-        { name: "理财账户", balance: "2,345.67", icon: PiggyBank, percentage: "12.3%" },
-        { name: "U卡账户", balance: "1,234.56", icon: DollarSign, percentage: "6.5%" },
-        { name: "佣金账户", balance: "567.89", icon: Gift, percentage: "3.0%" },
-        { name: "担保账户", balance: "5,000.00", icon: Shield, percentage: "26.1%" }
+        { name: "现金账户", balance: "8,567.89", icon: CreditCard, percentage: "38.5%" },
+        { name: "合约账户", balance: "3,456.78", icon: BarChart3, percentage: "15.5%" },
+        { name: "理财账户", balance: "2,345.67", icon: PiggyBank, percentage: "10.5%" },
+        { name: "U卡账户", balance: "1,234.56", icon: DollarSign, percentage: "5.5%" },
+        { name: "佣金账户", balance: "567.89", icon: Gift, percentage: "2.5%" },
+        { name: "担保账户", balance: "5,000.00", icon: Shield, percentage: "22.5%" },
+        { name: "BePAY账户", balance: "1,125.47", icon: Receipt, percentage: "5.0%" }
       ]
     }
   }
@@ -680,6 +719,32 @@ export default function WalletPage() {
       positions: [
         { pair: "BTCUSDT", margin: "2,000.00", leverage: "10x", status: "正常" },
         { pair: "ETHUSDT", margin: "1,200.00", leverage: "5x", status: "正常" }
+      ]
+    },
+    BePAY账户: {
+      merchantAssets: "1,125.47",
+      standbyFunds: "2,800.00",
+      totalBalance: "3,925.47",
+      todayRevenue: "+45.67",
+      monthRevenue: "+1,234.56",
+      successRate: "99.2%",
+      totalOrders: 1847,
+      activeChannels: 5,
+      channels: [
+        { name: "支付宝", status: "正常", successRate: "99.8%", todayAmount: "15,678.00", icon: "💰" },
+        { name: "微信支付", status: "正常", successRate: "99.5%", todayAmount: "12,345.00", icon: "💬" },
+        { name: "银行卡", status: "维护中", successRate: "98.9%", todayAmount: "8,900.00", icon: "🏦" },
+        { name: "云闪付", status: "正常", successRate: "99.1%", todayAmount: "5,600.00", icon: "⚡" },
+        { name: "数字钱包", status: "正常", successRate: "99.3%", todayAmount: "3,200.00", icon: "📱" }
+      ],
+      recentTransactions: [
+        { orderId: "BP001", type: "收款", amount: "1,250.00", channel: "支付宝", status: "成功", time: "16:30" },
+        { orderId: "BP002", type: "代付", amount: "850.00", channel: "微信支付", status: "处理中", time: "16:25" },
+        { orderId: "BP003", type: "退款", amount: "320.00", channel: "银行卡", status: "成功", time: "16:20" }
+      ],
+      assetDistribution: [
+        { name: "商户资产", value: 1125.47, percentage: 28.7, color: "#00D4AA" },
+        { name: "代付备用金", value: 2800.00, percentage: 71.3, color: "#3B82F6" }
       ]
     }
   }
