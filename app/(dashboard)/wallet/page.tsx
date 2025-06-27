@@ -107,6 +107,14 @@ export default function WalletPage() {
   const [exchangeAmount, setExchangeAmount] = useState("")
   const [estimatedUSDT, setEstimatedUSDT] = useState("")
 
+  // 代付备用金充值弹窗状态
+  const [showStandbyFundModal, setShowStandbyFundModal] = useState(false)
+  const [standbyFundModalAnimating, setStandbyFundModalAnimating] = useState(false)
+  const [standbyRechargeTab, setStandbyRechargeTab] = useState("法币充值") // "法币充值" or "USDT充值"
+  const [standbyRechargeCurrency, setStandbyRechargeCurrency] = useState("USD") // 选择的充值币种
+  const [standbyRechargeAmount, setStandbyRechargeAmount] = useState("") // 充值金额
+  const [estimatedStandbyAmount, setEstimatedStandbyAmount] = useState("") // 估算的代付备用金数量
+
   // 今日汇率 (示例汇率)
   const exchangeRates = {
     USD: 1.0,
@@ -128,6 +136,35 @@ export default function WalletPage() {
   const handleExchangeAmountChange = (value: string) => {
     setExchangeAmount(value)
     setEstimatedUSDT(calculateEstimatedUSDT(value, selectedFiatCurrency))
+  }
+
+  // 计算代付备用金充值估算
+  const calculateStandbyFundAmount = (amount: string, currency: string, isUSDTRecharge: boolean) => {
+    if (!amount) return ""
+    
+    if (isUSDTRecharge) {
+      // USDT充值：计算能充值多少法币代付备用金
+      const rate = exchangeRates[currency as keyof typeof exchangeRates] || 1
+      const fiatAmount = parseFloat(amount) / rate
+      return fiatAmount.toFixed(2)
+    } else {
+      // 法币充值：直接显示充值金额
+      return amount
+    }
+  }
+
+  // 处理代付备用金卡片点击
+  const handleStandbyFundClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowStandbyFundModal(true)
+    setTimeout(() => setStandbyFundModalAnimating(true), 50)
+  }
+
+  // 处理代付备用金充值金额变化
+  const handleStandbyRechargeAmountChange = (value: string) => {
+    setStandbyRechargeAmount(value)
+    const isUSDTRecharge = standbyRechargeTab === "USDT充值"
+    setEstimatedStandbyAmount(calculateStandbyFundAmount(value, standbyRechargeCurrency, isUSDTRecharge))
   }
 
   // 处理法币选择变化
@@ -1906,7 +1943,12 @@ export default function WalletPage() {
                   {balanceVisible ? "$125,860.00" : "****"}
                 </div>
                 <div className="text-gray-500 text-sm">
-                  代付备用金：$38,520.00
+                  <button 
+                    onClick={handleStandbyFundClick}
+                    className="hover:text-[#00D4AA] transition-colors cursor-pointer underline"
+                  >
+                    代付备用金：$38,520.00
+                  </button>
                 </div>
               </div>
 
@@ -4347,6 +4389,160 @@ export default function WalletPage() {
                     确认兑换
                   </Button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 代付备用金充值弹窗 */}
+      {showStandbyFundModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* 背景遮罩 */}
+          <div 
+            className={`absolute inset-0 bg-black transition-opacity duration-300 ${
+              standbyFundModalAnimating ? 'bg-opacity-50' : 'bg-opacity-0'
+            }`}
+            onClick={() => {
+              setStandbyFundModalAnimating(false)
+              setTimeout(() => setShowStandbyFundModal(false), 300)
+            }}
+          />
+          
+          {/* 弹窗内容 */}
+          <div className={`relative w-full max-w-md mx-4 rounded-lg shadow-lg transition-all duration-300 ease-out ${
+            standbyFundModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          } ${isDark ? 'bg-[#1a1b23] border border-[#3a3d4a]' : 'bg-white border border-gray-200'}`}>
+            <div className="p-6">
+              {/* 标题 */}
+              <div className="flex justify-between items-center mb-6">
+                <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  充值代付备用金
+                </h2>
+                <button
+                  onClick={() => {
+                    setStandbyFundModalAnimating(false)
+                    setTimeout(() => setShowStandbyFundModal(false), 300)
+                  }}
+                  className={`p-2 rounded-lg hover:bg-opacity-80 ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                {/* 1. 选择充值币种 */}
+                <div className="space-y-2">
+                  <label className={`text-sm font-medium block ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    1. 选择充值币种
+                  </label>
+                  <select
+                    value={standbyRechargeCurrency}
+                    onChange={(e) => {
+                      setStandbyRechargeCurrency(e.target.value)
+                      setStandbyRechargeAmount("")
+                      setEstimatedStandbyAmount("")
+                    }}
+                    className={`w-full p-3 rounded-lg border ${isDark ? 'bg-[#2a2d3a] border-[#3a3d4a] text-white' : 'bg-white border-gray-300'}`}
+                  >
+                    <option value="USD">USD - 美元</option>
+                    <option value="EUR">EUR - 欧元</option>
+                    <option value="GBP">GBP - 英镑</option>
+                    <option value="JPY">JPY - 日元</option>
+                  </select>
+                </div>
+
+                {/* 2. 页签：法币充值/USDT充值 */}
+                <div className="space-y-3">
+                  <label className={`text-sm font-medium block ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    2. 充值方式
+                  </label>
+                  <div className="flex gap-2">
+                    {["法币充值", "USDT充值"].map(tab => (
+                      <button
+                        key={tab}
+                        onClick={() => {
+                          setStandbyRechargeTab(tab)
+                          setStandbyRechargeAmount("")
+                          setEstimatedStandbyAmount("")
+                        }}
+                        className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 border-2 ${
+                          standbyRechargeTab === tab
+                            ? 'bg-[#00D4AA] text-white border-[#00D4AA]'
+                            : 'bg-transparent border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800'
+                        }`}
+                      >
+                        {tab}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 当前余额显示 */}
+                <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d3a]' : 'bg-gray-50'}`}>
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    {standbyRechargeTab === "法币充值" ? "当前法币资产余额" : "当前USDT余额"}
+                  </div>
+                  <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {standbyRechargeTab === "法币充值" 
+                      ? `${standbyRechargeCurrency === "USD" ? "$" : standbyRechargeCurrency === "EUR" ? "€" : standbyRechargeCurrency === "GBP" ? "£" : "¥"}125,860.00` 
+                      : "68,420.50 USDT"
+                    }
+                  </div>
+                </div>
+
+                {/* 输入金额 */}
+                <div className="space-y-2">
+                  <label className={`text-sm font-medium block ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    {standbyRechargeTab === "法币充值" ? "3. 输入充值金额" : "3. 输入USDT金额"}
+                  </label>
+                  <input
+                    type="number"
+                    placeholder={standbyRechargeTab === "法币充值" ? "请输入充值金额" : "请输入USDT金额"}
+                    value={standbyRechargeAmount}
+                    onChange={(e) => handleStandbyRechargeAmountChange(e.target.value)}
+                    className={`w-full p-3 rounded-lg border ${isDark ? 'bg-[#2a2d3a] border-[#3a3d4a] text-white placeholder-gray-400' : 'bg-white border-gray-300'}`}
+                  />
+                </div>
+
+                {/* USDT充值时显示汇率和计算 */}
+                {standbyRechargeTab === "USDT充值" && standbyRechargeAmount && (
+                  <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d3a]' : 'bg-gray-50'}`}>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-2`}>
+                      今日汇率：1 USDT = {exchangeRates[standbyRechargeCurrency as keyof typeof exchangeRates]} {standbyRechargeCurrency}
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      可充值代付备用金：
+                    </div>
+                    <div className={`text-lg font-semibold ${isDark ? 'text-[#00D4AA]' : 'text-[#00D4AA]'}`}>
+                      {estimatedStandbyAmount} {standbyRechargeCurrency}
+                    </div>
+                  </div>
+                )}
+
+                {/* 法币充值时显示充值结果 */}
+                {standbyRechargeTab === "法币充值" && standbyRechargeAmount && (
+                  <div className={`p-3 rounded-lg ${isDark ? 'bg-[#00D4AA]/10 border border-[#00D4AA]/30' : 'bg-[#00D4AA]/10 border border-[#00D4AA]/30'}`}>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      充值代付备用金：
+                    </div>
+                    <div className={`text-lg font-semibold ${isDark ? 'text-[#00D4AA]' : 'text-[#00D4AA]'}`}>
+                      {standbyRechargeAmount} {standbyRechargeCurrency}
+                    </div>
+                  </div>
+                )}
+
+                {/* 确认按钮 */}
+                <button
+                  disabled={!standbyRechargeAmount || parseFloat(standbyRechargeAmount) <= 0}
+                  className={`w-full py-3 rounded-lg font-medium transition-all duration-200 ${
+                    !standbyRechargeAmount || parseFloat(standbyRechargeAmount) <= 0
+                      ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                      : 'bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90'
+                  }`}
+                >
+                  确认充值
+                </button>
               </div>
             </div>
           </div>
