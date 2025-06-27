@@ -2260,104 +2260,9 @@ export default function WalletPage() {
               )}
             </div>
 
-            {/* 统计信息 */}
-            <div className={`${cardStyle} rounded-lg p-6`}>
-              <h3 className="text-lg font-semibold mb-4">支付统计</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className={`text-2xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {walletData.BePAY账户.successRate}
-                  </div>
-                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>成功率</div>
-                </div>
-                <div className="text-center">
-                  <div className={`text-2xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {walletData.BePAY账户.totalOrders.toLocaleString()}
-                  </div>
-                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>总订单</div>
-                </div>
-                <div className="text-center">
-                  <div className={`text-2xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {walletData.BePAY账户.activeChannels}
-                  </div>
-                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>活跃通道</div>
-                </div>
-                <div className="text-center">
-                  <div className={`text-2xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {walletData.BePAY账户.monthRevenue}
-                  </div>
-                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>月收益</div>
-                </div>
-              </div>
-            </div>
 
-            {/* 通道监控 */}
-            <div className={`${cardStyle} rounded-lg p-6`}>
-              <h3 className="text-lg font-semibold mb-4">通道监控</h3>
-              <div className="space-y-4">
-                {walletData.BePAY账户.channels.map((channel, index) => (
-                  <div key={index} className={`flex items-center justify-between p-4 rounded-lg border ${isDark ? 'border-[#252842] bg-[#1a1d29]' : 'border-gray-200 bg-gray-50'}`}>
-                    <div className="flex items-center space-x-3">
-                      <span className="text-2xl">{channel.icon}</span>
-                      <div>
-                        <div className="font-medium">{channel.name}</div>
-                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                          成功率: {channel.successRate}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        channel.status === "正常" 
-                          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                          : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
-                      }`}>
-                        {channel.status}
-                      </div>
-                      <div className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        今日: ¥{channel.todayAmount}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
 
-            {/* 最近交易 */}
-            <div className={`${cardStyle} rounded-lg p-6`}>
-              <h3 className="text-lg font-semibold mb-4">最近交易</h3>
-              <div className="space-y-3">
-                {walletData.BePAY账户.recentTransactions.map((tx, index) => (
-                  <div key={index} className={`flex items-center justify-between p-3 rounded-lg border ${isDark ? 'border-[#252842]' : 'border-gray-200'}`}>
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        tx.type === "收款" ? "bg-green-100 text-green-600" :
-                        tx.type === "代付" ? "bg-blue-100 text-blue-600" :
-                        "bg-yellow-100 text-yellow-600"
-                      }`}>
-                        {tx.type === "收款" ? "+" : tx.type === "代付" ? "-" : "↩"}
-                      </div>
-                      <div>
-                        <div className="font-medium">{tx.type}</div>
-                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                          {tx.orderId} • {tx.channel}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-semibold">¥{tx.amount}</div>
-                      <div className={`text-xs ${
-                        tx.status === "成功" ? "text-green-500" :
-                        tx.status === "处理中" ? "text-blue-500" :
-                        "text-gray-500"
-                      }`}>
-                        {tx.status} • {tx.time}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+
           </div>
         )
 
@@ -2844,10 +2749,7 @@ export default function WalletPage() {
                 <PieChart className="h-6 w-6 mb-2 text-[#00D4AA]" />
                 <span className="text-sm font-medium">资产分布</span>
               </Button>
-              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
-                <BarChart3 className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">成功率分析</span>
-              </Button>
+
               <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
                 <Settings className="h-6 w-6 mb-2 text-[#00D4AA]" />
                 <span className="text-sm font-medium">通道配置</span>
@@ -2859,20 +2761,7 @@ export default function WalletPage() {
                 <ArrowLeftRight className="h-6 w-6 mb-2 text-[#00D4AA]" />
                 <span className="text-sm font-medium">划转</span>
               </Button>
-              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
-                <History className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">资金记录</span>
-              </Button>
-              <Button 
-                onClick={() => {
-                  setTopLevelTab("订单记录")
-                  setOrderTab("支付订单")
-                }}
-                className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-              >
-                <Receipt className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">订单记录</span>
-              </Button>
+
             </div>
 
             {/* 统计信息 */}
