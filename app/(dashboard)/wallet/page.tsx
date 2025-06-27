@@ -1868,14 +1868,14 @@ export default function WalletPage() {
             {/* 页签导航 - 根据选中的卡片显示不同的页签 */}
             <div className="flex flex-col lg:flex-row gap-4">
                 {/* 文字页签 */}
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-2 lg:flex lg:flex-wrap gap-2 w-full">
                   {selectedPaymentCard === "fiat" ? (
                     <>
-                      {["商户资产", "通道配置", "法币换U", "代付充值"].map((tab) => (
+                      {["商户资产", "通道配置", "法币换U", "代付充值"].map((tab, index) => (
                         <Button
                           key={tab}
                           onClick={() => setFiatTab(tab)}
-                          className={`transition-all duration-200 text-base font-bold ${
+                          className={`transition-all duration-200 text-base font-bold w-full lg:w-auto flex-1 lg:flex-none ${
                             fiatTab === tab
                               ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
@@ -1888,11 +1888,11 @@ export default function WalletPage() {
                     </>
                   ) : (
                     <>
-                      {["商户资产", "地址管理", "通道配置", "划转"].map((tab) => (
+                      {["商户资产", "地址管理", "通道配置", "划转"].map((tab, index) => (
                         <Button
                           key={tab}
                           onClick={() => setCryptoTab(tab)}
-                          className={`transition-all duration-200 text-base font-bold ${
+                          className={`transition-all duration-200 text-base font-bold w-full lg:w-auto flex-1 lg:flex-none ${
                             cryptoTab === tab
                               ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
