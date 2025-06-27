@@ -111,6 +111,13 @@ export default function WalletPage() {
   const [showMoreCurrencies, setShowMoreCurrencies] = useState(false) // 显示更多币种弹窗
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
   
+  // 确保当前币种页签在选中的币种列表中
+  useEffect(() => {
+    if (!selectedCurrencies.includes(currencyTab) && selectedCurrencies.length > 0) {
+      setCurrencyTab(selectedCurrencies[0])
+    }
+  }, [selectedCurrencies, currencyTab])
+  
   // 代付备用金充值弹窗状态
   const [showStandbyRechargeModal, setShowStandbyRechargeModal] = useState(false)
   const [standbyRechargeAnimating, setStandbyRechargeAnimating] = useState(false)
