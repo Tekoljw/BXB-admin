@@ -48,7 +48,8 @@ import {
   Users,
   Receipt,
   Coins,
-  MapPin
+  MapPin,
+  Building2
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -1845,10 +1846,10 @@ export default function WalletPage() {
       case "BePAY账户":
         // 定义法币和加密货币页签
         const fiatTabs = [
-          { id: "商户资产", label: "商户资产", icon: DollarSign },
-          { id: "通道配置", label: "通道配置", icon: Settings },
-          { id: "结算", label: "结算", icon: CreditCard },
-          { id: "充值", label: "充值", icon: Plus }
+          { id: "商户资产", label: "商户资产", icon: Building2 },
+          { id: "通道配置", label: "通道配置", icon: CreditCard },
+          { id: "法币下发", label: "法币下发", icon: ArrowUpDown },
+          { id: "代付金充值", label: "代付金充值", icon: Plus }
         ]
         const fiatIconTabs = [
           { id: "资金记录", icon: FileText },
@@ -1857,9 +1858,9 @@ export default function WalletPage() {
         ]
         
         const cryptoTabs = [
-          { id: "商户资产", label: "商户资产", icon: PiggyBank },
+          { id: "商户资产", label: "商户资产", icon: Building2 },
           { id: "地址管理", label: "地址管理", icon: MapPin },
-          { id: "通道配置", label: "通道配置", icon: Settings },
+          { id: "通道配置", label: "通道配置", icon: CreditCard },
           { id: "划转", label: "划转", icon: ArrowLeftRight }
         ]
         const cryptoIconTabs = [
