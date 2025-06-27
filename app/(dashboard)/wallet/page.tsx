@@ -289,6 +289,14 @@ export default function WalletPage() {
         otc: 'OTC记录',
         quick: '快捷买卖记录'
       }
+    },
+    payment: {
+      name: '支付订单',
+      tabs: {
+        collect: '收款记录',
+        proxy: '代付记录',
+        refund: '退款记录'
+      }
     }
   }
 
@@ -2202,6 +2210,239 @@ export default function WalletPage() {
                     延长有效期
                   </Button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )
+
+      case "BePAY账户":
+        return (
+          <div className="space-y-6">
+            {/* 顶部卡片：商户资产和代付备用金 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* 商户资产卡片 */}
+              <div className={`${cardStyle} rounded-lg p-6`}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <Receipt className="h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-lg font-semibold">商户资产</h3>
+                  </div>
+                </div>
+                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? `${walletData.BePAY账户.merchantAssets} USDT` : "****"}
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-green-500 text-sm font-medium">今日收益: {walletData.BePAY账户.todayRevenue}</span>
+                </div>
+              </div>
+
+              {/* 代付备用金卡片 */}
+              <div className={`${cardStyle} rounded-lg p-6`}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <PiggyBank className="h-6 w-6 text-[#3B82F6]" />
+                    <h3 className="text-lg font-semibold">代付备用金</h3>
+                  </div>
+                </div>
+                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? `${walletData.BePAY账户.standbyFunds} USDT` : "****"}
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-blue-500 text-sm font-medium">本月收益: {walletData.BePAY账户.monthRevenue}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 功能按钮组 */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
+                <PieChart className="h-6 w-6 mb-2 text-[#00D4AA]" />
+                <span className="text-sm font-medium">资产分布</span>
+              </Button>
+              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
+                <BarChart3 className="h-6 w-6 mb-2 text-[#00D4AA]" />
+                <span className="text-sm font-medium">成功率分析</span>
+              </Button>
+              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
+                <Settings className="h-6 w-6 mb-2 text-[#00D4AA]" />
+                <span className="text-sm font-medium">通道配置</span>
+              </Button>
+              <Button 
+                onClick={handleTransferClick}
+                className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
+              >
+                <ArrowLeftRight className="h-6 w-6 mb-2 text-[#00D4AA]" />
+                <span className="text-sm font-medium">划转</span>
+              </Button>
+            </div>
+
+            {/* 统计信息 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              <h3 className="text-lg font-semibold mb-4">支付统计</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="text-center">
+                  <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {walletData.BePAY账户.successRate}
+                  </div>
+                  <div className="text-sm text-gray-500">成功率</div>
+                </div>
+                <div className="text-center">
+                  <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {walletData.BePAY账户.totalOrders.toLocaleString()}
+                  </div>
+                  <div className="text-sm text-gray-500">总订单数</div>
+                </div>
+                <div className="text-center">
+                  <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {walletData.BePAY账户.activeChannels}
+                  </div>
+                  <div className="text-sm text-gray-500">活跃通道</div>
+                </div>
+                <div className="text-center">
+                  <div className={`text-2xl font-bold text-green-500`}>
+                    {walletData.BePAY账户.monthRevenue}
+                  </div>
+                  <div className="text-sm text-gray-500">月收益</div>
+                </div>
+              </div>
+            </div>
+
+            {/* 资产分布饼图 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              <h3 className="text-lg font-semibold mb-4">资产分布</h3>
+              <div className="flex items-center justify-center">
+                <div className="relative w-48 h-48">
+                  <svg viewBox="0 0 42 42" className="w-full h-full">
+                    <circle
+                      cx="21"
+                      cy="21"
+                      r="15.915"
+                      fill="transparent"
+                      stroke="#e2e8f0"
+                      strokeWidth="3"
+                    />
+                    <circle
+                      cx="21"
+                      cy="21"
+                      r="15.915"
+                      fill="transparent"
+                      stroke="#00D4AA"
+                      strokeWidth="3"
+                      strokeDasharray="28.7 71.3"
+                      strokeDashoffset="25"
+                      transform="rotate(-90 21 21)"
+                    />
+                    <circle
+                      cx="21"
+                      cy="21"
+                      r="15.915"
+                      fill="transparent"
+                      stroke="#3B82F6"
+                      strokeWidth="3"
+                      strokeDasharray="71.3 28.7"
+                      strokeDashoffset="-3.7"
+                      transform="rotate(-90 21 21)"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {walletData.BePAY账户.totalBalance}
+                      </div>
+                      <div className="text-sm text-gray-500">总资产</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="ml-8 space-y-3">
+                  {walletData.BePAY账户.assetDistribution.map((item, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <div 
+                        className="w-4 h-4 rounded-full" 
+                        style={{ backgroundColor: item.color }}
+                      ></div>
+                      <div className="flex-1">
+                        <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {item.name}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {item.value.toLocaleString()} USDT ({item.percentage}%)
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* 支付通道状态 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              <h3 className="text-lg font-semibold mb-4">支付通道状态</h3>
+              <div className="space-y-4">
+                {walletData.BePAY账户.channels.map((channel, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-2xl">{channel.icon}</span>
+                      <div>
+                        <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {channel.name}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          成功率: {channel.successRate}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        ¥{channel.todayAmount}
+                      </div>
+                      <div className="text-sm">
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          channel.status === '正常' 
+                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
+                        }`}>
+                          {channel.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 最近交易 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              <h3 className="text-lg font-semibold mb-4">最近交易</h3>
+              <div className="space-y-3">
+                {walletData.BePAY账户.recentTransactions.map((tx, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <Receipt className="h-5 w-5 text-[#00D4AA]" />
+                      <div>
+                        <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {tx.type} - {tx.channel}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {tx.orderId} • {tx.time}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {tx.amount} USDT
+                      </div>
+                      <div className="text-sm">
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          tx.status === '成功' 
+                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
+                        }`}>
+                          {tx.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
