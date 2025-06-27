@@ -1817,44 +1817,139 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 功能按钮组 */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              <Button 
-                onClick={handlePositionModalClick}
-                className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-              >
-                <PieChart className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">资产分布</span>
-              </Button>
-              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
-                <BarChart3 className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">成功率分析</span>
-              </Button>
-              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
-                <Settings className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">通道配置</span>
-              </Button>
-              <Button 
-                onClick={handleTransferClick}
-                className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-              >
-                <ArrowLeftRight className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">划转</span>
-              </Button>
-              <Button className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10">
-                <History className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">资金记录</span>
-              </Button>
-              <Button 
-                onClick={() => {
-                  setTopLevelTab("订单记录")
-                  setOrderTab("支付订单")
-                }}
-                className="flex flex-col items-center p-4 h-auto bg-transparent border-2 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-              >
-                <Receipt className="h-6 w-6 mb-2 text-[#00D4AA]" />
-                <span className="text-sm font-medium">订单记录</span>
-              </Button>
+            {/* 功能按钮组 - 匹配钱包总览页面设计 */}
+            <div className="transform transition-all duration-300 ease-out">
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* 主要操作按钮 - 自动适配屏幕宽度 */}
+                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <Button 
+                    onClick={handlePositionModalClick}
+                    onMouseDown={() => setClickedAction("asset-distribution")}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-12 transition-all duration-200 text-base font-bold ${
+                      clickedAction === "asset-distribution"
+                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                        : selectedAction === "asset-distribution"
+                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
+                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <PieChart className="h-4 w-4 mr-2" />
+                    资产分布
+                  </Button>
+                  <Button 
+                    onMouseDown={() => setClickedAction("success-analysis")}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-12 transition-all duration-200 text-base font-bold ${
+                      clickedAction === "success-analysis"
+                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                        : selectedAction === "success-analysis"
+                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
+                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    成功率分析
+                  </Button>
+                  <Button 
+                    onMouseDown={() => setClickedAction("channel-config")}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-12 transition-all duration-200 text-base font-bold ${
+                      clickedAction === "channel-config"
+                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                        : selectedAction === "channel-config"
+                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
+                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <Settings className="h-4 w-4 mr-2" />
+                    通道配置
+                  </Button>
+                  <Button 
+                    onClick={handleTransferClick}
+                    onMouseDown={() => setClickedAction("transfer")}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-12 transition-all duration-200 text-base font-bold ${
+                      clickedAction === "transfer"
+                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                        : selectedAction === "transfer"
+                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
+                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <ArrowLeftRight className="h-4 w-4 mr-2" />
+                    划转
+                  </Button>
+                </div>
+                
+                {/* 记录按钮区域 - 右对齐 */}
+                <div className="flex justify-end md:justify-center gap-3">
+                  {/* 资金记录按钮 */}
+                  <Button
+                    onClick={() => handleActionClick("fund-records")}
+                    onMouseDown={() => setClickedAction("fund-records")}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-12 w-12 transition-all duration-200 ${
+                      clickedAction === "fund-records"
+                        ? "bg-[#00D4AA] border-[#00D4AA]"
+                        : selectedAction === "fund-records"
+                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                    title="资金记录"
+                  >
+                    <History 
+                      className={`h-4 w-4 transition-colors ${
+                        clickedAction === "fund-records"
+                          ? "text-white"
+                          : selectedAction === "fund-records" 
+                            ? "text-[#00D4AA]"
+                            : "text-black dark:text-white"
+                      }`} 
+                    />
+                  </Button>
+
+                  {/* 订单记录按钮 */}
+                  <Button
+                    onClick={() => {
+                      setTopLevelTab("订单记录")
+                      setOrderTab("支付订单")
+                    }}
+                    onMouseDown={() => setClickedAction("order-records")}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-12 w-12 transition-all duration-200 ${
+                      clickedAction === "order-records"
+                        ? "bg-[#00D4AA] border-[#00D4AA]"
+                        : selectedAction === "order-records"
+                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                    title="订单记录"
+                  >
+                    <Receipt 
+                      className={`h-4 w-4 transition-colors ${
+                        clickedAction === "order-records"
+                          ? "text-white"
+                          : selectedAction === "order-records" 
+                            ? "text-[#00D4AA]"
+                            : "text-black dark:text-white"
+                      }`} 
+                    />
+                  </Button>
+                </div>
+              </div>
             </div>
 
             {/* 统计信息 */}
