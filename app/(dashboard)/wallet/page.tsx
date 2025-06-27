@@ -1866,8 +1866,7 @@ export default function WalletPage() {
             </div>
 
             {/* 页签导航 - 根据选中的卡片显示不同的页签 */}
-            <div className={`${cardStyle} rounded-lg p-6`}>
-              <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex flex-col lg:flex-row gap-4">
                 {/* 文字页签 */}
                 <div className="flex flex-wrap gap-2">
                   {selectedPaymentCard === "fiat" ? (
@@ -2058,20 +2057,21 @@ export default function WalletPage() {
                               </div>
                               <div>
                                 <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
-                                <div className="text-sm text-gray-500">商户资产：{asset.merchantBalance} | 代付备用金：{asset.standbyBalance}</div>
+                                <div className="text-sm text-gray-500">商户资产：{asset.merchantBalance}</div>
+                                <div className="text-sm text-gray-500">代付备用金：{asset.standbyBalance}</div>
                               </div>
                             </div>
                             <div className="flex items-center space-x-2">
                               <Button 
                                 size="sm" 
-                                className="bg-[#00D4AA] hover:bg-[#00B89A] text-white border-0"
+                                className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                                 variant="outline"
                               >
-                                换U
+                                法币换U
                               </Button>
                               <Button 
                                 size="sm" 
-                                className="bg-blue-500 hover:bg-blue-600 text-white border-0"
+                                className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0"
                                 variant="outline"
                               >
                                 代付充值
