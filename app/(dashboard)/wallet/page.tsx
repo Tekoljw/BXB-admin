@@ -1805,17 +1805,24 @@ export default function WalletPage() {
                   {balanceVisible ? "$125,860.00" : "****"}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500 text-sm">换算美元 (可切换币种)</span>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-xs"
+                  <span className="text-gray-500 text-sm">换算美元</span>
+                  <button
                     onClick={(e) => {
                       e.stopPropagation()
+                      handleCurrencyModalClick()
                     }}
+                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
+                      isDark 
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
+                    }`}
                   >
-                    切换币种
-                  </Button>
+                    <div className="w-3 h-3 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold">
+                      <span className="text-white text-[8px]">$</span>
+                    </div>
+                    <span>USD</span>
+                    <ChevronDown className="h-2 w-2" />
+                  </button>
                 </div>
               </div>
 
@@ -1836,17 +1843,24 @@ export default function WalletPage() {
                   {balanceVisible ? "₮ 89,650.25" : "****"}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500 text-sm">换算USDT (可切换币种)</span>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-xs"
+                  <span className="text-gray-500 text-sm">换算USDT</span>
+                  <button
                     onClick={(e) => {
                       e.stopPropagation()
+                      handleCurrencyModalClick()
                     }}
+                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
+                      isDark 
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
+                    }`}
                   >
-                    切换币种
-                  </Button>
+                    <div className="w-3 h-3 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold">
+                      <span className="text-white text-[8px]">₮</span>
+                    </div>
+                    <span>USDT</span>
+                    <ChevronDown className="h-2 w-2" />
+                  </button>
                 </div>
               </div>
             </div>
