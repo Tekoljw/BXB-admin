@@ -1976,7 +1976,18 @@ export default function WalletPage() {
                       return (
                         <Button 
                           key={tab.id}
-                          onClick={() => setFiatTab(tab.id)}
+                          onClick={() => {
+                            if (tab.id === "法币下发") {
+                              setSelectedFiatCurrency("USD")
+                              setShowExchangeModal(true)
+                            } else if (tab.id === "代付金充值") {
+                              setStandbyRechargeCurrency("USD")
+                              setShowStandbyRechargeModal(true)
+                              setTimeout(() => setStandbyRechargeAnimating(true), 50)
+                            } else {
+                              setFiatTab(tab.id)
+                            }
+                          }}
                           className={`h-12 transition-all duration-200 text-base font-bold ${
                             isSelected
                               ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
