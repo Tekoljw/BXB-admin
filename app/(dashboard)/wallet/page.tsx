@@ -2393,54 +2393,6 @@ export default function WalletPage() {
                   
                   {fiatTab === "通道配置" && (
                     <div className="space-y-6">
-                      {/* 通道状态概览 */}
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div className={`${cardStyle} rounded-lg p-4`}>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-gray-500">活跃通道</p>
-                              <p className="text-2xl font-bold text-green-500">12</p>
-                            </div>
-                            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                              <CheckCircle className="h-5 w-5 text-green-500" />
-                            </div>
-                          </div>
-                        </div>
-                        <div className={`${cardStyle} rounded-lg p-4`}>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-gray-500">维护中</p>
-                              <p className="text-2xl font-bold text-yellow-500">3</p>
-                            </div>
-                            <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                              <Clock className="h-5 w-5 text-yellow-500" />
-                            </div>
-                          </div>
-                        </div>
-                        <div className={`${cardStyle} rounded-lg p-4`}>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-gray-500">异常通道</p>
-                              <p className="text-2xl font-bold text-red-500">1</p>
-                            </div>
-                            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                              <X className="h-5 w-5 text-red-500" />
-                            </div>
-                          </div>
-                        </div>
-                        <div className={`${cardStyle} rounded-lg p-4`}>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-gray-500">成功率</p>
-                              <p className="text-2xl font-bold text-blue-500">96.8%</p>
-                            </div>
-                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                              <TrendingUp className="h-5 w-5 text-blue-500" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
                       {/* 通道列表 */}
                       <div className={`${cardStyle} rounded-lg p-6`}>
 
