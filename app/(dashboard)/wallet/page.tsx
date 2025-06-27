@@ -2393,11 +2393,7 @@ export default function WalletPage() {
                   
                   {fiatTab === "通道配置" && (
                     <div className="space-y-6">
-                      {/* 通道列表 */}
-                      <div className={`${cardStyle} rounded-lg p-6`}>
-
-                        
-                        {/* 页签导航 - 币种和代收/代付在同一行 */}
+                      {/* 页签导航 - 币种和代收/代付在同一行 */}
                         <div className="mb-6">
                           <div className="flex items-center justify-between">
                             {/* 左侧 - 币种页签 */}
@@ -2517,9 +2513,6 @@ export default function WalletPage() {
                             </div>
                           ))}
                         </div>
-                      </div>
-
-
                     </div>
                   )}
                   
