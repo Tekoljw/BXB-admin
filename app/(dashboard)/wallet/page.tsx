@@ -2129,14 +2129,6 @@ export default function WalletPage() {
             </div>
           </div>
         )
-                      <div className="text-center py-12 text-gray-500">
-                        划转功能开发中...
-                      </div>
-                    </div>
-                  )}
-                  
-                  {cryptoTab === "划转记录" && (
-                    <div className="space-y-4">
                       <h3 className="text-lg font-semibold mb-4">划转记录</h3>
                       <div className="text-center py-12 text-gray-500">
                         划转记录功能开发中...
