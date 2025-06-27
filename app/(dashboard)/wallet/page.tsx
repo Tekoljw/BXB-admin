@@ -1861,7 +1861,6 @@ export default function WalletPage() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
-                      handleCurrencyModalClick()
                     }}
                     className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
                       isDark 
@@ -1888,6 +1887,39 @@ export default function WalletPage() {
               <div 
                 onClick={() => setSelectedPaymentCard("crypto")}
                 className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
+                  selectedPaymentCard === "crypto" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
+                }`}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <PiggyBank className="h-6 w-6 text-[#3B82F6]" />
+                    <h3 className="text-lg font-semibold">加密货币总余额</h3>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                    }}
+                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
+                      isDark 
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className="w-3 h-3 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold">
+                      <span className="text-white text-[8px]">₮</span>
+                    </div>
+                    <span>USDT</span>
+                    <ChevronDown className="h-2 w-2" />
+                  </button>
+                </div>
+                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? "45,230.50 USDT" : "****"}
+                </div>
+                <div className="text-gray-500 text-sm">
+                  其他币种：28.95 ETH + 1.26 BTC
+                </div>
+              </div>
+            </div>
                   selectedPaymentCard === "crypto" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
                 }`}
               >
