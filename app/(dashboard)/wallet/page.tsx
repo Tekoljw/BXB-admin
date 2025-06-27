@@ -2043,57 +2043,7 @@ export default function WalletPage() {
 
       case "BePAY账户":
         return renderBePayAccount()
-          <div className="space-y-6">
-            {/* 顶部卡片：法币总余额和加密货币总余额 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* 商户法币资产卡片 */}
-              <div 
-                onClick={() => setSelectedPaymentCard("fiat")}
-                className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
-                  selectedPaymentCard === "fiat" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
-                }`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <Banknote className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">法币资产</h3>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                    }}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
-                      isDark 
-                        ? "bg-transparent text-white hover:bg-gray-800" 
-                        : "bg-white text-black hover:bg-gray-50"
-                    }`}
-                  >
-                    <div className="w-3 h-3 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold">
-                      <span className="text-white text-[8px]">$</span>
-                    </div>
-                    <span>USD</span>
-                    <ChevronDown className="h-2 w-2" />
-                  </button>
-                </div>
-                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? "$125,860.00" : "****"}
-                </div>
-                <div className="text-gray-500 text-sm">
-                  代付备用金：$38,520.00
-                </div>
-              </div>
 
-              {/* 商户加密货币资产卡片 */}
-              <div 
-                onClick={() => setSelectedPaymentCard("crypto")}
-                className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
-                  selectedPaymentCard === "crypto" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
-                }`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <Coins className="h-6 w-6 text-[#3B82F6]" />
-                    <h3 className="text-lg font-semibold">加密货币资产</h3>
                   </div>
                   <button
                     onClick={(e) => {
