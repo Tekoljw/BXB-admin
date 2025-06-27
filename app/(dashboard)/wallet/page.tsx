@@ -2043,466 +2043,6 @@ export default function WalletPage() {
 
       case "BePAY账户":
         return renderBePayAccount()
-            <div className="transform transition-all duration-300 ease-out">
-              <div className="flex flex-col md:flex-row gap-4">
-                {/* 主要操作按钮 - 自动适配屏幕宽度 */}
-                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {selectedPaymentCard === "fiat" ? (
-                    fiatTabs.map((tab) => {
-                      const Icon = tab.icon
-                      const isSelected = fiatTab === tab.id
-                      
-                      return (
-                        <Button 
-                          key={tab.id}
-                          onClick={() => {
-                            if (tab.id === "法币下发") {
-                              setSelectedFiatCurrency("USD")
-                              setShowExchangeModal(true)
-                            } else if (tab.id === "代付金充值") {
-                              setStandbyRechargeCurrency("USD")
-                              setShowStandbyRechargeModal(true)
-                              setTimeout(() => setStandbyRechargeAnimating(true), 50)
-                            } else {
-                              setFiatTab(tab.id)
-                            }
-                          }}
-                          className={`h-12 transition-all duration-200 text-base font-bold ${
-                            isSelected
-                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
-                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                          }`}
-                          variant="outline"
-                        >
-                          <Icon className="h-4 w-4 mr-2" />
-                          {tab.label}
-                        </Button>
-                      )
-                    })
-                  ) : (
-                    cryptoTabs.map((tab) => {
-                      const Icon = tab.icon
-                      const isSelected = cryptoTab === tab.id
-                      
-                      return (
-                        <Button 
-                          key={tab.id}
-                          onClick={() => setCryptoTab(tab.id)}
-                          className={`h-12 transition-all duration-200 text-base font-bold ${
-                            isSelected
-                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
-                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                          }`}
-                          variant="outline"
-                        >
-                          <Icon className="h-4 w-4 mr-2" />
-                          {tab.label}
-                        </Button>
-                      )
-                    })
-                  )}
-                </div>
-                
-                {/* 图标按钮区域 - 右对齐 */}
-                <div className="flex justify-end md:justify-center gap-3">
-                  {selectedPaymentCard === "fiat" ? (
-                    fiatIconTabs.map((tab) => {
-                      const Icon = tab.icon
-                      const isSelected = fiatTab === tab.id
-                      
-                      return (
-                        <Button
-                          key={tab.id}
-                          onClick={tab.id === "资产分布" ? handlePositionModalClick : () => setFiatTab(tab.id)}
-                          className={`h-12 w-12 transition-all duration-200 ${
-                            isSelected
-                              ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                              : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                          }`}
-                          variant="outline"
-                          title={tab.id}
-                        >
-                          <Icon 
-                            className={`h-4 w-4 transition-colors ${
-                              isSelected 
-                                ? "text-[#00D4AA]"
-                                : "text-black dark:text-white"
-                            }`} 
-                          />
-                        </Button>
-                      )
-                    })
-                  ) : (
-                    cryptoIconTabs.map((tab) => {
-                      const Icon = tab.icon
-                      const isSelected = cryptoTab === tab.id
-                      
-                      return (
-                        <Button
-                          key={tab.id}
-                          onClick={tab.id === "资产分布" ? handlePositionModalClick : () => setCryptoTab(tab.id)}
-                          className={`h-12 w-12 transition-all duration-200 ${
-                            isSelected
-                              ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                              : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                          }`}
-                          variant="outline"
-                          title={tab.id}
-                        >
-                          <Icon 
-                            className={`h-4 w-4 transition-colors ${
-                              isSelected 
-                                ? "text-[#00D4AA]"
-                                : "text-black dark:text-white"
-                            }`} 
-                          />
-                        </Button>
-                      )
-                    })
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* 页签内容 */}
-            <div className={`${cardStyle} rounded-lg p-6`}>
-              {selectedPaymentCard === "fiat" ? (
-                <div>
-                  {fiatTab === "商户资产" && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex-1 relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                          <input
-                            type="text"
-                            placeholder="搜索法币..."
-                            className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
-                              isDark 
-                                ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
-                                : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
-                            }`}
-                          />
-                        </div>
-                        <div className="flex items-center space-x-2 ml-4">
-                          <button
-                            onClick={() => setShowAssetModal(true)}
-                            className={`w-10 h-10 rounded-lg border transition-all transform hover:scale-105 flex items-center justify-center ${
-                              isDark 
-                                ? "border-[#252842] hover:bg-[#252842]" 
-                                : "border-gray-300 hover:bg-gray-50"
-                            }`}
-                            title="管理资产"
-                          >
-                            <div className="flex flex-col items-center">
-                              <Plus className="h-3 w-3" />
-                              <Minus className="h-3 w-3 -mt-1" />
-                            </div>
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* 法币资产列表 */}
-                      <div className="grid gap-4">
-                        {[
-                          { currency: "USD", merchantBalance: "85,430.50", standbyBalance: "25,430.50", symbol: "$" },
-                          { currency: "EUR", merchantBalance: "12,680.25", standbyBalance: "8,680.25", symbol: "€" },
-                          { currency: "GBP", merchantBalance: "8,950.75", standbyBalance: "3,950.75", symbol: "£" },
-                          { currency: "JPY", merchantBalance: "2,580,000", standbyBalance: "890,000", symbol: "¥" }
-                        ].map((asset) => (
-                          <div key={asset.currency} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* 商户资产卡片 */}
-                            <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}
-                                 onClick={() => {
-                                   setSelectedFiatCurrency(asset.currency)
-                                   setShowExchangeModal(true)
-                                 }}>
-                              <div className="flex items-center space-x-3">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
-                                  {asset.symbol}
-                                </div>
-                                <div className="flex-1">
-                                  <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
-                                  <div className="text-sm text-gray-500">商户资产</div>
-                                </div>
-                              </div>
-                              <div className="flex items-center space-x-6">
-                                <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.merchantBalance}</div>
-                                <Button 
-                                  size="sm" 
-                                  className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 w-10 h-10 p-0"
-                                  variant="outline"
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    setSelectedFiatCurrency(asset.currency)
-                                    setShowExchangeModal(true)
-                                  }}
-                                >
-                                  <ArrowUpRight className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </div>
-
-                            {/* 代付备用金卡片 */}
-                            <div 
-                              className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}
-                              onClick={(e) => {
-                                setStandbyRechargeCurrency(asset.currency)
-                                handleStandbyRechargeClick(e)
-                              }}
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
-                                  {asset.symbol}
-                                </div>
-                                <div className="flex-1">
-                                  <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
-                                  <div className="text-sm text-gray-500">代付备用金</div>
-                                </div>
-                              </div>
-                              <div className="flex items-center space-x-6">
-                                <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.standbyBalance}</div>
-                                <Button 
-                                  size="sm" 
-                                  className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-10 h-10 p-0"
-                                  variant="outline"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <ArrowDownLeft className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* 加载更多按钮 */}
-                      <div className="text-center pt-4">
-                        <Button
-                          variant="outline"
-                          className={`px-6 py-2 ${isDark ? 'border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d3a]' : 'border-gray-300'}`}
-                        >
-                          加载更多 (4)
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {fiatTab === "通道配置" && (
-                    <div className="space-y-6">
-                      {/* 页签导航 - 币种和代收/代付在同一行 */}
-                      <div className="mb-6">
-                        <div className="flex items-center justify-between">
-                          {/* 左侧 - 币种页签 */}
-                          <div className="flex items-center space-x-2">
-                            {selectedCurrencies.map((currency, index) => (
-                              <button
-                                key={currency}
-                                onClick={() => {
-                                  setCurrencyTab(currency);
-                                  setPaymentMethodTab("代收");
-                                }}
-                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                                  currencyTab === currency
-                                    ? isDark 
-                                      ? "bg-white text-black"
-                                      : "bg-black text-white"
-                                    : isDark
-                                      ? "text-gray-300 hover:text-white"
-                                      : "text-gray-700 hover:text-gray-900"
-                                }`}
-                              >
-                                {currency}
-                              </button>
-                            ))}
-                            <button
-                              onClick={() => setShowMoreCurrencies(true)}
-                              className={`w-10 h-10 rounded-lg transition-all duration-200 flex items-center justify-center ${
-                                isDark
-                                  ? "text-gray-300 hover:text-white hover:bg-[#2a2d3a]"
-                                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
-                              }`}
-                            >
-                              <Plus className="h-4 w-4" />
-                            </button>
-                          </div>
-
-                          {/* 右侧 - 代收/代付页签 */}
-                          <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
-                            {getPaymentMethods(currencyTab).map((method, index) => (
-                              <button
-                                key={method}
-                                onClick={() => setPaymentMethodTab(method)}
-                                className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
-                                  paymentMethodTab === method
-                                    ? isDark ? "bg-white text-black" : "bg-black text-white"
-                                    : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
-                                }`}
-                              >
-                                {method}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-4">
-                          {getChannelsByCategory(currencyTab, paymentMethodTab).map((channel, index) => (
-                            <div key={index} className="flex items-center justify-between p-4 border border-gray-200 dark:border-[#3a3d4a] rounded-lg hover:shadow-md transition-all">
-                              <div className="flex items-center space-x-4">
-                                <div className={`w-3 h-3 rounded-full ${
-                                  channel.color === 'green' ? 'bg-green-500' :
-                                  channel.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'
-                                }`}></div>
-                                <div>
-                                  <div className="font-semibold">{channel.name}</div>
-                                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                                    {channel.type} • 成功率 {channel.successRate}
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="flex items-center space-x-6 text-sm">
-                                <div className="text-center">
-                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>日限额</div>
-                                  <div className="font-semibold">{channel.dailyLimit}</div>
-                                </div>
-                                <div className="text-center">
-                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>单笔限额</div>
-                                  <div className="font-semibold">{channel.minLimit}~{channel.maxLimit}</div>
-                                </div>
-                                <div className="text-center">
-                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>手续费</div>
-                                  <div className="font-semibold">{channel.fee}</div>
-                                </div>
-                                <div className="flex items-center space-x-3">
-                                  <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    className="h-8 px-3 text-xs"
-                                    onClick={() => {
-                                      // 打开收银台测试页面
-                                      window.open('/test-cashier?channel=' + encodeURIComponent(channel.name), '_blank');
-                                    }}
-                                  >
-                                    测试
-                                  </Button>
-                                  <div className="flex items-center">
-                                    <button
-                                      onClick={() => {
-                                        // 切换通道开关状态的逻辑
-                                        console.log(`切换 ${channel.name} 状态:`, !channel.enabled);
-                                      }}
-                                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                                        channel.enabled 
-                                          ? 'bg-[#00D4AA]' 
-                                          : isDark ? 'bg-gray-600' : 'bg-gray-300'
-                                      }`}
-                                    >
-                                      <span
-                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                                          channel.enabled ? 'translate-x-6' : 'translate-x-1'
-                                        }`}
-                                      />
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-
-                    </div>
-                  )}
-                  
-                  {/* 其他法币功能页签内容 */}
-                </div>
-              ) : (
-                <div>
-                  {cryptoTab === "商户资产" && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex-1 relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                          <input
-                            type="text"
-                            placeholder="搜索加密货币..."
-                            className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
-                              isDark 
-                                ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
-                                : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
-                            }`}
-                          />
-                        </div>
-                        <div className="flex items-center space-x-2 ml-4">
-                          <button
-                            onClick={() => setShowAssetModal(true)}
-                            className={`w-10 h-10 rounded-lg border transition-all transform hover:scale-105 flex items-center justify-center ${
-                              isDark 
-                                ? "border-[#252842] hover:bg-[#252842]" 
-                                : "border-gray-300 hover:bg-gray-50"
-                            }`}
-                            title="管理资产"
-                          >
-                            <div className="flex flex-col items-center">
-                              <Plus className="h-3 w-3" />
-                              <Minus className="h-3 w-3 -mt-1" />
-                            </div>
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        {[
-                          { symbol: "USDT", name: "Tether", balance: "45,230.50", value: "45,230.50", marketCap: "117.9B" },
-                          { symbol: "BTC", name: "Bitcoin", balance: "1.25680", value: "62,450.00", marketCap: "1.2T" },
-                          { symbol: "ETH", name: "Ethereum", balance: "28.9520", value: "89,756.30", marketCap: "400.8B" },
-                          { symbol: "BNB", name: "BNB", balance: "156.750", value: "67,043.75", marketCap: "85.6B" }
-                        ].map((currency, index) => (
-                          <div key={currency.symbol} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
-                                <span className="text-[#00D4AA] font-bold">{currency.symbol.charAt(0)}</span>
-                              </div>
-                              <div>
-                                <div className="font-semibold">{currency.symbol}</div>
-                                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                                  {currency.name}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <div className="flex-shrink-0">
-                                <KlineChart 
-                                  height={28}
-                                  width={64}
-                                />
-                              </div>
-                              <div className="text-right">
-                                <div className="font-bold">{balanceVisible ? currency.balance : "****"}</div>
-                                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                                  ≈ ${balanceVisible ? convertBalance(currency.value, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
-                                </div>
-                                {currency.marketCap && (
-                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-                                    市值: {currency.marketCap}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* 其他加密货币功能页签内容 */}
-                </div>
-              )}
-            </div>
-          </div>
-        )
-      }
 
       default:
         return <div>内容加载中...</div>
@@ -3176,6 +2716,442 @@ export default function WalletPage() {
       </div>
     </div>
   )
+
+  // BePAY merchant account rendering function
+  const renderBePayAccount = () => {
+    const [selectedPaymentCard, setSelectedPaymentCard] = useState("fiat")
+    const [fiatTab, setFiatTab] = useState("商户资产")
+    const [cryptoTab, setCryptoTab] = useState("商户资产")
+    const [selectedChannelCurrency, setSelectedChannelCurrency] = useState("USD")
+    const [selectedChannelType, setSelectedChannelType] = useState("代收")
+    const [showCurrencyModal, setShowCurrencyModal] = useState(false)
+    const [showAssetModal, setShowAssetModal] = useState(false)
+
+    const fiatTabs = [
+      { id: "商户资产", label: "商户资产", icon: Building2 },
+      { id: "代付备用金", label: "代付备用金", icon: Wallet },
+      { id: "通道配置", label: "通道配置", icon: Settings },
+      { id: "结算/充值", label: "结算/充值", icon: ArrowUpDown }
+    ]
+
+    const fiatIconTabs = [
+      { id: "资金记录", icon: Receipt },
+      { id: "订单记录", icon: FileText },
+      { id: "资产分布", icon: PieChart }
+    ]
+
+    const cryptoTabs = [
+      { id: "商户资产", label: "商户资产", icon: Building2 },
+      { id: "地址管理", label: "地址管理", icon: MapPin },
+      { id: "通道配置", label: "通道配置", icon: Settings },
+      { id: "划转", label: "划转", icon: ArrowRightLeft }
+    ]
+
+    const cryptoIconTabs = [
+      { id: "资金记录", icon: Receipt },
+      { id: "订单记录", icon: FileText },
+      { id: "资产分布", icon: PieChart }
+    ]
+
+    return (
+      <div className="space-y-6">
+        {/* 双卡片系统 - 法币和加密货币总余额 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* 法币总余额卡片 */}
+          <div 
+            className={`relative p-6 rounded-lg cursor-pointer transition-all duration-300 ${
+              selectedPaymentCard === "fiat" 
+                ? "bg-gradient-to-br from-[#00D4AA]/20 to-[#00B894]/10 border-2 border-[#00D4AA] ring-4 ring-[#00D4AA]/20" 
+                : `${cardStyle} border-2 border-transparent hover:border-[#00D4AA]/50`
+            }`}
+            onClick={() => setSelectedPaymentCard("fiat")}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                法币总余额
+              </h3>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">
+                  $
+                </div>
+              </div>
+            </div>
+            <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              {balanceVisible ? "123,456.78 USD" : "****"}
+            </div>
+            <div className="text-gray-500 text-sm">
+              等值: ≈ {balanceVisible ? "123,456.78 USDT" : "****"}
+            </div>
+            <div className="text-xs text-gray-400 mt-2">
+              包含: USD, EUR, GBP, JPY
+            </div>
+          </div>
+
+          {/* 加密货币总余额卡片 */}
+          <div 
+            className={`relative p-6 rounded-lg cursor-pointer transition-all duration-300 ${
+              selectedPaymentCard === "crypto" 
+                ? "bg-gradient-to-br from-[#00D4AA]/20 to-[#00B894]/10 border-2 border-[#00D4AA] ring-4 ring-[#00D4AA]/20" 
+                : `${cardStyle} border-2 border-transparent hover:border-[#00D4AA]/50`
+            }`}
+            onClick={() => setSelectedPaymentCard("crypto")}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                加密货币总余额
+              </h3>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-sm">
+                  ₮
+                </div>
+              </div>
+            </div>
+            <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              {balanceVisible ? "89,234.50 USDT" : "****"}
+            </div>
+            <div className="text-gray-500 text-sm">
+              等值: ≈ {balanceVisible ? "89,234.50 USD" : "****"}
+            </div>
+            <div className="text-xs text-gray-400 mt-2">
+              包含: USDT, BTC, ETH, BNB
+            </div>
+          </div>
+        </div>
+
+        {/* 功能按钮区域 */}
+        <div className="transform transition-all duration-300 ease-out">
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* 主要操作按钮 - 自动适配屏幕宽度 */}
+            <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
+              {selectedPaymentCard === "fiat" ? (
+                fiatTabs.map((tab) => {
+                  const Icon = tab.icon
+                  const isSelected = fiatTab === tab.id
+                  
+                  return (
+                    <Button 
+                      key={tab.id}
+                      onClick={() => setFiatTab(tab.id)}
+                      className={`h-12 transition-all duration-200 text-base font-bold ${
+                        isSelected
+                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                      }`}
+                      variant="outline"
+                    >
+                      <Icon className="h-4 w-4 mr-2" />
+                      {tab.label}
+                    </Button>
+                  )
+                })
+              ) : (
+                cryptoTabs.map((tab) => {
+                  const Icon = tab.icon
+                  const isSelected = cryptoTab === tab.id
+                  
+                  return (
+                    <Button 
+                      key={tab.id}
+                      onClick={() => setCryptoTab(tab.id)}
+                      className={`h-12 transition-all duration-200 text-base font-bold ${
+                        isSelected
+                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                      }`}
+                      variant="outline"
+                    >
+                      <Icon className="h-4 w-4 mr-2" />
+                      {tab.label}
+                    </Button>
+                  )
+                })
+              )}
+            </div>
+            
+            {/* 图标按钮区域 - 右对齐 */}
+            <div className="flex justify-end md:justify-center gap-3">
+              {selectedPaymentCard === "fiat" ? (
+                fiatIconTabs.map((tab) => {
+                  const Icon = tab.icon
+                  const isSelected = fiatTab === tab.id
+                  
+                  return (
+                    <Button
+                      key={tab.id}
+                      onClick={() => setFiatTab(tab.id)}
+                      className={`h-12 w-12 transition-all duration-200 ${
+                        isSelected
+                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                      }`}
+                      variant="outline"
+                      title={tab.id}
+                    >
+                      <Icon 
+                        className={`h-4 w-4 transition-colors ${
+                          isSelected 
+                            ? "text-[#00D4AA]"
+                            : "text-black dark:text-white"
+                        }`} 
+                      />
+                    </Button>
+                  )
+                })
+              ) : (
+                cryptoIconTabs.map((tab) => {
+                  const Icon = tab.icon
+                  const isSelected = cryptoTab === tab.id
+                  
+                  return (
+                    <Button
+                      key={tab.id}
+                      onClick={() => setCryptoTab(tab.id)}
+                      className={`h-12 w-12 transition-all duration-200 ${
+                        isSelected
+                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                      }`}
+                      variant="outline"
+                      title={tab.id}
+                    >
+                      <Icon 
+                        className={`h-4 w-4 transition-colors ${
+                          isSelected 
+                            ? "text-[#00D4AA]"
+                            : "text-black dark:text-white"
+                        }`} 
+                      />
+                    </Button>
+                  )
+                })
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* 页签内容 */}
+        <div className={`${cardStyle} rounded-lg p-6`}>
+          {selectedPaymentCard === "fiat" ? (
+            <div>
+              {fiatTab === "商户资产" && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex-1 relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="搜索法币..."
+                        className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
+                          isDark 
+                            ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                            : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                        }`}
+                      />
+                    </div>
+                  </div>
+
+                  {/* 法币资产列表 */}
+                  <div className="grid gap-4">
+                    {[
+                      { currency: "USD", merchantBalance: "85,430.50", standbyBalance: "25,430.50", symbol: "$" },
+                      { currency: "EUR", merchantBalance: "12,680.25", standbyBalance: "8,680.25", symbol: "€" },
+                      { currency: "GBP", merchantBalance: "8,950.75", standbyBalance: "3,950.75", symbol: "£" },
+                      { currency: "JPY", merchantBalance: "2,580,000", standbyBalance: "890,000", symbol: "¥" }
+                    ].map((asset) => (
+                      <div key={asset.currency} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* 商户资产卡片 */}
+                        <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}>
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                              {asset.symbol}
+                            </div>
+                            <div className="flex-1">
+                              <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
+                              <div className="text-sm text-gray-500">商户资产</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-6">
+                            <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.merchantBalance}</div>
+                            <Button 
+                              size="sm" 
+                              className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 w-10 h-10 p-0"
+                              variant="outline"
+                            >
+                              <ArrowUpRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* 代付备用金卡片 */}
+                        <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}>
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                              {asset.symbol}
+                            </div>
+                            <div className="flex-1">
+                              <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
+                              <div className="text-sm text-gray-500">代付备用金</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-6">
+                            <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.standbyBalance}</div>
+                            <Button 
+                              size="sm" 
+                              className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100 w-10 h-10 p-0"
+                              variant="outline"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {fiatTab === "通道配置" && (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* 币种选择 */}
+                    <div className="space-y-3">
+                      <label className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        选择法币
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {["USD", "EUR", "GBP", "JPY"].map((currency) => (
+                          <button
+                            key={currency}
+                            onClick={() => setSelectedChannelCurrency(currency)}
+                            className={`px-3 py-2 rounded-lg text-sm font-medium border-2 transition-all ${
+                              selectedChannelCurrency === currency
+                                ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                                : `border-black text-black hover:bg-gray-50 ${isDark ? 'border-white text-white hover:bg-gray-800' : ''}`
+                            }`}
+                          >
+                            {currency}
+                          </button>
+                        ))}
+                        <button
+                          onClick={() => setShowCurrencyModal(true)}
+                          className={`px-3 py-2 rounded-lg text-sm font-medium border-2 border-black text-black hover:bg-gray-50 ${isDark ? 'border-white text-white hover:bg-gray-800' : ''} flex items-center space-x-1`}
+                        >
+                          <Plus className="h-3 w-3" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 代收/代付选择 */}
+                    <div className="space-y-3">
+                      <label className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        通道类型
+                      </label>
+                      <div className="flex gap-2">
+                        {["代收", "代付"].map((type) => (
+                          <button
+                            key={type}
+                            onClick={() => setSelectedChannelType(type)}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium border-2 transition-all ${
+                              selectedChannelType === type
+                                ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                                : `border-black text-black hover:bg-gray-50 ${isDark ? 'border-white text-white hover:bg-gray-800' : ''}`
+                            }`}
+                          >
+                            {type}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 通道列表 */}
+                  <div className="space-y-4">
+                    {[
+                      { name: "Bank Transfer", status: "active", rate: "0.5%", limit: "1K-50K", speed: "2-6h" },
+                      { name: "Credit Card", status: "maintenance", rate: "2.8%", limit: "100-5K", speed: "即时" },
+                      { name: "Wire Transfer", status: "active", rate: "1.2%", limit: "5K-100K", speed: "1-3天" },
+                      { name: "Digital Wallet", status: "error", rate: "1.5%", limit: "50-10K", speed: "30分钟" }
+                    ].map((channel, index) => (
+                      <div key={index} className={`p-4 rounded-lg border ${cardStyle} hover:bg-opacity-80 transition-colors`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <div className={`w-3 h-3 rounded-full ${
+                              channel.status === "active" ? "bg-green-500" :
+                              channel.status === "maintenance" ? "bg-yellow-500" :
+                              "bg-red-500"
+                            }`}></div>
+                            <div>
+                              <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{channel.name}</div>
+                              <div className="text-sm text-gray-500">
+                                费率: {channel.rate} | 限额: {channel.limit} | 到账: {channel.speed}
+                              </div>
+                            </div>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                          >
+                            配置
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div>
+              {cryptoTab === "商户资产" && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex-1 relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="搜索加密货币..."
+                        className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
+                          isDark 
+                            ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                            : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                        }`}
+                      />
+                    </div>
+                  </div>
+
+                  {/* 加密货币资产列表 */}
+                  <div className="grid gap-4">
+                    {[
+                      { currency: "USDT", balance: "45,230.50", icon: "₮", color: "bg-green-500" },
+                      { currency: "BTC", balance: "1.26", icon: "₿", color: "bg-orange-500" },
+                      { currency: "ETH", balance: "28.95", icon: "Ξ", color: "bg-blue-500" },
+                      { currency: "BNB", balance: "156.80", icon: "⬢", color: "bg-yellow-500" }
+                    ].map((currency) => (
+                      <div key={currency.currency} className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} hover:bg-opacity-80 transition-colors cursor-pointer`}>
+                        <div className="flex items-center space-x-3">
+                          <div className={`w-10 h-10 rounded-full ${currency.color} flex items-center justify-center text-white font-bold text-sm`}>
+                            {currency.icon}
+                          </div>
+                          <div className="flex-1">
+                            <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{currency.currency}</div>
+                            <div className="text-sm text-gray-500">商户资产</div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-bold">{balanceVisible ? currency.balance : "****"}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   const renderAddCreditModal = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
