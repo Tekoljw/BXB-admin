@@ -1791,68 +1791,62 @@ export default function WalletPage() {
               {/* 法币总余额卡片 */}
               <div 
                 onClick={() => setSelectedPaymentCard("fiat")}
-                className={`cursor-pointer transition-all duration-300 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white transform hover:scale-105 ${
-                  selectedPaymentCard === "fiat" ? "ring-4 ring-blue-300 ring-opacity-50 shadow-2xl" : "shadow-lg"
+                className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
+                  selectedPaymentCard === "fiat" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
                 }`}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div>
+                  <div className="flex items-center space-x-2">
+                    <DollarSign className="h-6 w-6 text-[#00D4AA]" />
                     <h3 className="text-lg font-semibold">法币总余额</h3>
-                    <p className="text-blue-100 text-sm">换算美元 (可切换币种)</p>
                   </div>
-                  <DollarSign className="h-8 w-8 text-blue-200" />
                 </div>
-                <div className="space-y-2">
-                  <div className="text-2xl font-bold">
-                    {balanceVisible ? "$125,860.00" : "****"}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-blue-100 text-sm">可用余额: $98,430.50</span>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="text-white hover:bg-white/20 text-xs"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                      }}
-                    >
-                      切换币种
-                    </Button>
-                  </div>
+                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? "$125,860.00" : "****"}
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500 text-sm">换算美元 (可切换币种)</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-xs"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    切换币种
+                  </Button>
                 </div>
               </div>
 
               {/* 加密货币总余额卡片 */}
               <div 
                 onClick={() => setSelectedPaymentCard("crypto")}
-                className={`cursor-pointer transition-all duration-300 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white transform hover:scale-105 ${
-                  selectedPaymentCard === "crypto" ? "ring-4 ring-purple-300 ring-opacity-50 shadow-2xl" : "shadow-lg"
+                className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
+                  selectedPaymentCard === "crypto" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
                 }`}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div>
+                  <div className="flex items-center space-x-2">
+                    <Coins className="h-6 w-6 text-[#00D4AA]" />
                     <h3 className="text-lg font-semibold">加密货币总余额</h3>
-                    <p className="text-purple-100 text-sm">换算USDT (可切换币种)</p>
                   </div>
-                  <Coins className="h-8 w-8 text-purple-200" />
                 </div>
-                <div className="space-y-2">
-                  <div className="text-2xl font-bold">
-                    {balanceVisible ? "₮ 89,650.25" : "****"}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-purple-100 text-sm">可用余额: ₮ 76,320.18</span>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="text-white hover:bg-white/20 text-xs"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                      }}
-                    >
-                      切换币种
-                    </Button>
-                  </div>
+                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? "₮ 89,650.25" : "****"}
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500 text-sm">换算USDT (可切换币种)</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-xs"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                    }}
+                  >
+                    切换币种
+                  </Button>
                 </div>
               </div>
             </div>
@@ -2036,28 +2030,33 @@ export default function WalletPage() {
                 <div>
                   {fiatTab === "商户资产" && (
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4">法币商户资产</h3>
                       <div className="grid gap-4">
                         {[
-                          { currency: "USD", balance: "85,430.50", icon: "💵" },
-                          { currency: "EUR", balance: "12,680.25", icon: "💶" },
-                          { currency: "GBP", balance: "8,950.75", icon: "💷" },
-                          { currency: "JPY", balance: "2,580,000", icon: "💴" }
+                          { currency: "USD", balance: "85,430.50", symbol: "$" },
+                          { currency: "EUR", balance: "12,680.25", symbol: "€" },
+                          { currency: "GBP", balance: "8,950.75", symbol: "£" },
+                          { currency: "JPY", balance: "2,580,000", symbol: "¥" }
                         ].map((asset) => (
-                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'}`}>
+                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
                             <div className="flex items-center space-x-3">
-                              <span className="text-2xl">{asset.icon}</span>
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                                {asset.symbol}
+                              </div>
                               <div>
-                                <div className="font-semibold">{asset.currency}</div>
+                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
                                 <div className="text-sm text-gray-500">可用余额</div>
                               </div>
                             </div>
                             <div className="flex items-center space-x-3">
                               <div className="text-right">
-                                <div className="font-semibold">{asset.balance}</div>
+                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.balance}</div>
                                 <div className="text-sm text-gray-500">余额</div>
                               </div>
-                              <Button size="sm" className="bg-[#00D4AA] hover:bg-[#00B89A] text-white">
+                              <Button 
+                                size="sm" 
+                                className="bg-[#00D4AA] hover:bg-[#00B89A] text-white border-0"
+                                variant="outline"
+                              >
                                 结算
                               </Button>
                             </div>
@@ -2069,28 +2068,33 @@ export default function WalletPage() {
                   
                   {fiatTab === "代付备用金" && (
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4">代付备用金</h3>
                       <div className="grid gap-4">
                         {[
-                          { currency: "USD", balance: "25,430.50", icon: "💵" },
-                          { currency: "EUR", balance: "8,680.25", icon: "💶" },
-                          { currency: "GBP", balance: "3,950.75", icon: "💷" },
-                          { currency: "JPY", balance: "890,000", icon: "💴" }
+                          { currency: "USD", balance: "25,430.50", symbol: "$" },
+                          { currency: "EUR", balance: "8,680.25", symbol: "€" },
+                          { currency: "GBP", balance: "3,950.75", symbol: "£" },
+                          { currency: "JPY", balance: "890,000", symbol: "¥" }
                         ].map((asset) => (
-                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'}`}>
+                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
                             <div className="flex items-center space-x-3">
-                              <span className="text-2xl">{asset.icon}</span>
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-blue-500`}>
+                                {asset.symbol}
+                              </div>
                               <div>
-                                <div className="font-semibold">{asset.currency}</div>
+                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
                                 <div className="text-sm text-gray-500">备用金余额</div>
                               </div>
                             </div>
                             <div className="flex items-center space-x-3">
                               <div className="text-right">
-                                <div className="font-semibold">{asset.balance}</div>
+                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.balance}</div>
                                 <div className="text-sm text-gray-500">余额</div>
                               </div>
-                              <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white">
+                              <Button 
+                                size="sm" 
+                                className="bg-blue-500 hover:bg-blue-600 text-white border-0"
+                                variant="outline"
+                              >
                                 充值
                               </Button>
                             </div>
@@ -2149,28 +2153,33 @@ export default function WalletPage() {
                 <div>
                   {cryptoTab === "商户资产" && (
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4">加密货币商户资产</h3>
                       <div className="grid gap-4">
                         {[
-                          { currency: "USDT", balance: "45,230.50", icon: "₮" },
-                          { currency: "BTC", balance: "1.25680", icon: "₿" },
-                          { currency: "ETH", balance: "28.9520", icon: "Ξ" },
-                          { currency: "BNB", balance: "156.750", icon: "🔶" }
+                          { currency: "USDT", balance: "45,230.50", symbol: "₮", color: "bg-green-500" },
+                          { currency: "BTC", balance: "1.25680", symbol: "₿", color: "bg-orange-500" },
+                          { currency: "ETH", balance: "28.9520", symbol: "Ξ", color: "bg-blue-500" },
+                          { currency: "BNB", balance: "156.750", symbol: "B", color: "bg-yellow-500" }
                         ].map((asset) => (
-                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'}`}>
+                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
                             <div className="flex items-center space-x-3">
-                              <span className="text-2xl">{asset.icon}</span>
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${asset.color}`}>
+                                {asset.symbol}
+                              </div>
                               <div>
-                                <div className="font-semibold">{asset.currency}</div>
+                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
                                 <div className="text-sm text-gray-500">可用余额</div>
                               </div>
                             </div>
                             <div className="flex items-center space-x-3">
                               <div className="text-right">
-                                <div className="font-semibold">{asset.balance}</div>
+                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.balance}</div>
                                 <div className="text-sm text-gray-500">余额</div>
                               </div>
-                              <Button size="sm" className="bg-[#00D4AA] hover:bg-[#00B89A] text-white">
+                              <Button 
+                                size="sm" 
+                                className="bg-[#00D4AA] hover:bg-[#00B89A] text-white border-0"
+                                variant="outline"
+                              >
                                 管理
                               </Button>
                             </div>
