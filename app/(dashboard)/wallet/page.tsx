@@ -47,7 +47,8 @@ import {
   MessageCircle,
   Users,
   Receipt,
-  Coins
+  Coins,
+  MapPin
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -1843,8 +1844,29 @@ export default function WalletPage() {
 
       case "BePAY账户":
         // 定义法币和加密货币页签
-        const fiatTabs = ["商户资产", "代付备用金", "通道配置", "结算", "充值", "资金记录", "订单记录"]
-        const cryptoTabs = ["商户资产", "地址管理", "通道配置", "划转", "划转记录", "订单记录", "资产分布"]
+        const fiatTabs = [
+          { id: "商户资产", label: "商户资产", icon: DollarSign },
+          { id: "通道配置", label: "通道配置", icon: Settings },
+          { id: "结算", label: "结算", icon: CreditCard },
+          { id: "充值", label: "充值", icon: Plus }
+        ]
+        const fiatIconTabs = [
+          { id: "资金记录", icon: FileText },
+          { id: "订单记录", icon: BarChart2 },
+          { id: "资产分布", icon: PieChart }
+        ]
+        
+        const cryptoTabs = [
+          { id: "商户资产", label: "商户资产", icon: PiggyBank },
+          { id: "地址管理", label: "地址管理", icon: MapPin },
+          { id: "通道配置", label: "通道配置", icon: Settings },
+          { id: "划转", label: "划转", icon: ArrowLeftRight }
+        ]
+        const cryptoIconTabs = [
+          { id: "划转记录", icon: FileText },
+          { id: "订单记录", icon: BarChart2 },
+          { id: "资产分布", icon: PieChart }
+        ]
         
         return (
           <div className="space-y-6">
@@ -1925,37 +1947,115 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 页签选择 */}
-            <div className="flex flex-wrap gap-3">
-              {selectedPaymentCard === "fiat" ? (
-                fiatTabs.map(tab => (
-                  <button
-                    key={tab}
-                    onClick={() => setFiatTab(tab)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 border-2 ${
-                      fiatTab === tab
-                        ? 'bg-[#00D4AA] text-white border-[#00D4AA]'
-                        : 'bg-transparent border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800'
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))
-              ) : (
-                cryptoTabs.map(tab => (
-                  <button
-                    key={tab}
-                    onClick={() => setCryptoTab(tab)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 border-2 ${
-                      cryptoTab === tab
-                        ? 'bg-[#00D4AA] text-white border-[#00D4AA]'
-                        : 'bg-transparent border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800'
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))
-              )}
+            {/* 操作按钮区域 */}
+            <div className="transform transition-all duration-300 ease-out">
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* 主要操作按钮 - 自动适配屏幕宽度 */}
+                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {selectedPaymentCard === "fiat" ? (
+                    fiatTabs.map((tab) => {
+                      const Icon = tab.icon
+                      const isSelected = fiatTab === tab.id
+                      
+                      return (
+                        <Button 
+                          key={tab.id}
+                          onClick={() => setFiatTab(tab.id)}
+                          className={`h-12 transition-all duration-200 text-base font-bold ${
+                            isSelected
+                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                          }`}
+                          variant="outline"
+                        >
+                          <Icon className="h-4 w-4 mr-2" />
+                          {tab.label}
+                        </Button>
+                      )
+                    })
+                  ) : (
+                    cryptoTabs.map((tab) => {
+                      const Icon = tab.icon
+                      const isSelected = cryptoTab === tab.id
+                      
+                      return (
+                        <Button 
+                          key={tab.id}
+                          onClick={() => setCryptoTab(tab.id)}
+                          className={`h-12 transition-all duration-200 text-base font-bold ${
+                            isSelected
+                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                          }`}
+                          variant="outline"
+                        >
+                          <Icon className="h-4 w-4 mr-2" />
+                          {tab.label}
+                        </Button>
+                      )
+                    })
+                  )}
+                </div>
+                
+                {/* 图标按钮区域 - 右对齐 */}
+                <div className="flex justify-end md:justify-center gap-3">
+                  {selectedPaymentCard === "fiat" ? (
+                    fiatIconTabs.map((tab) => {
+                      const Icon = tab.icon
+                      const isSelected = fiatTab === tab.id
+                      
+                      return (
+                        <Button
+                          key={tab.id}
+                          onClick={() => setFiatTab(tab.id)}
+                          className={`h-12 w-12 transition-all duration-200 ${
+                            isSelected
+                              ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                              : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                          }`}
+                          variant="outline"
+                          title={tab.id}
+                        >
+                          <Icon 
+                            className={`h-4 w-4 transition-colors ${
+                              isSelected 
+                                ? "text-[#00D4AA]"
+                                : "text-black dark:text-white"
+                            }`} 
+                          />
+                        </Button>
+                      )
+                    })
+                  ) : (
+                    cryptoIconTabs.map((tab) => {
+                      const Icon = tab.icon
+                      const isSelected = cryptoTab === tab.id
+                      
+                      return (
+                        <Button
+                          key={tab.id}
+                          onClick={() => setCryptoTab(tab.id)}
+                          className={`h-12 w-12 transition-all duration-200 ${
+                            isSelected
+                              ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                              : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                          }`}
+                          variant="outline"
+                          title={tab.id}
+                        >
+                          <Icon 
+                            className={`h-4 w-4 transition-colors ${
+                              isSelected 
+                                ? "text-[#00D4AA]"
+                                : "text-black dark:text-white"
+                            }`} 
+                          />
+                        </Button>
+                      )
+                    })
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* 页签内容 */}
