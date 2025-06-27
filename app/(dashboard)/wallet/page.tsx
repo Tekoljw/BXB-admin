@@ -49,7 +49,10 @@ import {
   Receipt,
   Coins,
   MapPin,
-  Building2
+  Building2,
+  University,
+  Link,
+  Zap
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -1873,9 +1876,9 @@ export default function WalletPage() {
         ]
         
         const cryptoTabs = [
-          { id: "商户资产", label: "商户资产", icon: Building2 },
-          { id: "地址管理", label: "地址管理", icon: MapPin },
-          { id: "通道配置", label: "通道配置", icon: CreditCard },
+          { id: "商户资产", label: "商户资产", icon: University },
+          { id: "地址管理", label: "地址管理", icon: Link },
+          { id: "通道配置", label: "通道配置", icon: Zap },
           { id: "划转", label: "划转", icon: ArrowLeftRight }
         ]
         const cryptoIconTabs = [
