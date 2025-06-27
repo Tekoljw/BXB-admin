@@ -60,7 +60,7 @@ export default function WalletPage() {
   const router = useRouter()
   const [balanceVisible, setBalanceVisible] = useState(true)
   const [topLevelTab, setTopLevelTab] = useState("账户资产") // "账户资产" or "订单记录"
-  const [activeTab, setActiveTab] = useState(t("wallet.title"))
+  const [activeTab, setActiveTab] = useState("钱包总览")
   const [orderTab, setOrderTab] = useState("现货订单")
   const [secondaryTab, setSecondaryTab] = useState<string>("current") // 二级页签状态 // 订单记录子页签
   const [activeOrderCategory, setActiveOrderCategory] = useState('spot')
