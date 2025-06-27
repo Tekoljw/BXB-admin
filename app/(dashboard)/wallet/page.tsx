@@ -1866,16 +1866,16 @@ export default function WalletPage() {
             </div>
 
             {/* 页签导航 - 根据选中的卡片显示不同的页签 */}
-            <div className="flex flex-col lg:flex-row gap-4">
-                {/* 文字页签 */}
-                <div className="grid grid-cols-2 lg:flex lg:flex-wrap gap-2 w-full">
+            <div className="flex flex-col md:flex-row gap-4">
+                {/* 主要操作按钮 - 自动适配屏幕宽度 */}
+                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
                   {selectedPaymentCard === "fiat" ? (
                     <>
-                      {["商户资产", "通道配置", "法币换U", "代付充值"].map((tab, index) => (
+                      {["商户资产", "通道配置", "法币换U", "代付充值"].map((tab) => (
                         <Button
                           key={tab}
                           onClick={() => setFiatTab(tab)}
-                          className={`transition-all duration-200 text-base font-bold w-full lg:w-auto flex-1 lg:flex-none ${
+                          className={`h-12 transition-all duration-200 text-base font-bold ${
                             fiatTab === tab
                               ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
@@ -1888,11 +1888,11 @@ export default function WalletPage() {
                     </>
                   ) : (
                     <>
-                      {["商户资产", "地址管理", "通道配置", "划转"].map((tab, index) => (
+                      {["商户资产", "地址管理", "通道配置", "划转"].map((tab) => (
                         <Button
                           key={tab}
                           onClick={() => setCryptoTab(tab)}
-                          className={`transition-all duration-200 text-base font-bold w-full lg:w-auto flex-1 lg:flex-none ${
+                          className={`h-12 transition-all duration-200 text-base font-bold ${
                             cryptoTab === tab
                               ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
