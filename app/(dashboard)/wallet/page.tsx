@@ -2055,7 +2055,7 @@ export default function WalletPage() {
                               <div className="text-sm text-gray-500">商户资产</div>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-3">
+                          <div className="flex items-center space-x-6">
                             <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>85,430.50</div>
                             <Button 
                               size="sm" 
@@ -2078,7 +2078,7 @@ export default function WalletPage() {
                               <div className="text-sm text-gray-500">代付备用金</div>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-3">
+                          <div className="flex items-center space-x-6">
                             <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>25,430.50</div>
                             <Button 
                               size="sm" 
@@ -2091,39 +2091,58 @@ export default function WalletPage() {
                         </div>
                       </div>
 
-                      {/* 其他币种保持原有格式 */}
+                      {/* 其他币种使用相同格式 */}
                       <div className="grid gap-4">
                         {[
                           { currency: "EUR", merchantBalance: "12,680.25", standbyBalance: "8,680.25", symbol: "€" },
                           { currency: "GBP", merchantBalance: "8,950.75", standbyBalance: "3,950.75", symbol: "£" },
                           { currency: "JPY", merchantBalance: "2,580,000", standbyBalance: "890,000", symbol: "¥" }
                         ].map((asset) => (
-                          <div key={asset.currency} className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
-                                {asset.symbol}
+                          <div key={asset.currency} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* 商户资产卡片 */}
+                            <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
+                              <div className="flex items-center space-x-3">
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                                  {asset.symbol}
+                                </div>
+                                <div className="flex-1">
+                                  <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
+                                  <div className="text-sm text-gray-500">商户资产</div>
+                                </div>
                               </div>
-                              <div>
-                                <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
-                                <div className="text-sm text-gray-500">商户资产：{asset.merchantBalance}</div>
-                                <div className="text-sm text-gray-500">代付备用金：{asset.standbyBalance}</div>
+                              <div className="flex items-center space-x-6">
+                                <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.merchantBalance}</div>
+                                <Button 
+                                  size="sm" 
+                                  className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 w-10 h-10 p-0"
+                                  variant="outline"
+                                >
+                                  <ArrowUpRight className="h-4 w-4" />
+                                </Button>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-2">
-                              <Button 
-                                size="sm" 
-                                className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                                variant="outline"
-                              >
-                                法币换U
-                              </Button>
-                              <Button 
-                                size="sm" 
-                                className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0"
-                                variant="outline"
-                              >
-                                代付充值
-                              </Button>
+
+                            {/* 代付备用金卡片 */}
+                            <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle}`}>
+                              <div className="flex items-center space-x-3">
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                                  {asset.symbol}
+                                </div>
+                                <div className="flex-1">
+                                  <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
+                                  <div className="text-sm text-gray-500">代付备用金</div>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-6">
+                                <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.standbyBalance}</div>
+                                <Button 
+                                  size="sm" 
+                                  className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-10 h-10 p-0"
+                                  variant="outline"
+                                >
+                                  <ArrowDownLeft className="h-4 w-4" />
+                                </Button>
+                              </div>
                             </div>
                           </div>
                         ))}
