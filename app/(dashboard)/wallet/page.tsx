@@ -2,6 +2,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { 
   Wallet, 
@@ -97,6 +101,69 @@ export default function WalletPage() {
   const [selectedPaymentCard, setSelectedPaymentCard] = useState<"fiat" | "crypto">("fiat") // BePAY支付卡片选择
   const [fiatTab, setFiatTab] = useState("商户资产") // 法币卡片页签
   const [cryptoTab, setCryptoTab] = useState("商户资产") // 加密货币卡片页签
+  
+  // 兑换USDT弹窗状态
+  const [showExchangeModal, setShowExchangeModal] = useState(false)
+  const [selectedFiatCurrency, setSelectedFiatCurrency] = useState("")
+  const [exchangeAmount, setExchangeAmount] = useState("")
+  const [estimatedUSDT, setEstimatedUSDT] = useState("")
+
+  // 今日汇率 (示例汇率)
+  const exchangeRates = {
+    USD: 1.0,
+    EUR: 1.08,
+    GBP: 1.27,
+    JPY: 0.0067
+  }
+
+  // 计算估算USDT金额
+  const calculateEstimatedUSDT = (amount: string, currency: string) => {
+    if (!amount || !currency) return ""
+    const numAmount = parseFloat(amount)
+    if (isNaN(numAmount)) return ""
+    const rate = exchangeRates[currency as keyof typeof exchangeRates] || 1
+    return (numAmount * rate).toFixed(2)
+  }
+
+  // 处理兑换金额变化
+  const handleExchangeAmountChange = (value: string) => {
+    setExchangeAmount(value)
+    setEstimatedUSDT(calculateEstimatedUSDT(value, selectedFiatCurrency))
+  }
+
+  // 处理法币选择变化
+  const handleFiatCurrencyChange = (currency: string) => {
+    setSelectedFiatCurrency(currency)
+    setEstimatedUSDT(calculateEstimatedUSDT(exchangeAmount, currency))
+  }
+
+  // 确认兑换
+  const handleExchangeConfirm = () => {
+    if (!selectedFiatCurrency || !exchangeAmount || !estimatedUSDT) return
+    
+    // 生成兑换订单（这里可以添加到支付订单列表中）
+    const exchangeOrder = {
+      id: Date.now().toString(),
+      type: "法币兑换",
+      fromCurrency: selectedFiatCurrency,
+      toCurrency: "USDT",
+      amount: exchangeAmount,
+      estimatedAmount: estimatedUSDT,
+      rate: exchangeRates[selectedFiatCurrency as keyof typeof exchangeRates],
+      status: "等待审核",
+      createTime: new Date().toLocaleString(),
+      category: "下发订单"
+    }
+    
+    // 关闭弹窗并重置状态
+    setShowExchangeModal(false)
+    setSelectedFiatCurrency("")
+    setExchangeAmount("")
+    setEstimatedUSDT("")
+    
+    // 这里可以添加成功提示
+    console.log("兑换订单已生成:", exchangeOrder)
+  }
 
   // 处理仓位分布弹窗
   const handlePositionModalClick = (e: React.MouseEvent) => {
@@ -338,13 +405,7 @@ export default function WalletPage() {
     }
   }, [orderTab, secondaryTab])
 
-  // 币种汇率数据
-  const exchangeRates = {
-    USDT: 1,
-    BTC: 0.000024,
-    ETH: 0.00041,
-    CNY: 7.2
-  }
+
 
   // 订单记录数据
   const orderRecordsData = {
