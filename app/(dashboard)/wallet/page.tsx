@@ -45,7 +45,8 @@ import {
   Calendar,
   MessageCircle,
   Users,
-  Receipt
+  Receipt,
+  Coins
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -1833,7 +1834,7 @@ export default function WalletPage() {
                     <h3 className="text-lg font-semibold">加密货币总余额</h3>
                     <p className="text-purple-100 text-sm">换算USDT (可切换币种)</p>
                   </div>
-                  <Bitcoin className="h-8 w-8 text-purple-200" />
+                  <Coins className="h-8 w-8 text-purple-200" />
                 </div>
                 <div className="space-y-2">
                   <div className="text-2xl font-bold">
