@@ -239,10 +239,6 @@ export default function ProfilePage() {
     return (
       <div className="space-y-6">
         <div className={`${cardStyle} rounded-lg p-6 border`}>
-          <h2 className={`text-xl font-bold mb-6 ${isDark ? "text-white" : "text-gray-800"}`}>
-            API管理
-          </h2>
-          
           {/* API Type Tabs */}
           <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 mb-6">
             <button
