@@ -58,7 +58,8 @@ import {
   Repeat,
   Copy,
   Edit,
-  Trash2
+  Trash2,
+  Unlink
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -133,6 +134,9 @@ export default function WalletPage() {
   const [selectedFiatCurrency, setSelectedFiatCurrency] = useState("")
   const [exchangeAmount, setExchangeAmount] = useState("")
   const [estimatedUSDT, setEstimatedUSDT] = useState("")
+  
+  // OTC供应商选择状态
+  const [selectedSupplier, setSelectedSupplier] = useState("MoonPay")
 
   // 今日汇率 (示例汇率)
   const exchangeRates = {
@@ -3067,12 +3071,15 @@ export default function WalletPage() {
                                   <td className="py-4 px-4">
                                     <button
                                       onClick={() => handleReleaseAddress(address)}
-                                      className={`p-2 rounded hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
-                                        isDark ? 'text-gray-400' : 'text-gray-500'
+                                      className={`px-3 py-1 rounded text-xs flex items-center gap-1 transition-colors ${
+                                        isDark 
+                                          ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' 
+                                          : 'bg-red-50 text-red-600 hover:bg-red-100'
                                       }`}
                                       title="释放地址"
                                     >
-                                      <Settings className="h-4 w-4" />
+                                      <Unlink className="w-3 h-3" />
+                                      释放地址
                                     </button>
                                   </td>
                                 </tr>
@@ -3203,139 +3210,251 @@ export default function WalletPage() {
                   
                   {cryptoTab === "OTC供应商" && (
                     <div className="space-y-6">
-                      {/* 顶部操作栏 */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1 relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                          <input
-                            type="text"
-                            placeholder="搜索供应商..."
-                            className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
-                              isDark 
-                                ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
-                                : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
-                            }`}
-                          />
-                        </div>
-                        <div className="flex items-center space-x-2 ml-4">
+                      {/* 供应商选择标签 */}
+                      <div className="flex items-center space-x-2 overflow-x-auto">
+                        {[
+                          { name: "MoonPay", status: "启用" },
+                          { name: "Simplex", status: "启用" },
+                          { name: "Banxa", status: "启用" },
+                          { name: "Mercuryo", status: "暂停" }
+                        ].map((supplier) => (
                           <button
-                            onClick={() => setShowAddSupplierModal(true)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all transform hover:scale-105 ${
-                              isDark 
-                                ? "bg-[#00D4AA] text-black hover:bg-[#00B894]" 
-                                : "bg-[#00D4AA] text-white hover:bg-[#00B894]"
-                            }`}
-                          >
-                            <Plus className="h-4 w-4 mr-2 inline" />
-                            添加供应商
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* 供应商状态筛选 */}
-                      <div className="flex items-center space-x-2 overflow-x-auto pb-2">
-                        {["全部", "正常", "维护中", "暂停"].map((status) => (
-                          <button
-                            key={status}
-                            onClick={() => setSelectedSupplierStatus(status)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
-                              selectedSupplierStatus === status
+                            key={supplier.name}
+                            onClick={() => setSelectedSupplier(supplier.name)}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 ${
+                              selectedSupplier === supplier.name
                                 ? isDark 
-                                  ? "bg-[#00D4AA] text-black" 
-                                  : "bg-[#00D4AA] text-white"
+                                  ? "bg-white text-black"
+                                  : "bg-black text-white"
                                 : isDark 
-                                  ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
-                                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                  ? "bg-transparent text-white border border-white hover:bg-white hover:text-black"
+                                  : "bg-transparent text-black border border-black hover:bg-black hover:text-white"
                             }`}
                           >
-                            {status}
+                            {supplier.name}
+                            <span className={`px-1.5 py-0.5 rounded text-xs ${
+                              supplier.status === "启用" 
+                                ? "bg-green-500 text-white" 
+                                : "bg-red-500 text-white"
+                            }`}>
+                              {supplier.status}
+                            </span>
                           </button>
                         ))}
                       </div>
 
-                      {/* 供应商列表 */}
-                      <div className="space-y-3">
-                        {otcSupplierList
-                          .filter(supplier => selectedSupplierStatus === "全部" || supplier.status === selectedSupplierStatus)
-                          .map((supplier, index) => (
-                          <div key={index} className={`${cardStyle} rounded-lg p-4 hover:shadow-md transition-all`}>
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-4 flex-1">
-                                {/* 供应商图标 */}
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                                  supplier.status === '正常' ? 'bg-green-100 text-green-600' :
-                                  supplier.status === '维护中' ? 'bg-yellow-100 text-yellow-600' :
-                                  'bg-red-100 text-red-600'
-                                }`}>
-                                  <Users className="h-5 w-5" />
-                                </div>
-                                
-                                <div className="flex-1">
-                                  <div className="flex items-center space-x-2">
-                                    <span className="font-semibold">{supplier.name}</span>
-                                    <span className={`px-2 py-1 rounded-full text-xs ${
-                                      supplier.status === "正常" 
-                                        ? "bg-green-100 text-green-600" 
-                                        : supplier.status === "维护中"
-                                        ? "bg-yellow-100 text-yellow-600"
-                                        : "bg-red-100 text-red-600"
-                                    }`}>
-                                      {supplier.status}
-                                    </span>
-                                    {supplier.isPreferred && (
-                                      <span className="px-2 py-1 rounded-full text-xs bg-[#00D4AA] text-white">
-                                        优选
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
-                                    支持币种: {supplier.supportedCurrencies.join(", ")}
-                                  </div>
-                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mt-1`}>
-                                    费率: {supplier.feeRate} • 限额: {supplier.limits}
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* 操作按钮 */}
-                              <div className="flex items-center space-x-2">
-                                <button
-                                  onClick={() => handleTestSupplier(supplier)}
-                                  className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
-                                    isDark ? 'text-gray-400' : 'text-gray-500'
-                                  }`}
-                                  title="测试连接"
-                                >
-                                  <CheckCircle className="h-4 w-4" />
-                                </button>
-                                <button
-                                  onClick={() => handleEditSupplier(supplier)}
-                                  className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
-                                    isDark ? 'text-gray-400' : 'text-gray-500'
-                                  }`}
-                                  title="编辑"
-                                >
-                                  <Settings className="h-4 w-4" />
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteSupplier(supplier.id)}
-                                  className={`p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20 transition-all text-red-500`}
-                                  title="删除"
-                                >
-                                  <X className="h-4 w-4" />
+                      {/* MoonPay 供应商详情 */}
+                      {selectedSupplier === "MoonPay" && (
+                        <div className={`${cardStyle} rounded-lg p-6`}>
+                          {/* 供应商信息 */}
+                          <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center gap-4">
+                              <div className="flex items-center gap-2">
+                                <h3 className="text-lg font-semibold">MoonPay</h3>
+                                <button className="p-1 rounded hover:bg-gray-100 dark:hover:bg-[#3a3d4a]">
+                                  <Edit className="w-4 h-4" />
                                 </button>
                               </div>
+                              <span className="text-sm text-gray-500">接入费/月：1000 USDT</span>
                             </div>
+                            <div className="flex items-center gap-2">
+                              <button className="px-3 py-1 rounded text-sm bg-green-500 text-white">启用</button>
+                              <label className="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" className="sr-only peer" defaultChecked />
+                                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                              </label>
+                            </div>
+                          </div>
 
-                            {/* 供应商统计信息 */}
-                            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-[#3a3d4a]">
-                              <div className="grid grid-cols-4 gap-4 text-center">
-                                <div>
-                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>成功率</div>
-                                  <div className="font-semibold text-sm">{supplier.successRate}</div>
-                                </div>
-                                <div>
-                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>响应时间</div>
+                          {/* 支付方式表格 */}
+                          <div className="overflow-x-auto">
+                            <table className="w-full">
+                              <thead>
+                                <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>支付货币</th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>支付方式</th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>可购买加密货币</th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>USDT汇率</th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>支持输出</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {/* USD 美元 */}
+                                <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-100'}`}>
+                                  <td className="py-4 px-4">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-lg">$</span>
+                                      <span className="font-medium">USD (美元)</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <div className="flex flex-wrap gap-1">
+                                      {["信用卡", "银行转账", "Apple Pay", "Google Pay"].map((method) => (
+                                        <span 
+                                          key={method}
+                                          className="px-2 py-1 rounded text-xs bg-blue-100 text-blue-700"
+                                        >
+                                          {method}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <div className="flex flex-wrap gap-1">
+                                      {["BTC", "ETH", "USDT", "BNB", "SOL", "MATIC", "AVAX"].map((crypto) => (
+                                        <span 
+                                          key={crypto}
+                                          className="px-2 py-1 rounded text-xs bg-green-100 text-green-700"
+                                        >
+                                          {crypto}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1 USDT = 1.02 USD</span>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <button className="px-3 py-1 rounded text-sm bg-green-500 text-white">支持</button>
+                                  </td>
+                                </tr>
+
+                                {/* EUR 欧元 */}
+                                <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-100'}`}>
+                                  <td className="py-4 px-4">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-lg">€</span>
+                                      <span className="font-medium">EUR (欧元)</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <div className="flex flex-wrap gap-1">
+                                      {["信用卡", "SEPA转账", "Apple Pay", "iDEAL"].map((method) => (
+                                        <span 
+                                          key={method}
+                                          className="px-2 py-1 rounded text-xs bg-blue-100 text-blue-700"
+                                        >
+                                          {method}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <div className="flex flex-wrap gap-1">
+                                      {["BTC", "ETH", "USDT", "SOL", "AVAX", "DOT"].map((crypto) => (
+                                        <span 
+                                          key={crypto}
+                                          className="px-2 py-1 rounded text-xs bg-green-100 text-green-700"
+                                        >
+                                          {crypto}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1 USDT = 1.10 EUR</span>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <button className="px-3 py-1 rounded text-sm bg-green-500 text-white">支持</button>
+                                  </td>
+                                </tr>
+
+                                {/* GBP 英镑 */}
+                                <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-100'}`}>
+                                  <td className="py-4 px-4">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-lg">£</span>
+                                      <span className="font-medium">GBP (英镑)</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <div className="flex flex-wrap gap-1">
+                                      {["信用卡", "银行转账", "Apple Pay"].map((method) => (
+                                        <span 
+                                          key={method}
+                                          className="px-2 py-1 rounded text-xs bg-blue-100 text-blue-700"
+                                        >
+                                          {method}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <div className="flex flex-wrap gap-1">
+                                      {["BTC", "ETH", "USDT", "SOL"].map((crypto) => (
+                                        <span 
+                                          key={crypto}
+                                          className="px-2 py-1 rounded text-xs bg-green-100 text-green-700"
+                                        >
+                                          {crypto}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1 USDT = 1.29 GBP</span>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <button className="px-3 py-1 rounded text-sm bg-green-500 text-white">支持</button>
+                                  </td>
+                                </tr>
+
+                                {/* JPY 日元 */}
+                                <tr>
+                                  <td className="py-4 px-4">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-lg">¥</span>
+                                      <span className="font-medium">JPY (日元)</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <div className="flex flex-wrap gap-1">
+                                      {["信用卡", "银行转账"].map((method) => (
+                                        <span 
+                                          key={method}
+                                          className="px-2 py-1 rounded text-xs bg-blue-100 text-blue-700"
+                                        >
+                                          {method}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <div className="flex flex-wrap gap-1">
+                                      {["BTC", "ETH", "USDT", "SOL"].map((crypto) => (
+                                        <span 
+                                          key={crypto}
+                                          className="px-2 py-1 rounded text-xs bg-green-100 text-green-700"
+                                        >
+                                          {crypto}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1 USDT = 0.0070 JPY</span>
+                                  </td>
+                                  <td className="py-4 px-4">
+                                    <button className="px-3 py-1 rounded text-sm bg-red-500 text-white">不支持</button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 其他供应商的占位符 */}
+                      {selectedSupplier !== "MoonPay" && (
+                        <div className={`${cardStyle} rounded-lg p-8 text-center`}>
+                          <div className="text-gray-500">
+                            <h3 className="text-lg font-medium mb-2">{selectedSupplier}</h3>
+                            <p className="text-sm">供应商配置页面开发中...</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                                   <div className="font-semibold text-sm">{supplier.responseTime}</div>
                                 </div>
                                 <div>
