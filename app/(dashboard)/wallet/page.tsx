@@ -3648,6 +3648,15 @@ export default function WalletPage() {
                         </span>
                       </div>
                     </div>
+                    
+                    {/* VISA & MasterCard logos */}
+                    <div className="flex justify-end mt-4">
+                      <img 
+                        src="/visa-mastercard-logo.png" 
+                        alt="VISA MasterCard" 
+                        className="h-6 opacity-80"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -3714,6 +3723,15 @@ export default function WalletPage() {
                           USDT
                         </span>
                       </div>
+                    </div>
+                    
+                    {/* VISA & MasterCard logos */}
+                    <div className="flex justify-end mt-4">
+                      <img 
+                        src="/visa-mastercard-logo.png" 
+                        alt="VISA MasterCard" 
+                        className="h-6 opacity-80"
+                      />
                     </div>
                   </div>
                 </div>
