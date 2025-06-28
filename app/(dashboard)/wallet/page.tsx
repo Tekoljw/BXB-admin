@@ -3590,49 +3590,77 @@ export default function WalletPage() {
                 className="relative cursor-pointer"
                 onClick={() => setSelectedCardType("virtual")}
               >
-                <div className={`w-full h-48 rounded-2xl bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 p-6 text-white relative overflow-hidden transition-all duration-300 ${
+                <div className={`w-full rounded-2xl p-8 relative transition-all duration-300 ${
+                  isDark 
+                    ? "bg-gradient-to-br from-[#2a2d3a] to-[#1e1f2e]" 
+                    : "bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0]"
+                } ${
                   selectedCardType === "virtual" 
-                    ? "shadow-2xl ring-4 ring-[#00D4AA] ring-opacity-60" 
-                    : "shadow-lg hover:shadow-2xl"
+                    ? "shadow-2xl ring-2 ring-[#00D4AA] ring-opacity-60" 
+                    : "shadow-lg hover:shadow-xl"
                 }`}>
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
                   
                   {/* 选中指示器 */}
                   {selectedCardType === "virtual" && (
                     <div className="absolute top-4 right-4">
                       <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center">
-                        <Check className="h-4 w-4 text-black" />
+                        <Check className="h-4 w-4 text-white" />
                       </div>
                     </div>
                   )}
                   
-                  <div className="relative z-10">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <div className="text-xs opacity-80 mb-1">BeDAO Virtual Card</div>
-                        <div className="text-lg font-bold">虚拟U卡</div>
+                  <div className="space-y-6">
+                    {/* 标题区域 */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                          isDark ? "bg-[#00D4AA]/20" : "bg-[#00D4AA]/10"
+                        }`}>
+                          <CreditCard className="h-6 w-6 text-[#00D4AA]" />
+                        </div>
+                        <div>
+                          <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                            虚拟U卡
+                          </h3>
+                          <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                            虚拟借记卡
+                          </p>
+                        </div>
                       </div>
-                      <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                        <CreditCard className="h-4 w-4" />
+                      <div className="text-right">
+                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                          Eye icon
+                        </div>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setBalanceVisible(!balanceVisible)
+                          }}
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                            isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"
+                          }`}
+                        >
+                          {balanceVisible ? 
+                            <Eye className={`h-4 w-4 ${isDark ? "text-gray-400" : "text-gray-500"}`} /> : 
+                            <EyeOff className={`h-4 w-4 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+                          }
+                        </button>
                       </div>
                     </div>
                     
-                    <div className="mb-6">
-                      <div className="text-xs opacity-70 mb-1">总余额</div>
-                      <div className="text-3xl font-bold">
-                        {balanceVisible ? `${convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency)} USDT` : "****"}
+                    {/* 余额区域 */}
+                    <div>
+                      <div className={`text-4xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                        {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
                       </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-end">
-                      <div>
-                        <div className="text-xs opacity-70">卡片类型</div>
-                        <div className="text-sm font-medium">虚拟借记卡</div>
+                      <div className="flex items-center space-x-2">
+                        <span className="w-2 h-2 rounded-full bg-[#00D4AA]"></span>
+                        <span className={`text-lg font-medium ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                          USDT
+                        </span>
                       </div>
-                      <div>
-                        <div className="text-xs opacity-70">支持币种</div>
-                        <div className="text-sm font-medium">USDT</div>
+                      <div className={`text-sm mt-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                        ≈ ${balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", "USD") : "****"}
                       </div>
                     </div>
                   </div>
@@ -3644,49 +3672,64 @@ export default function WalletPage() {
                 className="relative cursor-pointer"
                 onClick={() => setSelectedCardType("physical")}
               >
-                <div className={`w-full h-48 rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 text-white relative overflow-hidden transition-all duration-300 ${
+                <div className={`w-full rounded-2xl p-8 relative transition-all duration-300 ${
+                  isDark 
+                    ? "bg-gradient-to-br from-[#2a2d3a] to-[#1e1f2e]" 
+                    : "bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0]"
+                } ${
                   selectedCardType === "physical" 
-                    ? "shadow-2xl ring-4 ring-[#00D4AA] ring-opacity-60" 
-                    : "shadow-lg hover:shadow-2xl"
+                    ? "shadow-2xl ring-2 ring-[#00D4AA] ring-opacity-60" 
+                    : "shadow-lg hover:shadow-xl"
                 }`}>
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
                   
                   {/* 选中指示器 */}
                   {selectedCardType === "physical" && (
                     <div className="absolute top-4 right-4">
                       <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center">
-                        <Check className="h-4 w-4 text-black" />
+                        <Check className="h-4 w-4 text-white" />
                       </div>
                     </div>
                   )}
                   
-                  <div className="relative z-10">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <div className="text-xs opacity-80 mb-1">BeDAO Physical Card</div>
-                        <div className="text-lg font-bold">实体U卡</div>
+                  <div className="space-y-6">
+                    {/* 标题区域 */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                          isDark ? "bg-[#00D4AA]/20" : "bg-[#00D4AA]/10"
+                        }`}>
+                          <CardIcon className="h-6 w-6 text-[#00D4AA]" />
+                        </div>
+                        <div>
+                          <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                            实体U卡
+                          </h3>
+                          <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                            实体借记卡
+                          </p>
+                        </div>
                       </div>
-                      <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                        <CardIcon className="h-4 w-4" />
+                      <div className="text-right">
+                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                          Clock icon
+                        </div>
+                        <Clock className={`h-4 w-4 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
                       </div>
                     </div>
                     
-                    <div className="mb-6">
-                      <div className="text-xs opacity-70 mb-1">总余额</div>
-                      <div className="text-3xl font-bold">
-                        {balanceVisible ? `${convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency)} USDT` : "****"}
+                    {/* 余额区域 */}
+                    <div>
+                      <div className={`text-4xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                        {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
                       </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-end">
-                      <div>
-                        <div className="text-xs opacity-70">卡片类型</div>
-                        <div className="text-sm font-medium">实体借记卡</div>
+                      <div className="flex items-center space-x-2">
+                        <span className="w-2 h-2 rounded-full bg-[#00D4AA]"></span>
+                        <span className={`text-lg font-medium ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                          USDT
+                        </span>
                       </div>
-                      <div>
-                        <div className="text-xs opacity-70">支持币种</div>
-                        <div className="text-sm font-medium">USDT</div>
+                      <div className={`text-sm mt-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                        ≈ ${balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", "USD") : "****"}
                       </div>
                     </div>
                   </div>
