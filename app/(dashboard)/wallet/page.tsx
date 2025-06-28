@@ -2864,32 +2864,25 @@ export default function WalletPage() {
                         </div>
                       </div>
 
-                      {/* 网络筛选卡片 */}
-                      <div className={`${cardStyle} rounded-lg p-4`}>
-                        <div>
-                          {/* 区块链网络筛选 */}
-                          <div>
-                            <div className="flex items-center space-x-2 mb-2 overflow-x-auto pb-2">
-                              {["TRC20", "ERC20", "BTC", "BSC", "XRP", "Solana", "Matrix"].map((network) => (
-                                <button
-                                  key={network}
-                                  onClick={() => setSelectedNetwork(network)}
-                                  className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all border ${
-                                    selectedNetwork === network
-                                      ? isDark 
-                                        ? "bg-white text-black border-white"
-                                        : "bg-black text-white border-black"
-                                      : isDark 
-                                        ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
-                                        : "bg-transparent text-black border-black hover:bg-black hover:text-white"
-                                  }`}
-                                >
-                                  {network}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
+                      {/* 网络筛选 */}
+                      <div className="flex items-center space-x-2 mb-4 overflow-x-auto pb-2">
+                        {["TRC20", "ERC20", "BTC", "BSC", "XRP", "Solana", "Matrix"].map((network) => (
+                          <button
+                            key={network}
+                            onClick={() => setSelectedNetwork(network)}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all border ${
+                              selectedNetwork === network
+                                ? isDark 
+                                  ? "bg-white text-black border-white"
+                                  : "bg-black text-white border-black"
+                                : isDark 
+                                  ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                                  : "bg-transparent text-black border-black hover:bg-black hover:text-white"
+                            }`}
+                          >
+                            {network}
+                          </button>
+                        ))}
                       </div>
 
                       {/* TRC20统计卡片 */}
