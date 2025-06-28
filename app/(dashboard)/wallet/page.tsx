@@ -3223,12 +3223,10 @@ export default function WalletPage() {
                             onClick={() => setSelectedSupplier(supplier.name)}
                             className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 ${
                               selectedSupplier === supplier.name
-                                ? isDark 
-                                  ? "bg-white text-black"
-                                  : "bg-black text-white"
+                                ? "bg-gray-500 text-white"
                                 : isDark 
-                                  ? "bg-transparent text-white border border-white hover:bg-white hover:text-black"
-                                  : "bg-transparent text-black border border-black hover:bg-black hover:text-white"
+                                  ? "bg-transparent text-white border border-white hover:bg-gray-500 hover:text-white"
+                                  : "bg-transparent text-black border border-black hover:bg-gray-500 hover:text-white"
                             }`}
                           >
                             {supplier.name}
@@ -3284,7 +3282,7 @@ export default function WalletPage() {
                                   <td className="py-4 px-4">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">$</span>
-                                      <span className="font-medium">USD (美元)</span>
+                                      <span className="font-medium">USD</span>
                                     </div>
                                   </td>
                                   <td className="py-4 px-4">
@@ -3324,7 +3322,7 @@ export default function WalletPage() {
                                   <td className="py-4 px-4">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">€</span>
-                                      <span className="font-medium">EUR (欧元)</span>
+                                      <span className="font-medium">EUR</span>
                                     </div>
                                   </td>
                                   <td className="py-4 px-4">
@@ -3364,7 +3362,7 @@ export default function WalletPage() {
                                   <td className="py-4 px-4">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">£</span>
-                                      <span className="font-medium">GBP (英镑)</span>
+                                      <span className="font-medium">GBP</span>
                                     </div>
                                   </td>
                                   <td className="py-4 px-4">
@@ -3404,7 +3402,7 @@ export default function WalletPage() {
                                   <td className="py-4 px-4">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">¥</span>
-                                      <span className="font-medium">JPY (日元)</span>
+                                      <span className="font-medium">JPY</span>
                                     </div>
                                   </td>
                                   <td className="py-4 px-4">
