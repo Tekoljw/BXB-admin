@@ -3618,21 +3618,21 @@ export default function WalletPage() {
                       </div>
                     </div>
                     
-                    <div className="mb-4">
+                    <div className="mb-6">
                       <div className="text-xs opacity-70 mb-1">总余额</div>
-                      <div className="text-2xl font-bold">
-                        {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
+                      <div className="text-3xl font-bold">
+                        {balanceVisible ? `${convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency)} USDT` : "****"}
                       </div>
                     </div>
                     
                     <div className="flex justify-between items-end">
                       <div>
-                        <div className="text-xs opacity-70">Card Number</div>
-                        <div className="text-sm font-mono tracking-wider">**** **** **** 5678</div>
+                        <div className="text-xs opacity-70">卡片类型</div>
+                        <div className="text-sm font-medium">虚拟借记卡</div>
                       </div>
                       <div>
-                        <div className="text-xs opacity-70">Valid Thru</div>
-                        <div className="text-sm font-medium">12/28</div>
+                        <div className="text-xs opacity-70">支持币种</div>
+                        <div className="text-sm font-medium">USDT</div>
                       </div>
                     </div>
                   </div>
@@ -3672,21 +3672,21 @@ export default function WalletPage() {
                       </div>
                     </div>
                     
-                    <div className="mb-4">
+                    <div className="mb-6">
                       <div className="text-xs opacity-70 mb-1">总余额</div>
-                      <div className="text-2xl font-bold">
-                        {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
+                      <div className="text-3xl font-bold">
+                        {balanceVisible ? `${convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency)} USDT` : "****"}
                       </div>
                     </div>
                     
                     <div className="flex justify-between items-end">
                       <div>
-                        <div className="text-xs opacity-70">Card Number</div>
-                        <div className="text-sm font-mono tracking-wider">**** **** **** 1234</div>
+                        <div className="text-xs opacity-70">卡片类型</div>
+                        <div className="text-sm font-medium">实体借记卡</div>
                       </div>
                       <div>
-                        <div className="text-xs opacity-70">Valid Thru</div>
-                        <div className="text-sm font-medium">12/28</div>
+                        <div className="text-xs opacity-70">支持币种</div>
+                        <div className="text-sm font-medium">USDT</div>
                       </div>
                     </div>
                   </div>
