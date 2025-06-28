@@ -3224,9 +3224,7 @@ export default function WalletPage() {
                             className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 ${
                               selectedSupplier === supplier.name
                                 ? "bg-gray-500 text-white"
-                                : isDark 
-                                  ? "bg-transparent text-white border border-white hover:bg-gray-500 hover:text-white"
-                                  : "bg-transparent text-black border border-black hover:bg-gray-500 hover:text-white"
+                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                             }`}
                           >
                             {supplier.name}
