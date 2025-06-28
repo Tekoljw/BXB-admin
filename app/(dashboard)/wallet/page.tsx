@@ -1535,7 +1535,7 @@ export default function WalletPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 现金账户卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 cursor-pointer transform transition-all duration-300 ease-out hover:shadow-xl hover:scale-105 ${
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl  ${
                   overviewMode === "现金账户" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
                     : "hover:shadow-lg"
@@ -1582,7 +1582,7 @@ export default function WalletPage() {
 
               {/* 总资产卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 cursor-pointer transform transition-all duration-300 ease-out hover:shadow-xl hover:scale-105 ${
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl  ${
                   overviewMode === "总资产" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
                     : "hover:shadow-lg"
@@ -1630,7 +1630,7 @@ export default function WalletPage() {
 
             {/* 操作按钮区域（仅现金账户时显示） */}
             {overviewMode === "现金账户" && (
-              <div className="transform transition-all duration-300 ease-out">
+              <div className="transition-all duration-300 ease-out">
                 <div className="flex flex-col md:flex-row gap-4">
                   {/* 主要操作按钮 - 自动适配屏幕宽度 */}
                   <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -1759,7 +1759,7 @@ export default function WalletPage() {
                 <div className={`${cardStyle} rounded-lg p-6`}>
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex-1 relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <input
                         type="text"
                         placeholder="搜索币种..."
@@ -1775,7 +1775,7 @@ export default function WalletPage() {
                     <div className="flex items-center space-x-2 ml-4">
                       <button
                         onClick={openAddAssetModal}
-                        className={`w-10 h-10 rounded-lg border transition-all transform hover:scale-105 flex items-center justify-center ${
+                        className={`w-10 h-10 rounded-lg border transition-all hover:shadow-md flex items-center justify-center ${
                           isDark 
                             ? "border-[#252842] hover:bg-[#252842]" 
                             : "border-gray-300 hover:bg-gray-50"
@@ -1926,12 +1926,12 @@ export default function WalletPage() {
             {/* 六个卡片布局 - 两排三列，增强动画效果 */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* 第一排 */}
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-medium">总余额</h3>
                   <button
                     onClick={handleCurrencyModalClick}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300 hover:scale-105 ${
+                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
                       isDark 
                         ? "bg-transparent text-white hover:bg-gray-800" 
                         : "bg-white text-black hover:bg-gray-50"
@@ -1951,14 +1951,14 @@ export default function WalletPage() {
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
                 <h3 className="text-sm font-medium mb-2">净资产</h3>
                 <div className="text-2xl font-bold text-[#00D4AA] transition-all duration-500">
                   {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
                 <h3 className="text-sm font-medium mb-2">未实现盈亏</h3>
                 <div className="text-2xl font-bold text-green-500 transition-all duration-500">
                   {balanceVisible ? contractData.unrealizedPnL : "****"}
@@ -1966,7 +1966,7 @@ export default function WalletPage() {
               </div>
               
               {/* 第二排 */}
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
                 <h3 className="text-sm font-medium mb-2">已实现盈亏</h3>
                 <div className="space-y-1">
                   <div className="flex justify-between items-center">
@@ -1980,14 +1980,14 @@ export default function WalletPage() {
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
                 <h3 className="text-sm font-medium mb-2">已用保证金</h3>
                 <div className="text-2xl font-bold transition-all duration-500">
                   {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
                 <h3 className="text-sm font-medium mb-2">可用保证金</h3>
                 <div className="text-2xl font-bold transition-all duration-500">
                   {balanceVisible ? convertBalance(contractData.marginAvailable, "USDT", selectedDisplayCurrency) : "****"}
@@ -1996,7 +1996,7 @@ export default function WalletPage() {
             </div>
 
             {/* 操作按钮区域 */}
-            <div className="transform transition-all duration-300 ease-out">
+            <div className="transition-all duration-300 ease-out">
               <div className="flex flex-col md:flex-row gap-4">
                 {/* 主要操作按钮 */}
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -2551,7 +2551,7 @@ export default function WalletPage() {
             </div>
 
             {/* 操作按钮区域 */}
-            <div className="transform transition-all duration-300 ease-out">
+            <div className="transition-all duration-300 ease-out">
               <div className="flex flex-col md:flex-row gap-4">
                 {/* 主要操作按钮 - 自动适配屏幕宽度 */}
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -2680,7 +2680,7 @@ export default function WalletPage() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between mb-6">
                         <div className="flex-1 relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                           <input
                             type="text"
                             placeholder="搜索法币..."
@@ -2694,7 +2694,7 @@ export default function WalletPage() {
                         <div className="flex items-center space-x-2 ml-4">
                           <button
                             onClick={() => setShowAssetModal(true)}
-                            className={`w-10 h-10 rounded-lg border transition-all transform hover:scale-105 flex items-center justify-center ${
+                            className={`w-10 h-10 rounded-lg border transition-all  flex items-center justify-center ${
                               isDark 
                                 ? "border-[#252842] hover:bg-[#252842]" 
                                 : "border-gray-300 hover:bg-gray-50"
@@ -2906,7 +2906,7 @@ export default function WalletPage() {
                                       }`}
                                     >
                                       <span
-                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                        className={`inline-block h-4 w-4 rounded-full bg-white transition-${
                                           channel.enabled ? 'translate-x-6' : 'translate-x-1'
                                         }`}
                                       />
@@ -2928,7 +2928,7 @@ export default function WalletPage() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between mb-6">
                         <div className="flex-1 relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                           <input
                             type="text"
                             placeholder="搜索加密货币..."
@@ -2942,7 +2942,7 @@ export default function WalletPage() {
                         <div className="flex items-center space-x-2 ml-4">
                           <button
                             onClick={() => setShowAssetModal(true)}
-                            className={`w-10 h-10 rounded-lg border transition-all transform hover:scale-105 flex items-center justify-center ${
+                            className={`w-10 h-10 rounded-lg border transition-all  flex items-center justify-center ${
                               isDark 
                                 ? "border-[#252842] hover:bg-[#252842]" 
                                 : "border-gray-300 hover:bg-gray-50"
@@ -3094,7 +3094,7 @@ export default function WalletPage() {
                       {/* 搜索栏 */}
                       <div className="flex items-center space-x-3">
                         <div className="flex-1 relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                           <input
                             type="text"
                             value={addressSearchTerm}
@@ -3590,10 +3590,10 @@ export default function WalletPage() {
                 className="relative cursor-pointer"
                 onClick={() => setSelectedCardType("virtual")}
               >
-                <div className={`w-full h-48 rounded-2xl bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 p-6 text-white shadow-2xl relative overflow-hidden transition-all duration-300 ${
+                <div className={`w-full h-48 rounded-2xl bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 p-6 text-white relative overflow-hidden transition-all duration-300 ${
                   selectedCardType === "virtual" 
-                    ? "ring-4 ring-[#00D4AA] ring-opacity-60 transform scale-105" 
-                    : "hover:scale-105"
+                    ? "shadow-2xl ring-4 ring-[#00D4AA] ring-opacity-60" 
+                    : "shadow-lg hover:shadow-2xl"
                 }`}>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
@@ -3644,10 +3644,10 @@ export default function WalletPage() {
                 className="relative cursor-pointer"
                 onClick={() => setSelectedCardType("physical")}
               >
-                <div className={`w-full h-48 rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 text-white shadow-2xl relative overflow-hidden transition-all duration-300 ${
+                <div className={`w-full h-48 rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 text-white relative overflow-hidden transition-all duration-300 ${
                   selectedCardType === "physical" 
-                    ? "ring-4 ring-[#00D4AA] ring-opacity-60 transform scale-105" 
-                    : "hover:scale-105"
+                    ? "shadow-2xl ring-4 ring-[#00D4AA] ring-opacity-60" 
+                    : "shadow-lg hover:shadow-2xl"
                 }`}>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
@@ -5878,12 +5878,12 @@ export default function WalletPage() {
                       <button
                         key={tab.id}
                         onClick={() => handleTabChange(tab.id)}
-                        className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
+                        className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 border ${
                           activeTab === tab.id
                             ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
                             : isDark
-                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] hover:scale-102"
-                              : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
+                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] "
+                              : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 "
                         }`}
                       >
                         <Icon className="h-5 w-5" />
@@ -5903,12 +5903,12 @@ export default function WalletPage() {
                       <button
                         key={tab.id}
                         onClick={() => setOrderTab(tab.id)}
-                        className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform border ${
+                        className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 border ${
                           orderTab === tab.id
                             ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
                             : isDark
-                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] hover:scale-102"
-                              : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 hover:scale-102"
+                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] "
+                              : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 "
                         }`}
                       >
                         <Icon className="h-5 w-5" />
@@ -5924,7 +5924,7 @@ export default function WalletPage() {
           {/* Main Content */}
           <div className="flex-1 overflow-y-auto">
             <div className="container mx-auto p-6">
-              <div className={`transition-all duration-300 transform ${
+              <div className={`transition-all duration-300 ${
                 isAnimating 
                   ? 'translate-x-8 opacity-0 scale-95' 
                   : 'translate-x-0 opacity-100 scale-100'
@@ -5947,7 +5947,7 @@ export default function WalletPage() {
             onClick={closeCurrencyModal}
           />
           {/* 侧边栏 */}
-          <div className={`absolute right-0 top-0 h-full w-80 max-w-[90vw] ${cardStyle} transform transition-transform duration-300 ease-out ${
+          <div className={`absolute right-0 top-0 h-full w-80 max-w-[90vw] ${cardStyle} transition-duration-300 ease-out ${
             currencyModalAnimating ? 'translate-x-0' : 'translate-x-full'
           }`}>
             <div className="p-6 h-full overflow-y-auto">
@@ -5956,27 +5956,27 @@ export default function WalletPage() {
                 <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
                   <button
                     onClick={() => handleCurrencyTypeChange("crypto")}
-                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 transform ${
+                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
                       currencyType === "crypto"
                         ? isDark ? "bg-white text-black scale-105" : "bg-black text-white scale-105"
-                        : isDark ? "text-gray-400 hover:text-white hover:scale-105" : "text-gray-600 hover:text-black hover:scale-105"
+                        : isDark ? "text-gray-400 hover:text-white " : "text-gray-600 hover:text-black "
                     }`}
                   >
                     加密货币
                   </button>
                   <button
                     onClick={() => handleCurrencyTypeChange("fiat")}
-                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 transform ${
+                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
                       currencyType === "fiat"
                         ? isDark ? "bg-white text-black scale-105" : "bg-black text-white scale-105"
-                        : isDark ? "text-gray-400 hover:text-white hover:scale-105" : "text-gray-600 hover:text-black hover:scale-105"
+                        : isDark ? "text-gray-400 hover:text-white " : "text-gray-600 hover:text-black "
                     }`}
                   >
                     法币
                   </button>
                 </div>
               </div>
-              <div className={`space-y-3 transition-all duration-300 ${currencyTypeAnimating ? 'opacity-50 transform translate-x-2' : 'opacity-100 transform translate-x-0'}`}>
+              <div className={`space-y-3 transition-all duration-300 ${currencyTypeAnimating ? 'opacity-50 translate-x-2' : 'opacity-100 translate-x-0'}`}>
                 {(currencyType === "crypto" ? availableCurrencies : [
                   { symbol: "USD", name: "美元", color: "bg-green-500" },
                   { symbol: "EUR", name: "欧元", color: "bg-blue-500" },
@@ -6028,7 +6028,7 @@ export default function WalletPage() {
             onClick={() => setShowAssetModal(false)}
           />
           {/* 侧边栏 */}
-          <div className={`absolute left-0 top-0 h-full w-96 max-w-[90vw] ${cardStyle} transform transition-transform duration-300 ${
+          <div className={`absolute left-0 top-0 h-full w-96 max-w-[90vw] ${cardStyle} transition-duration-300 ${
             showAssetModal ? 'translate-x-0' : '-translate-x-full'
           }`}>
             <div className="p-6 h-full flex flex-col">
@@ -6136,14 +6136,14 @@ export default function WalletPage() {
             onClick={closeAddAssetModal}
           />
           {/* 侧边栏 */}
-          <div className={`absolute right-0 top-0 h-full w-96 max-w-[90vw] ${cardStyle} transform transition-transform duration-300 ease-out ${
+          <div className={`absolute right-0 top-0 h-full w-96 max-w-[90vw] ${cardStyle} transition-duration-300 ease-out ${
             addAssetModalAnimating ? 'translate-x-0' : 'translate-x-full'
           }`}>
             <div className="p-6 h-full flex flex-col">
               
               {/* 搜索框 */}
               <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <input
                   type="text"
                   placeholder="搜索币种..."
@@ -6218,7 +6218,7 @@ export default function WalletPage() {
             onClick={closePositionModal}
           />
           {/* 弹窗内容 */}
-          <div className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 max-w-[90vw] ${cardStyle} rounded-lg transition-all duration-300 ease-out ${
+          <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 max-w-[90vw] ${cardStyle} rounded-lg transition-all duration-300 ease-out ${
             positionModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}>
             <div className="p-6">
@@ -6239,7 +6239,7 @@ export default function WalletPage() {
               <div className="mb-6">
                 <div className="relative w-48 h-48 mx-auto mb-4">
                   {/* SVG 饼图 */}
-                  <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
+                  <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                     {/* USDT - 40% */}
                     <circle
                       cx="50"
@@ -6335,7 +6335,7 @@ export default function WalletPage() {
             onClick={closeTransferModal}
           />
           {/* 弹窗内容 */}
-          <div className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 max-w-[90vw] transition-all duration-300 ease-out ${
+          <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 max-w-[90vw] transition-all duration-300 ease-out ${
             transferModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           } ${
             isDark 
@@ -6391,7 +6391,7 @@ export default function WalletPage() {
                         <option value="理财账户">理财账户</option>
                         <option value="U卡账户">U卡账户</option>
                       </select>
-                      <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 pointer-events-none ${
+                      <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none ${
                         isDark ? 'text-gray-400' : 'text-gray-500'
                       }`} />
                     </div>
@@ -6439,7 +6439,7 @@ export default function WalletPage() {
                         <option value="理财账户">理财账户</option>
                         <option value="U卡账户">U卡账户</option>
                       </select>
-                      <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 pointer-events-none ${
+                      <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none ${
                         isDark ? 'text-gray-400' : 'text-gray-500'
                       }`} />
                     </div>
@@ -6640,8 +6640,8 @@ export default function WalletPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className={`relative max-w-md w-full max-h-[90vh] overflow-y-auto ${
             standbyRechargeAnimating 
-              ? "transform transition-all duration-300 ease-out scale-100 opacity-100" 
-              : "transform scale-95 opacity-0"
+              ? "transition-all duration-300 ease-out scale-100 opacity-100" 
+              : "scale-95 opacity-0"
           }`}>
             <div className={`${cardStyle} rounded-lg p-6 relative`}>
               {/* 标题栏 */}
@@ -6680,7 +6680,7 @@ export default function WalletPage() {
                     <option value="GBP">GBP - 英镑</option>
                     <option value="JPY">JPY - 日元</option>
                   </select>
-                  <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 pointer-events-none ${
+                  <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none ${
                     isDark ? 'text-gray-400' : 'text-gray-500'
                   }`} />
                 </div>
@@ -6737,7 +6737,7 @@ export default function WalletPage() {
                       isDark ? 'text-white placeholder-gray-500' : 'text-gray-900 placeholder-gray-400'
                     }`}
                   />
-                  <div className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-sm ${
+                  <div className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm ${
                     isDark ? 'text-gray-400' : 'text-gray-500'
                   }`}>
                     {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
