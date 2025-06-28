@@ -3596,7 +3596,7 @@ export default function WalletPage() {
                     : "bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0]"
                 } ${
                   selectedCardType === "virtual" 
-                    ? "shadow-2xl ring-2 ring-[#00D4AA] ring-opacity-60" 
+                    ? "shadow-lg ring-2 ring-[#00D4AA] ring-opacity-40" 
                     : "shadow-lg hover:shadow-xl"
                 }`}>
                   
@@ -3628,39 +3628,24 @@ export default function WalletPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                          Eye icon
+                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"} mb-1`}>
+                          币种换算
                         </div>
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setBalanceVisible(!balanceVisible)
-                          }}
-                          className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                            isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"
-                          }`}
-                        >
-                          {balanceVisible ? 
-                            <Eye className={`h-4 w-4 ${isDark ? "text-gray-400" : "text-gray-500"}`} /> : 
-                            <EyeOff className={`h-4 w-4 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
-                          }
-                        </button>
+                        <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+                          ${balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", "USD") : "****"}
+                        </div>
                       </div>
                     </div>
                     
                     {/* 余额区域 */}
                     <div>
-                      <div className={`text-4xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                        {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="w-2 h-2 rounded-full bg-[#00D4AA]"></span>
-                        <span className={`text-lg font-medium ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                      <div className="flex items-baseline space-x-3">
+                        <div className={`text-4xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
+                        </div>
+                        <span className="px-2 py-1 bg-[#00D4AA] text-white text-sm font-medium rounded-md">
                           USDT
                         </span>
-                      </div>
-                      <div className={`text-sm mt-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                        ≈ ${balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", "USD") : "****"}
                       </div>
                     </div>
                   </div>
@@ -3678,7 +3663,7 @@ export default function WalletPage() {
                     : "bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0]"
                 } ${
                   selectedCardType === "physical" 
-                    ? "shadow-2xl ring-2 ring-[#00D4AA] ring-opacity-60" 
+                    ? "shadow-lg ring-2 ring-[#00D4AA] ring-opacity-40" 
                     : "shadow-lg hover:shadow-xl"
                 }`}>
                   
@@ -3710,10 +3695,12 @@ export default function WalletPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                          Clock icon
+                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"} mb-1`}>
+                          币种换算
                         </div>
-                        <Clock className={`h-4 w-4 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+                        <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+                          ${balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", "USD") : "****"}
+                        </div>
                       </div>
                     </div>
                     
