@@ -3583,13 +3583,29 @@ export default function WalletPage() {
       case "U卡账户":
         return (
           <div className="space-y-6">
-            {/* 顶部两个银行卡 */}
+            {/* 顶部两个银行卡作为页签 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 虚拟卡 */}
-              <div className="relative">
-                <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 p-6 text-white shadow-2xl relative overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-300">
+              <div 
+                className="relative cursor-pointer"
+                onClick={() => setSelectedCardType("virtual")}
+              >
+                <div className={`w-full h-48 rounded-2xl bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 p-6 text-white shadow-2xl relative overflow-hidden transition-all duration-300 ${
+                  selectedCardType === "virtual" 
+                    ? "ring-4 ring-[#00D4AA] ring-opacity-60 transform scale-105" 
+                    : "hover:scale-105"
+                }`}>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
+                  
+                  {/* 选中指示器 */}
+                  {selectedCardType === "virtual" && (
+                    <div className="absolute top-4 right-4">
+                      <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center">
+                        <Check className="h-4 w-4 text-black" />
+                      </div>
+                    </div>
+                  )}
                   
                   <div className="relative z-10">
                     <div className="flex justify-between items-start mb-4">
@@ -3624,10 +3640,26 @@ export default function WalletPage() {
               </div>
 
               {/* 实体卡 */}
-              <div className="relative">
-                <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 text-white shadow-2xl relative overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-300">
+              <div 
+                className="relative cursor-pointer"
+                onClick={() => setSelectedCardType("physical")}
+              >
+                <div className={`w-full h-48 rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 text-white shadow-2xl relative overflow-hidden transition-all duration-300 ${
+                  selectedCardType === "physical" 
+                    ? "ring-4 ring-[#00D4AA] ring-opacity-60 transform scale-105" 
+                    : "hover:scale-105"
+                }`}>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+                  
+                  {/* 选中指示器 */}
+                  {selectedCardType === "physical" && (
+                    <div className="absolute top-4 right-4">
+                      <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center">
+                        <Check className="h-4 w-4 text-black" />
+                      </div>
+                    </div>
+                  )}
                   
                   <div className="relative z-10">
                     <div className="flex justify-between items-start mb-4">
@@ -3659,34 +3691,6 @@ export default function WalletPage() {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* 按钮切换选择 */}
-            <div className="flex items-center justify-center">
-              <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
-                <button
-                  onClick={() => setSelectedCardType("virtual")}
-                  className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
-                    selectedCardType === "virtual"
-                      ? "bg-[#00D4AA] text-black shadow-sm"
-                      : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  <CreditCard className="h-4 w-4" />
-                  <span>虚拟卡</span>
-                </button>
-                <button
-                  onClick={() => setSelectedCardType("physical")}
-                  className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
-                    selectedCardType === "physical"
-                      ? "bg-[#00D4AA] text-black shadow-sm"
-                      : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  <CardIcon className="h-4 w-4" />
-                  <span>实体卡</span>
-                </button>
               </div>
             </div>
 
