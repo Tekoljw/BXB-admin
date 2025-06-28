@@ -15,6 +15,7 @@ export default function ProfilePage() {
   const { isDark } = useTheme()
   const [activeSection, setActiveSection] = useState("personal")
   const [showEditModal, setShowEditModal] = useState(false)
+  const [selectedApiType, setSelectedApiType] = useState("bedao")
   const [editForm, setEditForm] = useState({
     nickname: '交易达人',
     bio: 'Professional trader with 5+ years experience',
@@ -234,16 +235,124 @@ export default function ProfilePage() {
     </div>
   )
 
-  const renderApiManagement = () => (
-    <div className={`${cardStyle} rounded-lg p-6 border`}>
-      <h2 className={`text-xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-        API管理
-      </h2>
-      <p className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>
-        API管理功能正在开发中...
-      </p>
-    </div>
-  )
+  const renderApiManagement = () => {
+    return (
+      <div className="space-y-6">
+        <div className={`${cardStyle} rounded-lg p-6 border`}>
+          <h2 className={`text-xl font-bold mb-6 ${isDark ? "text-white" : "text-gray-800"}`}>
+            API管理
+          </h2>
+          
+          {/* API Type Tabs */}
+          <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 mb-6">
+            <button
+              onClick={() => setSelectedApiType("bedao")}
+              className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                selectedApiType === "bedao"
+                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
+            >
+              BeDAO API【交易】
+            </button>
+            <button
+              onClick={() => setSelectedApiType("bepay")}
+              className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                selectedApiType === "bepay"
+                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
+            >
+              BePAY API【支付】
+            </button>
+          </div>
+          
+          {/* API Content */}
+          {selectedApiType === "bedao" ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <div>
+                  <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+                    BeDAO 交易API
+                  </h3>
+                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"} mt-1`}>
+                    用于加密货币交易、市场数据、订单管理等功能
+                  </p>
+                </div>
+                <button className="px-4 py-2 bg-[#00D4AA] text-black rounded-lg text-sm font-medium hover:bg-[#00B894] transition-colors">
+                  创建API密钥
+                </button>
+              </div>
+              
+              <div className={`p-4 border border-gray-200 dark:border-gray-700 rounded-lg ${isDark ? "bg-gray-800" : "bg-gray-50"}`}>
+                <h4 className={`font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  功能权限
+                </h4>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="trade" className="rounded" />
+                    <label htmlFor="trade" className={isDark ? "text-gray-300" : "text-gray-700"}>现货交易</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="futures" className="rounded" />
+                    <label htmlFor="futures" className={isDark ? "text-gray-300" : "text-gray-700"}>合约交易</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="market" className="rounded" />
+                    <label htmlFor="market" className={isDark ? "text-gray-300" : "text-gray-700"}>市场数据</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="account" className="rounded" />
+                    <label htmlFor="account" className={isDark ? "text-gray-300" : "text-gray-700"}>账户信息</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <div>
+                  <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+                    BePAY 支付API
+                  </h3>
+                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"} mt-1`}>
+                    用于法币支付、加密货币支付、商户管理等功能
+                  </p>
+                </div>
+                <button className="px-4 py-2 bg-[#00D4AA] text-black rounded-lg text-sm font-medium hover:bg-[#00B894] transition-colors">
+                  创建API密钥
+                </button>
+              </div>
+              
+              <div className={`p-4 border border-gray-200 dark:border-gray-700 rounded-lg ${isDark ? "bg-gray-800" : "bg-gray-50"}`}>
+                <h4 className={`font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                  功能权限
+                </h4>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="fiat-payment" className="rounded" />
+                    <label htmlFor="fiat-payment" className={isDark ? "text-gray-300" : "text-gray-700"}>法币支付</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="crypto-payment" className="rounded" />
+                    <label htmlFor="crypto-payment" className={isDark ? "text-gray-300" : "text-gray-700"}>加密货币支付</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="merchant" className="rounded" />
+                    <label htmlFor="merchant" className={isDark ? "text-gray-300" : "text-gray-700"}>商户管理</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="webhook" className="rounded" />
+                    <label htmlFor="webhook" className={isDark ? "text-gray-300" : "text-gray-700"}>回调通知</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   const renderSettingsPage = () => (
     <div className={`${cardStyle} rounded-lg p-6 border`}>
