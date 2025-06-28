@@ -48,6 +48,8 @@ import {
   Users,
   Receipt,
   Coins,
+  HelpCircle,
+  Zap,
   Lock,
   Unlock,
   MapPin,
@@ -3582,7 +3584,86 @@ export default function WalletPage() {
       case "U卡账户":
         return (
           <div className="space-y-6">
-            {/* 卡片类型选择 - 简洁的切换按钮 */}
+            {/* 顶部两个银行卡 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* 虚拟卡 */}
+              <div className="relative">
+                <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 p-6 text-white shadow-2xl relative overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-300">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <div className="text-xs opacity-80 mb-1">BeDAO Virtual Card</div>
+                        <div className="text-lg font-bold">虚拟U卡</div>
+                      </div>
+                      <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                        <CreditCard className="h-4 w-4" />
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <div className="text-xs opacity-70 mb-1">总余额</div>
+                      <div className="text-2xl font-bold">
+                        {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <div className="text-xs opacity-70">Card Number</div>
+                        <div className="text-sm font-mono tracking-wider">**** **** **** 5678</div>
+                      </div>
+                      <div>
+                        <div className="text-xs opacity-70">Valid Thru</div>
+                        <div className="text-sm font-medium">12/28</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 实体卡 */}
+              <div className="relative">
+                <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 text-white shadow-2xl relative overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-300">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <div className="text-xs opacity-80 mb-1">BeDAO Physical Card</div>
+                        <div className="text-lg font-bold">实体U卡</div>
+                      </div>
+                      <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                        <CardIcon className="h-4 w-4" />
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <div className="text-xs opacity-70 mb-1">总余额</div>
+                      <div className="text-2xl font-bold">
+                        {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <div className="text-xs opacity-70">Card Number</div>
+                        <div className="text-sm font-mono tracking-wider">**** **** **** 1234</div>
+                      </div>
+                      <div>
+                        <div className="text-xs opacity-70">Valid Thru</div>
+                        <div className="text-sm font-medium">12/28</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 按钮切换选择 */}
             <div className="flex items-center justify-center">
               <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
                 <button
@@ -3610,357 +3691,302 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 根据卡片类型显示内容 */}
+            {/* 功能按钮区域 */}
             {selectedCardType === "virtual" ? (
-              <div className="space-y-6">
-                {!walletData["U卡账户"].hasVirtualCard ? (
-                  /* 虚拟卡开卡引导 */
-                  <div className={`${cardStyle} rounded-xl p-8`}>
-                    <div className="text-center max-w-md mx-auto">
-                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                        <CreditCard className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="text-xl font-bold mb-2">开通虚拟U卡</h3>
-                      <p className="text-gray-500 mb-6">即开即用，支持全球在线支付</p>
-                      
-                      <div className="grid grid-cols-2 gap-3 mb-6 text-sm">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                          <span>即时开卡</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                          <span>免开卡费</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                          <span>在线支付</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                          <span>实时通知</span>
-                        </div>
-                      </div>
-                      
-                      <Button 
-                        onClick={() => setShowVirtualCardApplication(true)}
-                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black font-medium"
-                      >
-                        立即开通虚拟U卡
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  /* 虚拟卡管理界面 */
-                  <div className="space-y-6">
-                    {/* 虚拟卡展示 */}
-                    <div className="flex justify-center">
-                      <div className="w-full max-w-sm h-52 rounded-2xl bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 p-6 text-white shadow-2xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
-                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
-                        
-                        <div className="relative z-10">
-                          <div className="flex justify-between items-start mb-8">
-                            <div>
-                              <div className="text-xs opacity-80 mb-1">BeDAO Virtual Card</div>
-                              <div className="text-lg font-bold">虚拟U卡</div>
-                            </div>
-                            <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                              <CreditCard className="h-4 w-4" />
-                            </div>
-                          </div>
-                          
-                          <div className="mb-6">
-                            <div className="text-xs opacity-70 mb-1">Card Number</div>
-                            <div className="text-lg font-mono tracking-wider">**** **** **** 5678</div>
-                          </div>
-                          
-                          <div className="flex justify-between items-end">
-                            <div>
-                              <div className="text-xs opacity-70">Valid Thru</div>
-                              <div className="text-sm font-medium">12/28</div>
-                            </div>
-                            <div>
-                              <div className="text-xs opacity-70">CVV</div>
-                              <div className="text-sm font-medium">***</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 余额和限额信息 */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className={`${cardStyle} rounded-lg p-4`}>
-                        <div className="text-sm text-gray-500 mb-1">虚拟卡余额</div>
-                        <div className="text-xl font-bold">
-                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
-                        </div>
-                      </div>
-                      <div className={`${cardStyle} rounded-lg p-4`}>
-                        <div className="text-sm text-gray-500 mb-1">单笔限额</div>
-                        <div className="text-xl font-bold text-blue-500">$2,000</div>
-                      </div>
-                      <div className={`${cardStyle} rounded-lg p-4`}>
-                        <div className="text-sm text-gray-500 mb-1">本月消费</div>
-                        <div className="text-xl font-bold text-orange-500">
-                          {balanceVisible ? convertBalance(walletData["U卡账户"].monthlySpent, "USDT", selectedDisplayCurrency) : "****"}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 虚拟卡功能按钮 */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      <Button 
-                        variant="outline" 
-                        className="h-12 flex flex-col items-center justify-center space-y-1 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-                      >
-                        <Plus className="h-4 w-4" />
-                        <span className="text-xs">充值</span>
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="h-12 flex flex-col items-center justify-center space-y-1 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-                      >
-                        <CreditCard className="h-4 w-4" />
-                        <span className="text-xs">消费记录</span>
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="h-12 flex flex-col items-center justify-center space-y-1 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-                      >
-                        <Settings className="h-4 w-4" />
-                        <span className="text-xs">卡片设置</span>
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="h-12 flex flex-col items-center justify-center space-y-1 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-                      >
-                        <ArrowLeftRight className="h-4 w-4" />
-                        <span className="text-xs">划转</span>
-                      </Button>
-                    </div>
-
-                    {/* 最近交易 */}
-                    <div className={`${cardStyle} rounded-lg p-4`}>
-                      <h4 className="font-medium mb-3">最近交易</h4>
-                      <div className="space-y-3">
-                        {walletData["U卡账户"].transactions.slice(0, 3).map((transaction, index) => (
-                          <div key={index} className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                transaction.amount.startsWith('+') 
-                                  ? 'bg-green-100 text-green-600' 
-                                  : 'bg-red-100 text-red-600'
-                              }`}>
-                                {transaction.amount.startsWith('+') ? 
-                                  <Plus className="h-4 w-4" /> : 
-                                  <Minus className="h-4 w-4" />
-                                }
-                              </div>
-                              <div>
-                                <div className="font-medium text-sm">{transaction.merchant}</div>
-                                <div className="text-xs text-gray-500">{transaction.date}</div>
-                              </div>
-                            </div>
-                            <div className={`font-medium text-sm ${
-                              transaction.amount.startsWith('+') ? 'text-green-500' : 'text-red-500'
-                            }`}>
-                              {transaction.amount}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
+              /* 虚拟卡按钮 */
+              <div className="grid grid-cols-7 gap-3">
+                <Button 
+                  onClick={() => setSelectedAction("my-virtual-cards")}
+                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
+                    selectedAction === "my-virtual-cards"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <CreditCard className="h-5 w-5" />
+                  <span className="text-xs">我的虚拟卡</span>
+                </Button>
+                
+                <Button 
+                  onClick={() => setShowVirtualCardApplication(true)}
+                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
+                    selectedAction === "apply-new-card"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <Plus className="h-5 w-5" />
+                  <span className="text-xs">申请新卡</span>
+                </Button>
+                
+                <Button 
+                  onClick={() => setSelectedAction("how-to-use")}
+                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
+                    selectedAction === "how-to-use"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <HelpCircle className="h-5 w-5" />
+                  <span className="text-xs">如何使用虚拟卡</span>
+                </Button>
+                
+                <Button 
+                  onClick={() => setSelectedAction("transfer")}
+                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
+                    selectedAction === "transfer"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <ArrowLeftRight className="h-5 w-5" />
+                  <span className="text-xs">划款</span>
+                </Button>
+                
+                {/* 仅图标按钮 */}
+                <Button 
+                  onClick={() => setSelectedAction("fund-records")}
+                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
+                    selectedAction === "fund-records"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <Wallet className="h-5 w-5" />
+                </Button>
+                
+                <Button 
+                  onClick={() => setSelectedAction("usage-bills")}
+                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
+                    selectedAction === "usage-bills"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <Receipt className="h-5 w-5" />
+                </Button>
+                
+                <Button 
+                  onClick={() => setSelectedAction("operation-records")}
+                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
+                    selectedAction === "operation-records"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <FileText className="h-5 w-5" />
+                </Button>
               </div>
             ) : (
-              <div className="space-y-6">
-                {!walletData["U卡账户"].hasPhysicalCard ? (
-                  /* 实体卡申请引导 */
-                  <div className={`${cardStyle} rounded-xl p-8`}>
-                    <div className="text-center max-w-md mx-auto">
-                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center">
-                        <CardIcon className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="text-xl font-bold mb-2">申请实体U卡</h3>
-                      <p className="text-gray-500 mb-6">全球ATM取现和POS刷卡消费</p>
-                      
-                      <div className="grid grid-cols-2 gap-3 mb-6 text-sm">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                          <span>ATM取现</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                          <span>线下刷卡</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                          <span>更高限额</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                          <span>全球邮寄</span>
-                        </div>
-                      </div>
-                      
-                      <div className="text-sm text-gray-600 mb-4">
-                        开卡费用: <span className="font-medium">$15 USDT</span> (一次性)
-                      </div>
-                      
-                      <Button 
-                        onClick={() => setShowPhysicalCardApplication(true)}
-                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black font-medium"
-                      >
-                        申请实体U卡
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  /* 实体卡管理界面 */
-                  <div className="space-y-6">
-                    {/* 实体卡展示 */}
-                    <div className="flex justify-center">
-                      <div className="w-full max-w-sm h-52 rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 text-white shadow-2xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
-                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
-                        
-                        <div className="relative z-10">
-                          <div className="flex justify-between items-start mb-8">
-                            <div>
-                              <div className="text-xs opacity-80 mb-1">BeDAO Physical Card</div>
-                              <div className="text-lg font-bold">实体U卡</div>
-                            </div>
-                            <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                              <CardIcon className="h-4 w-4" />
-                            </div>
-                          </div>
-                          
-                          <div className="mb-6">
-                            <div className="text-xs opacity-70 mb-1">Card Number</div>
-                            <div className="text-lg font-mono tracking-wider">**** **** **** 1234</div>
-                          </div>
-                          
-                          <div className="flex justify-between items-end">
-                            <div>
-                              <div className="text-xs opacity-70">Cardholder</div>
-                              <div className="text-sm font-medium">JOHN DOE</div>
-                            </div>
-                            <div>
-                              <div className="text-xs opacity-70">Valid Thru</div>
-                              <div className="text-sm font-medium">12/28</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+              /* 实体卡按钮 */
+              <div className="grid grid-cols-7 gap-3">
+                <Button 
+                  onClick={() => setSelectedAction("my-cards")}
+                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
+                    selectedAction === "my-cards"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <CardIcon className="h-5 w-5" />
+                  <span className="text-xs">我的卡片</span>
+                </Button>
+                
+                <Button 
+                  onClick={() => setShowPhysicalCardApplication(true)}
+                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
+                    selectedAction === "apply-new-card"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <Plus className="h-5 w-5" />
+                  <span className="text-xs">申请新卡</span>
+                </Button>
+                
+                <Button 
+                  onClick={() => setSelectedAction("activate-card")}
+                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
+                    selectedAction === "activate-card"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <Zap className="h-5 w-5" />
+                  <span className="text-xs">激活卡片</span>
+                </Button>
+                
+                <Button 
+                  onClick={() => setSelectedAction("transfer")}
+                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
+                    selectedAction === "transfer"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <ArrowLeftRight className="h-5 w-5" />
+                  <span className="text-xs">划款</span>
+                </Button>
+                
+                {/* 仅图标按钮 */}
+                <Button 
+                  onClick={() => setSelectedAction("fund-records")}
+                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
+                    selectedAction === "fund-records"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <Wallet className="h-5 w-5" />
+                </Button>
+                
+                <Button 
+                  onClick={() => setSelectedAction("usage-bills")}
+                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
+                    selectedAction === "usage-bills"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <Receipt className="h-5 w-5" />
+                </Button>
+                
+                <Button 
+                  onClick={() => setSelectedAction("operation-records")}
+                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
+                    selectedAction === "operation-records"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <FileText className="h-5 w-5" />
+                </Button>
+              </div>
+            )}
 
-                    {/* 余额和限额信息 */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className={`${cardStyle} rounded-lg p-4`}>
-                        <div className="text-sm text-gray-500 mb-1">实体卡余额</div>
-                        <div className="text-xl font-bold">
-                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
+            {/* 内容区域 */}
+            <div className={`${cardStyle} rounded-lg p-6 min-h-[400px]`}>
+              {selectedAction === "my-virtual-cards" ? (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold mb-4">我的虚拟卡</h3>
+                  
+                  {/* 虚拟卡列表 */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className={`p-6 rounded-lg border ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'} hover:shadow-md transition-all`}>
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h4 className="font-medium">主卡 - USDT</h4>
+                          <p className="text-sm text-gray-500">虚拟借记卡</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">正常</span>
+                          <Button size="sm" variant="outline" className="border-[#00D4AA] text-[#00D4AA]">
+                            管理
+                          </Button>
                         </div>
                       </div>
-                      <div className={`${cardStyle} rounded-lg p-4`}>
-                        <div className="text-sm text-gray-500 mb-1">单日限额</div>
-                        <div className="text-xl font-bold text-blue-500">$10,000</div>
-                      </div>
-                      <div className={`${cardStyle} rounded-lg p-4`}>
-                        <div className="text-sm text-gray-500 mb-1">本月消费</div>
-                        <div className="text-xl font-bold text-orange-500">
-                          {balanceVisible ? convertBalance(walletData["U卡账户"].monthlySpent, "USDT", selectedDisplayCurrency) : "****"}
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-500">卡号</span>
+                          <span className="text-sm font-mono">**** **** **** 5678</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-500">余额</span>
+                          <span className="text-sm font-bold text-[#00D4AA]">
+                            {balanceVisible ? "1,234.56 USDT" : "****"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-500">有效期</span>
+                          <span className="text-sm">12/28</span>
                         </div>
                       </div>
-                    </div>
-
-                    {/* 实体卡功能按钮 */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      <Button 
-                        variant="outline" 
-                        className="h-12 flex flex-col items-center justify-center space-y-1 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-                      >
-                        <Plus className="h-4 w-4" />
-                        <span className="text-xs">充值</span>
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="h-12 flex flex-col items-center justify-center space-y-1 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-                      >
-                        <CreditCard className="h-4 w-4" />
-                        <span className="text-xs">消费记录</span>
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="h-12 flex flex-col items-center justify-center space-y-1 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-                      >
-                        <Settings className="h-4 w-4" />
-                        <span className="text-xs">卡片设置</span>
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="h-12 flex flex-col items-center justify-center space-y-1 border-gray-300 hover:border-[#00D4AA] hover:bg-[#00D4AA]/10"
-                      >
-                        <Lock className="h-4 w-4" />
-                        <span className="text-xs">冻结/解冻</span>
-                      </Button>
-                    </div>
-
-                    {/* 卡片状态 */}
-                    <div className={`${cardStyle} rounded-lg p-4`}>
-                      <h4 className="font-medium mb-3">卡片状态</h4>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                          <div>
-                            <div className="font-medium text-sm">正常使用</div>
-                            <div className="text-xs text-gray-500">卡片功能正常，可以正常消费和取现</div>
-                          </div>
-                        </div>
-                        <Button size="sm" variant="outline" className="border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA]/10">
-                          管理
+                      
+                      <div className="flex space-x-2 mt-4">
+                        <Button size="sm" className="flex-1 bg-[#00D4AA] hover:bg-[#00B894] text-black">
+                          充值
+                        </Button>
+                        <Button size="sm" variant="outline" className="flex-1 border-red-500 text-red-500 hover:bg-red-50">
+                          冻结
                         </Button>
                       </div>
                     </div>
-
-                    {/* 最近交易 */}
-                    <div className={`${cardStyle} rounded-lg p-4`}>
-                      <h4 className="font-medium mb-3">最近交易</h4>
-                      <div className="space-y-3">
-                        {walletData["U卡账户"].transactions.slice(0, 3).map((transaction, index) => (
-                          <div key={index} className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                transaction.amount.startsWith('+') 
-                                  ? 'bg-green-100 text-green-600' 
-                                  : 'bg-red-100 text-red-600'
-                              }`}>
-                                {transaction.amount.startsWith('+') ? 
-                                  <Plus className="h-4 w-4" /> : 
-                                  <Minus className="h-4 w-4" />
-                                }
-                              </div>
-                              <div>
-                                <div className="font-medium text-sm">{transaction.merchant}</div>
-                                <div className="text-xs text-gray-500">{transaction.date}</div>
-                              </div>
-                            </div>
-                            <div className={`font-medium text-sm ${
-                              transaction.amount.startsWith('+') ? 'text-green-500' : 'text-red-500'
-                            }`}>
-                              {transaction.amount}
-                            </div>
-                          </div>
-                        ))}
+                  </div>
+                </div>
+              ) : selectedAction === "my-cards" ? (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold mb-4">我的卡片</h3>
+                  
+                  {/* 实体卡列表 */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className={`p-6 rounded-lg border ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'} hover:shadow-md transition-all`}>
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h4 className="font-medium">白金卡 - USDT</h4>
+                          <p className="text-sm text-gray-500">实体借记卡</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">激活</span>
+                          <Button size="sm" variant="outline" className="border-[#00D4AA] text-[#00D4AA]">
+                            管理
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-500">卡号</span>
+                          <span className="text-sm font-mono">**** **** **** 1234</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-500">余额</span>
+                          <span className="text-sm font-bold text-[#00D4AA]">
+                            {balanceVisible ? "1,234.56 USDT" : "****"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-500">有效期</span>
+                          <span className="text-sm">12/28</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-500">持卡人</span>
+                          <span className="text-sm">JOHN DOE</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex space-x-2 mt-4">
+                        <Button size="sm" className="flex-1 bg-[#00D4AA] hover:bg-[#00B894] text-black">
+                          充值
+                        </Button>
+                        <Button size="sm" variant="outline" className="flex-1 border-red-500 text-red-500 hover:bg-red-50">
+                          冻结
+                        </Button>
                       </div>
                     </div>
                   </div>
-                )}
-              </div>
-            )}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="text-gray-500 mb-4">请选择功能</div>
+                  <p className="text-sm text-gray-400">选择上方按钮查看相应功能</p>
+                </div>
+              )}
+            </div>
 
             {/* 虚拟卡申请流程模态框 */}
             {showVirtualCardApplication && (
