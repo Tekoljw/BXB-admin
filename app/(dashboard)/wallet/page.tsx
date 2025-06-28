@@ -414,13 +414,12 @@ export default function WalletPage() {
   // 筛选后的地址列表
   const filteredAddressList = addressTableData.filter(address => {
     const matchesNetwork = selectedNetwork === "TRC20" ? true : address.network === selectedNetwork
-    const matchesCurrency = selectedAddressCurrency === "全部" || address.currency === selectedAddressCurrency
     const matchesSearch = addressSearchTerm === "" || 
       address.fullAddress.toLowerCase().includes(addressSearchTerm.toLowerCase()) ||
       address.userId.toLowerCase().includes(addressSearchTerm.toLowerCase()) ||
       address.username.includes(addressSearchTerm)
     
-    return matchesNetwork && matchesCurrency && matchesSearch
+    return matchesNetwork && matchesSearch
   })
 
   // 地址管理相关函数
@@ -2867,7 +2866,7 @@ export default function WalletPage() {
 
                       {/* 网络筛选卡片 */}
                       <div className={`${cardStyle} rounded-lg p-4`}>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div>
                           {/* 区块链网络筛选 */}
                           <div>
                             <div className="flex items-center space-x-2 mb-2 overflow-x-auto pb-2">
@@ -2875,40 +2874,19 @@ export default function WalletPage() {
                                 <button
                                   key={network}
                                   onClick={() => setSelectedNetwork(network)}
-                                  className={`px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                                  className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all border ${
                                     selectedNetwork === network
-                                      ? "bg-[#00D4AA] text-white"
+                                      ? isDark 
+                                        ? "bg-white text-black border-white"
+                                        : "bg-black text-white border-black"
                                       : isDark 
-                                        ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
-                                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                        ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                                        : "bg-transparent text-black border-black hover:bg-black hover:text-white"
                                   }`}
                                 >
                                   {network}
                                 </button>
                               ))}
-                              <div className="w-2 h-8 bg-[#00D4AA] rounded-full"></div>
-                            </div>
-                          </div>
-                          
-                          {/* 币种筛选 */}
-                          <div>
-                            <div className="flex items-center space-x-2 mb-2 overflow-x-auto pb-2">
-                              {["全部", "USDT", "TRX", "USDC", "TUSD"].map((currency) => (
-                                <button
-                                  key={currency}
-                                  onClick={() => setSelectedAddressCurrency(currency)}
-                                  className={`px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
-                                    selectedAddressCurrency === currency
-                                      ? "bg-[#00D4AA] text-white"
-                                      : isDark 
-                                        ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
-                                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                  }`}
-                                >
-                                  {currency}
-                                </button>
-                              ))}
-                              <div className="w-2 h-8 bg-[#00D4AA] rounded-full"></div>
                             </div>
                           </div>
                         </div>
