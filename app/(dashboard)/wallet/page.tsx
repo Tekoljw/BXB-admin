@@ -2865,35 +2865,35 @@ export default function WalletPage() {
                         <div className={`${cardStyle} rounded-lg p-4 text-center`}>
                           <div className="text-2xl font-bold">4</div>
                           <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>TRC20地址总数</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>总地址数：18</div>
+                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>总地址数：<span className="text-blue-500">18</span></div>
                         </div>
                         
                         {/* 卡片2: 已分配TRC20地址数 */}
                         <div className={`${cardStyle} rounded-lg p-4 text-center`}>
                           <div className="text-2xl font-bold text-green-500">3</div>
                           <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>已分配TRC20地址数</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>未分配TRC20地址数：1</div>
+                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>未分配TRC20地址数：<span className="text-red-500">1</span></div>
                         </div>
                         
                         {/* 卡片3: 已分配总地址数 */}
                         <div className={`${cardStyle} rounded-lg p-4 text-center`}>
                           <div className="text-2xl font-bold text-green-500">16</div>
                           <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>已分配总地址数</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>未分配总地址数：2</div>
+                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>未分配总地址数：<span className="text-red-500">2</span></div>
                         </div>
                         
                         {/* 卡片4: 本月地址费用 */}
                         <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                          <div className="text-2xl font-bold text-orange-500">7 USDT</div>
+                          <div className="text-2xl font-bold text-orange-500">7 <span className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT</span></div>
                           <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>本月地址费用</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>上月地址费用：6 USDT</div>
+                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>上月地址费用：<span className="text-purple-500">6</span> <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT</span></div>
                         </div>
                         
                         {/* 卡片5: 本月TRC20地址费用 */}
                         <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                          <div className="text-2xl font-bold text-orange-500">1 USDT</div>
+                          <div className="text-2xl font-bold text-orange-500">1 <span className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT</span></div>
                           <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>本月TRC20地址费用</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>TRC20地址价格：100U/1000地址</div>
+                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>TRC20地址价格：<span className="text-blue-500">100U</span>/1000地址</div>
                         </div>
                       </div>
 
