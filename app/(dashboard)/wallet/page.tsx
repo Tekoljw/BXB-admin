@@ -3272,8 +3272,8 @@ export default function WalletPage() {
                                   <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>支付货币</th>
                                   <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>支付方式</th>
                                   <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>可购买加密货币</th>
-                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>USDT汇率</th>
-                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>支持输出</th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>汇率</th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>买卖</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -3312,10 +3312,14 @@ export default function WalletPage() {
                                     </div>
                                   </td>
                                   <td className="py-4 px-4">
-                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1 USDT = 1.02 USD</span>
+                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1.02</span>
                                   </td>
                                   <td className="py-4 px-4">
-                                    <button className="px-3 py-1 rounded text-sm bg-green-500 text-white">支持</button>
+                                    <div className="text-sm font-medium">
+                                      <span className="text-green-600">买</span>
+                                      <span className="mx-1">/</span>
+                                      <span className="text-green-600">卖</span>
+                                    </div>
                                   </td>
                                 </tr>
 
@@ -3354,10 +3358,14 @@ export default function WalletPage() {
                                     </div>
                                   </td>
                                   <td className="py-4 px-4">
-                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1 USDT = 1.10 EUR</span>
+                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1.10</span>
                                   </td>
                                   <td className="py-4 px-4">
-                                    <button className="px-3 py-1 rounded text-sm bg-green-500 text-white">支持</button>
+                                    <div className="text-sm font-medium">
+                                      <span className="text-green-600">买</span>
+                                      <span className="mx-1">/</span>
+                                      <span className="text-green-600">卖</span>
+                                    </div>
                                   </td>
                                 </tr>
 
@@ -3396,10 +3404,14 @@ export default function WalletPage() {
                                     </div>
                                   </td>
                                   <td className="py-4 px-4">
-                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1 USDT = 1.29 GBP</span>
+                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1.29</span>
                                   </td>
                                   <td className="py-4 px-4">
-                                    <button className="px-3 py-1 rounded text-sm bg-green-500 text-white">支持</button>
+                                    <div className="text-sm font-medium">
+                                      <span className="text-green-600">买</span>
+                                      <span className="mx-1">/</span>
+                                      <span className="text-gray-400">卖</span>
+                                    </div>
                                   </td>
                                 </tr>
 
@@ -3438,10 +3450,14 @@ export default function WalletPage() {
                                     </div>
                                   </td>
                                   <td className="py-4 px-4">
-                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">1 USDT = 0.0070 JPY</span>
+                                    <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">0.0070</span>
                                   </td>
                                   <td className="py-4 px-4">
-                                    <button className="px-3 py-1 rounded text-sm bg-red-500 text-white">不支持</button>
+                                    <div className="text-sm font-medium">
+                                      <span className="text-gray-400">买</span>
+                                      <span className="mx-1">/</span>
+                                      <span className="text-gray-400">卖</span>
+                                    </div>
                                   </td>
                                 </tr>
                               </tbody>
