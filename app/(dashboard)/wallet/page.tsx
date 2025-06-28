@@ -2414,8 +2414,24 @@ export default function WalletPage() {
                 <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? "$125,860.00" : "****"}
                 </div>
-                <div className="text-gray-500 text-sm">
-                  代付备用金：$38,520.00
+                <div className="flex items-center justify-between">
+                  <div className="text-gray-500 text-sm">
+                    代付备用金：$38,520.00
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      // Handle API documentation click
+                    }}
+                    className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                      isDark 
+                        ? "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white" 
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
+                    }`}
+                    title="API文档"
+                  >
+                    API文档
+                  </button>
                 </div>
               </div>
 
@@ -2451,8 +2467,24 @@ export default function WalletPage() {
                 <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? "45,230.50 USDT" : "****"}
                 </div>
-                <div className="text-gray-500 text-sm">
-                  其他币种：28.95 ETH + 1.26 BTC
+                <div className="flex items-center justify-between">
+                  <div className="text-gray-500 text-sm">
+                    其他币种：28.95 ETH + 1.26 BTC
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      // Handle API documentation click
+                    }}
+                    className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                      isDark 
+                        ? "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white" 
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
+                    }`}
+                    title="API文档"
+                  >
+                    API文档
+                  </button>
                 </div>
               </div>
             </div>
