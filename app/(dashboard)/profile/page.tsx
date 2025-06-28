@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useTheme } from "@/contexts/theme-context"
-import { User, Shield, Key, CreditCard, Settings, Home, ChevronRight, Camera, X } from "lucide-react"
+import { User, Shield, Key, CreditCard, Settings, Home, ChevronRight, Camera, X, Heart, MessageCircle, Share, Star, MoreHorizontal } from "lucide-react"
 
 interface ProfileMenuItem {
   id: string
@@ -16,6 +16,8 @@ export default function ProfilePage() {
   const [activeSection, setActiveSection] = useState("personal")
   const [showEditModal, setShowEditModal] = useState(false)
   const [selectedApiType, setSelectedApiType] = useState("bedao")
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [favorites, setFavorites] = useState<string[]>(["post-1"])
   const [editForm, setEditForm] = useState({
     nickname: '交易达人',
     bio: 'Professional trader with 5+ years experience',
@@ -33,6 +35,44 @@ export default function ProfilePage() {
       setEditForm(prev => ({ ...prev, avatar: file }))
     }
   }
+
+  const toggleFavorite = (postId: string) => {
+    setFavorites((prev) => (prev.includes(postId) ? prev.filter((f) => f !== postId) : [...prev, postId]))
+  }
+
+  const handleLike = (postId: string) => {
+    // Handle like logic
+  }
+
+  // Sample post data for user's own posts
+  const userPosts = [
+    {
+      id: "post-1",
+      author: "交易达人",
+      avatar: "我",
+      verified: true,
+      content: "刚刚发现一个新的DeFi协议，APY高达200%！但是大家要注意风险，高收益往往伴随高风险。DYOR! 💰",
+      timestamp: "4小时前",
+      likes: 1876,
+      comments: 234,
+      shares: 67,
+      isLiked: true,
+      tags: ["DeFi", "高收益挖矿", "风险提示"],
+    },
+    {
+      id: "post-2", 
+      author: "交易达人",
+      avatar: "我",
+      verified: true,
+      content: "今日BTC突破新高，但要注意成交量配合情况。技术面看RSI已进入超买区间，短期可能面临回调压力。建议分批减仓，等待更好的入场机会。",
+      timestamp: "1天前",
+      likes: 3245,
+      comments: 567,
+      shares: 123,
+      isLiked: false,
+      tags: ["BTC", "技术分析", "交易策略"],
+    }
+  ]
 
   const cardStyle = isDark ? "bg-[#1a1d29] border-[#252842]" : "bg-white border-gray-200"
 
@@ -148,93 +188,159 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Sample Post Content */}
-        <div className={`${cardStyle} rounded-xl p-6 transition-all duration-200 hover:shadow-lg hover:${
-          isDark ? "bg-[#1e2332]" : "bg-gray-50"
-        }`}>
-          {/* 头部 - 用户信息和操作 */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold shadow-lg">
-                我
-              </div>
-              <div>
-                <div className="flex items-center space-x-2">
-                  <span className={`font-bold text-base ${isDark ? "text-white" : "text-gray-900"}`}>
-                    交易达人
-                  </span>
-                  <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+        {/* User Posts */}
+        <div className="space-y-6">
+          {userPosts.map((post) => {
+            const isFavorite = favorites.includes(post.id)
+
+            return (
+              <div
+                key={post.id}
+                className={`${cardStyle} rounded-xl p-6 transition-all duration-200 hover:shadow-lg hover:${
+                  isDark ? "bg-[#1e2332]" : "bg-gray-50"
+                }`}
+              >
+                {/* 头部 - 用户信息和操作 */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold shadow-lg">
+                      {post.avatar}
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-bold text-base ${isDark ? "text-white" : "text-gray-900"}`}>
+                          {post.author}
+                        </span>
+                        {post.verified && (
+                          <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                        )}
+                        {/* 信誉担保标签 */}
+                        <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                          信誉担保$123K
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-500">{post.timestamp}</div>
+                    </div>
                   </div>
-                  {/* 信誉担保标签 */}
-                  <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                    信誉担保$123K
-                  </span>
+                  
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => toggleFavorite(post.id)}
+                      className={`p-2 rounded-full transition-all duration-200 ${
+                        isFavorite 
+                          ? "text-yellow-500 bg-yellow-50 hover:bg-yellow-100" 
+                          : "text-gray-400 hover:text-yellow-500 hover:bg-gray-50"
+                      }`}
+                    >
+                      <Star className="h-5 w-5" fill={isFavorite ? "currentColor" : "none"} />
+                    </button>
+                    <div className="relative">
+                      <button 
+                        onClick={() => setOpenDropdown(openDropdown === post.id ? null : post.id)}
+                        className="p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all duration-200"
+                      >
+                        <MoreHorizontal className="h-5 w-5" />
+                      </button>
+                      
+                      {/* 三点菜单弹窗 */}
+                      {openDropdown === post.id && (
+                        <div className={`absolute right-0 top-full mt-2 w-32 rounded-lg shadow-lg border z-50 ${
+                          isDark 
+                            ? "bg-[#1a1d29] border-[#252842]" 
+                            : "bg-white border-gray-200"
+                        }`}>
+                          <div className="py-1">
+                            <button 
+                              onClick={() => {
+                                setOpenDropdown(null)
+                                // 编辑逻辑
+                              }}
+                              className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                                isDark 
+                                  ? "text-white hover:bg-[#252842]" 
+                                  : "text-gray-700 hover:bg-gray-50"
+                              }`}
+                            >
+                              编辑
+                            </button>
+                            <button 
+                              onClick={() => {
+                                setOpenDropdown(null)
+                                // 删除逻辑
+                              }}
+                              className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                                isDark 
+                                  ? "text-red-400 hover:bg-[#252842]" 
+                                  : "text-red-600 hover:bg-gray-50"
+                              }`}
+                            >
+                              删除
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-sm text-gray-500">4小时前</div>
+
+                {/* 内容 */}
+                <div className="mb-4">
+                  <p className={`text-base leading-relaxed ${isDark ? "text-gray-100" : "text-gray-800"}`}>
+                    {post.content}
+                  </p>
+                </div>
+
+                {/* 标签 */}
+                {post.tags && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {post.tags.map((tag, index) => (
+                      <span 
+                        key={index} 
+                        className={`px-3 py-1 text-sm font-medium rounded-full cursor-pointer transition-all duration-200 ${
+                          isDark 
+                            ? "bg-[#00D4AA]/30 text-[#00D4AA] hover:bg-[#00D4AA]/50" 
+                            : "bg-[#00D4AA]/10 text-[#00D4AA] hover:bg-[#00D4AA]/20"
+                        }`}
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* 底部操作栏 */}
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                  <div className="flex items-center space-x-6">
+                    <button
+                      onClick={() => handleLike(post.id)}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200 ${
+                        post.isLiked 
+                          ? "text-red-500 bg-red-50 hover:bg-red-100" 
+                          : "text-gray-500 hover:text-red-500 hover:bg-red-50"
+                      }`}
+                    >
+                      <Heart className={`h-5 w-5 ${post.isLiked ? "fill-current" : ""}`} />
+                      <span className="text-sm font-medium">{post.likes}</span>
+                    </button>
+
+                    <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-gray-500 hover:text-[#00D4AA] hover:bg-[#00D4AA]/10 transition-all duration-200">
+                      <MessageCircle className="h-5 w-5" />
+                      <span className="text-sm font-medium">{post.comments}</span>
+                    </button>
+
+                    <button className="flex items-center space-x-2 px-4 py-2 rounded-full text-gray-500 hover:text-[#00D4AA] hover:bg-[#00D4AA]/10 transition-all duration-200">
+                      <Share className="h-5 w-5" />
+                      <span className="text-sm font-medium">{post.shares}</span>
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          {/* 内容 */}
-          <div className="mb-4">
-            <p className={`text-base leading-relaxed ${isDark ? "text-gray-100" : "text-gray-800"}`}>
-              刚刚发现一个新的DeFi协议，APY高达200%！但是大家要注意风险，高收益往往伴随高风险。DYOR! 💰
-            </p>
-          </div>
-
-          {/* 标签 */}
-          <div className="flex flex-wrap gap-2 mb-4">
-            <span className={`px-3 py-1 text-sm font-medium rounded-full cursor-pointer transition-all duration-200 ${
-              isDark 
-                ? "bg-[#00D4AA]/30 text-[#00D4AA] hover:bg-[#00D4AA]/50" 
-                : "bg-[#00D4AA]/10 text-[#00D4AA] hover:bg-[#00D4AA]/20"
-            }`}>
-              #DeFi
-            </span>
-            <span className={`px-3 py-1 text-sm font-medium rounded-full cursor-pointer transition-all duration-200 ${
-              isDark 
-                ? "bg-yellow-500/30 text-yellow-400 hover:bg-yellow-500/50" 
-                : "bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20"
-            }`}>
-              #高收益挖矿
-            </span>
-            <span className={`px-3 py-1 text-sm font-medium rounded-full cursor-pointer transition-all duration-200 ${
-              isDark 
-                ? "bg-blue-500/30 text-blue-400 hover:bg-blue-500/50" 
-                : "bg-blue-500/10 text-blue-600 hover:bg-blue-500/20"
-            }`}>
-              #风险提示
-            </span>
-          </div>
-
-          {/* 底部操作栏 */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
-            <div className="flex items-center space-x-6">
-              <button className="flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
-                <span>❤️</span>
-                <span className="text-sm font-medium">1876</span>
-              </button>
-              <button className="flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200 text-gray-400 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800">
-                <span>💬</span>
-                <span className="text-sm font-medium">234</span>
-              </button>
-              <button className="flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200 text-gray-400 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800">
-                <span>🔄</span>
-                <span className="text-sm font-medium">67</span>
-              </button>
-            </div>
-            
-            {/* 右下角跟单信息 */}
-            <div className="flex items-center space-x-3">
-              <span className="text-xs text-gray-500">已有2,177人跟单</span>
-              <button className="px-3 py-1.5 bg-[#00D4AA] text-black text-sm font-medium rounded-lg hover:bg-[#00B894] transition-colors">
-                跟单
-              </button>
-            </div>
-          </div>
+            )
+          })}
         </div>
       </div>
     </div>
