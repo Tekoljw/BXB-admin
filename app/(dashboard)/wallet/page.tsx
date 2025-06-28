@@ -2935,9 +2935,6 @@ export default function WalletPage() {
                                 <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>网络</th>
                                 <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>地址</th>
                                 <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户ID</th>
-                                <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户名</th>
-                                <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>手机号</th>
-                                <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>邮箱</th>
                                 <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>状态</th>
                                 <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>操作</th>
                               </tr>
@@ -2973,15 +2970,6 @@ export default function WalletPage() {
                                   </td>
                                   <td className="py-4 px-4">
                                     <span className="text-sm">{address.userId}</span>
-                                  </td>
-                                  <td className="py-4 px-4">
-                                    <span className="text-sm">{address.username}</span>
-                                  </td>
-                                  <td className="py-4 px-4">
-                                    <span className="text-sm">{address.phone}</span>
-                                  </td>
-                                  <td className="py-4 px-4">
-                                    <span className="text-sm">{address.email}</span>
                                   </td>
                                   <td className="py-4 px-4">
                                     <div className={`w-8 h-4 rounded-full transition-all ${address.isActive ? 'bg-green-500' : 'bg-gray-300'} relative`}>
