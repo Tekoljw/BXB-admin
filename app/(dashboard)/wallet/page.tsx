@@ -3706,17 +3706,13 @@ export default function WalletPage() {
                     
                     {/* 余额区域 */}
                     <div>
-                      <div className={`text-4xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                        {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="w-2 h-2 rounded-full bg-[#00D4AA]"></span>
-                        <span className={`text-lg font-medium ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                      <div className="flex items-baseline space-x-3">
+                        <div className={`text-4xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
+                        </div>
+                        <span className="px-2 py-1 bg-[#00D4AA] text-white text-sm font-medium rounded-md">
                           USDT
                         </span>
-                      </div>
-                      <div className={`text-sm mt-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                        ≈ ${balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", "USD") : "****"}
                       </div>
                     </div>
                   </div>
