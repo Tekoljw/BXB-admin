@@ -55,7 +55,10 @@ import {
   Zap,
   Landmark,
   Network,
-  Repeat
+  Repeat,
+  Copy,
+  Edit,
+  Trash2
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
