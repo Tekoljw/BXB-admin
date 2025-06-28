@@ -3227,8 +3227,8 @@ export default function WalletPage() {
                                   ? "bg-transparent border border-white text-white"
                                   : "bg-transparent border border-black text-black"
                                 : isDark 
-                                  ? "bg-transparent border border-gray-500 text-white hover:border-white"
-                                  : "bg-transparent border border-gray-400 text-gray-700 hover:border-black"
+                                  ? "bg-transparent border border-gray-600 text-white hover:border-white"
+                                  : "bg-transparent border border-gray-300 text-gray-700 hover:border-black"
                             }`}
                           >
                             {supplier.name}
