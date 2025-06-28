@@ -5809,6 +5809,102 @@ export default function WalletPage() {
           </div>
         </div>
       )}
+
+      {/* 购买地址弹窗 */}
+      {showPurchaseAddressModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className={`${cardStyle} rounded-lg p-6 w-full max-w-md mx-4`}>
+            <h3 className={`text-lg font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              购买地址
+            </h3>
+            
+            <div className="space-y-4">
+              {/* 选择链 */}
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  选择区块链网络
+                </label>
+                <select
+                  value={selectedChain}
+                  onChange={(e) => setSelectedChain(e.target.value)}
+                  className={`w-full p-3 rounded-lg border text-sm ${
+                    isDark 
+                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
+                      : "bg-white border-gray-300 text-gray-800"
+                  }`}
+                >
+                  {Object.keys(chainPrices).map((chain) => (
+                    <option key={chain} value={chain}>{chain}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* 显示单价 */}
+              <div className={`p-3 rounded-lg ${isDark ? 'bg-[#252842]' : 'bg-gray-50'}`}>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {selectedChain} 地址单价
+                </div>
+                <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {chainPrices[selectedChain as keyof typeof chainPrices]} <span className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT/个</span>
+                </div>
+              </div>
+
+              {/* 输入数量 */}
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  购买数量
+                </label>
+                <input
+                  type="number"
+                  value={addressQuantity}
+                  onChange={(e) => setAddressQuantity(e.target.value)}
+                  placeholder="请输入地址数量"
+                  className={`w-full p-3 rounded-lg border text-sm ${
+                    isDark 
+                      ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                      : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                  }`}
+                />
+              </div>
+
+              {/* 显示总价 */}
+              <div className={`p-3 rounded-lg ${isDark ? 'bg-[#252842]' : 'bg-gray-50'}`}>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  总费用
+                </div>
+                <div className={`text-xl font-bold text-[#00D4AA]`}>
+                  {totalPrice.toFixed(2)} <span className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* 按钮 */}
+            <div className="flex items-center space-x-3 mt-6">
+              <button
+                onClick={() => setShowPurchaseAddressModal(false)}
+                className={`flex-1 px-4 py-3 rounded-lg border text-sm font-medium transition-all ${
+                  isDark 
+                    ? "border-[#3a3d4a] text-gray-300 hover:bg-[#3a3d4a]" 
+                    : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                取消
+              </button>
+              <button
+                onClick={handlePurchaseAddress}
+                disabled={!addressQuantity || parseInt(addressQuantity) <= 0}
+                className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                  !addressQuantity || parseInt(addressQuantity) <= 0
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90"
+                }`}
+              >
+                确认购买
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
