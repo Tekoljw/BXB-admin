@@ -290,6 +290,31 @@ export default function WalletPage() {
     console.log("已复制到剪贴板:", text)
   }
 
+  // U卡相关状态
+  const [selectedCardType, setSelectedCardType] = useState("virtual")
+  const [showVirtualCardApplication, setShowVirtualCardApplication] = useState(false)
+  const [showPhysicalCardApplication, setShowPhysicalCardApplication] = useState(false)
+  const [cardApplicationStep, setCardApplicationStep] = useState(1)
+  const [virtualCardApplicationData, setVirtualCardApplicationData] = useState({
+    fullName: "",
+    idNumber: "",
+    email: "",
+    phone: "",
+    agreeTerms: false
+  })
+  const [physicalCardApplicationData, setPhysicalCardApplicationData] = useState({
+    fullName: "",
+    idNumber: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    country: "",
+    postalCode: "",
+    agreeTerms: false,
+    cardDesign: "classic"
+  })
+
   // OTC供应商相关状态
   const [selectedSupplierStatus, setSelectedSupplierStatus] = useState("全部")
   const [showAddSupplierModal, setShowAddSupplierModal] = useState(false)
@@ -1271,6 +1296,39 @@ export default function WalletPage() {
         { name: "USDT活期", amount: "1,000.00", apy: "3.5%", earnings: "+35.00" },
         { name: "BTC定期30天", amount: "0.05", apy: "5.2%", earnings: "+26.78" },
         { name: "ETH灵活理财", amount: "1.0", apy: "4.8%", earnings: "+84.11" }
+      ]
+    },
+    U卡账户: {
+      cardBalance: "1,234.56",
+      cardLimit: "5,000.00",
+      monthlySpent: "456.78",
+      hasVirtualCard: false,
+      hasPhysicalCard: false,
+      transactions: [
+        { 
+          id: "UC001", 
+          merchant: "Amazon", 
+          amount: "-89.99", 
+          date: "2024-01-15", 
+          status: "已完成",
+          type: "online" 
+        },
+        { 
+          id: "UC002", 
+          merchant: "钱包充值", 
+          amount: "+500.00", 
+          date: "2024-01-14", 
+          status: "已完成",
+          type: "recharge" 
+        },
+        { 
+          id: "UC003", 
+          merchant: "Spotify", 
+          amount: "-15.99", 
+          date: "2024-01-13", 
+          status: "已完成",
+          type: "online" 
+        }
       ]
     },
     佣金账户: {
@@ -3524,53 +3582,795 @@ export default function WalletPage() {
       case "U卡账户":
         return (
           <div className="space-y-6">
-            {/* 顶部卡片：U卡账户总览 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* U卡余额卡片 */}
-              <div className={`${cardStyle} rounded-lg p-6 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-medium">U卡余额</h3>
-                  <button
-                    onClick={handleCurrencyModalClick}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300 hover:scale-105 ${
-                      isDark 
-                        ? "bg-transparent text-white hover:bg-gray-800" 
-                        : "bg-white text-black hover:bg-gray-50"
-                    }`}
-                  >
-                    <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
-                      availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
-                    }`}>
-                      <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
-                    </div>
-                    <span>{selectedDisplayCurrency}</span>
-                    <ChevronDown className="h-2 w-2" />
-                  </button>
-                </div>
-                <div className="text-2xl font-bold transition-all duration-500">
-                  {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
-                </div>
-                <div className="text-sm text-gray-500 mt-1">可用余额</div>
-              </div>
-              
-              <div className={`${cardStyle} rounded-lg p-6 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">卡片限额</h3>
-                <div className="text-2xl font-bold text-blue-500 transition-all duration-500">
-                  {balanceVisible ? convertBalance(walletData["U卡账户"].cardLimit, "USDT", selectedDisplayCurrency) : "****"}
-                </div>
-                <div className="text-sm text-gray-500 mt-1">单日限额</div>
-              </div>
-              
-              <div className={`${cardStyle} rounded-lg p-6 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">本月消费</h3>
-                <div className="text-2xl font-bold text-orange-500 transition-all duration-500">
-                  {balanceVisible ? convertBalance(walletData["U卡账户"].monthlySpent, "USDT", selectedDisplayCurrency) : "****"}
-                </div>
-                <div className="text-sm text-gray-500 mt-1">
-                  剩余: {balanceVisible ? convertBalance((parseFloat(walletData["U卡账户"].cardLimit.replace(',', '')) - parseFloat(walletData["U卡账户"].monthlySpent.replace(',', ''))).toFixed(2), "USDT", selectedDisplayCurrency) : "****"}
-                </div>
-              </div>
+            {/* 卡片类型选择 */}
+            <div className="flex space-x-4 mb-6">
+              <Button
+                onClick={() => setSelectedCardType("virtual")}
+                className={`px-6 py-3 transition-all duration-200 ${
+                  selectedCardType === "virtual"
+                    ? "bg-[#00D4AA] text-black border-[#00D4AA]"
+                    : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                }`}
+                variant="outline"
+              >
+                <CreditCard className="h-4 w-4 mr-2" />
+                虚拟卡
+              </Button>
+              <Button
+                onClick={() => setSelectedCardType("physical")}
+                className={`px-6 py-3 transition-all duration-200 ${
+                  selectedCardType === "physical"
+                    ? "bg-[#00D4AA] text-black border-[#00D4AA]"
+                    : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                }`}
+                variant="outline"
+              >
+                <CardIcon className="h-4 w-4 mr-2" />
+                实体卡
+              </Button>
             </div>
+
+            {/* 根据卡片类型显示不同内容 */}
+            {selectedCardType === "virtual" ? (
+              /* 虚拟卡内容 */
+              <div className="space-y-6">
+                {/* 检查是否已有虚拟卡 */}
+                {!walletData["U卡账户"].hasVirtualCard ? (
+                  /* 虚拟卡开卡流程 */
+                  <div className="text-center py-12">
+                    <div className={`${cardStyle} rounded-lg p-8 max-w-md mx-auto`}>
+                      <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                        <CreditCard className="h-10 w-10 text-[#00D4AA]" />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-3">开通虚拟U卡</h3>
+                      <p className="text-gray-500 mb-6">虚拟U卡支持在线支付，即开即用，安全便捷</p>
+                      
+                      <div className="space-y-3 mb-6 text-left">
+                        <div className="flex items-center space-x-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          <span className="text-sm">即时开卡，无需等待</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          <span className="text-sm">支持全球在线支付</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          <span className="text-sm">实时消费通知</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          <span className="text-sm">免开卡费用</span>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        onClick={() => setShowVirtualCardApplication(true)}
+                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black"
+                      >
+                        立即开通虚拟U卡
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  /* 已有虚拟卡 - 显示管理界面 */
+                  <div className="space-y-6">
+                    {/* 虚拟卡总览 */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className={`${cardStyle} rounded-lg p-6 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="text-sm font-medium">虚拟卡余额</h3>
+                          <button
+                            onClick={handleCurrencyModalClick}
+                            className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300 hover:scale-105 ${
+                              isDark 
+                                ? "bg-transparent text-white hover:bg-gray-800" 
+                                : "bg-white text-black hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                              availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                            }`}>
+                              <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
+                            </div>
+                            <span>{selectedDisplayCurrency}</span>
+                            <ChevronDown className="h-2 w-2" />
+                          </button>
+                        </div>
+                        <div className="text-2xl font-bold transition-all duration-500">
+                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">可用余额</div>
+                      </div>
+                      
+                      <div className={`${cardStyle} rounded-lg p-6 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+                        <h3 className="text-sm font-medium mb-2">单笔限额</h3>
+                        <div className="text-2xl font-bold text-blue-500 transition-all duration-500">
+                          {balanceVisible ? "$2,000" : "****"}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">单次交易限额</div>
+                      </div>
+                      
+                      <div className={`${cardStyle} rounded-lg p-6 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+                        <h3 className="text-sm font-medium mb-2">本月消费</h3>
+                        <div className="text-2xl font-bold text-orange-500 transition-all duration-500">
+                          {balanceVisible ? convertBalance(walletData["U卡账户"].monthlySpent, "USDT", selectedDisplayCurrency) : "****"}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">虚拟卡消费</div>
+                      </div>
+                    </div>
+                    
+                    {/* 虚拟卡展示 */}
+                    <div className="relative">
+                      <div className={`w-full max-w-md mx-auto h-48 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 p-6 text-white shadow-2xl transform transition-all duration-300 hover:scale-105`}>
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <div className="text-sm opacity-80">BeDAO 虚拟U卡</div>
+                            <div className="text-xl font-bold">VIRTUAL</div>
+                          </div>
+                          <div className="text-2xl">💳</div>
+                        </div>
+                        <div className="mb-4">
+                          <div className="text-sm opacity-80">卡号</div>
+                          <div className="text-lg font-mono tracking-wider">**** **** **** 5678</div>
+                        </div>
+                        <div className="flex justify-between items-end">
+                          <div>
+                            <div className="text-sm opacity-80">有效期</div>
+                            <div className="font-medium">12/28</div>
+                          </div>
+                          <div>
+                            <div className="text-sm opacity-80">CVV</div>
+                            <div className="font-medium">***</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* 实体卡内容 */
+              <div className="space-y-6">
+                {/* 检查是否已有实体卡 */}
+                {!walletData["U卡账户"].hasPhysicalCard ? (
+                  /* 实体卡开卡流程 */
+                  <div className="text-center py-12">
+                    <div className={`${cardStyle} rounded-lg p-8 max-w-md mx-auto`}>
+                      <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                        <CardIcon className="h-10 w-10 text-[#00D4AA]" />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-3">申请实体U卡</h3>
+                      <p className="text-gray-500 mb-6">实体U卡支持全球ATM取现和POS刷卡消费</p>
+                      
+                      <div className="space-y-3 mb-6 text-left">
+                        <div className="flex items-center space-x-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          <span className="text-sm">全球ATM取现</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          <span className="text-sm">线下商户刷卡</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          <span className="text-sm">更高交易限额</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Check className="h-4 w-4 text-green-500" />
+                          <span className="text-sm">免费全球邮寄</span>
+                        </div>
+                      </div>
+                      
+                      <div className="text-sm text-gray-500 mb-4">
+                        开卡费用: $15 USDT (一次性)
+                      </div>
+                      
+                      <Button 
+                        onClick={() => setShowPhysicalCardApplication(true)}
+                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black"
+                      >
+                        申请实体U卡
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  /* 已有实体卡 - 显示管理界面 */
+                  <div className="space-y-6">
+                    {/* 实体卡总览 */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className={`${cardStyle} rounded-lg p-6 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="text-sm font-medium">实体卡余额</h3>
+                          <button
+                            onClick={handleCurrencyModalClick}
+                            className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300 hover:scale-105 ${
+                              isDark 
+                                ? "bg-transparent text-white hover:bg-gray-800" 
+                                : "bg-white text-black hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                              availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                            }`}>
+                              <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
+                            </div>
+                            <span>{selectedDisplayCurrency}</span>
+                            <ChevronDown className="h-2 w-2" />
+                          </button>
+                        </div>
+                        <div className="text-2xl font-bold transition-all duration-500">
+                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">可用余额</div>
+                      </div>
+                      
+                      <div className={`${cardStyle} rounded-lg p-6 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+                        <h3 className="text-sm font-medium mb-2">单日限额</h3>
+                        <div className="text-2xl font-bold text-blue-500 transition-all duration-500">
+                          {balanceVisible ? "$10,000" : "****"}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">每日交易限额</div>
+                      </div>
+                      
+                      <div className={`${cardStyle} rounded-lg p-6 transform transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl`}>
+                        <h3 className="text-sm font-medium mb-2">本月消费</h3>
+                        <div className="text-2xl font-bold text-orange-500 transition-all duration-500">
+                          {balanceVisible ? convertBalance(walletData["U卡账户"].monthlySpent, "USDT", selectedDisplayCurrency) : "****"}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">实体卡消费</div>
+                      </div>
+                    </div>
+                    
+                    {/* 实体卡展示 */}
+                    <div className="relative">
+                      <div className={`w-full max-w-md mx-auto h-48 rounded-xl bg-gradient-to-br from-gray-800 to-black p-6 text-white shadow-2xl transform transition-all duration-300 hover:scale-105`}>
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <div className="text-sm opacity-80">BeDAO 实体U卡</div>
+                            <div className="text-xl font-bold">PLATINUM</div>
+                          </div>
+                          <div className="text-2xl">💳</div>
+                        </div>
+                        <div className="mb-4">
+                          <div className="text-sm opacity-80">卡号</div>
+                          <div className="text-lg font-mono tracking-wider">**** **** **** 1234</div>
+                        </div>
+                        <div className="flex justify-between items-end">
+                          <div>
+                            <div className="text-sm opacity-80">持卡人</div>
+                            <div className="font-medium">JOHN DOE</div>
+                          </div>
+                          <div>
+                            <div className="text-sm opacity-80">有效期</div>
+                            <div className="font-medium">12/28</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 虚拟卡申请流程模态框 */}
+            {showVirtualCardApplication && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className={`${cardStyle} rounded-lg p-6 w-full max-w-md mx-4`}>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold">申请虚拟U卡</h3>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setShowVirtualCardApplication(false)
+                        setCardApplicationStep(1)
+                        setVirtualCardApplicationData({
+                          fullName: "",
+                          idNumber: "",
+                          email: "",
+                          phone: "",
+                          agreeTerms: false
+                        })
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  {cardApplicationStep === 1 && (
+                    <div className="space-y-4">
+                      <div className="text-center mb-6">
+                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                          <CreditCard className="h-8 w-8 text-[#00D4AA]" />
+                        </div>
+                        <p className="text-sm text-gray-500">填写个人信息完成虚拟卡申请</p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">真实姓名</label>
+                        <input
+                          type="text"
+                          value={virtualCardApplicationData.fullName}
+                          onChange={(e) => setVirtualCardApplicationData({
+                            ...virtualCardApplicationData,
+                            fullName: e.target.value
+                          })}
+                          className={`w-full p-2 border rounded-lg ${
+                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                          }`}
+                          placeholder="请输入真实姓名"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">身份证号</label>
+                        <input
+                          type="text"
+                          value={virtualCardApplicationData.idNumber}
+                          onChange={(e) => setVirtualCardApplicationData({
+                            ...virtualCardApplicationData,
+                            idNumber: e.target.value
+                          })}
+                          className={`w-full p-2 border rounded-lg ${
+                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                          }`}
+                          placeholder="请输入身份证号"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">邮箱地址</label>
+                        <input
+                          type="email"
+                          value={virtualCardApplicationData.email}
+                          onChange={(e) => setVirtualCardApplicationData({
+                            ...virtualCardApplicationData,
+                            email: e.target.value
+                          })}
+                          className={`w-full p-2 border rounded-lg ${
+                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                          }`}
+                          placeholder="请输入邮箱地址"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">手机号码</label>
+                        <input
+                          type="tel"
+                          value={virtualCardApplicationData.phone}
+                          onChange={(e) => setVirtualCardApplicationData({
+                            ...virtualCardApplicationData,
+                            phone: e.target.value
+                          })}
+                          className={`w-full p-2 border rounded-lg ${
+                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                          }`}
+                          placeholder="请输入手机号码"
+                        />
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id="agreeTerms"
+                          checked={virtualCardApplicationData.agreeTerms}
+                          onChange={(e) => setVirtualCardApplicationData({
+                            ...virtualCardApplicationData,
+                            agreeTerms: e.target.checked
+                          })}
+                          className="rounded"
+                        />
+                        <label htmlFor="agreeTerms" className="text-sm">
+                          我已阅读并同意《U卡服务协议》和《隐私政策》
+                        </label>
+                      </div>
+
+                      <Button
+                        onClick={() => setCardApplicationStep(2)}
+                        disabled={!virtualCardApplicationData.fullName || !virtualCardApplicationData.idNumber || 
+                                 !virtualCardApplicationData.email || !virtualCardApplicationData.phone || 
+                                 !virtualCardApplicationData.agreeTerms}
+                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black"
+                      >
+                        下一步
+                      </Button>
+                    </div>
+                  )}
+
+                  {cardApplicationStep === 2 && (
+                    <div className="space-y-4 text-center">
+                      <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center">
+                        <CheckCircle className="h-8 w-8 text-green-500" />
+                      </div>
+                      <h4 className="text-lg font-semibold">申请提交成功！</h4>
+                      <p className="text-sm text-gray-500 mb-6">
+                        您的虚拟U卡申请已提交，预计3-5分钟内完成审核并自动开通
+                      </p>
+                      
+                      <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'} text-left`}>
+                        <h5 className="font-medium mb-2">申请信息</h5>
+                        <div className="space-y-1 text-sm">
+                          <div>姓名: {virtualCardApplicationData.fullName}</div>
+                          <div>身份证: {virtualCardApplicationData.idNumber.replace(/(.{6}).*(.{4})/, '$1****$2')}</div>
+                          <div>邮箱: {virtualCardApplicationData.email}</div>
+                          <div>手机: {virtualCardApplicationData.phone.replace(/(.{3}).*(.{4})/, '$1****$2')}</div>
+                        </div>
+                      </div>
+
+                      <Button
+                        onClick={() => {
+                          // 模拟开卡成功
+                          walletData["U卡账户"].hasVirtualCard = true
+                          setShowVirtualCardApplication(false)
+                          setCardApplicationStep(1)
+                          setVirtualCardApplicationData({
+                            fullName: "",
+                            idNumber: "",
+                            email: "",
+                            phone: "",
+                            agreeTerms: false
+                          })
+                        }}
+                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black"
+                      >
+                        完成申请
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* 实体卡申请流程模态框 */}
+            {showPhysicalCardApplication && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className={`${cardStyle} rounded-lg p-6 w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto`}>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold">申请实体U卡</h3>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setShowPhysicalCardApplication(false)
+                        setCardApplicationStep(1)
+                        setPhysicalCardApplicationData({
+                          fullName: "",
+                          idNumber: "",
+                          email: "",
+                          phone: "",
+                          address: "",
+                          city: "",
+                          country: "",
+                          postalCode: "",
+                          agreeTerms: false,
+                          cardDesign: "classic"
+                        })
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  {cardApplicationStep === 1 && (
+                    <div className="space-y-4">
+                      <div className="text-center mb-6">
+                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                          <CardIcon className="h-8 w-8 text-[#00D4AA]" />
+                        </div>
+                        <p className="text-sm text-gray-500">填写个人信息和邮寄地址</p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">真实姓名</label>
+                        <input
+                          type="text"
+                          value={physicalCardApplicationData.fullName}
+                          onChange={(e) => setPhysicalCardApplicationData({
+                            ...physicalCardApplicationData,
+                            fullName: e.target.value
+                          })}
+                          className={`w-full p-2 border rounded-lg ${
+                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                          }`}
+                          placeholder="请输入真实姓名"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">身份证号</label>
+                        <input
+                          type="text"
+                          value={physicalCardApplicationData.idNumber}
+                          onChange={(e) => setPhysicalCardApplicationData({
+                            ...physicalCardApplicationData,
+                            idNumber: e.target.value
+                          })}
+                          className={`w-full p-2 border rounded-lg ${
+                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                          }`}
+                          placeholder="请输入身份证号"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">邮箱地址</label>
+                        <input
+                          type="email"
+                          value={physicalCardApplicationData.email}
+                          onChange={(e) => setPhysicalCardApplicationData({
+                            ...physicalCardApplicationData,
+                            email: e.target.value
+                          })}
+                          className={`w-full p-2 border rounded-lg ${
+                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                          }`}
+                          placeholder="请输入邮箱地址"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">手机号码</label>
+                        <input
+                          type="tel"
+                          value={physicalCardApplicationData.phone}
+                          onChange={(e) => setPhysicalCardApplicationData({
+                            ...physicalCardApplicationData,
+                            phone: e.target.value
+                          })}
+                          className={`w-full p-2 border rounded-lg ${
+                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                          }`}
+                          placeholder="请输入手机号码"
+                        />
+                      </div>
+
+                      <Button
+                        onClick={() => setCardApplicationStep(2)}
+                        disabled={!physicalCardApplicationData.fullName || !physicalCardApplicationData.idNumber || 
+                                 !physicalCardApplicationData.email || !physicalCardApplicationData.phone}
+                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black"
+                      >
+                        下一步 - 邮寄地址
+                      </Button>
+                    </div>
+                  )}
+
+                  {cardApplicationStep === 2 && (
+                    <div className="space-y-4">
+                      <div className="text-center mb-6">
+                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                          <MapPin className="h-8 w-8 text-[#00D4AA]" />
+                        </div>
+                        <p className="text-sm text-gray-500">填写卡片邮寄地址</p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">详细地址</label>
+                        <input
+                          type="text"
+                          value={physicalCardApplicationData.address}
+                          onChange={(e) => setPhysicalCardApplicationData({
+                            ...physicalCardApplicationData,
+                            address: e.target.value
+                          })}
+                          className={`w-full p-2 border rounded-lg ${
+                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                          }`}
+                          placeholder="请输入详细地址"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">城市</label>
+                          <input
+                            type="text"
+                            value={physicalCardApplicationData.city}
+                            onChange={(e) => setPhysicalCardApplicationData({
+                              ...physicalCardApplicationData,
+                              city: e.target.value
+                            })}
+                            className={`w-full p-2 border rounded-lg ${
+                              isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                            }`}
+                            placeholder="城市"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1">邮政编码</label>
+                          <input
+                            type="text"
+                            value={physicalCardApplicationData.postalCode}
+                            onChange={(e) => setPhysicalCardApplicationData({
+                              ...physicalCardApplicationData,
+                              postalCode: e.target.value
+                            })}
+                            className={`w-full p-2 border rounded-lg ${
+                              isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                            }`}
+                            placeholder="邮编"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">国家/地区</label>
+                        <select
+                          value={physicalCardApplicationData.country}
+                          onChange={(e) => setPhysicalCardApplicationData({
+                            ...physicalCardApplicationData,
+                            country: e.target.value
+                          })}
+                          className={`w-full p-2 border rounded-lg ${
+                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                          }`}
+                        >
+                          <option value="">请选择国家/地区</option>
+                          <option value="CN">中国</option>
+                          <option value="US">美国</option>
+                          <option value="UK">英国</option>
+                          <option value="JP">日本</option>
+                          <option value="KR">韩国</option>
+                          <option value="SG">新加坡</option>
+                          <option value="CA">加拿大</option>
+                          <option value="AU">澳大利亚</option>
+                        </select>
+                      </div>
+
+                      <div className="flex space-x-4">
+                        <Button
+                          variant="outline"
+                          onClick={() => setCardApplicationStep(1)}
+                          className="flex-1"
+                        >
+                          上一步
+                        </Button>
+                        <Button
+                          onClick={() => setCardApplicationStep(3)}
+                          disabled={!physicalCardApplicationData.address || !physicalCardApplicationData.city || 
+                                   !physicalCardApplicationData.country || !physicalCardApplicationData.postalCode}
+                          className="flex-1 bg-[#00D4AA] hover:bg-[#00B894] text-black"
+                        >
+                          下一步 - 卡片设计
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {cardApplicationStep === 3 && (
+                    <div className="space-y-4">
+                      <div className="text-center mb-6">
+                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                          <CreditCard className="h-8 w-8 text-[#00D4AA]" />
+                        </div>
+                        <p className="text-sm text-gray-500">选择卡片设计样式</p>
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4">
+                        <div 
+                          onClick={() => setPhysicalCardApplicationData({
+                            ...physicalCardApplicationData,
+                            cardDesign: "classic"
+                          })}
+                          className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                            physicalCardApplicationData.cardDesign === "classic"
+                              ? "border-[#00D4AA] bg-[#00D4AA]/10"
+                              : isDark ? "border-gray-700" : "border-gray-300"
+                          }`}
+                        >
+                          <div className="w-full h-24 rounded-lg bg-gradient-to-r from-gray-800 to-black mb-3 flex items-center justify-center text-white text-sm">
+                            经典黑金
+                          </div>
+                          <div className="font-medium">经典款</div>
+                          <div className="text-sm text-gray-500">经典黑金设计，商务专业</div>
+                        </div>
+
+                        <div 
+                          onClick={() => setPhysicalCardApplicationData({
+                            ...physicalCardApplicationData,
+                            cardDesign: "premium"
+                          })}
+                          className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                            physicalCardApplicationData.cardDesign === "premium"
+                              ? "border-[#00D4AA] bg-[#00D4AA]/10"
+                              : isDark ? "border-gray-700" : "border-gray-300"
+                          }`}
+                        >
+                          <div className="w-full h-24 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 mb-3 flex items-center justify-center text-white text-sm">
+                            高端紫蓝
+                          </div>
+                          <div className="font-medium">高端款</div>
+                          <div className="text-sm text-gray-500">紫蓝渐变设计，时尚高端</div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id="agreeTermsPhysical"
+                          checked={physicalCardApplicationData.agreeTerms}
+                          onChange={(e) => setPhysicalCardApplicationData({
+                            ...physicalCardApplicationData,
+                            agreeTerms: e.target.checked
+                          })}
+                          className="rounded"
+                        />
+                        <label htmlFor="agreeTermsPhysical" className="text-sm">
+                          我已阅读并同意《实体U卡服务协议》，确认支付$15 USDT开卡费
+                        </label>
+                      </div>
+
+                      <div className="flex space-x-4">
+                        <Button
+                          variant="outline"
+                          onClick={() => setCardApplicationStep(2)}
+                          className="flex-1"
+                        >
+                          上一步
+                        </Button>
+                        <Button
+                          onClick={() => setCardApplicationStep(4)}
+                          disabled={!physicalCardApplicationData.agreeTerms}
+                          className="flex-1 bg-[#00D4AA] hover:bg-[#00B894] text-black"
+                        >
+                          提交申请
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {cardApplicationStep === 4 && (
+                    <div className="space-y-4 text-center">
+                      <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center">
+                        <CheckCircle className="h-8 w-8 text-green-500" />
+                      </div>
+                      <h4 className="text-lg font-semibold">申请提交成功！</h4>
+                      <p className="text-sm text-gray-500 mb-6">
+                        您的实体U卡申请已提交，预计1-2个工作日审核，审核通过后7-14个工作日内邮寄到您的地址
+                      </p>
+                      
+                      <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'} text-left`}>
+                        <h5 className="font-medium mb-2">申请信息</h5>
+                        <div className="space-y-1 text-sm">
+                          <div>姓名: {physicalCardApplicationData.fullName}</div>
+                          <div>邮寄地址: {physicalCardApplicationData.address}, {physicalCardApplicationData.city}</div>
+                          <div>国家: {physicalCardApplicationData.country}</div>
+                          <div>邮编: {physicalCardApplicationData.postalCode}</div>
+                          <div>卡片设计: {physicalCardApplicationData.cardDesign === "classic" ? "经典款" : "高端款"}</div>
+                          <div>开卡费用: $15 USDT</div>
+                        </div>
+                      </div>
+
+                      <Button
+                        onClick={() => {
+                          // 模拟申请提交成功
+                          walletData["U卡账户"].hasPhysicalCard = true
+                          setShowPhysicalCardApplication(false)
+                          setCardApplicationStep(1)
+                          setPhysicalCardApplicationData({
+                            fullName: "",
+                            idNumber: "",
+                            email: "",
+                            phone: "",
+                            address: "",
+                            city: "",
+                            country: "",
+                            postalCode: "",
+                            agreeTerms: false,
+                            cardDesign: "classic"
+                          })
+                        }}
+                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black"
+                      >
+                        完成申请
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* 操作按钮区域 */}
             <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
