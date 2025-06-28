@@ -281,6 +281,102 @@ export default function WalletPage() {
     console.log("已复制到剪贴板:", text)
   }
 
+  // OTC供应商相关状态
+  const [selectedSupplierStatus, setSelectedSupplierStatus] = useState("全部")
+  const [showAddSupplierModal, setShowAddSupplierModal] = useState(false)
+  const [newSupplier, setNewSupplier] = useState({
+    name: "",
+    apiUrl: "",
+    apiKey: "",
+    supportedCurrencies: "",
+    isPreferred: false
+  })
+
+  // OTC供应商列表数据
+  const otcSupplierList = [
+    {
+      id: "sup001",
+      name: "AlphaTrade OTC",
+      status: "正常",
+      supportedCurrencies: ["USDT", "BTC", "ETH"],
+      feeRate: "0.15%",
+      limits: "1,000-50,000 USDT",
+      successRate: "99.8%",
+      responseTime: "2.3s",
+      monthlyVolume: "2.8M USDT",
+      rating: "A+",
+      isPreferred: true
+    },
+    {
+      id: "sup002",
+      name: "BetaExchange Pro",
+      status: "正常",
+      supportedCurrencies: ["USDT", "BTC", "ETH", "BNB"],
+      feeRate: "0.12%",
+      limits: "500-100,000 USDT",
+      successRate: "99.5%",
+      responseTime: "1.8s",
+      monthlyVolume: "4.2M USDT",
+      rating: "A",
+      isPreferred: false
+    },
+    {
+      id: "sup003",
+      name: "GammaLiquidity",
+      status: "维护中",
+      supportedCurrencies: ["USDT", "BTC"],
+      feeRate: "0.18%",
+      limits: "2,000-30,000 USDT",
+      successRate: "98.9%",
+      responseTime: "3.1s",
+      monthlyVolume: "1.5M USDT",
+      rating: "B+",
+      isPreferred: false
+    },
+    {
+      id: "sup004",
+      name: "DeltaOTC Solutions",
+      status: "暂停",
+      supportedCurrencies: ["USDT", "ETH", "ADA"],
+      feeRate: "0.20%",
+      limits: "1,500-25,000 USDT",
+      successRate: "97.2%",
+      responseTime: "4.5s",
+      monthlyVolume: "0.8M USDT",
+      rating: "B",
+      isPreferred: false
+    }
+  ]
+
+  // OTC供应商相关函数
+  const handleAddSupplier = () => {
+    if (!newSupplier.name || !newSupplier.apiUrl || !newSupplier.apiKey) {
+      return
+    }
+    
+    console.log("添加新供应商:", newSupplier)
+    setShowAddSupplierModal(false)
+    setNewSupplier({
+      name: "",
+      apiUrl: "",
+      apiKey: "",
+      supportedCurrencies: "",
+      isPreferred: false
+    })
+  }
+
+  const handleEditSupplier = (supplier: any) => {
+    console.log("编辑供应商:", supplier)
+  }
+
+  const handleDeleteSupplier = (supplierId: string) => {
+    console.log("删除供应商:", supplierId)
+  }
+
+  const handleTestSupplier = (supplier: any) => {
+    console.log("测试供应商连接:", supplier)
+  }
+
   // 更多币种列表
   const moreCurrencies = ["CNY", "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "CHF", "SEK", "NOK"]
 
@@ -2151,7 +2247,7 @@ export default function WalletPage() {
         const cryptoTabs = [
           { id: "商户资产", label: "商户资产", icon: Landmark },
           { id: "地址管理", label: "地址管理", icon: Link },
-          { id: "通道配置", label: "通道配置", icon: Network },
+          { id: "OTC供应商", label: "OTC供应商", icon: Network },
           { id: "划转", label: "划转", icon: ArrowLeftRight }
         ]
         const cryptoIconTabs = [
@@ -2162,7 +2258,7 @@ export default function WalletPage() {
         
         return (
           <div className="space-y-6">
-            {/* 顶部卡片：法币总余额和加密货币总余额 */}
+            {/* 顶部卡片：法币支付API和加密货币支付API */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 商户法币资产卡片 */}
               <div 
@@ -2174,7 +2270,7 @@ export default function WalletPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <Banknote className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">法币资产</h3>
+                    <h3 className="text-lg font-semibold">法币支付API</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -2211,7 +2307,7 @@ export default function WalletPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <Coins className="h-6 w-6 text-[#3B82F6]" />
-                    <h3 className="text-lg font-semibold">加密货币资产</h3>
+                    <h3 className="text-lg font-semibold">加密货币支付API</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -2950,6 +3046,269 @@ export default function WalletPage() {
                                 }`}
                               >
                                 添加地址
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  
+                  {cryptoTab === "OTC供应商" && (
+                    <div className="space-y-6">
+                      {/* 顶部操作栏 */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1 relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <input
+                            type="text"
+                            placeholder="搜索供应商..."
+                            className={`w-full pl-10 pr-4 py-2 rounded-lg border text-sm ${
+                              isDark 
+                                ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                                : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                            }`}
+                          />
+                        </div>
+                        <div className="flex items-center space-x-2 ml-4">
+                          <button
+                            onClick={() => setShowAddSupplierModal(true)}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all transform hover:scale-105 ${
+                              isDark 
+                                ? "bg-[#00D4AA] text-black hover:bg-[#00B894]" 
+                                : "bg-[#00D4AA] text-white hover:bg-[#00B894]"
+                            }`}
+                          >
+                            <Plus className="h-4 w-4 mr-2 inline" />
+                            添加供应商
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* 供应商状态筛选 */}
+                      <div className="flex items-center space-x-2 overflow-x-auto pb-2">
+                        {["全部", "正常", "维护中", "暂停"].map((status) => (
+                          <button
+                            key={status}
+                            onClick={() => setSelectedSupplierStatus(status)}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                              selectedSupplierStatus === status
+                                ? isDark 
+                                  ? "bg-[#00D4AA] text-black" 
+                                  : "bg-[#00D4AA] text-white"
+                                : isDark 
+                                  ? "bg-[#252842] text-gray-300 hover:bg-[#3a3d4a]" 
+                                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            }`}
+                          >
+                            {status}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* 供应商列表 */}
+                      <div className="space-y-3">
+                        {otcSupplierList
+                          .filter(supplier => selectedSupplierStatus === "全部" || supplier.status === selectedSupplierStatus)
+                          .map((supplier, index) => (
+                          <div key={index} className={`${cardStyle} rounded-lg p-4 hover:shadow-md transition-all`}>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-4 flex-1">
+                                {/* 供应商图标 */}
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                  supplier.status === '正常' ? 'bg-green-100 text-green-600' :
+                                  supplier.status === '维护中' ? 'bg-yellow-100 text-yellow-600' :
+                                  'bg-red-100 text-red-600'
+                                }`}>
+                                  <Users className="h-5 w-5" />
+                                </div>
+                                
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-2">
+                                    <span className="font-semibold">{supplier.name}</span>
+                                    <span className={`px-2 py-1 rounded-full text-xs ${
+                                      supplier.status === "正常" 
+                                        ? "bg-green-100 text-green-600" 
+                                        : supplier.status === "维护中"
+                                        ? "bg-yellow-100 text-yellow-600"
+                                        : "bg-red-100 text-red-600"
+                                    }`}>
+                                      {supplier.status}
+                                    </span>
+                                    {supplier.isPreferred && (
+                                      <span className="px-2 py-1 rounded-full text-xs bg-[#00D4AA] text-white">
+                                        优选
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
+                                    支持币种: {supplier.supportedCurrencies.join(", ")}
+                                  </div>
+                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mt-1`}>
+                                    费率: {supplier.feeRate} • 限额: {supplier.limits}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* 操作按钮 */}
+                              <div className="flex items-center space-x-2">
+                                <button
+                                  onClick={() => handleTestSupplier(supplier)}
+                                  className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
+                                    isDark ? 'text-gray-400' : 'text-gray-500'
+                                  }`}
+                                  title="测试连接"
+                                >
+                                  <CheckCircle className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleEditSupplier(supplier)}
+                                  className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
+                                    isDark ? 'text-gray-400' : 'text-gray-500'
+                                  }`}
+                                  title="编辑"
+                                >
+                                  <Settings className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteSupplier(supplier.id)}
+                                  className={`p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20 transition-all text-red-500`}
+                                  title="删除"
+                                >
+                                  <X className="h-4 w-4" />
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* 供应商统计信息 */}
+                            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-[#3a3d4a]">
+                              <div className="grid grid-cols-4 gap-4 text-center">
+                                <div>
+                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>成功率</div>
+                                  <div className="font-semibold text-sm">{supplier.successRate}</div>
+                                </div>
+                                <div>
+                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>响应时间</div>
+                                  <div className="font-semibold text-sm">{supplier.responseTime}</div>
+                                </div>
+                                <div>
+                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>月交易量</div>
+                                  <div className="font-semibold text-sm">{supplier.monthlyVolume}</div>
+                                </div>
+                                <div>
+                                  <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>服务评级</div>
+                                  <div className="font-semibold text-sm">{supplier.rating}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 添加供应商模态框 */}
+                      {showAddSupplierModal && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowAddSupplierModal(false)}>
+                          <div className={`${cardStyle} rounded-lg p-6 w-full max-w-md mx-4`} onClick={e => e.stopPropagation()}>
+                            <div className="flex items-center justify-between mb-4">
+                              <h3 className="text-lg font-semibold">添加OTC供应商</h3>
+                              <button onClick={() => setShowAddSupplierModal(false)}>
+                                <X className="h-5 w-5" />
+                              </button>
+                            </div>
+                            
+                            <div className="space-y-4">
+                              <div>
+                                <label className="block text-sm font-medium mb-2">供应商名称</label>
+                                <input
+                                  type="text"
+                                  value={newSupplier.name}
+                                  onChange={(e) => setNewSupplier({...newSupplier, name: e.target.value})}
+                                  placeholder="例如：ABC Trading、XYZ Exchange"
+                                  className={`w-full p-3 rounded-lg border text-sm ${
+                                    isDark 
+                                      ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                                      : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                                  }`}
+                                />
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium mb-2">API接口地址</label>
+                                <input
+                                  type="text"
+                                  value={newSupplier.apiUrl}
+                                  onChange={(e) => setNewSupplier({...newSupplier, apiUrl: e.target.value})}
+                                  placeholder="https://api.example.com"
+                                  className={`w-full p-3 rounded-lg border text-sm ${
+                                    isDark 
+                                      ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                                      : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                                  }`}
+                                />
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium mb-2">API密钥</label>
+                                <input
+                                  type="password"
+                                  value={newSupplier.apiKey}
+                                  onChange={(e) => setNewSupplier({...newSupplier, apiKey: e.target.value})}
+                                  placeholder="输入API密钥"
+                                  className={`w-full p-3 rounded-lg border text-sm ${
+                                    isDark 
+                                      ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                                      : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                                  }`}
+                                />
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium mb-2">支持币种</label>
+                                <input
+                                  type="text"
+                                  value={newSupplier.supportedCurrencies}
+                                  onChange={(e) => setNewSupplier({...newSupplier, supportedCurrencies: e.target.value})}
+                                  placeholder="例如：USDT, BTC, ETH"
+                                  className={`w-full p-3 rounded-lg border text-sm ${
+                                    isDark 
+                                      ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
+                                      : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
+                                  }`}
+                                />
+                              </div>
+                              
+                              <div className="flex items-center">
+                                <input
+                                  type="checkbox"
+                                  id="setPreferred"
+                                  checked={newSupplier.isPreferred}
+                                  onChange={(e) => setNewSupplier({...newSupplier, isPreferred: e.target.checked})}
+                                  className="rounded border-gray-300"
+                                />
+                                <label htmlFor="setPreferred" className="ml-2 text-sm">设为优选供应商</label>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center space-x-3 mt-6">
+                              <button
+                                onClick={() => setShowAddSupplierModal(false)}
+                                className={`flex-1 px-4 py-2 rounded-lg border text-sm font-medium transition-all ${
+                                  isDark 
+                                    ? "border-[#3a3d4a] text-gray-300 hover:bg-[#3a3d4a]" 
+                                    : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                                }`}
+                              >
+                                取消
+                              </button>
+                              <button
+                                onClick={handleAddSupplier}
+                                className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                                  isDark 
+                                    ? "bg-[#00D4AA] text-black hover:bg-[#00B894]" 
+                                    : "bg-[#00D4AA] text-white hover:bg-[#00B894]"
+                                }`}
+                              >
+                                添加供应商
                               </button>
                             </div>
                           </div>
