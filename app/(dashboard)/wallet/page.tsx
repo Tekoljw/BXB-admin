@@ -3280,8 +3280,10 @@ export default function WalletPage() {
                                 {/* USD 美元 */}
                                 <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-100'}`}>
                                   <td className="py-4 px-4">
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-lg">$</span>
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-sm">
+                                        $
+                                      </div>
                                       <span className="font-medium">USD</span>
                                     </div>
                                   </td>
@@ -3320,8 +3322,10 @@ export default function WalletPage() {
                                 {/* EUR 欧元 */}
                                 <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-100'}`}>
                                   <td className="py-4 px-4">
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-lg">€</span>
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">
+                                        €
+                                      </div>
                                       <span className="font-medium">EUR</span>
                                     </div>
                                   </td>
@@ -3360,8 +3364,10 @@ export default function WalletPage() {
                                 {/* GBP 英镑 */}
                                 <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-100'}`}>
                                   <td className="py-4 px-4">
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-lg">£</span>
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm">
+                                        £
+                                      </div>
                                       <span className="font-medium">GBP</span>
                                     </div>
                                   </td>
@@ -3400,8 +3406,10 @@ export default function WalletPage() {
                                 {/* JPY 日元 */}
                                 <tr>
                                   <td className="py-4 px-4">
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-lg">¥</span>
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-white font-bold text-sm">
+                                        ¥
+                                      </div>
                                       <span className="font-medium">JPY</span>
                                     </div>
                                   </td>
