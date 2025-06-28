@@ -3612,28 +3612,29 @@ export default function WalletPage() {
                   <div className="space-y-6">
                     {/* 标题区域 */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                          isDark ? "bg-[#00D4AA]/20" : "bg-[#00D4AA]/10"
-                        }`}>
-                          <CreditCard className="h-6 w-6 text-[#00D4AA]" />
-                        </div>
-                        <div>
-                          <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                            虚拟U卡
-                          </h3>
-                          <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                            虚拟借记卡
-                          </p>
-                        </div>
+                      <div>
+                        <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                          虚拟U卡
+                        </h3>
                       </div>
                       <div className="text-right">
                         <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"} mb-1`}>
                           币种换算
                         </div>
-                        <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
-                          ${balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", "USD") : "****"}
-                        </div>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            const currencies = ["USD", "EUR", "GBP", "JPY"]
+                            const currentIndex = currencies.indexOf(selectedDisplayCurrency)
+                            const nextCurrency = currencies[(currentIndex + 1) % currencies.length]
+                            setSelectedDisplayCurrency(nextCurrency)
+                          }}
+                          className={`text-sm font-medium transition-colors ${
+                            isDark ? "text-white hover:text-[#00D4AA]" : "text-gray-900 hover:text-[#00D4AA]"
+                          }`}
+                        >
+                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
+                        </button>
                       </div>
                     </div>
                     
@@ -3643,7 +3644,7 @@ export default function WalletPage() {
                         <div className={`text-4xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
                           {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
                         </div>
-                        <span className="px-2 py-1 bg-[#00D4AA] text-white text-sm font-medium rounded-md">
+                        <span className="text-lg font-medium text-[#00D4AA]">
                           USDT
                         </span>
                       </div>
@@ -3688,28 +3689,29 @@ export default function WalletPage() {
                   <div className="space-y-6">
                     {/* 标题区域 */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                          isDark ? "bg-[#00D4AA]/20" : "bg-[#00D4AA]/10"
-                        }`}>
-                          <CardIcon className="h-6 w-6 text-[#00D4AA]" />
-                        </div>
-                        <div>
-                          <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                            实体U卡
-                          </h3>
-                          <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                            实体借记卡
-                          </p>
-                        </div>
+                      <div>
+                        <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                          实体U卡
+                        </h3>
                       </div>
                       <div className="text-right">
                         <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"} mb-1`}>
                           币种换算
                         </div>
-                        <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
-                          ${balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", "USD") : "****"}
-                        </div>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            const currencies = ["USD", "EUR", "GBP", "JPY"]
+                            const currentIndex = currencies.indexOf(selectedDisplayCurrency)
+                            const nextCurrency = currencies[(currentIndex + 1) % currencies.length]
+                            setSelectedDisplayCurrency(nextCurrency)
+                          }}
+                          className={`text-sm font-medium transition-colors ${
+                            isDark ? "text-white hover:text-[#00D4AA]" : "text-gray-900 hover:text-[#00D4AA]"
+                          }`}
+                        >
+                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
+                        </button>
                       </div>
                     </div>
                     
@@ -3719,7 +3721,7 @@ export default function WalletPage() {
                         <div className={`text-4xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
                           {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
                         </div>
-                        <span className="px-2 py-1 bg-[#00D4AA] text-white text-sm font-medium rounded-md">
+                        <span className="text-lg font-medium text-[#00D4AA]">
                           USDT
                         </span>
                       </div>
