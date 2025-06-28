@@ -384,6 +384,43 @@ export default function WalletPage() {
   const [selectedNetwork, setSelectedNetwork] = useState("TRC20")
   const [selectedAddressCurrency, setSelectedAddressCurrency] = useState("全部")
   const [addressSearchTerm, setAddressSearchTerm] = useState("")
+  
+  // 添加地址弹窗状态
+  const [showPurchaseAddressModal, setShowPurchaseAddressModal] = useState(false)
+  const [selectedChain, setSelectedChain] = useState("TRC20")
+  const [addressQuantity, setAddressQuantity] = useState("")
+  const [totalPrice, setTotalPrice] = useState(0)
+  
+  // 各链地址价格 (USDT/个)
+  const chainPrices = {
+    TRC20: 0.1,
+    ERC20: 0.5,
+    BTC: 1.0,
+    BSC: 0.2,
+    XRP: 0.3,
+    Solana: 0.15,
+    Matrix: 0.08
+  }
+  
+  // 计算总价格
+  useEffect(() => {
+    const quantity = parseInt(addressQuantity) || 0
+    const price = chainPrices[selectedChain as keyof typeof chainPrices] || 0
+    setTotalPrice(quantity * price)
+  }, [addressQuantity, selectedChain])
+  
+  // 处理购买地址
+  const handlePurchaseAddress = () => {
+    console.log("购买地址:", {
+      chain: selectedChain,
+      quantity: addressQuantity,
+      unitPrice: chainPrices[selectedChain as keyof typeof chainPrices],
+      totalPrice: totalPrice
+    })
+    setShowPurchaseAddressModal(false)
+    setAddressQuantity("")
+    setTotalPrice(0)
+  }
 
   // 地址管理数据
   const addressTableData = [
@@ -2914,14 +2951,14 @@ export default function WalletPage() {
                           />
                         </div>
                         <button
-                          onClick={() => setAddressSearchTerm("")}
+                          onClick={() => setShowPurchaseAddressModal(true)}
                           className={`px-4 py-3 rounded-lg text-sm font-medium border transition-all ${
                             isDark 
-                              ? "border-[#3a3d4a] text-gray-300 hover:bg-[#3a3d4a]" 
-                              : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                              ? "bg-white text-black border-white hover:bg-gray-100"
+                              : "bg-black text-white border-black hover:bg-gray-800"
                           }`}
                         >
-                          清除
+                          添加地址
                         </button>
                       </div>
 
