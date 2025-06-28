@@ -391,6 +391,10 @@ export default function WalletPage() {
   const [addressQuantity, setAddressQuantity] = useState("")
   const [totalPrice, setTotalPrice] = useState(0)
   
+  // 释放地址弹窗状态
+  const [showReleaseModal, setShowReleaseModal] = useState(false)
+  const [selectedAddress, setSelectedAddress] = useState<any>(null)
+  
   // 各链地址价格 (USDT/个)
   const chainPrices = {
     TRC20: 0.1,
@@ -420,6 +424,33 @@ export default function WalletPage() {
     setShowPurchaseAddressModal(false)
     setAddressQuantity("")
     setTotalPrice(0)
+  }
+  
+  // 处理释放地址
+  const handleReleaseAddress = (address: any) => {
+    setSelectedAddress(address)
+    setShowReleaseModal(true)
+  }
+  
+  // 确认释放地址
+  const confirmReleaseAddress = () => {
+    console.log("释放地址:", selectedAddress)
+    setShowReleaseModal(false)
+    setSelectedAddress(null)
+  }
+  
+  // 获取网络Logo
+  const getNetworkLogo = (network: string) => {
+    const logos: { [key: string]: string } = {
+      TRC20: "🟢", // Tron
+      ERC20: "🔵", // Ethereum
+      BTC: "🟠", // Bitcoin
+      BSC: "🟡", // Binance Smart Chain
+      XRP: "⚪", // Ripple
+      Solana: "🟣", // Solana
+      Matrix: "🔴" // Matrix
+    }
+    return logos[network] || "⚫"
   }
 
   // 地址管理数据
@@ -2968,7 +2999,6 @@ export default function WalletPage() {
                           <table className="w-full">
                             <thead>
                               <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
-                                <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>币种</th>
                                 <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>网络</th>
                                 <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>地址</th>
                                 <th className={`text-left py-4 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户ID</th>
@@ -2981,17 +3011,9 @@ export default function WalletPage() {
                                 <tr key={index} className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-100'} hover:bg-gray-50 dark:hover:bg-[#3a3d4a] transition-all`}>
                                   <td className="py-4 px-4">
                                     <div className="flex items-center space-x-2">
-                                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold ${
-                                        address.currency === 'USDT' ? 'bg-green-100 text-green-600' :
-                                        address.currency === 'TRX' ? 'bg-red-100 text-red-600' :
-                                        'bg-blue-100 text-blue-600'
-                                      }`}>
-                                        {address.currency}
-                                      </div>
+                                      <span className="text-lg">{getNetworkLogo(address.network)}</span>
+                                      <span className="text-sm font-medium">{address.network}</span>
                                     </div>
-                                  </td>
-                                  <td className="py-4 px-4">
-                                    <span className="text-sm font-medium">{address.network}</span>
                                   </td>
                                   <td className="py-4 px-4">
                                     <div className="flex items-center space-x-2">
@@ -3014,35 +3036,15 @@ export default function WalletPage() {
                                     </div>
                                   </td>
                                   <td className="py-4 px-4">
-                                    <div className="flex items-center space-x-1">
-                                      <button
-                                        onClick={() => copyToClipboard(address.fullAddress)}
-                                        className={`p-2 rounded hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
-                                          isDark ? 'text-gray-400' : 'text-gray-500'
-                                        }`}
-                                        title="复制"
-                                      >
-                                        <Copy className="h-4 w-4" />
-                                      </button>
-                                      <button
-                                        onClick={() => handleEditAddress(address)}
-                                        className={`p-2 rounded hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
-                                          isDark ? 'text-gray-400' : 'text-gray-500'
-                                        }`}
-                                        title="编辑"
-                                      >
-                                        <Edit className="h-4 w-4" />
-                                      </button>
-                                      <button
-                                        onClick={() => handleRefreshAddress(address)}
-                                        className={`p-2 rounded hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
-                                          isDark ? 'text-gray-400' : 'text-gray-500'
-                                        }`}
-                                        title="刷新"
-                                      >
-                                        <RefreshCw className="h-4 w-4" />
-                                      </button>
-                                    </div>
+                                    <button
+                                      onClick={() => handleReleaseAddress(address)}
+                                      className={`p-2 rounded hover:bg-gray-100 dark:hover:bg-[#3a3d4a] transition-all ${
+                                        isDark ? 'text-gray-400' : 'text-gray-500'
+                                      }`}
+                                      title="释放地址"
+                                    >
+                                      <Settings className="h-4 w-4" />
+                                    </button>
                                   </td>
                                 </tr>
                               ))}
@@ -5900,6 +5902,57 @@ export default function WalletPage() {
                 }`}
               >
                 确认购买
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 释放地址确认弹窗 */}
+      {showReleaseModal && selectedAddress && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className={`${cardStyle} rounded-lg p-6 w-full max-w-md mx-4`}>
+            <h3 className={`text-lg font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              确认释放地址
+            </h3>
+            
+            <div className="space-y-4">
+              <div className={`p-4 rounded-lg ${isDark ? 'bg-[#252842]' : 'bg-gray-50'}`}>
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className="text-lg">{getNetworkLogo(selectedAddress.network)}</span>
+                  <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {selectedAddress.network}
+                  </span>
+                </div>
+                <div className={`text-sm font-mono ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  {selectedAddress.fullAddress}
+                </div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
+                  用户ID: {selectedAddress.userId}
+                </div>
+              </div>
+              
+              <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                是否确认释放该地址？释放后该地址将与该用户解绑，重新回到未分配地址库，以后随机分配给其他用户。
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-3 mt-6">
+              <button
+                onClick={() => setShowReleaseModal(false)}
+                className={`flex-1 px-4 py-3 rounded-lg border text-sm font-medium transition-all ${
+                  isDark 
+                    ? "border-[#3a3d4a] text-gray-300 hover:bg-[#3a3d4a]" 
+                    : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmReleaseAddress}
+                className="flex-1 px-4 py-3 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all text-sm font-medium"
+              >
+                确认释放
               </button>
             </div>
           </div>
