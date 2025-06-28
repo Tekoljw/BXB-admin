@@ -56,7 +56,6 @@ import {
   Building2,
   University,
   Link,
-  Zap,
   Landmark,
   Network,
   Repeat,
