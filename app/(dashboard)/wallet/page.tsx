@@ -3211,32 +3211,34 @@ export default function WalletPage() {
                   {cryptoTab === "OTC供应商" && (
                     <div className="space-y-6">
                       {/* 供应商选择标签 */}
-                      <div className="flex items-center space-x-2 overflow-x-auto">
-                        {[
-                          { name: "MoonPay", status: "启用" },
-                          { name: "Simplex", status: "启用" },
-                          { name: "Banxa", status: "启用" },
-                          { name: "Mercuryo", status: "暂停" }
-                        ].map((supplier) => (
-                          <button
-                            key={supplier.name}
-                            onClick={() => setSelectedSupplier(supplier.name)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 ${
-                              selectedSupplier === supplier.name
-                                ? "bg-gray-500 text-white"
-                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                            }`}
-                          >
-                            {supplier.name}
-                            <span className={`px-1.5 py-0.5 rounded text-xs ${
-                              supplier.status === "启用" 
-                                ? "bg-green-500 text-white" 
-                                : "bg-red-500 text-white"
-                            }`}>
-                              {supplier.status}
-                            </span>
-                          </button>
-                        ))}
+                      <div className="bg-gray-200 rounded-lg p-3">
+                        <div className="flex items-center space-x-2 overflow-x-auto">
+                          {[
+                            { name: "MoonPay", status: "启用" },
+                            { name: "Simplex", status: "启用" },
+                            { name: "Banxa", status: "启用" },
+                            { name: "Mercuryo", status: "暂停" }
+                          ].map((supplier) => (
+                            <button
+                              key={supplier.name}
+                              onClick={() => setSelectedSupplier(supplier.name)}
+                              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 ${
+                                selectedSupplier === supplier.name
+                                  ? "bg-gray-600 text-white"
+                                  : "bg-white text-gray-700 hover:bg-gray-50"
+                              }`}
+                            >
+                              {supplier.name}
+                              <span className={`px-1.5 py-0.5 rounded text-xs ${
+                                supplier.status === "启用" 
+                                  ? "bg-green-500 text-white" 
+                                  : "bg-red-500 text-white"
+                              }`}>
+                                {supplier.status}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
                       </div>
 
                       {/* MoonPay 供应商详情 */}
