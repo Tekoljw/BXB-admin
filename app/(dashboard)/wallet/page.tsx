@@ -2968,9 +2968,10 @@ export default function WalletPage() {
                             <span className="text-2xl font-bold text-orange-500">7</span>
                             <span className="text-lg font-medium mx-1">/</span>
                             <span className="text-purple-500 text-sm font-medium">6</span>
+                            <span className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} ml-1`}>U</span>
                           </div>
-                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>本月地址费用 <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT</span></div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>上月地址费用 <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT</span></div>
+                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>本月地址费用</div>
+                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>上月地址费用</div>
                         </div>
                         
                         {/* 卡片5: 本月TRC20地址费用 */}
@@ -2979,9 +2980,10 @@ export default function WalletPage() {
                             <span className="text-2xl font-bold text-orange-500">1</span>
                             <span className="text-lg font-medium mx-1">/</span>
                             <span className="text-purple-500 text-sm font-medium">0.8</span>
+                            <span className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} ml-1`}>U</span>
                           </div>
-                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>本月TRC20地址费用 <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT</span></div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>上月TRC20费用 <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT</span></div>
+                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>本月TRC20地址费用</div>
+                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>上月TRC20费用</div>
                         </div>
                         
                         {/* 卡片6: TRC20地址价格 */}
