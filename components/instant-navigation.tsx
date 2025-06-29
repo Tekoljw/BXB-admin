@@ -298,14 +298,13 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               {/* Notification Dropdown - Using Portal */}
               {showNotificationDropdown && typeof window !== 'undefined' && createPortal(
                 <div 
-                  className="bg-red-500 rounded-lg shadow-2xl border-2 border-yellow-400"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-600"
                   style={{ 
                     position: 'fixed',
                     zIndex: 2147483647,
-                    left: '20px',
-                    top: '20px',
+                    left: isExpanded ? '272px' : '112px',
+                    bottom: '80px',
                     width: '320px',
-                    height: '200px',
                     isolation: 'isolate',
                     willChange: 'transform',
                     transform: 'translateZ(0)',
@@ -313,10 +312,55 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   }}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="p-4 text-white font-bold text-lg">
-                    ✅ Portal测试弹窗！
-                    <br />
-                    现在应该在最顶层了
+                  {/* Header */}
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-medium text-gray-900 dark:text-white">通知</h3>
+                      <button 
+                        onClick={() => navigate("/notifications")}
+                        className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
+                      >
+                        查看全部
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Filter Tabs */}
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex space-x-1">
+                      {[
+                        { id: 'all', label: '全部' },
+                        { id: 'trading', label: '交易' },
+                        { id: 'system', label: '系统' },
+                        { id: 'social', label: '社交' }
+                      ].map((filter) => (
+                        <button
+                          key={filter.id}
+                          className={`px-3 py-1.5 text-xs rounded-md transition-colors ${
+                            filter.id === 'all'
+                              ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                          }`}
+                        >
+                          {filter.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 text-center">
+                    <div className="mb-4">
+                      <div className="w-16 h-16 mx-auto mb-3 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                        <div className="w-10 h-12 bg-gray-200 dark:bg-gray-600 rounded-sm relative">
+                          <div className="absolute top-2 left-1 w-2 h-2 bg-gray-300 dark:bg-gray-500 rounded-full"></div>
+                          <div className="absolute top-2 right-1 w-2 h-2 bg-gray-300 dark:bg-gray-500 rounded-full"></div>
+                          <div className="absolute bottom-2 left-1 right-1 h-1 bg-gray-300 dark:bg-gray-500 rounded"></div>
+                          <div className="absolute top-1 right-0 w-3 h-3 bg-gray-100 dark:bg-gray-700 transform rotate-45 origin-bottom-left"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">没有新通知</p>
                   </div>
                 </div>,
                 document.body
