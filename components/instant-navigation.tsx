@@ -59,12 +59,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
   const menuItems = [
     { id: "chat", icon: "💬", label: t("chat"), labelEn: "Chat" },
-    { id: "social", icon: "👥", label: t("social"), labelEn: "Social" },
-    { id: "marketplace", icon: "🏪", label: t("marketplace"), labelEn: "Market" },
-    { id: "usdt-trading", icon: "💰", label: t("usdtTrading"), labelEn: "USDT" },
-    { id: "spot-trading", icon: "📊", label: t("spotTrading"), labelEn: "Spot" },
-    { id: "futures-trading", icon: "📈", label: t("futuresTrading"), labelEn: "Futures" },
-    { id: "finance", icon: "🏦", label: t("finance"), labelEn: "Finance" },
     { id: "wallet", icon: "👛", label: t("wallet"), labelEn: "Wallet" },
     { id: "profile", icon: "👤", label: t("profile"), labelEn: "Profile" }
   ]
