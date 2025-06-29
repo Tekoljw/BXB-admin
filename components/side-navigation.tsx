@@ -150,8 +150,8 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
         </div>
       </div>
 
-      <nav className="flex-1 overflow-hidden" style={{maxHeight: 'calc(100vh - 100px)', height: 'calc(100vh - 100px)'}}>
-        <ul className="h-full flex flex-col space-y-2 overflow-y-auto py-2">
+      <nav className="flex-1 overflow-y-auto" style={{maxHeight: 'calc(100vh - 120px)'}}>
+        <ul className="flex flex-col space-y-1 py-2">
           {/* 聊天 */}
           <li className="flex justify-center md:justify-center">
             <button
@@ -250,14 +250,18 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
             </button>
           </li>
 
-          {/* 理财 */}
-          <li className="flex justify-center md:justify-center">
+          {/* 理财 - TEST VISIBILITY */}
+          <li className="flex justify-center md:justify-center" style={{ backgroundColor: 'red', minHeight: '40px' }}>
             <button
-              onClick={() => handleNavClick("/financial")}
+              onClick={() => {
+                console.log("Financial button clicked");
+                handleNavClick("/financial");
+              }}
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/financial") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
               title={!isExpanded ? "理财" : undefined}
+              style={{ backgroundColor: 'green', border: '2px solid yellow', color: 'white' }}
             >
               <Coins className="h-5 w-5 md:h-5 md:w-5" />
               <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>理财</span>
