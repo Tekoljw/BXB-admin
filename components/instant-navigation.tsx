@@ -34,6 +34,7 @@ import USDTTradePage from "@/app/(dashboard)/usdt-trade/page"
 import MarketPage from "@/app/(dashboard)/market/page"
 import SpotPage from "@/app/(dashboard)/spot/page"
 import FuturesPage from "@/app/(dashboard)/futures/page"
+import FinancePage from "@/app/(dashboard)/finance/page"
 import TetherIcon from "@/components/tether-icon"
 
 interface InstantNavigationProps {
@@ -89,6 +90,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
     { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
     { path: "/futures", icon: BarChart3, label: "合约", component: FuturesPage },
+    { path: "/finance", icon: TrendingUp, label: "理财", component: FinancePage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
   ]
 

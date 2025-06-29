@@ -18,6 +18,7 @@ import {
   ShoppingBag,
   Compass,
   Coins,
+  TrendingUp,
 } from "lucide-react"
 
 import Link from "next/link"
@@ -63,6 +64,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
     { id: "market", icon: BarChart2, label: t("nav.market"), href: "/market" },
     { id: "spot", icon: Coins, label: t("nav.spot"), href: "/spot" },
     { id: "futures", icon: LineChart, label: t("nav.futures"), href: "/futures" },
+    { id: "finance", icon: TrendingUp, label: t("nav.finance"), href: "/finance" },
     { id: "usdt-trade", icon: DollarSign, label: t("nav.usdt_trade"), href: "/usdt-trade" },
     { id: "social", icon: Users, label: t("nav.social"), href: "/social" },
     { id: "chat", icon: MessageCircle, label: t("nav.chat"), href: "/chat" },
