@@ -276,10 +276,14 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <button 
                 onClick={(e) => {
                   e.stopPropagation()
-                  console.log("Instant notification button clicked, current state:", showNotificationDropdown)
-                  setShowNotificationDropdown(!showNotificationDropdown)
+                  const newState = !showNotificationDropdown
+                  console.log("Instant notification button clicked, setting state to:", newState)
+                  setShowNotificationDropdown(newState)
+                  console.log("State should now be:", newState)
                 }}
-                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative"
+                className={`p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative ${
+                  showNotificationDropdown ? 'bg-gray-600' : ''
+                }`}
                 title="通知"
               >
                 <div className="transition-all duration-300 group-hover:ring-2 group-hover:ring-custom-green group-hover:text-custom-green">
@@ -290,10 +294,15 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </span>
               </button>
 
+              {/* Debug: Always show a small indicator when dropdown should be visible */}
+              {showNotificationDropdown && (
+                <div className="fixed top-10 left-10 w-4 h-4 bg-red-500 rounded-full z-[9999]"></div>
+              )}
+
               {/* Notification Dropdown */}
               {showNotificationDropdown && (
                 <div 
-                  className="absolute right-full bottom-0 mr-2 w-80 bg-gray-800 rounded-lg shadow-lg border border-gray-600 z-[9999] animate-in fade-in slide-in-from-right-5 duration-200"
+                  className="fixed left-20 bottom-20 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999]"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {/* Header */}

@@ -357,7 +357,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
 
             {/* Notification Dropdown */}
             {notificationDropdownOpen && (
-              <div className="absolute left-full bottom-0 ml-2 w-80 bg-gray-800 rounded-lg shadow-lg border border-gray-600 z-50 animate-in fade-in slide-in-from-left-5 duration-200">
+              <div className="fixed left-20 bottom-16 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999]">
                 {/* Header */}
                 <div className="p-4 border-b border-gray-700">
                   <div className="flex items-center justify-between">
