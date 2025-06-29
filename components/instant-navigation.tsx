@@ -527,8 +527,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
             </div>
 
             {/* Filter Tabs */}
-            <div style={{ padding: '20px', borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}` }}>
-              <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}` }}>
+              <div style={{ display: 'flex', paddingLeft: '20px', paddingRight: '20px' }}>
                 {[
                   { id: 'all', label: '全部' },
                   { id: 'trading', label: '交易通知' },
@@ -538,24 +538,25 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   <button
                     key={filter.id}
                     style={{ 
-                      padding: '8px 16px', 
-                      fontSize: '13px', 
-                      borderRadius: '8px',
+                      padding: '12px 0px',
+                      marginRight: '32px',
+                      fontSize: '16px', 
                       border: 'none',
+                      background: 'transparent',
                       cursor: 'pointer',
                       fontWeight: '500',
-                      backgroundColor: filter.id === 'all' ? '#dbeafe' : 'transparent',
-                      color: filter.id === 'all' ? '#2563eb' : (theme === 'dark' ? '#9ca3af' : '#6b7280'),
+                      color: filter.id === 'all' ? (theme === 'dark' ? '#ffffff' : '#000000') : (theme === 'dark' ? '#9ca3af' : '#6b7280'),
+                      borderBottom: filter.id === 'all' ? `2px solid ${theme === 'dark' ? '#ffffff' : '#000000'}` : '2px solid transparent',
                       transition: 'all 0.2s'
                     }}
                     onMouseEnter={(e) => {
                       if (filter.id !== 'all') {
-                        e.currentTarget.style.backgroundColor = theme === 'dark' ? '#374151' : '#f3f4f6'
+                        e.currentTarget.style.color = theme === 'dark' ? '#d1d5db' : '#374151'
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (filter.id !== 'all') {
-                        e.currentTarget.style.backgroundColor = 'transparent'
+                        e.currentTarget.style.color = theme === 'dark' ? '#9ca3af' : '#6b7280'
                       }
                     }}
                   >
