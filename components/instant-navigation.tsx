@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { createPortal } from "react-dom"
 
 import { useTheme } from "@/contexts/theme-context"
 import AccountDropdown from "@/components/account-dropdown"
@@ -295,44 +294,51 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </span>
               </button>
 
-              {/* Notification Dropdown - Using Portal */}
-              {showNotificationDropdown && typeof window !== 'undefined' && createPortal(
-                <>
-                  {console.log('Portal dropdown rendering successfully')}
-                  <div 
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-600"
-                    style={{ 
-                      position: 'fixed',
-                      zIndex: 2147483647,
-                      left: isExpanded ? '272px' : '112px',
-                      bottom: '80px',
-                      width: '320px',
-                      isolation: 'isolate',
-                      willChange: 'transform',
-                      transform: 'translateZ(0)',
-                      pointerEvents: 'auto'
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {/* Header */}
-                    <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-medium text-gray-900 dark:text-white">通知</h3>
-                        <button 
-                          onClick={() => {
-                            console.log('View all notifications clicked')
-                            if (typeof navigate === 'function') {
-                              navigate("/notifications")
-                            } else {
-                              window.location.href = "/notifications"
-                            }
-                          }}
-                          className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
-                        >
-                          查看全部
-                        </button>
-                      </div>
+              {/* Notification Dropdown */}
+              {showNotificationDropdown && (
+                <div 
+                  className="fixed bg-red-500 border-4 border-yellow-400"
+                  style={{ 
+                    position: 'fixed',
+                    zIndex: 2147483647,
+                    left: '50px',
+                    top: '50px',
+                    width: '300px',
+                    height: '100px'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="p-4 text-white font-bold">
+                    测试弹窗 - 能看到吗？
+                  </div>
+                </div>
+              )}
+
+              {/* Real Notification Dropdown */}
+              {false && (
+                <div 
+                  className="fixed bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-600"
+                  style={{ 
+                    position: 'fixed',
+                    zIndex: 999999,
+                    left: isExpanded ? '272px' : '112px',
+                    bottom: '80px',
+                    width: '320px'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Header */}
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-medium text-gray-900 dark:text-white">通知</h3>
+                      <button 
+                        onClick={() => window.location.href = "/notifications"}
+                        className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
+                      >
+                        查看全部
+                      </button>
                     </div>
+                  </div>
 
                   {/* Filter Tabs */}
                   <div className="p-4 border-b border-gray-200 dark:border-gray-700">
@@ -372,8 +378,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                     <p className="text-gray-500 dark:text-gray-400 text-sm">没有新通知</p>
                   </div>
                 </div>
-                </>,
-                document.body
               )}
 
               {/* Original Dropdown */}
