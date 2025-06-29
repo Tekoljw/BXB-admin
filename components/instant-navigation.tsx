@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 
 import { useTheme } from "@/contexts/theme-context"
 import AccountDropdown from "@/components/account-dropdown"
@@ -294,15 +295,15 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </span>
               </button>
 
-              {/* Debug: Always show a small indicator when dropdown should be visible */}
-              {showNotificationDropdown && (
-                <div className="fixed top-10 left-10 w-4 h-4 bg-red-500 rounded-full z-[9999]"></div>
-              )}
-
               {/* Notification Dropdown */}
               {showNotificationDropdown && (
                 <div 
-                  className="fixed left-20 bottom-20 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999]"
+                  className="fixed left-20 bottom-20 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-600 z-[99999]"
+                  style={{ 
+                    position: 'fixed',
+                    zIndex: 99999,
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+                  }}
                   onClick={(e) => e.stopPropagation()}
                 >
                   {/* Header */}
