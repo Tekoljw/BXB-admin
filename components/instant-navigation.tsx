@@ -14,6 +14,7 @@ import {
   BarChart3,
   Wallet,
   Settings,
+  Bell,
   Globe2,
   Sun,
   Moon,
@@ -268,13 +269,16 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
             </div>
             <div className="flex justify-center w-full">
               <button 
-                onClick={() => navigate("/settings")}
-                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
-                title="设置"
+                onClick={() => navigate("/notifications")}
+                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative"
+                title="通知"
               >
-                <div className="transition-all duration-300 group-hover:rotate-90 group-hover:text-custom-green">
-                  <Settings size={20} />
+                <div className="transition-all duration-300 group-hover:ring-2 group-hover:ring-custom-green group-hover:text-custom-green">
+                  <Bell size={20} />
                 </div>
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
+                  5
+                </span>
               </button>
             </div>
           </div>

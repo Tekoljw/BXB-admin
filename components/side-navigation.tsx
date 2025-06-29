@@ -341,13 +341,16 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
             <ThemeToggle />
           </div>
           <button
-            onClick={() => handleNavClick("/settings")}
-            className={`p-1 rounded transition-colors hover:bg-white/10 ${
-              isActive("/settings") ? "bg-white/20" : "text-white/70 hover:text-white"
+            onClick={() => handleNavClick("/notifications")}
+            className={`p-1 rounded transition-colors hover:bg-white/10 relative ${
+              isActive("/notifications") ? "bg-white/20" : "text-white/70 hover:text-white"
             }`}
-            title="设置"
+            title="通知"
           >
-            <Settings className="h-3 w-3" />
+            <Bell className="h-3 w-3" />
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center text-[8px]">
+              5
+            </span>
           </button>
         </div>
       </div>
