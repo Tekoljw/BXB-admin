@@ -51,39 +51,44 @@ export default function FinancePage() {
   ]
 
   return (
-    <div className={`min-h-screen p-4 ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
-      <div className="flex gap-6">
-        {/* Left Sidebar Menu */}
-        <div className="w-48 flex-shrink-0">
-          <div className={`${cardStyle} rounded-lg p-4`}>
-            <h3 className={`font-medium mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>
-              挖矿类型
-            </h3>
-            <div className="space-y-2">
-              {["UBX挖矿", "UBC挖矿"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setSelectedTab(tab)}
-                  className={`relative w-full px-4 py-3 rounded-lg text-left font-medium transition-all duration-200 ${
-                    selectedTab === tab
-                      ? `bg-[#00D4AA]/10 text-[#00D4AA] border border-[#00D4AA]/20`
-                      : `${isDark ? "text-gray-400 hover:text-gray-200 hover:bg-[#252842]" : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"}`
-                  }`}
-                >
-                  {tab}
-                  {tab === "UBC挖矿" && (
-                    <span className="absolute top-1 right-1 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
-                      HOT
-                    </span>
-                  )}
-                </button>
-              ))}
+    <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+      <div className="flex">
+        {/* Left Sidebar Menu - Full screen style */}
+        <div className="w-56 flex-shrink-0">
+          <div className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border-r sticky top-0 overflow-hidden h-screen ${isDark ? "border-[#252842]" : "border-gray-200"}`}>
+            <div className="flex flex-col h-full">
+              <div className="flex-1 py-6">
+                <div className="space-y-1 px-4">
+                  {["UBX挖矿", "UBC挖矿"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setSelectedTab(tab)}
+                      className={`relative w-full flex items-center px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        selectedTab === tab
+                          ? isDark
+                            ? "bg-white text-black"
+                            : "bg-black text-white"
+                          : isDark
+                            ? "text-gray-300 hover:text-white hover:bg-[#252842]"
+                            : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      }`}
+                    >
+                      {tab}
+                      {tab === "UBC挖矿" && (
+                        <span className="absolute top-1 right-1 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                          HOT
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="flex-1">
+        <div className="flex-1 p-6">
           {/* New User Exclusive Banner */}
           <div className="mb-6">
             <div className={`${cardStyle} rounded-lg p-6 relative overflow-hidden`}>
