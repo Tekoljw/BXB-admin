@@ -343,21 +343,11 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
           </div>
           <div className="relative" ref={notificationDropdownRef}>
             <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                console.log("Notification button clicked, current state:", notificationDropdownOpen)
-                setNotificationDropdownOpen(prev => {
-                  console.log("Setting notification dropdown to:", !prev)
-                  return !prev
-                })
-              }}
+              onClick={() => setNotificationDropdownOpen(!notificationDropdownOpen)}
               className={`p-1 rounded transition-colors hover:bg-white/10 relative ${
                 notificationDropdownOpen ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
               title="通知"
-              style={{ zIndex: 10, pointerEvents: 'auto' }}
             >
               <Bell className="h-3 w-3" />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center text-[8px]">
@@ -367,11 +357,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
 
             {/* Notification Dropdown */}
             {notificationDropdownOpen && (
-              <div 
-                className="absolute left-full bottom-0 ml-2 w-80 bg-gray-800 rounded-lg shadow-lg border border-gray-600 z-[9999] animate-in fade-in slide-in-from-left-5 duration-200"
-                onClick={(e) => e.stopPropagation()}
-                style={{ pointerEvents: 'auto' }}
-              >
+              <div className="absolute left-full bottom-0 ml-2 w-80 bg-gray-800 rounded-lg shadow-lg border border-gray-600 z-50 animate-in fade-in slide-in-from-left-5 duration-200">
                 {/* Header */}
                 <div className="p-4 border-b border-gray-700">
                   <div className="flex items-center justify-between">

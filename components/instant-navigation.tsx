@@ -47,8 +47,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const [currentPage, setCurrentPage] = useState("/chat")
   const [isExpanded, setIsExpanded] = useState(false)
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
-  const [showNotificationDropdown, setShowNotificationDropdown] = useState(false)
-  const [notificationFilter, setNotificationFilter] = useState<"all" | "system" | "activity" | "important">("all")
   const { theme, setTheme, language, setLanguage } = useTheme()
 
   useEffect(() => {
@@ -62,19 +60,16 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       if (showLanguageDropdown) {
         setShowLanguageDropdown(false)
       }
-      if (showNotificationDropdown) {
-        setShowNotificationDropdown(false)
-      }
     }
 
-    if (showLanguageDropdown || showNotificationDropdown) {
+    if (showLanguageDropdown) {
       document.addEventListener('click', handleClickOutside)
     }
 
     return () => {
       document.removeEventListener('click', handleClickOutside)
     }
-  }, [showLanguageDropdown, showNotificationDropdown])
+  }, [showLanguageDropdown])
 
   const navigate = (path: string) => {
     setCurrentPage(path)
@@ -272,14 +267,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </div>
               </button>
             </div>
-            <div className="flex justify-center w-full relative">
+            <div className="flex justify-center w-full">
               <button 
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  console.log("Instant notification button clicked, current state:", showNotificationDropdown)
-                  setShowNotificationDropdown(!showNotificationDropdown)
-                }}
+                onClick={() => navigate("/notifications")}
                 className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative"
                 title="通知"
               >
@@ -290,71 +280,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   5
                 </span>
               </button>
-
-              {/* Notification Dropdown */}
-              {showNotificationDropdown && (
-                <div 
-                  className="absolute right-0 bottom-full mb-2 bg-red-500 border border-gray-600 rounded-lg shadow-xl min-w-[320px] z-[9999]"
-                  onClick={(e) => e.stopPropagation()}
-                  style={{ 
-                    zIndex: 9999,
-                    transform: 'translateX(-50%)',
-                    backgroundColor: 'red'
-                  }}
-                >
-                  {/* Header */}
-                  <div className="p-4 border-b border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-medium text-white">通知</h3>
-                      <button 
-                        onClick={() => navigate("/notifications")}
-                        className="text-sm text-blue-400 hover:text-blue-300"
-                      >
-                        查看全部
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Filter Tabs */}
-                  <div className="p-3 border-b border-gray-700">
-                    <div className="flex space-x-1">
-                      {[
-                        { key: "all", label: "全部" },
-                        { key: "system", label: "系统通知" },
-                        { key: "activity", label: "最新活动" },
-                        { key: "important", label: "重要通知" }
-                      ].map((filter) => (
-                        <button
-                          key={filter.key}
-                          onClick={() => setNotificationFilter(filter.key as any)}
-                          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                            notificationFilter === filter.key
-                              ? "bg-blue-600 text-white"
-                              : "text-gray-300 hover:text-white hover:bg-gray-700"
-                          }`}
-                        >
-                          {filter.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 text-center">
-                    <div className="mb-4">
-                      <div className="w-16 h-16 mx-auto mb-3 bg-gray-700 rounded-lg flex items-center justify-center">
-                        <div className="w-10 h-12 bg-gray-600 rounded-sm relative">
-                          <div className="absolute top-2 left-1 w-2 h-2 bg-gray-500 rounded-full"></div>
-                          <div className="absolute top-2 right-1 w-2 h-2 bg-gray-500 rounded-full"></div>
-                          <div className="absolute bottom-2 left-1 right-1 h-1 bg-gray-500 rounded"></div>
-                          <div className="absolute top-1 right-0 w-3 h-3 bg-gray-700 transform rotate-45 origin-bottom-left"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-gray-400 text-sm">没有新通知</p>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
