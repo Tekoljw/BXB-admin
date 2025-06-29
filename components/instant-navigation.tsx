@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { createPortal } from "react-dom"
 
 import { useTheme } from "@/contexts/theme-context"
 import AccountDropdown from "@/components/account-dropdown"
@@ -295,16 +294,36 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </span>
               </button>
 
-              {/* Notification Dropdown - Rendered as Portal */}
-              {showNotificationDropdown && typeof window !== 'undefined' && createPortal(
+              {/* Notification Dropdown */}
+              {showNotificationDropdown && (
+                <>
+                  {console.log('Rendering notification dropdown')}
+                  <div 
+                    className="fixed w-80 bg-red-500 rounded-lg shadow-2xl border-2 border-yellow-400"
+                    style={{ 
+                      position: 'fixed',
+                      zIndex: 999999,
+                      left: '20px',
+                      top: '20px',
+                      height: '200px'
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="p-4 text-white font-bold">
+                      测试通知弹窗 - 如果你看到这个红色框说明弹窗已经显示
+                    </div>
+                  </div>
+                </>
+              ) || (
                 <div 
                   className="fixed w-80 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-600"
                   style={{ 
                     position: 'fixed',
                     zIndex: 999999,
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
                     left: isExpanded ? '272px' : '112px',
-                    bottom: '80px'
+                    bottom: '80px',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                    display: 'none'
                   }}
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -359,8 +378,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                     </div>
                     <p className="text-gray-400 text-sm">没有新通知</p>
                   </div>
-                </div>,
-                document.body
+                </div>
               )}
             </div>
           </div>
