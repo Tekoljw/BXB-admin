@@ -295,14 +295,16 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </span>
               </button>
 
-              {/* Notification Dropdown */}
-              {showNotificationDropdown && (
+              {/* Notification Dropdown - Rendered as Portal */}
+              {showNotificationDropdown && typeof window !== 'undefined' && createPortal(
                 <div 
-                  className="fixed left-20 bottom-20 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-600 z-[99999]"
+                  className="fixed w-80 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-600"
                   style={{ 
                     position: 'fixed',
-                    zIndex: 99999,
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+                    zIndex: 999999,
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                    left: isExpanded ? '272px' : '112px',
+                    bottom: '80px'
                   }}
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -357,7 +359,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                     </div>
                     <p className="text-gray-400 text-sm">没有新通知</p>
                   </div>
-                </div>
+                </div>,
+                document.body
               )}
             </div>
           </div>
