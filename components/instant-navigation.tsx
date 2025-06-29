@@ -1,165 +1,285 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { Bell, Sun, Moon, Globe } from "lucide-react"
-import { useTheme } from "../contexts/theme-context"
-import { useTranslation } from "../hooks/use-translation"
+import React, { useState, useEffect } from "react"
 
-// Import page components
-import ChatPage from "../app/(dashboard)/chat/page"
-import WalletPage from "../app/(dashboard)/wallet/page"
-import ProfilePage from "../app/(dashboard)/profile/page"
-import NotificationsPage from "../app/(dashboard)/notifications/page"
+import { useTheme } from "@/contexts/theme-context"
+import AccountDropdown from "@/components/account-dropdown"
+import {
+  MessageCircle,
+  Compass,
+  ShoppingBag,
+  DollarSign,
+  LineChart,
+  ArrowLeftRight,
+  BarChart3,
+  Wallet,
+  Settings,
+  Bell,
+  Globe2,
+  Sun,
+  Moon,
+  Menu,
+  User,
+  Shield,
+  TrendingUp,
+  PiggyBank,
+} from "lucide-react"
+
+// Import all page components directly to avoid compilation delays
+import ChatPage from "@/app/(dashboard)/chat/page"
+import MomentsPage from "@/app/(dashboard)/moments/page"
+import MallPage from "@/app/(dashboard)/mall/page"
+import WalletPage from "@/app/(dashboard)/wallet/page"
+import ProfilePage from "@/app/(dashboard)/profile/page"
+
+import USDTTradePage from "@/app/(dashboard)/usdt-trade/page"
+import MarketPage from "@/app/(dashboard)/market/page"
+import SpotPage from "@/app/(dashboard)/spot/page"
+import FuturesPage from "@/app/(dashboard)/futures/page"
+import FinancePage from "@/app/(dashboard)/finance/page"
+import TetherIcon from "@/components/tether-icon"
 
 interface InstantNavigationProps {
   onCloseMobile?: () => void
 }
 
 export default function InstantNavigation({ onCloseMobile }: InstantNavigationProps) {
-  const { theme, setTheme, language, setLanguage } = useTheme()
-  const { t } = useTranslation()
-  
-  const [currentPage, setCurrentPage] = useState("chat")
+  const [currentPage, setCurrentPage] = useState("/chat")
   const [isExpanded, setIsExpanded] = useState(false)
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false)
-  const [notificationActiveTab, setNotificationActiveTab] = useState("all")
-  
-  const sidebarRef = useRef<HTMLDivElement>(null)
-  const languageDropdownRef = useRef<HTMLDivElement>(null)
-  const notificationDropdownRef = useRef<HTMLDivElement>(null)
+  const [notificationFilter, setNotificationFilter] = useState<"all" | "system" | "activity" | "important">("all")
+  const { theme, setTheme, language, setLanguage } = useTheme()
 
-  const navigate = (page: string) => {
-    setCurrentPage(page)
-    if (onCloseMobile) {
-      onCloseMobile()
-    }
-  }
+  useEffect(() => {
+    // Initialize current page from URL on mount
+    const path = window.location.pathname
+    setCurrentPage(path || "/chat")
+  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
+      if (showLanguageDropdown) {
         setShowLanguageDropdown(false)
       }
-      if (notificationDropdownRef.current && !notificationDropdownRef.current.contains(event.target as Node)) {
+      if (showNotificationDropdown) {
         setShowNotificationDropdown(false)
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+    if (showLanguageDropdown || showNotificationDropdown) {
+      document.addEventListener('click', handleClickOutside)
     }
-  }, [])
 
-  const handleLanguageSelect = (newLanguage: "zh" | "en") => {
-    setLanguage(newLanguage)
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showLanguageDropdown])
+
+  const navigate = (path: string) => {
+    setCurrentPage(path)
+    onCloseMobile?.()
+    // Update URL without triggering page reload
+    window.history.pushState({}, "", path)
+  }
+
+  const handleLanguageSelect = (lang: "en" | "zh") => {
+    setLanguage(lang)
     setShowLanguageDropdown(false)
   }
 
-  const menuItems = [
-    { id: "chat", icon: "💬", label: t("chat"), labelEn: "Chat" },
-    { id: "wallet", icon: "👛", label: t("wallet"), labelEn: "Wallet" },
-    { id: "profile", icon: "👤", label: t("profile"), labelEn: "Profile" }
+  const isActive = (path: string) => currentPage === path
+
+  const navItems = [
+    { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
+    { path: "/moments", icon: Compass, label: "分享", component: MomentsPage },
+    { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
+    { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
+    { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
+    { path: "/futures", icon: BarChart3, label: "合约", component: FuturesPage },
+    { path: "/finance", icon: PiggyBank, label: "理财", component: FinancePage },
+    { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
   ]
 
   const renderCurrentPage = () => {
-    switch (currentPage) {
-      case "chat": return <ChatPage />
-      case "wallet": return <WalletPage />
-      case "profile": return <ProfilePage />
-      case "notifications": return <NotificationsPage />
-      default: return <ChatPage />
+    const currentItem = navItems.find(item => item.path === currentPage)
+    if (currentItem) {
+      const Component = currentItem.component
+      return <Component />
     }
-  }
 
-  // If we're on notifications page, render it directly
-  if (currentPage === "notifications") {
-    return <NotificationsPage />
+    // Handle profile page separately
+    if (currentPage === "/profile") {
+      return <ProfilePage />
+    }
+
+    return <ChatPage />
   }
 
   return (
     <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
       {/* Sidebar */}
       <div 
-        ref={sidebarRef}
         className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl shadow-black/20 relative overflow-hidden h-full`}
         style={{
           width: isExpanded ? '256px' : '96px',
-          transition: 'width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)'
+          transition: 'width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
+          minHeight: '100vh',
         }}
-        onMouseEnter={() => setIsExpanded(true)}
-        onMouseLeave={() => setIsExpanded(false)}
       >
-        {/* Logo */}
-        <div className="p-6 text-center">
-          <div className="text-2xl font-bold bg-gradient-to-r from-custom-green to-emerald-400 bg-clip-text text-transparent">
-            {isExpanded ? 'BeDAO' : 'B'}
+        {/* Background Overlay with Static Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-gray-700/5 opacity-50"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent"></div>
+        
+        {/* Header - Hamburger Menu with Glow Effect */}
+        <div className="relative z-10 h-14 flex items-center justify-center px-3 backdrop-blur-sm">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative overflow-hidden"
+            title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
+          >
+            <div className="relative transition-all duration-300 group-hover:rotate-180">
+              <Menu size={22} />
+            </div>
+          </button>
+        </div>
+
+        {/* User Section with Account Dropdown */}
+        <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-0 py-4'} backdrop-blur-sm`}>
+          <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'} transition-all duration-500`}>
+            <AccountDropdown onNavigate={navigate} />
+            {isExpanded && (
+              <div 
+                className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
+                style={{
+                  width: '140px',
+                  opacity: 1,
+                }}
+              >
+                <div className="text-sm font-medium text-white whitespace-nowrap text-center">John Doe</div>
+                <div className="text-xs text-gray-400 whitespace-nowrap text-center">
+                  demo@example.com
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="flex-1 px-4 space-y-3">
-          {menuItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => navigate(item.id)}
-              className={`w-full flex items-center px-4 py-3 rounded-xl transition-all duration-300 group hover:bg-gradient-to-r hover:from-custom-green/20 hover:to-emerald-500/20 hover:shadow-lg hover:shadow-custom-green/10 ${
-                currentPage === item.id 
-                  ? 'bg-gradient-to-r from-custom-green/30 to-emerald-500/30 shadow-lg shadow-custom-green/20 border border-custom-green/20' 
-                  : 'hover:bg-gray-700/50'
-              }`}
-            >
-              <span className="text-xl mr-4 group-hover:scale-110 transition-transform duration-200">
-                {item.icon}
-              </span>
-              <span className={`font-medium transition-all duration-300 ${
-                isExpanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
-              } ${currentPage === item.id ? 'text-custom-green' : 'group-hover:text-custom-green'}`}>
-                {language === "zh" ? item.label : item.labelEn}
-              </span>
-            </button>
-          ))}
-        </nav>
-
-        {/* Bottom Section */}
-        <div className="p-4 space-y-3 border-t border-gray-700/50">
-          {/* Theme Toggle */}
-          <div className="flex justify-center w-full">
-            <button 
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
-              title={theme === "dark" ? "切换到浅色模式" : "切换到深色模式"}
-            >
-              <div className="transition-all duration-300 group-hover:ring-2 group-hover:ring-custom-green group-hover:text-custom-green">
-                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+        {/* Navigation with Enhanced Animations */}
+        <div className={`relative z-10 flex-1 ${isExpanded ? 'p-2' : 'p-1'} flex flex-col justify-start min-h-0 overflow-hidden`}>
+          <div className="flex flex-col justify-start pt-4" style={{gap: 'clamp(0.25rem, 2vh, 0.75rem)'}}>
+          {navItems.map((item, index) => {
+            const Icon = item.icon
+            const active = isActive(item.path)
+            return (
+              <div key={item.path} className="relative group">
+                <button
+                  onClick={() => navigate(item.path)}
+                  className={`${isExpanded ? 'w-full px-4' : 'w-12 h-12 mx-auto'} flex items-center justify-center rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
+                    active 
+                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
+                      : "hover:scale-105 hover:bg-gray-700/20"
+                  }`}
+                  style={{ 
+                    padding: isExpanded ? 'clamp(0.5rem, 1.5vh, 1rem) 1rem' : '0',
+                    animationDelay: `${index * 50}ms`,
+                    animation: 'slideInLeft 0.6s ease-out forwards'
+                  }}
+                  title={!isExpanded ? item.label : undefined}
+                >
+                  {/* Active Item Background Glow */}
+                  {active && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl"></div>
+                  )}
+                  
+                  {/* Hover Border Effect - Only for non-active items */}
+                  {!active && (
+                    <div className={`absolute inset-1 border border-custom-green/0 group-hover:border-custom-green/30 transition-all duration-400 ease-in-out ${isExpanded ? 'rounded-lg' : 'rounded-lg'}`}></div>
+                  )}
+                  
+                  {/* Icon with Simple Animation */}
+                  <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
+                    {item.path === '/usdt-trade' ? (
+                      <div className={`transition-all duration-300 ${active ? 'text-custom-green' : 'text-gray-300'}`}>
+                        <TetherIcon className="w-[26px] h-[26px]" />
+                      </div>
+                    ) : (
+                      <Icon size={26} />
+                    )}
+                  </div>
+                  
+                  {/* Label with Smooth Slide Animation */}
+                  <div 
+                    className={`${isExpanded ? 'ml-4' : 'ml-0'} overflow-hidden transition-all duration-500 ease-in-out`}
+                    style={{
+                      width: isExpanded ? '120px' : '0px',
+                      opacity: isExpanded ? 1 : 0,
+                    }}
+                  >
+                    <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
+                      active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
+                    }`}>
+                      {item.label}
+                    </span>
+                  </div>
+                  
+                  {/* Active Indicator - Only show when expanded */}
+                  {active && isExpanded && (
+                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full"></div>
+                  )}
+                </button>
+                
+                {/* Tooltip for Collapsed State */}
+                {!isExpanded && (
+                  <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50 whitespace-nowrap shadow-xl border border-gray-600">
+                    {item.label}
+                    <div className="absolute left-0 top-1/2 transform -translate-x-1 -translate-y-1/2 w-2 h-2 bg-gray-800 rotate-45 border-l border-b border-gray-600"></div>
+                  </div>
+                )}
               </div>
-            </button>
+            )
+          })}
           </div>
+        </div>
 
-          {/* Language Toggle */}
-          <div className="flex justify-center w-full" ref={languageDropdownRef}>
-            <button 
-              onClick={(e) => {
-                e.stopPropagation()
-                setShowLanguageDropdown(!showLanguageDropdown)
-              }}
-              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
-              title="切换语言"
-            >
-              <div className="transition-all duration-300 group-hover:ring-2 group-hover:ring-custom-green group-hover:text-custom-green">
-                <Globe size={20} />
-              </div>
-            </button>
-          </div>
-
-          {/* Notification Button */}
-          <div className="flex justify-center w-full" ref={notificationDropdownRef}>
-            <div className="relative">
+        {/* Footer with Enhanced Controls */}
+        <div className="relative z-10 backdrop-blur-sm">
+          <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} transition-all duration-500`}>
+            <div className="relative flex justify-center w-full">
               <button 
                 onClick={(e) => {
                   e.stopPropagation()
-                  setShowNotificationDropdown(!showNotificationDropdown)
+                  setShowLanguageDropdown(!showLanguageDropdown)
+                }}
+                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
+                title="语言选择"
+              >
+                <div className="transition-all duration-300 group-hover:rotate-12 group-hover:text-blue-400">
+                  <Globe2 size={20} />
+                </div>
+              </button>
+
+
+            </div>
+            <div className="flex justify-center w-full">
+              <button 
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
+                title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
+              >
+                <div className="transition-all duration-300 group-hover:rotate-180 group-hover:text-yellow-400">
+                  {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+                </div>
+              </button>
+            </div>
+            <div className="flex justify-center w-full relative">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation()
+                  const newState = !showNotificationDropdown
+                  console.log("Instant notification button clicked, setting state to:", newState)
+                  setShowNotificationDropdown(newState)
+                  console.log("State should now be:", newState)
                 }}
                 className={`p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative ${
                   showNotificationDropdown ? 'bg-gray-600' : ''
@@ -174,18 +294,24 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </span>
               </button>
 
+              {/* Debug: Always show a small indicator when dropdown should be visible */}
+              {showNotificationDropdown && (
+                <div className="fixed top-10 left-10 w-4 h-4 bg-red-500 rounded-full z-[9999]"></div>
+              )}
+
               {/* Notification Dropdown */}
               {showNotificationDropdown && (
-                <div className="absolute right-0 bottom-full mb-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-600 z-[9999]"
-                     onClick={(e) => e.stopPropagation()}
+                <div 
+                  className="fixed left-20 bottom-20 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999]"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   {/* Header */}
-                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="p-4 border-b border-gray-700">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-medium text-gray-900 dark:text-white">通知</h3>
+                      <h3 className="font-medium text-white">通知</h3>
                       <button 
-                        onClick={() => navigate("notifications")}
-                        className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+                        onClick={() => navigate("/notifications")}
+                        className="text-sm text-blue-400 hover:text-blue-300"
                       >
                         查看全部
                       </button>
@@ -193,45 +319,42 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   </div>
 
                   {/* Filter Tabs */}
-                  <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                  <div className="p-3 border-b border-gray-700">
                     <div className="flex space-x-1">
                       {[
                         { key: "all", label: "全部" },
                         { key: "system", label: "系统通知" },
                         { key: "activity", label: "最新活动" },
                         { key: "important", label: "重要通知" }
-                      ].map((tab) => (
+                      ].map((filter) => (
                         <button
-                          key={tab.key}
-                          className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                            notificationActiveTab === tab.key
+                          key={filter.key}
+                          onClick={() => setNotificationFilter(filter.key as any)}
+                          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                            notificationFilter === filter.key
                               ? "bg-blue-600 text-white"
-                              : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                              : "text-gray-300 hover:text-white hover:bg-gray-700"
                           }`}
-                          onClick={() => setNotificationActiveTab(tab.key)}
                         >
-                          {tab.label}
+                          {filter.label}
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  {/* Empty State */}
-                  <div className="p-4">
-                    <div className="text-center py-8">
-                      <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <Bell size={20} className="text-gray-400" />
-                      </div>
-                      <div>
-                        <h4 className="text-gray-900 dark:text-white font-medium mb-1">暂无通知</h4>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm">
-                          {notificationActiveTab === "all" && "没有新通知"}
-                          {notificationActiveTab === "system" && "没有系统通知"}
-                          {notificationActiveTab === "activity" && "没有活动通知"}
-                          {notificationActiveTab === "important" && "没有重要通知"}
-                        </p>
+                  {/* Content */}
+                  <div className="p-6 text-center">
+                    <div className="mb-4">
+                      <div className="w-16 h-16 mx-auto mb-3 bg-gray-700 rounded-lg flex items-center justify-center">
+                        <div className="w-10 h-12 bg-gray-600 rounded-sm relative">
+                          <div className="absolute top-2 left-1 w-2 h-2 bg-gray-500 rounded-full"></div>
+                          <div className="absolute top-2 right-1 w-2 h-2 bg-gray-500 rounded-full"></div>
+                          <div className="absolute bottom-2 left-1 right-1 h-1 bg-gray-500 rounded"></div>
+                          <div className="absolute top-1 right-0 w-3 h-3 bg-gray-700 transform rotate-45 origin-bottom-left"></div>
+                        </div>
                       </div>
                     </div>
+                    <p className="text-gray-400 text-sm">没有新通知</p>
                   </div>
                 </div>
               )}
