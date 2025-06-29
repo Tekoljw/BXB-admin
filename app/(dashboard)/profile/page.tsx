@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useTheme } from "@/contexts/theme-context"
-import { User, Shield, Key, CreditCard, Settings, Home, ChevronRight, Camera, X, Heart, MessageCircle, Share, Star, MoreHorizontal, Gift, Percent, Lock, FileCheck, Database, UserX, LogOut } from "lucide-react"
+import { User, Shield, Key, CreditCard, Settings, Home, ChevronRight, Camera, X, Heart, MessageCircle, Share, Star, MoreHorizontal, Gift, Percent, Lock, FileCheck, Database, UserX, LogOut, Bell, Search } from "lucide-react"
 
 interface ProfileMenuItem {
   id: string
@@ -15,6 +15,8 @@ export default function ProfilePage() {
   const { isDark } = useTheme()
   const [activeSection, setActiveSection] = useState("personal")
   const [showEditModal, setShowEditModal] = useState(false)
+  const [showNotificationModal, setShowNotificationModal] = useState(false)
+  const [notificationTab, setNotificationTab] = useState("all")
   const [selectedApiType, setSelectedApiType] = useState("bedao")
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [favorites, setFavorites] = useState<string[]>(["post-1"])
@@ -83,7 +85,7 @@ export default function ProfilePage() {
     { id: "security", name: "安全中心", icon: Shield, description: "账户安全设置" },
     { id: "identity", name: "身份认证", icon: FileCheck, description: "实名认证管理" },
     { id: "api", name: "API管理", icon: Database, description: "API密钥管理" },
-    { id: "settings", name: "系统设置", icon: Settings, description: "账户偏好设置" },
+    { id: "notifications", name: "通知", icon: Bell, description: "消息通知设置" },
     { id: "switch", name: "切换账号", icon: UserX, description: "切换其他账号" },
     { id: "logout", name: "退出账号", icon: LogOut, description: "安全退出当前账号" }
   ]
@@ -675,8 +677,6 @@ export default function ProfilePage() {
         return renderIdentityVerification()
       case "api":
         return renderApiManagement()
-      case "settings":
-        return renderSystemSettings()
       case "switch":
         return renderSwitchAccount()
       case "logout":
@@ -688,6 +688,67 @@ export default function ProfilePage() {
 
   return (
     <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+      {/* Notification Modal */}
+      {showNotificationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} rounded-lg w-full max-w-2xl h-[80vh] flex flex-col`}>
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <h3 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                通知
+              </h3>
+              <div className="flex items-center space-x-4">
+                <button className={`text-sm ${isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-800"}`}>
+                  查看全部
+                </button>
+                <button 
+                  onClick={() => setShowNotificationModal(false)}
+                  className={`p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${isDark ? "text-gray-400" : "text-gray-600"}`}
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Tabs */}
+            <div className="flex space-x-0 px-6 pt-4 border-b border-gray-200 dark:border-gray-700">
+              {[
+                { id: "all", name: "全部" },
+                { id: "system", name: "系统通知" },
+                { id: "activity", name: "最新活动" },
+                { id: "important", name: "重要通知" }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setNotificationTab(tab.id)}
+                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                    notificationTab === tab.id
+                      ? "border-blue-500 text-blue-500"
+                      : isDark
+                        ? "border-transparent text-gray-400 hover:text-white"
+                        : "border-transparent text-gray-600 hover:text-gray-800"
+                  }`}
+                >
+                  {tab.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Modal Content - Empty State */}
+            <div className="flex-1 flex items-center justify-center p-6">
+              <div className="text-center">
+                <div className={`mx-auto w-20 h-20 rounded-lg mb-4 flex items-center justify-center ${isDark ? "bg-[#252842]" : "bg-gray-100"}`}>
+                  <Search className={`w-8 h-8 ${isDark ? "text-gray-500" : "text-gray-400"}`} />
+                </div>
+                <p className={`text-lg font-medium ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                  没有新通知
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Edit Profile Modal */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -802,7 +863,13 @@ export default function ProfilePage() {
                     return (
                       <button
                         key={item.id}
-                        onClick={() => setActiveSection(item.id)}
+                        onClick={() => {
+                          if (item.id === "notifications") {
+                            setShowNotificationModal(true)
+                          } else {
+                            setActiveSection(item.id)
+                          }
+                        }}
                         className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                           isActive
                             ? isDark
