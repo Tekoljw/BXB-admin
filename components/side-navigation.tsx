@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import {
   BarChart2,
   Settings,
@@ -125,21 +126,22 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
   const isDark = theme === "dark"
 
   return (
-    <div className={`w-full h-screen flex flex-col ${isDark ? "bg-[#374151]" : "bg-black"} text-white overflow-hidden`} style={{maxHeight: '100vh'}}>
-      {/* Expand/Collapse Toggle Button */}
-      <div className="hidden md:flex justify-end p-2">
-        <button
-          onClick={handleToggleExpand}
-          className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-          title={isExpanded ? "收起" : "展开"}
-        >
-          {isExpanded ? (
-            <ChevronLeft className="h-4 w-4 text-white/70" />
-          ) : (
-            <ChevronRight className="h-4 w-4 text-white/70" />
-          )}
-        </button>
-      </div>
+    <>
+      <div className={`w-full h-screen flex flex-col ${isDark ? "bg-[#374151]" : "bg-black"} text-white overflow-hidden`} style={{maxHeight: '100vh'}}>
+        {/* Expand/Collapse Toggle Button */}
+        <div className="hidden md:flex justify-end p-2">
+          <button
+            onClick={handleToggleExpand}
+            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+            title={isExpanded ? "收起" : "展开"}
+          >
+            {isExpanded ? (
+              <ChevronLeft className="h-4 w-4 text-white/70" />
+            ) : (
+              <ChevronRight className="h-4 w-4 text-white/70" />
+            )}
+          </button>
+        </div>
 
       {/* User Avatar Section */}
       <div className="p-3 pt-2 md:p-4 md:pt-2">
@@ -463,6 +465,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </React.Fragment>
   )
 }
