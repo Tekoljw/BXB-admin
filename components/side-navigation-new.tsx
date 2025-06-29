@@ -19,6 +19,7 @@ import {
   ShoppingBag,
   TrendingUp,
   PiggyBank,
+  AlertTriangle,
 } from "lucide-react"
 
 import Link from "next/link"
@@ -39,7 +40,6 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
   const pathname = usePathname()
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false)
-  const [notificationFilter, setNotificationFilter] = useState<"all" | "system" | "activity" | "important">("all")
   const languageDropdownRef = useRef<HTMLDivElement>(null)
   const notificationDropdownRef = useRef<HTMLDivElement>(null)
   const [isExpanded, setIsExpanded] = useState(propIsExpanded ?? true)
@@ -193,75 +193,116 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
         {/* Notifications */}
         <div className="relative" ref={notificationDropdownRef}>
           <button
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              console.log("Side navigation new notification button clicked, current state:", notificationDropdownOpen)
-              setNotificationDropdownOpen(!notificationDropdownOpen)
-            }}
-            className={`p-2 rounded transition-colors hover:bg-white/10 relative ${
-              notificationDropdownOpen ? "bg-white/20" : "text-white/70 hover:text-white"
+            onClick={() => setNotificationDropdownOpen(!notificationDropdownOpen)}
+            className={`p-2 rounded transition-all duration-200 hover:bg-white/10 relative ${
+              notificationDropdownOpen ? "bg-white/20 text-white" : "text-white/70 hover:text-white"
             }`}
           >
-            <Bell className="h-4 w-4" />
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center text-[8px]">
+            <Bell className={`h-4 w-4 transition-all duration-200 ${
+              notificationDropdownOpen 
+                ? "animate-pulse scale-110" 
+                : "hover:animate-bounce"
+            }`} />
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center text-[8px] animate-pulse">
               5
             </span>
           </button>
 
-          {/* Notification Dropdown */}
           {notificationDropdownOpen && (
-            <div className="absolute left-full bottom-0 ml-2 w-80 bg-gray-800 rounded-lg shadow-lg border border-gray-600 z-50 animate-in fade-in slide-in-from-left-5 duration-200">
-              {/* Header */}
-              <div className="p-4 border-b border-gray-700">
+            <div className="fixed inset-0 z-[9998] bg-black/20 backdrop-blur-sm" onClick={() => setNotificationDropdownOpen(false)}>
+              <div 
+                className="absolute top-4 right-4 w-80 max-w-[calc(100vw-2rem)] bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999] animate-in fade-in slide-in-from-top-2 duration-200"
+                onClick={(e) => e.stopPropagation()}
+              >
+              <div className="p-3 border-b border-gray-600">
                 <div className="flex items-center justify-between">
                   <h3 className="font-medium text-white">通知</h3>
-                  <button 
-                    onClick={() => handleNavClick("/notifications")}
-                    className="text-sm text-blue-400 hover:text-blue-300"
-                  >
-                    查看全部
+                  <span className="text-xs text-gray-400">5条未读</span>
+                </div>
+              </div>
+              
+              {/* Notification Categories */}
+              <div className="p-2">
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-2">
+                      <Bell className="h-4 w-4 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-medium text-white">全部通知</div>
+                      <div className="text-xs text-gray-400">5条</div>
+                    </div>
+                  </button>
+                  <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-2">
+                      <Settings className="h-4 w-4 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-medium text-white">系统通知</div>
+                      <div className="text-xs text-gray-400">2条</div>
+                    </div>
+                  </button>
+                  <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
+                    <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center mr-2">
+                      <TrendingUp className="h-4 w-4 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-medium text-white">最新活动</div>
+                      <div className="text-xs text-gray-400">1条</div>
+                    </div>
+                  </button>
+                  <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
+                    <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center mr-2">
+                      <AlertTriangle className="h-4 w-4 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-medium text-white">重要通知</div>
+                      <div className="text-xs text-gray-400">2条</div>
+                    </div>
                   </button>
                 </div>
               </div>
 
-              {/* Filter Tabs */}
-              <div className="p-3 border-b border-gray-700">
-                <div className="flex space-x-1">
-                  {[
-                    { key: "all", label: "全部" },
-                    { key: "system", label: "系统通知" },
-                    { key: "activity", label: "最新活动" },
-                    { key: "important", label: "重要通知" }
-                  ].map((filter) => (
-                    <button
-                      key={filter.key}
-                      onClick={() => setNotificationFilter(filter.key as any)}
-                      className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                        notificationFilter === filter.key
-                          ? "bg-blue-600 text-white"
-                          : "text-gray-300 hover:text-white hover:bg-gray-700"
-                      }`}
-                    >
-                      {filter.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6 text-center">
-                <div className="mb-4">
-                  <div className="w-16 h-16 mx-auto mb-3 bg-gray-700 rounded-lg flex items-center justify-center">
-                    <div className="w-10 h-12 bg-gray-600 rounded-sm relative">
-                      <div className="absolute top-2 left-1 w-2 h-2 bg-gray-500 rounded-full"></div>
-                      <div className="absolute top-2 right-1 w-2 h-2 bg-gray-500 rounded-full"></div>
-                      <div className="absolute bottom-2 left-1 right-1 h-1 bg-gray-500 rounded"></div>
-                      <div className="absolute top-1 right-0 w-3 h-3 bg-gray-700 transform rotate-45 origin-bottom-left"></div>
+              {/* Recent Notifications */}
+              <div className="max-h-60 overflow-y-auto">
+                <div className="px-3 py-2 border-t border-gray-600">
+                  <div className="text-xs text-gray-400 mb-2">最近通知</div>
+                  <div className="space-y-2">
+                    <div className="flex items-start p-2 rounded-md hover:bg-gray-700 transition-colors">
+                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-white">BTC价格突破$95,000</div>
+                        <div className="text-xs text-gray-400">2分钟前</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start p-2 rounded-md hover:bg-gray-700 transition-colors">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-white">ETH买入订单已执行</div>
+                        <div className="text-xs text-gray-400">15分钟前</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start p-2 rounded-md hover:bg-gray-700 transition-colors">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-white">系统维护通知</div>
+                        <div className="text-xs text-gray-400">1小时前</div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-400 text-sm">没有新通知</p>
+              </div>
+
+              <div className="p-3 border-t border-gray-600 text-center">
+                <button 
+                  onClick={() => {
+                    setNotificationDropdownOpen(false)
+                    handleNavClick("/notifications")
+                  }}
+                  className="text-sm text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                >
+                  查看全部通知
+                </button>
               </div>
             </div>
           )}
