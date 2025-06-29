@@ -151,7 +151,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
       </div>
 
       <nav className="flex-1 overflow-hidden" style={{maxHeight: 'calc(100vh - 100px)', height: 'calc(100vh - 100px)'}}>
-        <ul className="h-full flex flex-col justify-between overflow-hidden">
+        <ul className="h-full flex flex-col space-y-2 overflow-y-auto py-2">
           {/* 聊天 */}
           <li className="flex justify-center md:justify-center">
             <button
@@ -159,10 +159,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/chat") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t.chat : undefined}
+              title={!isExpanded ? t("chat") : undefined}
             >
               <MessageCircle className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.chat}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("chat")}</span>
             </button>
           </li>
 
@@ -173,10 +173,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/moments") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t.moments : undefined}
+              title={!isExpanded ? t("moments") : undefined}
             >
               <Compass className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.moments}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("moments")}</span>
             </button>
           </li>
 
@@ -201,10 +201,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/usdt-trade") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t.usdtTrade : undefined}
+              title={!isExpanded ? t("usdtTrade") : undefined}
             >
               <TetherIcon className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.usdtTrade}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("usdtTrade")}</span>
             </button>
           </li>
 
@@ -215,10 +215,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/market") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t.statistics : undefined}
+              title={!isExpanded ? t("statistics") : undefined}
             >
               <LineChart className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.statistics}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("statistics")}</span>
             </button>
           </li>
 
@@ -229,10 +229,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/spot") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t.spot : undefined}
+              title={!isExpanded ? t("spot") : undefined}
             >
               <ArrowLeftRight className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.spot}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("spot")}</span>
             </button>
           </li>
 
@@ -243,10 +243,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/futures") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t.futures : undefined}
+              title={!isExpanded ? t("futures") : undefined}
             >
               <FileText className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.futures}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("futures")}</span>
             </button>
           </li>
 
@@ -292,10 +292,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
             <button
               onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
               className={`group relative flex items-center w-full py-0.5 px-2 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}
-              title={!isExpanded ? t.languageToggle : undefined}
+              title={!isExpanded ? t("languageToggle") : undefined}
             >
               <Globe2 className="h-3 w-3 md:h-3 md:w-3" />
-              <span className={`ml-2 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t.languageToggle}</span>
+              <span className={`ml-2 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("languageToggle")}</span>
             </button>
 
             {/* Language Dropdown */}
