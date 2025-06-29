@@ -193,7 +193,12 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
         {/* Notifications */}
         <div className="relative" ref={notificationDropdownRef}>
           <button
-            onClick={() => setNotificationDropdownOpen(!notificationDropdownOpen)}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              console.log("Side navigation new notification button clicked, current state:", notificationDropdownOpen)
+              setNotificationDropdownOpen(!notificationDropdownOpen)
+            }}
             className={`p-2 rounded transition-colors hover:bg-white/10 relative ${
               notificationDropdownOpen ? "bg-white/20" : "text-white/70 hover:text-white"
             }`}

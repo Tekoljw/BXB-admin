@@ -275,7 +275,9 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
             <div className="flex justify-center w-full relative">
               <button 
                 onClick={(e) => {
+                  e.preventDefault()
                   e.stopPropagation()
+                  console.log("Instant notification button clicked, current state:", showNotificationDropdown)
                   setShowNotificationDropdown(!showNotificationDropdown)
                 }}
                 className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative"
