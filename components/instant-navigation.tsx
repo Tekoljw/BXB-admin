@@ -287,16 +287,16 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   setShowNotificationDropdown(newState)
                   console.log("State should now be:", newState)
                 }}
-                className={`p-3 rounded-xl transition-all duration-300 group relative ${
+                className={`p-3 rounded-xl transition-all duration-500 group relative ${
                   showNotificationDropdown 
-                    ? 'bg-custom-green/20 ring-2 ring-custom-green/50 scale-105' 
+                    ? 'bg-gradient-to-br from-amber-500/20 to-orange-500/20 shadow-lg shadow-amber-500/30 transform rotate-12 scale-110' 
                     : 'hover:bg-gray-700/50 hover:scale-110'
                 }`}
                 title="通知"
               >
-                <div className={`transition-all duration-300 ${
+                <div className={`transition-all duration-500 transform ${
                   showNotificationDropdown 
-                    ? 'text-custom-green' 
+                    ? 'text-amber-400 animate-bounce scale-110' 
                     : 'group-hover:ring-2 group-hover:ring-custom-green group-hover:text-custom-green'
                 }`}>
                   <Bell size={20} />
