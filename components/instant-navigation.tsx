@@ -299,18 +299,25 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 <>
                   {console.log('Rendering notification dropdown')}
                   <div 
-                    className="fixed w-80 bg-red-500 rounded-lg shadow-2xl border-2 border-yellow-400"
+                    className="bg-red-500 rounded-lg shadow-2xl border-2 border-yellow-400"
                     style={{ 
                       position: 'fixed',
-                      zIndex: 999999,
+                      zIndex: 2147483647,
                       left: '20px',
                       top: '20px',
-                      height: '200px'
+                      width: '320px',
+                      height: '200px',
+                      isolation: 'isolate',
+                      willChange: 'transform',
+                      transform: 'translateZ(0)',
+                      pointerEvents: 'auto'
                     }}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <div className="p-4 text-white font-bold">
-                      测试通知弹窗 - 如果你看到这个红色框说明弹窗已经显示
+                    <div className="p-4 text-white font-bold text-lg">
+                      ✅ 测试通知弹窗显示成功！
+                      <br />
+                      现在可以看到红色框了吗？
                     </div>
                   </div>
                 </>
