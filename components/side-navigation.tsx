@@ -250,6 +250,20 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
             </button>
           </li>
 
+          {/* 理财 */}
+          <li className="flex justify-center md:justify-center">
+            <button
+              onClick={() => handleNavClick("/financial")}
+              className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
+                isActive("/financial") ? "bg-white/20" : "text-white/70 hover:text-white"
+              }`}
+              title={!isExpanded ? "理财" : undefined}
+            >
+              <Coins className="h-5 w-5 md:h-5 md:w-5" />
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>理财</span>
+            </button>
+          </li>
+
           {/* 钱包 */}
           <li className="flex justify-center md:justify-center">
             <button
