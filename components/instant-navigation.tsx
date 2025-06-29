@@ -294,25 +294,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </span>
               </button>
 
-              {/* Notification Dropdown */}
-              {showNotificationDropdown && (
-                <div 
-                  className="fixed bg-red-500 border-4 border-yellow-400"
-                  style={{ 
-                    position: 'fixed',
-                    zIndex: 2147483647,
-                    left: '50px',
-                    top: '50px',
-                    width: '300px',
-                    height: '100px'
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="p-4 text-white font-bold">
-                    测试弹窗 - 能看到吗？
-                  </div>
-                </div>
-              )}
+
 
               {/* Real Notification Dropdown */}
               {false && (
@@ -490,6 +472,30 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       <div className="flex-1 overflow-auto">
         {renderCurrentPage()}
       </div>
+
+      {/* Notification Dropdown - Outside main structure for top layer */}
+      {showNotificationDropdown && (
+        <div 
+          style={{ 
+            position: 'fixed',
+            zIndex: 2147483647,
+            left: '50px',
+            top: '50px',
+            width: '300px',
+            height: '100px',
+            backgroundColor: '#ef4444',
+            border: '4px solid #facc15',
+            borderRadius: '8px'
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div style={{ padding: '16px', color: 'white', fontWeight: 'bold', fontSize: '16px' }}>
+            ✅ 测试弹窗显示成功！
+            <br />
+            现在能看到这个红色框吗？
+          </div>
+        </div>
+      )}
     </div>
   )
 }
