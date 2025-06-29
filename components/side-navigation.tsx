@@ -64,9 +64,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
     { id: "spot", icon: Coins, label: t("nav.spot"), href: "/spot" },
     { id: "futures", icon: LineChart, label: t("nav.futures"), href: "/futures" },
     { id: "usdt-trade", icon: DollarSign, label: t("nav.usdt_trade"), href: "/usdt-trade" },
+    { id: "marketplace", icon: ShoppingBag, label: t("nav.marketplace"), href: "/marketplace" },
     { id: "social", icon: Users, label: t("nav.social"), href: "/social" },
     { id: "chat", icon: MessageCircle, label: t("nav.chat"), href: "/chat" },
-    { id: "guarantee", icon: ShoppingBag, label: t("nav.guarantee"), href: "/guarantee" },
+    { id: "guarantee", icon: Compass, label: t("nav.guarantee"), href: "/guarantee" },
   ]
 
   const isActive = (path: string) => {
@@ -84,7 +85,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
 
   // 预加载所有路由以减少首次访问延迟
   useEffect(() => {
-    const routes = ['/chat', '/moments', '/usdt-trade', '/market', '/spot', '/futures', '/settings']
+    const routes = ['/chat', '/moments', '/usdt-trade', '/market', '/spot', '/futures', '/marketplace', '/settings']
     routes.forEach(route => {
       router.prefetch(route)
     })

@@ -23,6 +23,7 @@ export const translations = {
       spot: "现货交易",
       futures: "合约交易",
       usdt_trade: "USDT交易",
+      marketplace: "商城",
       social: "社交",
       chat: "聊天",
       guarantee: "担保账户"
@@ -175,6 +176,7 @@ export const translations = {
       spot: "Spot Trading",
       futures: "Futures",
       usdt_trade: "USDT Trade",
+      marketplace: "Marketplace",
       social: "Social",
       chat: "Chat",
       guarantee: "Guarantee Account"
