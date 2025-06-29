@@ -80,7 +80,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     return () => {
       document.removeEventListener('click', handleClickOutside)
     }
-  }, [showLanguageDropdown])
+  }, [showLanguageDropdown, showNotificationDropdown])
 
   const navigate = (path: string) => {
     setCurrentPage(path)
