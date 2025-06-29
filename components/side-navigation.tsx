@@ -341,7 +341,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
           <div className="flex items-center">
             <ThemeToggle />
           </div>
-          <div className="relative" ref={notificationDropdownRef}>
+          <div ref={notificationDropdownRef}>
             <button
               onClick={() => setNotificationDropdownOpen(!notificationDropdownOpen)}
               className={`p-1 rounded transition-all duration-200 hover:bg-white/10 relative group ${
@@ -358,8 +358,16 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
                 5
               </span>
             </button>
+          </div>
 
-            {notificationDropdownOpen && (
+        </div>
+
+        {notificationDropdownOpen && (
+          <div className="fixed inset-0 z-[9998]" onClick={() => setNotificationDropdownOpen(false)}>
+            <div 
+              className="fixed right-4 bottom-20 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999] animate-in fade-in slide-in-from-right-5 duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="fixed right-4 bottom-20 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999] animate-in fade-in slide-in-from-right-5 duration-200">
                 <div className="p-3 border-b border-gray-600">
                   <div className="flex items-center justify-between">
@@ -451,10 +459,9 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
                     查看全部通知
                   </button>
                 </div>
-              </div>
-            )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
