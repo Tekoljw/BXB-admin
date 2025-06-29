@@ -253,6 +253,23 @@ export default function SideNavigation({ onCloseMobile }: SideNavigationProps) {
             </Link>
           </li>
 
+          {/* 理财 */}
+          <li>
+            <Link
+              href="/financial"
+              onClick={handleClick}
+              className={`group relative flex items-center w-full py-2 md:py-3 px-6 md:justify-center rounded-lg transition-all duration-200 ${navHoverBg} active:bg-white/20 ${
+                isActive("/financial") ? navActiveBg : `${navTextColorMuted} hover:${navTextColor}`
+              }`}
+              title="理财"
+            >
+              <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6">
+                <Coins className="h-5 w-5 md:h-6 md:w-6 transition-transform duration-200 group-hover:scale-110 group-active:scale-95" />
+              </div>
+              <span className="ml-3 md:hidden">理财</span>
+            </Link>
+          </li>
+
           {/* 钱包 */}
           <li>
             <Link
