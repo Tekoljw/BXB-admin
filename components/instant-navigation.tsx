@@ -294,12 +294,12 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               {/* Notification Dropdown */}
               {showNotificationDropdown && (
                 <div 
-                  className="fixed left-20 bottom-20 bg-gray-800 border border-gray-600 rounded-lg shadow-xl py-0 min-w-[320px] z-[9999] animate-in fade-in-0 zoom-in-95 duration-200"
+                  className="absolute right-0 bottom-full mb-2 bg-red-500 border border-gray-600 rounded-lg shadow-xl min-w-[320px] z-[9999]"
                   onClick={(e) => e.stopPropagation()}
                   style={{ 
                     zIndex: 9999,
-                    left: isExpanded ? '272px' : '112px',
-                    transition: 'left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)'
+                    transform: 'translateX(-50%)',
+                    backgroundColor: 'red'
                   }}
                 >
                   {/* Header */}
