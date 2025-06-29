@@ -7,12 +7,6 @@ import { useTranslation } from "../hooks/use-translation"
 
 // Import page components
 import ChatPage from "../app/(dashboard)/chat/page"
-import SocialPage from "../app/(dashboard)/social/page"
-import MarketplacePage from "../app/(dashboard)/marketplace/page"
-import USDTTradingPage from "../app/(dashboard)/usdt-trading/page"
-import SpotTradingPage from "../app/(dashboard)/spot-trading/page"
-import FuturesTradingPage from "../app/(dashboard)/futures-trading/page"
-import FinancePage from "../app/(dashboard)/finance/page"
 import WalletPage from "../app/(dashboard)/wallet/page"
 import ProfilePage from "../app/(dashboard)/profile/page"
 import NotificationsPage from "../app/(dashboard)/notifications/page"
@@ -78,12 +72,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const renderCurrentPage = () => {
     switch (currentPage) {
       case "chat": return <ChatPage />
-      case "social": return <SocialPage />
-      case "marketplace": return <MarketplacePage />
-      case "usdt-trading": return <USDTTradingPage />
-      case "spot-trading": return <SpotTradingPage />
-      case "futures-trading": return <FuturesTradingPage />
-      case "finance": return <FinancePage />
       case "wallet": return <WalletPage />
       case "profile": return <ProfilePage />
       case "notifications": return <NotificationsPage />
