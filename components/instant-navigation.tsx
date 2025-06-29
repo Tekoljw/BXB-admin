@@ -24,6 +24,7 @@ import {
   TrendingUp,
   PiggyBank,
 } from "lucide-react"
+import { createPortal } from "react-dom"
 
 // Import all page components directly to avoid compilation delays
 import ChatPage from "@/app/(dashboard)/chat/page"
@@ -48,6 +49,11 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const [isExpanded, setIsExpanded] = useState(false)
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   const [notificationFilter, setNotificationFilter] = useState<"all" | "system" | "activity" | "important">("all")
   const { theme, setTheme, language, setLanguage } = useTheme()
 
@@ -473,85 +479,95 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         {renderCurrentPage()}
       </div>
 
-      {/* Notification Dropdown - Outside main structure for top layer */}
-      {showNotificationDropdown && (
+      {/* Portal-based Notification Dropdown */}
+      {mounted && showNotificationDropdown && createPortal(
         <div 
           style={{ 
             position: 'fixed',
-            zIndex: 2147483647,
-            left: isExpanded ? '272px' : '112px',
-            bottom: '80px',
-            width: '320px',
-            backgroundColor: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: '8px',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 999999,
+            pointerEvents: 'none'
           }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={() => setShowNotificationDropdown(false)}
         >
-          {/* Header */}
-          <div style={{ padding: '16px', borderBottom: '1px solid #e5e7eb' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h3 style={{ fontWeight: '500', color: '#111827', margin: 0 }}>通知</h3>
-              <button 
-                onClick={() => window.location.href = "/notifications"}
-                style={{ fontSize: '14px', color: '#2563eb', border: 'none', background: 'none', cursor: 'pointer' }}
-              >
-                查看全部
-              </button>
-            </div>
-          </div>
-
-          {/* Filter Tabs */}
-          <div style={{ padding: '16px', borderBottom: '1px solid #e5e7eb' }}>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              {[
-                { id: 'all', label: '全部' },
-                { id: 'trading', label: '交易' },
-                { id: 'system', label: '系统' },
-                { id: 'social', label: '社交' }
-              ].map((filter) => (
-                <button
-                  key={filter.id}
-                  style={{ 
-                    padding: '6px 12px', 
-                    fontSize: '12px', 
-                    borderRadius: '6px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    backgroundColor: filter.id === 'all' ? '#dbeafe' : 'transparent',
-                    color: filter.id === 'all' ? '#2563eb' : '#6b7280'
-                  }}
+          <div 
+            style={{ 
+              position: 'absolute',
+              left: isExpanded ? '272px' : '112px',
+              bottom: '80px',
+              width: '320px',
+              backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
+              border: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}`,
+              borderRadius: '8px',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+              pointerEvents: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div style={{ padding: '16px', borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <h3 style={{ fontWeight: '500', color: theme === 'dark' ? '#f9fafb' : '#111827', margin: 0 }}>通知</h3>
+                <button 
+                  onClick={() => window.location.href = "/notifications"}
+                  style={{ fontSize: '14px', color: '#2563eb', border: 'none', background: 'none', cursor: 'pointer' }}
                 >
-                  {filter.label}
+                  查看全部
                 </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Content */}
-          <div style={{ padding: '24px', textAlign: 'center' }}>
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ 
-                width: '64px', 
-                height: '64px', 
-                margin: '0 auto 12px', 
-                backgroundColor: '#f3f4f6', 
-                borderRadius: '8px', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center' 
-              }}>
-                <div style={{ width: '40px', height: '48px', backgroundColor: '#d1d5db', borderRadius: '2px', position: 'relative' }}>
-                  <div style={{ position: 'absolute', top: '8px', left: '4px', width: '8px', height: '8px', backgroundColor: '#9ca3af', borderRadius: '50%' }}></div>
-                  <div style={{ position: 'absolute', top: '8px', right: '4px', width: '8px', height: '8px', backgroundColor: '#9ca3af', borderRadius: '50%' }}></div>
-                  <div style={{ position: 'absolute', bottom: '8px', left: '4px', right: '4px', height: '4px', backgroundColor: '#9ca3af', borderRadius: '2px' }}></div>
-                </div>
               </div>
             </div>
-            <p style={{ color: '#6b7280', fontSize: '14px', margin: 0 }}>没有新通知</p>
+
+            {/* Filter Tabs */}
+            <div style={{ padding: '16px', borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}` }}>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {[
+                  { id: 'all', label: '全部' },
+                  { id: 'trading', label: '交易' },
+                  { id: 'system', label: '系统' },
+                  { id: 'social', label: '社交' }
+                ].map((filter) => (
+                  <button
+                    key={filter.id}
+                    style={{ 
+                      padding: '6px 12px', 
+                      fontSize: '12px', 
+                      borderRadius: '6px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: filter.id === 'all' ? '#dbeafe' : 'transparent',
+                      color: filter.id === 'all' ? '#2563eb' : (theme === 'dark' ? '#9ca3af' : '#6b7280')
+                    }}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Content */}
+            <div style={{ padding: '24px', textAlign: 'center' }}>
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ 
+                  width: '64px', 
+                  height: '64px', 
+                  margin: '0 auto 12px', 
+                  backgroundColor: theme === 'dark' ? '#374151' : '#f3f4f6', 
+                  borderRadius: '8px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center' 
+                }}>
+                  <Bell size={32} style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }} />
+                </div>
+              </div>
+              <p style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: '14px', margin: 0 }}>没有新通知</p>
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )
