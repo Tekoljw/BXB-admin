@@ -21,6 +21,7 @@ import {
   User,
   Shield,
   TrendingUp,
+  PiggyBank,
 } from "lucide-react"
 
 // Import all page components directly to avoid compilation delays
@@ -90,7 +91,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
     { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
     { path: "/futures", icon: BarChart3, label: "合约", component: FuturesPage },
-    { path: "/finance", icon: TrendingUp, label: "理财", component: FinancePage },
+    { path: "/finance", icon: PiggyBank, label: "理财", component: FinancePage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
   ]
 

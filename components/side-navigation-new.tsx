@@ -18,6 +18,7 @@ import {
   Wallet,
   ShoppingBag,
   TrendingUp,
+  PiggyBank,
 } from "lucide-react"
 
 import Link from "next/link"
@@ -51,7 +52,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
     { path: "/market", icon: LineChart, label: language === "zh" ? "行情" : "Market" },
     { path: "/spot", icon: ArrowLeftRight, label: language === "zh" ? "现货" : "Spot" },
     { path: "/futures", icon: FileText, label: language === "zh" ? "合约" : "Futures" },
-    { path: "/finance", icon: TrendingUp, label: language === "zh" ? "理财" : "Finance" },
+    { path: "/finance", icon: PiggyBank, label: language === "zh" ? "理财" : "Finance" },
     { path: "/wallet", icon: Wallet, label: language === "zh" ? "钱包" : "Wallet" },
   ]
 
