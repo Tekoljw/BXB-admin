@@ -164,6 +164,15 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Updated navigation translations for Chinese/English finance labels
   - Integrated finance routing across all navigation variants (instant, side, new navigation)
   - Updated icon from TrendingUp to PiggyBank for better visual representation of finance/savings concept
+- January 29, 2025. Enhanced profile page navigation layout:
+  - Redesigned left sidebar to be narrower (w-48) and taller (calc(100vh-8rem)) similar to wallet page
+  - Updated menu structure with 9 new functions: 个人主页, 邀请返佣, 费率折扣, 安全中心, 身份认证, API管理, 系统设置, 切换账号, 退出账号
+  - Implemented comprehensive content sections for each menu item with functional interfaces
+  - Added invite commission tracking with statistics dashboard and referral link management
+  - Created fee discount visualization with progress bars showing current trading fee rates
+  - Built system settings panel with language, theme, and notification preferences
+  - Designed account switching interface with current account display and add account option
+  - Added logout confirmation dialog with proper user flow and security considerations
 
 ## User Preferences
 

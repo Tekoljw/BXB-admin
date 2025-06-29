@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useTheme } from "@/contexts/theme-context"
-import { User, Shield, Key, CreditCard, Settings, Home, ChevronRight, Camera, X, Heart, MessageCircle, Share, Star, MoreHorizontal } from "lucide-react"
+import { User, Shield, Key, CreditCard, Settings, Home, ChevronRight, Camera, X, Heart, MessageCircle, Share, Star, MoreHorizontal, Gift, Percent, Lock, FileCheck, Database, UserX, LogOut } from "lucide-react"
 
 interface ProfileMenuItem {
   id: string
@@ -78,11 +78,14 @@ export default function ProfilePage() {
 
   const menuItems: ProfileMenuItem[] = [
     { id: "personal", name: "个人主页", icon: Home, description: "查看和编辑个人资料" },
-    { id: "commission", name: "我的佣金", icon: CreditCard, description: "佣金收益和明细" },
+    { id: "invite", name: "邀请返佣", icon: Gift, description: "邀请好友获得返佣" },
+    { id: "discount", name: "费率折扣", icon: Percent, description: "交易费率优惠管理" },
     { id: "security", name: "安全中心", icon: Shield, description: "账户安全设置" },
-    { id: "identity", name: "身份认证", icon: User, description: "实名认证管理" },
-    { id: "api", name: "API管理", icon: Key, description: "API密钥管理" },
-    { id: "settings", name: "设置", icon: Settings, description: "账户偏好设置" }
+    { id: "identity", name: "身份认证", icon: FileCheck, description: "实名认证管理" },
+    { id: "api", name: "API管理", icon: Database, description: "API密钥管理" },
+    { id: "settings", name: "系统设置", icon: Settings, description: "账户偏好设置" },
+    { id: "switch", name: "切换账号", icon: UserX, description: "切换其他账号" },
+    { id: "logout", name: "退出账号", icon: LogOut, description: "安全退出当前账号" }
   ]
 
   const renderPersonalHomepage = () => (
@@ -494,14 +497,167 @@ export default function ProfilePage() {
     )
   }
 
-  const renderSettingsPage = () => (
+  const renderInviteCommission = () => (
     <div className={`${cardStyle} rounded-lg p-6 border`}>
       <h2 className={`text-xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-        设置
+        邀请返佣
       </h2>
-      <p className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>
-        设置功能正在开发中...
-      </p>
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className={`p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+            <div className="text-2xl font-bold text-blue-500">156</div>
+            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>邀请用户数</div>
+          </div>
+          <div className={`p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+            <div className="text-2xl font-bold text-green-500">¥8,234</div>
+            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>累计返佣</div>
+          </div>
+          <div className={`p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+            <div className="text-2xl font-bold text-orange-500">¥456</div>
+            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>本月返佣</div>
+          </div>
+        </div>
+        <div className={`p-4 border-2 border-dashed rounded-lg ${isDark ? "border-gray-600" : "border-gray-300"}`}>
+          <div className="text-center">
+            <Gift className={`mx-auto h-8 w-8 mb-2 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+            <p className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>邀请链接</p>
+            <p className={`text-sm mt-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+              https://bedao.com/invite/abc123
+            </p>
+            <button className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+              复制链接
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const renderFeeDiscount = () => (
+    <div className={`${cardStyle} rounded-lg p-6 border`}>
+      <h2 className={`text-xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+        费率折扣
+      </h2>
+      <div className="space-y-4">
+        <div className={`p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+          <div className="flex justify-between items-center mb-2">
+            <span className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>现货交易</span>
+            <span className="text-green-500 font-bold">0.08%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="bg-green-500 h-2 rounded-full" style={{width: '80%'}}></div>
+          </div>
+          <div className={`text-xs mt-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            标准费率: 0.1% | 您的折扣: 20%
+          </div>
+        </div>
+        <div className={`p-4 rounded-lg ${isDark ? "bg-[#252842]" : "bg-gray-50"}`}>
+          <div className="flex justify-between items-center mb-2">
+            <span className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>合约交易</span>
+            <span className="text-green-500 font-bold">0.04%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="bg-green-500 h-2 rounded-full" style={{width: '60%'}}></div>
+          </div>
+          <div className={`text-xs mt-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            标准费率: 0.05% | 您的折扣: 20%
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const renderSystemSettings = () => (
+    <div className={`${cardStyle} rounded-lg p-6 border`}>
+      <h2 className={`text-xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+        系统设置
+      </h2>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700">
+          <div>
+            <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>语言设置</div>
+            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>选择界面显示语言</div>
+          </div>
+          <select className={`px-3 py-2 rounded-md border ${isDark ? "bg-[#252842] border-gray-600 text-white" : "bg-white border-gray-300"}`}>
+            <option>简体中文</option>
+            <option>English</option>
+          </select>
+        </div>
+        <div className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700">
+          <div>
+            <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>主题模式</div>
+            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>选择深色或浅色主题</div>
+          </div>
+          <button className={`px-4 py-2 rounded-md ${isDark ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-800"}`}>
+            {isDark ? "深色模式" : "浅色模式"}
+          </button>
+        </div>
+        <div className="flex items-center justify-between py-3">
+          <div>
+            <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>推送通知</div>
+            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>接收价格提醒和交易通知</div>
+          </div>
+          <input type="checkbox" className="rounded" defaultChecked />
+        </div>
+      </div>
+    </div>
+  )
+
+  const renderSwitchAccount = () => (
+    <div className={`${cardStyle} rounded-lg p-6 border`}>
+      <h2 className={`text-xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+        切换账号
+      </h2>
+      <div className="space-y-4">
+        <div className={`p-4 rounded-lg border-2 border-blue-500 ${isDark ? "bg-[#252842]" : "bg-blue-50"}`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                我
+              </div>
+              <div>
+                <div className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>交易达人</div>
+                <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>当前账号</div>
+              </div>
+            </div>
+            <span className="text-blue-500 text-sm font-medium">使用中</span>
+          </div>
+        </div>
+        <button className={`w-full p-4 border-2 border-dashed rounded-lg text-center ${isDark ? "border-gray-600 hover:border-gray-500" : "border-gray-300 hover:border-gray-400"}`}>
+          <UserX className={`mx-auto h-6 w-6 mb-2 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+          <div className={`font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}>添加其他账号</div>
+        </button>
+      </div>
+    </div>
+  )
+
+  const renderLogout = () => (
+    <div className={`${cardStyle} rounded-lg p-6 border`}>
+      <h2 className={`text-xl font-bold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+        退出账号
+      </h2>
+      <div className="text-center space-y-4">
+        <LogOut className={`mx-auto h-12 w-12 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+        <div>
+          <p className={`font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
+            确定要退出当前账号吗？
+          </p>
+          <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            退出后需要重新登录才能使用
+          </p>
+        </div>
+        <div className="flex space-x-3 justify-center">
+          <button 
+            onClick={() => setActiveSection("personal")}
+            className={`px-6 py-2 border rounded-lg ${isDark ? "border-gray-600 text-gray-300 hover:bg-[#252842]" : "border-gray-300 text-gray-700 hover:bg-gray-50"}`}
+          >
+            取消
+          </button>
+          <button className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+            确认退出
+          </button>
+        </div>
+      </div>
     </div>
   )
 
@@ -509,8 +665,10 @@ export default function ProfilePage() {
     switch (activeSection) {
       case "personal":
         return renderPersonalHomepage()
-      case "commission":
-        return renderCommissionPage()
+      case "invite":
+        return renderInviteCommission()
+      case "discount":
+        return renderFeeDiscount()
       case "security":
         return renderSecurityCenter()
       case "identity":
@@ -518,7 +676,11 @@ export default function ProfilePage() {
       case "api":
         return renderApiManagement()
       case "settings":
-        return renderSettingsPage()
+        return renderSystemSettings()
+      case "switch":
+        return renderSwitchAccount()
+      case "logout":
+        return renderLogout()
       default:
         return renderPersonalHomepage()
     }
@@ -626,40 +788,44 @@ export default function ProfilePage() {
         </div>
       )}
 
-      <div className="grid grid-cols-12 gap-6">
-        {/* Left Sidebar - Navigation */}
-        <div className="col-span-3">
-          <div className={`${cardStyle} rounded-lg border sticky top-6 overflow-hidden`}>
-            <div className="space-y-1 p-2">
-              {menuItems.map((item) => {
-                const Icon = item.icon
-                const isActive = activeSection === item.id
-                
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveSection(item.id)}
-                    className={`w-full flex items-center space-x-2 px-2 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? isDark
-                          ? "bg-white text-black"
-                          : "bg-black text-white"
-                        : isDark
-                          ? "text-gray-300 hover:text-white hover:bg-[#252842]"
-                          : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span>{item.name}</span>
-                  </button>
-                )
-              })}
+      <div className="flex gap-6">
+        {/* Left Sidebar - Navigation - Narrow and Tall */}
+        <div className="w-48 flex-shrink-0">
+          <div className={`${cardStyle} rounded-lg border sticky top-6 overflow-hidden h-[calc(100vh-8rem)]`}>
+            <div className="flex flex-col h-full">
+              <div className="flex-1 py-4">
+                <div className="space-y-1 px-3">
+                  {menuItems.map((item) => {
+                    const Icon = item.icon
+                    const isActive = activeSection === item.id
+                    
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveSection(item.id)}
+                        className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          isActive
+                            ? isDark
+                              ? "bg-white text-black"
+                              : "bg-black text-white"
+                            : isDark
+                              ? "text-gray-300 hover:text-white hover:bg-[#252842]"
+                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                        }`}
+                      >
+                        <Icon className="h-5 w-5 flex-shrink-0" />
+                        <span className="text-left">{item.name}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Right Content Area */}
-        <div className="col-span-9">
+        <div className="flex-1 min-w-0">
           {renderContent()}
         </div>
       </div>
