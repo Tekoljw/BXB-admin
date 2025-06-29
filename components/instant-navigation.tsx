@@ -292,7 +292,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               </button>
 
               {notificationDropdownOpen && (
-                <div className="fixed right-4 top-1/2 -translate-y-1/2 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999] animate-in fade-in slide-in-from-right-5 duration-200">
+                <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999] animate-in fade-in zoom-in-95 duration-200">
                   <div className="p-3 border-b border-gray-600">
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium text-white">通知</h3>

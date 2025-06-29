@@ -227,7 +227,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
       {notificationDropdownOpen && (
         <div className="fixed inset-0 z-[9998]" onClick={() => setNotificationDropdownOpen(false)}>
           <div 
-            className="fixed right-4 top-1/2 -translate-y-1/2 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999] animate-in fade-in slide-in-from-right-5 duration-200"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999] animate-in fade-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-3 border-b border-gray-600">
