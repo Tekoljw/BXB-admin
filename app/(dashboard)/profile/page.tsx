@@ -790,7 +790,7 @@ export default function ProfilePage() {
 
       <div className="flex">
         {/* Left Sidebar - Navigation - Narrow and Tall with only right border */}
-        <div className="w-48 flex-shrink-0">
+        <div className="w-56 flex-shrink-0">
           <div className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border-r sticky top-0 overflow-hidden h-screen ${isDark ? "border-[#252842]" : "border-gray-200"}`}>
             <div className="flex flex-col h-full">
               <div className="flex-1 py-6">
