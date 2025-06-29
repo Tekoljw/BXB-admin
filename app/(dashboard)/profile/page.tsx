@@ -687,7 +687,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+    <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       {/* Edit Profile Modal */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -788,13 +788,13 @@ export default function ProfilePage() {
         </div>
       )}
 
-      <div className="flex gap-6">
-        {/* Left Sidebar - Navigation - Narrow and Tall */}
+      <div className="flex">
+        {/* Left Sidebar - Navigation - Narrow and Tall with only right border */}
         <div className="w-48 flex-shrink-0">
-          <div className={`${cardStyle} rounded-lg border sticky top-6 overflow-hidden h-[calc(100vh-8rem)]`}>
+          <div className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border-r sticky top-0 overflow-hidden h-screen ${isDark ? "border-[#252842]" : "border-gray-200"}`}>
             <div className="flex flex-col h-full">
-              <div className="flex-1 py-4">
-                <div className="space-y-1 px-3">
+              <div className="flex-1 py-6">
+                <div className="space-y-1 px-4">
                   {menuItems.map((item) => {
                     const Icon = item.icon
                     const isActive = activeSection === item.id
@@ -825,7 +825,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Right Content Area */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 p-6">
           {renderContent()}
         </div>
       </div>
