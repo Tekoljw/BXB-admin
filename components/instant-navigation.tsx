@@ -287,12 +287,18 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   setShowNotificationDropdown(newState)
                   console.log("State should now be:", newState)
                 }}
-                className={`p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative ${
-                  showNotificationDropdown ? 'bg-gray-600' : ''
+                className={`p-3 rounded-xl transition-all duration-300 group relative ${
+                  showNotificationDropdown 
+                    ? 'bg-custom-green/20 ring-2 ring-custom-green/50 scale-105' 
+                    : 'hover:bg-gray-700/50 hover:scale-110'
                 }`}
                 title="通知"
               >
-                <div className="transition-all duration-300 group-hover:ring-2 group-hover:ring-custom-green group-hover:text-custom-green">
+                <div className={`transition-all duration-300 ${
+                  showNotificationDropdown 
+                    ? 'text-custom-green' 
+                    : 'group-hover:ring-2 group-hover:ring-custom-green group-hover:text-custom-green'
+                }`}>
                   <Bell size={20} />
                 </div>
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
@@ -498,7 +504,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               position: 'absolute',
               left: isExpanded ? '272px' : '112px',
               bottom: '80px',
-              width: '320px',
+              width: '420px',
               backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
               border: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}`,
               borderRadius: '8px',
@@ -508,12 +514,12 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div style={{ padding: '16px', borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}` }}>
+            <div style={{ padding: '20px', borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}` }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h3 style={{ fontWeight: '500', color: theme === 'dark' ? '#f9fafb' : '#111827', margin: 0 }}>通知</h3>
+                <h3 style={{ fontWeight: '600', fontSize: '16px', color: theme === 'dark' ? '#f9fafb' : '#111827', margin: 0 }}>通知中心</h3>
                 <button 
                   onClick={() => window.location.href = "/notifications"}
-                  style={{ fontSize: '14px', color: '#2563eb', border: 'none', background: 'none', cursor: 'pointer' }}
+                  style={{ fontSize: '14px', color: '#2563eb', border: 'none', background: 'none', cursor: 'pointer', fontWeight: '500' }}
                 >
                   查看全部
                 </button>
@@ -521,24 +527,36 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
             </div>
 
             {/* Filter Tabs */}
-            <div style={{ padding: '16px', borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}` }}>
-              <div style={{ display: 'flex', gap: '4px' }}>
+            <div style={{ padding: '20px', borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}` }}>
+              <div style={{ display: 'flex', gap: '8px' }}>
                 {[
                   { id: 'all', label: '全部' },
-                  { id: 'trading', label: '交易' },
-                  { id: 'system', label: '系统' },
-                  { id: 'social', label: '社交' }
+                  { id: 'trading', label: '交易通知' },
+                  { id: 'system', label: '系统通知' },
+                  { id: 'social', label: '社交通知' }
                 ].map((filter) => (
                   <button
                     key={filter.id}
                     style={{ 
-                      padding: '6px 12px', 
-                      fontSize: '12px', 
-                      borderRadius: '6px',
+                      padding: '8px 16px', 
+                      fontSize: '13px', 
+                      borderRadius: '8px',
                       border: 'none',
                       cursor: 'pointer',
+                      fontWeight: '500',
                       backgroundColor: filter.id === 'all' ? '#dbeafe' : 'transparent',
-                      color: filter.id === 'all' ? '#2563eb' : (theme === 'dark' ? '#9ca3af' : '#6b7280')
+                      color: filter.id === 'all' ? '#2563eb' : (theme === 'dark' ? '#9ca3af' : '#6b7280'),
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (filter.id !== 'all') {
+                        e.currentTarget.style.backgroundColor = theme === 'dark' ? '#374151' : '#f3f4f6'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filter.id !== 'all') {
+                        e.currentTarget.style.backgroundColor = 'transparent'
+                      }
                     }}
                   >
                     {filter.label}
@@ -548,22 +566,23 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
             </div>
 
             {/* Content */}
-            <div style={{ padding: '24px', textAlign: 'center' }}>
-              <div style={{ marginBottom: '16px' }}>
+            <div style={{ padding: '40px 30px', textAlign: 'center', minHeight: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ marginBottom: '20px' }}>
                 <div style={{ 
-                  width: '64px', 
-                  height: '64px', 
-                  margin: '0 auto 12px', 
+                  width: '80px', 
+                  height: '80px', 
+                  margin: '0 auto 16px', 
                   backgroundColor: theme === 'dark' ? '#374151' : '#f3f4f6', 
-                  borderRadius: '8px', 
+                  borderRadius: '12px', 
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'center' 
                 }}>
-                  <Bell size={32} style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }} />
+                  <Bell size={40} style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }} />
                 </div>
               </div>
-              <p style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: '14px', margin: 0 }}>没有新通知</p>
+              <h4 style={{ color: theme === 'dark' ? '#f3f4f6' : '#374151', fontSize: '16px', fontWeight: '500', margin: '0 0 8px 0' }}>暂无新通知</h4>
+              <p style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>当有新的交易、系统或社交通知时，会在这里显示</p>
             </div>
           </div>
         </div>,
