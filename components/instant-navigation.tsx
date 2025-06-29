@@ -78,11 +78,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     return <NotificationsPage />
   }
 
-  // If we're on chat page, render it directly without sidebar for instant response
-  if (currentPage === "chat") {
-    return <ChatPage />
-  }
-
   return (
     <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
       {/* Sidebar */}
