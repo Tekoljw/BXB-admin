@@ -159,10 +159,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/chat") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t("chat") : undefined}
+              title={!isExpanded ? "聊天" : undefined}
             >
               <MessageCircle className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("chat")}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>聊天</span>
             </button>
           </li>
 
@@ -173,10 +173,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/moments") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t("moments") : undefined}
+              title={!isExpanded ? "朋友圈" : undefined}
             >
               <Compass className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("moments")}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>朋友圈</span>
             </button>
           </li>
 
@@ -201,10 +201,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/usdt-trade") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t("usdtTrade") : undefined}
+              title={!isExpanded ? "USDT买卖" : undefined}
             >
               <TetherIcon className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("usdtTrade")}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>USDT买卖</span>
             </button>
           </li>
 
@@ -215,10 +215,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/market") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t("statistics") : undefined}
+              title={!isExpanded ? "行情" : undefined}
             >
               <LineChart className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("statistics")}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>行情</span>
             </button>
           </li>
 
@@ -229,10 +229,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/spot") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t("spot") : undefined}
+              title={!isExpanded ? "现货" : undefined}
             >
               <ArrowLeftRight className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("spot")}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>现货</span>
             </button>
           </li>
 
@@ -243,10 +243,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
               className={`group relative flex items-center py-1 px-2 ${isExpanded ? 'md:w-full md:justify-start md:px-3' : 'md:p-2 md:w-10 md:h-10 md:justify-center'} rounded-lg transition-colors hover:bg-white/10 ${
                 isActive("/futures") ? "bg-white/20" : "text-white/70 hover:text-white"
               }`}
-              title={!isExpanded ? t("futures") : undefined}
+              title={!isExpanded ? "合约" : undefined}
             >
               <FileText className="h-5 w-5 md:h-5 md:w-5" />
-              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("futures")}</span>
+              <span className={`ml-3 ${isExpanded ? 'md:block' : 'md:hidden'}`}>合约</span>
             </button>
           </li>
 
@@ -292,10 +292,10 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
             <button
               onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
               className={`group relative flex items-center w-full py-0.5 px-2 ${isExpanded ? 'md:justify-start' : 'md:justify-center'} rounded-lg transition-colors hover:bg-white/10 text-white/70 hover:text-white`}
-              title={!isExpanded ? t("languageToggle") : undefined}
+              title={!isExpanded ? "语言" : undefined}
             >
               <Globe2 className="h-3 w-3 md:h-3 md:w-3" />
-              <span className={`ml-2 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>{t("languageToggle")}</span>
+              <span className={`ml-2 text-xs ${isExpanded ? 'md:block' : 'md:hidden'}`}>语言</span>
             </button>
 
             {/* Language Dropdown */}
