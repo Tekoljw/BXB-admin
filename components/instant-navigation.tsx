@@ -1,433 +1,328 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
-
-import { useTheme } from "@/contexts/theme-context"
-import AccountDropdown from "@/components/account-dropdown"
+import React from "react"
 import {
+  BarChart2,
+  Settings,
   MessageCircle,
-  Compass,
-  ShoppingBag,
-  DollarSign,
+  User,
+  Bell,
   LineChart,
   ArrowLeftRight,
-  BarChart3,
-  Wallet,
-  Settings,
-  Bell,
-  Globe2,
-  Sun,
-  Moon,
-  Menu,
-  User,
-  Shield,
   TrendingUp,
+  Wallet,
+  Users,
+  ChevronLeft,
+  ChevronRight,
   PiggyBank,
-  AlertTriangle,
+  Globe,
+  ChevronDown
 } from "lucide-react"
+import { useRouter, usePathname } from "next/navigation"
+import { useTheme } from "@/contexts/theme-context"
+import { useState, useRef, useEffect } from "react"
+import { useTranslation } from "@/hooks/use-translation"
+import ThemeToggle from "./theme-toggle"
 
-// Import all page components directly to avoid compilation delays
-import ChatPage from "@/app/(dashboard)/chat/page"
-import MomentsPage from "@/app/(dashboard)/moments/page"
-import MallPage from "@/app/(dashboard)/mall/page"
-import WalletPage from "@/app/(dashboard)/wallet/page"
-import ProfilePage from "@/app/(dashboard)/profile/page"
-
-import USDTTradePage from "@/app/(dashboard)/usdt-trade/page"
-import MarketPage from "@/app/(dashboard)/market/page"
-import SpotPage from "@/app/(dashboard)/spot/page"
-import FuturesPage from "@/app/(dashboard)/futures/page"
-import FinancePage from "@/app/(dashboard)/finance/page"
-import TetherIcon from "@/components/tether-icon"
-
-interface InstantNavigationProps {
+interface SideNavigationProps {
   onCloseMobile?: () => void
+  onToggleExpanded?: (expanded: boolean) => void
+  isExpanded?: boolean
 }
 
-export default function InstantNavigation({ onCloseMobile }: InstantNavigationProps) {
-  const [currentPage, setCurrentPage] = useState("/chat")
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
+export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpanded: propIsExpanded }: SideNavigationProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const { language, setLanguage, theme } = useTheme()
+  const { t } = useTranslation()
+  const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false)
-  const { theme, setTheme, language, setLanguage } = useTheme()
+  const [isExpanded, setIsExpanded] = useState(propIsExpanded ?? true)
+  const languageDropdownRef = useRef<HTMLDivElement>(null)
   const notificationDropdownRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    // Initialize current page from URL on mount
-    const path = window.location.pathname
-    setCurrentPage(path || "/chat")
-  }, [])
+  const navigationItems = [
+    { icon: MessageCircle, label: t("chat"), path: "/" },
+    { icon: Users, label: t("social"), path: "/social" },
+    { icon: BarChart2, label: t("market"), path: "/market" },
+    { icon: LineChart, label: t("spot"), path: "/spot" },
+    { icon: TrendingUp, label: t("futures"), path: "/futures" },
+    { icon: PiggyBank, label: t("finance"), path: "/finance" },
+    { icon: Wallet, label: t("wallet"), path: "/wallet" },
+    { icon: User, label: t("profile"), path: "/profile" }
+  ]
 
+  const handleNavClick = (path: string) => {
+    router.push(path)
+    onCloseMobile?.()
+  }
+
+  const isActive = (path: string) => pathname === path
+
+  const handleToggleExpand = () => {
+    const newExpanded = !isExpanded
+    setIsExpanded(newExpanded)
+    onToggleExpanded?.(newExpanded)
+  }
+
+  const handleLanguageChange = (newLanguage: "en" | "zh") => {
+    setLanguage(newLanguage)
+    setLanguageDropdownOpen(false)
+  }
+
+  // Handle clicks outside dropdowns
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showLanguageDropdown) {
-        setShowLanguageDropdown(false)
+    function handleClickOutside(event: MouseEvent) {
+      if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
+        setLanguageDropdownOpen(false)
       }
       if (notificationDropdownRef.current && !notificationDropdownRef.current.contains(event.target as Node)) {
         setNotificationDropdownOpen(false)
       }
     }
 
-    if (showLanguageDropdown || notificationDropdownOpen) {
-      document.addEventListener('click', handleClickOutside)
-    }
-
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener('click', handleClickOutside)
+      document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [showLanguageDropdown, notificationDropdownOpen])
+  }, [])
 
-  const navigate = (path: string) => {
-    setCurrentPage(path)
-    onCloseMobile?.()
-    // Update URL without triggering page reload
-    window.history.pushState({}, "", path)
-  }
-
-  const handleLanguageSelect = (lang: "en" | "zh") => {
-    setLanguage(lang)
-    setShowLanguageDropdown(false)
-  }
-
-  const isActive = (path: string) => currentPage === path
-
-  const navItems = [
-    { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
-    { path: "/moments", icon: Compass, label: "分享", component: MomentsPage },
-    { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
-    { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
-    { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
-    { path: "/futures", icon: BarChart3, label: "合约", component: FuturesPage },
-    { path: "/finance", icon: PiggyBank, label: "理财", component: FinancePage },
-    { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
-  ]
-
-  const renderCurrentPage = () => {
-    const currentItem = navItems.find(item => item.path === currentPage)
-    if (currentItem) {
-      const Component = currentItem.component
-      return <Component />
-    }
-
-    // Handle profile page separately
-    if (currentPage === "/profile") {
-      return <ProfilePage />
-    }
-
-    return <ChatPage />
-  }
+  const isDark = theme === "dark"
 
   return (
-    <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
-      {/* Sidebar */}
-      <div 
-        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl shadow-black/20 relative overflow-hidden h-full`}
-        style={{
-          width: isExpanded ? '256px' : '96px',
-          transition: 'width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
-          minHeight: '100vh',
-        }}
-      >
-        {/* Background Overlay with Static Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-gray-700/5 opacity-50"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent"></div>
-        
-        {/* Header - Hamburger Menu with Glow Effect */}
-        <div className="relative z-10 h-14 flex items-center justify-center px-3 backdrop-blur-sm">
+    <>
+      <div className={`w-full h-screen flex flex-col ${isDark ? "bg-[#374151]" : "bg-black"} text-white overflow-hidden`} style={{maxHeight: '100vh'}}>
+        {/* Expand/Collapse Toggle Button */}
+        <div className="hidden md:flex justify-end p-2">
           <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative overflow-hidden"
-            title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
+            onClick={handleToggleExpand}
+            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+            title={isExpanded ? "收起" : "展开"}
           >
-            <div className="relative transition-all duration-300 group-hover:rotate-180">
-              <Menu size={22} />
-            </div>
+            {isExpanded ? (
+              <ChevronLeft className="h-4 w-4 text-white/70" />
+            ) : (
+              <ChevronRight className="h-4 w-4 text-white/70" />
+            )}
           </button>
         </div>
 
-        {/* User Section with Account Dropdown */}
-        <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-0 py-4'} backdrop-blur-sm`}>
-          <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'} transition-all duration-500`}>
-            <AccountDropdown onNavigate={navigate} />
+        {/* User Avatar Section */}
+        <div className="p-3 pt-2 md:p-4 md:pt-2">
+          <div className="flex flex-col items-center">
+            <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-2 md:mb-3">
+              <User className="h-6 w-6 md:h-8 md:w-8 text-white" />
+            </div>
             {isExpanded && (
-              <div 
-                className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
-                style={{
-                  width: '140px',
-                  opacity: 1,
-                }}
-              >
-                <div className="text-sm font-medium text-white whitespace-nowrap text-center">John Doe</div>
-                <div className="text-xs text-gray-400 whitespace-nowrap text-center">
-                  demo@example.com
+              <div className="text-center">
+                <div className="text-sm md:text-base font-medium text-white">用户名</div>
+                <div className="text-xs text-white/60">ID: 123456</div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Navigation Items */}
+        <div className="flex-1 px-2 md:px-3">
+          <div className="space-y-1">
+            {navigationItems.map((item) => {
+              const Icon = item.icon
+              const active = isActive(item.path)
+              
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => handleNavClick(item.path)}
+                  className={`w-full flex items-center p-2 md:p-3 rounded-lg transition-all duration-200 group ${
+                    active
+                      ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
+                      : "text-white/70 hover:text-white hover:bg-white/10"
+                  }`}
+                  title={!isExpanded ? item.label : undefined}
+                >
+                  <Icon className={`h-4 w-4 md:h-5 md:w-5 flex-shrink-0 ${
+                    active ? "text-blue-400" : "text-white/70 group-hover:text-white"
+                  }`} />
+                  {isExpanded && (
+                    <span className="ml-3 text-sm md:text-base font-medium">
+                      {item.label}
+                    </span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Language Selector */}
+        <div className="px-2 md:px-3 pb-2">
+          <div className="relative" ref={languageDropdownRef}>
+            <button
+              onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
+              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white"
+            >
+              <div className="flex items-center">
+                <Globe className="h-4 w-4 mr-2" />
+                {isExpanded && <span className="text-sm">{language === "zh" ? "中文" : "English"}</span>}
+              </div>
+              {isExpanded && <ChevronDown className="h-3 w-3" />}
+            </button>
+
+            {languageDropdownOpen && isExpanded && (
+              <div className="absolute bottom-full left-0 mb-2 w-full bg-popover border border-border rounded-md shadow-lg z-50">
+                <div className="py-1">
+                  <button
+                    onClick={() => handleLanguageChange("en")}
+                    className={`flex items-center w-full px-4 py-2 text-sm transition-colors hover:bg-muted ${
+                      language === "en" ? "bg-primary/10 text-primary font-medium" : "text-foreground"
+                    }`}
+                  >
+                    <span className="mr-3 text-base">🇺🇸</span>
+                    <span>English</span>
+                    {language === "en" && <span className="ml-auto text-primary">✓</span>}
+                  </button>
+                  <button
+                    onClick={() => handleLanguageChange("zh")}
+                    className={`flex items-center w-full px-4 py-2 text-sm transition-colors hover:bg-muted ${
+                      language === "zh" ? "bg-primary/10 text-primary font-medium" : "text-foreground"
+                    }`}
+                  >
+                    <span className="mr-3 text-base">🇨🇳</span>
+                    <span>中文</span>
+                    {language === "zh" && <span className="ml-auto text-primary">✓</span>}
+                  </button>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Navigation with Enhanced Animations */}
-        <div className={`relative z-10 flex-1 ${isExpanded ? 'p-2' : 'p-1'} flex flex-col justify-start min-h-0 overflow-hidden`}>
-          <div className="flex flex-col justify-start pt-4" style={{gap: 'clamp(0.25rem, 2vh, 0.75rem)'}}>
-          {navItems.map((item, index) => {
-            const Icon = item.icon
-            const active = isActive(item.path)
-            return (
-              <div key={item.path} className="relative group">
-                <button
-                  onClick={() => navigate(item.path)}
-                  className={`${isExpanded ? 'w-full px-4' : 'w-12 h-12 mx-auto'} flex items-center justify-center rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
-                    active 
-                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
-                      : "hover:scale-105 hover:bg-gray-700/20"
-                  }`}
-                  style={{ 
-                    padding: isExpanded ? 'clamp(0.5rem, 1.5vh, 1rem) 1rem' : '0',
-                    animationDelay: `${index * 50}ms`,
-                    animation: 'slideInLeft 0.6s ease-out forwards'
-                  }}
-                  title={!isExpanded ? item.label : undefined}
-                >
-                  {/* Active Item Background Glow */}
-                  {active && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl"></div>
-                  )}
-                  
-                  {/* Hover Border Effect - Only for non-active items */}
-                  {!active && (
-                    <div className={`absolute inset-1 border border-custom-green/0 group-hover:border-custom-green/30 transition-all duration-400 ease-in-out ${isExpanded ? 'rounded-lg' : 'rounded-lg'}`}></div>
-                  )}
-                  
-                  {/* Icon with Simple Animation */}
-                  <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
-                    {item.path === '/usdt-trade' ? (
-                      <div className={`transition-all duration-300 ${active ? 'text-custom-green' : 'text-gray-300'}`}>
-                        <TetherIcon className="w-[26px] h-[26px]" />
-                      </div>
-                    ) : (
-                      <Icon size={26} />
-                    )}
-                  </div>
-                  
-                  {/* Label with Smooth Slide Animation */}
-                  <div 
-                    className={`${isExpanded ? 'ml-4' : 'ml-0'} overflow-hidden transition-all duration-500 ease-in-out`}
-                    style={{
-                      width: isExpanded ? '120px' : '0px',
-                      opacity: isExpanded ? 1 : 0,
-                    }}
-                  >
-                    <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
-                      active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
-                    }`}>
-                      {item.label}
-                    </span>
-                  </div>
-                  
-                  {/* Active Indicator - Only show when expanded */}
-                  {active && isExpanded && (
-                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full"></div>
-                  )}
-                </button>
-                
-                {/* Tooltip for Collapsed State */}
-                {!isExpanded && (
-                  <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50 whitespace-nowrap shadow-xl border border-gray-600">
-                    {item.label}
-                    <div className="absolute left-0 top-1/2 transform -translate-x-1 -translate-y-1/2 w-2 h-2 bg-gray-800 rotate-45 border-l border-b border-gray-600"></div>
-                  </div>
-                )}
-              </div>
-            )
-          })}
+        {/* Compact Controls Row */}
+        <div className="px-2 md:px-3 flex items-center justify-center gap-2">
+          <div className="flex items-center">
+            <ThemeToggle />
           </div>
-        </div>
-
-        {/* Footer with Enhanced Controls */}
-        <div className="relative z-10 backdrop-blur-sm">
-          <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} transition-all duration-500`}>
-            <div className="relative flex justify-center w-full">
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setShowLanguageDropdown(!showLanguageDropdown)
-                }}
-                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
-                title="语言选择"
-              >
-                <div className="transition-all duration-300 group-hover:rotate-12 group-hover:text-blue-400">
-                  <Globe2 size={20} />
-                </div>
-              </button>
-
-
-            </div>
-            <div className="flex justify-center w-full">
-              <button 
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
-                title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
-              >
-                <div className="transition-all duration-300 group-hover:rotate-180 group-hover:text-yellow-400">
-                  {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-                </div>
-              </button>
-            </div>
-            <div className="flex justify-center w-full relative" ref={notificationDropdownRef}>
-              <button 
-                onClick={() => setNotificationDropdownOpen(!notificationDropdownOpen)}
-                className={`p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative ${
-                  notificationDropdownOpen ? "bg-gray-700/50 scale-110" : ""
-                }`}
-                title="通知"
-              >
-                <div className={`transition-all duration-300 group-hover:ring-2 group-hover:ring-custom-green group-hover:text-custom-green ${
-                  notificationDropdownOpen ? "animate-pulse ring-2 ring-custom-green text-custom-green" : ""
-                }`}>
-                  <Bell size={20} />
-                </div>
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px] animate-pulse">
-                  5
-                </span>
-              </button>
-
-              {notificationDropdownOpen && (
-                <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999] animate-in fade-in zoom-in-95 duration-200">
-                  <div className="p-3 border-b border-gray-600">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-medium text-white">通知</h3>
-                      <span className="text-xs text-gray-400">5条未读</span>
-                    </div>
-                  </div>
-                  
-                  {/* Notification Categories */}
-                  <div className="p-2">
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                      <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
-                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-2">
-                          <Bell size={16} />
-                        </div>
-                        <div className="text-left">
-                          <div className="text-sm font-medium text-white">全部通知</div>
-                          <div className="text-xs text-gray-400">5条</div>
-                        </div>
-                      </button>
-                      <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
-                        <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-2">
-                          <Settings size={16} />
-                        </div>
-                        <div className="text-left">
-                          <div className="text-sm font-medium text-white">系统通知</div>
-                          <div className="text-xs text-gray-400">2条</div>
-                        </div>
-                      </button>
-                      <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
-                        <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center mr-2">
-                          <TrendingUp size={16} />
-                        </div>
-                        <div className="text-left">
-                          <div className="text-sm font-medium text-white">最新活动</div>
-                          <div className="text-xs text-gray-400">1条</div>
-                        </div>
-                      </button>
-                      <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
-                        <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center mr-2">
-                          <AlertTriangle size={16} />
-                        </div>
-                        <div className="text-left">
-                          <div className="text-sm font-medium text-white">重要通知</div>
-                          <div className="text-xs text-gray-400">2条</div>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Recent Notifications */}
-                  <div className="max-h-60 overflow-y-auto">
-                    <div className="px-3 py-2 border-t border-gray-600">
-                      <div className="text-xs text-gray-400 mb-2">最近通知</div>
-                      <div className="space-y-2">
-                        <div className="flex items-start p-2 rounded-md hover:bg-gray-700 transition-colors">
-                          <div className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-white">BTC价格突破$95,000</div>
-                            <div className="text-xs text-gray-400">2分钟前</div>
-                          </div>
-                        </div>
-                        <div className="flex items-start p-2 rounded-md hover:bg-gray-700 transition-colors">
-                          <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-white">ETH买入订单已执行</div>
-                            <div className="text-xs text-gray-400">15分钟前</div>
-                          </div>
-                        </div>
-                        <div className="flex items-start p-2 rounded-md hover:bg-gray-700 transition-colors">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-white">系统维护通知</div>
-                            <div className="text-xs text-gray-400">1小时前</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-3 border-t border-gray-600 text-center">
-                    <button 
-                      onClick={() => {
-                        setNotificationDropdownOpen(false)
-                        navigate("/notifications")
-                      }}
-                      className="text-sm text-blue-400 hover:text-blue-300 font-medium transition-colors"
-                    >
-                      查看全部通知
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+          <div ref={notificationDropdownRef}>
+            <button
+              onClick={() => setNotificationDropdownOpen(!notificationDropdownOpen)}
+              className={`p-1 rounded transition-all duration-200 hover:bg-white/10 relative group ${
+                notificationDropdownOpen ? "bg-white/20 text-white" : "text-white/70 hover:text-white"
+              }`}
+              title="通知"
+            >
+              <Bell className={`h-3 w-3 transition-all duration-200 ${
+                notificationDropdownOpen 
+                  ? "animate-pulse scale-110" 
+                  : "group-hover:animate-bounce"
+              }`} />
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center text-[8px] animate-pulse">
+                5
+              </span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Language Dropdown - Positioned outside navigation */}
-      {showLanguageDropdown && (
-        <div 
-          className="fixed left-20 bottom-20 bg-gray-800 border border-gray-600 rounded-lg shadow-xl py-2 min-w-[120px] z-[9999] animate-in fade-in-0 zoom-in-95 duration-200"
-          onClick={(e) => e.stopPropagation()}
-          style={{ 
-            zIndex: 9999,
-            left: isExpanded ? '272px' : '112px',
-            transition: 'left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)'
-          }}
-        >
-          <button
-            onClick={() => handleLanguageSelect("zh")}
-            className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors duration-200 flex items-center ${
-              language === "zh" ? "text-custom-green" : "text-white"
-            }`}
+      {/* Notification Dropdown Portal */}
+      {notificationDropdownOpen && (
+        <div className="fixed inset-0 z-[9998] bg-black/20 backdrop-blur-sm" onClick={() => setNotificationDropdownOpen(false)}>
+          <div 
+            className="absolute top-4 right-4 w-80 max-w-[calc(100vw-2rem)] bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999] animate-in fade-in slide-in-from-top-2 duration-200"
+            onClick={(e) => e.stopPropagation()}
           >
-            <span className="mr-2">🇨🇳</span>
-            中文
-            {language === "zh" && <span className="ml-auto text-custom-green">✓</span>}
-          </button>
-          <button
-            onClick={() => handleLanguageSelect("en")}
-            className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors duration-200 flex items-center ${
-              language === "en" ? "text-custom-green" : "text-white"
-            }`}
-          >
-            <span className="mr-2">🇺🇸</span>
-            English
-            {language === "en" && <span className="ml-auto text-custom-green">✓</span>}
-          </button>
+            <div className="p-3 border-b border-gray-600">
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium text-white">通知</h3>
+                <span className="text-xs text-gray-400">5条未读</span>
+              </div>
+            </div>
+            
+            {/* Notification Categories */}
+            <div className="p-2">
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-2">
+                    <Bell className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-medium text-white">全部通知</div>
+                    <div className="text-xs text-gray-400">5条</div>
+                  </div>
+                </button>
+                <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
+                  <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-2">
+                    <Settings className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-medium text-white">系统通知</div>
+                    <div className="text-xs text-gray-400">2条</div>
+                  </div>
+                </button>
+                <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-2">
+                    <MessageCircle className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-medium text-white">最新活动</div>
+                    <div className="text-xs text-gray-400">3条</div>
+                  </div>
+                </button>
+                <button className="flex items-center p-2 rounded-md hover:bg-gray-700 transition-colors">
+                  <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center mr-2">
+                    <Bell className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-medium text-white">重要通知</div>
+                    <div className="text-xs text-gray-400">1条</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Recent Notifications */}
+            <div className="max-h-60 overflow-y-auto">
+              <div className="px-3 py-2 border-t border-gray-600">
+                <div className="text-xs text-gray-400 mb-2">最近通知</div>
+                <div className="space-y-2">
+                  <div className="flex items-start p-2 rounded-md hover:bg-gray-700 transition-colors">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-white">BTC价格突破$95,000</div>
+                      <div className="text-xs text-gray-400">2分钟前</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start p-2 rounded-md hover:bg-gray-700 transition-colors">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-white">ETH买入订单已执行</div>
+                      <div className="text-xs text-gray-400">15分钟前</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start p-2 rounded-md hover:bg-gray-700 transition-colors">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-white">系统维护通知</div>
+                      <div className="text-xs text-gray-400">1小时前</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-3 border-t border-gray-600 text-center">
+              <button 
+                onClick={() => {
+                  setNotificationDropdownOpen(false)
+                  handleNavClick("/notifications")
+                }}
+                className="text-sm text-blue-400 hover:text-blue-300 font-medium transition-colors"
+              >
+                查看全部通知
+              </button>
+            </div>
+          </div>
         </div>
       )}
-
-      {/* Main Content - Render component directly */}
-      <div className="flex-1 overflow-auto">
-        {renderCurrentPage()}
-      </div>
-    </div>
+    </>
   )
 }
