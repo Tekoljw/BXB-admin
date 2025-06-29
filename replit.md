@@ -173,6 +173,13 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Built system settings panel with language, theme, and notification preferences
   - Designed account switching interface with current account display and add account option
   - Added logout confirmation dialog with proper user flow and security considerations
+- January 29, 2025. Replaced main navigation settings with notifications:
+  - Updated all navigation components (side-navigation, instant-navigation, side-navigation-new) to replace settings button with notifications
+  - Added Bell icon with notification badge showing unread count in bottom navigation area
+  - Created comprehensive notifications page (/notifications) with filtering, search, and management features
+  - Implemented notification categories: price alerts, trading updates, system notifications, and social activities
+  - Added notification priority levels (high, medium, low) with visual indicators
+  - Built interactive notification management with mark as read, delete, and mark all as read functionality
 
 ## User Preferences
 
