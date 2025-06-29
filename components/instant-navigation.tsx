@@ -289,14 +289,14 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 }}
                 className={`p-3 rounded-xl transition-all duration-500 group relative ${
                   showNotificationDropdown 
-                    ? 'bg-gradient-to-br from-amber-500/20 to-orange-500/20 shadow-lg shadow-amber-500/30 transform rotate-12 scale-110' 
+                    ? 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 shadow-md shadow-purple-500/20 -translate-y-1' 
                     : 'hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-pink-500/10 hover:shadow-md hover:shadow-purple-500/20 hover:-translate-y-1'
                 }`}
                 title="通知"
               >
                 <div className={`transition-all duration-500 transform ${
                   showNotificationDropdown 
-                    ? 'text-amber-400 animate-bounce scale-110' 
+                    ? 'text-purple-400 rotate-12 scale-125' 
                     : 'group-hover:text-purple-400 group-hover:rotate-12 group-hover:scale-125'
                 }`}>
                   <Bell size={20} />
