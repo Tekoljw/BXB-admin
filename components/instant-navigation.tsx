@@ -47,6 +47,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const [currentPage, setCurrentPage] = useState("/chat")
   const [isExpanded, setIsExpanded] = useState(false)
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
+  const [showNotificationDropdown, setShowNotificationDropdown] = useState(false)
+  const [notificationFilter, setNotificationFilter] = useState<"all" | "system" | "activity" | "important">("all")
   const { theme, setTheme, language, setLanguage } = useTheme()
 
   useEffect(() => {
@@ -60,9 +62,12 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       if (showLanguageDropdown) {
         setShowLanguageDropdown(false)
       }
+      if (showNotificationDropdown) {
+        setShowNotificationDropdown(false)
+      }
     }
 
-    if (showLanguageDropdown) {
+    if (showLanguageDropdown || showNotificationDropdown) {
       document.addEventListener('click', handleClickOutside)
     }
 
