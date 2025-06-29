@@ -20,6 +20,7 @@ import {
   Menu,
   User,
   Shield,
+  TrendingUp,
 } from "lucide-react"
 
 // Import all page components directly to avoid compilation delays

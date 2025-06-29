@@ -17,10 +17,11 @@ import {
   ChevronLeft,
   Wallet,
   ShoppingBag,
+  TrendingUp,
 } from "lucide-react"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
 import ThemeToggle from "./theme-toggle"
 
@@ -34,6 +35,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
   const { language, setLanguage, theme } = useTheme()
   const [currentPath, setCurrentPath] = useState("/chat")
   const router = useRouter()
+  const pathname = usePathname()
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false)
   const languageDropdownRef = useRef<HTMLDivElement>(null)
   const [isExpanded, setIsExpanded] = useState(propIsExpanded ?? true)
@@ -49,6 +51,7 @@ export default function SideNavigation({ onCloseMobile, onToggleExpanded, isExpa
     { path: "/market", icon: LineChart, label: language === "zh" ? "行情" : "Market" },
     { path: "/spot", icon: ArrowLeftRight, label: language === "zh" ? "现货" : "Spot" },
     { path: "/futures", icon: FileText, label: language === "zh" ? "合约" : "Futures" },
+    { path: "/finance", icon: TrendingUp, label: language === "zh" ? "理财" : "Finance" },
     { path: "/wallet", icon: Wallet, label: language === "zh" ? "钱包" : "Wallet" },
   ]
 
