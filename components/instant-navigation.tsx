@@ -273,37 +273,32 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               </button>
             </div>
             <div className="flex justify-center w-full relative">
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation()
-                  const newState = !showNotificationDropdown
-                  console.log("Instant notification button clicked, setting state to:", newState)
-                  setShowNotificationDropdown(newState)
-                  console.log("State should now be:", newState)
-                }}
-                className={`p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative ${
-                  showNotificationDropdown ? 'bg-gray-600' : ''
-                }`}
-                title="通知"
-              >
+              <div className="relative">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    const newState = !showNotificationDropdown
+                    console.log("Instant notification button clicked, setting state to:", newState)
+                    setShowNotificationDropdown(newState)
+                    console.log("State should now be:", newState)
+                  }}
+                  className={`p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative ${
+                    showNotificationDropdown ? 'bg-gray-600' : ''
+                  }`}
+                  title="通知"
+                >
                 <div className="transition-all duration-300 group-hover:ring-2 group-hover:ring-custom-green group-hover:text-custom-green">
                   <Bell size={20} />
                 </div>
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
                   5
                 </span>
-              </button>
+                </button>
 
-              {/* Debug: Always show a small indicator when dropdown should be visible */}
-              {showNotificationDropdown && (
-                <div className="fixed top-10 left-10 w-4 h-4 bg-red-500 rounded-full z-[9999]"></div>
-              )}
-
-              {/* Notification Dropdown */}
-              {showNotificationDropdown && (
-                <div 
-                  className="fixed left-20 bottom-20 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-600 z-[9999]"
-                  onClick={(e) => e.stopPropagation()}
+                {/* Notification Dropdown - Positioned relative to button */}
+                {showNotificationDropdown && (
+                <div className="absolute right-0 bottom-full mb-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-600 z-[9999]"
+                     onClick={(e) => e.stopPropagation()}
                 >
                   {/* Header */}
                   <div className="p-4 border-b border-gray-700">
@@ -357,7 +352,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                     <p className="text-gray-400 text-sm">没有新通知</p>
                   </div>
                 </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
