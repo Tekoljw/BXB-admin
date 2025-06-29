@@ -75,6 +75,79 @@ export default function FinancePage() {
 
       {/* Content */}
       <div className="p-6">
+        {/* New User Exclusive Banner */}
+        <div className="mb-8">
+          <div className={`relative overflow-hidden rounded-xl p-8 ${
+            isDark 
+              ? "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900" 
+              : "bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800"
+          } border border-gray-700`}>
+            {/* Background decorative elements */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-4 right-8">
+                <div className="w-12 h-12 rounded-full border-2 border-green-400 flex items-center justify-center">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                </div>
+              </div>
+              <div className="absolute top-8 right-24">
+                <div className="w-6 h-6 border border-green-400 rotate-45"></div>
+              </div>
+              <div className="absolute bottom-8 right-16">
+                <div className="flex space-x-1">
+                  <div className="w-8 h-1 bg-green-400 rounded"></div>
+                  <div className="w-4 h-1 bg-green-400 rounded"></div>
+                  <div className="w-6 h-1 bg-green-400 rounded"></div>
+                </div>
+              </div>
+              {/* Chart-like decorative elements */}
+              <div className="absolute bottom-4 right-32">
+                <svg width="80" height="40" viewBox="0 0 80 40" className="text-green-400">
+                  <path 
+                    d="M0,35 Q20,25 40,30 T80,15" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    fill="none"
+                    opacity="0.6"
+                  />
+                  <circle cx="20" cy="28" r="2" fill="currentColor" opacity="0.8"/>
+                  <circle cx="40" cy="30" r="2" fill="currentColor" opacity="0.8"/>
+                  <circle cx="60" cy="22" r="2" fill="currentColor" opacity="0.8"/>
+                </svg>
+              </div>
+              {/* Dollar signs */}
+              <div className="absolute top-6 right-40 text-green-400 text-lg opacity-30">$</div>
+              <div className="absolute bottom-12 right-48 text-green-400 text-sm opacity-20">$</div>
+            </div>
+            
+            <div className="relative z-10">
+              <div className="mb-2">
+                <span className="text-green-400 text-sm font-medium">新用户专属</span>
+              </div>
+              
+              <div className="mb-4">
+                <div className="flex items-baseline space-x-3">
+                  <span className="text-white text-2xl font-bold">UBX挖矿</span>
+                  <span className="text-green-400 text-3xl font-bold">0.4%</span>
+                  <span className="text-gray-300 text-lg">日利率</span>
+                  <span className="text-gray-400 text-sm">7天</span>
+                </div>
+              </div>
+              
+              <div className="mb-6">
+                <span className="text-gray-300 text-sm">
+                  0.03% 基础利率 + 0.37% 活动奖励
+                </span>
+              </div>
+              
+              <div className="flex">
+                <button className="bg-green-500 hover:bg-green-600 text-white font-medium px-8 py-3 rounded-lg transition-colors">
+                  立即投资
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl">
           {financeProducts.map((product) => (
