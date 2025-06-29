@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 
 import { useTheme } from "@/contexts/theme-context"
 import AccountDropdown from "@/components/account-dropdown"
@@ -294,34 +295,35 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 </span>
               </button>
 
-              {/* Notification Dropdown */}
-              {showNotificationDropdown && (
-                <>
-                  {console.log('Rendering notification dropdown')}
-                  <div 
-                    className="bg-red-500 rounded-lg shadow-2xl border-2 border-yellow-400"
-                    style={{ 
-                      position: 'fixed',
-                      zIndex: 2147483647,
-                      left: '20px',
-                      top: '20px',
-                      width: '320px',
-                      height: '200px',
-                      isolation: 'isolate',
-                      willChange: 'transform',
-                      transform: 'translateZ(0)',
-                      pointerEvents: 'auto'
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="p-4 text-white font-bold text-lg">
-                      ✅ 测试通知弹窗显示成功！
-                      <br />
-                      现在可以看到红色框了吗？
-                    </div>
+              {/* Notification Dropdown - Using Portal */}
+              {showNotificationDropdown && typeof window !== 'undefined' && createPortal(
+                <div 
+                  className="bg-red-500 rounded-lg shadow-2xl border-2 border-yellow-400"
+                  style={{ 
+                    position: 'fixed',
+                    zIndex: 2147483647,
+                    left: '20px',
+                    top: '20px',
+                    width: '320px',
+                    height: '200px',
+                    isolation: 'isolate',
+                    willChange: 'transform',
+                    transform: 'translateZ(0)',
+                    pointerEvents: 'auto'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="p-4 text-white font-bold text-lg">
+                    ✅ Portal测试弹窗！
+                    <br />
+                    现在应该在最顶层了
                   </div>
-                </>
-              ) || (
+                </div>,
+                document.body
+              )}
+
+              {/* Original Dropdown */}
+              {false && (
                 <div 
                   className="fixed w-80 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-600"
                   style={{ 
