@@ -117,6 +117,7 @@ export default function WalletPage() {
   const [paymentMethodTab, setPaymentMethodTab] = useState("代收") // 通道配置支付方式页签
   const [showMoreCurrencies, setShowMoreCurrencies] = useState(false) // 显示更多币种弹窗
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
+  const [financeMode, setFinanceMode] = useState("账户总资产") // 理财账户模式选择
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
@@ -2232,143 +2233,321 @@ export default function WalletPage() {
         )
 
       case "理财账户":
+        const financeData = walletData["理财账户"]
+        
         return (
           <div className="space-y-6">
-            {/* 理财总览 Header */}
-            <div className={`${cardStyle} rounded-lg p-6`}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">理财总览</h2>
-                <div className="flex items-center space-x-2">
-                  <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>总估值</span>
-                  <span className="text-lg font-semibold">0.0000</span>
-                  <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>BTC</span>
+            {/* 三个卡片选择 - 增强动画效果 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* 账户总资产卡片 */}
+              <div 
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
+                  financeMode === "账户总资产" 
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
+                    : "hover:shadow-lg"
+                }`}
+                onClick={() => setFinanceMode("账户总资产")}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <PiggyBank className="h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-lg font-semibold">账户总资产</h3>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {balanceVisible ? financeData.totalAssets : "****"}
+                  </div>
+                  <div className="flex-shrink-0">
+                    <TrendChart 
+                      data={generateTrendData(true)} 
+                      isPositive={true}
+                      height={32}
+                    />
+                  </div>
+                </div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                  总收益 {balanceVisible ? financeData.totalEarnings : "****"}
                 </div>
               </div>
-              <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                ≈ $0.00
+
+              {/* 理财持仓卡片 */}
+              <div 
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
+                  financeMode === "理财持仓" 
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
+                    : "hover:shadow-lg"
+                }`}
+                onClick={() => setFinanceMode("理财持仓")}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <BarChart3 className="h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-lg font-semibold">理财持仓</h3>
+                  </div>
+                </div>
+                <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? financeData.products.length : "****"}
+                </div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                  活跃产品数量
+                </div>
+              </div>
+
+              {/* 可用余额卡片 */}
+              <div 
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
+                  financeMode === "可用余额" 
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
+                    : "hover:shadow-lg"
+                }`}
+                onClick={() => setFinanceMode("可用余额")}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <CreditCard className="h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-lg font-semibold">可用余额</h3>
+                  </div>
+                  <Button 
+                    size="sm"
+                    className="h-8 px-3 text-xs font-medium bg-[#00D4AA] text-black hover:bg-[#00D4AA]/80"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      // 划转功能
+                    }}
+                  >
+                    划转
+                  </Button>
+                </div>
+                <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? "2,345.67" : "****"}
+                </div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                  USDT
+                </div>
               </div>
             </div>
 
-            {/* UBX收益概览 Section */}
+            {/* 动态内容区域 */}
             <div className={`${cardStyle} rounded-lg p-6`}>
-              <h3 className="text-lg font-semibold mb-4">UBX收益概览</h3>
-              
-              {/* Top Row - 4 Cards */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                {/* 今日收益 */}
-                <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                  <div className="text-xs text-gray-500 mb-1">今日收益 ⓘ</div>
-                  <div className="text-lg font-bold text-[#00D4AA]">+0.0000</div>
-                  <div className="text-xs text-[#00D4AA]">UBX</div>
-                  <div className="text-xs text-gray-500">≈0.00 USDT</div>
-                </div>
+              {financeMode === "账户总资产" && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">收益概览</h3>
+                  
+                  {/* UBX收益概览 */}
+                  <div className="mb-8">
+                    <h4 className="text-md font-medium mb-4">UBX收益概览</h4>
+                    
+                    {/* Top Row - 4 Cards */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                      {/* 今日收益 */}
+                      <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className="text-xs text-gray-500 mb-1">今日收益 ⓘ</div>
+                        <div className="text-lg font-bold text-[#00D4AA]">+0.0000</div>
+                        <div className="text-xs text-[#00D4AA]">UBX</div>
+                        <div className="text-xs text-gray-500">≈0.00 USDT</div>
+                      </div>
 
-                {/* 今日挖矿 */}
-                <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                  <div className="text-xs text-gray-500 mb-1">今日挖矿</div>
-                  <div className="text-lg font-bold text-[#00D4AA]">+0.0000</div>
-                  <div className="text-xs text-[#00D4AA]">UBX</div>
-                  <div className="text-xs text-gray-500">≈0.00 USDT</div>
-                </div>
+                      {/* 今日挖矿 */}
+                      <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className="text-xs text-gray-500 mb-1">今日挖矿</div>
+                        <div className="text-lg font-bold text-[#00D4AA]">+0.0000</div>
+                        <div className="text-xs text-[#00D4AA]">UBX</div>
+                        <div className="text-xs text-gray-500">≈0.00 USDT</div>
+                      </div>
 
-                {/* 当前可收挖矿量 */}
-                <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                  <div className="text-xs text-gray-500 mb-1">当前可收挖矿量</div>
-                  <div className="text-lg font-bold">0.0000</div>
-                  <div className="text-xs">UBX</div>
-                  <button className="mt-2 px-3 py-1 bg-[#00D4AA] text-black text-xs rounded">
-                    领取UBX
-                  </button>
-                </div>
+                      {/* 当前可收挖矿量 */}
+                      <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className="text-xs text-gray-500 mb-1">当前可收挖矿量</div>
+                        <div className="text-lg font-bold">0.0000</div>
+                        <div className="text-xs">UBX</div>
+                        <button className="mt-2 px-3 py-1 bg-[#00D4AA] text-black text-xs rounded">
+                          领取UBX
+                        </button>
+                      </div>
 
-                {/* 超出领取挖矿量 */}
-                <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                  <div className="text-xs text-gray-500 mb-1">超出领取挖矿量</div>
-                  <div className="text-lg font-bold">0.0000</div>
-                  <div className="text-xs">UBX</div>
-                  <button className="mt-2 px-3 py-1 border border-gray-400 text-xs rounded">
-                    提升额度
-                  </button>
-                  <span className="text-xs ml-1">ⓘ</span>
-                </div>
-              </div>
+                      {/* 超出领取挖矿量 */}
+                      <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className="text-xs text-gray-500 mb-1">超出领取挖矿量</div>
+                        <div className="text-lg font-bold">0.0000</div>
+                        <div className="text-xs">UBX</div>
+                        <button className="mt-2 px-3 py-1 border border-gray-400 text-xs rounded">
+                          提升额度
+                        </button>
+                        <span className="text-xs ml-1">ⓘ</span>
+                      </div>
+                    </div>
 
-              {/* Alert Box */}
-              <div className="bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700 rounded-lg p-3 mb-6">
-                <div className="text-orange-800 dark:text-orange-300 text-sm">
-                  <span className="font-medium">超出挖矿收益警告</span>
-                  <span className="ml-2">时间: 16:19:02</span>
-                </div>
-                <div className="text-orange-700 dark:text-orange-400 text-xs mt-1">
-                  可挖矿额度不足小于每日挖矿收益，超出部分会在明日00:00(UTC+1)清零。
-                </div>
-              </div>
+                    {/* Alert Box */}
+                    <div className="bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700 rounded-lg p-3 mb-6">
+                      <div className="text-orange-800 dark:text-orange-300 text-sm">
+                        <span className="font-medium">超出挖矿收益警告</span>
+                        <span className="ml-2">时间: 16:19:02</span>
+                      </div>
+                      <div className="text-orange-700 dark:text-orange-400 text-xs mt-1">
+                        可挖矿额度不足小于每日挖矿收益，超出部分会在明日00:00(UTC+1)清零。
+                      </div>
+                    </div>
+                  </div>
 
-              {/* UBC收益概览 Section */}
-              <h3 className="text-lg font-semibold mb-4">UBC收益概览</h3>
-              
-              {/* UBC Cards */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                {/* 来矿可领取 */}
-                <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                  <div className="text-xs text-gray-500 mb-1">来矿可领取 ⓘ</div>
-                  <div className="text-lg font-bold text-[#00D4AA]">+0.0000</div>
-                  <div className="text-xs text-[#00D4AA]">UBC</div>
-                  <div className="text-xs text-gray-500">≈0.00 USDT</div>
-                </div>
+                  {/* UBC收益概览 */}
+                  <div className="mb-8">
+                    <h4 className="text-md font-medium mb-4">UBC收益概览</h4>
+                    
+                    {/* UBC Cards */}
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      {/* 来矿可领取 */}
+                      <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className="text-xs text-gray-500 mb-1">来矿可领取 ⓘ</div>
+                        <div className="text-lg font-bold text-[#00D4AA]">+0.0000</div>
+                        <div className="text-xs text-[#00D4AA]">UBC</div>
+                        <div className="text-xs text-gray-500">≈0.00 USDT</div>
+                      </div>
 
-                {/* 今日挖矿 */}
-                <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                  <div className="text-xs text-gray-500 mb-1">今日挖矿</div>
-                  <div className="text-lg font-bold text-[#00D4AA]">+0.0000</div>
-                  <div className="text-xs text-[#00D4AA]">UBC</div>
-                  <div className="text-xs text-gray-500">≈0.00 USDT</div>
-                  <button className="mt-2 px-3 py-1 border border-gray-400 text-xs rounded">
-                    领取UBC
-                  </button>
-                </div>
-              </div>
+                      {/* 今日挖矿 */}
+                      <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className="text-xs text-gray-500 mb-1">今日挖矿</div>
+                        <div className="text-lg font-bold text-[#00D4AA]">+0.0000</div>
+                        <div className="text-xs text-[#00D4AA]">UBC</div>
+                        <div className="text-xs text-gray-500">≈0.00 USDT</div>
+                        <button className="mt-2 px-3 py-1 border border-gray-400 text-xs rounded">
+                          领取UBC
+                        </button>
+                      </div>
+                    </div>
+                  </div>
 
-              {/* 累计收益 Section */}
-              <h3 className="text-lg font-semibold mb-4">累计发放收益</h3>
-              
-              {/* Bottom Statistics */}
-              <div className="grid grid-cols-2 gap-6">
-                {/* UBX Statistics */}
-                <div className="space-y-4">
-                  <div className="text-center">
-                    <div className="text-sm font-medium mb-2">UBX</div>
-                    <div className="text-2xl font-bold">0.0000</div>
-                    <div className="text-xs text-gray-500">≈0.00 USDT</div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-2">
-                      <span>今日 +0.0000</span>
-                      <span>月累计 +0.0000</span>
+                  {/* 累计发放收益 */}
+                  <div>
+                    <h4 className="text-md font-medium mb-4">累计发放收益</h4>
+                    
+                    <div className="grid grid-cols-2 gap-6">
+                      {/* UBX Statistics */}
+                      <div className="space-y-4">
+                        <div className="text-center">
+                          <div className="text-sm font-medium mb-2">UBX</div>
+                          <div className="text-2xl font-bold">0.0000</div>
+                          <div className="text-xs text-gray-500">≈0.00 USDT</div>
+                          <div className="flex justify-between text-xs text-gray-500 mt-2">
+                            <span>今日 +0.0000</span>
+                            <span>月累计 +0.0000</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* UBC Statistics */}
+                      <div className="space-y-4">
+                        <div className="text-center">
+                          <div className="text-sm font-medium mb-2">UBC</div>
+                          <div className="text-2xl font-bold">0.0000</div>
+                          <div className="text-xs text-gray-500">≈0.00 USDT</div>
+                          <div className="flex justify-between text-xs text-gray-500 mt-2">
+                            <span>今日 +0.0000</span>
+                            <span>月累计 +0.0000</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Final Summary */}
+                    <div className="mt-6 text-center">
+                      <div className="flex items-center justify-center space-x-4 text-sm">
+                        <span className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          合计: <span className="font-medium">0.00 USDT</span>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
+              )}
 
-                {/* UBC Statistics */}
-                <div className="space-y-4">
-                  <div className="text-center">
-                    <div className="text-sm font-medium mb-2">UBC</div>
-                    <div className="text-2xl font-bold">0.0000</div>
-                    <div className="text-xs text-gray-500">≈0.00 USDT</div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-2">
-                      <span>今日 +0.0000</span>
-                      <span>月累计 +0.0000</span>
+              {financeMode === "理财持仓" && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">理财持仓</h3>
+                  <div className="space-y-4">
+                    {financeData.products.map((product, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                            <PiggyBank className="h-5 w-5 text-[#00D4AA]" />
+                          </div>
+                          <div>
+                            <div className="font-medium">{product.name}</div>
+                            <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              年化收益率: {product.apy}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-medium">{balanceVisible ? product.amount : "****"}</div>
+                          <div className={`text-sm text-[#00D4AA]`}>
+                            {balanceVisible ? product.earnings : "****"}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {financeMode === "可用余额" && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">可用余额</h3>
+                  <div className="space-y-4">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                            <th className="text-left py-3 px-4 font-medium">币种</th>
+                            <th className="text-right py-3 px-4 font-medium">可用余额</th>
+                            <th className="text-right py-3 px-4 font-medium">冻结金额</th>
+                            <th className="text-center py-3 px-4 font-medium">操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {[
+                            { symbol: "USDT", name: "Tether USD", available: "2,345.67", frozen: "0.00" },
+                            { symbol: "BTC", name: "Bitcoin", available: "0.05234", frozen: "0.00" },
+                            { symbol: "ETH", name: "Ethereum", available: "1.2345", frozen: "0.00" },
+                            { symbol: "UBX", name: "UBX Token", available: "1,000.00", frozen: "50.00" },
+                            { symbol: "UBC", name: "UBC Token", available: "500.00", frozen: "25.00" }
+                          ].map((currency, index) => (
+                            <tr key={currency.symbol} className={`border-b ${isDark ? 'border-[#252842]' : 'border-gray-100'} hover:bg-gray-50 dark:hover:bg-[#252842]`}>
+                              <td className="py-4 px-4">
+                                <div className="flex items-center space-x-3">
+                                  <div className="w-8 h-8 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                                    <span className="text-[#00D4AA] font-bold text-sm">{currency.symbol.charAt(0)}</span>
+                                  </div>
+                                  <div>
+                                    <div className="font-medium">{currency.symbol}</div>
+                                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                      {currency.name}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium">
+                                {balanceVisible ? currency.available : "****"}
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium text-gray-500">
+                                {balanceVisible ? currency.frozen : "****"}
+                              </td>
+                              <td className="text-center py-4 px-4">
+                                <Button 
+                                  size="sm"
+                                  className="h-8 px-3 text-xs font-medium bg-[#00D4AA] text-black hover:bg-[#00D4AA]/80"
+                                >
+                                  划转
+                                </Button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Final Summary */}
-              <div className="mt-6 text-center">
-                <div className="flex items-center justify-center space-x-4 text-sm">
-                  <span className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    合计: <span className="font-medium">0.00 USDT</span>
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         )
