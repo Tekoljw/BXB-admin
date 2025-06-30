@@ -2053,46 +2053,110 @@ export default function WalletPage() {
             <div className={`${cardStyle} rounded-lg p-6`}>
               {contractMode === "账户总资产" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">账户资产详情</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {/* 总余额 */}
-                    <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                      <div className="text-xs text-gray-500 mb-1">总余额</div>
-                      <div className="text-lg font-bold">
-                        {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
-                      </div>
-                      <div className="text-xs text-gray-500">{selectedDisplayCurrency}</div>
+                  <h3 className="text-lg font-semibold mb-4">账户余额</h3>
+                  <div className="space-y-4">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                            <th className="text-left py-3 px-4 font-medium">币种</th>
+                            <th className="text-right py-3 px-4 font-medium">总余额</th>
+                            <th className="text-right py-3 px-4 font-medium">可用</th>
+                            <th className="text-right py-3 px-4 font-medium">冻结</th>
+                            <th className="text-right py-3 px-4 font-medium">估值({selectedDisplayCurrency})</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {[
+                            { 
+                              symbol: "USDT", 
+                              name: "Tether USD", 
+                              total: "12,345.67", 
+                              available: "8,734.56", 
+                              frozen: "3,611.11",
+                              value: convertBalance("12,345.67", "USDT", selectedDisplayCurrency)
+                            },
+                            { 
+                              symbol: "BTC", 
+                              name: "Bitcoin", 
+                              total: "0.15678", 
+                              available: "0.08234", 
+                              frozen: "0.07444",
+                              value: convertBalance("8,567.89", "USDT", selectedDisplayCurrency)
+                            },
+                            { 
+                              symbol: "ETH", 
+                              name: "Ethereum", 
+                              total: "2.4567", 
+                              available: "1.5678", 
+                              frozen: "0.8889",
+                              value: convertBalance("5,234.12", "USDT", selectedDisplayCurrency)
+                            },
+                            { 
+                              symbol: "BNB", 
+                              name: "BNB", 
+                              total: "25.789", 
+                              available: "15.4567", 
+                              frozen: "10.3323",
+                              value: convertBalance("12,456.78", "USDT", selectedDisplayCurrency)
+                            }
+                          ].map((currency, index) => (
+                            <tr key={currency.symbol} className={`border-b ${isDark ? 'border-[#252842]' : 'border-gray-100'} hover:bg-gray-50 dark:hover:bg-[#252842]`}>
+                              <td className="py-4 px-4">
+                                <div className="flex items-center space-x-3">
+                                  <div className="w-8 h-8 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                                    <span className="text-[#00D4AA] font-bold text-sm">{currency.symbol.charAt(0)}</span>
+                                  </div>
+                                  <div>
+                                    <div className="font-medium">{currency.symbol}</div>
+                                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                      {currency.name}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium">
+                                {balanceVisible ? currency.total : "****"}
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium text-[#00D4AA]">
+                                {balanceVisible ? currency.available : "****"}
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium text-red-500">
+                                {balanceVisible ? currency.frozen : "****"}
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium">
+                                {balanceVisible ? currency.value : "****"}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
 
-                    {/* 净资产 */}
-                    <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                      <div className="text-xs text-gray-500 mb-1">净资产</div>
-                      <div className="text-lg font-bold text-[#00D4AA]">
-                        {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
-                      </div>
-                      <div className="text-xs text-gray-500">{selectedDisplayCurrency}</div>
-                    </div>
-
-                    {/* 未实现盈亏 */}
-                    <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                      <div className="text-xs text-gray-500 mb-1">未实现盈亏</div>
-                      <div className="text-lg font-bold text-green-500">
-                        {balanceVisible ? contractData.unrealizedPnL : "****"}
-                      </div>
-                      <div className="text-xs text-gray-500">USDT</div>
-                    </div>
-
-                    {/* 已实现盈亏 */}
-                    <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                      <div className="text-xs text-gray-500 mb-1">已实现盈亏</div>
-                      <div className="space-y-1">
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-gray-500">今日</span>
-                          <span className="text-sm font-bold text-green-500">+123.45</span>
+                    {/* 汇总统计 */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-gray-200 dark:border-[#3a3d4a]">
+                      <div className="text-center">
+                        <div className="text-xs text-gray-500 mb-1">总资产</div>
+                        <div className="text-lg font-bold">
+                          {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
                         </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-gray-500">本月</span>
-                          <span className="text-sm font-bold text-red-500">-234.56</span>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xs text-gray-500 mb-1">净资产</div>
+                        <div className="text-lg font-bold text-[#00D4AA]">
+                          {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xs text-gray-500 mb-1">未实现盈亏</div>
+                        <div className="text-lg font-bold text-green-500">
+                          {balanceVisible ? contractData.unrealizedPnL : "****"}
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xs text-gray-500 mb-1">保证金占用</div>
+                        <div className="text-lg font-bold text-orange-500">
+                          {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
                         </div>
                       </div>
                     </div>
