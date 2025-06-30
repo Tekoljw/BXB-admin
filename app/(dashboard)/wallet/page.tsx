@@ -2308,16 +2308,28 @@ export default function WalletPage() {
                     <CreditCard className="h-6 w-6 text-[#00D4AA]" />
                     <h3 className="text-lg font-semibold">可用余额</h3>
                   </div>
-                  <Button 
-                    size="sm"
-                    className="h-8 px-3 text-xs font-medium bg-[#00D4AA] text-black hover:bg-[#00D4AA]/80"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      // 划转功能
-                    }}
-                  >
-                    划转
-                  </Button>
+                  <div className="flex items-center space-x-2">
+                    <Button 
+                      size="sm"
+                      className="h-8 px-3 text-xs font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        // 划转功能
+                      }}
+                    >
+                      划转
+                    </Button>
+                    <Button 
+                      size="sm"
+                      className="h-8 px-3 text-xs font-medium bg-transparent border border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        // 闪兑功能
+                      }}
+                    >
+                      闪兑
+                    </Button>
+                  </div>
                 </div>
                 <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? "2,345.67" : "****"}
@@ -2533,12 +2545,20 @@ export default function WalletPage() {
                                 {balanceVisible ? currency.frozen : "****"}
                               </td>
                               <td className="text-center py-4 px-4">
-                                <Button 
-                                  size="sm"
-                                  className="h-8 px-3 text-xs font-medium bg-[#00D4AA] text-black hover:bg-[#00D4AA]/80"
-                                >
-                                  划转
-                                </Button>
+                                <div className="flex items-center justify-center space-x-2">
+                                  <Button 
+                                    size="sm"
+                                    className="h-8 px-3 text-xs font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                                  >
+                                    划转
+                                  </Button>
+                                  <Button 
+                                    size="sm"
+                                    className="h-8 px-3 text-xs font-medium bg-transparent border border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                                  >
+                                    闪兑
+                                  </Button>
+                                </div>
                               </td>
                             </tr>
                           ))}
