@@ -118,6 +118,7 @@ export default function WalletPage() {
   const [showMoreCurrencies, setShowMoreCurrencies] = useState(false) // 显示更多币种弹窗
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
   const [financeMode, setFinanceMode] = useState("账户总资产") // 理财账户模式选择
+  const [contractMode, setContractMode] = useState("账户总资产") // 合约账户模式选择
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
@@ -1922,78 +1923,285 @@ export default function WalletPage() {
       
       case "合约账户":
         const contractData = walletData["合约账户"]
+        
         return (
           <div className="space-y-6">
-            {/* 六个卡片布局 - 两排三列，增强动画效果 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* 第一排 */}
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-medium">总余额</h3>
+            {/* 三个卡片选择 - 增强动画效果 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* 账户总资产卡片 */}
+              <div 
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
+                  contractMode === "账户总资产" 
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
+                    : "hover:shadow-lg"
+                }`}
+                onClick={() => setContractMode("账户总资产")}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <BarChart3 className="h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-lg font-semibold">账户总资产</h3>
+                  </div>
                   <button
-                    onClick={handleCurrencyModalClick}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleCurrencyModalClick()
+                    }}
+                    className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
                       isDark 
                         ? "bg-transparent text-white hover:bg-gray-800" 
                         : "bg-white text-black hover:bg-gray-50"
                     }`}
                   >
-                    <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                    <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
                       availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
                     }`}>
-                      <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
+                      <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
                     </div>
                     <span>{selectedDisplayCurrency}</span>
-                    <ChevronDown className="h-2 w-2" />
+                    <ChevronDown className="h-3 w-3" />
                   </button>
                 </div>
-                <div className="text-2xl font-bold transition-all duration-500">
-                  {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
-                </div>
-              </div>
-              
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">净资产</h3>
-                <div className="text-2xl font-bold text-[#00D4AA] transition-all duration-500">
-                  {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
-                </div>
-              </div>
-              
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">未实现盈亏</h3>
-                <div className="text-2xl font-bold text-green-500 transition-all duration-500">
-                  {balanceVisible ? contractData.unrealizedPnL : "****"}
-                </div>
-              </div>
-              
-              {/* 第二排 */}
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">已实现盈亏</h3>
-                <div className="space-y-1">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500">今日</span>
-                    <span className="text-sm font-bold text-green-500 transition-all duration-300">+123.45</span>
+                <div className="flex items-center gap-4">
+                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500">本月</span>
-                    <span className="text-sm font-bold text-red-500 transition-all duration-300">-234.56</span>
+                  <div className="flex-shrink-0">
+                    <TrendChart 
+                      data={generateTrendData(true)} 
+                      isPositive={true}
+                      height={32}
+                    />
                   </div>
                 </div>
-              </div>
-              
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">已用保证金</h3>
-                <div className="text-2xl font-bold transition-all duration-500">
-                  {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                  净资产 {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
-              
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">可用保证金</h3>
-                <div className="text-2xl font-bold transition-all duration-500">
+
+              {/* 当前持仓卡片 */}
+              <div 
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
+                  contractMode === "当前持仓" 
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
+                    : "hover:shadow-lg"
+                }`}
+                onClick={() => setContractMode("当前持仓")}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <TrendingUp className="h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-lg font-semibold">当前持仓</h3>
+                  </div>
+                </div>
+                <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? contractData.positions.length : "****"}
+                </div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                  未实现盈亏 {balanceVisible ? contractData.unrealizedPnL : "****"}
+                </div>
+              </div>
+
+              {/* 可用余额卡片 */}
+              <div 
+                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
+                  contractMode === "可用余额" 
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
+                    : "hover:shadow-lg"
+                }`}
+                onClick={() => setContractMode("可用余额")}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <CreditCard className="h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-lg font-semibold">可用余额</h3>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button 
+                      size="sm"
+                      className="h-8 px-3 text-xs font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleTransferClick()
+                      }}
+                    >
+                      划转
+                    </Button>
+                    <Button 
+                      size="sm"
+                      className="h-8 px-3 text-xs font-medium bg-transparent border border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        // 交易功能
+                        router.push("/usdt-trade")
+                      }}
+                    >
+                      交易
+                    </Button>
+                  </div>
+                </div>
+                <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? convertBalance(contractData.marginAvailable, "USDT", selectedDisplayCurrency) : "****"}
                 </div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                  已用保证金 {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
+                </div>
               </div>
+            </div>
+
+            {/* 动态内容区域 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              {contractMode === "账户总资产" && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">账户资产详情</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {/* 总余额 */}
+                    <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                      <div className="text-xs text-gray-500 mb-1">总余额</div>
+                      <div className="text-lg font-bold">
+                        {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
+                      </div>
+                      <div className="text-xs text-gray-500">{selectedDisplayCurrency}</div>
+                    </div>
+
+                    {/* 净资产 */}
+                    <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                      <div className="text-xs text-gray-500 mb-1">净资产</div>
+                      <div className="text-lg font-bold text-[#00D4AA]">
+                        {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
+                      </div>
+                      <div className="text-xs text-gray-500">{selectedDisplayCurrency}</div>
+                    </div>
+
+                    {/* 未实现盈亏 */}
+                    <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                      <div className="text-xs text-gray-500 mb-1">未实现盈亏</div>
+                      <div className="text-lg font-bold text-green-500">
+                        {balanceVisible ? contractData.unrealizedPnL : "****"}
+                      </div>
+                      <div className="text-xs text-gray-500">USDT</div>
+                    </div>
+
+                    {/* 已实现盈亏 */}
+                    <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                      <div className="text-xs text-gray-500 mb-1">已实现盈亏</div>
+                      <div className="space-y-1">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-gray-500">今日</span>
+                          <span className="text-sm font-bold text-green-500">+123.45</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-gray-500">本月</span>
+                          <span className="text-sm font-bold text-red-500">-234.56</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {contractMode === "当前持仓" && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">当前持仓</h3>
+                  <div className="space-y-4">
+                    {contractData.positions.map((position, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                            <span className="text-[#00D4AA] font-bold">{position.symbol.substring(0, 3).charAt(0)}</span>
+                          </div>
+                          <div>
+                            <div className="font-medium">{position.symbol}</div>
+                            <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {position.side} • 仓位大小: {position.size}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className={`font-medium ${position.pnl.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+                            {balanceVisible ? position.pnl : "****"}
+                          </div>
+                          <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                            保证金: {balanceVisible ? position.margin : "****"}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {contractMode === "可用余额" && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">可用余额</h3>
+                  <div className="space-y-4">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                            <th className="text-left py-3 px-4 font-medium">币种</th>
+                            <th className="text-right py-3 px-4 font-medium">可用余额</th>
+                            <th className="text-right py-3 px-4 font-medium">已用保证金</th>
+                            <th className="text-right py-3 px-4 font-medium">可用保证金</th>
+                            <th className="text-center py-3 px-4 font-medium">操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {[
+                            { symbol: "USDT", name: "Tether USD", available: "3,456.78", used: "1,234.56", margin: "2,222.22" },
+                            { symbol: "BTC", name: "Bitcoin", available: "0.08234", used: "0.02000", margin: "0.06234" },
+                            { symbol: "ETH", name: "Ethereum", available: "1.5678", used: "0.5000", margin: "1.0678" },
+                            { symbol: "BNB", name: "BNB", available: "15.4567", used: "5.0000", margin: "10.4567" }
+                          ].map((currency, index) => (
+                            <tr key={currency.symbol} className={`border-b ${isDark ? 'border-[#252842]' : 'border-gray-100'} hover:bg-gray-50 dark:hover:bg-[#252842]`}>
+                              <td className="py-4 px-4">
+                                <div className="flex items-center space-x-3">
+                                  <div className="w-8 h-8 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                                    <span className="text-[#00D4AA] font-bold text-sm">{currency.symbol.charAt(0)}</span>
+                                  </div>
+                                  <div>
+                                    <div className="font-medium">{currency.symbol}</div>
+                                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                      {currency.name}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium">
+                                {balanceVisible ? currency.available : "****"}
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium text-red-500">
+                                {balanceVisible ? currency.used : "****"}
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium text-[#00D4AA]">
+                                {balanceVisible ? currency.margin : "****"}
+                              </td>
+                              <td className="text-center py-4 px-4">
+                                <div className="flex items-center justify-center space-x-2">
+                                  <Button 
+                                    size="sm"
+                                    className="h-8 px-3 text-xs font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                                    onClick={() => handleTransferClick()}
+                                  >
+                                    划转
+                                  </Button>
+                                  <Button 
+                                    size="sm"
+                                    className="h-8 px-3 text-xs font-medium bg-transparent border border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                                    onClick={() => router.push("/usdt-trade")}
+                                  >
+                                    交易
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* 操作按钮区域 */}
