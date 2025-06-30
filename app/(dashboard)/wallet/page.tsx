@@ -1962,17 +1962,8 @@ export default function WalletPage() {
                     <ChevronDown className="h-3 w-3" />
                   </button>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
-                  </div>
-                  <div className="flex-shrink-0">
-                    <TrendChart 
-                      data={generateTrendData(true)} 
-                      isPositive={true}
-                      height={32}
-                    />
-                  </div>
+                <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
                 </div>
                 <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                   净资产 {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
@@ -1994,11 +1985,20 @@ export default function WalletPage() {
                     <h3 className="text-lg font-semibold">当前持仓</h3>
                   </div>
                 </div>
-                <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? contractData.positions.length : "****"}
+                <div className="flex items-center gap-4">
+                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {balanceVisible ? contractData.unrealizedPnL : "****"}
+                  </div>
+                  <div className="flex-shrink-0">
+                    <TrendChart 
+                      data={generateTrendData(contractData.unrealizedPnL.startsWith('+'))} 
+                      isPositive={contractData.unrealizedPnL.startsWith('+')}
+                      height={32}
+                    />
+                  </div>
                 </div>
                 <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                  未实现盈亏 {balanceVisible ? contractData.unrealizedPnL : "****"}
+                  保证金 {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
 
