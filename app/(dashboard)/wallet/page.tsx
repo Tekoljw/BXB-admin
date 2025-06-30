@@ -2060,10 +2060,10 @@ export default function WalletPage() {
                         <thead>
                           <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
                             <th className="text-left py-3 px-4 font-medium">币种</th>
-                            <th className="text-right py-3 px-4 font-medium">总余额</th>
-                            <th className="text-right py-3 px-4 font-medium">可用</th>
-                            <th className="text-right py-3 px-4 font-medium">冻结</th>
-                            <th className="text-right py-3 px-4 font-medium">估值({selectedDisplayCurrency})</th>
+                            <th className="text-right py-3 px-4 font-medium">账户余额</th>
+                            <th className="text-right py-3 px-4 font-medium">未实现盈亏</th>
+                            <th className="text-right py-3 px-4 font-medium">净资产余额</th>
+                            <th className="text-right py-3 px-4 font-medium">保证金余额</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -2071,34 +2071,34 @@ export default function WalletPage() {
                             { 
                               symbol: "USDT", 
                               name: "Tether USD", 
-                              total: "12,345.67", 
-                              available: "8,734.56", 
-                              frozen: "3,611.11",
-                              value: convertBalance("12,345.67", "USDT", selectedDisplayCurrency)
+                              accountBalance: "12,345.67", 
+                              unrealizedPnl: "+1,234.56", 
+                              netBalance: "11,111.11",
+                              marginBalance: "3,611.11"
                             },
                             { 
                               symbol: "BTC", 
                               name: "Bitcoin", 
-                              total: "0.15678", 
-                              available: "0.08234", 
-                              frozen: "0.07444",
-                              value: convertBalance("8,567.89", "USDT", selectedDisplayCurrency)
+                              accountBalance: "0.15678", 
+                              unrealizedPnl: "-0.00234", 
+                              netBalance: "0.15444",
+                              marginBalance: "0.07444"
                             },
                             { 
                               symbol: "ETH", 
                               name: "Ethereum", 
-                              total: "2.4567", 
-                              available: "1.5678", 
-                              frozen: "0.8889",
-                              value: convertBalance("5,234.12", "USDT", selectedDisplayCurrency)
+                              accountBalance: "2.4567", 
+                              unrealizedPnl: "+0.1234", 
+                              netBalance: "2.3333",
+                              marginBalance: "0.8889"
                             },
                             { 
                               symbol: "BNB", 
                               name: "BNB", 
-                              total: "25.789", 
-                              available: "15.4567", 
-                              frozen: "10.3323",
-                              value: convertBalance("12,456.78", "USDT", selectedDisplayCurrency)
+                              accountBalance: "25.789", 
+                              unrealizedPnl: "-1.456", 
+                              netBalance: "24.333",
+                              marginBalance: "10.3323"
                             }
                           ].map((currency, index) => (
                             <tr key={currency.symbol} className={`border-b ${isDark ? 'border-[#252842]' : 'border-gray-100'} hover:bg-gray-50 dark:hover:bg-[#252842]`}>
@@ -2116,16 +2116,18 @@ export default function WalletPage() {
                                 </div>
                               </td>
                               <td className="text-right py-4 px-4 font-medium">
-                                {balanceVisible ? currency.total : "****"}
-                              </td>
-                              <td className="text-right py-4 px-4 font-medium text-[#00D4AA]">
-                                {balanceVisible ? currency.available : "****"}
-                              </td>
-                              <td className="text-right py-4 px-4 font-medium text-red-500">
-                                {balanceVisible ? currency.frozen : "****"}
+                                {balanceVisible ? currency.accountBalance : "****"}
                               </td>
                               <td className="text-right py-4 px-4 font-medium">
-                                {balanceVisible ? currency.value : "****"}
+                                <span className={currency.unrealizedPnl.startsWith('+') ? 'text-green-500' : 'text-red-500'}>
+                                  {balanceVisible ? currency.unrealizedPnl : "****"}
+                                </span>
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium text-[#00D4AA]">
+                                {balanceVisible ? currency.netBalance : "****"}
+                              </td>
+                              <td className="text-right py-4 px-4 font-medium text-orange-500">
+                                {balanceVisible ? currency.marginBalance : "****"}
                               </td>
                             </tr>
                           ))}
