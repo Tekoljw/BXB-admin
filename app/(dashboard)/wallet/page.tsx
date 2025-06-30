@@ -2134,34 +2134,6 @@ export default function WalletPage() {
                         </tbody>
                       </table>
                     </div>
-
-                    {/* 汇总统计 */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-gray-200 dark:border-[#3a3d4a]">
-                      <div className="text-center">
-                        <div className="text-xs text-gray-500 mb-1">总资产</div>
-                        <div className="text-lg font-bold">
-                          {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
-                        </div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-xs text-gray-500 mb-1">净资产</div>
-                        <div className="text-lg font-bold text-[#00D4AA]">
-                          {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
-                        </div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-xs text-gray-500 mb-1">未实现盈亏</div>
-                        <div className="text-lg font-bold text-green-500">
-                          {balanceVisible ? contractData.unrealizedPnL : "****"}
-                        </div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-xs text-gray-500 mb-1">保证金占用</div>
-                        <div className="text-lg font-bold text-orange-500">
-                          {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               )}
