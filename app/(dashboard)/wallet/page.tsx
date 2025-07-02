@@ -3929,10 +3929,10 @@ export default function WalletPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* 虚拟卡账户总览 */}
               <div 
-                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${
+                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
                   selectedUCardView === "virtual"
-                    ? "bg-[#00D4AA]/10 border-2 border-[#00D4AA] shadow-lg" 
-                    : `${cardStyle} hover:shadow-md`
+                    ? "border-2 border-[#00D4AA] shadow-lg" 
+                    : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
                 }`}
                 onClick={() => setSelectedUCardView("virtual")}
               >
@@ -3960,10 +3960,10 @@ export default function WalletPage() {
 
               {/* 实体卡账户总览 */}
               <div 
-                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${
+                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
                   selectedUCardView === "physical"
-                    ? "bg-[#00D4AA]/10 border-2 border-[#00D4AA] shadow-lg" 
-                    : `${cardStyle} hover:shadow-md`
+                    ? "border-2 border-[#00D4AA] shadow-lg" 
+                    : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
                 }`}
                 onClick={() => setSelectedUCardView("physical")}
               >
@@ -3991,10 +3991,10 @@ export default function WalletPage() {
 
               {/* 可用余额 */}
               <div 
-                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${
+                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
                   selectedUCardView === "balance"
-                    ? "bg-[#00D4AA]/10 border-2 border-[#00D4AA] shadow-lg" 
-                    : `${cardStyle} hover:shadow-md`
+                    ? "border-2 border-[#00D4AA] shadow-lg" 
+                    : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
                 }`}
                 onClick={() => setSelectedUCardView("balance")}
               >
