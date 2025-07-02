@@ -3947,13 +3947,29 @@ export default function WalletPage() {
                     <span className="text-lg font-bold mr-1">{balanceVisible ? "2,222.22" : "****"}</span>
                     <span className="text-xs text-gray-500">USDT</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">已发卡数</span>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">卡片数</span>
                     <span className="text-sm">2张</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">本月消费</span>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">本月消费</span>
                     <span className="text-sm text-red-500">-678.90 USDT</span>
+                  </div>
+                  <div className="flex justify-end space-x-2 mt-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="border-gray-300 p-1.5 h-7 w-7"
+                    >
+                      <Plus className="h-3 w-3" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="border-gray-300 p-1.5 h-7 w-7"
+                    >
+                      <History className="h-3 w-3" />
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -3978,13 +3994,29 @@ export default function WalletPage() {
                     <span className="text-lg font-bold mr-1">{balanceVisible ? "1,234.56" : "****"}</span>
                     <span className="text-xs text-gray-500">USDT</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">已发卡数</span>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">卡片数</span>
                     <span className="text-sm">1张</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">本月消费</span>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">本月消费</span>
                     <span className="text-sm text-red-500">-456.78 USDT</span>
+                  </div>
+                  <div className="flex justify-end space-x-2 mt-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="border-gray-300 p-1.5 h-7 w-7"
+                    >
+                      <Plus className="h-3 w-3" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="border-gray-300 p-1.5 h-7 w-7"
+                    >
+                      <History className="h-3 w-3" />
+                    </Button>
                   </div>
                 </div>
               </div>
