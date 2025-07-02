@@ -117,7 +117,7 @@ export default function WalletPage() {
   const [paymentMethodTab, setPaymentMethodTab] = useState("代收") // 通道配置支付方式页签
   const [showMoreCurrencies, setShowMoreCurrencies] = useState(false) // 显示更多币种弹窗
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
-  const [financeMode, setFinanceMode] = useState("账户总资产") // 理财账户模式选择
+  const [financeMode, setFinanceMode] = useState("理财收益") // 理财账户模式选择
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
@@ -2240,19 +2240,19 @@ export default function WalletPage() {
           <div className="space-y-6">
             {/* 三个卡片选择 - 增强动画效果 */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* 账户总资产卡片 */}
+              {/* 理财收益卡片 */}
               <div 
                 className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
-                  financeMode === "账户总资产" 
+                  financeMode === "理财收益" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
                     : "hover:shadow-lg"
                 }`}
-                onClick={() => setFinanceMode("账户总资产")}
+                onClick={() => setFinanceMode("理财收益")}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <PiggyBank className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">账户总资产</h3>
+                    <h3 className="text-lg font-semibold">理财收益</h3>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -2343,7 +2343,7 @@ export default function WalletPage() {
 
             {/* 动态内容区域 */}
             <div className={`${cardStyle} rounded-lg p-6`}>
-              {financeMode === "账户总资产" && (
+              {financeMode === "理财收益" && (
                 <div>
                   <h3 className="text-lg font-semibold mb-4">收益概览</h3>
                   
