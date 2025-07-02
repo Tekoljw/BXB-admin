@@ -1962,21 +1962,19 @@ export default function WalletPage() {
                     <ChevronDown className="h-3 w-3" />
                   </button>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
-                    </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      净资产 {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
-                    </div>
+                <div className="relative">
+                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                      <FileText className="h-4 w-4 text-gray-500" title="资金记录" />
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    净资产 {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
+                  </div>
+                  <div className="absolute bottom-0 right-0 flex items-center space-x-1">
+                    <button className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                      <FileText className="h-3.5 w-3.5 text-gray-500" title="资金记录" />
                     </button>
-                    <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                      <BarChart3 className="h-4 w-4 text-gray-500" title="交易记录" />
+                    <button className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                      <BarChart3 className="h-3.5 w-3.5 text-gray-500" title="交易记录" />
                     </button>
                   </div>
                 </div>
@@ -1997,7 +1995,7 @@ export default function WalletPage() {
                     <h3 className="text-lg font-semibold">当前持仓</h3>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="relative">
                   <div className="flex items-center gap-4">
                     <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       {balanceVisible ? contractData.unrealizedPnL : "****"}
@@ -2010,12 +2008,14 @@ export default function WalletPage() {
                       />
                     </div>
                   </div>
-                  <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <PieChart className="h-4 w-4 text-gray-500" title="仓位分布" />
-                  </button>
-                </div>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                  保证金 {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    保证金 {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
+                  </div>
+                  <div className="absolute bottom-0 right-0">
+                    <button className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                      <PieChart className="h-3.5 w-3.5 text-gray-500" title="仓位分布" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
