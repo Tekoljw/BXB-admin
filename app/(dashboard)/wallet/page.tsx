@@ -4009,12 +4009,23 @@ export default function WalletPage() {
                     <span className="text-sm text-gray-600 dark:text-gray-400">可划转金额</span>
                     <span className="text-lg font-bold text-green-600">{balanceVisible ? "3,456.78" : "****"} USDT</span>
                   </div>
-                  <Button 
-                    size="sm" 
-                    className="w-full bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
-                  >
-                    划转
-                  </Button>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button 
+                      size="sm" 
+                      className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                    >
+                      <ArrowLeftRight className="h-3 w-3 mr-1" />
+                      划转
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    >
+                      <FileText className="h-3 w-3 mr-1" />
+                      资金记录
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
