@@ -1540,24 +1540,27 @@ export default function WalletPage() {
               <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                 {/* 滑动背景 */}
                 <div
-                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'} ${
-                    overviewTab === "现金账户" ? "w-24" : "w-20"
-                  }`}
+                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
                   style={{
+                    width: overviewTab === "现金账户" ? '96px' : '80px',
                     left: overviewTab === "现金账户" ? '4px' : '100px'
                   }}
                 />
                 {/* 按钮 */}
-                {["现金账户", "总资产"].map((tab) => (
+                {["现金账户", "总资产"].map((tab, index) => (
                   <button
                     key={tab}
-                    className={`relative z-10 px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
                       overviewTab === tab
                         ? isDark ? "text-black" : "text-white"
                         : isDark
                         ? "text-gray-300 hover:text-white"
                         : "text-gray-700 hover:text-gray-900"
                     }`}
+                    style={{
+                      width: tab === "现金账户" ? '96px' : '80px',
+                      height: '32px'
+                    }}
                     onClick={() => {
                       setOverviewTab(tab)
                       setOverviewMode(tab)
