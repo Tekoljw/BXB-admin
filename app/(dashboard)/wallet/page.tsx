@@ -2303,12 +2303,11 @@ export default function WalletPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* 理财收益卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
-                  financeMode === "理财收益" 
-                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
-                    : "hover:shadow-lg"
+                className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out ${
+                  financeMode === "收益计算" 
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
+                    : ""
                 }`}
-                onClick={() => setFinanceMode("理财收益")}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
@@ -2357,12 +2356,11 @@ export default function WalletPage() {
 
               {/* 理财持仓卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
-                  financeMode === "理财持仓" 
-                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
-                    : "hover:shadow-lg"
+                className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out ${
+                  financeMode === "当前持仓" 
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
+                    : ""
                 }`}
-                onClick={() => setFinanceMode("理财持仓")}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
@@ -2402,12 +2400,11 @@ export default function WalletPage() {
 
               {/* 账户余额卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
+                className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out ${
                   financeMode === "账户余额" 
-                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
-                    : "hover:shadow-lg"
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
+                    : ""
                 }`}
-                onClick={() => setFinanceMode("账户余额")}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
@@ -2459,8 +2456,9 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 理财账户标签页 */}
-            <div className="flex justify-start">
+            {/* 理财账户标签页和操作按钮 */}
+            <div className="flex justify-between items-center">
+              {/* 左侧：标签页 */}
               <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                 {/* 滑动背景 */}
                 <div
@@ -2496,6 +2494,125 @@ export default function WalletPage() {
                     {tab.label}
                   </button>
                 ))}
+              </div>
+
+              {/* 右侧：操作按钮 */}
+              <div className="flex gap-2">
+                {/* 主要操作按钮 */}
+                {[
+                  { id: "finance-transfer", label: "划转", icon: ArrowLeftRight },
+                  { id: "finance-exchange", label: "闪兑", icon: RefreshCw }
+                ].map((button) => {
+                  const Icon = button.icon
+                  const isSelected = selectedAction === button.id
+                  const isClicked = clickedAction === button.id
+                  
+                  return (
+                    <Button 
+                      key={button.id}
+                      onClick={() => handleActionClick(button.id)}
+                      onMouseDown={() => setClickedAction(button.id)}
+                      onMouseUp={() => setClickedAction("")}
+                      onMouseLeave={() => setClickedAction("")}
+                      className={`h-10 px-3 transition-all duration-200 text-sm font-bold ${
+                        isClicked
+                          ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                          : isSelected 
+                            ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                            : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                      }`}
+                      variant="outline"
+                    >
+                      <Icon className="h-4 w-4 mr-1" />
+                      {button.label}
+                    </Button>
+                  )
+                })}
+                
+                {/* 分隔线 */}
+                <div className={`w-px h-10 ${isDark ? 'bg-gray-600' : 'bg-gray-300'}`} />
+                
+                {/* 图标按钮区域 */}
+                {/* 资金记录按钮 */}
+                <Button
+                  onClick={() => handleActionClick("finance-fund-records")}
+                  onMouseDown={() => setClickedAction("finance-fund-records")}
+                  onMouseUp={() => setClickedAction("")}
+                  onMouseLeave={() => setClickedAction("")}
+                  className={`h-10 w-10 transition-all duration-200 ${
+                    clickedAction === "finance-fund-records"
+                      ? "bg-[#00D4AA] border-[#00D4AA]"
+                      : selectedAction === "finance-fund-records"
+                        ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                  title="资金记录"
+                >
+                  <FileText 
+                    className={`h-4 w-4 transition-colors ${
+                      clickedAction === "finance-fund-records"
+                        ? "text-white"
+                        : selectedAction === "finance-fund-records" 
+                          ? "text-[#00D4AA]"
+                          : "text-black dark:text-white"
+                    }`} 
+                  />
+                </Button>
+
+                {/* 投资记录按钮 */}
+                <Button
+                  onClick={() => handleActionClick("finance-investment-records")}
+                  onMouseDown={() => setClickedAction("finance-investment-records")}
+                  onMouseUp={() => setClickedAction("")}
+                  onMouseLeave={() => setClickedAction("")}
+                  className={`h-10 w-10 transition-all duration-200 ${
+                    clickedAction === "finance-investment-records"
+                      ? "bg-[#00D4AA] border-[#00D4AA]"
+                      : selectedAction === "finance-investment-records"
+                        ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                  title="投资记录"
+                >
+                  <TrendingUp 
+                    className={`h-4 w-4 transition-colors ${
+                      clickedAction === "finance-investment-records"
+                        ? "text-white"
+                        : selectedAction === "finance-investment-records" 
+                          ? "text-[#00D4AA]"
+                          : "text-black dark:text-white"
+                    }`} 
+                  />
+                </Button>
+
+                {/* 持仓分布按钮 */}
+                <Button
+                  onClick={() => handleActionClick("finance-position-distribution")}
+                  onMouseDown={() => setClickedAction("finance-position-distribution")}
+                  onMouseUp={() => setClickedAction("")}
+                  onMouseLeave={() => setClickedAction("")}
+                  className={`h-10 w-10 transition-all duration-200 ${
+                    clickedAction === "finance-position-distribution"
+                      ? "bg-[#00D4AA] border-[#00D4AA]"
+                      : selectedAction === "finance-position-distribution"
+                        ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                  title="持仓分布"
+                >
+                  <PieChart 
+                    className={`h-4 w-4 transition-colors ${
+                      clickedAction === "finance-position-distribution"
+                        ? "text-white"
+                        : selectedAction === "finance-position-distribution" 
+                          ? "text-[#00D4AA]"
+                          : "text-black dark:text-white"
+                    }`} 
+                  />
+                </Button>
               </div>
             </div>
 
