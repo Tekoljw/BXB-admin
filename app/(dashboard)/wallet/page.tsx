@@ -4004,19 +4004,17 @@ export default function WalletPage() {
                     selectedUCardView === "balance" ? "text-[#00D4AA]" : "text-gray-600 dark:text-gray-400"
                   }`} />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600 dark:text-gray-400">可划转金额</span>
                     <span className="text-lg font-bold text-green-600">{balanceVisible ? "3,456.78" : "****"} USDT</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">冻结金额</span>
-                    <span className="text-sm">0.00 USDT</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">待入账</span>
-                    <span className="text-sm text-blue-500">0.00 USDT</span>
-                  </div>
+                  <Button 
+                    size="sm" 
+                    className="w-full bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                  >
+                    划转
+                  </Button>
                 </div>
               </div>
             </div>
