@@ -3931,7 +3931,7 @@ export default function WalletPage() {
               <div 
                 className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
                   selectedUCardView === "virtual"
-                    ? "border-2 border-[#00D4AA] shadow-lg" 
+                    ? "!border-2 !border-green-500 shadow-lg" 
                     : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
                 }`}
                 onClick={() => setSelectedUCardView("virtual")}
@@ -3978,7 +3978,7 @@ export default function WalletPage() {
               <div 
                 className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
                   selectedUCardView === "physical"
-                    ? "border-2 border-[#00D4AA] shadow-lg" 
+                    ? "!border-2 !border-green-500 shadow-lg" 
                     : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
                 }`}
                 onClick={() => setSelectedUCardView("physical")}
@@ -4025,7 +4025,7 @@ export default function WalletPage() {
               <div 
                 className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
                   selectedUCardView === "balance"
-                    ? "border-2 border-[#00D4AA] shadow-lg" 
+                    ? "!border-2 !border-green-500 shadow-lg" 
                     : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
                 }`}
                 onClick={() => setSelectedUCardView("balance")}
