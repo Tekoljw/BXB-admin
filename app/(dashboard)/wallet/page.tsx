@@ -1994,6 +1994,25 @@ export default function WalletPage() {
                     <TrendingUp className="h-6 w-6 text-[#00D4AA]" />
                     <h3 className="text-lg font-semibold">当前持仓</h3>
                   </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleCurrencyModalClick()
+                    }}
+                    className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
+                      isDark 
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
+                      availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                    }`}>
+                      <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
+                    </div>
+                    <span>{selectedDisplayCurrency}</span>
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
                 </div>
                 <div className="relative">
                   <div className="flex items-center gap-4">
