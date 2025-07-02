@@ -3964,14 +3964,14 @@ export default function WalletPage() {
                         variant="outline"
                         className="border-gray-300 p-1.5 h-7 w-7"
                       >
-                        <Download className="h-3 w-3" />
+                        <TrendingUp className="h-3 w-3" />
                       </Button>
                       <Button 
                         size="sm" 
                         variant="outline"
                         className="border-gray-300 p-1.5 h-7 w-7"
                       >
-                        <Receipt className="h-3 w-3" />
+                        <FileText className="h-3 w-3" />
                       </Button>
                     </div>
                   </div>
@@ -4015,14 +4015,14 @@ export default function WalletPage() {
                         variant="outline"
                         className="border-gray-300 p-1.5 h-7 w-7"
                       >
-                        <Download className="h-3 w-3" />
+                        <TrendingUp className="h-3 w-3" />
                       </Button>
                       <Button 
                         size="sm" 
                         variant="outline"
                         className="border-gray-300 p-1.5 h-7 w-7"
                       >
-                        <Receipt className="h-3 w-3" />
+                        <FileText className="h-3 w-3" />
                       </Button>
                     </div>
                   </div>
