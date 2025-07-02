@@ -2381,17 +2381,8 @@ export default function WalletPage() {
                         // 划转功能
                       }}
                     >
+                      <ArrowLeftRight className="h-3 w-3 mr-1" />
                       划转
-                    </Button>
-                    <Button 
-                      size="sm"
-                      className="h-8 px-3 text-xs font-medium bg-transparent border border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        // 闪兑功能
-                      }}
-                    >
-                      闪兑
                     </Button>
                   </div>
                 </div>
