@@ -2576,182 +2576,187 @@ export default function WalletPage() {
       case "担保账户":
         return (
           <div className="space-y-6">
-            {/* 担保账户卡片区域 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              
-              {/* 应收担保金额 */}
-              <Card 
-                className={`bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer ${
-                  selectedCard === "receivable" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
+            {/* 三个顶部卡片 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* 交易担保金额 */}
+              <div 
+                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
+                  selectedUCardView === "guarantee"
+                    ? "!border-2 !border-green-500 shadow-lg" 
+                    : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
                 }`}
-                onClick={() => handleCardClick("receivable")}
+                onClick={() => setSelectedUCardView("guarantee")}
               >
-                <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
-                    <div className="flex items-center">
-                      <ArrowDown className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
-                      应收担保金额
-                    </div>
-                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-base font-semibold">交易担保金额</h3>
+                  <Shield className={`h-5 w-5 ${
+                    selectedUCardView === "guarantee" ? "text-[#00D4AA]" : "text-gray-600 dark:text-gray-400"
+                  }`} />
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <span className="text-lg font-bold mr-1">{balanceVisible ? "2,222.21" : "****"}</span>
+                    <span className="text-xs text-gray-500">USDT</span>
+                  </div>
                   <div className="flex items-center justify-between">
-                    <div>
-                      <div className="flex items-baseline space-x-1">
-                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          1,234.56
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-6 flex items-center justify-between">
-                    <div className="text-xs text-gray-500">2 笔担保中</div>
-                    <FileText className="h-4 w-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* 应付担保金额 */}
-              <Card 
-                className={`bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer ${
-                  selectedCard === "payable" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
-                }`}
-                onClick={() => handleCardClick("payable")}
-              >
-                <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
                     <div className="flex items-center">
-                      <ArrowUp className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
-                      应付担保金额
+                      <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">应收</span>
+                      <span className="text-sm text-green-600 font-medium">1,234.56 USDT</span>
                     </div>
-                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                  </div>
                   <div className="flex items-center justify-between">
-                    <div>
-                      <div className="flex items-baseline space-x-1">
-                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          987.65
-                        </span>
-                      </div>
+                    <div className="flex items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">应付</span>
+                      <span className="text-sm text-red-500 font-medium">987.65 USDT</span>
                     </div>
                   </div>
-                  <div className="mt-6 flex items-center justify-between">
-                    <div className="text-xs text-gray-500">2 笔担保中</div>
-                    <FileText className="h-4 w-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
               {/* 信誉担保金额 */}
-              <Card 
-                className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200"
+              <div 
+                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
+                  selectedUCardView === "credit"
+                    ? "!border-2 !border-green-500 shadow-lg" 
+                    : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
+                }`}
+                onClick={() => setSelectedUCardView("credit")}
               >
-                <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
-                    <div className="flex items-center">
-                      <Shield className="h-4 w-4 mr-2 text-blue-400 dark:text-blue-500" />
-                      信誉担保金额
-                    </div>
-                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-base font-semibold">信誉担保金额</h3>
+                  <Shield className={`h-5 w-5 ${
+                    selectedUCardView === "credit" ? "text-[#00D4AA]" : "text-gray-600 dark:text-gray-400"
+                  }`} />
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <span className="text-lg font-bold mr-1">{balanceVisible ? "5,000.00" : "****"}</span>
+                    <span className="text-xs text-gray-500">USDT</span>
+                  </div>
                   <div className="flex items-center justify-between">
-                    <div>
-                      <div className="flex items-baseline space-x-2">
-                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          5,000.00
-                        </span>
-                        <Button
-                          size="sm"
-                          className={`h-6 w-6 p-0 rounded ${isDark ? 'bg-white hover:bg-gray-100 text-black border border-white' : 'bg-white hover:bg-gray-100 text-black border border-black'}`}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setShowAddCreditModal(true)
-                          }}
-                        >
-                          <Plus className="h-3 w-3" />
-                        </Button>
-                      </div>
+                    <div className="flex items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">到期时间</span>
+                      <span className="text-sm text-blue-600 font-medium">42天</span>
                     </div>
                   </div>
-                  <div className="mt-6 flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
-                        剩余 42 天到期
-                      </span>
-                      <Button
-                        size="sm"
-                        className={`h-5 px-2 text-xs ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'}`}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setShowExtendTimeModal(true)
-                        }}
-                      >
-                        延长
-                      </Button>
-                    </div>
-                    <FileText className="h-4 w-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
               {/* 可用余额 */}
-              <Card className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200">
-                <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
-                    <div className="flex items-center">
-                      <DollarSign className="h-4 w-4 mr-2 text-[#00D4AA]" />
-                      可用余额
-                    </div>
-                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="flex items-baseline space-x-1">
-                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          2,456.78
-                        </span>
-                      </div>
-                    </div>
+              <div 
+                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
+                  selectedUCardView === "available"
+                    ? "!border-2 !border-green-500 shadow-lg" 
+                    : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
+                }`}
+                onClick={() => setSelectedUCardView("available")}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-base font-semibold">可用余额</h3>
+                  <Wallet className={`h-5 w-5 ${
+                    selectedUCardView === "available" ? "text-[#00D4AA]" : "text-gray-600 dark:text-gray-400"
+                  }`} />
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <span className="text-lg font-bold text-green-600 mr-1">{balanceVisible ? "2,456.78" : "****"}</span>
+                    <span className="text-xs text-gray-500">USDT</span>
                   </div>
-                  <div className="mt-4 grid grid-cols-2 gap-2">
-                    <Button
-                      size="sm"
-                      className={`h-7 text-xs ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'}`}
-                      onClick={() => setShowTransferModal(true)}
-                    >
-                      <ArrowLeftRight className="h-3 w-3 mr-1" />
-                      划转
-                    </Button>
-                    <Button
-                      size="sm"
-                      className={`h-7 text-xs ${isDark ? 'bg-transparent text-white border border-white hover:bg-white hover:text-black' : 'bg-white hover:bg-gray-100 text-black border border-black'}`}
-                      onClick={() => router.push('/wallet?tab=order-records')}
-                    >
-                      <FileText className="h-3 w-3 mr-1" />
-                      记录
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
 
-            {/* 详细内容区域 */}
-            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
-              {renderGuaranteeContent()}
+            {/* 功能按钮区域 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+                <Button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
+                  <ArrowDown className="h-4 w-4 mr-2" />
+                  应收担保交易
+                </Button>
+                <Button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
+                  <ArrowUp className="h-4 w-4 mr-2" />
+                  应付担保交易
+                </Button>
+                <Button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
+                  <Shield className="h-4 w-4 mr-2" />
+                  增加信誉担保
+                </Button>
+                <Button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
+                  <ArrowLeftRight className="h-4 w-4 mr-2" />
+                  划转
+                </Button>
+                <Button variant="outline" className="border-black text-black hover:bg-gray-50 dark:border-white dark:text-white">
+                  <FileText className="h-4 w-4 mr-2" />
+                  资金记录
+                </Button>
+                <Button variant="outline" className="border-black text-black hover:bg-gray-50 dark:border-white dark:text-white">
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  交易记录
+                </Button>
+                <Button variant="outline" className="border-black text-black hover:bg-gray-50 dark:border-white dark:text-white">
+                  <History className="h-4 w-4 mr-2" />
+                  担保记录
+                </Button>
+              </div>
             </div>
 
-            {/* 模态框 */}
-            {showTransferModal && renderTransferModal()}
-            {showAddCreditModal && renderAddCreditModal()}
-            {showExtendTimeModal && renderExtendTimeModal()}
-            {showContractModal && selectedContract && renderContractModal()}
+            {/* 动态内容区域 */}
+            {selectedUCardView === "guarantee" && (
+              <div className={`${cardStyle} rounded-lg p-6`}>
+                <h3 className="text-lg font-semibold mb-4">交易担保管理</h3>
+                <div className="text-center py-8">
+                  <Shield className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">显示交易担保详情和管理功能</p>
+                  <Button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
+                    管理担保交易
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {selectedUCardView === "credit" && (
+              <div className={`${cardStyle} rounded-lg p-6`}>
+                <h3 className="text-lg font-semibold mb-4">信誉担保管理</h3>
+                <div className="text-center py-8">
+                  <Shield className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">信誉担保剩余42天到期</p>
+                  <div className="space-x-3">
+                    <Button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
+                      增加担保金额
+                    </Button>
+                    <Button variant="outline" className="border-black text-black hover:bg-gray-50 dark:border-white dark:text-white">
+                      延长时间
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {selectedUCardView === "available" && (
+              <div className={`${cardStyle} rounded-lg p-6`}>
+                <h3 className="text-lg font-semibold mb-4">余额管理</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                      <span className="text-sm">USDT余额</span>
+                      <span className="font-medium">{balanceVisible ? "2,456.78" : "****"} USDT</span>
+                    </div>
+                    <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                      <span className="text-sm">BTC余额</span>
+                      <span className="font-medium">{balanceVisible ? "0.0089" : "****"} BTC</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <Button className="w-full bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
+                      余额划转
+                    </Button>
+                    <Button variant="outline" className="w-full border-black text-black hover:bg-gray-50 dark:border-white dark:text-white">
+                      充值
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )
 
