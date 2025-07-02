@@ -1962,11 +1962,23 @@ export default function WalletPage() {
                     <ChevronDown className="h-3 w-3" />
                   </button>
                 </div>
-                <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
-                </div>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                  净资产 {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      净资产 {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                      <FileText className="h-4 w-4 text-gray-500" title="资金记录" />
+                    </button>
+                    <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                      <BarChart3 className="h-4 w-4 text-gray-500" title="交易记录" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1985,17 +1997,22 @@ export default function WalletPage() {
                     <h3 className="text-lg font-semibold">当前持仓</h3>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {balanceVisible ? contractData.unrealizedPnL : "****"}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {balanceVisible ? contractData.unrealizedPnL : "****"}
+                    </div>
+                    <div className="flex-shrink-0">
+                      <TrendChart 
+                        data={generateTrendData(contractData.unrealizedPnL.startsWith('+'))} 
+                        isPositive={contractData.unrealizedPnL.startsWith('+')}
+                        height={32}
+                      />
+                    </div>
                   </div>
-                  <div className="flex-shrink-0">
-                    <TrendChart 
-                      data={generateTrendData(contractData.unrealizedPnL.startsWith('+'))} 
-                      isPositive={contractData.unrealizedPnL.startsWith('+')}
-                      height={32}
-                    />
-                  </div>
+                  <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <PieChart className="h-4 w-4 text-gray-500" title="仓位分布" />
+                  </button>
                 </div>
                 <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                   保证金 {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
@@ -2139,7 +2156,6 @@ export default function WalletPage() {
 
               {contractMode === "当前持仓" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">当前持仓</h3>
                   <div className="space-y-4">
                     {contractData.positions.map((position, index) => (
                       <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all">
@@ -2170,7 +2186,6 @@ export default function WalletPage() {
 
               {contractMode === "可用余额" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">可用余额</h3>
                   <div className="space-y-4">
                     <div className="overflow-x-auto">
                       <table className="w-full">

@@ -166,7 +166,7 @@ export default function ProfilePage() {
             {/* Edit Button */}
             <button 
               onClick={() => setShowEditModal(true)}
-              className="bg-black text-white py-2.5 px-4 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm"
+              className="bg-white border border-black text-black py-2.5 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm dark:bg-gray-900 dark:border-white dark:text-white dark:hover:bg-gray-800"
             >
               编辑资料
             </button>
@@ -806,8 +806,8 @@ export default function ProfilePage() {
                         className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                           isActive
                             ? isDark
-                              ? "bg-white text-black"
-                              : "bg-black text-white"
+                              ? "bg-gray-900 border border-white text-white"
+                              : "bg-white border border-black text-black"
                             : isDark
                               ? "text-gray-300 hover:text-white hover:bg-[#252842]"
                               : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
