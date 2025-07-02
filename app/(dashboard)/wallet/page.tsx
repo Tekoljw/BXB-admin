@@ -4275,16 +4275,15 @@ export default function WalletPage() {
       case "U卡账户":
         return (
           <div className="space-y-6">
-            {/* 三个账户卡片 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* 两个账户卡片 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 虚拟卡账户总览 */}
               <div 
-                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
+                className={`rounded-lg p-6 transition-all duration-200 ${cardStyle} ${
                   selectedUCardView === "virtual"
-                    ? "!border-2 !border-green-500 shadow-lg" 
-                    : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
+                    : ""
                 }`}
-                onClick={() => setSelectedUCardView("virtual")}
               >
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-base font-semibold">虚拟卡总余额</h3>
@@ -4330,12 +4329,11 @@ export default function WalletPage() {
 
               {/* 实体卡账户总览 */}
               <div 
-                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
+                className={`rounded-lg p-6 transition-all duration-200 ${cardStyle} ${
                   selectedUCardView === "physical"
-                    ? "!border-2 !border-green-500 shadow-lg" 
-                    : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
+                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
+                    : ""
                 }`}
-                onClick={() => setSelectedUCardView("physical")}
               >
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-base font-semibold">实体卡总余额</h3>
@@ -4378,45 +4376,6 @@ export default function WalletPage() {
                   </div>
                 </div>
               </div>
-
-              {/* 可用余额 */}
-              <div 
-                className={`rounded-lg p-4 cursor-pointer transition-all duration-200 ${cardStyle} ${
-                  selectedUCardView === "balance"
-                    ? "!border-2 !border-green-500 shadow-lg" 
-                    : "border border-gray-200 dark:border-gray-700 hover:shadow-md"
-                }`}
-                onClick={() => setSelectedUCardView("balance")}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-base font-semibold">账户余额</h3>
-                  <Wallet className={`h-5 w-5 ${
-                    selectedUCardView === "balance" ? "text-[#00D4AA]" : "text-gray-600 dark:text-gray-400"
-                  }`} />
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <span className="text-lg font-bold text-green-600 mr-1">{balanceVisible ? "3,456.78" : "****"}</span>
-                    <span className="text-xs text-gray-500">USDT</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <Button 
-                      size="sm" 
-                      className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
-                    >
-                      <ArrowLeftRight className="h-3 w-3 mr-1" />
-                      划转
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      className="border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 p-2"
-                    >
-                      <FileText className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* 动态内容区域 */}
@@ -4442,32 +4401,6 @@ export default function WalletPage() {
                   <Button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
                     立即申请实体卡
                   </Button>
-                </div>
-              </div>
-            )}
-
-            {selectedUCardView === "balance" && (
-              <div className={`${cardStyle} rounded-lg p-6`}>
-                <h3 className="text-lg font-semibold mb-4">余额管理</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                      <span className="text-sm">USDT余额</span>
-                      <span className="font-medium">{balanceVisible ? "3,456.78" : "****"} USDT</span>
-                    </div>
-                    <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                      <span className="text-sm">BTC余额</span>
-                      <span className="font-medium">{balanceVisible ? "0.0123" : "****"} BTC</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <Button className="w-full bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
-                      余额划转
-                    </Button>
-                    <Button variant="outline" className="w-full border-black text-black hover:bg-gray-50 dark:border-white dark:text-white">
-                      充值
-                    </Button>
-                  </div>
                 </div>
               </div>
             )}
