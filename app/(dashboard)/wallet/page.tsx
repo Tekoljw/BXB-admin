@@ -48,6 +48,7 @@ import {
   Users,
   Receipt,
   Coins,
+  Target,
   HelpCircle,
   Zap,
   Lock,
