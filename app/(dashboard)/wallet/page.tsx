@@ -2254,10 +2254,32 @@ export default function WalletPage() {
                     <PiggyBank className="h-6 w-6 text-[#00D4AA]" />
                     <h3 className="text-lg font-semibold">理财收益</h3>
                   </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleCurrencyModalClick()
+                    }}
+                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
+                      isDark 
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                      availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                    }`}>
+                      <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
+                    </div>
+                    <span>{selectedDisplayCurrency}</span>
+                    <ChevronDown className="h-2 w-2" />
+                  </button>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {balanceVisible ? financeData.totalAssets : "****"}
+                    {balanceVisible ? convertBalance(financeData.totalAssets, "USDT", selectedDisplayCurrency) : "****"}
+                    <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      {selectedDisplayCurrency}
+                    </span>
                   </div>
                   <div className="flex-shrink-0">
                     <TrendChart 
@@ -2268,7 +2290,7 @@ export default function WalletPage() {
                   </div>
                 </div>
                 <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                  总收益 {balanceVisible ? financeData.totalEarnings : "****"}
+                  总收益 {balanceVisible ? convertBalance(financeData.totalEarnings, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
                 </div>
               </div>
 
@@ -2286,30 +2308,71 @@ export default function WalletPage() {
                     <BarChart3 className="h-6 w-6 text-[#00D4AA]" />
                     <h3 className="text-lg font-semibold">理财持仓</h3>
                   </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleCurrencyModalClick()
+                    }}
+                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
+                      isDark 
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                      availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                    }`}>
+                      <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
+                    </div>
+                    <span>{selectedDisplayCurrency}</span>
+                    <ChevronDown className="h-2 w-2" />
+                  </button>
                 </div>
                 <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? financeData.products.length : "****"}
+                  {balanceVisible ? convertBalance("8,456.78", "USDT", selectedDisplayCurrency) : "****"}
+                  <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                    {selectedDisplayCurrency}
+                  </span>
                 </div>
                 <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                  活跃产品数量
+                  持仓资产金额
                 </div>
               </div>
 
-              {/* 可用余额卡片 */}
+              {/* 账户余额卡片 */}
               <div 
                 className={`${cardStyle} rounded-lg p-6 cursor-pointer transition-all duration-300 ease-out hover:shadow-xl ${
-                  financeMode === "可用余额" 
+                  financeMode === "账户余额" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg scale-102" 
                     : "hover:shadow-lg"
                 }`}
-                onClick={() => setFinanceMode("可用余额")}
+                onClick={() => setFinanceMode("账户余额")}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <CreditCard className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">可用余额</h3>
+                    <h3 className="text-lg font-semibold">账户余额</h3>
                   </div>
                   <div className="flex items-center space-x-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleCurrencyModalClick()
+                      }}
+                      className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
+                        isDark 
+                          ? "bg-transparent text-white hover:bg-gray-800" 
+                          : "bg-white text-black hover:bg-gray-50"
+                      }`}
+                    >
+                      <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                        availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                      }`}>
+                        <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
+                      </div>
+                      <span>{selectedDisplayCurrency}</span>
+                      <ChevronDown className="h-2 w-2" />
+                    </button>
                     <Button 
                       size="sm"
                       className="h-8 px-3 text-xs font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
@@ -2333,10 +2396,13 @@ export default function WalletPage() {
                   </div>
                 </div>
                 <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? "2,345.67" : "****"}
+                  {balanceVisible ? convertBalance("2,345.67", "USDT", selectedDisplayCurrency) : "****"}
+                  <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                    {selectedDisplayCurrency}
+                  </span>
                 </div>
                 <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                  USDT
+                  可用于理财投资
                 </div>
               </div>
             </div>
@@ -2503,9 +2569,9 @@ export default function WalletPage() {
                 </div>
               )}
 
-              {financeMode === "可用余额" && (
+              {financeMode === "账户余额" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">可用余额</h3>
+                  <h3 className="text-lg font-semibold mb-4">账户余额</h3>
                   <div className="space-y-4">
                     <div className="overflow-x-auto">
                       <table className="w-full">
