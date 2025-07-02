@@ -180,6 +180,12 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Implemented notification categories: price alerts, trading updates, system notifications, and social activities
   - Added notification priority levels (high, medium, low) with visual indicators
   - Built interactive notification management with mark as read, delete, and mark all as read functionality
+- January 29, 2025. Enhanced guarantee account page layout and functionality:
+  - Merged top 4 cards into 3 cards by combining "应收担保金额" and "应付担保金额" into one "交易担保金额" card
+  - Added 7 function buttons: 应收担保交易, 应付担保交易, 增加信誉担保, 划转, 资金记录, 交易记录, 担保记录
+  - Updated button styling to match wallet overview layout with transparent borders and proper spacing
+  - Converted last three buttons (资金记录, 交易记录, 担保记录) to icon-only format for cleaner interface
+  - Implemented full functionality for all tabs including transaction records, fund management, and guarantee history
 
 ## User Preferences
 

@@ -2718,70 +2718,105 @@ export default function WalletPage() {
             </div>
 
             {/* 功能按钮区域 */}
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-              <Button
-                variant={selectedGuaranteeTab === "应收担保交易" ? "default" : "outline"}
-                size="sm"
-                className={`h-10 text-sm ${selectedGuaranteeTab === "应收担保交易" ? (isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800') : ''}`}
-                onClick={() => setSelectedGuaranteeTab("应收担保交易")}
-              >
-                <ArrowDown className="h-4 w-4 mr-2" />
-                应收担保交易
-              </Button>
-              <Button
-                variant={selectedGuaranteeTab === "应付担保交易" ? "default" : "outline"}
-                size="sm"
-                className={`h-10 text-sm ${selectedGuaranteeTab === "应付担保交易" ? (isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800') : ''}`}
-                onClick={() => setSelectedGuaranteeTab("应付担保交易")}
-              >
-                <ArrowUp className="h-4 w-4 mr-2" />
-                应付担保交易
-              </Button>
-              <Button
-                variant={selectedGuaranteeTab === "增加信誉担保" ? "default" : "outline"}
-                size="sm"
-                className={`h-10 text-sm ${selectedGuaranteeTab === "增加信誉担保" ? (isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800') : ''}`}
-                onClick={() => setSelectedGuaranteeTab("增加信誉担保")}
-              >
-                <Shield className="h-4 w-4 mr-2" />
-                增加信誉担保
-              </Button>
-              <Button
-                variant={selectedGuaranteeTab === "划转" ? "default" : "outline"}
-                size="sm"
-                className={`h-10 text-sm ${selectedGuaranteeTab === "划转" ? (isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800') : ''}`}
-                onClick={() => setSelectedGuaranteeTab("划转")}
-              >
-                <ArrowLeftRight className="h-4 w-4 mr-2" />
-                划转
-              </Button>
-              <Button
-                variant={selectedGuaranteeTab === "资金记录" ? "default" : "outline"}
-                size="sm"
-                className={`h-10 text-sm ${selectedGuaranteeTab === "资金记录" ? (isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800') : ''}`}
-                onClick={() => setSelectedGuaranteeTab("资金记录")}
-              >
-                <FileText className="h-4 w-4 mr-2" />
-                资金记录
-              </Button>
-              <Button
-                variant={selectedGuaranteeTab === "交易记录" ? "default" : "outline"}
-                size="sm"
-                className={`h-10 text-sm ${selectedGuaranteeTab === "交易记录" ? (isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800') : ''}`}
-                onClick={() => setSelectedGuaranteeTab("交易记录")}
-              >
-                <BarChart3 className="h-4 w-4 mr-2" />
-                交易记录
-              </Button>
-              <Button
-                variant={selectedGuaranteeTab === "担保记录" ? "default" : "outline"}
-                size="sm"
-                className={`h-10 text-sm ${selectedGuaranteeTab === "担保记录" ? (isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800') : ''}`}
-                onClick={() => setSelectedGuaranteeTab("担保记录")}
-              >
-                <History className="h-4 w-4 mr-2" />
-                担保记录
-              </Button>
+            <div className="transition-all duration-300 ease-out">
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* 主要操作按钮 - 自动适配屏幕宽度 */}
+                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <Button
+                    onClick={() => setSelectedGuaranteeTab("应收担保交易")}
+                    className={`h-12 transition-all duration-200 text-base font-bold ${
+                      selectedGuaranteeTab === "应收担保交易"
+                        ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <ArrowDown className="h-4 w-4 mr-2" />
+                    应收担保交易
+                  </Button>
+                  <Button
+                    onClick={() => setSelectedGuaranteeTab("应付担保交易")}
+                    className={`h-12 transition-all duration-200 text-base font-bold ${
+                      selectedGuaranteeTab === "应付担保交易"
+                        ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <ArrowUp className="h-4 w-4 mr-2" />
+                    应付担保交易
+                  </Button>
+                  <Button
+                    onClick={() => setSelectedGuaranteeTab("增加信誉担保")}
+                    className={`h-12 transition-all duration-200 text-base font-bold ${
+                      selectedGuaranteeTab === "增加信誉担保"
+                        ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    增加信誉担保
+                  </Button>
+                  <Button
+                    onClick={() => setSelectedGuaranteeTab("划转")}
+                    className={`h-12 transition-all duration-200 text-base font-bold ${
+                      selectedGuaranteeTab === "划转"
+                        ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <ArrowLeftRight className="h-4 w-4 mr-2" />
+                    划转
+                  </Button>
+                </div>
+                
+                {/* 记录按钮区域 - 右对齐，仅显示图标 */}
+                <div className="flex justify-end md:justify-center gap-3">
+                  {/* 资金记录按钮 */}
+                  <Button
+                    onClick={() => setSelectedGuaranteeTab("资金记录")}
+                    className={`h-12 w-12 transition-all duration-200 ${
+                      selectedGuaranteeTab === "资金记录"
+                        ? "bg-[#00D4AA] border-[#00D4AA] text-white"
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                    title="资金记录"
+                  >
+                    <FileText className="h-4 w-4" />
+                  </Button>
+                  
+                  {/* 交易记录按钮 */}
+                  <Button
+                    onClick={() => setSelectedGuaranteeTab("交易记录")}
+                    className={`h-12 w-12 transition-all duration-200 ${
+                      selectedGuaranteeTab === "交易记录"
+                        ? "bg-[#00D4AA] border-[#00D4AA] text-white"
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                    title="交易记录"
+                  >
+                    <BarChart3 className="h-4 w-4" />
+                  </Button>
+                  
+                  {/* 担保记录按钮 */}
+                  <Button
+                    onClick={() => setSelectedGuaranteeTab("担保记录")}
+                    className={`h-12 w-12 transition-all duration-200 ${
+                      selectedGuaranteeTab === "担保记录"
+                        ? "bg-[#00D4AA] border-[#00D4AA] text-white"
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                    title="担保记录"
+                  >
+                    <History className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
 
             {/* 详细内容区域 */}
