@@ -86,7 +86,7 @@ export default function WalletPage() {
   const [overviewTab, setOverviewTab] = useState("现金账户") // Tab for wallet overview: "现金账户" or "总资产"
   const [selectedCurrency, setSelectedCurrency] = useState("USDT")
   const [selectedDisplayCurrency, setSelectedDisplayCurrency] = useState("USDT") // 卡片显示币种
-  const [selectedAction, setSelectedAction] = useState("") // 选中的操作按钮
+  const [selectedAction, setSelectedAction] = useState("current-positions") // 选中的操作按钮
   const [clickedAction, setClickedAction] = useState("") // 点击的操作按钮
   const [showCurrencyModal, setShowCurrencyModal] = useState(false) // 币种选择弹窗
   const [currencyModalAnimating, setCurrencyModalAnimating] = useState(false) // 币种弹窗动画状态
@@ -2029,113 +2029,142 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 操作按钮区域 */}
-            <div className="transition-all duration-300 ease-out">
-              <div className="flex flex-col md:flex-row gap-4">
-                {/* 主要操作按钮 */}
-                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {[
-                    { id: "current-positions", label: "当前持仓", icon: BarChart2, isGreen: true },
-                    { id: "account-balance", label: "账户余额", icon: Wallet },
-                    { id: "transfer", label: "划转", icon: ArrowLeftRight },
-                    { id: "trade", label: "交易", icon: TrendingUp }
-                  ].map((button) => {
-                    const Icon = button.icon
-                    const isSelected = selectedAction === button.id
-                    const isClicked = clickedAction === button.id
-                    const isGreenButton = button.isGreen
-                    
-                    return (
-                      <Button 
-                        key={button.id}
-                        onClick={() => handleActionClick(button.id)}
-                        onMouseDown={() => setClickedAction(button.id)}
-                        onMouseUp={() => setClickedAction("")}
-                        onMouseLeave={() => setClickedAction("")}
-                        className={`h-12 transition-all duration-200 text-base font-bold ${
-                          isClicked
-                            ? "bg-[#00D4AA] text-white border-[#00D4AA]"
-                            : isSelected 
-                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
-                              : isGreenButton
-                                ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90"
-                                : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                        }`}
-                        variant={isGreenButton ? "default" : "outline"}
-                      >
-                        <Icon className="h-4 w-4 mr-2" />
-                        {button.label}
-                      </Button>
-                    )
-                  })}
-                </div>
+            {/* 合约账户标签页和操作按钮 */}
+            <div className="flex justify-between items-center">
+              {/* 左侧：标签页 */}
+              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+                {/* 滑动背景 */}
+                <div
+                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
+                  style={{
+                    width: selectedAction === "current-positions" ? '96px' : '96px',
+                    left: selectedAction === "current-positions" ? '4px' : '100px'
+                  }}
+                />
+                {/* 按钮 */}
+                {[
+                  { id: "current-positions", label: "当前持仓" },
+                  { id: "account-balance", label: "账户余额" }
+                ].map((tab, index) => (
+                  <button
+                    key={tab.id}
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                      selectedAction === tab.id
+                        ? isDark ? "text-black" : "text-white"
+                        : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-700 hover:text-gray-900"
+                    }`}
+                    style={{
+                      width: '96px',
+                      height: '32px'
+                    }}
+                    onClick={() => {
+                      setSelectedAction(tab.id)
+                    }}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* 右侧：操作按钮 */}
+              <div className="flex gap-2">
+                {/* 划转和交易按钮 */}
+                {[
+                  { id: "transfer", label: "划转", icon: ArrowLeftRight },
+                  { id: "trade", label: "交易", icon: TrendingUp }
+                ].map((button) => {
+                  const Icon = button.icon
+                  const isSelected = selectedAction === button.id
+                  const isClicked = clickedAction === button.id
+                  
+                  return (
+                    <Button 
+                      key={button.id}
+                      onClick={() => handleActionClick(button.id)}
+                      onMouseDown={() => setClickedAction(button.id)}
+                      onMouseUp={() => setClickedAction("")}
+                      onMouseLeave={() => setClickedAction("")}
+                      className={`h-10 px-3 transition-all duration-200 text-sm font-bold ${
+                        isClicked
+                          ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                          : isSelected 
+                            ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                            : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                      }`}
+                      variant="outline"
+                    >
+                      <Icon className="h-4 w-4 mr-1" />
+                      {button.label}
+                    </Button>
+                  )
+                })}
                 
-                {/* 记录按钮区域 */}
-                <div className="flex justify-end md:justify-center gap-3">
-                  {/* 资金记录按钮 */}
-                  <Button
-                    onClick={() => handleActionClick("contract-fund-records")}
-                    onMouseDown={() => setClickedAction("contract-fund-records")}
-                    onMouseUp={() => setClickedAction("")}
-                    onMouseLeave={() => setClickedAction("")}
-                    className={`h-12 w-12 transition-all duration-200 ${
+                {/* 图标按钮区域 */}
+                {/* 资金记录按钮 */}
+                <Button
+                  onClick={() => handleActionClick("contract-fund-records")}
+                  onMouseDown={() => setClickedAction("contract-fund-records")}
+                  onMouseUp={() => setClickedAction("")}
+                  onMouseLeave={() => setClickedAction("")}
+                  className={`h-10 w-10 transition-all duration-200 ${
+                    clickedAction === "contract-fund-records"
+                      ? "bg-[#00D4AA] border-[#00D4AA]"
+                      : selectedAction === "contract-fund-records"
+                        ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                  title="资金记录"
+                >
+                  <FileText 
+                    className={`h-4 w-4 transition-colors ${
                       clickedAction === "contract-fund-records"
-                        ? "bg-[#00D4AA] border-[#00D4AA]"
-                        : selectedAction === "contract-fund-records"
-                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                    title="资金记录"
-                  >
-                    <FileText 
-                      className={`h-4 w-4 transition-colors ${
-                        clickedAction === "contract-fund-records"
-                          ? "text-white"
-                          : selectedAction === "contract-fund-records" 
-                            ? "text-[#00D4AA]"
-                            : "text-black dark:text-white"
-                      }`} 
-                    />
-                  </Button>
+                        ? "text-white"
+                        : selectedAction === "contract-fund-records" 
+                          ? "text-[#00D4AA]"
+                          : "text-black dark:text-white"
+                    }`} 
+                  />
+                </Button>
 
-                  {/* 交易记录按钮 */}
-                  <Button
-                    onClick={() => handleActionClick("contract-trade-records")}
-                    onMouseDown={() => setClickedAction("contract-trade-records")}
-                    onMouseUp={() => setClickedAction("")}
-                    onMouseLeave={() => setClickedAction("")}
-                    className={`h-12 w-12 transition-all duration-200 ${
+                {/* 交易记录按钮 */}
+                <Button
+                  onClick={() => handleActionClick("contract-trade-records")}
+                  onMouseDown={() => setClickedAction("contract-trade-records")}
+                  onMouseUp={() => setClickedAction("")}
+                  onMouseLeave={() => setClickedAction("")}
+                  className={`h-10 w-10 transition-all duration-200 ${
+                    clickedAction === "contract-trade-records"
+                      ? "bg-[#00D4AA] border-[#00D4AA]"
+                      : selectedAction === "contract-trade-records"
+                        ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                  title="交易记录"
+                >
+                  <BarChart2 
+                    className={`h-4 w-4 transition-colors ${
                       clickedAction === "contract-trade-records"
-                        ? "bg-[#00D4AA] border-[#00D4AA]"
-                        : selectedAction === "contract-trade-records"
-                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                    title="交易记录"
-                  >
-                    <BarChart2 
-                      className={`h-4 w-4 transition-colors ${
-                        clickedAction === "contract-trade-records"
-                          ? "text-white"
-                          : selectedAction === "contract-trade-records" 
-                            ? "text-[#00D4AA]"
-                            : "text-black dark:text-white"
-                      }`} 
-                    />
-                  </Button>
+                        ? "text-white"
+                        : selectedAction === "contract-trade-records" 
+                          ? "text-[#00D4AA]"
+                          : "text-black dark:text-white"
+                    }`} 
+                  />
+                </Button>
 
-                  {/* 仓位分布按钮 */}
-                  <Button
-                    onClick={() => setShowPositionModal(true)}
-                    className={`h-12 w-12 transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800`}
-                    variant="outline"
-                    title="仓位分布"
-                  >
-                    <PieChart className="h-4 w-4 text-black dark:text-white" />
-                  </Button>
-                </div>
+                {/* 仓位分布按钮 */}
+                <Button
+                  onClick={() => setShowPositionModal(true)}
+                  className={`h-10 w-10 transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800`}
+                  variant="outline"
+                  title="仓位分布"
+                >
+                  <PieChart className="h-4 w-4 text-black dark:text-white" />
+                </Button>
               </div>
             </div>
             
