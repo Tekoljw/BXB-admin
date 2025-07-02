@@ -3937,15 +3937,15 @@ export default function WalletPage() {
                 onClick={() => setSelectedUCardView("virtual")}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-base font-semibold">虚拟卡账户</h3>
+                  <h3 className="text-base font-semibold">虚拟卡总余额</h3>
                   <CreditCard className={`h-5 w-5 ${
                     selectedUCardView === "virtual" ? "text-[#00D4AA]" : "text-gray-600 dark:text-gray-400"
                   }`} />
                 </div>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">总余额</span>
-                    <span className="text-lg font-bold">{balanceVisible ? "2,222.22" : "****"} USDT</span>
+                  <div className="flex items-center">
+                    <span className="text-lg font-bold mr-1">{balanceVisible ? "2,222.22" : "****"}</span>
+                    <span className="text-xs text-gray-500">USDT</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600 dark:text-gray-400">已发卡数</span>
@@ -3968,15 +3968,15 @@ export default function WalletPage() {
                 onClick={() => setSelectedUCardView("physical")}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-base font-semibold">实体卡账户</h3>
+                  <h3 className="text-base font-semibold">实体卡总余额</h3>
                   <CreditCard className={`h-5 w-5 ${
                     selectedUCardView === "physical" ? "text-[#00D4AA]" : "text-gray-600 dark:text-gray-400"
                   }`} />
                 </div>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">总余额</span>
-                    <span className="text-lg font-bold">{balanceVisible ? "1,234.56" : "****"} USDT</span>
+                  <div className="flex items-center">
+                    <span className="text-lg font-bold mr-1">{balanceVisible ? "1,234.56" : "****"}</span>
+                    <span className="text-xs text-gray-500">USDT</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600 dark:text-gray-400">已发卡数</span>
@@ -3999,17 +3999,17 @@ export default function WalletPage() {
                 onClick={() => setSelectedUCardView("balance")}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-base font-semibold">可用余额</h3>
+                  <h3 className="text-base font-semibold">账户余额</h3>
                   <Wallet className={`h-5 w-5 ${
                     selectedUCardView === "balance" ? "text-[#00D4AA]" : "text-gray-600 dark:text-gray-400"
                   }`} />
                 </div>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">可划转金额</span>
-                    <span className="text-lg font-bold text-green-600">{balanceVisible ? "3,456.78" : "****"} USDT</span>
+                  <div className="flex items-center">
+                    <span className="text-lg font-bold text-green-600 mr-1">{balanceVisible ? "3,456.78" : "****"}</span>
+                    <span className="text-xs text-gray-500">USDT</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="flex justify-between items-center">
                     <Button 
                       size="sm" 
                       className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
@@ -4020,10 +4020,9 @@ export default function WalletPage() {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      className="border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                      className="border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 p-2"
                     >
-                      <FileText className="h-3 w-3 mr-1" />
-                      资金记录
+                      <FileText className="h-3 w-3" />
                     </Button>
                   </div>
                 </div>
