@@ -83,6 +83,7 @@ export default function WalletPage() {
   const [activeOrderCategory, setActiveOrderCategory] = useState('spot')
   const [activeOrderSubTab, setActiveOrderSubTab] = useState('current')
   const [overviewMode, setOverviewMode] = useState("现金账户") // "现金账户" or "总资产"
+  const [overviewTab, setOverviewTab] = useState("现金账户") // Tab for wallet overview: "现金账户" or "总资产"
   const [selectedCurrency, setSelectedCurrency] = useState("USDT")
   const [selectedDisplayCurrency, setSelectedDisplayCurrency] = useState("USDT") // 卡片显示币种
   const [selectedAction, setSelectedAction] = useState("") // 选中的操作按钮
@@ -1533,6 +1534,40 @@ export default function WalletPage() {
       case "钱包总览":
         return (
           <div className="space-y-6">
+            {/* 钱包总览标签页 */}
+            <div className="flex justify-center">
+              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+                {/* 滑动背景 */}
+                <div
+                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'} ${
+                    overviewTab === "现金账户" ? "w-24 left-1" : "w-20"
+                  }`}
+                  style={{
+                    left: overviewTab === "现金账户" ? '4px' : '100px'
+                  }}
+                />
+                {/* 按钮 */}
+                {["现金账户", "总资产"].map((tab) => (
+                  <button
+                    key={tab}
+                    className={`relative z-10 px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                      overviewTab === tab
+                        ? isDark ? "text-black" : "text-white"
+                        : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-700 hover:text-gray-900"
+                    }`}
+                    onClick={() => {
+                      setOverviewTab(tab)
+                      setOverviewMode(tab)
+                    }}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* 主要卡片选择 - 增强动画效果 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 现金账户卡片 */}
