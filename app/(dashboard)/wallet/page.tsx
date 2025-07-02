@@ -118,7 +118,7 @@ export default function WalletPage() {
   const [paymentMethodTab, setPaymentMethodTab] = useState("代收") // 通道配置支付方式页签
   const [showMoreCurrencies, setShowMoreCurrencies] = useState(false) // 显示更多币种弹窗
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
-  const [financeMode, setFinanceMode] = useState("理财收益") // 理财账户模式选择
+  const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
@@ -2459,9 +2459,49 @@ export default function WalletPage() {
               </div>
             </div>
 
+            {/* 理财账户标签页 */}
+            <div className="flex justify-start">
+              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+                {/* 滑动背景 */}
+                <div
+                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
+                  style={{
+                    width: '96px',
+                    left: financeMode === "收益计算" ? '4px' : financeMode === "当前持仓" ? '100px' : '196px'
+                  }}
+                />
+                {/* 按钮 */}
+                {[
+                  { id: "收益计算", label: "收益计算" },
+                  { id: "当前持仓", label: "当前持仓" },
+                  { id: "账户余额", label: "账户余额" }
+                ].map((tab, index) => (
+                  <button
+                    key={tab.id}
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                      financeMode === tab.id
+                        ? isDark ? "text-black" : "text-white"
+                        : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-700 hover:text-gray-900"
+                    }`}
+                    style={{
+                      width: '96px',
+                      height: '32px'
+                    }}
+                    onClick={() => {
+                      setFinanceMode(tab.id)
+                    }}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* 动态内容区域 */}
             <div className={`${cardStyle} rounded-lg p-6`}>
-              {financeMode === "理财收益" && (
+              {financeMode === "收益计算" && (
                 <div>
                   
                   {/* UBX收益概览 */}
@@ -2591,7 +2631,7 @@ export default function WalletPage() {
                 </div>
               )}
 
-              {financeMode === "理财持仓" && (
+              {financeMode === "当前持仓" && (
                 <div>
                   <div className="space-y-4">
                     {financeData.products.map((product, index) => (
