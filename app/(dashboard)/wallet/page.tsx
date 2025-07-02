@@ -3925,84 +3925,72 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             {/* 三个账户卡片 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* 虚拟卡账户总览 */}
-              <div className={`rounded-2xl p-6 ${
-                isDark 
-                  ? "bg-gradient-to-br from-blue-900/50 to-blue-800/50" 
-                  : "bg-gradient-to-br from-blue-50 to-blue-100"
-              }`}>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">虚拟卡账户</h3>
-                  <CreditCard className="h-6 w-6 text-blue-500" />
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-base font-semibold">虚拟卡账户</h3>
+                  <CreditCard className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">总余额</span>
-                    <span className="text-xl font-bold">{balanceVisible ? "2,222.22" : "****"} USDT</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">总余额</span>
+                    <span className="text-lg font-bold">{balanceVisible ? "2,222.22" : "****"} USDT</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">已发卡数</span>
-                    <span className="text-lg">2张</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">已发卡数</span>
+                    <span className="text-sm">2张</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">本月消费</span>
-                    <span className="text-lg text-red-500">-678.90 USDT</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">本月消费</span>
+                    <span className="text-sm text-red-500">-678.90 USDT</span>
                   </div>
                 </div>
               </div>
 
               {/* 实体卡账户总览 */}
-              <div className={`rounded-2xl p-6 ${
-                isDark 
-                  ? "bg-gradient-to-br from-green-900/50 to-green-800/50" 
-                  : "bg-gradient-to-br from-green-50 to-green-100"
-              }`}>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">实体卡账户</h3>
-                  <CreditCard className="h-6 w-6 text-green-500" />
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-base font-semibold">实体卡账户</h3>
+                  <CreditCard className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">总余额</span>
-                    <span className="text-xl font-bold">{balanceVisible ? "1,234.56" : "****"} USDT</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">总余额</span>
+                    <span className="text-lg font-bold">{balanceVisible ? "1,234.56" : "****"} USDT</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">已发卡数</span>
-                    <span className="text-lg">1张</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">已发卡数</span>
+                    <span className="text-sm">1张</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">本月消费</span>
-                    <span className="text-lg text-red-500">-456.78 USDT</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">本月消费</span>
+                    <span className="text-sm text-red-500">-456.78 USDT</span>
                   </div>
                 </div>
               </div>
 
               {/* 可用余额 */}
-              <div className={`rounded-2xl p-6 ${
-                isDark 
-                  ? "bg-gradient-to-br from-purple-900/50 to-purple-800/50" 
-                  : "bg-gradient-to-br from-purple-50 to-purple-100"
-              }`}>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">可用余额</h3>
-                  <Wallet className="h-6 w-6 text-purple-500" />
+              <div className={`${cardStyle} rounded-lg p-4`}>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-base font-semibold">可用余额</h3>
+                  <Wallet className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">可划转金额</span>
-                    <span className="text-xl font-bold text-green-600">{balanceVisible ? "3,456.78" : "****"} USDT</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">可划转金额</span>
+                    <span className="text-lg font-bold text-green-600">{balanceVisible ? "3,456.78" : "****"} USDT</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">冻结金额</span>
-                    <span className="text-lg">0.00 USDT</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">冻结金额</span>
+                    <span className="text-sm">0.00 USDT</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">待入账</span>
-                    <span className="text-lg text-blue-500">0.00 USDT</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">待入账</span>
+                    <span className="text-sm text-blue-500">0.00 USDT</span>
                   </div>
                 </div>
               </div>
