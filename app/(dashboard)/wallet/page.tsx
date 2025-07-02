@@ -2053,7 +2053,6 @@ export default function WalletPage() {
             <div className={`${cardStyle} rounded-lg p-6`}>
               {contractMode === "账户总资产" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">账户余额</h3>
                   <div className="space-y-4">
                     <div className="overflow-x-auto">
                       <table className="w-full">
