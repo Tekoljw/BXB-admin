@@ -2576,7 +2576,7 @@ export default function WalletPage() {
                   variant="outline"
                   title="投资记录"
                 >
-                  <TrendingUp 
+                  <Target 
                     className={`h-4 w-4 transition-colors ${
                       clickedAction === "finance-investment-records"
                         ? "text-white"
