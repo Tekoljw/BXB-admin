@@ -2353,38 +2353,25 @@ export default function WalletPage() {
                     <CreditCard className="h-6 w-6 text-[#00D4AA]" />
                     <h3 className="text-lg font-semibold">账户余额</h3>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleCurrencyModalClick()
-                      }}
-                      className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
-                        isDark 
-                          ? "bg-transparent text-white hover:bg-gray-800" 
-                          : "bg-white text-black hover:bg-gray-50"
-                      }`}
-                    >
-                      <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
-                        availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
-                      }`}>
-                        <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
-                      </div>
-                      <span>{selectedDisplayCurrency}</span>
-                      <ChevronDown className="h-2 w-2" />
-                    </button>
-                    <Button 
-                      size="sm"
-                      className="h-8 px-3 text-xs font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        // 划转功能
-                      }}
-                    >
-                      <ArrowLeftRight className="h-3 w-3 mr-1" />
-                      划转
-                    </Button>
-                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleCurrencyModalClick()
+                    }}
+                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
+                      isDark 
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                      availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                    }`}>
+                      <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
+                    </div>
+                    <span>{selectedDisplayCurrency}</span>
+                    <ChevronDown className="h-2 w-2" />
+                  </button>
                 </div>
                 <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? convertBalance("2,345.67", "USDT", selectedDisplayCurrency) : "****"}
@@ -2392,8 +2379,21 @@ export default function WalletPage() {
                     {selectedDisplayCurrency}
                   </span>
                 </div>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                  可用于理财投资
+                <div className="flex items-center justify-between mt-2">
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    可用于理财投资
+                  </div>
+                  <Button 
+                    size="sm"
+                    className="h-8 px-3 text-xs font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      // 划转功能
+                    }}
+                  >
+                    <ArrowLeftRight className="h-3 w-3 mr-1" />
+                    划转
+                  </Button>
                 </div>
               </div>
             </div>
@@ -2402,7 +2402,6 @@ export default function WalletPage() {
             <div className={`${cardStyle} rounded-lg p-6`}>
               {financeMode === "理财收益" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">收益概览</h3>
                   
                   {/* UBX收益概览 */}
                   <div className="mb-8">
@@ -2533,7 +2532,6 @@ export default function WalletPage() {
 
               {financeMode === "理财持仓" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">理财持仓</h3>
                   <div className="space-y-4">
                     {financeData.products.map((product, index) => (
                       <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all">
@@ -2562,7 +2560,6 @@ export default function WalletPage() {
 
               {financeMode === "账户余额" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">账户余额</h3>
                   <div className="space-y-4">
                     <div className="overflow-x-auto">
                       <table className="w-full">
