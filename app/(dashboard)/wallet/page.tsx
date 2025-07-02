@@ -1568,9 +1568,8 @@ export default function WalletPage() {
                 ))}
               </div>
 
-              {/* 右侧：操作按钮（仅现金账户时显示） */}
-              {overviewMode === "现金账户" && (
-                <div className="flex gap-2">
+              {/* 右侧：操作按钮 */}
+              <div className="flex gap-2">
                   {/* 主要操作按钮 */}
                   {actionButtons.map((button) => {
                     const Icon = button.icon
@@ -1687,7 +1686,6 @@ export default function WalletPage() {
                     />
                   </Button>
                 </div>
-              )}
             </div>
 
             {/* 主要卡片选择 - 移除点击功能 */}
