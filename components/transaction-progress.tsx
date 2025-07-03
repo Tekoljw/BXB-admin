@@ -92,7 +92,7 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
           style={{
             left: '12px', // 第一个圆球的中心位置
             right: '12px', // 最后一个圆球的中心位置
-            bottom: '18px' // 调整到圆球中心位置
+            bottom: '27px' // 调整到圆球中心位置
           }}
         />
         
@@ -102,7 +102,7 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
           style={{
             left: '12px', // 从第一个圆球中心开始
             width: `${Math.min(progressPercentage, 100) * (100 - 24) / 100}%`,
-            bottom: '18px' // 调整到圆球中心位置
+            bottom: '27px' // 调整到圆球中心位置
           }}
         />
       </div>
