@@ -2856,34 +2856,37 @@ export default function WalletPage() {
               <Card 
                 className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200"
               >
-                <CardHeader className="pb-3">
-                  <CardTitle className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center justify-between`}>
-                    <div className="flex items-center">
-                      <ArrowLeftRight className="h-4 w-4 mr-2 text-[#00D4AA]" />
-                      交易担保金额
-                    </div>
-                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
+                <CardHeader className="pb-2">
+                  <CardTitle className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center`}>
+                    <ArrowLeftRight className="h-4 w-4 mr-2 text-[#00D4AA]" />
+                    交易担保金额
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
+                <CardContent className="pt-0">
+                  <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <ArrowDown className="h-4 w-4 text-green-600 dark:text-green-400" />
                         <span className="text-sm text-gray-600 dark:text-gray-400">应收</span>
                       </div>
-                      <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        1,234.56
-                      </span>
+                      <div className="flex items-baseline space-x-1">
+                        <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          1,234.56
+                        </span>
+                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
+                      </div>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <ArrowUp className="h-4 w-4 text-red-600 dark:text-red-400" />
                         <span className="text-sm text-gray-600 dark:text-gray-400">应付</span>
                       </div>
-                      <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        987.65
-                      </span>
+                      <div className="flex items-baseline space-x-1">
+                        <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          987.65
+                        </span>
+                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -2893,24 +2896,20 @@ export default function WalletPage() {
               <Card 
                 className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200"
               >
-                <CardHeader className="pb-3">
-                  <CardTitle className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center justify-between`}>
-                    <div className="flex items-center">
-                      <Shield className="h-4 w-4 mr-2 text-blue-400 dark:text-blue-500" />
-                      信誉担保金额
-                    </div>
-                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
+                <CardHeader className="pb-2">
+                  <CardTitle className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center`}>
+                    <Shield className="h-4 w-4 mr-2 text-blue-400 dark:text-blue-500" />
+                    信誉担保金额
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        5,000.00
-                      </span>
-                    </div>
+                <CardContent className="pt-0">
+                  <div className="flex items-baseline space-x-1 mb-4">
+                    <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      5,000.00
+                    </span>
+                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                   </div>
-                  <div className="mt-6">
+                  <div>
                     <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
                       担保解冻时间：00天00小时00分钟00秒
                     </span>
@@ -2920,22 +2919,18 @@ export default function WalletPage() {
 
               {/* 可用余额 */}
               <Card className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200">
-                <CardHeader className="pb-3">
-                  <CardTitle className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center justify-between`}>
-                    <div className="flex items-center">
-                      <DollarSign className="h-4 w-4 mr-2 text-[#00D4AA]" />
-                      可用余额
-                    </div>
-                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
+                <CardHeader className="pb-2">
+                  <CardTitle className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center`}>
+                    <DollarSign className="h-4 w-4 mr-2 text-[#00D4AA]" />
+                    可用余额
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        2,456.78
-                      </span>
-                    </div>
+                <CardContent className="pt-0">
+                  <div className="flex items-baseline space-x-1">
+                    <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      2,456.78
+                    </span>
+                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
                   </div>
                 </CardContent>
               </Card>
