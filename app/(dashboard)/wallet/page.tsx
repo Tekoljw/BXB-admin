@@ -5553,34 +5553,27 @@ export default function WalletPage() {
                     
                     {/* 进度步骤显示 */}
                     <div className="py-4">
-                      <div className="flex items-center">
-                        <div className="flex flex-col items-center">
+                      <div className="flex items-center relative">
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">发起交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">对方已付担保金</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-gray-300 mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">等待确认完成交易</span>
                           <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-gray-300 mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">完成收款</span>
                           <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* 状态标签 */}
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2 py-1 bg-[#00D4AA] text-white rounded text-xs font-medium">已完成</span>
-                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">进行中</span>
-                      <span className="text-xs text-gray-500">自动完成时间：<span className="font-mono">02天15小时30分钟</span></span>
                     </div>
                   </div>
                   
@@ -5674,33 +5667,27 @@ export default function WalletPage() {
                     
                     {/* 进度步骤显示 - 刚开始 */}
                     <div className="py-4">
-                      <div className="flex items-center">
-                        <div className="flex flex-col items-center">
+                      <div className="flex items-center relative">
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">发起交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-gray-300 mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">对方已付担保金</span>
                           <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-gray-300 mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">等待确认完成交易</span>
                           <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-gray-300 mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">完成收款</span>
                           <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* 状态标签 */}
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">等待对方</span>
-                      <span className="text-xs text-gray-500">创建时间：<span className="font-mono">2小时前</span></span>
                     </div>
                   </div>
                   
@@ -5791,33 +5778,27 @@ export default function WalletPage() {
                     
                     {/* 进度步骤显示 - 全部完成 */}
                     <div className="py-4">
-                      <div className="flex items-center">
-                        <div className="flex flex-col items-center">
+                      <div className="flex items-center relative">
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">发起交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">对方已付担保金</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">等待确认完成交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">完成收款</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* 状态标签 */}
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">交易完成</span>
-                      <span className="text-xs text-gray-500">完成时间：<span className="font-mono">1天前</span></span>
                     </div>
                   </div>
                   
@@ -5910,32 +5891,27 @@ export default function WalletPage() {
                     
                     {/* 进度步骤显示 - 收款担保 */}
                     <div className="py-4">
-                      <div className="flex items-center">
-                        <div className="flex flex-col items-center">
+                      <div className="flex items-center relative">
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">发起交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">对方已付担保金</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">等待确认完成交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">完成收款</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* 状态标签 */}
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2 py-1 bg-[#00D4AA] text-white rounded text-xs font-medium">已完成</span>
                     </div>
                   </div>
                   
@@ -6035,34 +6011,27 @@ export default function WalletPage() {
                     
                     {/* 进度步骤显示 - 付款担保 */}
                     <div className="py-4">
-                      <div className="flex items-center">
-                        <div className="flex flex-col items-center">
+                      <div className="flex items-center relative">
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">发起交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">您已付担保金</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">等待确认完成交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-gray-300 mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">完成收款</span>
                           <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* 状态标签 */}
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2 py-1 bg-[#00D4AA] text-white rounded text-xs font-medium">已完成</span>
-                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">进行中</span>
-                      <span className="text-xs text-gray-500">自动完成时间：<span className="font-mono">01天08小时15分钟</span></span>
                     </div>
                   </div>
                   
@@ -6171,34 +6140,27 @@ export default function WalletPage() {
                     
                     {/* 进度步骤显示 - 刚付款等待确认 */}
                     <div className="py-4">
-                      <div className="flex items-center">
-                        <div className="flex flex-col items-center">
+                      <div className="flex items-center relative">
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">发起交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">您已付担保金</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">等待确认完成交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-gray-300 mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">完成收款</span>
                           <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* 状态标签 */}
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2 py-1 bg-[#00D4AA] text-white rounded text-xs font-medium">已完成</span>
-                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">等待确认</span>
-                      <span className="text-xs text-gray-500">自动完成时间：<span className="font-mono">06小时45分钟</span></span>
                     </div>
                   </div>
                   
@@ -6289,34 +6251,27 @@ export default function WalletPage() {
                     
                     {/* 进度步骤显示 - 争议状态 */}
                     <div className="py-4">
-                      <div className="flex items-center">
-                        <div className="flex flex-col items-center">
+                      <div className="flex items-center relative">
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">发起交易</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">您已付担保金</span>
                           <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-4"></div>
-                        <div className="flex flex-col items-center">
-                          <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2 text-red-600">争议中</span>
+                        <div className="flex-1 h-0.5 bg-[#00D4AA] mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
+                          <span className="text-xs text-red-600 dark:text-red-400 font-medium mb-2">争议中</span>
                           <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                         </div>
-                        <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
-                        <div className="flex flex-col items-center">
+                        <div className="flex-1 h-0.5 bg-gray-300 mx-3"></div>
+                        <div className="flex flex-col items-center z-10">
                           <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">完成收款</span>
                           <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* 状态标签 */}
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2 py-1 bg-[#00D4AA] text-white rounded text-xs font-medium">已完成</span>
-                      <span className="px-2 py-1 bg-red-100 text-red-800 rounded text-xs font-medium">争议中</span>
-                      <span className="text-xs text-gray-500">仲裁时间：<span className="font-mono">2天前提交</span></span>
                     </div>
                   </div>
                   
