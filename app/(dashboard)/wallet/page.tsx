@@ -2857,7 +2857,7 @@ export default function WalletPage() {
                 className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200"
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
+                  <CardTitle className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center justify-between`}>
                     <div className="flex items-center">
                       <ArrowLeftRight className="h-4 w-4 mr-2 text-[#00D4AA]" />
                       交易担保金额
@@ -2886,10 +2886,6 @@ export default function WalletPage() {
                       </span>
                     </div>
                   </div>
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className="text-xs text-gray-500">共 4 笔担保中</div>
-                    <FileText className="h-4 w-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
-                  </div>
                 </CardContent>
               </Card>
 
@@ -2898,7 +2894,7 @@ export default function WalletPage() {
                 className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200"
               >
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
+                  <CardTitle className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center justify-between`}>
                     <div className="flex items-center">
                       <Shield className="h-4 w-4 mr-2 text-blue-400 dark:text-blue-500" />
                       信誉担保金额
@@ -2909,40 +2905,15 @@ export default function WalletPage() {
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="flex items-baseline space-x-2">
-                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          5,000.00
-                        </span>
-                        <Button
-                          size="sm"
-                          className={`h-6 w-6 p-0 rounded ${isDark ? 'bg-white hover:bg-gray-100 text-black border border-white' : 'bg-white hover:bg-gray-100 text-black border border-black'}`}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setShowAddCreditModal(true)
-                          }}
-                        >
-                          <Plus className="h-3 w-3" />
-                        </Button>
-                      </div>
+                      <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        5,000.00
+                      </span>
                     </div>
                   </div>
-                  <div className="mt-6 flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
-                        剩余 42 天到期
-                      </span>
-                      <Button
-                        size="sm"
-                        className={`h-5 px-2 text-xs ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'}`}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setShowExtendTimeModal(true)
-                        }}
-                      >
-                        延长
-                      </Button>
-                    </div>
-                    <FileText className="h-4 w-4 text-gray-500 hover:text-gray-700 cursor-pointer" />
+                  <div className="mt-6">
+                    <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                      担保解冻时间：00天00小时00分钟00秒
+                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -2950,7 +2921,7 @@ export default function WalletPage() {
               {/* 可用余额 */}
               <Card className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200">
                 <CardHeader className="pb-3">
-                  <CardTitle className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'} flex items-center justify-between`}>
+                  <CardTitle className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center justify-between`}>
                     <div className="flex items-center">
                       <DollarSign className="h-4 w-4 mr-2 text-[#00D4AA]" />
                       可用余额
@@ -2961,30 +2932,10 @@ export default function WalletPage() {
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="flex items-baseline space-x-1">
-                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          2,456.78
-                        </span>
-                      </div>
+                      <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        2,456.78
+                      </span>
                     </div>
-                  </div>
-                  <div className="mt-4 grid grid-cols-2 gap-2">
-                    <Button
-                      size="sm"
-                      className={`h-7 text-xs ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'}`}
-                      onClick={() => setShowTransferModal(true)}
-                    >
-                      <ArrowLeftRight className="h-3 w-3 mr-1" />
-                      划转
-                    </Button>
-                    <Button
-                      size="sm"
-                      className={`h-7 text-xs ${isDark ? 'bg-transparent text-white border border-white hover:bg-white hover:text-black' : 'bg-white hover:bg-gray-100 text-black border border-black'}`}
-                      onClick={() => router.push('/wallet?tab=order-records')}
-                    >
-                      <FileText className="h-3 w-3 mr-1" />
-                      记录
-                    </Button>
                   </div>
                 </CardContent>
               </Card>
