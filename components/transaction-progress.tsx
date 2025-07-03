@@ -26,9 +26,9 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
 
   return (
     <div className={`w-full ${className}`}>
-      <div className="relative py-6 px-4 sm:px-6 lg:px-8">
+      <div className="relative py-6">
         {/* 步骤标签 */}
-        <div className="flex justify-between items-start mb-6 sm:mb-8">
+        <div className="flex justify-between items-start mb-6 sm:mb-8 px-2">
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center text-center flex-1">
               <div className={`
@@ -49,14 +49,14 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
           ))}
         </div>
 
-        {/* 进度条容器 - 横跨整个卡片宽度 */}
-        <div className="relative w-full">
-          {/* 背景横线 - 完整宽度 */}
-          <div className="absolute w-full h-1 bg-gray-200 top-1/2 transform -translate-y-1/2" />
+        {/* 进度条容器 - 真正横跨整个宽度，不使用任何padding */}
+        <div className="relative w-full -mx-4 px-4">
+          {/* 背景横线 - 从边缘到边缘 */}
+          <div className="absolute left-0 right-0 h-1 bg-gray-200 top-1/2 transform -translate-y-1/2" />
           
-          {/* 进度横线 */}
+          {/* 进度横线 - 从左边缘开始 */}
           <div 
-            className="absolute h-1 bg-green-500 top-1/2 transform -translate-y-1/2 transition-all duration-500 ease-out"
+            className="absolute left-0 h-1 bg-green-500 top-1/2 transform -translate-y-1/2 transition-all duration-500 ease-out"
             style={{
               width: `${Math.min(progressPercentage, 100)}%`
             }}
