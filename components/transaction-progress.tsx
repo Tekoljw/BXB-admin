@@ -27,14 +27,13 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
   return (
     <div className={`w-full ${className}`}>
       <div className="relative py-6 px-4">
-        {/* 统一的节点容器 - 确保气泡和圆球完美对齐 */}
-        <div className="flex items-start space-x-8 sm:space-x-12 lg:space-x-16">
+        {/* 步骤标签 - 气泡形式 */}
+        <div className="flex justify-between items-start mb-8">
           {steps.map((step, index) => (
-            <div key={step.id} className="flex flex-col items-center relative">
-              {/* 气泡样式标签 */}
+            <div key={step.id} className="flex flex-col items-center text-center flex-1">
               <div className={`
                 relative px-3 py-2 rounded-lg text-sm font-medium text-center
-                whitespace-nowrap shadow-sm mb-8
+                whitespace-nowrap shadow-sm
                 ${step.status === 'completed' 
                   ? 'bg-green-100 text-green-800 border border-green-200' 
                   : step.status === 'current'
@@ -59,61 +58,60 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
                   }
                 `} />
               </div>
-              
-              {/* 圆球节点 - 直接在气泡下方 */}
-              <div 
-                className={`
-                  w-6 h-6 rounded-full flex items-center justify-center
-                  border-2 border-white shadow-md relative z-10
-                  ${step.status === 'completed' 
-                    ? 'bg-green-500' 
-                    : step.status === 'current'
-                    ? 'bg-yellow-400'
-                    : step.status === 'dispute'
-                    ? 'bg-red-500'
-                    : 'bg-gray-400'
-                  }
-                `}
-              >
-                {step.status === 'completed' && (
-                  <Check className="w-3 h-3 text-white" strokeWidth={3} />
-                )}
-                {step.status === 'current' && (
-                  <div className="w-2 h-2 bg-white rounded-full" />
-                )}
-              </div>
-
-              {/* 圆球下方小字说明 */}
-              <div className="mt-3 text-xs text-gray-500 text-center whitespace-nowrap">
-                {step.label === '发起交易' && '发起时间：00/00/0000'}
-                {step.label === '等待确认' && '自动确认：00：00：00'}
-                {step.label === '争议仲裁' && '无争议则跳过'}
-                {step.label === '等待确认完成交易' && '自动确认：00：00：00'}
-                {(step.label !== '发起交易' && step.label !== '等待确认' && step.label !== '争议仲裁' && step.label !== '等待确认完成交易') && '\u00A0'}
-              </div>
             </div>
           ))}
         </div>
 
-        {/* 连接线 - 穿过圆球中心 */}
-        <div 
-          className="absolute h-1 bg-gray-200"
-          style={{
-            left: '32px',
-            right: '32px',
-            top: 'calc(100% - 36px)' // 圆球中心位置
-          }}
-        />
-        
-        {/* 进度线 */}
-        <div 
-          className="absolute h-1 bg-green-500 transition-all duration-500 ease-out"
-          style={{
-            left: '32px',
-            width: `${Math.min(progressPercentage, 100) * (100 - 64) / 100}%`,
-            top: 'calc(100% - 36px)' // 圆球中心位置
-          }}
-        />
+        {/* 进度条容器 */}
+        <div className="relative w-full">
+          {/* 背景横线 */}
+          <div className="absolute w-full h-1 bg-gray-200 top-1/2 transform -translate-y-1/2" />
+          
+          {/* 进度横线 */}
+          <div 
+            className="absolute h-1 bg-green-500 top-1/2 transform -translate-y-1/2 transition-all duration-500 ease-out"
+            style={{
+              width: `${Math.min(progressPercentage, 100)}%`
+            }}
+          />
+
+          {/* 步骤圆球容器 */}
+          <div className="flex justify-between items-center relative z-10">
+            {steps.map((step, index) => (
+              <div key={step.id} className="flex flex-col items-center">
+                <div 
+                  className={`
+                    w-6 h-6 rounded-full flex items-center justify-center
+                    border-2 border-white shadow-md
+                    ${step.status === 'completed' 
+                      ? 'bg-green-500' 
+                      : step.status === 'current'
+                      ? 'bg-yellow-400'
+                      : step.status === 'dispute'
+                      ? 'bg-red-500'
+                      : 'bg-gray-400'
+                    }
+                  `}
+                >
+                  {step.status === 'completed' && (
+                    <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                  )}
+                  {step.status === 'current' && (
+                    <div className="w-2 h-2 bg-white rounded-full" />
+                  )}
+                </div>
+
+                {/* 圆球下方小字说明 */}
+                <div className="mt-2 text-xs text-gray-500 text-center whitespace-nowrap">
+                  {step.label === '发起交易' && '发起时间：00/00/0000'}
+                  {step.label === '等待确认' && '自动确认：00：00：00'}
+                  {step.label === '争议仲裁' && '无争议则跳过'}
+                  {step.label === '等待确认完成交易' && '自动确认：00：00：00'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
