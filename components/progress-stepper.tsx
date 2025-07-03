@@ -27,6 +27,24 @@ export default function ProgressStepper({ steps, className = '' }: ProgressStepp
     <div className={`w-full max-w-4xl min-w-[360px] mx-auto overflow-x-auto ${className}`}>
       <div className="relative py-8">
         <div className="flex justify-between items-center relative px-4 sm:px-8 md:px-12">
+          {/* 背景横线 - 精确从第一个圆球中心到最后一个圆球中心 */}
+          <div 
+            className="absolute top-1/2 h-0.5 bg-gray-200 transform -translate-y-1/2 z-0"
+            style={{
+              left: `calc(${(100 / (steps.length - 1)) * 0}% + 10px)`,
+              right: `calc(${(100 / (steps.length - 1)) * 0}% + 10px)`
+            }}
+          ></div>
+          
+          {/* 进度横线 - 从第一个圆球中心按进度延伸 */}
+          <div 
+            className="absolute top-1/2 h-0.5 bg-[#00D4AA] transform -translate-y-1/2 z-0 transition-all duration-500 ease-out"
+            style={{ 
+              left: `calc(${(100 / (steps.length - 1)) * 0}% + 10px)`,
+              width: `calc((100% - 20px) * ${progressPercentage / 100})`
+            }}
+          ></div>
+
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center relative">
               <div className={`
@@ -67,22 +85,6 @@ export default function ProgressStepper({ steps, className = '' }: ProgressStepp
               </div>
             </div>
           ))}
-          
-          <div 
-            className="absolute top-1/2 h-0.5 bg-gray-200 transform -translate-y-1/2 z-0"
-            style={{
-              left: '0%',
-              right: '0%'
-            }}
-          ></div>
-          
-          <div 
-            className="absolute top-1/2 h-0.5 bg-[#00D4AA] transform -translate-y-1/2 z-0 transition-all duration-500 ease-out"
-            style={{ 
-              left: '0%',
-              width: `${Math.min(progressPercentage, 100)}%`
-            }}
-          ></div>
         </div>
       </div>
     </div>
