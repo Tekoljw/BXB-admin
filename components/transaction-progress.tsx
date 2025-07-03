@@ -26,14 +26,14 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
 
   return (
     <div className={`w-full ${className}`}>
-      <div className="relative py-6 px-4 sm:px-6 lg:px-8">
+      <div className="relative py-6 px-6 sm:px-12 lg:px-16 xl:px-20">
         {/* 步骤标签 */}
-        <div className="flex justify-between items-start mb-6 sm:mb-8">
+        <div className="flex justify-between items-start mb-8 sm:mb-10 lg:mb-12">
           {steps.map((step, index) => (
-            <div key={step.id} className="flex flex-col items-center text-center flex-1">
+            <div key={step.id} className="flex flex-col items-center text-center flex-1 mx-2 sm:mx-4 lg:mx-6">
               <div className={`
-                px-1.5 sm:px-2 py-1 rounded text-xs font-medium text-center
-                max-w-[80px] sm:max-w-none whitespace-nowrap overflow-hidden text-ellipsis
+                px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium text-center
+                max-w-[70px] sm:max-w-[100px] lg:max-w-none whitespace-nowrap overflow-hidden text-ellipsis
                 ${step.status === 'completed' 
                   ? 'bg-green-100 text-green-800' 
                   : step.status === 'current'
@@ -49,27 +49,27 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
           ))}
         </div>
 
-        {/* 进度条容器 - 横跨整个卡片宽度 */}
-        <div className="relative w-full">
+        {/* 进度条容器 - 扩展间距 */}
+        <div className="relative w-full mx-auto" style={{ maxWidth: '90%' }}>
           {/* 背景横线 - 完整宽度 */}
-          <div className="absolute w-full h-1 bg-gray-200 top-1/2 transform -translate-y-1/2" />
+          <div className="absolute w-full h-1 sm:h-1.5 bg-gray-200 top-1/2 transform -translate-y-1/2 rounded-full" />
           
           {/* 进度横线 */}
           <div 
-            className="absolute h-1 bg-green-500 top-1/2 transform -translate-y-1/2 transition-all duration-500 ease-out"
+            className="absolute h-1 sm:h-1.5 bg-green-500 top-1/2 transform -translate-y-1/2 transition-all duration-500 ease-out rounded-full"
             style={{
               width: `${Math.min(progressPercentage, 100)}%`
             }}
           />
 
-          {/* 步骤圆球容器 */}
-          <div className="flex justify-between items-center relative z-10">
+          {/* 步骤圆球容器 - 增加间距 */}
+          <div className="flex justify-between items-center relative z-10 px-2 sm:px-4 lg:px-8">
             {steps.map((step, index) => (
               <div 
                 key={step.id} 
                 className={`
-                  w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center
-                  border-2 border-white shadow-md
+                  w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 rounded-full flex items-center justify-center
+                  border-2 sm:border-3 border-white shadow-lg
                   ${step.status === 'completed' 
                     ? 'bg-green-500' 
                     : step.status === 'current'
@@ -81,10 +81,10 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
                 `}
               >
                 {step.status === 'completed' && (
-                  <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" strokeWidth={3} />
+                  <Check className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-white" strokeWidth={3} />
                 )}
                 {step.status === 'current' && (
-                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full" />
+                  <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 lg:w-3 lg:h-3 bg-white rounded-full" />
                 )}
               </div>
             ))}
