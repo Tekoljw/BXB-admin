@@ -2926,11 +2926,16 @@ export default function WalletPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <div className="flex items-baseline space-x-1">
+                  <div className="flex items-baseline space-x-1 mb-2">
                     <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       2,456.78
                     </span>
                     <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      可划转至现金账户
+                    </span>
                   </div>
                 </CardContent>
               </Card>
