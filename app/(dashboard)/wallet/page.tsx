@@ -5552,26 +5552,38 @@ export default function WalletPage() {
                     </div>
                     
                     {/* 进度步骤显示 */}
-                    <div className="flex items-center space-x-2">
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
-                          <span className="text-xs text-gray-600">发起交易</span>
+                    <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-between">
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">发起交易</span>
                         </div>
-                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                          <span className="text-xs text-gray-600">对方已付担保金</span>
+                        <div className="flex-1 h-1 bg-blue-500 mx-3 rounded-full"></div>
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">对方已付担保金</span>
                         </div>
-                        <div className="h-0.5 w-8 bg-gray-300"></div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold">3</div>
-                          <span className="text-xs text-gray-600">等待对方确认完成交易</span>
+                        <div className="flex-1 h-1 bg-gray-300 mx-3 rounded-full"></div>
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center shadow-lg">
+                            <span className="text-sm font-bold">3</span>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">等待对方确认完成交易</span>
                         </div>
-                        <div className="h-0.5 w-8 bg-gray-300"></div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold">4</div>
-                          <span className="text-xs text-gray-600">完成收款/争议待仲裁</span>
+                        <div className="flex-1 h-1 bg-gray-300 mx-3 rounded-full"></div>
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center shadow-lg">
+                            <span className="text-sm font-bold">4</span>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">完成收款/争议待仲裁</span>
                         </div>
                       </div>
                     </div>
@@ -5675,26 +5687,42 @@ export default function WalletPage() {
                     </div>
                     
                     {/* 进度步骤显示 - 收款担保 */}
-                    <div className="flex items-center space-x-2">
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
-                          <span className="text-xs text-gray-600">发起交易</span>
+                    <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-between">
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">发起交易</span>
                         </div>
-                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                          <span className="text-xs text-gray-600">对方已付担保金</span>
+                        <div className="flex-1 h-1 bg-blue-500 mx-3 rounded-full"></div>
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">对方已付担保金</span>
                         </div>
-                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
-                          <span className="text-xs text-gray-600">等待对方确认完成交易</span>
+                        <div className="flex-1 h-1 bg-blue-500 mx-3 rounded-full"></div>
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">等待对方确认完成交易</span>
                         </div>
-                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">4</div>
-                          <span className="text-xs text-gray-600">完成收款/争议待仲裁</span>
+                        <div className="flex-1 h-1 bg-green-500 mx-3 rounded-full"></div>
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">完成收款/争议待仲裁</span>
                         </div>
                       </div>
                     </div>
@@ -5800,26 +5828,38 @@ export default function WalletPage() {
                     </div>
                     
                     {/* 进度步骤显示 - 付款担保 */}
-                    <div className="flex items-center space-x-2">
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
-                          <span className="text-xs text-gray-600">发起交易</span>
+                    <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-between">
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">发起交易</span>
                         </div>
-                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                          <span className="text-xs text-gray-600">您已付担保金</span>
+                        <div className="flex-1 h-1 bg-blue-500 mx-3 rounded-full"></div>
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">您已付担保金</span>
                         </div>
-                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
-                          <span className="text-xs text-gray-600">等待您确认完成交易</span>
+                        <div className="flex-1 h-1 bg-blue-500 mx-3 rounded-full"></div>
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-yellow-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                            <span className="text-sm font-bold">3</span>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">等待您确认完成交易</span>
                         </div>
-                        <div className="h-0.5 w-8 bg-gray-300"></div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold">4</div>
-                          <span className="text-xs text-gray-600">完成收款/争议待仲裁</span>
+                        <div className="flex-1 h-1 bg-gray-300 mx-3 rounded-full"></div>
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center shadow-lg">
+                            <span className="text-sm font-bold">4</span>
+                          </div>
+                          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">完成收款/争议待仲裁</span>
                         </div>
                       </div>
                     </div>
