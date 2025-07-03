@@ -26,80 +26,66 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
 
   return (
     <div className={`w-full ${className}`}>
-      <div className="relative">
-        {/* 步骤容器 */}
-        <div className="flex justify-between items-center relative">
-          {steps.map((step, index) => {
-            const isFirst = index === 0
-            const isLast = index === steps.length - 1
-            
-            return (
-              <div key={step.id} className="flex flex-col items-center relative z-10">
-                {/* 气泡标签 */}
-                <div className={`
-                  relative mb-4 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap
-                  ${step.status === 'completed' 
-                    ? 'bg-green-500 text-white' 
-                    : step.status === 'current'
-                    ? 'bg-yellow-400 text-black'
-                    : step.status === 'dispute'
-                    ? 'bg-red-500 text-white'
-                    : 'bg-gray-300 text-gray-600'
-                  }
-                `}>
-                  {step.label}
-                  {/* 气泡指向箭头 */}
-                  <div className={`
-                    absolute top-full left-1/2 transform -translate-x-1/2
-                    w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent
-                    ${step.status === 'completed' 
-                      ? 'border-t-green-500' 
-                      : step.status === 'current'
-                      ? 'border-t-yellow-400'
-                      : step.status === 'dispute'
-                      ? 'border-t-red-500'
-                      : 'border-t-gray-300'
-                    }
-                  `} />
-                </div>
-                
-                {/* 步骤圆球 */}
-                <div className={`
-                  w-5 h-5 rounded-full flex items-center justify-center
-                  border-2 border-white shadow-lg relative z-20
-                  ${step.status === 'completed' 
-                    ? 'bg-green-500' 
-                    : step.status === 'current'
-                    ? 'bg-yellow-400'
-                    : step.status === 'dispute'
-                    ? 'bg-red-500'
-                    : 'bg-gray-300'
-                  }
-                `}>
-                  {step.status === 'completed' && (
-                    <Check className="w-3 h-3 text-white" strokeWidth={3} />
-                  )}
-                </div>
+      <div className="relative py-8">
+        {/* 步骤标签 */}
+        <div className="flex justify-between items-start mb-8">
+          {steps.map((step, index) => (
+            <div key={step.id} className="flex flex-col items-center text-center">
+              <div className={`
+                px-2 py-1 rounded text-xs font-medium whitespace-nowrap mb-4
+                ${step.status === 'completed' 
+                  ? 'bg-green-100 text-green-800' 
+                  : step.status === 'current'
+                  ? 'bg-yellow-100 text-yellow-800'
+                  : step.status === 'dispute'
+                  ? 'bg-red-100 text-red-800'
+                  : 'bg-gray-100 text-gray-600'
+                }
+              `}>
+                {step.label}
               </div>
-            )
-          })}
+            </div>
+          ))}
         </div>
-        
-        {/* 横线容器 - 绝对定位在圆球层之下 */}
-        <div className="absolute inset-0 flex items-center" style={{ top: 'calc(100% - 10px)' }}>
-          <div className="w-full flex justify-between px-2.5">
-            {/* 背景横线 - 从第一个圆球中心到最后一个圆球中心 */}
-            <div className="flex-1 h-0.5 bg-gray-200 mx-0" />
-            
-            {/* 进度横线 - 覆盖在背景线上 */}
+
+        {/* 进度条容器 */}
+        <div className="relative flex justify-between items-center">
+          {/* 背景横线 - 完整宽度 */}
+          <div className="absolute w-full h-1 bg-gray-200 top-1/2 transform -translate-y-1/2" />
+          
+          {/* 进度横线 */}
+          <div 
+            className="absolute h-1 bg-green-500 top-1/2 transform -translate-y-1/2 transition-all duration-500 ease-out"
+            style={{
+              width: `${Math.min(progressPercentage, 100)}%`
+            }}
+          />
+
+          {/* 步骤圆球 */}
+          {steps.map((step, index) => (
             <div 
-              className="absolute h-0.5 bg-green-500 transition-all duration-500 ease-out"
-              style={{
-                left: '10px',
-                width: `calc((100% - 20px) * ${Math.min(progressPercentage, 100)}%)`
-              }}
-            />
-          </div>
+              key={step.id} 
+              className={`
+                w-6 h-6 rounded-full flex items-center justify-center relative z-10
+                border-2 border-white shadow-md
+                ${step.status === 'completed' 
+                  ? 'bg-green-500' 
+                  : step.status === 'current'
+                  ? 'bg-yellow-400'
+                  : step.status === 'dispute'
+                  ? 'bg-red-500'
+                  : 'bg-gray-400'
+                }
+              `}
+            >
+              {step.status === 'completed' && (
+                <Check className="w-3 h-3 text-white" strokeWidth={3} />
+              )}
+              {step.status === 'current' && (
+                <div className="w-2 h-2 bg-white rounded-full" />
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>
