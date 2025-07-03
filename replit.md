@@ -186,6 +186,15 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Updated button styling to match wallet overview layout with transparent borders and proper spacing
   - Converted last three buttons (资金记录, 交易记录, 担保记录) to icon-only format for cleaner interface
   - Implemented full functionality for all tabs including transaction records, fund management, and guarantee history
+- January 29, 2025. Redesigned guarantee account progress tracking system:
+  - Removed担保解冻时间 display and replaced with comprehensive progress step visualization
+  - Implemented reference-based progress design with larger circular steps (10x10px) and professional styling
+  - Added 4-step process flow: 发起交易 → 对方/您已付担保金 → 等待确认完成交易 → 完成收款/争议待仲裁
+  - Used color-coded progress indicators: blue for completed steps (with checkmarks), yellow for current step, gray for pending, red for disputes, green for final completion
+  - Repositioned layout with amounts on left side and transaction objects/guarantee groups on right side in styled cards
+  - Enhanced with comprehensive mock data showing different transaction states (USDT, BTC, ETH, SOL, NFT transactions)
+  - Added expandable content functionality with relevant action buttons (催促对方, 确认收款, 申请仲裁, 查看仲裁等)
+  - Implemented distinct visual states for 收款担保 and 付款担保 with appropriate progress tracking and status labels
 
 ## User Preferences
 
