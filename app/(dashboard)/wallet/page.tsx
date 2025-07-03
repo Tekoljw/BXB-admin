@@ -5521,53 +5521,54 @@ export default function WalletPage() {
     switch (selectedGuaranteeTab) {
       case "收款担保":
         return (
-          <div className="space-y-3">
-            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm">
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="space-y-4">
+            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
               {/* USDT买卖担保 */}
-              <div className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between">
-                    <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
-                      USDT买卖担保
-                    </span>
-                    <div className="flex flex-col items-end space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
-                        <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123789</span>
-                        <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-4 w-4" />
-                        </button>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
-                        <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123123</span>
-                        <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-4 w-4" />
-                        </button>
-                      </div>
+              <div className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200">
+                <div className="flex items-start justify-between mb-4">
+                  <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
+                    USDT买卖担保
+                  </span>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
+                      <span className={`text-xs font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>交易对象</span>
+                      <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
+                      <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123789</span>
+                      <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
+                        <MessageCircle className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className={`text-xs font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>担保群</span>
+                      <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
+                      <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>123123</span>
+                      <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
+                        <Users className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                </div>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+                  <div>
+                    <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       5,000.00 USDT
                     </span>
                   </div>
                   
-                  <div>
-                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
-                      购买5000 USDT，汇率7.20，总价36000元人民币，银行卡转账支付，商户信誉良好
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-end justify-end">
-                    <div className="text-right">
-                      <span className="text-sm text-yellow-600">等待对方确认</span>
-                      <div className="text-xs text-gray-500 mt-1">自动确认：<span className="font-mono">23:45:12</span></div>
+                  <div className="lg:col-span-2">
+                    <div className="mb-3">
+                      <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
+                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
+                        购买5000 USDT，汇率7.20，总价36000元人民币，银行卡转账支付，商户信誉良好
+                      </span>
+                    </div>
+                    
+                    <div className="flex justify-end">
+                      <div className="text-right">
+                        <span className="text-sm text-yellow-600 font-medium">等待对方确认</span>
+                        <div className="text-xs text-gray-500 mt-1">自动确认：<span className="font-mono">23:45:12</span></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -5623,7 +5624,6 @@ export default function WalletPage() {
                     </div>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
           </div>
