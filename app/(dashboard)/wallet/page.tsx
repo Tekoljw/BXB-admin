@@ -2873,7 +2873,7 @@ export default function WalletPage() {
                         <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           1,234.56
                         </span>
-                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
+                        <span className="text-sm text-[#00D4AA] font-medium">USDT</span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
@@ -2885,7 +2885,7 @@ export default function WalletPage() {
                         <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           987.65
                         </span>
-                        <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
+                        <span className="text-sm text-[#00D4AA] font-medium">USDT</span>
                       </div>
                     </div>
                   </div>
@@ -2907,10 +2907,10 @@ export default function WalletPage() {
                     <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       5,000.00
                     </span>
-                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
+                    <span className="text-sm text-[#00D4AA] font-medium">USDT</span>
                   </div>
                   <div>
-                    <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                    <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">
                       担保解冻时间：00天00小时00分钟00秒
                     </span>
                   </div>
@@ -2930,10 +2930,10 @@ export default function WalletPage() {
                     <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       2,456.78
                     </span>
-                    <span className="text-xs text-[#00D4AA] font-medium">USDT</span>
+                    <span className="text-sm text-[#00D4AA] font-medium">USDT</span>
                   </div>
                   <div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
                       可划转至现金账户
                     </span>
                   </div>
@@ -2950,13 +2950,13 @@ export default function WalletPage() {
                   className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
                   style={{
                     width: '120px',
-                    left: selectedGuaranteeTab === "应收担保交易" ? '4px' : '124px'
+                    left: selectedGuaranteeTab === "收款担保" ? '4px' : '124px'
                   }}
                 />
                 {/* 按钮 */}
                 {[
-                  { id: "应收担保交易", label: "应收担保交易" },
-                  { id: "应付担保交易", label: "应付担保交易" }
+                  { id: "收款担保", label: "收款担保" },
+                  { id: "付款担保", label: "付款担保" }
                 ].map((tab, index) => (
                   <button
                     key={tab.id}
@@ -5387,7 +5387,7 @@ export default function WalletPage() {
 
   // 担保账户相关状态和函数
   const [selectedCard, setSelectedCard] = useState("receivable")
-  const [selectedGuaranteeTab, setSelectedGuaranteeTab] = useState("应收担保交易") // 新增担保页签状态
+  const [selectedGuaranteeTab, setSelectedGuaranteeTab] = useState("收款担保") // 新增担保页签状态
   const [showAddCreditModal, setShowAddCreditModal] = useState(false)
   const [showExtendTimeModal, setShowExtendTimeModal] = useState(false)
   const [showContractModal, setShowContractModal] = useState(false)
@@ -5519,7 +5519,7 @@ export default function WalletPage() {
   // 渲染担保内容
   const renderGuaranteeContent = () => {
     switch (selectedGuaranteeTab) {
-      case "应收担保交易":
+      case "收款担保":
         return (
           <div className="space-y-4">
             <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm">
@@ -5629,7 +5629,7 @@ export default function WalletPage() {
           </div>
         )
 
-      case "应付担保交易":
+      case "付款担保":
         return (
           <div className="space-y-4">
 
