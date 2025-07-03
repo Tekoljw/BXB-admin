@@ -82,15 +82,6 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
                   <div className="w-2 h-2 bg-white rounded-full" />
                 )}
               </div>
-
-              {/* 圆球下方小字说明 */}
-              <div className="mt-3 text-xs text-gray-500 text-center whitespace-nowrap">
-                {step.label === '发起交易' && '发起时间：00/00/0000'}
-                {step.label === '等待确认' && '自动确认：00：00：00'}
-                {step.label === '争议仲裁' && '无争议则跳过'}
-                {step.label === '等待确认完成交易' && '自动确认：00：00：00'}
-                {(step.label !== '发起交易' && step.label !== '等待确认' && step.label !== '争议仲裁' && step.label !== '等待确认完成交易') && '\u00A0'}
-              </div>
             </div>
           ))}
         </div>
