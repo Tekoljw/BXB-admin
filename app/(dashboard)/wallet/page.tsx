@@ -5543,14 +5543,45 @@ export default function WalletPage() {
                 onClick={() => toggleGuaranteeItem("guarantee-1")}
               >
                 <div className="flex items-start justify-between mb-6">
-                  <div className="flex flex-col space-y-2">
+                  <div className="flex flex-col space-y-3">
                     <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
                       USDT买卖担保
                     </span>
                     <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       5,000.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
-                    <div className="text-xs text-gray-500">担保解冻时间：<span className="font-mono">03天12小时25分钟15秒</span></div>
+                    
+                    {/* 进度步骤显示 */}
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                          <span className="text-xs text-gray-600">发起交易</span>
+                        </div>
+                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                          <span className="text-xs text-gray-600">对方已付担保金</span>
+                        </div>
+                        <div className="h-0.5 w-8 bg-gray-300"></div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                          <span className="text-xs text-gray-600">等待对方确认完成交易</span>
+                        </div>
+                        <div className="h-0.5 w-8 bg-gray-300"></div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold">4</div>
+                          <span className="text-xs text-gray-600">完成收款/争议待仲裁</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* 状态标签 */}
+                    <div className="flex items-center space-x-2">
+                      <span className="px-2 py-1 bg-[#00D4AA] text-white rounded text-xs font-medium">已完成</span>
+                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">进行中</span>
+                      <span className="text-xs text-gray-500">自动完成时间：<span className="font-mono">02天15小时30分钟</span></span>
+                    </div>
                   </div>
                   
                   {/* 交易对象和担保群 - 右侧显示 */}
@@ -5635,14 +5666,43 @@ export default function WalletPage() {
                 onClick={() => toggleGuaranteeItem("guarantee-other")}
               >
                 <div className="flex items-start justify-between mb-6">
-                  <div className="flex flex-col space-y-2">
+                  <div className="flex flex-col space-y-3">
                     <span className="px-3 py-1.5 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold w-fit">
                       其他担保交易
                     </span>
                     <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       2,500.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
-                    <div className="text-xs text-gray-500">担保解冻时间：<span className="font-mono">02天05小时30分钟45秒</span></div>
+                    
+                    {/* 进度步骤显示 - 收款担保 */}
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                          <span className="text-xs text-gray-600">发起交易</span>
+                        </div>
+                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                          <span className="text-xs text-gray-600">对方已付担保金</span>
+                        </div>
+                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                          <span className="text-xs text-gray-600">等待对方确认完成交易</span>
+                        </div>
+                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">4</div>
+                          <span className="text-xs text-gray-600">完成收款/争议待仲裁</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* 状态标签 */}
+                    <div className="flex items-center space-x-2">
+                      <span className="px-2 py-1 bg-[#00D4AA] text-white rounded text-xs font-medium">已完成</span>
+                    </div>
                   </div>
                   
                   {/* 交易对象和担保群 - 右侧显示 */}
@@ -5731,14 +5791,45 @@ export default function WalletPage() {
                 onClick={() => toggleGuaranteeItem("guarantee-2")}
               >
                 <div className="flex items-start justify-between mb-6">
-                  <div className="flex flex-col space-y-2">
+                  <div className="flex flex-col space-y-3">
                     <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
                       USDT买卖担保
                     </span>
                     <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       3,000.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
-                    <div className="text-xs text-gray-500">担保解冻时间：<span className="font-mono">01天08小时15分钟30秒</span></div>
+                    
+                    {/* 进度步骤显示 - 付款担保 */}
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                          <span className="text-xs text-gray-600">发起交易</span>
+                        </div>
+                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-[#00D4AA] text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                          <span className="text-xs text-gray-600">您已付担保金</span>
+                        </div>
+                        <div className="h-0.5 w-8 bg-[#00D4AA]"></div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                          <span className="text-xs text-gray-600">等待您确认完成交易</span>
+                        </div>
+                        <div className="h-0.5 w-8 bg-gray-300"></div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold">4</div>
+                          <span className="text-xs text-gray-600">完成收款/争议待仲裁</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* 状态标签 */}
+                    <div className="flex items-center space-x-2">
+                      <span className="px-2 py-1 bg-[#00D4AA] text-white rounded text-xs font-medium">已完成</span>
+                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">进行中</span>
+                      <span className="text-xs text-gray-500">自动完成时间：<span className="font-mono">01天08小时15分钟</span></span>
+                    </div>
                   </div>
                   
                   {/* 交易对象和担保群 - 右侧显示 */}
