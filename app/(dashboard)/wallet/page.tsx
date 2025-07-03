@@ -5606,7 +5606,7 @@ export default function WalletPage() {
                     {/* 交易发起时间和自动确认倒计时 */}
                     <div className="mt-3 flex items-center justify-between">
                       <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        发起时间: 2025-01-29 14:23:15 | <span className="text-orange-500 font-medium">自动确认倒计时: 23小时42分钟</span>
+                        发起时间: 2025-01-29 | <span className="text-orange-500 font-medium">自动确认倒计时: 23小时42分钟</span>
                       </div>
                       <button 
                         className={`flex items-center gap-1 text-sm text-blue-500 hover:text-blue-600 transition-colors ${isDark ? 'hover:text-blue-400' : ''}`}
@@ -5699,7 +5699,10 @@ export default function WalletPage() {
                   </div>
                 )}
               </div>
+            </div>
 
+            {/* 第二个担保交易卡片 */}
+            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
               {/* 第二个担保交易 - 刚开始 */}
               <div 
                 className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
@@ -5787,7 +5790,10 @@ export default function WalletPage() {
                   </div>
                 )}
               </div>
+            </div>
 
+            {/* 第三个担保交易卡片 */}
+            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
               {/* 第三个担保交易 - 完成状态 */}
               <div 
                 className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
