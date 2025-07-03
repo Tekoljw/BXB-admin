@@ -5551,38 +5551,40 @@ export default function WalletPage() {
                       5,000.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
                     
-                    {/* 进度步骤显示 */}
-                    <div className="py-6">
-                      <div className="relative px-4">
-                        {/* 连接线背景 */}
-                        <div className="absolute top-8 left-0 right-0 h-1 bg-gray-300"></div>
-                        <div className="absolute top-8 left-0 w-1/4 h-1 bg-[#00D4AA]"></div>
-                        
-                        {/* 步骤圆点和标签 */}
-                        <div className="flex justify-between items-center relative">
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">发起交易</div>
+                    {/* 全新进度条系统 */}
+                    <div className="mt-6">
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center space-x-6">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 bg-[#00D4AA] rounded-full"></div>
+                            <span className="text-sm font-medium text-[#00D4AA]">发起交易</span>
                           </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">已付担保金</div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 bg-[#00D4AA] rounded-full"></div>
+                            <span className="text-sm font-medium text-[#00D4AA]">已付担保金</span>
                           </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">等待确认</div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 bg-gray-300 rounded-full"></div>
+                            <span className="text-sm font-medium text-gray-500">等待确认</span>
                           </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">争议仲裁</div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 bg-gray-300 rounded-full"></div>
+                            <span className="text-sm font-medium text-gray-500">争议仲裁</span>
                           </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">完成交易</div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 bg-gray-300 rounded-full"></div>
+                            <span className="text-sm font-medium text-gray-500">完成交易</span>
                           </div>
                         </div>
                       </div>
+                      
+                      <div className="relative">
+                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full bg-[#00D4AA] rounded-full transition-all duration-300" style={{width: '40%'}}></div>
+                        </div>
+                      </div>
                     </div>
+
                   </div>
                   
                   {/* 交易对象和担保群 - 右侧显示 */}
@@ -5673,37 +5675,7 @@ export default function WalletPage() {
                       0.15 <span className="text-sm font-normal text-gray-500">BTC</span>
                     </div>
                     
-                    {/* 进度步骤显示 - 刚开始 */}
-                    <div className="py-6">
-                      <div className="relative px-4">
-                        {/* 连接线背景 */}
-                        <div className="absolute top-8 left-0 right-0 h-1 bg-gray-300"></div>
-                        
-                        {/* 步骤圆点和标签 */}
-                        <div className="flex justify-between items-center relative">
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">发起交易</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">已付担保金</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">等待确认</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">争议仲裁</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">完成交易</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+
                   </div>
                   
                   {/* 交易对象和担保群 - 右侧显示 */}
@@ -5791,37 +5763,7 @@ export default function WalletPage() {
                       2.5 <span className="text-sm font-normal text-gray-500">ETH</span>
                     </div>
                     
-                    {/* 进度步骤显示 - 全部完成 */}
-                    <div className="py-6">
-                      <div className="relative px-4">
-                        {/* 连接线背景 */}
-                        <div className="absolute top-8 left-0 right-0 h-1 bg-[#00D4AA]"></div>
-                        
-                        {/* 步骤圆点和标签 */}
-                        <div className="flex justify-between items-center relative">
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">发起交易</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">已付担保金</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">等待确认</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">争议仲裁</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">完成交易</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+
                   </div>
                   
                   {/* 交易对象和担保群 - 右侧显示 */}
@@ -5911,30 +5853,7 @@ export default function WalletPage() {
                       2,500.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
                     
-                    {/* 进度步骤显示 - 收款担保 */}
-                    <div className="py-4">
-                      <div className="flex items-center relative">
-                        <div className="flex flex-col items-center z-10">
-                          <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">发起交易</span>
-                          <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
-                        </div>
-                        <div className="flex-1 h-1 bg-[#00D4AA] mx-3"></div>
-                        <div className="flex flex-col items-center z-10">
-                          <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">对方已付担保金</span>
-                          <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
-                        </div>
-                        <div className="flex-1 h-1 bg-[#00D4AA] mx-3"></div>
-                        <div className="flex flex-col items-center z-10">
-                          <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">等待确认完成交易</span>
-                          <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
-                        </div>
-                        <div className="flex-1 h-1 bg-[#00D4AA] mx-3"></div>
-                        <div className="flex flex-col items-center z-10">
-                          <span className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">完成收款</span>
-                          <div className="w-3 h-3 bg-[#00D4AA] rounded-full"></div>
-                        </div>
-                      </div>
-                    </div>
+
                   </div>
                   
                   {/* 交易对象和担保群 - 右侧显示 */}
@@ -6031,38 +5950,7 @@ export default function WalletPage() {
                       3,000.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
                     
-                    {/* 进度步骤显示 - 付款担保 */}
-                    <div className="py-6">
-                      <div className="relative px-4">
-                        {/* 连接线背景 */}
-                        <div className="absolute top-8 left-0 right-0 h-1 bg-gray-300"></div>
-                        <div className="absolute top-8 left-0 w-1/2 h-1 bg-[#00D4AA]"></div>
-                        
-                        {/* 步骤圆点和标签 */}
-                        <div className="flex justify-between items-center relative">
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">发起交易</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">已付担保金</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">等待确认</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">争议仲裁</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">完成交易</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+
                   </div>
                   
                   {/* 交易对象和担保群 - 右侧显示 */}
@@ -6168,38 +6056,7 @@ export default function WalletPage() {
                       50.0 <span className="text-sm font-normal text-gray-500">SOL</span>
                     </div>
                     
-                    {/* 进度步骤显示 - 刚付款等待确认 */}
-                    <div className="py-6">
-                      <div className="relative px-4">
-                        {/* 连接线背景 */}
-                        <div className="absolute top-8 left-0 right-0 h-1 bg-gray-300"></div>
-                        <div className="absolute top-8 left-0 w-1/2 h-1 bg-[#00D4AA]"></div>
-                        
-                        {/* 步骤圆点和标签 */}
-                        <div className="flex justify-between items-center relative">
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">发起交易</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">已付担保金</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">等待确认</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">争议仲裁</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">完成交易</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+
                   </div>
                   
                   {/* 交易对象和担保群 - 右侧显示 */}
@@ -6287,39 +6144,7 @@ export default function WalletPage() {
                       1,200.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
                     
-                    {/* 进度步骤显示 - 争议状态 */}
-                    <div className="py-6">
-                      <div className="relative px-4">
-                        {/* 连接线背景 */}
-                        <div className="absolute top-8 left-0 right-0 h-1 bg-gray-300"></div>
-                        <div className="absolute top-8 left-0 w-1/2 h-1 bg-[#00D4AA]"></div>
-                        <div className="absolute top-8 left-1/2 w-1/4 h-1 bg-red-500"></div>
-                        
-                        {/* 步骤圆点和标签 */}
-                        <div className="flex justify-between items-center relative">
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">发起交易</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">已付担保金</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-[#00D4AA] text-white px-2 py-1 rounded text-xs font-medium">等待确认</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-red-500 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-red-500 text-white px-2 py-1 rounded text-xs font-medium">争议仲裁</div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 mb-3"></div>
-                            <div className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-xs font-medium">完成交易</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+
                   </div>
                   
                   {/* 交易对象和担保群 - 右侧显示 */}
