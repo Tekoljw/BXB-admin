@@ -90,8 +90,8 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
         <div 
           className="absolute h-1 bg-gray-200"
           style={{
-            left: '12px', // 第一个圆球的中心位置
-            right: '12px', // 最后一个圆球的中心位置
+            left: '16px', // 第一个圆球的边缘位置
+            right: '16px', // 最后一个圆球的边缘位置
             bottom: '31px' // 调整到圆球中心位置
           }}
         />
@@ -100,8 +100,8 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
         <div 
           className="absolute h-1 bg-green-500 transition-all duration-500 ease-out"
           style={{
-            left: '12px', // 从第一个圆球中心开始
-            width: `${Math.min(progressPercentage, 100) * (100 - 24) / 100}%`,
+            left: '16px', // 从第一个圆球边缘开始
+            width: `${Math.min(progressPercentage, 100) * (100 - 32) / 100}%`,
             bottom: '31px' // 调整到圆球中心位置
           }}
         />
