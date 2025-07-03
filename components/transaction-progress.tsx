@@ -34,7 +34,7 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
               {/* 气泡样式标签 */}
               <div className={`
                 relative px-3 py-2 rounded-lg text-sm font-medium text-center
-                whitespace-nowrap shadow-sm mb-8
+                whitespace-nowrap shadow-sm mb-4
                 ${step.status === 'completed' 
                   ? 'bg-green-100 text-green-800 border border-green-200' 
                   : step.status === 'current'
@@ -86,13 +86,13 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
           ))}
         </div>
 
-        {/* 连接线 - 穿过圆球中心 */}
+        {/* 连接线 - 从第一个圆球中心到最后一个圆球中心 */}
         <div 
           className="absolute h-1 bg-gray-200"
           style={{
-            left: '32px',
-            right: '32px',
-            top: 'calc(100% - 36px)' // 圆球中心位置
+            left: '16px', // 第一个圆球的中心位置
+            right: '16px', // 最后一个圆球的中心位置
+            top: 'calc(100% - 20px)' // 圆球中心位置
           }}
         />
         
@@ -100,9 +100,9 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
         <div 
           className="absolute h-1 bg-green-500 transition-all duration-500 ease-out"
           style={{
-            left: '32px',
-            width: `${Math.min(progressPercentage, 100) * (100 - 64) / 100}%`,
-            top: 'calc(100% - 36px)' // 圆球中心位置
+            left: '16px', // 从第一个圆球中心开始
+            width: `${Math.min(progressPercentage, 100) * (100 - 32) / 100}%`,
+            top: 'calc(100% - 20px)' // 圆球中心位置
           }}
         />
       </div>
