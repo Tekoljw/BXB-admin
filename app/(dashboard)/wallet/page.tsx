@@ -3034,6 +3034,7 @@ export default function WalletPage() {
                 {/* 主要操作按钮 */}
                 {[
                   { id: "add-credit", label: "增加信誉担保金", icon: Shield },
+                  { id: "extend-time", label: "延长信誉担保时间", icon: Clock },
                   { id: "transfer", label: "划转", icon: ArrowLeftRight }
                 ].map((button) => {
                   const Icon = button.icon
@@ -3046,6 +3047,8 @@ export default function WalletPage() {
                       onClick={() => {
                         if (button.id === "add-credit") {
                           setShowAddCreditModal(true)
+                        } else if (button.id === "extend-time") {
+                          setShowExtendTimeModal(true)
                         } else if (button.id === "transfer") {
                           setShowTransferModal(true)
                         }
