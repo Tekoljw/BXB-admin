@@ -5554,9 +5554,9 @@ export default function WalletPage() {
                   </div>
                 </div>
                 
-                {/* 交易对象和担保群 - 始终显示，图标在前 */}
+                {/* 交易对象和担保群 - 始终显示，图标在前，居右对齐 */}
                 <div className="space-y-4">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center justify-end space-x-3">
                     <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                       <User className="h-5 w-5 text-gray-600" />
                     </div>
@@ -5571,7 +5571,7 @@ export default function WalletPage() {
                     </button>
                   </div>
                   
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center justify-end space-x-3">
                     <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
                       <Users className="h-5 w-5 text-blue-600" />
                     </div>
@@ -5693,9 +5693,9 @@ export default function WalletPage() {
                   </div>
                 </div>
                 
-                {/* 交易对象和担保群 - 始终显示，图标在前 */}
+                {/* 交易对象和担保群 - 始终显示，图标在前，居右对齐 */}
                 <div className="space-y-4">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center justify-end space-x-3">
                     <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                       <User className="h-5 w-5 text-gray-600" />
                     </div>
@@ -5710,7 +5710,7 @@ export default function WalletPage() {
                     </button>
                   </div>
                   
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center justify-end space-x-3">
                     <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
                       <Users className="h-5 w-5 text-blue-600" />
                     </div>
