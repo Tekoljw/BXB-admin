@@ -5688,12 +5688,17 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 第二个担保交易卡片 */}
+          </div>
+        )
+
+      case "付款担保":
+        return (
+          <div className="space-y-6">
             <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
-              {/* 第二个担保交易 - 刚开始 */}
+              {/* USDT买卖担保 */}
               <div 
-                className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("guarantee-2-new")}
+                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                onClick={() => toggleGuaranteeItem("pay-guarantee-1")}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex flex-col space-y-3">
