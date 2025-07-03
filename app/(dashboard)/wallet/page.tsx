@@ -2,7 +2,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import ProgressStepper from "@/components/progress-stepper"
+import TransactionProgress from "@/components/transaction-progress"
+
 
 import { useRouter } from "next/navigation"
 import { 
@@ -5552,7 +5553,7 @@ export default function WalletPage() {
                       5,000.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
                     
-                    <ProgressStepper 
+                    <TransactionProgress 
                       steps={[
                         { id: '1', label: '发起交易', status: 'completed' },
                         { id: '2', label: '已付担保金', status: 'completed' },
@@ -5831,7 +5832,7 @@ export default function WalletPage() {
                       2,500.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
                     
-                    <ProgressStepper 
+                    <TransactionProgress 
                       steps={[
                         { id: '1', label: '发起交易', status: 'completed' },
                         { id: '2', label: '对方已付担保金', status: 'completed' },
@@ -6044,7 +6045,7 @@ export default function WalletPage() {
                       50.0 <span className="text-sm font-normal text-gray-500">SOL</span>
                     </div>
                     
-                    <ProgressStepper 
+                    <TransactionProgress 
                       steps={[
                         { id: '1', label: '发起交易', status: 'completed' },
                         { id: '2', label: '您已付担保金', status: 'completed' },
