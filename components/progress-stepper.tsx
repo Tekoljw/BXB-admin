@@ -23,15 +23,22 @@ export default function ProgressStepper({ steps, className = '' }: ProgressStepp
 
   return (
     <div className={`w-full ${className}`}>
-      {/* 步骤标签和圆点容器 */}
-      <div className="relative">
-        {/* 步骤标签 */}
-        <div className="flex justify-between mb-4">
+      <div className="relative py-8">
+        {/* 横线背景 - 放在中心位置 */}
+        <div className="absolute top-1/2 left-8 right-8 h-2 bg-gray-200 rounded-full transform -translate-y-1/2"></div>
+        {/* 进度线 */}
+        <div 
+          className="absolute top-1/2 left-8 h-2 bg-[#00D4AA] rounded-full transition-all duration-500 ease-out transform -translate-y-1/2"
+          style={{ width: `calc(${Math.min(progressPercentage, 100)}% - 32px)` }}
+        ></div>
+        
+        {/* 步骤标签和圆点 */}
+        <div className="flex justify-between items-center relative px-8">
           {steps.map((step, index) => (
-            <div key={step.id} className="flex flex-col items-center relative">
+            <div key={step.id} className="flex flex-col items-center">
               {/* 气泡标签 */}
               <div className={`
-                px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-3
+                px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-4
                 ${step.status === 'completed' 
                   ? 'bg-[#00D4AA] text-white' 
                   : step.status === 'current'
@@ -53,7 +60,7 @@ export default function ProgressStepper({ steps, className = '' }: ProgressStepp
                 `}></div>
               </div>
               
-              {/* 步骤圆点 */}
+              {/* 步骤圆点 - 直接在横线上 */}
               <div className={`
                 w-5 h-5 rounded-full border-3 border-white dark:border-gray-800 
                 relative z-10 shadow-md flex items-center justify-center
@@ -70,17 +77,6 @@ export default function ProgressStepper({ steps, className = '' }: ProgressStepp
               </div>
             </div>
           ))}
-        </div>
-        
-        {/* 进度线容器 */}
-        <div className="absolute bottom-[10px] left-[10px] right-[10px] h-2">
-          {/* 背景线 */}
-          <div className="absolute inset-0 bg-gray-200 rounded-full"></div>
-          {/* 进度线 */}
-          <div 
-            className="absolute left-0 top-0 h-full bg-[#00D4AA] rounded-full transition-all duration-500 ease-out"
-            style={{ width: `${Math.min(progressPercentage, 100)}%` }}
-          ></div>
         </div>
       </div>
     </div>
