@@ -5395,6 +5395,11 @@ export default function WalletPage() {
   const [selectedCard, setSelectedCard] = useState("receivable")
   const [selectedGuaranteeTab, setSelectedGuaranteeTab] = useState("收款担保") // 新增担保页签状态
   const [expandedGuaranteeItems, setExpandedGuaranteeItems] = useState<Set<string>>(new Set()) // 展开的担保项目
+  const [tradingPartnerDialog, setTradingPartnerDialog] = useState<{isOpen: boolean, partnerName: string, partnerId: string}>({
+    isOpen: false,
+    partnerName: '',
+    partnerId: ''
+  }) // 交易伙伴对话框状态
   const [showAddCreditModal, setShowAddCreditModal] = useState(false)
   const [showExtendTimeModal, setShowExtendTimeModal] = useState(false)
   const [showContractModal, setShowContractModal] = useState(false)
@@ -5566,7 +5571,11 @@ export default function WalletPage() {
                         }`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          console.log('点击交易对象');
+                          setTradingPartnerDialog({
+                            isOpen: true,
+                            partnerName: '123789',
+                            partnerId: 'user-123789'
+                          });
                         }}
                       >
                         <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
@@ -8788,6 +8797,85 @@ export default function WalletPage() {
                 className="flex-1 px-4 py-3 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all text-sm font-medium"
               >
                 确认释放
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 交易伙伴操作对话框 */}
+      {tradingPartnerDialog.isOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className={`w-full max-w-md rounded-2xl ${isDark ? 'bg-[#1a1d29]' : 'bg-white'} shadow-2xl border ${isDark ? 'border-[#252842]' : 'border-gray-200'} overflow-hidden`}>
+            {/* 对话框头部 */}
+            <div className={`px-6 py-4 border-b ${isDark ? 'border-[#252842]' : 'border-gray-100'}`}>
+              <div className="flex items-center justify-between">
+                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  交易伙伴: {tradingPartnerDialog.partnerName}
+                </h3>
+                <button
+                  onClick={() => setTradingPartnerDialog({isOpen: false, partnerName: '', partnerId: ''})}
+                  className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+                >
+                  <X className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                </button>
+              </div>
+            </div>
+
+            {/* 对话框内容 */}
+            <div className="px-6 py-6 space-y-4">
+              <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                选择与交易伙伴的联系方式
+              </p>
+
+              {/* 私聊选项 */}
+              <button
+                onClick={() => {
+                  // 这里可以跳转到私聊页面或打开聊天功能
+                  console.log('打开私聊:', tradingPartnerDialog.partnerName);
+                  setTradingPartnerDialog({isOpen: false, partnerName: '', partnerId: ''});
+                }}
+                className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 hover:shadow-md ${
+                  isDark 
+                    ? 'border-[#252842] bg-[#0f1219] hover:bg-[#1a1d29] text-white' 
+                    : 'border-gray-200 bg-gray-50 hover:bg-white text-gray-900'
+                }`}
+              >
+                <div className={`p-2 rounded-lg ${isDark ? 'bg-blue-500/20' : 'bg-blue-50'}`}>
+                  <MessageCircle className={`h-5 w-5 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                </div>
+                <div className="text-left">
+                  <div className="font-medium">发起私聊</div>
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    与 {tradingPartnerDialog.partnerName} 进行私人对话
+                  </div>
+                </div>
+                <ChevronRight className={`h-5 w-5 ml-auto ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
+              </button>
+
+              {/* 担保群选项 */}
+              <button
+                onClick={() => {
+                  // 这里可以跳转到担保群或打开群聊功能
+                  console.log('进入担保群:', tradingPartnerDialog.partnerName);
+                  setTradingPartnerDialog({isOpen: false, partnerName: '', partnerId: ''});
+                }}
+                className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 hover:shadow-md ${
+                  isDark 
+                    ? 'border-[#252842] bg-[#0f1219] hover:bg-[#1a1d29] text-white' 
+                    : 'border-gray-200 bg-gray-50 hover:bg-white text-gray-900'
+                }`}
+              >
+                <div className={`p-2 rounded-lg ${isDark ? 'bg-green-500/20' : 'bg-green-50'}`}>
+                  <Users className={`h-5 w-5 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
+                </div>
+                <div className="text-left">
+                  <div className="font-medium">进入担保群</div>
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    在担保群中协商交易细节
+                  </div>
+                </div>
+                <ChevronRight className={`h-5 w-5 ml-auto ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
               </button>
             </div>
           </div>
