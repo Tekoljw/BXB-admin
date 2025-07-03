@@ -5543,59 +5543,60 @@ export default function WalletPage() {
                 onClick={() => toggleGuaranteeItem("guarantee-1")}
               >
                 <div className="flex items-start justify-between mb-6">
-                  <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
-                    USDT买卖担保
-                  </span>
-                  <div className="text-right">
+                  <div className="flex flex-col space-y-2">
+                    <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
+                      USDT买卖担保
+                    </span>
                     <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       5,000.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">担保解冻时间：<span className="font-mono">03天12小时25分钟15秒</span></div>
+                    <div className="text-xs text-gray-500">担保解冻时间：<span className="font-mono">03天12小时25分钟15秒</span></div>
                   </div>
-                </div>
-                
-                {/* 交易对象和担保群 - 用卡片框起来 */}
-                <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <button 
-                          className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
-                          title="联系用户"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <MessageCircle className="h-6 w-6" />
-                        </button>
-                        <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                          <User className="h-5 w-5 text-gray-600" />
+                  
+                  {/* 交易对象和担保群 - 右侧显示 */}
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <button 
+                            className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
+                            title="联系用户"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <MessageCircle className="h-6 w-6" />
+                          </button>
+                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
                         </div>
-                        <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123789</span>
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                            <User className="h-5 w-5 text-gray-600" />
+                          </div>
+                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123789</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <button 
+                            className="text-blue-500 hover:text-blue-600 transition-colors" 
+                            title="进入担保群"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Users className="h-6 w-6" />
+                          </button>
+                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
+                            <Users className="h-5 w-5 text-blue-600" />
+                          </div>
+                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123123</span>
+                        </div>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <button 
-                          className="text-blue-500 hover:text-blue-600 transition-colors" 
-                          title="进入担保群"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Users className="h-6 w-6" />
-                        </button>
-                        <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
-                          <Users className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123123</span>
-                      </div>
-                    </div>
                   </div>
                 </div>
+
                 
                 {/* 可展开的内容简介和操作按钮 */}
                 {expandedGuaranteeItems.has("guarantee-1") && (
@@ -5634,59 +5635,60 @@ export default function WalletPage() {
                 onClick={() => toggleGuaranteeItem("guarantee-other")}
               >
                 <div className="flex items-start justify-between mb-6">
-                  <span className="px-3 py-1.5 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
-                    其他担保交易
-                  </span>
-                  <div className="text-right">
+                  <div className="flex flex-col space-y-2">
+                    <span className="px-3 py-1.5 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold w-fit">
+                      其他担保交易
+                    </span>
                     <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       2,500.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">担保解冻时间：<span className="font-mono">02天05小时30分钟45秒</span></div>
+                    <div className="text-xs text-gray-500">担保解冻时间：<span className="font-mono">02天05小时30分钟45秒</span></div>
                   </div>
-                </div>
-                
-                {/* 交易对象和担保群 - 用卡片框起来 */}
-                <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <button 
-                          className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
-                          title="联系用户"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <MessageCircle className="h-6 w-6" />
-                        </button>
-                        <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                          <User className="h-5 w-5 text-gray-600" />
+                  
+                  {/* 交易对象和担保群 - 右侧显示 */}
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <button 
+                            className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
+                            title="联系用户"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <MessageCircle className="h-6 w-6" />
+                          </button>
+                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
                         </div>
-                        <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>456456</span>
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                            <User className="h-5 w-5 text-gray-600" />
+                          </div>
+                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>456456</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <button 
+                            className="text-blue-500 hover:text-blue-600 transition-colors" 
+                            title="进入担保群"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Users className="h-6 w-6" />
+                          </button>
+                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
+                            <Users className="h-5 w-5 text-blue-600" />
+                          </div>
+                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>456456</span>
+                        </div>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <button 
-                          className="text-blue-500 hover:text-blue-600 transition-colors" 
-                          title="进入担保群"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Users className="h-6 w-6" />
-                        </button>
-                        <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
-                          <Users className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>456456</span>
-                      </div>
-                    </div>
                   </div>
                 </div>
+
                 
                 {/* 可展开的内容简介和操作按钮 */}
                 {expandedGuaranteeItems.has("guarantee-other") && (
@@ -5729,59 +5731,60 @@ export default function WalletPage() {
                 onClick={() => toggleGuaranteeItem("guarantee-2")}
               >
                 <div className="flex items-start justify-between mb-6">
-                  <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
-                    USDT买卖担保
-                  </span>
-                  <div className="text-right">
+                  <div className="flex flex-col space-y-2">
+                    <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
+                      USDT买卖担保
+                    </span>
                     <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       3,000.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">担保解冻时间：<span className="font-mono">01天08小时15分钟30秒</span></div>
+                    <div className="text-xs text-gray-500">担保解冻时间：<span className="font-mono">01天08小时15分钟30秒</span></div>
                   </div>
-                </div>
-                
-                {/* 交易对象和担保群 - 用卡片框起来 */}
-                <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <button 
-                          className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
-                          title="联系用户"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <MessageCircle className="h-6 w-6" />
-                        </button>
-                        <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                          <User className="h-5 w-5 text-gray-600" />
+                  
+                  {/* 交易对象和担保群 - 右侧显示 */}
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <button 
+                            className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
+                            title="联系用户"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <MessageCircle className="h-6 w-6" />
+                          </button>
+                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
                         </div>
-                        <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123456</span>
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                            <User className="h-5 w-5 text-gray-600" />
+                          </div>
+                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123456</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <button 
+                            className="text-blue-500 hover:text-blue-600 transition-colors" 
+                            title="进入担保群"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Users className="h-6 w-6" />
+                          </button>
+                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
+                            <Users className="h-5 w-5 text-blue-600" />
+                          </div>
+                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123456</span>
+                        </div>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <button 
-                          className="text-blue-500 hover:text-blue-600 transition-colors" 
-                          title="进入担保群"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Users className="h-6 w-6" />
-                        </button>
-                        <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
-                          <Users className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123456</span>
-                      </div>
-                    </div>
                   </div>
                 </div>
+
                 
                 {/* 可展开的内容简介和操作按钮 */}
                 {expandedGuaranteeItems.has("guarantee-2") && (
