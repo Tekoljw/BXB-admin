@@ -24,21 +24,21 @@ export default function ProgressStepper({ steps, className = '' }: ProgressStepp
   return (
     <div className={`w-full max-w-4xl min-w-[360px] mx-auto overflow-x-auto ${className}`}>
       <div className="relative py-8">
-        {/* 横线背景 - 放在中心位置，使用响应式内边距 */}
-        <div className="absolute top-1/2 left-4 right-4 sm:left-8 sm:right-8 md:left-12 md:right-12 h-2 bg-gray-200 rounded-full transform -translate-y-1/2"></div>
-        {/* 进度线 */}
-        <div 
-          className="absolute top-1/2 left-4 sm:left-8 md:left-12 h-2 bg-[#00D4AA] rounded-full transition-all duration-500 ease-out transform -translate-y-1/2"
-          style={{ 
-            width: `calc((100% - 2rem) * ${Math.min(progressPercentage, 100) / 100})`,
-            maxWidth: `calc(100% - 2rem)`
-          }}
-        ></div>
-        
-        {/* 步骤标签和圆点 */}
+        {/* 步骤标签和圆点容器 */}
         <div className="flex justify-between items-center relative px-4 sm:px-8 md:px-12">
+          {/* 背景横线 - 从第一个圆点到最后一个圆点 */}
+          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-200 transform -translate-y-1/2 z-0"></div>
+          
+          {/* 进度横线 - 根据完成状态显示 */}
+          <div 
+            className="absolute top-1/2 left-0 h-0.5 bg-[#00D4AA] transform -translate-y-1/2 z-0 transition-all duration-500 ease-out"
+            style={{ 
+              width: `${progressPercentage}%`
+            }}
+          ></div>
+          
           {steps.map((step, index) => (
-            <div key={step.id} className="flex flex-col items-center">
+            <div key={step.id} className="flex flex-col items-center relative">
               {/* 气泡标签 */}
               <div className={`
                 px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg text-xs sm:text-sm font-medium relative whitespace-nowrap mb-3 sm:mb-4
@@ -63,7 +63,7 @@ export default function ProgressStepper({ steps, className = '' }: ProgressStepp
                 `}></div>
               </div>
               
-              {/* 步骤圆点 - 直接在横线上 */}
+              {/* 步骤圆点 */}
               <div className={`
                 w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 sm:border-3 border-white dark:border-gray-800 
                 relative z-10 shadow-md flex items-center justify-center
