@@ -5553,74 +5553,64 @@ export default function WalletPage() {
                     
                     {/* 全新进度条系统 - 气泡标签设计 */}
                     <div className="mt-8 px-2">
-                      <div className="relative py-6">
-                        {/* 横线背景 */}
-                        <div className="absolute top-1/2 left-8 right-8 h-2 bg-gray-200 rounded-full transform -translate-y-1/2"></div>
-                        {/* 进度线 */}
-                        <div className="absolute top-1/2 left-8 h-2 bg-[#00D4AA] rounded-full transition-all duration-300 transform -translate-y-1/2" style={{width: 'calc(50% - 32px)'}}></div>
-                        
+                      <div className="relative py-8">
                         {/* 步骤点和气泡标签 */}
-                        <div className="flex justify-between items-center relative px-8">
+                        <div className="flex justify-between items-end relative px-8 mb-4">
                           {/* 步骤1：发起交易 - 已完成 */}
                           <div className="flex flex-col items-center">
-                            <div className="relative mb-4">
-                              <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap">
-                                发起交易
-                                {/* 气泡尖角 */}
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
-                              </div>
+                            <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-2">
+                              发起交易
+                              {/* 气泡尖角 */}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
                             </div>
                             <div className="w-5 h-5 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 shadow-md"></div>
                           </div>
                           
                           {/* 步骤2：已付担保金 - 已完成 */}
                           <div className="flex flex-col items-center">
-                            <div className="relative mb-4">
-                              <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap">
-                                已付担保金
-                                {/* 气泡尖角 */}
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
-                              </div>
+                            <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-2">
+                              已付担保金
+                              {/* 气泡尖角 */}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
                             </div>
                             <div className="w-5 h-5 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 shadow-md"></div>
                           </div>
                           
                           {/* 步骤3：等待确认 - 当前进行中 */}
                           <div className="flex flex-col items-center">
-                            <div className="relative mb-4">
-                              <div className="bg-yellow-400 text-black px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap">
-                                等待确认
-                                {/* 气泡尖角 */}
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-yellow-400"></div>
-                              </div>
+                            <div className="bg-yellow-400 text-black px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-2">
+                              等待确认
+                              {/* 气泡尖角 */}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-yellow-400"></div>
                             </div>
                             <div className="w-5 h-5 bg-yellow-400 rounded-full border-3 border-white dark:border-gray-800 relative z-10 shadow-md"></div>
                           </div>
                           
                           {/* 步骤4：争议仲裁 - 未开始 */}
                           <div className="flex flex-col items-center">
-                            <div className="relative mb-4">
-                              <div className="bg-gray-300 text-gray-600 px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap">
-                                争议仲裁
-                                {/* 气泡尖角 */}
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-300"></div>
-                              </div>
+                            <div className="bg-gray-300 text-gray-600 px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-2">
+                              争议仲裁
+                              {/* 气泡尖角 */}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-300"></div>
                             </div>
                             <div className="w-5 h-5 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 shadow-md"></div>
                           </div>
                           
                           {/* 步骤5：完成交易 - 未开始 */}
                           <div className="flex flex-col items-center">
-                            <div className="relative mb-4">
-                              <div className="bg-gray-300 text-gray-600 px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap">
-                                完成交易
-                                {/* 气泡尖角 */}
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-300"></div>
-                              </div>
+                            <div className="bg-gray-300 text-gray-600 px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-2">
+                              完成交易
+                              {/* 气泡尖角 */}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-300"></div>
                             </div>
                             <div className="w-5 h-5 bg-gray-300 rounded-full border-3 border-white dark:border-gray-800 relative z-10 shadow-md"></div>
                           </div>
                         </div>
+                        
+                        {/* 横线背景 - 放在圆球中心位置 */}
+                        <div className="absolute bottom-4 left-8 right-8 h-2 bg-gray-200 rounded-full"></div>
+                        {/* 进度线 */}
+                        <div className="absolute bottom-4 left-8 h-2 bg-[#00D4AA] rounded-full transition-all duration-300" style={{width: 'calc(50% - 32px)'}}></div>
                       </div>
                     </div>
 
@@ -5894,69 +5884,59 @@ export default function WalletPage() {
                     
                     {/* 收款担保进度条 - 已完成状态 */}
                     <div className="mt-8 px-2">
-                      <div className="relative py-6">
-                        {/* 横线背景 */}
-                        <div className="absolute top-1/2 left-8 right-8 h-2 bg-gray-200 rounded-full transform -translate-y-1/2"></div>
-                        {/* 进度线 - 100%完成 */}
-                        <div className="absolute top-1/2 left-8 right-8 h-2 bg-[#00D4AA] rounded-full transition-all duration-300 transform -translate-y-1/2"></div>
-                        
+                      <div className="relative py-8">
                         {/* 步骤点和气泡标签 */}
-                        <div className="flex justify-between items-center relative px-8">
+                        <div className="flex justify-between items-end relative px-8 mb-4">
                           {/* 步骤1：发起交易 - 已完成 */}
                           <div className="flex flex-col items-center">
-                            <div className="relative mb-4">
-                              <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap">
-                                发起交易
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
-                              </div>
+                            <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-2">
+                              发起交易
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
                             </div>
                             <div className="w-5 h-5 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 shadow-md"></div>
                           </div>
                           
                           {/* 步骤2：已付担保金 - 已完成 */}
                           <div className="flex flex-col items-center">
-                            <div className="relative mb-4">
-                              <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap">
-                                对方已付担保金
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
-                              </div>
+                            <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-2">
+                              对方已付担保金
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
                             </div>
                             <div className="w-5 h-5 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 shadow-md"></div>
                           </div>
                           
                           {/* 步骤3：等待确认 - 已完成 */}
                           <div className="flex flex-col items-center">
-                            <div className="relative mb-4">
-                              <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap">
-                                等待确认完成交易
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
-                              </div>
+                            <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-2">
+                              等待确认完成交易
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
                             </div>
                             <div className="w-5 h-5 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 shadow-md"></div>
                           </div>
                           
                           {/* 步骤4：争议仲裁 - 已完成 */}
                           <div className="flex flex-col items-center">
-                            <div className="relative mb-4">
-                              <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap">
-                                争议仲裁
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
-                              </div>
+                            <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-2">
+                              争议仲裁
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
                             </div>
                             <div className="w-5 h-5 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 shadow-md"></div>
                           </div>
                           
                           {/* 步骤5：完成交易 - 已完成 */}
                           <div className="flex flex-col items-center">
-                            <div className="relative mb-4">
-                              <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap">
-                                完成收款
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
-                              </div>
+                            <div className="bg-[#00D4AA] text-white px-3 py-2 rounded-lg text-sm font-medium relative whitespace-nowrap mb-2">
+                              完成收款
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-[#00D4AA]"></div>
                             </div>
                             <div className="w-5 h-5 bg-[#00D4AA] rounded-full border-3 border-white dark:border-gray-800 relative z-10 shadow-md"></div>
                           </div>
                         </div>
+                        
+                        {/* 横线背景 - 放在圆球中心位置 */}
+                        <div className="absolute bottom-4 left-8 right-8 h-2 bg-gray-200 rounded-full"></div>
+                        {/* 进度线 - 100%完成 */}
+                        <div className="absolute bottom-4 left-8 right-8 h-2 bg-[#00D4AA] rounded-full transition-all duration-300"></div>
                       </div>
                     </div>
 
