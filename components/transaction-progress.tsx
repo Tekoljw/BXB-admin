@@ -64,7 +64,7 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
               <div 
                 className={`
                   w-6 h-6 rounded-full flex items-center justify-center
-                  border-2 border-white shadow-md relative z-10 mb-2
+                  border-2 border-white shadow-md relative z-10
                   ${step.status === 'completed' 
                     ? 'bg-green-500' 
                     : step.status === 'current'
@@ -81,15 +81,6 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
                 {step.status === 'current' && (
                   <div className="w-2 h-2 bg-white rounded-full" />
                 )}
-              </div>
-              
-              {/* 节点下方说明文字 */}
-              <div className="text-xs text-gray-500 text-center whitespace-nowrap">
-                {step.label === '发起交易' && '发起时间：00/00/0000'}
-                {step.label === '等待确认' && '自动确认：00：00：00'}
-                {step.label === '争议仲裁' && '无争议则跳过'}
-                {(step.label === '等待确认完成交易' || step.label.includes('等待确认')) && step.label !== '等待确认' && '自动确认：00：00：00'}
-                {step.label.includes('争议') && step.label !== '争议仲裁' && '无争议则跳过'}
               </div>
             </div>
           ))}
