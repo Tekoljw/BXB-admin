@@ -5561,7 +5561,7 @@ export default function WalletPage() {
                         { id: '4', label: '争议仲裁', status: 'pending' },
                         { id: '5', label: '完成交易', status: 'pending' }
                       ]}
-                      className="mt-6 px-4"
+                      className="mt-6"
                     />
 
                   </div>
@@ -5840,7 +5840,7 @@ export default function WalletPage() {
                         { id: '4', label: '争议仲裁', status: 'completed' },
                         { id: '5', label: '完成收款', status: 'completed' }
                       ]}
-                      className="mt-6 px-4"
+                      className="mt-6"
                     />
 
                   </div>
@@ -6053,7 +6053,7 @@ export default function WalletPage() {
                         { id: '4', label: '争议仲裁', status: 'current' },
                         { id: '5', label: '完成交易', status: 'pending' }
                       ]}
-                      className="mt-6 px-4"
+                      className="mt-6"
                     />
 
                   </div>
