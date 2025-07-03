@@ -5521,12 +5521,12 @@ export default function WalletPage() {
     switch (selectedGuaranteeTab) {
       case "收款担保":
         return (
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm">
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
-              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                <div className="space-y-4">
+              <div className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                <div className="space-y-3">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
                       USDT买卖担保
@@ -5574,8 +5574,8 @@ export default function WalletPage() {
               </div>
 
               {/* 其他担保交易 */}
-              <div className={isDark ? "p-6 hover:bg-gray-700/30 transition-colors" : "p-6 hover:bg-gray-50 transition-colors"}>
-                <div className="space-y-4">
+              <div className={isDark ? "p-4 hover:bg-gray-700/30 transition-colors" : "p-4 hover:bg-gray-50 transition-colors"}>
+                <div className="space-y-3">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
                       其他担保交易
@@ -5631,12 +5631,12 @@ export default function WalletPage() {
 
       case "付款担保":
         return (
-          <div className="space-y-4">
+          <div className="space-y-3">
 
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {/* USDT买卖担保 */}
-              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                <div className="space-y-4">
+              <div className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                <div className="space-y-3">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-[#00D4AA] text-black rounded-full text-xs font-semibold">
                       USDT买卖担保
@@ -5698,8 +5698,8 @@ export default function WalletPage() {
               </div>
 
               {/* 其他担保交易 */}
-              <div className={isDark ? "p-6 hover:bg-gray-700/30 transition-colors" : "p-6 hover:bg-gray-50 transition-colors"}>
-                <div className="space-y-4">
+              <div className={isDark ? "p-4 hover:bg-gray-700/30 transition-colors" : "p-4 hover:bg-gray-50 transition-colors"}>
+                <div className="space-y-3">
                   <div className="flex items-start justify-between">
                     <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
                       其他担保交易
