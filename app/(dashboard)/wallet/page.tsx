@@ -67,7 +67,8 @@ import {
   Copy,
   Edit,
   Trash2,
-  Unlink
+  Unlink,
+  ChevronRight
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -5566,47 +5567,67 @@ export default function WalletPage() {
 
                   </div>
                   
-                  {/* 交易对象和担保群 - 右侧显示 */}
-                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                    <div className="space-y-4">
+                  {/* 交易对象和担保群 - 两个分开的可点击卡片 */}
+                  <div className="space-y-3">
+                    {/* 交易对象卡片 */}
+                    <button 
+                      className={`w-full p-4 rounded-lg border transition-all duration-200 hover:shadow-md active:scale-[0.98] ${
+                        isDark 
+                          ? 'border-gray-700 bg-gray-800/50 hover:bg-gray-800/70 hover:border-gray-600' 
+                          : 'border-gray-200 bg-gray-50/50 hover:bg-gray-100/70 hover:border-gray-300'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // 处理交易对象点击事件
+                        console.log('点击交易对象');
+                      }}
+                    >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
-                            title="联系用户"
-                            onClick={(e) => e.stopPropagation()}
-                          >
+                          <div className="text-[#00D4AA]">
                             <MessageCircle className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
+                          </div>
+                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象</span>
                         </div>
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                             <User className="h-5 w-5 text-gray-600" />
                           </div>
                           <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123789</span>
+                          <ChevronRight className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                         </div>
                       </div>
-                      
+                    </button>
+                    
+                    {/* 担保群卡片 */}
+                    <button 
+                      className={`w-full p-4 rounded-lg border transition-all duration-200 hover:shadow-md active:scale-[0.98] ${
+                        isDark 
+                          ? 'border-gray-700 bg-gray-800/50 hover:bg-gray-800/70 hover:border-gray-600' 
+                          : 'border-gray-200 bg-gray-50/50 hover:bg-gray-100/70 hover:border-gray-300'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // 处理担保群点击事件
+                        console.log('点击担保群');
+                      }}
+                    >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-blue-500 hover:text-blue-600 transition-colors" 
-                            title="进入担保群"
-                            onClick={(e) => e.stopPropagation()}
-                          >
+                          <div className="text-blue-500">
                             <Users className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
+                          </div>
+                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群</span>
                         </div>
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
                             <Users className="h-5 w-5 text-blue-600" />
                           </div>
                           <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123123</span>
+                          <ChevronRight className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                         </div>
                       </div>
-                    </div>
+                    </button>
                   </div>
                 </div>
 
