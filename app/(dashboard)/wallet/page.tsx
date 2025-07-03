@@ -5551,12 +5551,12 @@ export default function WalletPage() {
                     <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
                       USDT买卖担保
                     </span>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      5,000.00 <span className="text-sm font-normal text-gray-500">USDT</span>
+                    <div className={`text-3xl font-bold mt-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      5,000.00 <span className="text-base font-normal text-gray-500">USDT</span>
                     </div>
                     
                     {/* 交易对象和担保群 - 放在担保金额下面 */}
-                    <div className="flex gap-2 mt-3">
+                    <div className="flex gap-2 mt-4">
                       {/* 交易对象标签 */}
                       <button 
                         className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
