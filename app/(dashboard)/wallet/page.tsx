@@ -5543,10 +5543,10 @@ export default function WalletPage() {
             <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
               {/* USDT买卖担保 */}
               <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
                 onClick={() => toggleGuaranteeItem("guarantee-1")}
               >
-                <div className="flex items-start justify-between mb-6">
+                <div className="flex items-start justify-between mb-3">
                   <div className="flex flex-col space-y-3">
                     <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
                       USDT买卖担保
@@ -5579,7 +5579,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条 - 与左上角标签对齐 */}
-                  <div className="flex-shrink-0 ml-6 -mt-6">
+                  <div className="flex-shrink-0 ml-6 -mt-3">
                     <TransactionProgress 
                       steps={[
                         { id: '1', label: '发起交易', status: 'completed' },
@@ -5591,19 +5591,19 @@ export default function WalletPage() {
                       className="w-auto"
                     />
                     {/* 交易发起时间和自动确认倒计时 */}
-                    <div className="mt-3 flex items-center justify-between">
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <div className="mt-2 flex items-center justify-between">
+                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                         发起时间: 2025-01-29 | <span className="text-orange-500 font-medium">自动确认倒计时: 23小时42分钟</span>
                       </div>
                       <button 
-                        className={`flex items-center gap-1 text-sm text-blue-500 hover:text-blue-600 transition-colors ${isDark ? 'hover:text-blue-400' : ''}`}
+                        className={`flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 transition-colors ${isDark ? 'hover:text-blue-400' : ''}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleGuaranteeItem("guarantee-1");
                         }}
                       >
                         查看合同
-                        <ChevronDown className="h-4 w-4" />
+                        <ChevronDown className="h-3 w-3" />
                       </button>
                     </div>
                   </div>
@@ -5692,10 +5692,10 @@ export default function WalletPage() {
             <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
               {/* 第二个担保交易 - 刚开始 */}
               <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
                 onClick={() => toggleGuaranteeItem("guarantee-2-new")}
               >
-                <div className="flex items-start justify-between mb-6">
+                <div className="flex items-start justify-between mb-3">
                   <div className="flex flex-col space-y-3">
                     <span className="px-3 py-1.5 bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 rounded-full text-xs font-semibold w-fit">
                       BTC交易担保
@@ -5727,7 +5727,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条和时间信息 */}
-                  <div className="flex flex-col items-end -mt-6">
+                  <div className="flex flex-col items-end -mt-3">
                     <TransactionProgress 
                       steps={[
                         { id: 'start', label: '发起交易', status: 'completed' },
@@ -5737,14 +5737,14 @@ export default function WalletPage() {
                       ]}
                       className=""
                     />
-                    <div className={`text-xs mt-2 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <div className={`text-xs mt-1 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                       <span>发起时间：2025-01-29</span>
                       <span className="mx-2">|</span>
                       <span>自动确认：24小时</span>
                     </div>
                     
                     {/* 查看合同链接 */}
-                    <div className="mt-3">
+                    <div className="mt-2">
                       <button 
                         className={`flex items-center gap-1 text-xs transition-colors ${
                           isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
@@ -5799,10 +5799,10 @@ export default function WalletPage() {
             <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
               {/* 第三个担保交易 - 完成状态 */}
               <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
                 onClick={() => toggleGuaranteeItem("guarantee-3-complete")}
               >
-                <div className="flex items-start justify-between mb-6">
+                <div className="flex items-start justify-between mb-3">
                   <div className="flex flex-col space-y-3">
                     <span className="px-3 py-1.5 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 rounded-full text-xs font-semibold w-fit">
                       ETH交易担保
@@ -5834,7 +5834,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条和时间信息 */}
-                  <div className="flex flex-col items-end -mt-6">
+                  <div className="flex flex-col items-end -mt-3">
                     <TransactionProgress 
                       steps={[
                         { id: 'start', label: '发起交易', status: 'completed' },
@@ -5844,14 +5844,14 @@ export default function WalletPage() {
                       ]}
                       className=""
                     />
-                    <div className={`text-xs mt-2 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <div className={`text-xs mt-1 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                       <span>发起时间：2025-01-28</span>
                       <span className="mx-2">|</span>
                       <span>已完成</span>
                     </div>
                     
                     {/* 查看合同链接 */}
-                    <div className="mt-3">
+                    <div className="mt-2">
                       <button 
                         className={`flex items-center gap-1 text-xs transition-colors ${
                           isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
@@ -5905,10 +5905,10 @@ export default function WalletPage() {
             {/* 其他担保交易 - 独立卡片 */}
             <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
               <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
                 onClick={() => toggleGuaranteeItem("guarantee-other")}
               >
-                <div className="flex items-start justify-between mb-6">
+                <div className="flex items-start justify-between mb-3">
                   <div className="flex flex-col space-y-3">
                     <span className="px-3 py-1.5 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold w-fit">
                       其他担保交易
@@ -5940,7 +5940,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条和时间信息 */}
-                  <div className="flex flex-col items-end -mt-6">
+                  <div className="flex flex-col items-end -mt-3">
                     <TransactionProgress 
                       steps={[
                         { id: 'start', label: '发起交易', status: 'completed' },
@@ -5950,14 +5950,14 @@ export default function WalletPage() {
                       ]}
                       className=""
                     />
-                    <div className={`text-xs mt-2 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <div className={`text-xs mt-1 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                       <span>发起时间：2025-01-27</span>
                       <span className="mx-2">|</span>
                       <span>已完成</span>
                     </div>
                     
                     {/* 查看合同链接 */}
-                    <div className="mt-3">
+                    <div className="mt-2">
                       <button 
                         className={`flex items-center gap-1 text-xs transition-colors ${
                           isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
