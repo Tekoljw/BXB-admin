@@ -5592,7 +5592,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条 - 与左上角标签对齐 */}
-                  <div className="flex-shrink-0 ml-6 -mt-1">
+                  <div className="flex-shrink-0 ml-6 -mt-3">
                     <TransactionProgress 
                       steps={[
                         { id: '1', label: '发起交易', status: 'completed' },
