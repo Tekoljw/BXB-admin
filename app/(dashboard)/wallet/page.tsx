@@ -5554,6 +5554,45 @@ export default function WalletPage() {
                       5,000.00 <span className="text-sm font-normal text-gray-500">USDT</span>
                     </div>
                     
+                    {/* 交易对象和担保群 - 放在担保金额下面 */}
+                    <div className="flex gap-2 mt-3">
+                      {/* 交易对象标签 */}
+                      <button 
+                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
+                          isDark 
+                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log('点击交易对象');
+                        }}
+                      >
+                        <MessageCircle className="h-4 w-4 text-[#00D4AA]" />
+                        <span>交易对象: 123789</span>
+                      </button>
+                      
+                      {/* 担保群标签 */}
+                      <button 
+                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
+                          isDark 
+                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log('点击担保群');
+                        }}
+                      >
+                        <Users className="h-4 w-4 text-blue-500" />
+                        <span>担保群: 123123</span>
+                      </button>
+                    </div>
+
+                  </div>
+                  
+                  {/* 进度条 - 右上方居右对齐 */}
+                  <div className="flex-shrink-0 ml-6">
                     <TransactionProgress 
                       steps={[
                         { id: '1', label: '发起交易', status: 'completed' },
@@ -5562,44 +5601,8 @@ export default function WalletPage() {
                         { id: '4', label: '争议仲裁', status: 'pending' },
                         { id: '5', label: '完成交易', status: 'pending' }
                       ]}
-                      className="mt-6"
+                      className="w-auto"
                     />
-
-                  </div>
-                  
-                  {/* 交易对象和担保群 - 小标签形式 */}
-                  <div className="flex gap-2">
-                    {/* 交易对象标签 */}
-                    <button 
-                      className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
-                        isDark 
-                          ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                          : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
-                      }`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        console.log('点击交易对象');
-                      }}
-                    >
-                      <MessageCircle className="h-4 w-4 text-[#00D4AA]" />
-                      <span>交易对象: 123789</span>
-                    </button>
-                    
-                    {/* 担保群标签 */}
-                    <button 
-                      className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
-                        isDark 
-                          ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                          : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
-                      }`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        console.log('点击担保群');
-                      }}
-                    >
-                      <Users className="h-4 w-4 text-blue-500" />
-                      <span>担保群: 123123</span>
-                    </button>
                   </div>
                 </div>
 
