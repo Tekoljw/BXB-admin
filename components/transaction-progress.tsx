@@ -86,23 +86,23 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
           ))}
         </div>
 
-        {/* 连接线 - 位于圆球层级之下 */}
+        {/* 连接线 - 穿过圆球中心 */}
         <div 
-          className="absolute h-1 bg-gray-200 top-1/2 transform -translate-y-1/2"
+          className="absolute h-1 bg-gray-200"
           style={{
             left: '32px',
             right: '32px',
-            top: 'calc(50% + 26px)' // 调整到圆球中心位置
+            top: 'calc(100% - 36px)' // 圆球中心位置
           }}
         />
         
         {/* 进度线 */}
         <div 
-          className="absolute h-1 bg-green-500 top-1/2 transform -translate-y-1/2 transition-all duration-500 ease-out"
+          className="absolute h-1 bg-green-500 transition-all duration-500 ease-out"
           style={{
             left: '32px',
             width: `${Math.min(progressPercentage, 100) * (100 - 64) / 100}%`,
-            top: 'calc(50% + 26px)' // 调整到圆球中心位置
+            top: 'calc(100% - 36px)' // 圆球中心位置
           }}
         />
       </div>
