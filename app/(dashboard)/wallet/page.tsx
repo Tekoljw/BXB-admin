@@ -125,6 +125,7 @@ export default function WalletPage() {
   const [showMoreCurrencies, setShowMoreCurrencies] = useState(false) // 显示更多币种弹窗
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
+  const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
@@ -5717,49 +5718,79 @@ export default function WalletPage() {
                       0.15 <span className="text-sm font-normal text-gray-500">BTC</span>
                     </div>
                     
-
+                    {/* 交易对象和担保群 - 放在担保金额下面 */}
+                    <div className="flex gap-2 mt-3">
+                      {/* 交易对象标签 */}
+                      <button 
+                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
+                          isDark 
+                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log('点击交易对象');
+                        }}
+                      >
+                        <MessageCircle className="h-4 w-4 text-[#00D4AA]" />
+                        <span>交易对象: Bitcoin99</span>
+                      </button>
+                      
+                      {/* 担保群标签 */}
+                      <button 
+                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
+                          isDark 
+                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log('点击担保群');
+                        }}
+                      >
+                        <Users className="h-4 w-4 text-blue-500" />
+                        <span>担保群: BTC_Trade_99</span>
+                      </button>
+                    </div>
                   </div>
                   
-                  {/* 交易对象和担保群 - 右侧显示 */}
-                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
-                            title="联系用户"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MessageCircle className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                            <User className="h-5 w-5 text-gray-600" />
-                          </div>
-                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>Bitcoin99</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-blue-500 hover:text-blue-600 transition-colors" 
-                            title="进入担保群"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Users className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
-                            <Users className="h-5 w-5 text-blue-600" />
-                          </div>
-                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>BTC_Trade_99</span>
-                        </div>
-                      </div>
+                  {/* 进度条和时间信息 */}
+                  <div className="flex flex-col items-end -mt-6">
+                    <TransactionProgress 
+                      steps={[
+                        { id: 'start', label: '发起交易', status: 'completed' },
+                        { id: 'deposit', label: '对方/您已付担保金', status: 'current' },
+                        { id: 'confirm', label: '等待确认完成交易', status: 'pending' },
+                        { id: 'complete', label: '完成收款/争议待仲裁', status: 'pending' }
+                      ]}
+                      className=""
+                    />
+                    <div className={`text-xs mt-2 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      <span>发起时间：2025-01-29</span>
+                      <span className="mx-2">|</span>
+                      <span>自动确认：24小时</span>
+                    </div>
+                    
+                    {/* 查看合同链接 */}
+                    <div className="mt-3">
+                      <button 
+                        className={`flex items-center gap-1 text-xs transition-colors ${
+                          isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setExpandedContractItems(prev => 
+                            prev.has("guarantee-2-new") 
+                              ? new Set([...prev].filter(id => id !== "guarantee-2-new"))
+                              : new Set([...prev, "guarantee-2-new"])
+                          );
+                        }}
+                      >
+                        查看合同
+                        <ChevronDown className={`h-3 w-3 transition-transform ${
+                          expandedContractItems.has("guarantee-2-new") ? 'rotate-180' : ''
+                        }`} />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -5808,49 +5839,79 @@ export default function WalletPage() {
                       2.5 <span className="text-sm font-normal text-gray-500">ETH</span>
                     </div>
                     
-
+                    {/* 交易对象和担保群 - 放在担保金额下面 */}
+                    <div className="flex gap-2 mt-3">
+                      {/* 交易对象标签 */}
+                      <button 
+                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
+                          isDark 
+                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log('点击交易对象');
+                        }}
+                      >
+                        <MessageCircle className="h-4 w-4 text-[#00D4AA]" />
+                        <span>交易对象: ETH_Safe_777</span>
+                      </button>
+                      
+                      {/* 担保群标签 */}
+                      <button 
+                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
+                          isDark 
+                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log('点击担保群');
+                        }}
+                      >
+                        <Users className="h-4 w-4 text-blue-500" />
+                        <span>担保群: ETH_Guard_Group</span>
+                      </button>
+                    </div>
                   </div>
                   
-                  {/* 交易对象和担保群 - 右侧显示 */}
-                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
-                            title="联系用户"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MessageCircle className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                            <User className="h-5 w-5 text-gray-600" />
-                          </div>
-                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>EthTrader</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-blue-500 hover:text-blue-600 transition-colors" 
-                            title="进入担保群"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Users className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
-                            <Users className="h-5 w-5 text-blue-600" />
-                          </div>
-                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>ETH_Safe_777</span>
-                        </div>
-                      </div>
+                  {/* 进度条和时间信息 */}
+                  <div className="flex flex-col items-end -mt-6">
+                    <TransactionProgress 
+                      steps={[
+                        { id: 'start', label: '发起交易', status: 'completed' },
+                        { id: 'deposit', label: '对方/您已付担保金', status: 'completed' },
+                        { id: 'confirm', label: '等待确认完成交易', status: 'completed' },
+                        { id: 'complete', label: '完成收款/争议待仲裁', status: 'completed' }
+                      ]}
+                      className=""
+                    />
+                    <div className={`text-xs mt-2 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      <span>发起时间：2025-01-28</span>
+                      <span className="mx-2">|</span>
+                      <span>已完成</span>
+                    </div>
+                    
+                    {/* 查看合同链接 */}
+                    <div className="mt-3">
+                      <button 
+                        className={`flex items-center gap-1 text-xs transition-colors ${
+                          isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setExpandedContractItems(prev => 
+                            prev.has("guarantee-3-complete") 
+                              ? new Set([...prev].filter(id => id !== "guarantee-3-complete"))
+                              : new Set([...prev, "guarantee-3-complete"])
+                          );
+                        }}
+                      >
+                        查看合同
+                        <ChevronDown className={`h-3 w-3 transition-transform ${
+                          expandedContractItems.has("guarantee-3-complete") ? 'rotate-180' : ''
+                        }`} />
+                      </button>
                     </div>
                   </div>
                 </div>
