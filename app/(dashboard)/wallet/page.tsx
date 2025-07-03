@@ -5589,22 +5589,21 @@ export default function WalletPage() {
                         { id: '5', label: '完成交易', status: 'pending' }
                       ]}
                       className="w-auto"
-                      autoConfirmTime="23小时42分钟"
                     />
-                    {/* 交易发起时间和查看合同 */}
-                    <div className="mt-1 flex items-center justify-between">
+                    {/* 交易发起时间和自动确认倒计时 */}
+                    <div className="mt-2 flex items-center justify-between">
                       <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        发起时间: 2025-01-29
+                        发起时间: 2025-01-29 | <span className="text-orange-500 font-medium">自动确认倒计时: 23小时42分钟</span>
                       </div>
                       <button 
-                        className={`flex items-center gap-1 text-sm text-blue-500 hover:text-blue-600 transition-colors ${isDark ? 'hover:text-blue-400' : ''}`}
+                        className={`flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 transition-colors ${isDark ? 'hover:text-blue-400' : ''}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleGuaranteeItem("guarantee-1");
                         }}
                       >
                         查看合同
-                        <ChevronDown className="h-4 w-4" />
+                        <ChevronDown className="h-3 w-3" />
                       </button>
                     </div>
                   </div>

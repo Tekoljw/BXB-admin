@@ -12,10 +12,9 @@ interface Step {
 interface TransactionProgressProps {
   steps: Step[]
   className?: string
-  autoConfirmTime?: string // 自动确认时间，只在当前步骤下显示
 }
 
-export default function TransactionProgress({ steps, className = '', autoConfirmTime }: TransactionProgressProps) {
+export default function TransactionProgress({ steps, className = '' }: TransactionProgressProps) {
   // 计算已完成的步骤数量
   const completedCount = steps.filter(step => step.status === 'completed').length
   const currentIndex = steps.findIndex(step => step.status === 'current')
@@ -83,13 +82,6 @@ export default function TransactionProgress({ steps, className = '', autoConfirm
                   <div className="w-2 h-2 bg-white rounded-full" />
                 )}
               </div>
-              
-              {/* 自动确认信息 - 只在当前步骤下显示 */}
-              {step.status === 'current' && autoConfirmTime && (
-                <div className="mt-2 text-xs text-orange-500 font-medium text-center whitespace-nowrap">
-                  自动确认: {autoConfirmTime}
-                </div>
-              )}
             </div>
           ))}
         </div>
