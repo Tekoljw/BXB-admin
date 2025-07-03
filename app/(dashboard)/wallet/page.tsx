@@ -5603,6 +5603,13 @@ export default function WalletPage() {
                       ]}
                       className="w-auto"
                     />
+                    {/* 交易发起时间和自动确认倒计时 */}
+                    <div className={`mt-3 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} space-y-1`}>
+                      <div>发起时间: 2025-01-29 14:23:15</div>
+                      <div className="text-orange-500 font-medium">
+                        自动确认倒计时: 23小时42分钟
+                      </div>
+                    </div>
                   </div>
                 </div>
 
