@@ -5559,7 +5559,7 @@ export default function WalletPage() {
                   <div className="lg:col-span-2">
                     <div className="mb-3">
                       <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
-                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-tight`}>
+                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
                         购买5000 USDT，汇率7.20，总价36000元人民币，银行卡转账支付，商户信誉良好
                       </span>
                     </div>
@@ -5609,7 +5609,7 @@ export default function WalletPage() {
                   
                   <div>
                     <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-tight`}>
+                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
                       虚拟商品交易担保，游戏道具出售，价值2500 USDT，买方已付款等待确认收货
                     </span>
                   </div>
@@ -5671,12 +5671,16 @@ export default function WalletPage() {
                   
                   <div>
                     <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-tight`}>
+                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
                       出售3000 USDT给用户，汇率7.18，总价21540元，支付宝转账，已收到买方付款
                     </span>
                   </div>
                   
-                  <div className="flex items-end justify-end">
+                  <div className="flex items-end justify-between">
+                    <Button variant="outline" size="sm" className="h-7 text-xs">
+                      <Eye className="h-3 w-3 mr-1" />
+                      查看合同
+                    </Button>
                     <div className="text-right">
                       <div className="flex items-center space-x-2 mb-2">
                         <Button className={`${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'} h-7 text-xs px-3`}>
@@ -5728,16 +5732,12 @@ export default function WalletPage() {
                   
                   <div>
                     <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-tight`}>
+                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
                       数字艺术品交易，NFT作品出售，买方质疑作品真实性，目前在仲裁阶段处理中
                     </span>
                   </div>
                   
-                  <div className="flex items-end justify-between">
-                    <Button variant="outline" size="sm" className="h-7 text-xs">
-                      <Eye className="h-3 w-3 mr-1" />
-                      查看合同
-                    </Button>
+                  <div className="flex items-end justify-end">
                     <div className="text-right">
                       <div className="flex items-center space-x-2 mb-2">
                         <Button className={`${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'} h-7 text-xs px-3`}>
