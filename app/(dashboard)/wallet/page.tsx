@@ -5604,35 +5604,95 @@ export default function WalletPage() {
                       className="w-auto"
                     />
                     {/* 交易发起时间和自动确认倒计时 */}
-                    <div className={`mt-3 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      发起时间: 2025-01-29 14:23:15 | <span className="text-orange-500 font-medium">自动确认倒计时: 23小时42分钟</span>
+                    <div className="mt-3 flex items-center justify-between">
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        发起时间: 2025-01-29 14:23:15 | <span className="text-orange-500 font-medium">自动确认倒计时: 23小时42分钟</span>
+                      </div>
+                      <button 
+                        className={`flex items-center gap-1 text-sm text-blue-500 hover:text-blue-600 transition-colors ${isDark ? 'hover:text-blue-400' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleGuaranteeItem("guarantee-1");
+                        }}
+                      >
+                        查看合同
+                        <ChevronDown className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
                 </div>
 
                 
-                {/* 可展开的内容简介和操作按钮 */}
+                {/* 展开的合同内容 */}
                 {expandedGuaranteeItems.has("guarantee-1") && (
                   <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div>
-                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          购买5000 USDT，汇率7.20，总价36000元人民币，银行卡转账支付，商户信誉良好
-                        </p>
-                      </div>
+                    <div className={`${isDark ? 'bg-gray-800/50' : 'bg-gray-50'} rounded-lg p-4`}>
+                      <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        数字资产担保交易合同
+                      </h3>
                       
-                      <div className="flex justify-between items-center">
-                        <Button 
-                          variant="outline" 
-                          className={`h-8 text-xs px-4 ${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-gray-600 text-gray-600 hover:bg-gray-50'}`} 
-                          onClick={(e) => { e.stopPropagation(); handleViewContract("CT001"); }}
-                        >
-                          查看合同
-                        </Button>
-                        <div className="text-right">
-                          <span className="text-sm text-yellow-600 font-medium">等待对方确认</span>
-                          <div className="text-xs text-gray-500 mt-1">自动确认：<span className="font-mono">23:45:12</span></div>
+                      <div className={`space-y-3 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
+                        <div>
+                          <strong>合同编号：</strong>CT-2025012901-USDT-5000
+                        </div>
+                        
+                        <div>
+                          <strong>交易标的：</strong>USDT (Tether USD)
+                        </div>
+                        
+                        <div>
+                          <strong>交易数量：</strong>5,000.00 USDT
+                        </div>
+                        
+                        <div>
+                          <strong>交易汇率：</strong>1 USDT = 7.20 人民币
+                        </div>
+                        
+                        <div>
+                          <strong>交易金额：</strong>36,000.00 人民币
+                        </div>
+                        
+                        <div>
+                          <strong>付款方式：</strong>银行卡转账
+                        </div>
+                        
+                        <div>
+                          <strong>买方：</strong>用户123789
+                        </div>
+                        
+                        <div>
+                          <strong>卖方：</strong>商户 CryptoTrade Pro
+                        </div>
+                        
+                        <div>
+                          <strong>担保方：</strong>BeDAO担保平台
+                        </div>
+                        
+                        <div>
+                          <strong>担保金额：</strong>5,000.00 USDT
+                        </div>
+                        
+                        <div>
+                          <strong>交易流程：</strong>
+                          <ol className="list-decimal list-inside mt-2 ml-4 space-y-1">
+                            <li>买方发起交易申请</li>
+                            <li>双方缴纳担保金至平台</li>
+                            <li>买方转账法币至卖方指定账户</li>
+                            <li>卖方确认收款后释放USDT至买方钱包</li>
+                            <li>平台释放双方担保金</li>
+                          </ol>
+                        </div>
+                        
+                        <div>
+                          <strong>自动确认时间：</strong>24小时（如卖方未在规定时间内确认，系统将自动释放数字资产）
+                        </div>
+                        
+                        <div>
+                          <strong>争议处理：</strong>如发生争议，由BeDAO仲裁委员会进行仲裁
+                        </div>
+                        
+                        <div className="pt-3 border-t border-gray-300 dark:border-gray-600 mt-4">
+                          <strong>签署时间：</strong>2025年1月29日 14:23:15
                         </div>
                       </div>
                     </div>
