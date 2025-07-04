@@ -5560,14 +5560,30 @@ export default function WalletPage() {
                       5,000.00 <span className="text-base font-normal text-gray-500">USDT</span>
                     </div>
                     
-                    {/* 交易对象和担保群 - 放在担保金额下面 */}
-                    <div className="flex gap-2 mt-4">
-                      {/* 交易对象标签 */}
+                    {/* 查看合同按钮和联系人 */}
+                    <div className="flex items-center gap-3 mt-4">
+                      {/* 查看合同按钮 */}
                       <button 
-                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
+                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-blue-500 hover:text-blue-600 transition-colors border ${
                           isDark 
-                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
+                            ? 'border-blue-500/30 hover:border-blue-500/50 hover:bg-blue-500/10' 
+                            : 'border-blue-200 hover:border-blue-300 hover:bg-blue-50'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleGuaranteeItem("guarantee-1");
+                        }}
+                      >
+                        查看合同
+                        <ChevronDown className="h-3 w-3" />
+                      </button>
+                      
+                      {/* 联系人图标 */}
+                      <button 
+                        className={`p-2 rounded-full transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
+                          isDark 
+                            ? 'bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                            : 'bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
                         }`}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -5577,11 +5593,9 @@ export default function WalletPage() {
                             partnerId: 'user-123789'
                           });
                         }}
+                        title="联系交易对象"
                       >
-                        <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
-                          <User className="h-3 w-3 text-white" />
-                        </div>
-                        <span>交易对象: 123789</span>
+                        <User className="h-5 w-5" />
                       </button>
                     </div>
 
@@ -5607,16 +5621,6 @@ export default function WalletPage() {
                       <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                         <span className="text-orange-500 font-medium">自动确认: 23小时42分钟</span>
                       </div>
-                      <button 
-                        className={`flex items-center gap-1 text-sm text-blue-500 hover:text-blue-600 transition-colors ${isDark ? 'hover:text-blue-400' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleGuaranteeItem("guarantee-1");
-                        }}
-                      >
-                        查看合同
-                        <ChevronDown className="h-4 w-4" />
-                      </button>
                     </div>
                   </div>
                 </div>
