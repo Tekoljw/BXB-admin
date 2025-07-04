@@ -218,6 +218,15 @@ export default function WalletPage() {
     isDefault: false
   })
 
+  // 立即确认弹窗状态
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const [confirmTransactionInfo, setConfirmTransactionInfo] = useState({
+    id: "",
+    amount: "",
+    currency: "",
+    partner: ""
+  })
+
   // 地址列表数据
   const addressList = [
     {
@@ -6133,6 +6142,25 @@ export default function WalletPage() {
                       </button>
                     </div>
                   </div>
+
+                  {/* 立即确认按钮 */}
+                  <div className="flex-shrink-0 ml-4">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setConfirmTransactionInfo({
+                          id: "pay-guarantee-1",
+                          amount: "1,500.00",
+                          currency: "USDT",
+                          partner: "CryptoTrader123"
+                        });
+                        setShowConfirmDialog(true);
+                      }}
+                      className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm hover:shadow-md active:scale-[0.98]"
+                    >
+                      立即确认
+                    </button>
+                  </div>
                 </div>
 
                 {/* 可展开的内容简介和操作按钮 */}
@@ -6254,6 +6282,16 @@ export default function WalletPage() {
                         }`} />
                       </button>
                     </div>
+                  </div>
+
+                  {/* 争议状态按钮 */}
+                  <div className="flex-shrink-0 ml-4">
+                    <button
+                      disabled
+                      className="px-4 py-2 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed opacity-50"
+                    >
+                      争议中
+                    </button>
                   </div>
                 </div>
 
@@ -7705,6 +7743,83 @@ export default function WalletPage() {
                   </div>
                 </div>
                 <ChevronRight className={`h-5 w-5 ml-auto ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 立即确认弹窗 */}
+      {showConfirmDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowConfirmDialog(false)}>
+          <div 
+            className={`max-w-md w-full mx-4 rounded-2xl shadow-xl ${
+              isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* 弹窗头部 */}
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  确认交易
+                </h3>
+                <button
+                  onClick={() => setShowConfirmDialog(false)}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+                  }`}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* 弹窗内容 */}
+            <div className="p-6 space-y-4">
+              <div className={`p-4 rounded-lg ${isDark ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'}`}>
+                <div className={`text-sm ${isDark ? 'text-red-300' : 'text-red-800'}`}>
+                  ⚠️ 重要提醒
+                </div>
+                <div className={`text-sm mt-2 ${isDark ? 'text-red-200' : 'text-red-700'}`}>
+                  如果确认，则交易资金会解除担保，对方将收到这一笔钱！
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <span className="font-medium">交易金额：</span>
+                  <span className="font-bold text-green-500">{confirmTransactionInfo.amount} {confirmTransactionInfo.currency}</span>
+                </div>
+                <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <span className="font-medium">交易对象：</span>
+                  <span>{confirmTransactionInfo.partner}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 弹窗按钮 */}
+            <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
+              <button
+                onClick={() => setShowConfirmDialog(false)}
+                className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
+                  isDark 
+                    ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                取消
+              </button>
+              <button
+                onClick={() => {
+                  // 确认交易逻辑
+                  console.log('确认交易:', confirmTransactionInfo);
+                  setShowConfirmDialog(false);
+                  // 这里可以添加成功提示和更新交易状态
+                }}
+                className="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+              >
+                确认
               </button>
             </div>
           </div>
