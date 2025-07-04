@@ -126,6 +126,7 @@ export default function WalletPage() {
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
+  const [activeAccount, setActiveAccount] = useState("main") // 当前活动账户: "main", "bepay", "guarantee"
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
@@ -6448,10 +6449,80 @@ export default function WalletPage() {
     }
   }
 
+  // 渲染账户内容
+  const renderAccountContent = () => {
+    switch (activeAccount) {
+      case 'main':
+        return renderTabContent()
+      case 'bepay':
+        return renderTabContent()
+      case 'guarantee':
+        return renderGuaranteeContent()
+      default:
+        return renderTabContent()
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* 钱包概览 */}
-      <WalletOverview />
+      <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            钱包概览
+          </h2>
+          <button
+            onClick={() => setBalanceVisible(!balanceVisible)}
+            className={`p-2 rounded-lg transition-colors ${
+              isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+            }`}
+          >
+            {balanceVisible ? (
+              <Eye className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+            ) : (
+              <EyeOff className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+            )}
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-gradient-to-r from-[#00D4AA] to-[#00B894] rounded-lg p-4 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm opacity-90">总资产</p>
+                <p className="text-2xl font-bold">
+                  {balanceVisible ? '¥128,456.78' : '****'}
+                </p>
+              </div>
+              <Wallet className="h-8 w-8 opacity-80" />
+            </div>
+          </div>
+
+          <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>可用余额</p>
+                <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? '¥98,234.56' : '****'}
+                </p>
+              </div>
+              <DollarSign className={`h-8 w-8 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+            </div>
+          </div>
+
+          <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>冻结资产</p>
+                <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? '¥30,222.22' : '****'}
+                </p>
+              </div>
+              <Shield className={`h-8 w-8 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* 账户切换 */}
       <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm p-6">
