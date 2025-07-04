@@ -25,9 +25,9 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
     : ((completedCount + 0.5) / (steps.length - 1)) * 100
 
   return (
-    <div className={`w-full min-w-[300px] max-w-[800px] mx-auto ${className}`}>
+    <div className={`w-full ${className}`}>
       <div className="relative py-6 px-4">
-        {/* 统一的节点容器 - 确保气泡和圆球完美对齐 */}
+        {/* 统一的节点容器 - 根据屏幕宽度自适应间距 */}
         <div className="flex items-start justify-between w-full">
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center relative">
@@ -86,25 +86,36 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
           ))}
         </div>
 
-        {/* 连接线 - 自适应宽度 */}
-        <div 
-          className="absolute h-1 bg-gray-200"
-          style={{
-            left: 'calc(2rem + 12px)', // 第一个圆球中心位置
-            right: 'calc(2rem + 12px)', // 最后一个圆球中心位置  
-            bottom: '31px' // 调整到圆球中心位置
-          }}
-        />
+        {/* 连接线 - 使用flex布局自动计算位置 */}
+        {steps.length > 1 && (
+          <div className="absolute flex items-center" style={{ 
+            bottom: '31px',
+            left: '0',
+            right: '0',
+            paddingLeft: 'calc(2rem + 12px)',
+            paddingRight: 'calc(2rem + 12px)'
+          }}>
+            <div className="flex-1 h-1 bg-gray-200" />
+          </div>
+        )}
         
-        {/* 进度线 - 自适应宽度 */}
-        <div 
-          className="absolute h-1 bg-green-500 transition-all duration-500 ease-out"
-          style={{
-            left: 'calc(2rem + 12px)', // 从第一个圆球中心开始
-            width: `calc((100% - 4rem - 24px) * ${Math.min(progressPercentage, 100)} / 100)`,
-            bottom: '31px' // 调整到圆球中心位置
-          }}
-        />
+        {/* 进度线 - 使用flex布局自动计算位置 */}
+        {steps.length > 1 && (
+          <div className="absolute flex items-center" style={{ 
+            bottom: '31px',
+            left: '0',
+            right: '0',
+            paddingLeft: 'calc(2rem + 12px)',
+            paddingRight: 'calc(2rem + 12px)'
+          }}>
+            <div 
+              className="h-1 bg-green-500 transition-all duration-500 ease-out"
+              style={{ 
+                width: `${Math.min(progressPercentage, 100)}%`
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   )
