@@ -5704,6 +5704,334 @@ export default function WalletPage() {
               </div>
             </div>
 
+            {/* 第二个收款担保 - USDT买卖担保等待确认 */}
+            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
+              <div 
+                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                onClick={() => toggleGuaranteeItem("guarantee-2")}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-col space-y-3">
+                    <span className="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 rounded-full text-xs font-semibold inline-block w-fit">
+                      USDT买卖担保
+                    </span>
+                    
+                    <div className="flex items-center space-x-3">
+                      <span className={`text-lg font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>收款担保金额：</span>
+                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        1,800.0 <span className="text-sm font-normal text-gray-500">USDT</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col items-end space-y-3">
+                    <button 
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
+                        isDark 
+                          ? 'bg-transparent border border-white text-white hover:bg-white hover:text-gray-900' 
+                          : 'bg-transparent border border-black text-black hover:bg-black hover:text-white'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      title="查看合同"
+                    >
+                      查看合同
+                    </button>
+                      
+                    {/* 头像图标 */}
+                    <button 
+                      className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
+                        isDark 
+                          ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
+                          : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setTradingPartnerDialog({
+                          isOpen: true,
+                          partnerName: 'Eva999',
+                          partnerId: 'user-eva999'
+                        });
+                      }}
+                      title="联系交易对象"
+                    >
+                      <User className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* 进度条 - 与左上角标签对齐 */}
+                <div className="flex-1 ml-6 -mt-3">
+                  <TransactionProgress 
+                    steps={[
+                      { id: '1', label: '发起交易', status: 'completed' },
+                      { id: '2', label: '已付担保金', status: 'completed' },
+                      { id: '3', label: '等待确认', status: 'current' },
+                      { id: '4', label: '争议仲裁', status: 'pending' },
+                      { id: '5', label: '完成交易', status: 'pending' }
+                    ]}
+                    className=""
+                  />
+                  {/* 交易发起时间和自动确认 */}
+                  <div className="mt-1 flex items-center justify-between">
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      发起时间: 2025-01-29
+                    </div>
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      <span className="text-yellow-500 font-medium">等待对方确认收款</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 第三个收款担保 - 其他交易担保已完成 */}
+            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
+              <div 
+                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                onClick={() => toggleGuaranteeItem("guarantee-3")}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-col space-y-3">
+                    <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold inline-block w-fit">
+                      其他交易担保
+                    </span>
+                    
+                    <div className="flex items-center space-x-3">
+                      <span className={`text-lg font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>收款担保金额：</span>
+                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        650.0 <span className="text-sm font-normal text-gray-500">USDT</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col items-end space-y-3">
+                    <button 
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
+                        isDark 
+                          ? 'bg-transparent border border-white text-white hover:bg-white hover:text-gray-900' 
+                          : 'bg-transparent border border-black text-black hover:bg-black hover:text-white'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      title="查看合同"
+                    >
+                      查看合同
+                    </button>
+                      
+                    {/* 头像图标 */}
+                    <button 
+                      className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
+                        isDark 
+                          ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
+                          : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setTradingPartnerDialog({
+                          isOpen: true,
+                          partnerName: 'Frank123',
+                          partnerId: 'user-frank123'
+                        });
+                      }}
+                      title="联系交易对象"
+                    >
+                      <User className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* 进度条 - 与左上角标签对齐 */}
+                <div className="flex-1 ml-6 -mt-3">
+                  <TransactionProgress 
+                    steps={[
+                      { id: '1', label: '发起交易', status: 'completed' },
+                      { id: '2', label: '已付担保金', status: 'completed' },
+                      { id: '3', label: '等待确认', status: 'completed' },
+                      { id: '4', label: '争议仲裁', status: 'completed' },
+                      { id: '5', label: '完成交易', status: 'completed' }
+                    ]}
+                    className=""
+                  />
+                  {/* 交易发起时间和自动确认 */}
+                  <div className="mt-1 flex items-center justify-between">
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      发起时间: 2025-01-28
+                    </div>
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      <span className="text-green-500 font-medium">交易已完成</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 第四个收款担保 - USDT买卖担保争议状态 */}
+            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
+              <div 
+                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                onClick={() => toggleGuaranteeItem("guarantee-4")}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-col space-y-3">
+                    <span className="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 rounded-full text-xs font-semibold inline-block w-fit">
+                      USDT买卖担保
+                    </span>
+                    
+                    <div className="flex items-center space-x-3">
+                      <span className={`text-lg font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>收款担保金额：</span>
+                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        3,500.0 <span className="text-sm font-normal text-gray-500">USDT</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col items-end space-y-3">
+                    <button 
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
+                        isDark 
+                          ? 'bg-transparent border border-white text-white hover:bg-white hover:text-gray-900' 
+                          : 'bg-transparent border border-black text-black hover:bg-black hover:text-white'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      title="查看合同"
+                    >
+                      查看合同
+                    </button>
+                      
+                    {/* 头像图标 */}
+                    <button 
+                      className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
+                        isDark 
+                          ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
+                          : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setTradingPartnerDialog({
+                          isOpen: true,
+                          partnerName: 'Grace456',
+                          partnerId: 'user-grace456'
+                        });
+                      }}
+                      title="联系交易对象"
+                    >
+                      <User className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* 进度条 - 与左上角标签对齐 */}
+                <div className="flex-1 ml-6 -mt-3">
+                  <TransactionProgress 
+                    steps={[
+                      { id: '1', label: '发起交易', status: 'completed' },
+                      { id: '2', label: '已付担保金', status: 'completed' },
+                      { id: '3', label: '等待确认', status: 'completed' },
+                      { id: '4', label: '争议仲裁', status: 'dispute' },
+                      { id: '5', label: '完成交易', status: 'pending' }
+                    ]}
+                    className=""
+                  />
+                  {/* 交易发起时间和自动确认 */}
+                  <div className="mt-1 flex items-center justify-between">
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      发起时间: 2025-01-27
+                    </div>
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      <span className="text-red-500 font-medium">争议处理中</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 第五个收款担保 - 其他交易担保刚发起 */}
+            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
+              <div 
+                className="p-5 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                onClick={() => toggleGuaranteeItem("guarantee-5")}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-col space-y-3">
+                    <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold inline-block w-fit">
+                      其他交易担保
+                    </span>
+                    
+                    <div className="flex items-center space-x-3">
+                      <span className={`text-lg font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>收款担保金额：</span>
+                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        950.0 <span className="text-sm font-normal text-gray-500">USDT</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col items-end space-y-3">
+                    <button 
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
+                        isDark 
+                          ? 'bg-transparent border border-white text-white hover:bg-white hover:text-gray-900' 
+                          : 'bg-transparent border border-black text-black hover:bg-black hover:text-white'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      title="查看合同"
+                    >
+                      查看合同
+                    </button>
+                      
+                    {/* 头像图标 */}
+                    <button 
+                      className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
+                        isDark 
+                          ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
+                          : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setTradingPartnerDialog({
+                          isOpen: true,
+                          partnerName: 'Henry789',
+                          partnerId: 'user-henry789'
+                        });
+                      }}
+                      title="联系交易对象"
+                    >
+                      <User className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* 进度条 - 与左上角标签对齐 */}
+                <div className="flex-1 ml-6 -mt-3">
+                  <TransactionProgress 
+                    steps={[
+                      { id: '1', label: '发起交易', status: 'current' },
+                      { id: '2', label: '已付担保金', status: 'pending' },
+                      { id: '3', label: '等待确认', status: 'pending' },
+                      { id: '4', label: '争议仲裁', status: 'pending' },
+                      { id: '5', label: '完成交易', status: 'pending' }
+                    ]}
+                    className=""
+                  />
+                  {/* 交易发起时间和自动确认 */}
+                  <div className="mt-1 flex items-center justify-between">
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      发起时间: 2025-01-29
+                    </div>
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      <span className="text-blue-500 font-medium">等待对方响应</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         )
 
