@@ -25,7 +25,7 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
     : ((completedCount + 0.5) / (steps.length - 1)) * 100
 
   return (
-    <div className={`w-full min-w-[300px] max-w-[800px] mx-auto ${className}`}>
+    <div className={`w-full ${className}`} style={{ minWidth: '300px', maxWidth: '100%' }}>
       <div className="relative py-6 px-4">
         {/* 统一的节点容器 - 确保气泡和圆球完美对齐 */}
         <div className="flex items-start justify-between w-full">
@@ -86,22 +86,22 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
           ))}
         </div>
 
-        {/* 连接线 - 自适应宽度 */}
+        {/* 连接线 - 真正自适应宽度 */}
         <div 
           className="absolute h-1 bg-gray-200"
           style={{
-            left: 'calc(2rem + 12px)', // 第一个圆球中心位置
-            right: 'calc(2rem + 12px)', // 最后一个圆球中心位置  
+            left: '2rem', // 从第一个步骤开始
+            right: '2rem', // 到最后一个步骤结束
             bottom: '31px' // 调整到圆球中心位置
           }}
         />
         
-        {/* 进度线 - 自适应宽度 */}
+        {/* 进度线 - 真正自适应宽度 */}
         <div 
           className="absolute h-1 bg-green-500 transition-all duration-500 ease-out"
           style={{
-            left: 'calc(2rem + 12px)', // 从第一个圆球中心开始
-            width: `calc((100% - 4rem - 24px) * ${Math.min(progressPercentage, 100)} / 100)`,
+            left: '2rem', // 从第一个圆球开始
+            width: `calc((100% - 4rem) * ${Math.min(progressPercentage, 100)} / 100)`,
             bottom: '31px' // 调整到圆球中心位置
           }}
         />
