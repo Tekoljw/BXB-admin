@@ -5578,12 +5578,12 @@ export default function WalletPage() {
                         <ChevronDown className="h-3 w-3" />
                       </button>
                       
-                      {/* 联系人图标 */}
+                      {/* 对话图标 */}
                       <button 
                         className={`p-2 rounded-full transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
                           isDark 
-                            ? 'bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                            : 'bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
+                            ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
+                            : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
                         }`}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -5595,7 +5595,7 @@ export default function WalletPage() {
                         }}
                         title="联系交易对象"
                       >
-                        <User className="h-5 w-5" />
+                        <MessageCircle className="h-5 w-5" />
                       </button>
                     </div>
 
