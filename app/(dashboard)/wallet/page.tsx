@@ -5548,7 +5548,7 @@ export default function WalletPage() {
             <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
               {/* USDT买卖担保 */}
               <div 
-                className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
                 onClick={() => toggleGuaranteeItem("guarantee-1")}
               >
                 <div className="flex items-start justify-between mb-3 mt-2">
