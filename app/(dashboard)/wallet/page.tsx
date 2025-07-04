@@ -126,6 +126,50 @@ export default function WalletPage() {
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
+  const [activeCategory, setActiveCategory] = useState("overview") // 当前选中的账户类别
+  const [activeSubTab, setActiveSubTab] = useState("") // 二级页签状态
+  const [currentCategory, setCurrentCategory] = useState<any>(null) // 当前分类信息
+  const [tradingPartnerDialog, setTradingPartnerDialog] = useState({isOpen: false, partnerName: '', partnerId: ''}) // 交易对象弹窗状态
+  const [expandedGuaranteeItems, setExpandedGuaranteeItems] = useState<Set<string>>(new Set()) // 担保交易展开状态
+  
+  // 定义账户分类
+  const categories = [
+    {
+      id: "overview",
+      name: "钱包总览", 
+      icon: Wallet
+    },
+    {
+      id: "guarantee",
+      name: "担保账户",
+      icon: Shield
+    },
+    {
+      id: "credit", 
+      name: "信誉担保",
+      icon: CheckCircle
+    },
+    {
+      id: "finance",
+      name: "理财账户", 
+      icon: PiggyBank
+    },
+    {
+      id: "ucard",
+      name: "U卡账户",
+      icon: CreditCard
+    },
+    {
+      id: "contract",
+      name: "合约账户",
+      icon: BarChart3
+    },
+    {
+      id: "bepay",
+      name: "BePAY账户",
+      icon: Receipt
+    }
+  ]
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
@@ -5394,12 +5438,6 @@ export default function WalletPage() {
   // 担保账户相关状态和函数
   const [selectedCard, setSelectedCard] = useState("receivable")
   const [selectedGuaranteeTab, setSelectedGuaranteeTab] = useState("收款担保") // 新增担保页签状态
-  const [expandedGuaranteeItems, setExpandedGuaranteeItems] = useState<Set<string>>(new Set()) // 展开的担保项目
-  const [tradingPartnerDialog, setTradingPartnerDialog] = useState<{isOpen: boolean, partnerName: string, partnerId: string}>({
-    isOpen: false,
-    partnerName: '',
-    partnerId: ''
-  }) // 交易伙伴对话框状态
   const [showAddCreditModal, setShowAddCreditModal] = useState(false)
   const [showExtendTimeModal, setShowExtendTimeModal] = useState(false)
   const [showContractModal, setShowContractModal] = useState(false)
