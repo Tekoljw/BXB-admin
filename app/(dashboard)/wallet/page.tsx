@@ -5556,12 +5556,12 @@ export default function WalletPage() {
                     <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
                       USDT买卖担保
                     </span>
-                    <div className={`text-3xl font-bold mt-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className={`text-3xl font-bold mt-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       5,000.00 <span className="text-base font-normal text-gray-500">USDT</span>
                     </div>
                     
                     {/* 查看合同按钮和联系人 */}
-                    <div className="flex items-center gap-3 mt-4">
+                    <div className="flex items-center gap-3 mt-5">
                       {/* 查看合同按钮 */}
                       <button 
                         className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-blue-500 hover:text-blue-600 transition-colors border ${
