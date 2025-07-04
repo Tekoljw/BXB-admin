@@ -25,10 +25,10 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
     : ((completedCount + 0.5) / (steps.length - 1)) * 100
 
   return (
-    <div className={`w-full ${className}`}>
+    <div className={`w-full min-w-[300px] max-w-[800px] ${className}`}>
       <div className="relative py-6 px-4">
         {/* 统一的节点容器 - 确保气泡和圆球完美对齐 */}
-        <div className="flex items-start space-x-8 sm:space-x-12 lg:space-x-16">
+        <div className="flex items-start justify-between w-full">
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center relative">
               {/* 气泡样式标签 */}
@@ -86,22 +86,22 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
           ))}
         </div>
 
-        {/* 连接线 - 从第一个圆球中心到最后一个圆球中心 */}
+        {/* 连接线 - 自适应宽度 */}
         <div 
           className="absolute h-1 bg-gray-200"
           style={{
-            left: '16px', // 第一个圆球的边缘位置
-            right: '16px', // 最后一个圆球的边缘位置
+            left: 'calc(2rem + 12px)', // 第一个圆球中心位置
+            right: 'calc(2rem + 12px)', // 最后一个圆球中心位置  
             bottom: '31px' // 调整到圆球中心位置
           }}
         />
         
-        {/* 进度线 */}
+        {/* 进度线 - 自适应宽度 */}
         <div 
           className="absolute h-1 bg-green-500 transition-all duration-500 ease-out"
           style={{
-            left: '16px', // 从第一个圆球边缘开始
-            width: `${Math.min(progressPercentage, 100) * (100 - 32) / 100}%`,
+            left: 'calc(2rem + 12px)', // 从第一个圆球中心开始
+            width: `calc((100% - 4rem - 24px) * ${Math.min(progressPercentage, 100)} / 100)`,
             bottom: '31px' // 调整到圆球中心位置
           }}
         />

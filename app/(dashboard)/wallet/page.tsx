@@ -5611,7 +5611,7 @@ export default function WalletPage() {
                         { id: '4', label: '争议仲裁', status: 'pending' },
                         { id: '5', label: '完成交易', status: 'pending' }
                       ]}
-                      className="w-auto"
+                      className=""
                     />
                     {/* 交易发起时间和自动确认 */}
                     <div className="mt-1 flex items-center justify-between">
