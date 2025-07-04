@@ -5820,91 +5820,93 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
-              {/* USDT买卖担保 */}
+              {/* 第一个付款担保 - USDT买卖担保 */}
               <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
                 onClick={() => toggleGuaranteeItem("pay-guarantee-1")}
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex flex-col space-y-3">
-                    <span className="px-3 py-1.5 bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 rounded-full text-xs font-semibold w-fit">
-                      BTC交易担保
+                <div className="flex items-start justify-between mb-3 mt-2">
+                  <div className="flex flex-col space-y-5">
+                    <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
+                      USDT买卖担保
                     </span>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      0.15 <span className="text-sm font-normal text-gray-500">BTC</span>
+                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      3,200.00 <span className="text-base font-normal text-gray-500">USDT</span>
                     </div>
                     
-                    {/* 交易对象和担保群 - 放在担保金额下面 */}
-                    <div className="flex gap-2 mt-3">
-                      {/* 交易对象标签 */}
+                    {/* 查看合同按钮和联系人 */}
+                    <div className="flex items-center gap-3">
+                      {/* 查看合同按钮 */}
                       <button 
-                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
+                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-blue-500 hover:text-blue-600 transition-colors border ${
                           isDark 
-                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
+                            ? 'border-blue-500/30 hover:border-blue-500/50 hover:bg-blue-500/10' 
+                            : 'border-blue-200 hover:border-blue-300 hover:bg-blue-50'
                         }`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          console.log('点击交易对象');
-                        }}
-                      >
-                        <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
-                          <User className="h-3 w-3 text-white" />
-                        </div>
-                        <span>交易对象: Bitcoin99</span>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  {/* 进度条和时间信息 */}
-                  <div className="flex-1 flex flex-col items-stretch -mt-3">
-                    <TransactionProgress 
-                      steps={[
-                        { id: 'start', label: '发起交易', status: 'completed' },
-                        { id: 'deposit', label: '对方/您已付担保金', status: 'current' },
-                        { id: 'confirm', label: '等待确认完成交易', status: 'pending' },
-                        { id: 'complete', label: '完成收款/争议待仲裁', status: 'pending' }
-                      ]}
-                      className=""
-                    />
-                    <div className={`text-xs mt-1 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      <span>发起时间：2025-01-29</span>
-                      <span className="mx-2">|</span>
-                      <span>自动确认：24小时</span>
-                    </div>
-                    
-                    {/* 查看合同链接 */}
-                    <div className="mt-2">
-                      <button 
-                        className={`flex items-center gap-1 text-xs transition-colors ${
-                          isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setExpandedContractItems(prev => 
-                            prev.has("guarantee-2-new") 
-                              ? new Set([...prev].filter(id => id !== "guarantee-2-new"))
-                              : new Set([...prev, "guarantee-2-new"])
-                          );
+                          toggleGuaranteeItem("pay-guarantee-1");
                         }}
                       >
                         查看合同
-                        <ChevronDown className={`h-3 w-3 transition-transform ${
-                          expandedContractItems.has("guarantee-2-new") ? 'rotate-180' : ''
-                        }`} />
+                        <ChevronDown className="h-3 w-3" />
                       </button>
+                      
+                      {/* 头像图标 */}
+                      <button 
+                        className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
+                          isDark 
+                            ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
+                            : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setTradingPartnerDialog({
+                            isOpen: true,
+                            partnerName: 'Bitcoin99',
+                            partnerId: 'user-bitcoin99'
+                          });
+                        }}
+                        title="联系交易对象"
+                      >
+                        <User className="h-5 w-5" />
+                      </button>
+                    </div>
+
+                  </div>
+                  
+                  {/* 进度条 - 与左上角标签对齐 */}
+                  <div className="flex-1 ml-6 -mt-3">
+                    <TransactionProgress 
+                      steps={[
+                        { id: '1', label: '发起交易', status: 'completed' },
+                        { id: '2', label: '已付担保金', status: 'current' },
+                        { id: '3', label: '等待确认', status: 'pending' },
+                        { id: '4', label: '完成交易', status: 'pending' }
+                      ]}
+                      className=""
+                    />
+                    {/* 交易发起时间和自动确认 */}
+                    <div className="mt-1 flex items-center justify-between">
+                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        发起时间: 2025-01-29
+                      </div>
+                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        自动确认: 24小时
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* 可展开的内容简介和操作按钮 */}
-                {expandedGuaranteeItems.has("guarantee-2-new") && (
+                
+                {/* 展开的合同内容 */}
+                {expandedGuaranteeItems.has("pay-guarantee-1") && (
                   <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                     <div className="space-y-4">
                       <div>
                         <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
                         <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          BTC场外交易担保，交易金额0.15 BTC，单价65,000 USDT，总价值9,750 USDT。买方需要在24小时内完成付款，超时将自动取消交易。
+                          USDT场外交易担保，您作为买方向卖方Bitcoin99购买3,200 USDT，单价7.2 CNY，总价值22,640 CNY。当前等待对方确认付款并释放担保。
                         </p>
                       </div>
                       
@@ -5912,106 +5914,105 @@ export default function WalletPage() {
                         <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           查看详情
                         </button>
-                        <button className="px-4 py-2 bg-[#00D4AA] text-white rounded-lg hover:bg-[#00B894] transition-colors">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                           催促对方
                         </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-red-600 text-red-400 hover:bg-red-900/20' : 'border-red-300 text-red-600 hover:bg-red-50'}`}>
-                          取消交易
+                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                          申请仲裁
                         </button>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
-            </div>
 
-            {/* 第三个担保交易卡片 */}
-            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
-              {/* 第三个担保交易 - 完成状态 */}
+              {/* 第二个付款担保 - 其他交易担保 */}
               <div 
-                className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("guarantee-3-complete")}
+                className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
+                onClick={() => toggleGuaranteeItem("pay-guarantee-2")}
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex flex-col space-y-3">
-                    <span className="px-3 py-1.5 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 rounded-full text-xs font-semibold w-fit">
-                      ETH交易担保
+                <div className="flex items-start justify-between mb-3 mt-2">
+                  <div className="flex flex-col space-y-5">
+                    <span className="px-3 py-1.5 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold w-fit">
+                      其他交易担保
                     </span>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      2.5 <span className="text-sm font-normal text-gray-500">ETH</span>
+                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      2,500.00 <span className="text-base font-normal text-gray-500">USDT</span>
                     </div>
                     
-                    {/* 交易对象和担保群 - 放在担保金额下面 */}
-                    <div className="flex gap-2 mt-3">
-                      {/* 交易对象标签 */}
+                    {/* 查看合同按钮和联系人 */}
+                    <div className="flex items-center gap-3">
+                      {/* 查看合同按钮 */}
                       <button 
-                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
+                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-blue-500 hover:text-blue-600 transition-colors border ${
                           isDark 
-                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
+                            ? 'border-blue-500/30 hover:border-blue-500/50 hover:bg-blue-500/10' 
+                            : 'border-blue-200 hover:border-blue-300 hover:bg-blue-50'
                         }`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          console.log('点击交易对象');
-                        }}
-                      >
-                        <div className="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
-                          <User className="h-3 w-3 text-white" />
-                        </div>
-                        <span>交易对象: ETH_Safe_777</span>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  {/* 进度条和时间信息 */}
-                  <div className="flex-1 flex flex-col items-stretch -mt-3">
-                    <TransactionProgress 
-                      steps={[
-                        { id: 'start', label: '发起交易', status: 'completed' },
-                        { id: 'deposit', label: '对方/您已付担保金', status: 'completed' },
-                        { id: 'confirm', label: '等待确认完成交易', status: 'completed' },
-                        { id: 'complete', label: '完成收款/争议待仲裁', status: 'completed' }
-                      ]}
-                      className=""
-                    />
-                    <div className={`text-xs mt-1 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      <span>发起时间：2025-01-28</span>
-                      <span className="mx-2">|</span>
-                      <span>已完成</span>
-                    </div>
-                    
-                    {/* 查看合同链接 */}
-                    <div className="mt-2">
-                      <button 
-                        className={`flex items-center gap-1 text-xs transition-colors ${
-                          isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setExpandedContractItems(prev => 
-                            prev.has("guarantee-3-complete") 
-                              ? new Set([...prev].filter(id => id !== "guarantee-3-complete"))
-                              : new Set([...prev, "guarantee-3-complete"])
-                          );
+                          toggleGuaranteeItem("pay-guarantee-2");
                         }}
                       >
                         查看合同
-                        <ChevronDown className={`h-3 w-3 transition-transform ${
-                          expandedContractItems.has("guarantee-3-complete") ? 'rotate-180' : ''
-                        }`} />
+                        <ChevronDown className="h-3 w-3" />
                       </button>
+                      
+                      {/* 头像图标 */}
+                      <button 
+                        className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
+                          isDark 
+                            ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
+                            : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setTradingPartnerDialog({
+                            isOpen: true,
+                            partnerName: 'TradeMaster456',
+                            partnerId: 'user-trademaster456'
+                          });
+                        }}
+                        title="联系交易对象"
+                      >
+                        <User className="h-5 w-5" />
+                      </button>
+                    </div>
+
+                  </div>
+                  
+                  {/* 进度条 - 与左上角标签对齐 */}
+                  <div className="flex-1 ml-6 -mt-3">
+                    <TransactionProgress 
+                      steps={[
+                        { id: '1', label: '发起交易', status: 'completed' },
+                        { id: '2', label: '已付担保金', status: 'completed' },
+                        { id: '3', label: '等待确认', status: 'completed' },
+                        { id: '4', label: '完成交易', status: 'completed' }
+                      ]}
+                      className=""
+                    />
+                    {/* 交易发起时间和自动确认 */}
+                    <div className="mt-1 flex items-center justify-between">
+                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        完成时间: 2025-01-27
+                      </div>
+                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <span className="text-green-500 font-medium">已完成</span>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* 可展开的内容简介和操作按钮 */}
-                {expandedGuaranteeItems.has("guarantee-3-complete") && (
+                
+                {/* 展开的合同内容 */}
+                {expandedGuaranteeItems.has("pay-guarantee-2") && (
                   <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                     <div className="space-y-4">
                       <div>
                         <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
                         <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          ETH场外交易担保，交易金额2.5 ETH，单价3,200 USDT，总价值8,000 USDT。交易已顺利完成，双方评价良好。
+                          其他数字资产担保交易，您作为买方向卖方TradeMaster456购买2,500 USDT价值的数字资产，交易已完成。双方均对交易过程满意，信誉良好。
                         </p>
                       </div>
                       
@@ -6030,578 +6031,12 @@ export default function WalletPage() {
                   </div>
                 )}
               </div>
+
+
             </div>
 
-            {/* 其他担保交易 - 独立卡片 */}
-            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
-              <div 
-                className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("guarantee-other")}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex flex-col space-y-3">
-                    <span className="px-3 py-1.5 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold w-fit">
-                      其他担保交易
-                    </span>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      2,500.00 <span className="text-sm font-normal text-gray-500">USDT</span>
-                    </div>
-                    
-                    {/* 交易对象 - 放在担保金额下面 */}
-                    <div className="flex gap-2 mt-3">
-                      {/* 交易对象标签 */}
-                      <button 
-                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
-                          isDark 
-                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          console.log('点击交易对象');
-                        }}
-                      >
-                        <div className="w-5 h-5 bg-teal-500 rounded-full flex items-center justify-center">
-                          <User className="h-3 w-3 text-white" />
-                        </div>
-                        <span>交易对象: TradeMaster456</span>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  {/* 进度条和时间信息 */}
-                  <div className="flex-1 flex flex-col items-stretch -mt-3">
-                    <TransactionProgress 
-                      steps={[
-                        { id: 'start', label: '发起交易', status: 'completed' },
-                        { id: 'deposit', label: '对方/您已付担保金', status: 'completed' },
-                        { id: 'confirm', label: '等待确认完成交易', status: 'completed' },
-                        { id: 'complete', label: '完成收款/争议待仲裁', status: 'completed' }
-                      ]}
-                      className=""
-                    />
-                    <div className={`text-xs mt-1 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      <span>发起时间：2025-01-27</span>
-                      <span className="mx-2">|</span>
-                      <span>已完成</span>
-                    </div>
-                    
-                    {/* 查看合同链接 */}
-                    <div className="mt-2">
-                      <button 
-                        className={`flex items-center gap-1 text-xs transition-colors ${
-                          isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setExpandedContractItems(prev => 
-                            prev.has("guarantee-other") 
-                              ? new Set([...prev].filter(id => id !== "guarantee-other"))
-                              : new Set([...prev, "guarantee-other"])
-                          );
-                        }}
-                      >
-                        查看合同
-                        <ChevronDown className={`h-3 w-3 transition-transform ${
-                          expandedContractItems.has("guarantee-other") ? 'rotate-180' : ''
-                        }`} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                
-                {/* 可展开的内容简介和操作按钮 */}
-                {expandedGuaranteeItems.has("guarantee-other") && (
-                  <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div>
-                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          虚拟商品交易担保，游戏道具出售，价值2500 USDT，买方已付款等待确认收货
-                        </p>
-                      </div>
-                      
-                      <div className="flex justify-between items-center">
-                        <Button 
-                          variant="outline" 
-                          className={`h-8 text-xs px-4 ${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-gray-600 text-gray-600 hover:bg-gray-50'}`} 
-                          onClick={(e) => { e.stopPropagation(); }}
-                        >
-                          查看合同
-                        </Button>
-                        <div className="text-right">
-                          <span className="text-sm text-red-600 font-medium">争议中，等待仲裁</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
         )
-
-      case "付款担保":
-        return (
-          <div className="space-y-6">
-            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
-              {/* USDT买卖担保 */}
-              <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("guarantee-2")}
-              >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex flex-col space-y-3">
-                    <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
-                      USDT买卖担保
-                    </span>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      3,000.00 <span className="text-sm font-normal text-gray-500">USDT</span>
-                    </div>
-                    
-
-                  </div>
-                  
-                  {/* 交易对象和担保群 - 右侧显示 */}
-                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
-                            title="联系用户"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MessageCircle className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                            <User className="h-5 w-5 text-gray-600" />
-                          </div>
-                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123456</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-blue-500 hover:text-blue-600 transition-colors" 
-                            title="进入担保群"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Users className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
-                            <Users className="h-5 w-5 text-blue-600" />
-                          </div>
-                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>123456</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                
-                {/* 可展开的内容简介和操作按钮 */}
-                {expandedGuaranteeItems.has("guarantee-2") && (
-                  <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div>
-                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          出售3000 USDT给用户，汇率7.18，总价21540元，支付宝转账，已收到买方付款
-                        </p>
-                      </div>
-                      
-                      <div className="flex justify-between items-center">
-                        <Button 
-                          variant="outline" 
-                          className={`h-8 text-xs px-4 ${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-gray-600 text-gray-600 hover:bg-gray-50'}`} 
-                          onClick={(e) => { e.stopPropagation(); }}
-                        >
-                          查看合同
-                        </Button>
-                        <div className="text-right">
-                          <div className="flex items-center space-x-2 mb-2">
-                            <Button 
-                              className={`${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'} h-7 text-xs px-3`}
-                              onClick={(e) => { e.stopPropagation(); }}
-                            >
-                              <CheckCircle className="h-3 w-3 mr-1" />
-                              确认
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              className={`h-7 text-xs px-3 text-red-600 ${isDark ? 'border-white hover:bg-white hover:text-red-600' : 'border-red-600 hover:bg-red-50'}`}
-                              onClick={(e) => { e.stopPropagation(); }}
-                            >
-                              请求仲裁
-                            </Button>
-                          </div>
-                          <div className="text-xs text-gray-500">自动确认：<span className="font-mono">12:34:56</span></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* 第二个付款担保 - 等待确认 */}
-              <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("pay-guarantee-2")}
-              >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex flex-col space-y-3">
-                    <span className="px-3 py-1.5 bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300 rounded-full text-xs font-semibold w-fit">
-                      SOL交易担保
-                    </span>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      50.0 <span className="text-sm font-normal text-gray-500">SOL</span>
-                    </div>
-                    
-                    <TransactionProgress 
-                      steps={[
-                        { id: '1', label: '发起交易', status: 'completed' },
-                        { id: '2', label: '您已付担保金', status: 'completed' },
-                        { id: '3', label: '等待确认', status: 'completed' },
-                        { id: '4', label: '争议仲裁', status: 'current' },
-                        { id: '5', label: '完成交易', status: 'pending' }
-                      ]}
-                      className="mt-6"
-                    />
-
-                  </div>
-                  
-                  {/* 交易对象和担保群 - 右侧显示 */}
-                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
-                            title="联系用户"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MessageCircle className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                            <User className="h-5 w-5 text-gray-600" />
-                          </div>
-                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>SolanaKing</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-blue-500 hover:text-blue-600 transition-colors" 
-                            title="进入担保群"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Users className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
-                            <Users className="h-5 w-5 text-blue-600" />
-                          </div>
-                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>SOL_Trade_888</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 可展开的内容简介和操作按钮 */}
-                {expandedGuaranteeItems.has("pay-guarantee-2") && (
-                  <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div>
-                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          SOL场外交易担保，交易金额50 SOL，单价120 USDT，总价值6,000 USDT。您需要确认收到货物后点击完成交易。
-                        </p>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          查看详情
-                        </button>
-                        <button className="px-4 py-2 bg-[#00D4AA] text-white rounded-lg hover:bg-[#00B894] transition-colors">
-                          确认收款
-                        </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-red-600 text-red-400 hover:bg-red-900/20' : 'border-red-300 text-red-600 hover:bg-red-50'}`}>
-                          申请仲裁
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* 第三个付款担保 - 争议状态 */}
-              <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("pay-guarantee-3")}
-              >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex flex-col space-y-3">
-                    <span className="px-3 py-1.5 bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 rounded-full text-xs font-semibold w-fit">
-                      NFT交易担保
-                    </span>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      1,200.00 <span className="text-sm font-normal text-gray-500">USDT</span>
-                    </div>
-                    
-
-                  </div>
-                  
-                  {/* 交易对象和担保群 - 右侧显示 */}
-                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-[#00D4AA] hover:text-[#00B894] transition-colors" 
-                            title="联系用户"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MessageCircle className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>交易对象：</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                            <User className="h-5 w-5 text-gray-600" />
-                          </div>
-                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>NFTCollector</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            className="text-blue-500 hover:text-blue-600 transition-colors" 
-                            title="进入担保群"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Users className="h-6 w-6" />
-                          </button>
-                          <span className={`text-base font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>担保群：</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-300 rounded-full flex items-center justify-center">
-                            <Users className="h-5 w-5 text-blue-600" />
-                          </div>
-                          <span className={`text-base ${isDark ? 'text-white' : 'text-black'} font-semibold`}>NFT_Safe_555</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 可展开的内容简介和操作按钮 */}
-                {expandedGuaranteeItems.has("pay-guarantee-3") && (
-                  <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div>
-                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          NFT数字艺术品交易担保，价值1,200 USDT。买方质疑作品真实性，目前在仲裁阶段处理中。
-                        </p>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          查看详情
-                        </button>
-                        <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
-                          查看仲裁
-                        </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          提交证据
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* 其他担保交易 */}
-              <div className={isDark ? "p-4 hover:bg-gray-700/30 transition-colors" : "p-4 hover:bg-gray-50 transition-colors"}>
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold">
-                      其他担保交易
-                    </span>
-                    <div className="flex flex-col items-end space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>交易对象：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">U</div>
-                        <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>987987</span>
-                        <button className="text-[#00D4AA] hover:text-[#00B894] transition-colors" title="联系用户">
-                          <MessageCircle className="h-4 w-4" />
-                        </button>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>担保群：</span>
-                        <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">G</div>
-                        <span className={`text-sm ${isDark ? 'text-white' : 'text-black'} font-medium`}>987987</span>
-                        <button className="text-blue-500 hover:text-blue-600 transition-colors" title="进入担保群">
-                          <Users className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      1,200.00 USDT
-                    </span>
-                  </div>
-                  
-                  <div>
-                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容 </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
-                      数字艺术品交易，NFT作品出售，买方质疑作品真实性，目前在仲裁阶段处理中
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-end justify-end">
-                    <div className="text-right">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Button className={`${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black hover:bg-gray-800 text-white'} h-7 text-xs px-3`}>
-                          <CheckCircle className="h-3 w-3 mr-1" />
-                          确认结束争议
-                        </Button>
-                      </div>
-                      <span className="text-sm text-red-600">争议中，等待仲裁</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 第四个付款担保 - 刚发起状态 */}
-              <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("pay-guarantee-4")}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex flex-col space-y-3">
-                    <span className="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 rounded-full text-xs font-semibold inline-block w-fit">
-                      USDT买卖担保
-                    </span>
-                    
-                    <div className="flex items-center space-x-3">
-                      <span className={`text-lg font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>付款担保金额：</span>
-                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        1,200.0 <span className="text-sm font-normal text-gray-500">USDT</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col items-end space-y-3">
-                    <button 
-                      className={`px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
-                        isDark 
-                          ? 'bg-transparent border border-white text-white hover:bg-white hover:text-gray-900' 
-                          : 'bg-transparent border border-black text-black hover:bg-black hover:text-white'
-                      }`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                      title="查看合同"
-                    >
-                      查看合同
-                    </button>
-                      
-                    {/* 头像图标 */}
-                    <button 
-                      className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
-                        isDark 
-                          ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
-                          : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
-                      }`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setTradingPartnerDialog({
-                          isOpen: true,
-                          partnerName: 'Alice888',
-                          partnerId: 'user-alice888'
-                        });
-                      }}
-                      title="联系交易对象"
-                    >
-                      <User className="h-5 w-5" />
-                    </button>
-                  </div>
-                </div>
-                
-                {/* 进度条 - 与左上角标签对齐 */}
-                <div className="flex-1 ml-6 -mt-3">
-                  <TransactionProgress 
-                    steps={[
-                      { id: '1', label: '发起交易', status: 'current' },
-                      { id: '2', label: '已付担保金', status: 'pending' },
-                      { id: '3', label: '等待确认', status: 'pending' },
-                      { id: '4', label: '争议仲裁', status: 'pending' },
-                      { id: '5', label: '完成交易', status: 'pending' }
-                    ]}
-                    className=""
-                  />
-                  {/* 交易发起时间和自动确认 */}
-                  <div className="mt-1 flex items-center justify-between">
-                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      发起时间: 2025-01-29
-                    </div>
-                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      <span className="text-blue-500 font-medium">等待对方响应</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 第五个付款担保 - 其他交易担保完成状态 */}
-              <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("pay-guarantee-5")}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex flex-col space-y-3">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold inline-block w-fit">
-                      其他交易担保
-                    </span>
-                    
-                    <div className="flex items-center space-x-3">
-                      <span className={`text-lg font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>付款担保金额：</span>
-                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        800.0 <span className="text-sm font-normal text-gray-500">USDT</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col items-end space-y-3">
-                    <button 
-                      className={`px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
-                        isDark 
-                          ? 'bg-transparent border border-white text-white hover:bg-white hover:text-gray-900' 
-                          : 'bg-transparent border border-black text-black hover:bg-black hover:text-white'
-                      }`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                      title="查看合同"
                     >
                       查看合同
                     </button>
