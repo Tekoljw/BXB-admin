@@ -5602,7 +5602,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条 - 与左上角标签对齐 */}
-                  <div className="flex-shrink-0 ml-6 -mt-3">
+                  <div className="flex-1 ml-6 -mt-3">
                     <TransactionProgress 
                       steps={[
                         { id: '1', label: '发起交易', status: 'completed' },
@@ -5748,7 +5748,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条和时间信息 */}
-                  <div className="flex flex-col items-end -mt-3">
+                  <div className="flex-1 flex flex-col items-stretch -mt-3">
                     <TransactionProgress 
                       steps={[
                         { id: 'start', label: '发起交易', status: 'completed' },
@@ -5855,7 +5855,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条和时间信息 */}
-                  <div className="flex flex-col items-end -mt-3">
+                  <div className="flex-1 flex flex-col items-stretch -mt-3">
                     <TransactionProgress 
                       steps={[
                         { id: 'start', label: '发起交易', status: 'completed' },
@@ -5961,7 +5961,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条和时间信息 */}
-                  <div className="flex flex-col items-end -mt-3">
+                  <div className="flex-1 flex flex-col items-stretch -mt-3">
                     <TransactionProgress 
                       steps={[
                         { id: 'start', label: '发起交易', status: 'completed' },
