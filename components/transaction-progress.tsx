@@ -25,7 +25,7 @@ export default function TransactionProgress({ steps, className = '' }: Transacti
     : ((completedCount + 0.5) / (steps.length - 1)) * 100
 
   return (
-    <div className={`w-full min-w-[300px] max-w-[800px] ${className}`}>
+    <div className={`w-full min-w-[300px] max-w-[800px] mx-auto ${className}`}>
       <div className="relative py-6 px-4">
         {/* 统一的节点容器 - 确保气泡和圆球完美对齐 */}
         <div className="flex items-start justify-between w-full">
