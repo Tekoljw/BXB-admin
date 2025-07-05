@@ -4302,28 +4302,26 @@ export default function WalletPage() {
                         卡内余额
                       </h3>
                     </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center">
-                        <span className={`text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          {balanceVisible ? "2,222.22" : "****"}
-                        </span>
-                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
-                      </div>
-                      <div className="flex items-center">
-                        <span className={`text-sm mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          本月消费
-                        </span>
-                        <span className="text-sm text-red-500">-678.90 USDT</span>
-                      </div>
+                    <div className="flex items-center">
+                      <span className={`text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {balanceVisible ? "2,222.22" : "****"}
+                      </span>
+                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 ml-4">
+                  <div className="flex-shrink-0 ml-4 flex flex-col items-center">
                     <TrendChart 
                       data={generateTrendData(false)} 
                       isPositive={false}
-                      height={60}
+                      height={50}
                       width={80}
                     />
+                    <div className="flex items-center mt-2">
+                      <span className={`text-xs mr-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        本月消费
+                      </span>
+                      <span className="text-xs text-red-500">-678.90 USDT</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -4338,30 +4336,28 @@ export default function WalletPage() {
                         账户余额
                       </h3>
                     </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center">
-                        <span className={`text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          {balanceVisible ? "3,456.78" : "****"}
-                        </span>
-                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
-                      </div>
-                      <div className="flex items-center">
-                        <span className={`text-sm mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          本月充值
-                        </span>
-                        <span className={`text-sm font-medium ${isDark ? 'text-[#00D4AA]' : 'text-blue-600'}`}>
-                          +1,500.00 USDT
-                        </span>
-                      </div>
+                    <div className="flex items-center">
+                      <span className={`text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {balanceVisible ? "3,456.78" : "****"}
+                      </span>
+                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 ml-4">
+                  <div className="flex-shrink-0 ml-4 flex flex-col items-center">
                     <TrendChart 
                       data={generateTrendData(true)} 
                       isPositive={true}
-                      height={60}
+                      height={50}
                       width={80}
                     />
+                    <div className="flex items-center mt-2">
+                      <span className={`text-xs mr-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        本月充值
+                      </span>
+                      <span className={`text-xs font-medium ${isDark ? 'text-[#00D4AA]' : 'text-blue-600'}`}>
+                        +1,500.00 USDT
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
