@@ -4448,6 +4448,7 @@ export default function WalletPage() {
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
+                  title="使用指南"
                 >
                   <BookOpen className="h-4 w-4" />
                 </Button>
@@ -4458,8 +4459,9 @@ export default function WalletPage() {
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
+                  title="账单记录"
                 >
-                  <FileText className="h-4 w-4" />
+                  <History className="h-4 w-4" />
                 </Button>
               </div>
             </div>
