@@ -221,7 +221,7 @@ export default function MallPage() {
 
                   <div className="flex items-center gap-1">
                     <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
+                      {Array.from({ length: 5 }, (_, i) => (
                         <Star
                           key={i}
                           className={`h-4 w-4 ${

@@ -16,7 +16,7 @@ export default function Loading() {
             <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-32 animate-pulse"></div>
           </div>
           <div className="flex space-x-2">
-            {[...Array(3)].map((_, i) => (
+            {Array.from({ length: 3 }, (_, i) => (
               <div key={i} className="w-16 h-8 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
             ))}
           </div>
@@ -34,7 +34,7 @@ export default function Loading() {
 
         {/* 表格行骨架 */}
         <div className="space-y-1">
-          {[...Array(12)].map((_, i) => (
+          {Array.from({ length: 12 }, (_, i) => (
             <div key={i} className="grid grid-cols-6 gap-4 py-4 border-b border-gray-100 dark:border-gray-800">
               {/* 币种信息 */}
               <div className="flex items-center space-x-3">
