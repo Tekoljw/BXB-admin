@@ -73,6 +73,7 @@ import {
   Trash2,
   Lock,
   Key,
+  Ban,
   Unlink,
   ChevronRight
 } from "lucide-react"
@@ -4596,7 +4597,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <DollarRefreshIcon className="h-4 w-4" />
+                            <DollarSign className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4608,7 +4609,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Power className="h-4 w-4" />
+                            <Ban className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4632,7 +4633,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Key className="h-4 w-4" />
+                            <Settings className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
@@ -4737,7 +4738,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <DollarRefreshIcon className="h-4 w-4" />
+                            <DollarSign className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4749,7 +4750,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Power className="h-4 w-4" />
+                            <Ban className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4773,7 +4774,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Key className="h-4 w-4" />
+                            <Settings className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
@@ -4878,7 +4879,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <DollarRefreshIcon className="h-4 w-4" />
+                            <DollarSign className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4890,7 +4891,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Power className="h-4 w-4" />
+                            <Ban className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4914,7 +4915,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Key className="h-4 w-4" />
+                            <Settings className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
