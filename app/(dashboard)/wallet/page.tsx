@@ -4497,7 +4497,9 @@ export default function WalletPage() {
                   {/* 虚拟卡布局 */}
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {/* 个人购物虚拟卡 */}
-                    <div className="space-y-3 max-w-sm w-full">
+                    <div className={`space-y-3 max-w-sm w-full p-4 rounded-lg border transition-all ${
+                      isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' : 'bg-white border-gray-200 hover:border-gray-300'
+                    }`}>
                       <div className={`relative p-4 rounded-lg transition-all hover:shadow-lg h-28 ${
                         isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
                       }`}>
@@ -4585,7 +4587,9 @@ export default function WalletPage() {
                     </div>
 
                     {/* 微博芽专用虚拟卡 */}
-                    <div className="space-y-3 max-w-sm w-full">
+                    <div className={`space-y-3 max-w-sm w-full p-4 rounded-lg border transition-all ${
+                      isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' : 'bg-white border-gray-200 hover:border-gray-300'
+                    }`}>
                       <div className={`relative p-4 rounded-lg transition-all hover:shadow-lg h-28 ${
                         isDark ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
                       }`}>
@@ -4676,7 +4680,9 @@ export default function WalletPage() {
                     </div>
 
                     {/* 工薪卡虚拟卡 */}
-                    <div className="space-y-3 max-w-sm w-full">
+                    <div className={`space-y-3 max-w-sm w-full p-4 rounded-lg border transition-all ${
+                      isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' : 'bg-white border-gray-200 hover:border-gray-300'
+                    }`}>
                       <div className={`relative p-4 rounded-lg transition-all hover:shadow-lg h-28 ${
                         isDark ? 'bg-gradient-to-r from-green-600 to-teal-600' : 'bg-gradient-to-r from-green-500 to-teal-500'
                       }`}>
