@@ -4933,7 +4933,7 @@ export default function WalletPage() {
               {selectedUCardView === "physical" && (
                 <div className="flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-8">
                   {/* 实体卡1 - 白金卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-48 ${
+                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
                     isDark ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'
                   } shadow-lg transition-all hover:shadow-xl flex-shrink-0`}>
                     {/* 顶部logo区域 */}
@@ -4967,7 +4967,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡2 - 钻石卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-48 ${
+                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
                     isDark ? 'bg-gradient-to-br from-purple-800 to-purple-900' : 'bg-gradient-to-br from-purple-500 to-purple-600'
                   } shadow-lg transition-all hover:shadow-xl text-white flex-shrink-0`}>
                     {/* 顶部logo区域 */}
@@ -5001,7 +5001,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡3 - 黑金卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-48 ${
+                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
                     isDark ? 'bg-gradient-to-br from-gray-900 to-black' : 'bg-gradient-to-br from-gray-800 to-gray-900'
                   } shadow-lg transition-all hover:shadow-xl text-white flex-shrink-0`}>
                     {/* 顶部logo区域 */}
@@ -5035,7 +5035,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡4 - 商务卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-48 ${
+                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
                     isDark ? 'bg-gradient-to-br from-green-800 to-green-900' : 'bg-gradient-to-br from-green-600 to-green-700'
                   } shadow-lg transition-all hover:shadow-xl text-white flex-shrink-0`}>
                     {/* 顶部logo区域 */}
@@ -5069,7 +5069,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡5 - 学生卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-48 ${
+                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
                     isDark ? 'bg-gradient-to-br from-blue-800 to-blue-900' : 'bg-gradient-to-br from-blue-500 to-blue-600'
                   } shadow-lg transition-all hover:shadow-xl text-white flex-shrink-0`}>
                     {/* 顶部logo区域 */}
@@ -5103,7 +5103,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡6 - 高级卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-48 ${
+                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
                     isDark ? 'bg-gradient-to-br from-red-800 to-red-900' : 'bg-gradient-to-br from-red-500 to-red-600'
                   } shadow-lg transition-all hover:shadow-xl text-white flex-shrink-0`}>
                     {/* 顶部logo区域 */}
