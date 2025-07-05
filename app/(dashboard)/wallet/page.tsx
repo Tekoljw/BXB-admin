@@ -4635,18 +4635,6 @@ export default function WalletPage() {
                           >
                             <Settings className="h-4 w-4" />
                           </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("个人信息 for card-1")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <User className="h-4 w-4" />
-                          </button>
                         </div>
                       </div>
                     </div>
@@ -4788,18 +4776,6 @@ export default function WalletPage() {
                           >
                             <Settings className="h-4 w-4" />
                           </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("个人信息 for card-2")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <User className="h-4 w-4" />
-                          </button>
                         </div>
                       </div>
                     </div>
@@ -4940,18 +4916,6 @@ export default function WalletPage() {
                             }`}
                           >
                             <Settings className="h-4 w-4" />
-                          </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("个人信息 for card-3")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <User className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
