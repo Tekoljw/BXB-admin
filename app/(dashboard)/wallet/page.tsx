@@ -48,16 +48,17 @@ import {
   Clock,
   CheckCircle,
   Calendar,
+  User,
+  Briefcase,
+  Rocket,
   MessageCircle,
   Users,
-  User,
   ExternalLink,
   Receipt,
   Coins,
   Target,
   HelpCircle,
   Zap,
-  Lock,
   Unlock,
   MapPin,
   Building2,
@@ -4482,41 +4483,219 @@ export default function WalletPage() {
             <div className={`${cardStyle} rounded-lg p-6`}>
               {selectedUCardView === "virtual" && (
                 <div>
-                  <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <h3 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     虚拟卡管理
                   </h3>
-                  <div className="text-center py-8">
-                    <CreditCard className={`h-12 w-12 mx-auto mb-4 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
-                    <p className={`mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      显示虚拟卡详情和管理功能
-                    </p>
-                    <Button className={`${
-                      isDark 
-                        ? "bg-white text-black hover:bg-gray-200" 
-                        : "bg-black text-white hover:bg-gray-800"
+                  
+                  {/* 虚拟卡列表 */}
+                  <div className="space-y-4">
+                    {/* 个人购物虚拟卡 */}
+                    <div className={`relative p-4 rounded-xl transition-all hover:shadow-lg ${
+                      isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
                     }`}>
-                      管理虚拟卡
-                    </Button>
+                      <div className="flex justify-between items-start text-white">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center">
+                              <div className="bg-white/20 rounded-full p-2 mr-3">
+                                <User className="h-5 w-5" />
+                              </div>
+                              <span className="text-sm opacity-90">个人购物</span>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-sm opacity-90">余额: 20U</div>
+                            </div>
+                          </div>
+                          <div className="mb-4">
+                            <div className="text-lg font-mono tracking-wider">4323 4323 4323 9999</div>
+                          </div>
+                          <div className="flex justify-between items-end">
+                            <div className="flex items-center">
+                              <Eye className="h-4 w-4 mr-1" />
+                              <span className="text-sm">卡情</span>
+                            </div>
+                            <div className="text-right">
+                              <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCA0MCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0id2hpdGUiLz4KPHN2ZyB4PSI4IiB5PSI2IiB3aWR0aD0iMjQiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAyNCAxMiIgZmlsbD0ibm9uZSI+CjxwYXRoIGQ9Ik0yLjUgNkg5LjVMMTEuNSA5SDE2LjVMMTguNSA2SDIxLjVWMTBIMi41VjZaIiBmaWxsPSIjMTQyMzY4Ii8+CjxwYXRoIGQ9Ik0yLjUgMkgxMy41TDE2LjUgNUgxOC41TDIxLjUgMlYxMEgyLjVWMloiIGZpbGw9IiNGRkY1RjAiLz4KPC9zdmc+Cjwvc3ZnPgo=" alt="VISA" className="h-6" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 微博芽专用虚拟卡 */}
+                    <div className={`relative p-4 rounded-xl transition-all hover:shadow-lg ${
+                      isDark ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                    }`}>
+                      <div className="flex justify-between items-start text-white">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center">
+                              <div className="bg-white/20 rounded-full p-2 mr-3">
+                                <Zap className="h-5 w-5" />
+                              </div>
+                              <span className="text-sm opacity-90">微博芽专用</span>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-sm opacity-90">余额: 10U</div>
+                            </div>
+                          </div>
+                          <div className="mb-4">
+                            <div className="text-lg font-mono tracking-wider">4323 4323 4323 9999</div>
+                          </div>
+                          <div className="flex justify-between items-end">
+                            <div className="flex items-center">
+                              <Eye className="h-4 w-4 mr-1" />
+                              <span className="text-sm">卡情</span>
+                            </div>
+                            <div className="text-right flex items-center">
+                              <span className="text-xs mr-2">mastercard</span>
+                              <div className="flex">
+                                <div className="w-4 h-4 rounded-full bg-red-500 -mr-1"></div>
+                                <div className="w-4 h-4 rounded-full bg-yellow-400"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 工薪卡虚拟卡 */}
+                    <div className={`relative p-4 rounded-xl transition-all hover:shadow-lg ${
+                      isDark ? 'bg-gradient-to-r from-green-600 to-teal-600' : 'bg-gradient-to-r from-green-500 to-teal-500'
+                    }`}>
+                      <div className="flex justify-between items-start text-white">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center">
+                              <div className="bg-white/20 rounded-full p-2 mr-3">
+                                <Briefcase className="h-5 w-5" />
+                              </div>
+                              <span className="text-sm opacity-90">工薪卡</span>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-sm opacity-90">余额: 20U</div>
+                            </div>
+                          </div>
+                          <div className="mb-4">
+                            <div className="text-lg font-mono tracking-wider">4323 4323 4323 9999</div>
+                          </div>
+                          <div className="flex justify-between items-end">
+                            <div className="flex items-center">
+                              <Eye className="h-4 w-4 mr-1" />
+                              <span className="text-sm">卡情</span>
+                            </div>
+                            <div className="text-right flex items-center">
+                              <span className="text-xs mr-2">mastercard</span>
+                              <div className="flex">
+                                <div className="w-4 h-4 rounded-full bg-red-500 -mr-1"></div>
+                                <div className="w-4 h-4 rounded-full bg-yellow-400"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
 
               {selectedUCardView === "physical" && (
                 <div>
-                  <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <h3 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     实体卡管理
                   </h3>
-                  <div className="text-center py-8">
-                    <CreditCard className={`h-12 w-12 mx-auto mb-4 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
-                    <p className={`mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      您还没有申请实体卡
-                    </p>
-                    <Button className={`${
-                      isDark 
-                        ? "bg-white text-black hover:bg-gray-200" 
-                        : "bg-black text-white hover:bg-gray-800"
-                    }`}>
-                      立即申请实体卡
+                  
+                  {/* 实体卡展示 */}
+                  <div className="flex justify-center mb-8">
+                    <div className="relative w-96 h-60 transform hover:scale-105 transition-transform duration-300">
+                      {/* 实体卡背景 */}
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-green-400 via-teal-500 to-blue-600 shadow-2xl">
+                        {/* 卡片内容 */}
+                        <div className="relative h-full p-8 text-white">
+                          {/* 芯片 */}
+                          <div className="absolute top-12 left-8">
+                            <div className="w-12 h-9 bg-yellow-300 rounded-lg border border-yellow-400 opacity-80">
+                              <div className="grid grid-cols-3 gap-0.5 p-1 h-full">
+                                {[...Array(9)].map((_, i) => (
+                                  <div key={i} className="bg-yellow-500 rounded-sm"></div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* BeingFi Logo */}
+                          <div className="absolute top-8 left-8">
+                            <div className="flex items-center">
+                              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2">
+                                <span className="text-green-600 font-bold text-sm">B</span>
+                              </div>
+                              <span className="text-white font-bold text-lg">BeingFi</span>
+                            </div>
+                          </div>
+                          
+                          {/* 火箭图案 */}
+                          <div className="absolute top-16 right-8">
+                            <Rocket className="h-16 w-16 text-white/30 transform rotate-45" />
+                          </div>
+                          
+                          {/* 卡号 */}
+                          <div className="absolute bottom-20 left-8">
+                            <div className="text-xl font-mono tracking-widest">
+                              4323 4323 4323 9999
+                            </div>
+                          </div>
+                          
+                          {/* 持卡人和有效期 */}
+                          <div className="absolute bottom-8 left-8 flex justify-between items-end w-80">
+                            <div>
+                              <div className="text-xs opacity-75 mb-1">CARD HOLDER</div>
+                              <div className="text-sm font-medium">ZHANG SAN</div>
+                            </div>
+                            <div>
+                              <div className="text-xs opacity-75 mb-1">VALID THRU</div>
+                              <div className="text-sm font-medium">12/27</div>
+                            </div>
+                          </div>
+                          
+                          {/* VISA Logo */}
+                          <div className="absolute bottom-8 right-8">
+                            <div className="text-white font-bold text-2xl italic">VISA</div>
+                            <div className="text-xs opacity-75">Platinum</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* 实体卡信息 */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>卡片状态</div>
+                      <div className={`text-lg font-semibold text-green-600`}>正常使用</div>
+                    </div>
+                    <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>当月消费额度</div>
+                      <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>$8,500</div>
+                    </div>
+                    <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>可用余额</div>
+                      <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>$1,500</div>
+                    </div>
+                  </div>
+                  
+                  {/* 实体卡操作按钮 */}
+                  <div className="flex flex-wrap gap-3 justify-center">
+                    <Button variant="outline" className={`${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-black text-black hover:bg-black hover:text-white'}`}>
+                      <Lock className="h-4 w-4 mr-2" />
+                      冻结卡片
+                    </Button>
+                    <Button variant="outline" className={`${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-black text-black hover:bg-black hover:text-white'}`}>
+                      <Settings className="h-4 w-4 mr-2" />
+                      限额设置
+                    </Button>
+                    <Button variant="outline" className={`${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-black text-black hover:bg-black hover:text-white'}`}>
+                      <CreditCard className="h-4 w-4 mr-2" />
+                      查看密码
                     </Button>
                   </div>
                 </div>
