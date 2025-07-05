@@ -4294,54 +4294,74 @@ export default function WalletPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 卡内余额 */}
               <div className={`rounded-lg p-6 ${cardStyle}`}>
-                <div className="flex items-center mb-4">
-                  <CreditCard className={`h-6 w-6 mr-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    卡内余额
-                  </h3>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <span className={`text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {balanceVisible ? "2,222.22" : "****"}
-                    </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className={`text-sm mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        本月消费
-                      </span>
-                      <span className="text-sm text-red-500">-678.90 USDT</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center mb-4">
+                      <CreditCard className={`h-6 w-6 mr-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        卡内余额
+                      </h3>
                     </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center">
+                        <span className={`text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {balanceVisible ? "2,222.22" : "****"}
+                        </span>
+                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className={`text-sm mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          本月消费
+                        </span>
+                        <span className="text-sm text-red-500">-678.90 USDT</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 ml-4">
+                    <TrendChart 
+                      data={generateTrendData(false)} 
+                      isPositive={false}
+                      height={60}
+                      width={80}
+                    />
                   </div>
                 </div>
               </div>
 
               {/* 账户余额 */}
               <div className={`rounded-lg p-6 ${cardStyle}`}>
-                <div className="flex items-center mb-4">
-                  <Wallet className={`h-6 w-6 mr-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    账户余额
-                  </h3>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <span className={`text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {balanceVisible ? "3,456.78" : "****"}
-                    </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className={`text-sm mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        本月充值
-                      </span>
-                      <span className={`text-sm font-medium ${isDark ? 'text-[#00D4AA]' : 'text-blue-600'}`}>
-                        +1,500.00 USDT
-                      </span>
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center mb-4">
+                      <Wallet className={`h-6 w-6 mr-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        账户余额
+                      </h3>
                     </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center">
+                        <span className={`text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {balanceVisible ? "3,456.78" : "****"}
+                        </span>
+                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className={`text-sm mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          本月充值
+                        </span>
+                        <span className={`text-sm font-medium ${isDark ? 'text-[#00D4AA]' : 'text-blue-600'}`}>
+                          +1,500.00 USDT
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 ml-4">
+                    <TrendChart 
+                      data={generateTrendData(true)} 
+                      isPositive={true}
+                      height={60}
+                      width={80}
+                    />
                   </div>
                 </div>
               </div>
