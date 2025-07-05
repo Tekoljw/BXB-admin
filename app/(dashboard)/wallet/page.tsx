@@ -80,6 +80,7 @@ import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
 import { useTranslation } from "@/hooks/use-translation"
 import SkeletonLoader from "@/components/skeleton-loader"
+import DollarRefreshIcon from "@/components/dollar-refresh-icon"
 import TrendChart from "@/components/wallet/trend-chart"
 import KlineChart from "@/components/wallet/kline-chart"
 
@@ -4595,7 +4596,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Plus className="h-4 w-4" />
+                            <DollarRefreshIcon className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4736,7 +4737,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Plus className="h-4 w-4" />
+                            <DollarRefreshIcon className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4877,7 +4878,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Plus className="h-4 w-4" />
+                            <DollarRefreshIcon className="h-4 w-4" />
                           </button>
                           
                           <button
