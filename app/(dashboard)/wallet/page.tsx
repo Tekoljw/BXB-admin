@@ -4502,8 +4502,7 @@ export default function WalletPage() {
                     }`}>
                       <div className="text-white h-full flex flex-col justify-between">
                         {/* 顶部区域 */}
-                        <div className="flex items-center justify-between">
-                          <div className="text-xs font-bold">VISA</div>
+                        <div className="flex justify-end">
                           <div className="flex items-center">
                             <button 
                               className="text-xs opacity-90 hover:opacity-100 mr-2"
@@ -4574,6 +4573,7 @@ export default function WalletPage() {
                               <Plus className="h-3 w-3" />
                             </button>
                           </div>
+                          <div className="text-xs font-bold">VISA</div>
                         </div>
                       </div>
                     </div>
@@ -4584,11 +4584,7 @@ export default function WalletPage() {
                     }`}>
                       <div className="text-white h-full flex flex-col justify-between">
                         {/* 顶部区域 */}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
-                            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                          </div>
+                        <div className="flex justify-end">
                           <div className="flex items-center">
                             <button 
                               className="text-xs opacity-90 hover:opacity-100 mr-2"
@@ -4658,6 +4654,10 @@ export default function WalletPage() {
                               <Plus className="h-3 w-3" />
                             </button>
                           </div>
+                          <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
+                            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -4668,11 +4668,7 @@ export default function WalletPage() {
                     }`}>
                       <div className="text-white h-full flex flex-col justify-between">
                         {/* 顶部区域 */}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
-                            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                          </div>
+                        <div className="flex justify-end">
                           <div className="flex items-center">
                             <button 
                               className="text-xs opacity-90 hover:opacity-100 mr-2"
@@ -4741,6 +4737,10 @@ export default function WalletPage() {
                             >
                               <Plus className="h-3 w-3" />
                             </button>
+                          </div>
+                          <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
+                            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                           </div>
                         </div>
                       </div>
