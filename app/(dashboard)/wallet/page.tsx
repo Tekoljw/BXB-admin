@@ -4595,7 +4595,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <CreditCard className="h-4 w-4" />
+                            <Plus className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4607,7 +4607,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Lock className="h-4 w-4" />
+                            <Power className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4736,7 +4736,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <CreditCard className="h-4 w-4" />
+                            <Plus className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4748,7 +4748,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Lock className="h-4 w-4" />
+                            <Power className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4877,7 +4877,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <CreditCard className="h-4 w-4" />
+                            <Plus className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4889,7 +4889,7 @@ export default function WalletPage() {
                               isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Lock className="h-4 w-4" />
+                            <Power className="h-4 w-4" />
                           </button>
                           
                           <button
