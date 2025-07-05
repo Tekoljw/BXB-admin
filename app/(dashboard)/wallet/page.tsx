@@ -38,6 +38,8 @@ import {
   FileText,
   BarChart2,
   PieChart,
+  Power,
+  BookOpen,
   ShoppingCart,
   LineChart,
   Banknote,
@@ -113,6 +115,7 @@ export default function WalletPage() {
   const [positionModalAnimating, setPositionModalAnimating] = useState(false) // 仓位弹窗动画状态
   const [showTransferModal, setShowTransferModal] = useState(false) // 划转弹窗
   const [transferModalAnimating, setTransferModalAnimating] = useState(false) // 划转弹窗动画状态
+  const [showFundDistribution, setShowFundDistribution] = useState(false) // 资金分布弹窗
   const [transferFrom, setTransferFrom] = useState("现货账户") // 划转来源账户
   const [transferTo, setTransferTo] = useState("合约账户") // 划转目标账户
   const [transferCurrency, setTransferCurrency] = useState("USDT") // 划转币种
@@ -4358,15 +4361,15 @@ export default function WalletPage() {
                     isDark ? 'bg-white' : 'bg-white shadow-sm'
                   }`}
                   style={{
-                    width: `calc(50% - 4px)`,
-                    transform: selectedUCardView === "virtual" ? 'translateX(4px)' : 'translateX(calc(100% + 4px))'
+                    width: `calc(50% - 6px)`,
+                    transform: selectedUCardView === "virtual" ? 'translateX(6px)' : 'translateX(calc(100% + 6px))'
                   }}
                 />
                 
                 {/* 页签按钮 */}
                 <button
                   onClick={() => setSelectedUCardView("virtual")}
-                  className={`relative z-10 px-4 py-2 text-sm font-medium transition-colors duration-300 ${
+                  className={`relative z-10 px-6 py-3 text-base font-medium transition-colors duration-300 ${
                     selectedUCardView === "virtual"
                       ? 'text-black'
                       : isDark 
@@ -4378,7 +4381,7 @@ export default function WalletPage() {
                 </button>
                 <button
                   onClick={() => setSelectedUCardView("physical")}
-                  className={`relative z-10 px-4 py-2 text-sm font-medium transition-colors duration-300 ${
+                  className={`relative z-10 px-6 py-3 text-base font-medium transition-colors duration-300 ${
                     selectedUCardView === "physical"
                       ? 'text-black'
                       : isDark 
@@ -4394,70 +4397,80 @@ export default function WalletPage() {
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
-                  size="sm"
-                  className={`border transition-colors ${
+                  className={`px-4 py-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
+                  onClick={() => setShowFundDistribution(true)}
                 >
-                  充值
+                  <PieChart className="h-4 w-4 mr-2" />
+                  资金分布
                 </Button>
                 <Button
                   variant="outline"
-                  size="sm"
-                  onClick={handleTransferClick}
-                  className={`border transition-colors ${
+                  className={`px-4 py-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
                 >
-                  划款
+                  <Plus className="h-4 w-4 mr-2" />
+                  卡片充值
                 </Button>
                 <Button
                   variant="outline"
-                  size="sm"
-                  className={`border transition-colors ${
+                  className={`px-4 py-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
                 >
+                  <CreditCard className="h-4 w-4 mr-2" />
                   申请新卡
                 </Button>
                 <Button
                   variant="outline"
-                  size="sm"
-                  className={`border transition-colors ${
+                  className={`px-4 py-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
                 >
+                  <Power className="h-4 w-4 mr-2" />
                   激活卡片
                 </Button>
                 <Button
                   variant="outline"
-                  size="sm"
-                  className={`border transition-colors ${
+                  onClick={handleTransferClick}
+                  className={`px-4 py-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
                 >
-                  使用指南
+                  <ArrowLeftRight className="h-4 w-4 mr-2" />
+                  划款
                 </Button>
                 <Button
                   variant="outline"
-                  size="sm"
-                  className={`border transition-colors ${
+                  className={`p-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
                 >
-                  账单记录
+                  <BookOpen className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className={`p-2 border transition-colors ${
+                    isDark
+                      ? "border-white text-white hover:bg-white hover:text-black"
+                      : "border-black text-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  <FileText className="h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -8160,6 +8173,131 @@ export default function WalletPage() {
               >
                 确认
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 资金分布弹窗 */}
+      {showFundDistribution && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className={`w-full max-w-lg rounded-2xl ${isDark ? 'bg-[#1a1d29]' : 'bg-white'} shadow-2xl border ${isDark ? 'border-[#252842]' : 'border-gray-200'} overflow-hidden`}>
+            {/* 弹窗头部 */}
+            <div className={`px-6 py-4 border-b ${isDark ? 'border-[#252842]' : 'border-gray-100'}`}>
+              <div className="flex items-center justify-between">
+                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  资金分布
+                </h3>
+                <button
+                  onClick={() => setShowFundDistribution(false)}
+                  className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+                >
+                  <X className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                </button>
+              </div>
+            </div>
+
+            {/* 弹窗内容 */}
+            <div className="px-6 py-6">
+              {/* 总资产 */}
+              <div className={`text-center mb-6 p-4 rounded-lg ${isDark ? 'bg-[#252842]' : 'bg-gray-50'}`}>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>
+                  总资产
+                </div>
+                <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  5,679.00 USDT
+                </div>
+              </div>
+
+              {/* 饼图区域 */}
+              <div className="flex items-center justify-center mb-6">
+                <div className="relative w-48 h-48">
+                  {/* 简化的饼图显示 */}
+                  <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
+                    {/* 虚拟卡1 - 39% */}
+                    <circle cx="50" cy="50" r="25" fill="none" stroke="#00D4AA" strokeWidth="20" 
+                           strokeDasharray="61.26 96.3" strokeDashoffset="0" />
+                    {/* 虚拟卡2 - 23% */}
+                    <circle cx="50" cy="50" r="25" fill="none" stroke="#3B82F6" strokeWidth="20" 
+                           strokeDasharray="36.19 121.37" strokeDashoffset="-61.26" />
+                    {/* 实体卡 - 21% */}
+                    <circle cx="50" cy="50" r="25" fill="none" stroke="#F59E0B" strokeWidth="20" 
+                           strokeDasharray="33.06 124.5" strokeDashoffset="-97.45" />
+                    {/* 余额 - 17% */}
+                    <circle cx="50" cy="50" r="25" fill="none" stroke="#EF4444" strokeWidth="20" 
+                           strokeDasharray="26.7 130.86" strokeDashoffset="-130.51" />
+                  </svg>
+                  
+                  {/* 中心文字 */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className={`text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      <div className="text-sm font-medium">U卡资金</div>
+                      <div className="text-xs text-gray-500">分布情况</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 图例 */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 rounded-full bg-[#00D4AA] mr-3"></div>
+                    <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>虚拟卡1</span>
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>2,222.22 USDT</div>
+                    <div className="text-xs text-gray-500">39%</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 rounded-full bg-[#3B82F6] mr-3"></div>
+                    <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>虚拟卡2</span>
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>1,306.11 USDT</div>
+                    <div className="text-xs text-gray-500">23%</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 rounded-full bg-[#F59E0B] mr-3"></div>
+                    <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>实体卡</span>
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>1,192.59 USDT</div>
+                    <div className="text-xs text-gray-500">21%</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 rounded-full bg-[#EF4444] mr-3"></div>
+                    <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>账户余额</span>
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>958.08 USDT</div>
+                    <div className="text-xs text-gray-500">17%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 弹窗底部 */}
+            <div className={`px-6 py-4 border-t ${isDark ? 'border-[#252842]' : 'border-gray-100'}`}>
+              <Button
+                onClick={() => setShowFundDistribution(false)}
+                className={`w-full ${
+                  isDark 
+                    ? "bg-white text-black hover:bg-gray-200" 
+                    : "bg-black text-white hover:bg-gray-800"
+                }`}
+              >
+                知道了
+              </Button>
             </div>
           </div>
         </div>
