@@ -4487,110 +4487,90 @@ export default function WalletPage() {
                     虚拟卡管理
                   </h3>
                   
-                  {/* 虚拟卡列表 */}
-                  <div className="space-y-4">
+                  {/* 虚拟卡网格布局 */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {/* 个人购物虚拟卡 */}
-                    <div className={`relative p-4 rounded-xl transition-all hover:shadow-lg ${
+                    <div className={`relative p-3 rounded-lg transition-all hover:shadow-lg h-32 ${
                       isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
                     }`}>
-                      <div className="flex justify-between items-start text-white">
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center">
-                              <div className="bg-white/20 rounded-full p-2 mr-3">
-                                <User className="h-5 w-5" />
-                              </div>
-                              <span className="text-sm opacity-90">个人购物</span>
+                      <div className="text-white h-full flex flex-col justify-between">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <div className="bg-white rounded-full w-6 h-6 flex items-center justify-center mr-2">
+                              <span className="text-purple-600 font-bold text-xs">B</span>
                             </div>
-                            <div className="text-right">
-                              <div className="text-sm opacity-90">余额: 20U</div>
-                            </div>
+                            <span className="text-xs font-medium">BeingFi</span>
                           </div>
-                          <div className="mb-4">
-                            <div className="text-lg font-mono tracking-wider">4323 4323 4323 9999</div>
+                          <div className="text-xs opacity-90">余额: 20U</div>
+                        </div>
+                        <div className="flex-1 flex items-center justify-center">
+                          <div className="text-sm font-mono tracking-wider">4323 4323 4323 9999</div>
+                        </div>
+                        <div className="flex justify-between items-end">
+                          <div className="flex items-center">
+                            <Eye className="h-3 w-3 mr-1" />
+                            <span className="text-xs">个人购物</span>
                           </div>
-                          <div className="flex justify-between items-end">
-                            <div className="flex items-center">
-                              <Eye className="h-4 w-4 mr-1" />
-                              <span className="text-sm">卡情</span>
-                            </div>
-                            <div className="text-right">
-                              <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCA0MCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0id2hpdGUiLz4KPHN2ZyB4PSI4IiB5PSI2IiB3aWR0aD0iMjQiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAyNCAxMiIgZmlsbD0ibm9uZSI+CjxwYXRoIGQ9Ik0yLjUgNkg5LjVMMTEuNSA5SDE2LjVMMTguNSA2SDIxLjVWMTBIMi41VjZaIiBmaWxsPSIjMTQyMzY4Ii8+CjxwYXRoIGQ9Ik0yLjUgMkgxMy41TDE2LjUgNUgxOC41TDIxLjUgMlYxMEgyLjVWMloiIGZpbGw9IiNGRkY1RjAiLz4KPC9zdmc+Cjwvc3ZnPgo=" alt="VISA" className="h-6" />
-                            </div>
-                          </div>
+                          <div className="text-xs font-bold">VISA</div>
                         </div>
                       </div>
                     </div>
 
                     {/* 微博芽专用虚拟卡 */}
-                    <div className={`relative p-4 rounded-xl transition-all hover:shadow-lg ${
+                    <div className={`relative p-3 rounded-lg transition-all hover:shadow-lg h-32 ${
                       isDark ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
                     }`}>
-                      <div className="flex justify-between items-start text-white">
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center">
-                              <div className="bg-white/20 rounded-full p-2 mr-3">
-                                <Zap className="h-5 w-5" />
-                              </div>
-                              <span className="text-sm opacity-90">微博芽专用</span>
+                      <div className="text-white h-full flex flex-col justify-between">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <div className="bg-white rounded-full w-6 h-6 flex items-center justify-center mr-2">
+                              <span className="text-blue-600 font-bold text-xs">B</span>
                             </div>
-                            <div className="text-right">
-                              <div className="text-sm opacity-90">余额: 10U</div>
-                            </div>
+                            <span className="text-xs font-medium">BeingFi</span>
                           </div>
-                          <div className="mb-4">
-                            <div className="text-lg font-mono tracking-wider">4323 4323 4323 9999</div>
+                          <div className="text-xs opacity-90">余额: 10U</div>
+                        </div>
+                        <div className="flex-1 flex items-center justify-center">
+                          <div className="text-sm font-mono tracking-wider">4323 4323 4323 9999</div>
+                        </div>
+                        <div className="flex justify-between items-end">
+                          <div className="flex items-center">
+                            <Eye className="h-3 w-3 mr-1" />
+                            <span className="text-xs">微博芽专用</span>
                           </div>
-                          <div className="flex justify-between items-end">
-                            <div className="flex items-center">
-                              <Eye className="h-4 w-4 mr-1" />
-                              <span className="text-sm">卡情</span>
-                            </div>
-                            <div className="text-right flex items-center">
-                              <span className="text-xs mr-2">mastercard</span>
-                              <div className="flex">
-                                <div className="w-4 h-4 rounded-full bg-red-500 -mr-1"></div>
-                                <div className="w-4 h-4 rounded-full bg-yellow-400"></div>
-                              </div>
-                            </div>
+                          <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
+                            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                           </div>
                         </div>
                       </div>
                     </div>
 
                     {/* 工薪卡虚拟卡 */}
-                    <div className={`relative p-4 rounded-xl transition-all hover:shadow-lg ${
+                    <div className={`relative p-3 rounded-lg transition-all hover:shadow-lg h-32 ${
                       isDark ? 'bg-gradient-to-r from-green-600 to-teal-600' : 'bg-gradient-to-r from-green-500 to-teal-500'
                     }`}>
-                      <div className="flex justify-between items-start text-white">
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center">
-                              <div className="bg-white/20 rounded-full p-2 mr-3">
-                                <Briefcase className="h-5 w-5" />
-                              </div>
-                              <span className="text-sm opacity-90">工薪卡</span>
+                      <div className="text-white h-full flex flex-col justify-between">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <div className="bg-white rounded-full w-6 h-6 flex items-center justify-center mr-2">
+                              <span className="text-green-600 font-bold text-xs">B</span>
                             </div>
-                            <div className="text-right">
-                              <div className="text-sm opacity-90">余额: 20U</div>
-                            </div>
+                            <span className="text-xs font-medium">BeingFi</span>
                           </div>
-                          <div className="mb-4">
-                            <div className="text-lg font-mono tracking-wider">4323 4323 4323 9999</div>
+                          <div className="text-xs opacity-90">余额: 20U</div>
+                        </div>
+                        <div className="flex-1 flex items-center justify-center">
+                          <div className="text-sm font-mono tracking-wider">4323 4323 4323 9999</div>
+                        </div>
+                        <div className="flex justify-between items-end">
+                          <div className="flex items-center">
+                            <Eye className="h-3 w-3 mr-1" />
+                            <span className="text-xs">工薪卡</span>
                           </div>
-                          <div className="flex justify-between items-end">
-                            <div className="flex items-center">
-                              <Eye className="h-4 w-4 mr-1" />
-                              <span className="text-sm">卡情</span>
-                            </div>
-                            <div className="text-right flex items-center">
-                              <span className="text-xs mr-2">mastercard</span>
-                              <div className="flex">
-                                <div className="w-4 h-4 rounded-full bg-red-500 -mr-1"></div>
-                                <div className="w-4 h-4 rounded-full bg-yellow-400"></div>
-                              </div>
-                            </div>
+                          <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
+                            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                           </div>
                         </div>
                       </div>
@@ -4616,9 +4596,15 @@ export default function WalletPage() {
                           <div className="absolute top-12 left-8">
                             <div className="w-12 h-9 bg-yellow-300 rounded-lg border border-yellow-400 opacity-80">
                               <div className="grid grid-cols-3 gap-0.5 p-1 h-full">
-                                {Array.from({ length: 9 }, (_, i) => (
-                                  <div key={i} className="bg-yellow-500 rounded-sm"></div>
-                                ))}
+                                <div className="bg-yellow-500 rounded-sm"></div>
+                                <div className="bg-yellow-500 rounded-sm"></div>
+                                <div className="bg-yellow-500 rounded-sm"></div>
+                                <div className="bg-yellow-500 rounded-sm"></div>
+                                <div className="bg-yellow-500 rounded-sm"></div>
+                                <div className="bg-yellow-500 rounded-sm"></div>
+                                <div className="bg-yellow-500 rounded-sm"></div>
+                                <div className="bg-yellow-500 rounded-sm"></div>
+                                <div className="bg-yellow-500 rounded-sm"></div>
                               </div>
                             </div>
                           </div>
