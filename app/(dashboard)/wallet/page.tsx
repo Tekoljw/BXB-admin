@@ -6057,7 +6057,7 @@ export default function WalletPage() {
                 onClick={() => toggleGuaranteeItem("pay-guarantee-1")}
               >
                 <div className="flex items-start justify-between mb-6">
-                  <div className="flex flex-col space-y-3">
+                  <div className="flex flex-col space-y-3 flex-1">
                     <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
                       USDT买卖担保
                     </span>
@@ -6104,7 +6104,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条和时间信息 */}
-                  <div className="flex-1 flex flex-col items-stretch -mt-3">
+                  <div className="flex-1 flex flex-col items-stretch -mt-3 mx-4">
                     <TransactionProgress 
                       steps={[
                         { id: 'start', label: '发起交易', status: 'completed' },
@@ -6121,7 +6121,7 @@ export default function WalletPage() {
                     </div>
                     
                     {/* 查看合同链接 */}
-                    <div className="mt-2">
+                    <div className="mt-2 text-center">
                       <button 
                         className={`flex items-center gap-1 text-xs transition-colors ${
                           isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
@@ -6144,7 +6144,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 立即确认按钮 */}
-                  <div className="flex-shrink-0 ml-4">
+                  <div className="flex-shrink-0">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -6198,7 +6198,7 @@ export default function WalletPage() {
                 onClick={() => toggleGuaranteeItem("pay-guarantee-2")}
               >
                 <div className="flex items-start justify-between mb-6">
-                  <div className="flex flex-col space-y-3">
+                  <div className="flex flex-col space-y-3 flex-1">
                     <span className="px-3 py-1.5 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold w-fit">
                       其他交易担保
                     </span>
@@ -6245,7 +6245,7 @@ export default function WalletPage() {
                   </div>
                   
                   {/* 进度条和时间信息 */}
-                  <div className="flex-1 flex flex-col items-stretch -mt-3">
+                  <div className="flex-1 flex flex-col items-stretch -mt-3 mx-4">
                     <TransactionProgress 
                       steps={[
                         { id: 'start', label: '发起交易', status: 'completed' },
@@ -6262,7 +6262,7 @@ export default function WalletPage() {
                     </div>
                     
                     {/* 查看合同链接 */}
-                    <div className="mt-2">
+                    <div className="mt-2 text-center">
                       <button 
                         className={`flex items-center gap-1 text-xs transition-colors ${
                           isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
@@ -6285,7 +6285,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 争议状态按钮 */}
-                  <div className="flex-shrink-0 ml-4">
+                  <div className="flex-shrink-0">
                     <button
                       disabled
                       className="px-4 py-2 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed opacity-50"
