@@ -4402,23 +4402,7 @@ export default function WalletPage() {
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
-                  className={`px-4 py-2 border transition-colors ${
-                    isDark
-                      ? "border-white text-white hover:bg-white hover:text-black"
-                      : "border-black text-black hover:bg-black hover:text-white"
-                  }`}
-                  onClick={() => setShowFundDistribution(true)}
-                >
-                  <PieChart className="h-4 w-4 mr-2" />
-                  资金分布
-                </Button>
-                <Button
-                  variant="outline"
-                  className={`px-4 py-2 border transition-colors ${
-                    isDark
-                      ? "border-white text-white hover:bg-white hover:text-black"
-                      : "border-black text-black hover:bg-black hover:text-white"
-                  }`}
+                  className="px-4 py-2 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition-colors"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   卡片充值
@@ -4478,6 +4462,18 @@ export default function WalletPage() {
                   title="账单记录"
                 >
                   <History className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowFundDistribution(true)}
+                  className={`p-2 border transition-colors ${
+                    isDark
+                      ? "border-white text-white hover:bg-white hover:text-black"
+                      : "border-black text-black hover:bg-black hover:text-white"
+                  }`}
+                  title="资金分布"
+                >
+                  <PieChart className="h-4 w-4" />
                 </Button>
               </div>
             </div>
