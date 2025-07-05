@@ -4580,80 +4580,77 @@ export default function WalletPage() {
               )}
 
               {selectedUCardView === "physical" && (
-                <div>
+                <div className="space-y-6">
                   <h3 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     实体卡管理
                   </h3>
                   
-                  {/* 实体卡展示 */}
                   <div className="flex justify-center mb-8">
-                    <div className="w-96 h-60 rounded-2xl bg-gradient-to-br from-green-400 via-teal-500 to-blue-600 shadow-2xl p-8 text-white relative">
-                      {/* BeingFi Logo */}
-                      <div className="flex items-center mb-4">
-                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2">
-                          <span className="text-green-600 font-bold text-sm">B</span>
+                    <div className="w-80 h-48 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+                      <div className="flex justify-between items-start mb-6">
+                        <div className="text-lg font-bold">BeingFi</div>
+                        <div className="text-sm">VISA</div>
+                      </div>
+                      
+                      <div className="text-lg font-mono mb-6">
+                        4323 **** **** 9999
+                      </div>
+                      
+                      <div className="flex justify-between items-end">
+                        <div>
+                          <div className="text-xs opacity-75">持卡人</div>
+                          <div className="text-sm">ZHANG SAN</div>
                         </div>
-                        <span className="text-white font-bold text-lg">BeingFi</span>
-                      </div>
-                      
-                      {/* 芯片 */}
-                      <div className="w-12 h-9 bg-yellow-300 rounded-lg border border-yellow-400 opacity-80 mb-8"></div>
-                      
-                      {/* 卡号 */}
-                      <div className="text-xl font-mono tracking-widest mb-8">
-                        4323 4323 4323 9999
-                      </div>
-                      
-                      {/* 底部信息 */}
-                      <div className="absolute bottom-8 left-8 right-8">
-                        <div className="flex justify-between items-end">
-                          <div>
-                            <div className="text-xs opacity-75 mb-1">CARD HOLDER</div>
-                            <div className="text-sm font-medium">ZHANG SAN</div>
-                          </div>
-                          <div>
-                            <div className="text-xs opacity-75 mb-1">VALID THRU</div>
-                            <div className="text-sm font-medium">12/27</div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-white font-bold text-2xl italic">VISA</div>
-                            <div className="text-xs opacity-75">Platinum</div>
-                          </div>
+                        <div>
+                          <div className="text-xs opacity-75">有效期</div>
+                          <div className="text-sm">12/27</div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  
-                  {/* 实体卡信息 */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>卡片状态</div>
-                      <div className={`text-lg font-semibold text-green-600`}>正常使用</div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                    <div className={`p-4 rounded-lg text-center ${isDark ? 'bg-card' : 'bg-white'} border`}>
+                      <div className="text-lg font-bold text-green-500">¥2,588</div>
+                      <div className="text-sm text-gray-500">余额</div>
                     </div>
-                    <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>当月消费额度</div>
-                      <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>$8,500</div>
+                    
+                    <div className={`p-4 rounded-lg text-center ${isDark ? 'bg-card' : 'bg-white'} border`}>
+                      <div className="text-lg font-bold text-blue-500">¥1,245</div>
+                      <div className="text-sm text-gray-500">本月消费</div>
                     </div>
-                    <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>可用余额</div>
-                      <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>$1,500</div>
+                    
+                    <div className={`p-4 rounded-lg text-center ${isDark ? 'bg-card' : 'bg-white'} border`}>
+                      <div className="text-lg font-bold text-orange-500">正常</div>
+                      <div className="text-sm text-gray-500">状态</div>
                     </div>
                   </div>
-                  
-                  {/* 实体卡操作按钮 */}
-                  <div className="flex flex-wrap gap-3 justify-center">
-                    <Button variant="outline" className={`${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-black text-black hover:bg-black hover:text-white'}`}>
-                      <Lock className="h-4 w-4 mr-2" />
-                      冻结卡片
-                    </Button>
-                    <Button variant="outline" className={`${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-black text-black hover:bg-black hover:text-white'}`}>
-                      <Settings className="h-4 w-4 mr-2" />
-                      限额设置
-                    </Button>
-                    <Button variant="outline" className={`${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-black text-black hover:bg-black hover:text-white'}`}>
-                      <CreditCard className="h-4 w-4 mr-2" />
-                      查看密码
-                    </Button>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <button className="bg-green-500 text-white py-3 rounded-lg font-medium">
+                      充值
+                    </button>
+                    <button className="bg-blue-500 text-white py-3 rounded-lg font-medium">
+                      查看详情
+                    </button>
+                  </div>
+
+                  <div className={`p-4 rounded-lg ${isDark ? 'bg-card' : 'bg-white'} border`}>
+                    <h4 className="font-semibold mb-4">最近交易</h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span>Amazon 购物</span>
+                        <span className="text-red-500">-¥299</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Starbucks</span>
+                        <span className="text-red-500">-¥45</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>充值</span>
+                        <span className="text-green-500">+¥1000</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
