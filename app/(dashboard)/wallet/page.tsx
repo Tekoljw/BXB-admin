@@ -4502,7 +4502,31 @@ export default function WalletPage() {
                     }`}>
                       <div className="text-white h-full flex flex-col justify-between">
                         {/* 顶部区域 */}
-                        <div className="flex justify-end">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center">
+                            {editingCardId === "card-1" ? (
+                              <input 
+                                type="text" 
+                                value={editingCardName} 
+                                onChange={(e) => setEditingCardName(e.target.value)}
+                                onBlur={() => setEditingCardId("")}
+                                onKeyPress={(e) => e.key === 'Enter' && setEditingCardId("")}
+                                className="text-sm font-medium bg-transparent border-b border-white/50 outline-none text-yellow-300"
+                                autoFocus
+                              />
+                            ) : (
+                              <span className="text-sm font-medium text-yellow-300">个人购物</span>
+                            )}
+                            <button 
+                              className="text-xs opacity-90 hover:opacity-100 ml-2"
+                              onClick={() => {
+                                setEditingCardId("card-1")
+                                setEditingCardName("个人购物")
+                              }}
+                            >
+                              <Edit2 className="h-3 w-3" />
+                            </button>
+                          </div>
                           <div className="flex items-center">
                             <button 
                               className="text-xs opacity-90 hover:opacity-100 mr-2"
@@ -4515,34 +4539,11 @@ export default function WalletPage() {
                             >
                               <Eye className="h-3 w-3" />
                             </button>
-                            <div className="bg-white/20 rounded px-2 py-1 text-xs font-mono font-bold">***</div>
+                            <div className="flex items-center">
+                              <span className="text-xs mr-1">Pin码</span>
+                              <div className="bg-white/20 rounded px-2 py-1 text-xs font-mono font-bold">***</div>
+                            </div>
                           </div>
-                        </div>
-
-                        {/* 卡名和编辑按钮 */}
-                        <div className="flex items-center">
-                          {editingCardId === "card-1" ? (
-                            <input 
-                              type="text" 
-                              value={editingCardName} 
-                              onChange={(e) => setEditingCardName(e.target.value)}
-                              onBlur={() => setEditingCardId("")}
-                              onKeyPress={(e) => e.key === 'Enter' && setEditingCardId("")}
-                              className="text-sm font-medium bg-transparent border-b border-white/50 outline-none text-yellow-300"
-                              autoFocus
-                            />
-                          ) : (
-                            <span className="text-sm font-medium text-yellow-300">个人购物</span>
-                          )}
-                          <button 
-                            className="text-xs opacity-90 hover:opacity-100 ml-2"
-                            onClick={() => {
-                              setEditingCardId("card-1")
-                              setEditingCardName("个人购物")
-                            }}
-                          >
-                            <Edit2 className="h-3 w-3" />
-                          </button>
                         </div>
 
                         {/* 卡号（左对齐）和复制按钮 */}
@@ -4584,7 +4585,31 @@ export default function WalletPage() {
                     }`}>
                       <div className="text-white h-full flex flex-col justify-between">
                         {/* 顶部区域 */}
-                        <div className="flex justify-end">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center">
+                            {editingCardId === "card-2" ? (
+                              <input 
+                                type="text" 
+                                value={editingCardName} 
+                                onChange={(e) => setEditingCardName(e.target.value)}
+                                onBlur={() => setEditingCardId("")}
+                                onKeyPress={(e) => e.key === 'Enter' && setEditingCardId("")}
+                                className="text-sm font-medium bg-transparent border-b border-white/50 outline-none text-yellow-300"
+                                autoFocus
+                              />
+                            ) : (
+                              <span className="text-sm font-medium text-yellow-300">微博芽专用</span>
+                            )}
+                            <button 
+                              className="text-xs opacity-90 hover:opacity-100 ml-2"
+                              onClick={() => {
+                                setEditingCardId("card-2")
+                                setEditingCardName("微博芽专用")
+                              }}
+                            >
+                              <Edit2 className="h-3 w-3" />
+                            </button>
+                          </div>
                           <div className="flex items-center">
                             <button 
                               className="text-xs opacity-90 hover:opacity-100 mr-2"
@@ -4597,34 +4622,11 @@ export default function WalletPage() {
                             >
                               <Eye className="h-3 w-3" />
                             </button>
-                            <div className="bg-white/20 rounded px-2 py-1 text-xs font-mono font-bold">***</div>
+                            <div className="flex items-center">
+                              <span className="text-xs mr-1">Pin码</span>
+                              <div className="bg-white/20 rounded px-2 py-1 text-xs font-mono font-bold">***</div>
+                            </div>
                           </div>
-                        </div>
-
-                        {/* 卡名和编辑按钮 */}
-                        <div className="flex items-center">
-                          {editingCardId === "card-2" ? (
-                            <input 
-                              type="text" 
-                              value={editingCardName} 
-                              onChange={(e) => setEditingCardName(e.target.value)}
-                              onBlur={() => setEditingCardId("")}
-                              onKeyPress={(e) => e.key === 'Enter' && setEditingCardId("")}
-                              className="text-sm font-medium bg-transparent border-b border-white/50 outline-none text-yellow-300"
-                              autoFocus
-                            />
-                          ) : (
-                            <span className="text-sm font-medium text-yellow-300">微博芽专用</span>
-                          )}
-                          <button 
-                            className="text-xs opacity-90 hover:opacity-100 ml-2"
-                            onClick={() => {
-                              setEditingCardId("card-2")
-                              setEditingCardName("微博芽专用")
-                            }}
-                          >
-                            <Edit2 className="h-3 w-3" />
-                          </button>
                         </div>
 
                         {/* 卡号（左对齐）和复制按钮 */}
@@ -4668,7 +4670,31 @@ export default function WalletPage() {
                     }`}>
                       <div className="text-white h-full flex flex-col justify-between">
                         {/* 顶部区域 */}
-                        <div className="flex justify-end">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center">
+                            {editingCardId === "card-3" ? (
+                              <input 
+                                type="text" 
+                                value={editingCardName} 
+                                onChange={(e) => setEditingCardName(e.target.value)}
+                                onBlur={() => setEditingCardId("")}
+                                onKeyPress={(e) => e.key === 'Enter' && setEditingCardId("")}
+                                className="text-sm font-medium bg-transparent border-b border-white/50 outline-none text-yellow-300"
+                                autoFocus
+                              />
+                            ) : (
+                              <span className="text-sm font-medium text-yellow-300">工薪卡</span>
+                            )}
+                            <button 
+                              className="text-xs opacity-90 hover:opacity-100 ml-2"
+                              onClick={() => {
+                                setEditingCardId("card-3")
+                                setEditingCardName("工薪卡")
+                              }}
+                            >
+                              <Edit2 className="h-3 w-3" />
+                            </button>
+                          </div>
                           <div className="flex items-center">
                             <button 
                               className="text-xs opacity-90 hover:opacity-100 mr-2"
@@ -4681,34 +4707,11 @@ export default function WalletPage() {
                             >
                               <Eye className="h-3 w-3" />
                             </button>
-                            <div className="bg-white/20 rounded px-2 py-1 text-xs font-mono font-bold">***</div>
+                            <div className="flex items-center">
+                              <span className="text-xs mr-1">Pin码</span>
+                              <div className="bg-white/20 rounded px-2 py-1 text-xs font-mono font-bold">***</div>
+                            </div>
                           </div>
-                        </div>
-
-                        {/* 卡名和编辑按钮 */}
-                        <div className="flex items-center">
-                          {editingCardId === "card-3" ? (
-                            <input 
-                              type="text" 
-                              value={editingCardName} 
-                              onChange={(e) => setEditingCardName(e.target.value)}
-                              onBlur={() => setEditingCardId("")}
-                              onKeyPress={(e) => e.key === 'Enter' && setEditingCardId("")}
-                              className="text-sm font-medium bg-transparent border-b border-white/50 outline-none text-yellow-300"
-                              autoFocus
-                            />
-                          ) : (
-                            <span className="text-sm font-medium text-yellow-300">工薪卡</span>
-                          )}
-                          <button 
-                            className="text-xs opacity-90 hover:opacity-100 ml-2"
-                            onClick={() => {
-                              setEditingCardId("card-3")
-                              setEditingCardName("工薪卡")
-                            }}
-                          >
-                            <Edit2 className="h-3 w-3" />
-                          </button>
                         </div>
 
                         {/* 卡号（左对齐）和复制按钮 */}
