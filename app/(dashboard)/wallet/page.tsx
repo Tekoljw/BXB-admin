@@ -4287,135 +4287,210 @@ export default function WalletPage() {
       case "U卡账户":
         return (
           <div className="space-y-6">
-            {/* 两个账户卡片 */}
+            {/* 两个顶部卡片 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* 虚拟卡账户总览 */}
-              <div 
-                className={`rounded-lg p-6 transition-all duration-200 ${cardStyle} ${
-                  selectedUCardView === "virtual"
-                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
-                    : ""
-                }`}
-              >
+              {/* 卡内余额 */}
+              <div className={`rounded-lg p-6 ${cardStyle}`}>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-base font-semibold">虚拟卡总余额</h3>
-                  <CreditCard className={`h-5 w-5 ${
-                    selectedUCardView === "virtual" ? "text-[#00D4AA]" : "text-gray-600 dark:text-gray-400"
-                  }`} />
+                  <h3 className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    卡内余额
+                  </h3>
+                  <CreditCard className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center">
-                    <span className="text-lg font-bold mr-1">{balanceVisible ? "2,222.22" : "****"}</span>
-                    <span className="text-xs text-gray-500">USDT</span>
+                    <span className={`text-lg font-bold mr-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {balanceVisible ? "2,222.22" : "****"}
+                    </span>
+                    <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">本月消费</span>
+                      <span className={`text-sm mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        可用额度
+                      </span>
+                      <span className={`text-sm font-medium ${isDark ? 'text-[#00D4AA]' : 'text-blue-600'}`}>
+                        5,000.00 USDT
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <span className={`text-sm mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        本月消费
+                      </span>
                       <span className="text-sm text-red-500">-678.90 USDT</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">卡片数</span>
-                      <span className="text-sm text-blue-600 font-medium">2张</span>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        className="border-gray-300 p-1.5 h-7 w-7"
-                      >
-                        <TrendingUp className="h-3 w-3" />
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        className="border-gray-300 p-1.5 h-7 w-7"
-                      >
-                        <FileText className="h-3 w-3" />
-                      </Button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* 实体卡账户总览 */}
-              <div 
-                className={`rounded-lg p-6 transition-all duration-200 ${cardStyle} ${
-                  selectedUCardView === "physical"
-                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
-                    : ""
-                }`}
-              >
+              {/* 账户余额 */}
+              <div className={`rounded-lg p-6 ${cardStyle}`}>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-base font-semibold">实体卡总余额</h3>
-                  <CreditCard className={`h-5 w-5 ${
-                    selectedUCardView === "physical" ? "text-[#00D4AA]" : "text-gray-600 dark:text-gray-400"
-                  }`} />
+                  <h3 className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    账户余额
+                  </h3>
+                  <Wallet className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center">
-                    <span className="text-lg font-bold mr-1">{balanceVisible ? "1,234.56" : "****"}</span>
-                    <span className="text-xs text-gray-500">USDT</span>
+                    <span className={`text-lg font-bold mr-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {balanceVisible ? "3,456.78" : "****"}
+                    </span>
+                    <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">本月消费</span>
-                      <span className="text-sm text-red-500">-456.78 USDT</span>
+                      <span className={`text-sm mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        冻结金额
+                      </span>
+                      <span className={`text-sm font-medium ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>
+                        123.45 USDT
+                      </span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">卡片数</span>
-                      <span className="text-sm text-blue-600 font-medium">1张</span>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        className="border-gray-300 p-1.5 h-7 w-7"
-                      >
-                        <TrendingUp className="h-3 w-3" />
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        className="border-gray-300 p-1.5 h-7 w-7"
-                      >
-                        <FileText className="h-3 w-3" />
-                      </Button>
+                      <span className={`text-sm mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        可用余额
+                      </span>
+                      <span className={`text-sm font-medium ${isDark ? 'text-[#00D4AA]' : 'text-blue-600'}`}>
+                        3,333.33 USDT
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* 动态内容区域 */}
-            {selectedUCardView === "virtual" && (
-              <div className={`${cardStyle} rounded-lg p-6`}>
-                <h3 className="text-lg font-semibold mb-4">虚拟卡管理</h3>
-                <div className="text-center py-8">
-                  <CreditCard className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">显示虚拟卡详情和管理功能</p>
-                  <Button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
-                    管理虚拟卡
-                  </Button>
-                </div>
+            {/* 页签和功能按钮 */}
+            <div className="flex items-center justify-between">
+              {/* 虚拟卡/实体卡页签 */}
+              <div className="flex space-x-1">
+                <button
+                  onClick={() => setSelectedUCardView("virtual")}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedUCardView === "virtual"
+                      ? isDark 
+                        ? "bg-white text-black" 
+                        : "bg-black text-white"
+                      : isDark
+                        ? "bg-transparent text-white border border-white hover:bg-white hover:text-black"
+                        : "bg-transparent text-black border border-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  虚拟卡
+                </button>
+                <button
+                  onClick={() => setSelectedUCardView("physical")}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedUCardView === "physical"
+                      ? isDark 
+                        ? "bg-white text-black" 
+                        : "bg-black text-white"
+                      : isDark
+                        ? "bg-transparent text-white border border-white hover:bg-white hover:text-black"
+                        : "bg-transparent text-black border border-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  实体卡
+                </button>
               </div>
-            )}
 
-            {selectedUCardView === "physical" && (
-              <div className={`${cardStyle} rounded-lg p-6`}>
-                <h3 className="text-lg font-semibold mb-4">实体卡管理</h3>
-                <div className="text-center py-8">
-                  <CreditCard className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">您还没有申请实体卡</p>
-                  <Button className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
-                    立即申请实体卡
-                  </Button>
-                </div>
+              {/* 功能按钮 */}
+              <div className="flex space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`border transition-colors ${
+                    isDark
+                      ? "border-white text-white hover:bg-white hover:text-black"
+                      : "border-black text-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  申请新卡
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`border transition-colors ${
+                    isDark
+                      ? "border-white text-white hover:bg-white hover:text-black"
+                      : "border-black text-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  激活卡片
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`border transition-colors ${
+                    isDark
+                      ? "border-white text-white hover:bg-white hover:text-black"
+                      : "border-black text-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  使用指南
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`border transition-colors ${
+                    isDark
+                      ? "border-white text-white hover:bg-white hover:text-black"
+                      : "border-black text-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  账单记录
+                </Button>
               </div>
-            )}
+            </div>
+
+            {/* 页签内容区域 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              {selectedUCardView === "virtual" && (
+                <div>
+                  <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    虚拟卡管理
+                  </h3>
+                  <div className="text-center py-8">
+                    <CreditCard className={`h-12 w-12 mx-auto mb-4 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
+                    <p className={`mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      显示虚拟卡详情和管理功能
+                    </p>
+                    <Button className={`${
+                      isDark 
+                        ? "bg-white text-black hover:bg-gray-200" 
+                        : "bg-black text-white hover:bg-gray-800"
+                    }`}>
+                      管理虚拟卡
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {selectedUCardView === "physical" && (
+                <div>
+                  <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    实体卡管理
+                  </h3>
+                  <div className="text-center py-8">
+                    <CreditCard className={`h-12 w-12 mx-auto mb-4 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
+                    <p className={`mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      您还没有申请实体卡
+                    </p>
+                    <Button className={`${
+                      isDark 
+                        ? "bg-white text-black hover:bg-gray-200" 
+                        : "bg-black text-white hover:bg-gray-800"
+                    }`}>
+                      立即申请实体卡
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )
       case "佣金账户":
