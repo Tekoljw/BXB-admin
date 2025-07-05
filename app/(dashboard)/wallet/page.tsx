@@ -4490,9 +4490,7 @@ export default function WalletPage() {
             <div className={`${cardStyle} rounded-lg p-6`}>
               {selectedUCardView === "virtual" && (
                 <div>
-                  <h3 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    虚拟卡管理
-                  </h3>
+
                   
                   {/* 虚拟卡布局 */}
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -4786,9 +4784,6 @@ export default function WalletPage() {
 
               {selectedUCardView === "physical" && (
                 <div className="space-y-6">
-                  <h3 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    实体卡管理
-                  </h3>
                   
                   <div className="flex justify-center mb-8">
                     <div className="w-80 h-48 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
