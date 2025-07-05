@@ -5537,6 +5537,89 @@ export default function WalletPage() {
     setExtendDays("30")
   }
 
+  // 延长担保时间弹窗
+  const renderExtendTimeModal = () => {
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowExtendTimeModal(false)}>
+        <div 
+          className={`max-w-md w-full mx-4 rounded-2xl shadow-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* 弹窗头部 */}
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                延长信誉担保时间
+              </h3>
+              <button
+                onClick={() => setShowExtendTimeModal(false)}
+                className={`p-2 rounded-lg transition-colors ${
+                  isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+                }`}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* 弹窗内容 */}
+          <div className="p-6 space-y-4">
+            <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              请选择要延长的天数：
+            </div>
+            
+            <div className="space-y-3">
+              <label className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                延长天数
+              </label>
+              <select
+                value={extendDays}
+                onChange={(e) => setExtendDays(e.target.value)}
+                className={`w-full px-3 py-2 rounded-lg border transition-colors ${
+                  isDark 
+                    ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
+                    : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                } focus:outline-none focus:ring-1 focus:ring-blue-500`}
+              >
+                <option value="7">7天</option>
+                <option value="15">15天</option>
+                <option value="30">30天</option>
+                <option value="60">60天</option>
+                <option value="90">90天</option>
+              </select>
+            </div>
+
+            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+              延长后的担保时间将从当前时间开始计算，请确认您的选择。
+            </div>
+          </div>
+
+          {/* 弹窗按钮 */}
+          <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
+            <button
+              onClick={() => setShowExtendTimeModal(false)}
+              className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
+                isDark 
+                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              取消
+            </button>
+            <button
+              onClick={handleExtendTime}
+              className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+            >
+              确认延长
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // 切换担保项目展开状态
   const toggleGuaranteeItem = (itemId: string) => {
     const newExpanded = new Set(expandedGuaranteeItems)
