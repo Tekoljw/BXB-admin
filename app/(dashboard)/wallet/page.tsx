@@ -4510,10 +4510,10 @@ export default function WalletPage() {
                             <div className="text-sm font-bold">VISA</div>
                           </div>
 
-                          {/* 卡号（左对齐）和复制按钮 */}
-                          <div className="text-left">
+                          {/* 卡号和有效期区域 */}
+                          <div className="text-left mt-3">
                             <div className="flex items-center">
-                              <span className="text-sm font-mono tracking-wider">4323 4323 4323 9999</span>
+                              <span className="text-sm font-mono tracking-wider font-bold">4323 4323 4323 9999</span>
                               <button 
                                 className="ml-2 opacity-90 hover:opacity-100"
                                 onClick={() => navigator.clipboard.writeText("4323432343239999")}
@@ -4521,23 +4521,25 @@ export default function WalletPage() {
                                 <Copy className="h-3 w-3" />
                               </button>
                             </div>
-                            <div className="text-xs opacity-75 mt-1">有效期: 12/27</div>
-                            <div className="flex items-center mt-2">
-                              <button 
-                                className="text-xs opacity-90 hover:opacity-100 mr-3"
-                                onClick={() => {
-                                  setSelectedCardId("card-1")
-                                  setShowPinModal(true)
-                                  setShowPin(false)
-                                  setTransferPassword("")
-                                }}
-                              >
-                                <Eye className="h-3 w-3" />
-                              </button>
-                              <div className="flex items-center">
-                                <span className="text-base mr-2 font-medium">Pin码</span>
-                                <div className="bg-white/20 rounded px-3 py-1 text-base font-mono font-bold">***</div>
-                              </div>
+                            <div className="text-xs opacity-75 mt-2">有效期: 12/27</div>
+                          </div>
+
+                          {/* Pin码区域 - 右下角 */}
+                          <div className="absolute bottom-3 right-3 flex items-center">
+                            <button 
+                              className="text-xs opacity-90 hover:opacity-100 mr-2"
+                              onClick={() => {
+                                setSelectedCardId("card-1")
+                                setShowPinModal(true)
+                                setShowPin(false)
+                                setTransferPassword("")
+                              }}
+                            >
+                              <Eye className="h-2.5 w-2.5" />
+                            </button>
+                            <div className="flex items-center">
+                              <span className="text-xs mr-1 font-medium">Pin码</span>
+                              <div className="bg-white/20 rounded px-2 py-0.5 text-xs font-mono font-bold">***</div>
                             </div>
                           </div>
                         </div>
@@ -4604,10 +4606,10 @@ export default function WalletPage() {
                             </div>
                           </div>
 
-                          {/* 卡号（左对齐）和复制按钮 */}
-                          <div className="text-left">
+                          {/* 卡号和有效期区域 */}
+                          <div className="text-left mt-3">
                             <div className="flex items-center">
-                              <span className="text-sm font-mono tracking-wider">4323 4323 4323 8888</span>
+                              <span className="text-sm font-mono tracking-wider font-bold">4323 4323 4323 8888</span>
                               <button 
                                 className="ml-2 opacity-90 hover:opacity-100"
                                 onClick={() => navigator.clipboard.writeText("4323432343238888")}
@@ -4615,23 +4617,25 @@ export default function WalletPage() {
                                 <Copy className="h-3 w-3" />
                               </button>
                             </div>
-                            <div className="text-xs opacity-75 mt-1">有效期: 11/26</div>
-                            <div className="flex items-center mt-2">
-                              <button 
-                                className="text-xs opacity-90 hover:opacity-100 mr-3"
-                                onClick={() => {
-                                  setSelectedCardId("card-2")
-                                  setShowPinModal(true)
-                                  setShowPin(false)
-                                  setTransferPassword("")
-                                }}
-                              >
-                                <Eye className="h-3 w-3" />
-                              </button>
-                              <div className="flex items-center">
-                                <span className="text-base mr-2 font-medium">Pin码</span>
-                                <div className="bg-white/20 rounded px-3 py-1 text-base font-mono font-bold">***</div>
-                              </div>
+                            <div className="text-xs opacity-75 mt-2">有效期: 11/26</div>
+                          </div>
+
+                          {/* Pin码区域 - 右下角 */}
+                          <div className="absolute bottom-3 right-3 flex items-center">
+                            <button 
+                              className="text-xs opacity-90 hover:opacity-100 mr-2"
+                              onClick={() => {
+                                setSelectedCardId("card-2")
+                                setShowPinModal(true)
+                                setShowPin(false)
+                                setTransferPassword("")
+                              }}
+                            >
+                              <Eye className="h-2.5 w-2.5" />
+                            </button>
+                            <div className="flex items-center">
+                              <span className="text-xs mr-1 font-medium">Pin码</span>
+                              <div className="bg-white/20 rounded px-2 py-0.5 text-xs font-mono font-bold">***</div>
                             </div>
                           </div>
                         </div>
@@ -4698,10 +4702,10 @@ export default function WalletPage() {
                             </div>
                           </div>
 
-                          {/* 卡号（左对齐）和复制按钮 */}
-                          <div className="text-left">
+                          {/* 卡号和有效期区域 */}
+                          <div className="text-left mt-3">
                             <div className="flex items-center">
-                              <span className="text-sm font-mono tracking-wider">4323 4323 4323 7777</span>
+                              <span className="text-sm font-mono tracking-wider font-bold">4323 4323 4323 7777</span>
                               <button 
                                 className="ml-2 opacity-90 hover:opacity-100"
                                 onClick={() => navigator.clipboard.writeText("4323432343237777")}
@@ -4709,23 +4713,25 @@ export default function WalletPage() {
                                 <Copy className="h-3 w-3" />
                               </button>
                             </div>
-                            <div className="text-xs opacity-75 mt-1">有效期: 01/28</div>
-                            <div className="flex items-center mt-2">
-                              <button 
-                                className="text-xs opacity-90 hover:opacity-100 mr-3"
-                                onClick={() => {
-                                  setSelectedCardId("card-3")
-                                  setShowPinModal(true)
-                                  setShowPin(false)
-                                  setTransferPassword("")
-                                }}
-                              >
-                                <Eye className="h-3 w-3" />
-                              </button>
-                              <div className="flex items-center">
-                                <span className="text-base mr-2 font-medium">Pin码</span>
-                                <div className="bg-white/20 rounded px-3 py-1 text-base font-mono font-bold">***</div>
-                              </div>
+                            <div className="text-xs opacity-75 mt-2">有效期: 01/28</div>
+                          </div>
+
+                          {/* Pin码区域 - 右下角 */}
+                          <div className="absolute bottom-3 right-3 flex items-center">
+                            <button 
+                              className="text-xs opacity-90 hover:opacity-100 mr-2"
+                              onClick={() => {
+                                setSelectedCardId("card-3")
+                                setShowPinModal(true)
+                                setShowPin(false)
+                                setTransferPassword("")
+                              }}
+                            >
+                              <Eye className="h-2.5 w-2.5" />
+                            </button>
+                            <div className="flex items-center">
+                              <span className="text-xs mr-1 font-medium">Pin码</span>
+                              <div className="bg-white/20 rounded px-2 py-0.5 text-xs font-mono font-bold">***</div>
                             </div>
                           </div>
                         </div>
