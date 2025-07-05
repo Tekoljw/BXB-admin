@@ -4591,12 +4591,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("充值/退款 for card-1")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <CreditCard className="h-3 w-3 mb-1" />
-                            <span>充值</span>
+                            <CreditCard className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4604,12 +4603,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("冻结/解冻 for card-1")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Lock className="h-3 w-3 mb-1" />
-                            <span>冻结</span>
+                            <Lock className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4617,12 +4615,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("删除卡片 for card-1")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Trash2 className="h-3 w-3 mb-1" />
-                            <span>删除</span>
+                            <Trash2 className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4630,12 +4627,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("修改密码 for card-1")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Key className="h-3 w-3 mb-1" />
-                            <span>修改密码</span>
+                            <Key className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
@@ -4736,12 +4732,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("充值/退款 for card-2")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <CreditCard className="h-3 w-3 mb-1" />
-                            <span>充值</span>
+                            <CreditCard className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4749,12 +4744,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("冻结/解冻 for card-2")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Lock className="h-3 w-3 mb-1" />
-                            <span>冻结</span>
+                            <Lock className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4762,12 +4756,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("删除卡片 for card-2")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Trash2 className="h-3 w-3 mb-1" />
-                            <span>删除</span>
+                            <Trash2 className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4775,12 +4768,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("修改密码 for card-2")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Key className="h-3 w-3 mb-1" />
-                            <span>修改密码</span>
+                            <Key className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
@@ -4881,12 +4873,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("充值/退款 for card-3")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <CreditCard className="h-3 w-3 mb-1" />
-                            <span>充值</span>
+                            <CreditCard className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4894,12 +4885,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("冻结/解冻 for card-3")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Lock className="h-3 w-3 mb-1" />
-                            <span>冻结</span>
+                            <Lock className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4907,12 +4897,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("删除卡片 for card-3")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Trash2 className="h-3 w-3 mb-1" />
-                            <span>删除</span>
+                            <Trash2 className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4920,12 +4909,11 @@ export default function WalletPage() {
                               e.stopPropagation()
                               console.log("修改密码 for card-3")
                             }}
-                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
-                              isDark ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                             }`}
                           >
-                            <Key className="h-3 w-3 mb-1" />
-                            <span>修改密码</span>
+                            <Key className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
