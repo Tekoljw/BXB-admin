@@ -4497,10 +4497,10 @@ export default function WalletPage() {
                   {/* 虚拟卡布局 */}
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {/* 个人购物虚拟卡 */}
-                    <div className={`space-y-3 max-w-sm w-full p-4 rounded-lg border transition-all ${
-                      isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' : 'bg-white border-gray-200 hover:border-gray-300'
+                    <div className={`max-w-sm w-full border rounded-lg transition-all cursor-pointer hover:shadow-lg active:scale-95 ${
+                      isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600 hover:bg-gray-800/70' : 'bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                     }`}>
-                      <div className={`relative p-4 rounded-lg transition-all hover:shadow-lg h-28 ${
+                      <div className={`relative p-4 rounded-t-lg h-28 ${
                         isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
                       }`}>
                         <div className="text-white h-full flex flex-col justify-between">
@@ -4543,7 +4543,7 @@ export default function WalletPage() {
                       </div>
                       
                       {/* 卡名和余额信息 */}
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center p-4">
                         <div className="flex items-center">
                           {editingCardId === "card-1" ? (
                             <input 
@@ -4587,10 +4587,10 @@ export default function WalletPage() {
                     </div>
 
                     {/* 微博芽专用虚拟卡 */}
-                    <div className={`space-y-3 max-w-sm w-full p-4 rounded-lg border transition-all ${
-                      isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' : 'bg-white border-gray-200 hover:border-gray-300'
+                    <div className={`max-w-sm w-full border rounded-lg transition-all cursor-pointer hover:shadow-lg active:scale-95 ${
+                      isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600 hover:bg-gray-800/70' : 'bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                     }`}>
-                      <div className={`relative p-4 rounded-lg transition-all hover:shadow-lg h-28 ${
+                      <div className={`relative p-4 rounded-t-lg h-28 ${
                         isDark ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
                       }`}>
                         <div className="text-white h-full flex flex-col justify-between">
@@ -4636,7 +4636,7 @@ export default function WalletPage() {
                       </div>
                       
                       {/* 卡名和余额信息 */}
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center p-4">
                         <div className="flex items-center">
                           {editingCardId === "card-2" ? (
                             <input 
@@ -4680,10 +4680,10 @@ export default function WalletPage() {
                     </div>
 
                     {/* 工薪卡虚拟卡 */}
-                    <div className={`space-y-3 max-w-sm w-full p-4 rounded-lg border transition-all ${
-                      isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' : 'bg-white border-gray-200 hover:border-gray-300'
+                    <div className={`max-w-sm w-full border rounded-lg transition-all cursor-pointer hover:shadow-lg active:scale-95 ${
+                      isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600 hover:bg-gray-800/70' : 'bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                     }`}>
-                      <div className={`relative p-4 rounded-lg transition-all hover:shadow-lg h-28 ${
+                      <div className={`relative p-4 rounded-t-lg h-28 ${
                         isDark ? 'bg-gradient-to-r from-green-600 to-teal-600' : 'bg-gradient-to-r from-green-500 to-teal-500'
                       }`}>
                         <div className="text-white h-full flex flex-col justify-between">
@@ -4729,7 +4729,7 @@ export default function WalletPage() {
                       </div>
                       
                       {/* 卡名和余额信息 */}
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center p-4">
                         <div className="flex items-center">
                           {editingCardId === "card-3" ? (
                             <input 
