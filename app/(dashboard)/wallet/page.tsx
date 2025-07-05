@@ -4350,47 +4350,36 @@ export default function WalletPage() {
             {/* 页签和功能按钮 */}
             <div className="flex items-center justify-between">
               {/* 虚拟卡/实体卡页签 - 滑动样式 */}
-              <div className={`relative inline-flex rounded-lg p-1 ${
-                isDark 
-                  ? 'bg-gray-800 border border-gray-700' 
-                  : 'bg-gray-100 border border-gray-200'
-              }`}>
-                {/* 滑动背景指示器 */}
-                <div 
-                  className={`absolute top-1 bottom-1 rounded-md transition-transform duration-300 ease-in-out ${
-                    isDark ? 'bg-white' : 'bg-white shadow-sm'
-                  }`}
+              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+                {/* 滑动背景 */}
+                <div
+                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
                   style={{
-                    width: `calc(50% - 6px)`,
-                    transform: selectedUCardView === "virtual" ? 'translateX(6px)' : 'translateX(calc(100% + 6px))'
+                    width: '64px',
+                    left: selectedUCardView === "virtual" ? '4px' : '68px'
                   }}
                 />
                 
                 {/* 页签按钮 */}
-                <button
-                  onClick={() => setSelectedUCardView("virtual")}
-                  className={`relative z-10 px-6 py-3 text-base font-medium transition-colors duration-300 ${
-                    selectedUCardView === "virtual"
-                      ? 'text-black'
-                      : isDark 
-                        ? 'text-gray-400 hover:text-white' 
-                        : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  虚拟卡
-                </button>
-                <button
-                  onClick={() => setSelectedUCardView("physical")}
-                  className={`relative z-10 px-6 py-3 text-base font-medium transition-colors duration-300 ${
-                    selectedUCardView === "physical"
-                      ? 'text-black'
-                      : isDark 
-                        ? 'text-gray-400 hover:text-white' 
-                        : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  实体卡
-                </button>
+                {["virtual", "physical"].map((tab) => (
+                  <button
+                    key={tab}
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                      selectedUCardView === tab
+                        ? isDark ? "text-black" : "text-white"
+                        : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-700 hover:text-gray-900"
+                    }`}
+                    style={{
+                      width: '64px',
+                      height: '32px'
+                    }}
+                    onClick={() => setSelectedUCardView(tab)}
+                  >
+                    {tab === "virtual" ? "虚拟卡" : "实体卡"}
+                  </button>
+                ))}
               </div>
 
               {/* 功能按钮 */}
