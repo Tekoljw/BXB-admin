@@ -5258,96 +5258,211 @@ export default function WalletPage() {
                 </Button>
               </div>
             ) : (
-              /* 实体卡按钮 */
-              <div className="grid grid-cols-7 gap-3">
-                <Button 
-                  onClick={() => setSelectedAction("my-cards")}
-                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
-                    selectedAction === "my-cards"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <CardIcon className="h-5 w-5" />
-                  <span className="text-xs">我的卡片</span>
-                </Button>
-                
-                <Button 
-                  onClick={() => setShowPhysicalCardApplication(true)}
-                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
-                    selectedAction === "apply-new-card"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <Plus className="h-5 w-5" />
-                  <span className="text-xs">申请新卡</span>
-                </Button>
-                
-                <Button 
-                  onClick={() => setSelectedAction("activate-card")}
-                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
-                    selectedAction === "activate-card"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <Zap className="h-5 w-5" />
-                  <span className="text-xs">激活卡片</span>
-                </Button>
-                
-                <Button 
-                  onClick={() => setSelectedAction("transfer")}
-                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
-                    selectedAction === "transfer"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <ArrowLeftRight className="h-5 w-5" />
-                  <span className="text-xs">划款</span>
-                </Button>
-                
-                {/* 仅图标按钮 */}
-                <Button 
-                  onClick={() => setSelectedAction("fund-records")}
-                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
-                    selectedAction === "fund-records"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <Wallet className="h-5 w-5" />
-                </Button>
-                
-                <Button 
-                  onClick={() => setSelectedAction("usage-bills")}
-                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
-                    selectedAction === "usage-bills"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <Receipt className="h-5 w-5" />
-                </Button>
-                
-                <Button 
-                  onClick={() => setSelectedAction("operation-records")}
-                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
-                    selectedAction === "operation-records"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <FileText className="h-5 w-5" />
-                </Button>
+              /* 实体卡网格布局 */
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* 实体卡1 - 白金卡 */}
+                <div className={`relative rounded-2xl p-6 h-52 ${
+                  isDark ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                } shadow-lg transition-all hover:shadow-xl`}>
+                  {/* 顶部logo区域 */}
+                  <div className="flex justify-between items-start mb-6">
+                    <div className={`text-sm font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>BeDAO</div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 rounded-full bg-blue-500 -mr-0.5"></div>
+                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    </div>
+                  </div>
+
+                  {/* 卡号区域 */}
+                  <div className={`mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                    <div className="flex items-center">
+                      <span className="text-sm font-mono tracking-wider font-bold">5234 5234 5234 1234</span>
+                      <button 
+                        className="ml-2 opacity-70 hover:opacity-100"
+                        onClick={() => navigator.clipboard.writeText("5234523452341234")}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </button>
+                    </div>
+                    <div className={`text-xs opacity-75 mt-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>有效期: 12/28</div>
+                  </div>
+
+                  {/* 持卡人姓名 */}
+                  <div className="absolute bottom-4 left-6">
+                    <div className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>持卡人</div>
+                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>JOHN DOE</div>
+                  </div>
+                </div>
+
+                {/* 实体卡2 - 钻石卡 */}
+                <div className={`relative rounded-2xl p-6 h-52 ${
+                  isDark ? 'bg-gradient-to-br from-purple-800 to-purple-900' : 'bg-gradient-to-br from-purple-500 to-purple-600'
+                } shadow-lg transition-all hover:shadow-xl text-white`}>
+                  {/* 顶部logo区域 */}
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="text-sm font-bold">BeDAO</div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 rounded-full bg-yellow-400 -mr-0.5"></div>
+                      <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                    </div>
+                  </div>
+
+                  {/* 卡号区域 */}
+                  <div className="mb-4">
+                    <div className="flex items-center">
+                      <span className="text-sm font-mono tracking-wider font-bold">4456 4456 4456 7890</span>
+                      <button 
+                        className="ml-2 opacity-70 hover:opacity-100"
+                        onClick={() => navigator.clipboard.writeText("4456445644567890")}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </button>
+                    </div>
+                    <div className="text-xs opacity-75 mt-2">有效期: 08/29</div>
+                  </div>
+
+                  {/* 持卡人姓名 */}
+                  <div className="absolute bottom-4 left-6">
+                    <div className="text-xs opacity-75">持卡人</div>
+                    <div className="text-sm font-medium">JANE SMITH</div>
+                  </div>
+                </div>
+
+                {/* 实体卡3 - 黑金卡 */}
+                <div className={`relative rounded-2xl p-6 h-52 ${
+                  isDark ? 'bg-gradient-to-br from-gray-900 to-black' : 'bg-gradient-to-br from-gray-800 to-gray-900'
+                } shadow-lg transition-all hover:shadow-xl text-white`}>
+                  {/* 顶部logo区域 */}
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="text-sm font-bold">BeDAO</div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 rounded-full bg-gold -mr-0.5" style={{backgroundColor: '#FFD700'}}></div>
+                      <div className="w-3 h-3 rounded-full bg-silver" style={{backgroundColor: '#C0C0C0'}}></div>
+                    </div>
+                  </div>
+
+                  {/* 卡号区域 */}
+                  <div className="mb-4">
+                    <div className="flex items-center">
+                      <span className="text-sm font-mono tracking-wider font-bold">6789 6789 6789 0123</span>
+                      <button 
+                        className="ml-2 opacity-70 hover:opacity-100"
+                        onClick={() => navigator.clipboard.writeText("6789678967890123")}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </button>
+                    </div>
+                    <div className="text-xs opacity-75 mt-2">有效期: 05/30</div>
+                  </div>
+
+                  {/* 持卡人姓名 */}
+                  <div className="absolute bottom-4 left-6">
+                    <div className="text-xs opacity-75">持卡人</div>
+                    <div className="text-sm font-medium">ALICE WANG</div>
+                  </div>
+                </div>
+
+                {/* 实体卡4 - 商务卡 */}
+                <div className={`relative rounded-2xl p-6 h-52 ${
+                  isDark ? 'bg-gradient-to-br from-green-800 to-green-900' : 'bg-gradient-to-br from-green-600 to-green-700'
+                } shadow-lg transition-all hover:shadow-xl text-white`}>
+                  {/* 顶部logo区域 */}
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="text-sm font-bold">BeDAO</div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 rounded-full bg-blue-400 -mr-0.5"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                    </div>
+                  </div>
+
+                  {/* 卡号区域 */}
+                  <div className="mb-4">
+                    <div className="flex items-center">
+                      <span className="text-sm font-mono tracking-wider font-bold">7890 7890 7890 4567</span>
+                      <button 
+                        className="ml-2 opacity-70 hover:opacity-100"
+                        onClick={() => navigator.clipboard.writeText("7890789078904567")}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </button>
+                    </div>
+                    <div className="text-xs opacity-75 mt-2">有效期: 03/31</div>
+                  </div>
+
+                  {/* 持卡人姓名 */}
+                  <div className="absolute bottom-4 left-6">
+                    <div className="text-xs opacity-75">持卡人</div>
+                    <div className="text-sm font-medium">BOB CHEN</div>
+                  </div>
+                </div>
+
+                {/* 实体卡5 - 学生卡 */}
+                <div className={`relative rounded-2xl p-6 h-52 ${
+                  isDark ? 'bg-gradient-to-br from-blue-800 to-blue-900' : 'bg-gradient-to-br from-blue-500 to-blue-600'
+                } shadow-lg transition-all hover:shadow-xl text-white`}>
+                  {/* 顶部logo区域 */}
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="text-sm font-bold">BeDAO</div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 rounded-full bg-cyan-400 -mr-0.5"></div>
+                      <div className="w-3 h-3 rounded-full bg-blue-400"></div>
+                    </div>
+                  </div>
+
+                  {/* 卡号区域 */}
+                  <div className="mb-4">
+                    <div className="flex items-center">
+                      <span className="text-sm font-mono tracking-wider font-bold">1234 1234 1234 5678</span>
+                      <button 
+                        className="ml-2 opacity-70 hover:opacity-100"
+                        onClick={() => navigator.clipboard.writeText("1234123412345678")}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </button>
+                    </div>
+                    <div className="text-xs opacity-75 mt-2">有效期: 01/32</div>
+                  </div>
+
+                  {/* 持卡人姓名 */}
+                  <div className="absolute bottom-4 left-6">
+                    <div className="text-xs opacity-75">持卡人</div>
+                    <div className="text-sm font-medium">EMMA LI</div>
+                  </div>
+                </div>
+
+                {/* 实体卡6 - 高级卡 */}
+                <div className={`relative rounded-2xl p-6 h-52 ${
+                  isDark ? 'bg-gradient-to-br from-red-800 to-red-900' : 'bg-gradient-to-br from-red-500 to-red-600'
+                } shadow-lg transition-all hover:shadow-xl text-white`}>
+                  {/* 顶部logo区域 */}
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="text-sm font-bold">BeDAO</div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 rounded-full bg-pink-400 -mr-0.5"></div>
+                      <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                    </div>
+                  </div>
+
+                  {/* 卡号区域 */}
+                  <div className="mb-4">
+                    <div className="flex items-center">
+                      <span className="text-sm font-mono tracking-wider font-bold">9876 9876 9876 5432</span>
+                      <button 
+                        className="ml-2 opacity-70 hover:opacity-100"
+                        onClick={() => navigator.clipboard.writeText("9876987698765432")}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </button>
+                    </div>
+                    <div className="text-xs opacity-75 mt-2">有效期: 11/33</div>
+                  </div>
+
+                  {/* 持卡人姓名 */}
+                  <div className="absolute bottom-4 left-6">
+                    <div className="text-xs opacity-75">持卡人</div>
+                    <div className="text-sm font-medium">DAVID ZHAO</div>
+                  </div>
+                </div>
               </div>
             )}
 
