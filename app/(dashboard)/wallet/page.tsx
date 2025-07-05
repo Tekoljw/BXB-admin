@@ -4544,7 +4544,7 @@ export default function WalletPage() {
                       </div>
                       
                       {/* 卡名和余额信息 */}
-                      <div className="flex justify-between items-center p-4">
+                      <div className="flex justify-between items-center px-4 py-2">
                         <div className="flex items-center">
                           {editingCardId === "card-1" ? (
                             <input 
@@ -4638,7 +4638,7 @@ export default function WalletPage() {
                       </div>
                       
                       {/* 卡名和余额信息 */}
-                      <div className="flex justify-between items-center p-4">
+                      <div className="flex justify-between items-center px-4 py-2">
                         <div className="flex items-center">
                           {editingCardId === "card-2" ? (
                             <input 
@@ -4732,7 +4732,7 @@ export default function WalletPage() {
                       </div>
                       
                       {/* 卡名和余额信息 */}
-                      <div className="flex justify-between items-center p-4">
+                      <div className="flex justify-between items-center px-4 py-2">
                         <div className="flex items-center">
                           {editingCardId === "card-3" ? (
                             <input 
