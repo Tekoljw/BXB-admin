@@ -4505,7 +4505,8 @@ export default function WalletPage() {
                       }`}>
                         <div className="text-white h-full flex flex-col justify-between">
                           {/* 顶部logo区域 */}
-                          <div className="flex justify-end">
+                          <div className="flex justify-between items-start">
+                            <div className="text-sm font-bold">BeDAO</div>
                             <div className="text-sm font-bold">VISA</div>
                           </div>
 
@@ -4595,7 +4596,8 @@ export default function WalletPage() {
                       }`}>
                         <div className="text-white h-full flex flex-col justify-between">
                           {/* 顶部logo区域 */}
-                          <div className="flex justify-end">
+                          <div className="flex justify-between items-start">
+                            <div className="text-sm font-bold">BeDAO</div>
                             <div className="flex items-center">
                               <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
                               <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
@@ -4688,7 +4690,8 @@ export default function WalletPage() {
                       }`}>
                         <div className="text-white h-full flex flex-col justify-between">
                           {/* 顶部logo区域 */}
-                          <div className="flex justify-end">
+                          <div className="flex justify-between items-start">
+                            <div className="text-sm font-bold">BeDAO</div>
                             <div className="flex items-center">
                               <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
                               <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
