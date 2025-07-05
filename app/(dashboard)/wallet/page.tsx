@@ -4402,7 +4402,7 @@ export default function WalletPage() {
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
-                  className="px-4 py-2 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition-colors"
+                  className="px-4 py-2 bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90 transition-all duration-200"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   卡片充值
