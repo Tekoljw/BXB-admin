@@ -5537,6 +5537,286 @@ export default function WalletPage() {
     setExtendDays("30")
   }
 
+  // 划转弹窗
+  const renderTransferModal = () => {
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowTransferModal(false)}>
+        <div 
+          className={`max-w-md w-full mx-4 rounded-2xl shadow-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* 弹窗头部 */}
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                资金划转
+              </h3>
+              <button
+                onClick={() => setShowTransferModal(false)}
+                className={`p-2 rounded-lg transition-colors ${
+                  isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+                }`}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* 弹窗内容 */}
+          <div className="p-6 space-y-4">
+            <div className="space-y-3">
+              <label className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                从
+              </label>
+              <select
+                value={transferFrom}
+                onChange={(e) => setTransferFrom(e.target.value)}
+                className={`w-full px-3 py-2 rounded-lg border transition-colors ${
+                  isDark 
+                    ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
+                    : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                } focus:outline-none focus:ring-1 focus:ring-blue-500`}
+              >
+                <option value="信誉担保账户">信誉担保账户</option>
+                <option value="现货账户">现货账户</option>
+                <option value="合约账户">合约账户</option>
+              </select>
+            </div>
+
+            <div className="space-y-3">
+              <label className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                到
+              </label>
+              <select
+                value={transferTo}
+                onChange={(e) => setTransferTo(e.target.value)}
+                className={`w-full px-3 py-2 rounded-lg border transition-colors ${
+                  isDark 
+                    ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
+                    : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                } focus:outline-none focus:ring-1 focus:ring-blue-500`}
+              >
+                <option value="现货账户">现货账户</option>
+                <option value="合约账户">合约账户</option>
+                <option value="信誉担保账户">信誉担保账户</option>
+              </select>
+            </div>
+
+            <div className="space-y-3">
+              <label className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                划转金额
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  value={transferAmount}
+                  onChange={(e) => setTransferAmount(e.target.value)}
+                  placeholder="请输入金额"
+                  className={`w-full px-3 py-2 pr-16 rounded-lg border transition-colors ${
+                    isDark 
+                      ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500 placeholder-gray-400' 
+                      : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500 placeholder-gray-400'
+                  } focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                />
+                <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>
+                  {transferCurrency}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 弹窗按钮 */}
+          <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
+            <button
+              onClick={() => setShowTransferModal(false)}
+              className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
+                isDark 
+                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              取消
+            </button>
+            <button
+              onClick={() => {
+                console.log('划转:', { transferFrom, transferTo, transferAmount, transferCurrency });
+                setShowTransferModal(false);
+                setTransferAmount('');
+              }}
+              disabled={!transferAmount || parseFloat(transferAmount) <= 0}
+              className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+            >
+              确认划转
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // 查看合同弹窗
+  const renderContractModal = () => {
+    if (!selectedContract) return null;
+    
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowContractModal(false)}>
+        <div 
+          className={`max-w-2xl w-full mx-4 rounded-2xl shadow-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* 弹窗头部 */}
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                担保合同详情
+              </h3>
+              <button
+                onClick={() => setShowContractModal(false)}
+                className={`p-2 rounded-lg transition-colors ${
+                  isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+                }`}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* 弹窗内容 */}
+          <div className="p-6 space-y-4 max-h-96 overflow-y-auto">
+            <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
+              <p><strong>合同编号：</strong>{selectedContract.id}</p>
+              <p><strong>担保金额：</strong>{selectedContract.amount} {selectedContract.currency}</p>
+              <p><strong>交易双方：</strong>{selectedContract.parties}</p>
+              <p><strong>担保条款：</strong></p>
+              <div className="ml-4 mt-2 space-y-2">
+                <p>1. 本合同为数字资产交易担保合同</p>
+                <p>2. 担保方需在指定时间内完成资金担保</p>
+                <p>3. 交易完成后，担保资金将按合同约定释放</p>
+                <p>4. 如发生争议，将按平台仲裁规则处理</p>
+              </div>
+            </div>
+          </div>
+
+          {/* 弹窗按钮 */}
+          <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
+            <button
+              onClick={() => setShowContractModal(false)}
+              className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
+                isDark 
+                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              关闭
+            </button>
+            <button
+              onClick={() => {
+                console.log('下载合同:', selectedContract);
+                // 这里可以添加下载合同的逻辑
+              }}
+              className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+            >
+              下载合同
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // 增加信誉担保资金弹窗
+  const renderAddCreditModal = () => {
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowAddCreditModal(false)}>
+        <div 
+          className={`max-w-md w-full mx-4 rounded-2xl shadow-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* 弹窗头部 */}
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                增加信誉担保资金
+              </h3>
+              <button
+                onClick={() => setShowAddCreditModal(false)}
+                className={`p-2 rounded-lg transition-colors ${
+                  isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+                }`}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* 弹窗内容 */}
+          <div className="p-6 space-y-4">
+            <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              请输入要增加的担保资金金额：
+            </div>
+            
+            <div className="space-y-3">
+              <label className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                担保金额
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  value={creditAmount}
+                  onChange={(e) => setCreditAmount(e.target.value)}
+                  placeholder="请输入金额"
+                  className={`w-full px-3 py-2 pr-16 rounded-lg border transition-colors ${
+                    isDark 
+                      ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500 placeholder-gray-400' 
+                      : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500 placeholder-gray-400'
+                  } focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                />
+                <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>
+                  USDT
+                </span>
+              </div>
+            </div>
+
+            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+              增加的担保资金将从您的可用余额中扣除，用于提升交易信誉度。
+            </div>
+          </div>
+
+          {/* 弹窗按钮 */}
+          <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
+            <button
+              onClick={() => setShowAddCreditModal(false)}
+              className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
+                isDark 
+                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              取消
+            </button>
+            <button
+              onClick={handleAddCredit}
+              disabled={!creditAmount || parseFloat(creditAmount) <= 0}
+              className="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+            >
+              确认增加
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // 延长担保时间弹窗
   const renderExtendTimeModal = () => {
     return (
