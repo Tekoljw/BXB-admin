@@ -4616,7 +4616,7 @@ export default function WalletPage() {
                           <div className="absolute top-12 left-8">
                             <div className="w-12 h-9 bg-yellow-300 rounded-lg border border-yellow-400 opacity-80">
                               <div className="grid grid-cols-3 gap-0.5 p-1 h-full">
-                                {[...Array(9)].map((_, i) => (
+                                {Array.from({ length: 9 }, (_, i) => (
                                   <div key={i} className="bg-yellow-500 rounded-sm"></div>
                                 ))}
                               </div>
