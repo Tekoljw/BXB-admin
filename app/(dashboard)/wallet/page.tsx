@@ -329,8 +329,7 @@ export default function WalletPage() {
   const [editingCardName, setEditingCardName] = useState("") // 编辑中的卡片名称
   
   // 卡片操作弹窗状态
-  const [showCardActionsModal, setShowCardActionsModal] = useState(false)
-  const [selectedCardForActions, setSelectedCardForActions] = useState("")
+
   const [cardApplicationStep, setCardApplicationStep] = useState(1)
   const [virtualCardApplicationData, setVirtualCardApplicationData] = useState({
     fullName: "",
@@ -4502,13 +4501,9 @@ export default function WalletPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {/* 个人购物虚拟卡 */}
                     <div 
-                      className={`max-w-sm w-full border rounded-lg transition-all cursor-pointer hover:shadow-lg active:scale-95 ${
-                        isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600 hover:bg-gray-800/70' : 'bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      className={`max-w-sm w-full border rounded-lg transition-all ${
+                        isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
-                      onClick={() => {
-                        setSelectedCardForActions("card-1")
-                        setShowCardActionsModal(true)
-                      }}
                     >
                       <div className={`relative p-4 rounded-t-lg h-28 ${
                         isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
@@ -4585,15 +4580,62 @@ export default function WalletPage() {
                         </div>
                         <div className="flex items-center">
                           <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>20.00 USDT</div>
-                          <button 
-                            className={`ml-2 rounded-full p-1 transition-colors ${
-                              isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'
-                            }`}
-                            onClick={() => {
-                              console.log("充值卡片 card-1")
+                        </div>
+                      </div>
+
+                      {/* 操作按钮 */}
+                      <div className="px-4 pb-3">
+                        <div className="grid grid-cols-4 gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("充值/退款 for card-1")
                             }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            }`}
                           >
-                            <Plus className="h-3 w-3" />
+                            <CreditCard className="h-3 w-3 mb-1" />
+                            <span>充值</span>
+                          </button>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("冻结/解冻 for card-1")
+                            }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                            }`}
+                          >
+                            <Lock className="h-3 w-3 mb-1" />
+                            <span>冻结</span>
+                          </button>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("删除卡片 for card-1")
+                            }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            }`}
+                          >
+                            <Trash2 className="h-3 w-3 mb-1" />
+                            <span>删除</span>
+                          </button>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("修改密码 for card-1")
+                            }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                            }`}
+                          >
+                            <Key className="h-3 w-3 mb-1" />
+                            <span>修改密码</span>
                           </button>
                         </div>
                       </div>
@@ -4601,13 +4643,9 @@ export default function WalletPage() {
 
                     {/* 微博芽专用虚拟卡 */}
                     <div 
-                      className={`max-w-sm w-full border rounded-lg transition-all cursor-pointer hover:shadow-lg active:scale-95 ${
-                        isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600 hover:bg-gray-800/70' : 'bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      className={`max-w-sm w-full border rounded-lg transition-all ${
+                        isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
-                      onClick={() => {
-                        setSelectedCardForActions("card-2")
-                        setShowCardActionsModal(true)
-                      }}
                     >
                       <div className={`relative p-4 rounded-t-lg h-28 ${
                         isDark ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
@@ -4687,15 +4725,62 @@ export default function WalletPage() {
                         </div>
                         <div className="flex items-center">
                           <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>10.50 USDT</div>
-                          <button 
-                            className={`ml-2 rounded-full p-1 transition-colors ${
-                              isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'
-                            }`}
-                            onClick={() => {
-                              console.log("充值卡片 card-2")
+                        </div>
+                      </div>
+
+                      {/* 操作按钮 */}
+                      <div className="px-4 pb-3">
+                        <div className="grid grid-cols-4 gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("充值/退款 for card-2")
                             }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            }`}
                           >
-                            <Plus className="h-3 w-3" />
+                            <CreditCard className="h-3 w-3 mb-1" />
+                            <span>充值</span>
+                          </button>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("冻结/解冻 for card-2")
+                            }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                            }`}
+                          >
+                            <Lock className="h-3 w-3 mb-1" />
+                            <span>冻结</span>
+                          </button>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("删除卡片 for card-2")
+                            }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            }`}
+                          >
+                            <Trash2 className="h-3 w-3 mb-1" />
+                            <span>删除</span>
+                          </button>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("修改密码 for card-2")
+                            }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                            }`}
+                          >
+                            <Key className="h-3 w-3 mb-1" />
+                            <span>修改密码</span>
                           </button>
                         </div>
                       </div>
@@ -4703,13 +4788,9 @@ export default function WalletPage() {
 
                     {/* 工薪卡虚拟卡 */}
                     <div 
-                      className={`max-w-sm w-full border rounded-lg transition-all cursor-pointer hover:shadow-lg active:scale-95 ${
-                        isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600 hover:bg-gray-800/70' : 'bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      className={`max-w-sm w-full border rounded-lg transition-all ${
+                        isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
-                      onClick={() => {
-                        setSelectedCardForActions("card-3")
-                        setShowCardActionsModal(true)
-                      }}
                     >
                       <div className={`relative p-4 rounded-t-lg h-28 ${
                         isDark ? 'bg-gradient-to-r from-green-600 to-teal-600' : 'bg-gradient-to-r from-green-500 to-teal-500'
@@ -4789,15 +4870,62 @@ export default function WalletPage() {
                         </div>
                         <div className="flex items-center">
                           <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>156.80 USDT</div>
-                          <button 
-                            className={`ml-2 rounded-full p-1 transition-colors ${
-                              isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'
-                            }`}
-                            onClick={() => {
-                              console.log("充值卡片 card-3")
+                        </div>
+                      </div>
+
+                      {/* 操作按钮 */}
+                      <div className="px-4 pb-3">
+                        <div className="grid grid-cols-4 gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("充值/退款 for card-3")
                             }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            }`}
                           >
-                            <Plus className="h-3 w-3" />
+                            <CreditCard className="h-3 w-3 mb-1" />
+                            <span>充值</span>
+                          </button>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("冻结/解冻 for card-3")
+                            }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                            }`}
+                          >
+                            <Lock className="h-3 w-3 mb-1" />
+                            <span>冻结</span>
+                          </button>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("删除卡片 for card-3")
+                            }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            }`}
+                          >
+                            <Trash2 className="h-3 w-3 mb-1" />
+                            <span>删除</span>
+                          </button>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("修改密码 for card-3")
+                            }}
+                            className={`flex flex-col items-center justify-center p-2 rounded-lg text-xs transition-all hover:scale-105 ${
+                              isDark ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                            }`}
+                          >
+                            <Key className="h-3 w-3 mb-1" />
+                            <span>修改密码</span>
                           </button>
                         </div>
                       </div>
@@ -8663,132 +8791,7 @@ export default function WalletPage() {
         </div>
       )}
 
-      {/* 卡片操作弹窗 */}
-      {showCardActionsModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowCardActionsModal(false)}>
-          <div 
-            className={`max-w-md w-full mx-4 rounded-2xl shadow-xl ${
-              isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-            }`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  卡片操作
-                </h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowCardActionsModal(false)}
-                  className={`h-8 w-8 p-0 ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
 
-              {/* 操作选项 */}
-              <div className="space-y-3">
-                <button
-                  onClick={() => {
-                    console.log("充值/退款 for", selectedCardForActions)
-                    setShowCardActionsModal(false)
-                  }}
-                  className={`w-full p-4 rounded-lg text-left transition-all hover:scale-[1.02] ${
-                    isDark ? 'bg-[#252842] hover:bg-[#2a2d42] text-white border border-[#3a3d4a]' : 'bg-gray-50 hover:bg-gray-100 text-gray-900 border border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
-                      isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600'
-                    }`}>
-                      <CreditCard className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <div className="font-medium">充值/退款</div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        管理卡片资金
-                      </div>
-                    </div>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => {
-                    console.log("冻结/解冻 for", selectedCardForActions)
-                    setShowCardActionsModal(false)
-                  }}
-                  className={`w-full p-4 rounded-lg text-left transition-all hover:scale-[1.02] ${
-                    isDark ? 'bg-[#252842] hover:bg-[#2a2d42] text-white border border-[#3a3d4a]' : 'bg-gray-50 hover:bg-gray-100 text-gray-900 border border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
-                      isDark ? 'bg-orange-500/20 text-orange-400' : 'bg-orange-50 text-orange-600'
-                    }`}>
-                      <Lock className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <div className="font-medium">冻结/解冻</div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        控制卡片使用状态
-                      </div>
-                    </div>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => {
-                    console.log("删除卡片 for", selectedCardForActions)
-                    setShowCardActionsModal(false)
-                  }}
-                  className={`w-full p-4 rounded-lg text-left transition-all hover:scale-[1.02] ${
-                    isDark ? 'bg-[#252842] hover:bg-[#2a2d42] text-white border border-[#3a3d4a]' : 'bg-gray-50 hover:bg-gray-100 text-gray-900 border border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
-                      isDark ? 'bg-red-500/20 text-red-400' : 'bg-red-50 text-red-600'
-                    }`}>
-                      <Trash2 className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <div className="font-medium">删除卡片</div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        永久删除此卡片
-                      </div>
-                    </div>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => {
-                    console.log("修改密码 for", selectedCardForActions)
-                    setShowCardActionsModal(false)
-                  }}
-                  className={`w-full p-4 rounded-lg text-left transition-all hover:scale-[1.02] ${
-                    isDark ? 'bg-[#252842] hover:bg-[#2a2d42] text-white border border-[#3a3d4a]' : 'bg-gray-50 hover:bg-gray-100 text-gray-900 border border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
-                      isDark ? 'bg-green-500/20 text-green-400' : 'bg-green-50 text-green-600'
-                    }`}>
-                      <Key className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <div className="font-medium">修改密码</div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        更新卡片PIN码
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* PIN码查看弹窗 */}
       {showPinModal && (
