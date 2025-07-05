@@ -4587,64 +4587,35 @@ export default function WalletPage() {
                   
                   {/* 实体卡展示 */}
                   <div className="flex justify-center mb-8">
-                    <div className="relative w-96 h-60 transform hover:scale-105 transition-transform duration-300">
-                      {/* 实体卡背景 */}
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-green-400 via-teal-500 to-blue-600 shadow-2xl">
-                        {/* 卡片内容 */}
-                        <div className="relative h-full p-8 text-white">
-                          {/* 芯片 */}
-                          <div className="absolute top-12 left-8">
-                            <div className="w-12 h-9 bg-yellow-300 rounded-lg border border-yellow-400 opacity-80">
-                              <div className="grid grid-cols-3 gap-0.5 p-1 h-full">
-                                <div className="bg-yellow-500 rounded-sm"></div>
-                                <div className="bg-yellow-500 rounded-sm"></div>
-                                <div className="bg-yellow-500 rounded-sm"></div>
-                                <div className="bg-yellow-500 rounded-sm"></div>
-                                <div className="bg-yellow-500 rounded-sm"></div>
-                                <div className="bg-yellow-500 rounded-sm"></div>
-                                <div className="bg-yellow-500 rounded-sm"></div>
-                                <div className="bg-yellow-500 rounded-sm"></div>
-                                <div className="bg-yellow-500 rounded-sm"></div>
-                              </div>
-                            </div>
+                    <div className="w-96 h-60 rounded-2xl bg-gradient-to-br from-green-400 via-teal-500 to-blue-600 shadow-2xl p-8 text-white relative">
+                      {/* BeingFi Logo */}
+                      <div className="flex items-center mb-4">
+                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2">
+                          <span className="text-green-600 font-bold text-sm">B</span>
+                        </div>
+                        <span className="text-white font-bold text-lg">BeingFi</span>
+                      </div>
+                      
+                      {/* 芯片 */}
+                      <div className="w-12 h-9 bg-yellow-300 rounded-lg border border-yellow-400 opacity-80 mb-8"></div>
+                      
+                      {/* 卡号 */}
+                      <div className="text-xl font-mono tracking-widest mb-8">
+                        4323 4323 4323 9999
+                      </div>
+                      
+                      {/* 底部信息 */}
+                      <div className="absolute bottom-8 left-8 right-8">
+                        <div className="flex justify-between items-end">
+                          <div>
+                            <div className="text-xs opacity-75 mb-1">CARD HOLDER</div>
+                            <div className="text-sm font-medium">ZHANG SAN</div>
                           </div>
-                          
-                          {/* BeingFi Logo */}
-                          <div className="absolute top-8 left-8">
-                            <div className="flex items-center">
-                              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2">
-                                <span className="text-green-600 font-bold text-sm">B</span>
-                              </div>
-                              <span className="text-white font-bold text-lg">BeingFi</span>
-                            </div>
+                          <div>
+                            <div className="text-xs opacity-75 mb-1">VALID THRU</div>
+                            <div className="text-sm font-medium">12/27</div>
                           </div>
-                          
-                          {/* 火箭图案 */}
-                          <div className="absolute top-16 right-8">
-                            <Rocket className="h-16 w-16 text-white/30 transform rotate-45" />
-                          </div>
-                          
-                          {/* 卡号 */}
-                          <div className="absolute bottom-20 left-8">
-                            <div className="text-xl font-mono tracking-widest">
-                              4323 4323 4323 9999
-                            </div>
-                          </div>
-                          
-                          {/* 持卡人和有效期 */}
-                          <div className="absolute bottom-8 left-8 flex justify-between items-end w-80">
-                            <div>
-                              <div className="text-xs opacity-75 mb-1">CARD HOLDER</div>
-                              <div className="text-sm font-medium">ZHANG SAN</div>
-                            </div>
-                            <div>
-                              <div className="text-xs opacity-75 mb-1">VALID THRU</div>
-                              <div className="text-sm font-medium">12/27</div>
-                            </div>
-                          </div>
-                          
-                          {/* VISA Logo */}
-                          <div className="absolute bottom-8 right-8">
+                          <div className="text-right">
                             <div className="text-white font-bold text-2xl italic">VISA</div>
                             <div className="text-xs opacity-75">Platinum</div>
                           </div>
