@@ -4301,7 +4301,7 @@ export default function WalletPage() {
               )}
             </div>
           </div>
-        )
+        );
 
       case "U卡账户":
         return (
@@ -4500,287 +4500,6 @@ export default function WalletPage() {
                 <div className="space-y-6">
                   {/* 虚拟卡列表 */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {/* 个人购物卡 */}
-                    <div className={`relative group overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${
-                      isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-                    }`}>
-                      <div className={`relative p-4 rounded-t-lg ${
-                        isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
-                      }`} style={{aspectRatio: '16/9'}}>
-                        <div className="text-white h-full flex flex-col justify-between">
-                          {/* 顶部logo区域 */}
-                          <div className="flex justify-between items-start">
-                            <div className="text-sm font-bold">BeDAO</div>
-                            <div className="text-sm font-bold">VISA</div>
-                          </div>
-
-                          {/* 卡号和有效期区域 */}
-                          <div className="text-left mt-3">
-                            <div className="flex items-center">
-                              <span className="text-sm font-mono tracking-wider font-bold">4323 4323 4323 9999</span>
-                              <button 
-                                className="ml-2 opacity-90 hover:opacity-100"
-                                onClick={() => navigator.clipboard.writeText("4323432343239999")}
-                              >
-                                <Copy className="h-3 w-3" />
-                              </button>
-                            </div>
-                            <div className="text-xs opacity-75 mt-2">有效期: 12/27</div>
-                          </div>
-
-                          {/* Pin码区域 - 右下角 */}
-                          <div className="absolute bottom-3 right-3 flex items-center">
-                            <button 
-                              className="text-xs opacity-90 hover:opacity-100 mr-2"
-                              onClick={() => {
-                                setSelectedCardId("card-1")
-                                setShowPinModal(true)
-                                setShowPin(false)
-                                setTransferPassword("")
-                              }}
-                            >
-                              <Eye className="h-2.5 w-2.5" />
-                            </button>
-                            <div className="flex items-center">
-                              <span className="text-xs mr-1 font-medium">Pin码</span>
-                              <div className="bg-white/20 rounded px-2 py-0.5 text-xs font-mono font-bold">***</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* 卡名和余额信息 */}
-                      <div className="flex justify-between items-center px-4 py-2">
-                        <div className="flex items-center">
-                          {editingCardId === "card-1" ? (
-                            <input 
-                              type="text" 
-                              value={editingCardName} 
-                              onChange={(e) => setEditingCardName(e.target.value)}
-                              onBlur={() => setEditingCardId("")}
-                              onKeyPress={(e) => e.key === 'Enter' && setEditingCardId("")}
-                              className={`text-sm font-medium bg-transparent border-b outline-none ${
-                                isDark ? 'border-gray-600 text-yellow-300' : 'border-gray-300 text-yellow-600'
-                              }`}
-                              autoFocus
-                            />
-                          ) : (
-                            <span className={`text-sm font-medium ${isDark ? 'text-yellow-300' : 'text-yellow-600'}`}>个人购物</span>
-                          )}
-                          <button 
-                            className={`text-xs ml-2 ${isDark ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`}
-                            onClick={() => {
-                              setEditingCardId("card-1")
-                              setEditingCardName("个人购物")
-                            }}
-                          >
-                            <Edit2 className="h-3 w-3" />
-                          </button>
-                        </div>
-                        <div className="flex items-center">
-                          <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>20.00 USDT</div>
-                        </div>
-                      </div>
-
-                      {/* 操作按钮 */}
-                      <div className="px-4 pb-3">
-                        <div className="grid grid-cols-4 gap-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("充值/退款 for card-1")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <DollarSign className="h-4 w-4" />
-                          </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("冻结/解冻 for card-1")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <Ban className="h-4 w-4" />
-                          </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("删除卡片 for card-1")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("修改密码 for card-1")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <Settings className="h-4 w-4" />
-                          </button>
-                          
-
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 微博芽专用虚拟卡 */}
-                    <div 
-                      className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
-                        isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
-                      }`}
-                    >
-                      <div className={`relative p-4 rounded-t-lg ${
-                        isDark ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
-                      }`} style={{aspectRatio: '16/9'}}>
-                        <div className="text-white h-full flex flex-col justify-between">
-                          {/* 顶部logo区域 */}
-                          <div className="flex justify-between items-start">
-                            <div className="text-sm font-bold">BeDAO</div>
-                            <div className="flex items-center">
-                              <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
-                              <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                            </div>
-                          </div>
-
-                          {/* 卡号和有效期区域 */}
-                          <div className="text-left mt-3">
-                            <div className="flex items-center">
-                              <span className="text-sm font-mono tracking-wider font-bold">4323 4323 4323 8888</span>
-                              <button 
-                                className="ml-2 opacity-90 hover:opacity-100"
-                                onClick={() => navigator.clipboard.writeText("4323432343238888")}
-                              >
-                                <Copy className="h-3 w-3" />
-                              </button>
-                            </div>
-                            <div className="text-xs opacity-75 mt-2">有效期: 11/26</div>
-                          </div>
-
-                          {/* Pin码区域 - 右下角 */}
-                          <div className="absolute bottom-3 right-3 flex items-center">
-                            <button 
-                              className="text-xs opacity-90 hover:opacity-100 mr-2"
-                              onClick={() => {
-                                setSelectedCardId("card-2")
-                                setShowPinModal(true)
-                                setShowPin(false)
-                                setTransferPassword("")
-                              }}
-                            >
-                              <Eye className="h-2.5 w-2.5" />
-                            </button>
-                            <div className="flex items-center">
-                              <span className="text-xs mr-1 font-medium">Pin码</span>
-                              <div className="bg-white/20 rounded px-2 py-0.5 text-xs font-mono font-bold">***</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* 卡名和余额信息 */}
-                      <div className="flex justify-between items-center px-4 py-2">
-                        <div className="flex items-center">
-                          {editingCardId === "card-2" ? (
-                            <input 
-                              type="text" 
-                              value={editingCardName} 
-                              onChange={(e) => setEditingCardName(e.target.value)}
-                              onBlur={() => setEditingCardId("")}
-                              onKeyPress={(e) => e.key === 'Enter' && setEditingCardId("")}
-                              className={`text-sm font-medium bg-transparent border-b outline-none ${
-                                isDark ? 'border-gray-600 text-yellow-300' : 'border-gray-300 text-yellow-600'
-                              }`}
-                              autoFocus
-                            />
-                          ) : (
-                            <span className={`text-sm font-medium ${isDark ? 'text-yellow-300' : 'text-yellow-600'}`}>微博芽专用</span>
-                          )}
-                          <button 
-                            className={`text-xs ml-2 ${isDark ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`}
-                            onClick={() => {
-                              setEditingCardId("card-2")
-                              setEditingCardName("微博芽专用")
-                            }}
-                          >
-                            <Edit2 className="h-3 w-3" />
-                          </button>
-                        </div>
-                        <div className="flex items-center">
-                          <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>10.50 USDT</div>
-                        </div>
-                      </div>
-
-                      {/* 操作按钮 */}
-                      <div className="px-4 pb-3">
-                        <div className="grid grid-cols-4 gap-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("充值/退款 for card-2")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <DollarSign className="h-4 w-4" />
-                          </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("冻结/解冻 for card-2")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <Ban className="h-4 w-4" />
-                          </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("删除卡片 for card-2")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log("修改密码 for card-2")
-                            }}
-                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                            }`}
-                          >
-                            <Settings className="h-4 w-4" />
-                          </button>
-                          
-
-                        </div>
-                      </div>
-                    </div>
-
                     {/* 工薪卡虚拟卡 */}
                     <div 
                       className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
@@ -4811,7 +4530,7 @@ export default function WalletPage() {
                                 <Copy className="h-3 w-3" />
                               </button>
                             </div>
-                            <div className="text-xs opacity-75 mt-2">有效期: 01/28</div>
+                            <div className="text-xs opacity-75 mt-2">有效期: 05/29</div>
                           </div>
 
                           {/* Pin码区域 - 右下角 */}
@@ -4838,33 +4557,11 @@ export default function WalletPage() {
                       {/* 卡名和余额信息 */}
                       <div className="flex justify-between items-center px-4 py-2">
                         <div className="flex items-center">
-                          {editingCardId === "card-3" ? (
-                            <input 
-                              type="text" 
-                              value={editingCardName} 
-                              onChange={(e) => setEditingCardName(e.target.value)}
-                              onBlur={() => setEditingCardId("")}
-                              onKeyPress={(e) => e.key === 'Enter' && setEditingCardId("")}
-                              className={`text-sm font-medium bg-transparent border-b outline-none ${
-                                isDark ? 'border-gray-600 text-yellow-300' : 'border-gray-300 text-yellow-600'
-                              }`}
-                              autoFocus
-                            />
-                          ) : (
-                            <span className={`text-sm font-medium ${isDark ? 'text-yellow-300' : 'text-yellow-600'}`}>工薪卡</span>
-                          )}
-                          <button 
-                            className={`text-xs ml-2 ${isDark ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`}
-                            onClick={() => {
-                              setEditingCardId("card-3")
-                              setEditingCardName("工薪卡")
-                            }}
-                          >
-                            <Edit2 className="h-3 w-3" />
-                          </button>
+                          <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>工薪卡专用</span>
+                          <div className={`h-2 w-2 ml-2 rounded-full ${isDark ? 'bg-green-400' : 'bg-green-500'}`}></div>
                         </div>
                         <div className="flex items-center">
-                          <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>156.80 USDT</div>
+                          <div className={`text-lg font-bold ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>4,750.23 USDT</div>
                         </div>
                       </div>
 
@@ -4877,7 +4574,7 @@ export default function WalletPage() {
                               console.log("充值/退款 for card-3")
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+                              isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
                             }`}
                           >
                             <DollarSign className="h-4 w-4" />
@@ -4886,13 +4583,13 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("冻结/解冻 for card-3")
+                              console.log("冻结卡片 for card-3")
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+                              isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
                             }`}
                           >
-                            <Ban className="h-4 w-4" />
+                            <PauseCircle className="h-4 w-4" />
                           </button>
                           
                           <button
@@ -4901,7 +4598,7 @@ export default function WalletPage() {
                               console.log("删除卡片 for card-3")
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+                              isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
                             }`}
                           >
                             <Trash2 className="h-4 w-4" />
@@ -4913,20 +4610,15 @@ export default function WalletPage() {
                               console.log("修改密码 for card-3")
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+                              isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
                             }`}
                           >
                             <Settings className="h-4 w-4" />
                           </button>
-                          
-
                         </div>
                       </div>
                     </div>
                   </div>
-
-
-
                 </div>
               )}
 
