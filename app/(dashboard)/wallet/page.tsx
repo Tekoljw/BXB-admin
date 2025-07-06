@@ -4301,7 +4301,7 @@ export default function WalletPage() {
               )}
             </div>
           </div>
-        )
+        );
 
       case "U卡账户":
         return (
@@ -4922,6 +4922,56 @@ export default function WalletPage() {
 
 
 
+                    {/* 个人购物卡 */}
+                    <div className={`relative group overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl ${
+                      isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
+                    }`}>
+                      <div className={`relative p-3 ${
+                        isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
+                      }`} style={{aspectRatio: '20/10'}}>
+                        <div className="text-white h-full flex flex-col justify-between">
+                          <div className="flex justify-between items-start">
+                            <div className="text-sm font-bold">BeDAO</div>
+                            <div className="text-sm font-bold">VISA</div>
+                          </div>
+                          <div className="text-left">
+                            <div className="text-sm font-mono tracking-wider font-bold">•••• •••• •••• 9999</div>
+                            <div className="text-xs opacity-75 mt-1">有效期: 12/27</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="p-3">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className={`text-sm font-medium ${isDark ? 'text-yellow-300' : 'text-yellow-600'}`}>个人购物</span>
+                          <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>20.00 USDT</span>
+                        </div>
+                        
+                        <div className="grid grid-cols-4 gap-2">
+                          <button className={`p-2 rounded-lg transition-colors ${
+                            isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          }`}>
+                            <DollarSign className="h-4 w-4 mx-auto" />
+                          </button>
+                          <button className={`p-2 rounded-lg transition-colors ${
+                            isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          }`}>
+                            <PauseCircle className="h-4 w-4 mx-auto" />
+                          </button>
+                          <button className={`p-2 rounded-lg transition-colors ${
+                            isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          }`}>
+                            <Trash2 className="h-4 w-4 mx-auto" />
+                          </button>
+                          <button className={`p-2 rounded-lg transition-colors ${
+                            isDark ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          }`}>
+                            <Settings className="h-4 w-4 mx-auto" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
 
