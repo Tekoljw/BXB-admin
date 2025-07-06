@@ -4497,17 +4497,13 @@ export default function WalletPage() {
             {/* 页签内容区域 */}
             <div className={`${cardStyle} rounded-lg p-6`}>
               {selectedUCardView === "virtual" && (
-                <div>
-
-                  
-                  {/* 虚拟卡布局 */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 auto-rows-fr">
-                    {/* 个人购物虚拟卡 */}
-                    <div 
-                      className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
-                        isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
-                      }`}
-                    >
+                <div className="space-y-6">
+                  {/* 虚拟卡列表 */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {/* 个人购物卡 */}
+                    <div className={`relative group overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${
+                      isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
+                    }`}>
                       <div className={`relative p-4 rounded-t-lg ${
                         isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
                       }`} style={{aspectRatio: '16/9'}}>
