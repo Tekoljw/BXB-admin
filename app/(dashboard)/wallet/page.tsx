@@ -4501,16 +4501,16 @@ export default function WalletPage() {
 
                   
                   {/* 虚拟卡布局 */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 auto-rows-fr">
                     {/* 个人购物虚拟卡 */}
                     <div 
-                      className={`max-w-sm w-full border rounded-lg transition-all ${
+                      className={`w-full max-w-lg min-w-0 border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
-                      <div className={`relative p-4 rounded-t-lg h-28 ${
+                      <div className={`relative p-4 rounded-t-lg ${
                         isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
-                      }`}>
+                      }`} style={{aspectRatio: '16/9'}}>
                         <div className="text-white h-full flex flex-col justify-between">
                           {/* 顶部logo区域 */}
                           <div className="flex justify-between items-start">
@@ -4644,13 +4644,13 @@ export default function WalletPage() {
 
                     {/* 微博芽专用虚拟卡 */}
                     <div 
-                      className={`max-w-sm w-full border rounded-lg transition-all ${
+                      className={`w-full max-w-lg min-w-0 border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
-                      <div className={`relative p-4 rounded-t-lg h-28 ${
+                      <div className={`relative p-4 rounded-t-lg ${
                         isDark ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
-                      }`}>
+                      }`} style={{aspectRatio: '16/9'}}>
                         <div className="text-white h-full flex flex-col justify-between">
                           {/* 顶部logo区域 */}
                           <div className="flex justify-between items-start">
@@ -4787,13 +4787,13 @@ export default function WalletPage() {
 
                     {/* 工薪卡虚拟卡 */}
                     <div 
-                      className={`max-w-sm w-full border rounded-lg transition-all ${
+                      className={`w-full max-w-lg min-w-0 border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
-                      <div className={`relative p-4 rounded-t-lg h-28 ${
+                      <div className={`relative p-4 rounded-t-lg ${
                         isDark ? 'bg-gradient-to-r from-green-600 to-teal-600' : 'bg-gradient-to-r from-green-500 to-teal-500'
-                      }`}>
+                      }`} style={{aspectRatio: '16/9'}}>
                         <div className="text-white h-full flex flex-col justify-between">
                           {/* 顶部logo区域 */}
                           <div className="flex justify-between items-start">
@@ -4930,7 +4930,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 冻结状态虚拟卡 */}
-                  <div className={`relative rounded-xl overflow-hidden transition-all hover:shadow-lg ${
+                  <div className={`w-full max-w-lg min-w-0 relative rounded-xl overflow-hidden transition-all hover:shadow-lg ${
                     isDark ? 'bg-gray-800/80 border border-gray-700' : 'bg-gray-100/80 border border-gray-300'
                   }`}>
                     {/* 卡片主体 */}
