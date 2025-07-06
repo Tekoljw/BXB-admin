@@ -4504,7 +4504,7 @@ export default function WalletPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 auto-rows-fr">
                     {/* 个人购物虚拟卡 */}
                     <div 
-                      className={`w-full min-w-0 border rounded-lg transition-all ${
+                      className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
@@ -4644,7 +4644,7 @@ export default function WalletPage() {
 
                     {/* 微博芽专用虚拟卡 */}
                     <div 
-                      className={`w-full min-w-0 border rounded-lg transition-all ${
+                      className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
@@ -4787,7 +4787,7 @@ export default function WalletPage() {
 
                     {/* 工薪卡虚拟卡 */}
                     <div 
-                      className={`w-full min-w-0 border rounded-lg transition-all ${
+                      className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
@@ -4931,7 +4931,7 @@ export default function WalletPage() {
 
                   {/* 第四张虚拟卡 - 专用消费卡 */}
                   <div 
-                    className={`w-full min-w-0 border rounded-lg transition-all ${
+                    className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
                       isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                     }`}
                   >
@@ -5050,7 +5050,7 @@ export default function WalletPage() {
 
                   {/* 第五张虚拟卡 - 储蓄专用卡 */}
                   <div 
-                    className={`w-full min-w-0 border rounded-lg transition-all ${
+                    className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
                       isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                     }`}
                   >
