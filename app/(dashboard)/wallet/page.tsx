@@ -5054,11 +5054,11 @@ export default function WalletPage() {
               )}
 
               {selectedUCardView === "physical" && (
-                <div className="flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 justify-items-center">
                   {/* 实体卡1 - 白金卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
+                  <div className={`relative rounded-2xl p-4 sm:p-6 w-full max-w-sm min-w-[280px] ${
                     isDark ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                  } shadow-lg transition-all hover:shadow-xl flex-shrink-0`}>
+                  } shadow-lg transition-all hover:shadow-xl`} style={{aspectRatio: '16/9'}}>
                     {/* 顶部logo区域 */}
                     <div className="flex justify-between items-start mb-6">
                       <div className={`text-sm font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>BeDAO</div>
@@ -5090,9 +5090,9 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡2 - 钻石卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
+                  <div className={`relative rounded-2xl p-4 sm:p-6 w-full max-w-sm min-w-[280px] ${
                     isDark ? 'bg-gradient-to-br from-purple-800 to-purple-900' : 'bg-gradient-to-br from-purple-500 to-purple-600'
-                  } shadow-lg transition-all hover:shadow-xl text-white flex-shrink-0`}>
+                  } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                     {/* 顶部logo区域 */}
                     <div className="flex justify-between items-start mb-6">
                       <div className="text-sm font-bold">BeDAO</div>
@@ -5124,9 +5124,9 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡3 - 黑金卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
+                  <div className={`relative rounded-2xl p-4 sm:p-6 w-full max-w-sm min-w-[280px] ${
                     isDark ? 'bg-gradient-to-br from-gray-900 to-black' : 'bg-gradient-to-br from-gray-800 to-gray-900'
-                  } shadow-lg transition-all hover:shadow-xl text-white flex-shrink-0`}>
+                  } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                     {/* 顶部logo区域 */}
                     <div className="flex justify-between items-start mb-6">
                       <div className="text-sm font-bold">BeDAO</div>
@@ -5158,9 +5158,9 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡4 - 商务卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
+                  <div className={`relative rounded-2xl p-4 sm:p-6 w-full max-w-sm min-w-[280px] ${
                     isDark ? 'bg-gradient-to-br from-green-800 to-green-900' : 'bg-gradient-to-br from-green-600 to-green-700'
-                  } shadow-lg transition-all hover:shadow-xl text-white flex-shrink-0`}>
+                  } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                     {/* 顶部logo区域 */}
                     <div className="flex justify-between items-start mb-6">
                       <div className="text-sm font-bold">BeDAO</div>
@@ -5192,9 +5192,9 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡5 - 学生卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
+                  <div className={`relative rounded-2xl p-4 sm:p-6 w-full max-w-sm min-w-[280px] ${
                     isDark ? 'bg-gradient-to-br from-blue-800 to-blue-900' : 'bg-gradient-to-br from-blue-500 to-blue-600'
-                  } shadow-lg transition-all hover:shadow-xl text-white flex-shrink-0`}>
+                  } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                     {/* 顶部logo区域 */}
                     <div className="flex justify-between items-start mb-6">
                       <div className="text-sm font-bold">BeDAO</div>
@@ -5226,9 +5226,9 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡6 - 高级卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
+                  <div className={`relative rounded-2xl p-4 sm:p-6 w-full max-w-sm min-w-[280px] ${
                     isDark ? 'bg-gradient-to-br from-red-800 to-red-900' : 'bg-gradient-to-br from-red-500 to-red-600'
-                  } shadow-lg transition-all hover:shadow-xl text-white flex-shrink-0`}>
+                  } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                     {/* 顶部logo区域 */}
                     <div className="flex justify-between items-start mb-6">
                       <div className="text-sm font-bold">BeDAO</div>
@@ -5260,9 +5260,9 @@ export default function WalletPage() {
                   </div>
 
                   {/* 冻结状态实体卡 */}
-                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
+                  <div className={`relative rounded-2xl p-4 sm:p-6 w-full max-w-sm min-w-[280px] ${
                     isDark ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-400 to-gray-500'
-                  } shadow-lg text-white flex-shrink-0 transition-all hover:shadow-xl`}>
+                  } shadow-lg text-white transition-all hover:shadow-xl`} style={{aspectRatio: '16/9'}}>
                     {/* 冻结覆盖层 */}
                     <div className="absolute inset-0 bg-gray-900/60 rounded-2xl z-10 flex items-center justify-center">
                       <div className="flex flex-col items-center">
