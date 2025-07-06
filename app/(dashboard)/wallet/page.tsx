@@ -4929,8 +4929,8 @@ export default function WalletPage() {
                     </div>
                   </div>
 
-                  {/* 第四张虚拟卡 - 专用消费卡 */}
-                  <div 
+                    {/* 第四张虚拟卡 - 专用消费卡 */}
+                    <div 
                     className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
                       isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                     }`}
@@ -5048,8 +5048,8 @@ export default function WalletPage() {
                     </div>
                   </div>
 
-                  {/* 第五张虚拟卡 - 储蓄专用卡 */}
-                  <div 
+                    {/* 第五张虚拟卡 - 储蓄专用卡 */}
+                    <div 
                     className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
                       isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                     }`}
