@@ -4302,6 +4302,7 @@ export default function WalletPage() {
             </div>
           </div>
         )
+        break;
 
       case "U卡账户":
         return (
@@ -4500,10 +4501,119 @@ export default function WalletPage() {
                 <div className="space-y-6">
                   {/* 虚拟卡列表 */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {/* 个人购物卡 */}
-                    <div className={`relative group overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${
-                      isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-                    }`}>
+                    {/* 虚拟卡数据列表 */}
+                    {[
+                      { id: 1, name: "个人购物卡", cardNumber: "1234", balance: "2,450.65", expiry: "12/26", gradient: "from-purple-600 to-pink-600", brand: "VISA", status: "active" },
+                      { id: 2, name: "商务专用卡", cardNumber: "2222", balance: "8,750.32", expiry: "08/27", gradient: "from-blue-600 to-cyan-600", brand: "MasterCard", status: "active" },
+                      { id: 3, name: "备用储备卡", cardNumber: "3333", balance: "5,230.90", expiry: "11/28", gradient: "from-orange-600 to-red-600", brand: "Visa", status: "active" },
+                      { id: 4, name: "旅行专用卡", cardNumber: "4444", balance: "1,875.45", expiry: "07/29", gradient: "from-green-600 to-emerald-600", brand: "Amex", status: "active" },
+                      { id: 5, name: "娱乐消费卡", cardNumber: "5555", balance: "3,120.78", expiry: "03/28", gradient: "from-indigo-600 to-purple-600", brand: "VISA", status: "active" },
+                      { id: 6, name: "投资理财卡", cardNumber: "6666", balance: "12,500.00", expiry: "01/30", gradient: "from-rose-600 to-pink-600", brand: "MasterCard", status: "active" },
+                      { id: 7, name: "教育培训卡", cardNumber: "7777", balance: "4,680.23", expiry: "09/27", gradient: "from-teal-600 to-cyan-600", brand: "Visa", status: "active" },
+                      { id: 8, name: "医疗健康卡", cardNumber: "8888", balance: "6,890.56", expiry: "05/29", gradient: "from-emerald-600 to-green-600", brand: "Amex", status: "active" },
+                      { id: 9, name: "家庭开支卡", cardNumber: "9999", balance: "2,345.12", expiry: "10/28", gradient: "from-violet-600 to-indigo-600", brand: "VISA", status: "frozen" },
+                      { id: 10, name: "科技数码卡", cardNumber: "1010", balance: "7,654.89", expiry: "06/30", gradient: "from-sky-600 to-blue-600", brand: "MasterCard", status: "active" },
+                      { id: 11, name: "美食餐饮卡", cardNumber: "1111", balance: "1,567.34", expiry: "12/27", gradient: "from-amber-600 to-orange-600", brand: "Visa", status: "active" },
+                      { id: 12, name: "服装购物卡", cardNumber: "1212", balance: "3,789.67", expiry: "02/29", gradient: "from-fuchsia-600 to-rose-600", brand: "Amex", status: "active" },
+                      { id: 13, name: "交通出行卡", cardNumber: "1313", balance: "950.45", expiry: "08/28", gradient: "from-slate-600 to-gray-600", brand: "VISA", status: "active" },
+                      { id: 14, name: "订阅服务卡", cardNumber: "1414", balance: "2,234.78", expiry: "04/29", gradient: "from-lime-600 to-green-600", brand: "MasterCard", status: "active" },
+                      { id: 15, name: "紧急备用卡", cardNumber: "1515", balance: "10,000.00", expiry: "11/30", gradient: "from-red-600 to-rose-600", brand: "Visa", status: "active" },
+                      { id: 16, name: "礼品采购卡", cardNumber: "1616", balance: "1,456.89", expiry: "07/28", gradient: "from-pink-600 to-fuchsia-600", brand: "Amex", status: "active" },
+                      { id: 17, name: "宠物用品卡", cardNumber: "1717", balance: "892.34", expiry: "03/30", gradient: "from-cyan-600 to-teal-600", brand: "VISA", status: "active" },
+                      { id: 18, name: "家居装修卡", cardNumber: "1818", balance: "15,678.90", expiry: "09/29", gradient: "from-orange-600 to-amber-600", brand: "MasterCard", status: "frozen" },
+                      { id: 19, name: "健身运动卡", cardNumber: "1919", balance: "1,123.45", expiry: "05/28", gradient: "from-emerald-600 to-lime-600", brand: "Visa", status: "active" },
+                      { id: 20, name: "文化娱乐卡", cardNumber: "2020", balance: "2,567.12", expiry: "01/31", gradient: "from-indigo-600 to-violet-600", brand: "Amex", status: "active" }
+                    ].map((card) => (
+                      <div key={card.id} className={`relative group overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${
+                        isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
+                      }`}>
+                        {/* 卡片主体 */}
+                        <div className={`aspect-[16/10] relative bg-gradient-to-br ${card.gradient} p-6 text-white`}>
+                          {/* 背景装饰 */}
+                          <div className="absolute inset-0 bg-black/20"></div>
+                          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full"></div>
+                          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/5 rounded-full"></div>
+                          
+                          {/* 卡片内容 */}
+                          <div className="relative h-full flex flex-col justify-between">
+                            {/* 顶部 */}
+                            <div className="flex justify-between items-start">
+                              <div className="text-white/90 text-sm font-medium">BeDAO Card</div>
+                              <div className="text-white/90 text-xs font-bold">{card.brand}</div>
+                            </div>
+                            
+                            {/* 卡号 */}
+                            <div className="space-y-2">
+                              <div className="font-mono text-lg font-bold tracking-wider">
+                                •••• •••• •••• {card.cardNumber}
+                              </div>
+                              <div className="text-white/80 text-xs">有效期 {card.expiry}</div>
+                            </div>
+                            
+                            {/* 底部类型和状态 */}
+                            <div className="flex justify-between items-end">
+                              <div className="text-white/90 text-sm font-medium">{card.name}</div>
+                              <div className="flex items-center space-x-2">
+                                <div className={`w-2 h-2 rounded-full ${card.status === 'active' ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                                <div className="text-white/70 text-xs">VIRTUAL</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* 卡片信息 */}
+                        <div className="p-4">
+                          <div className="flex justify-between items-center mb-3">
+                            <div className="flex items-center">
+                              <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>可用余额</span>
+                              <div className={`w-2 h-2 rounded-full ml-2 ${card.status === 'active' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                            </div>
+                            <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{card.balance}</span>
+                          </div>
+                          
+                          {/* 操作按钮 */}
+                          <div className="grid grid-cols-4 gap-2">
+                            <button 
+                              onClick={() => console.log(`充值/退款 for card-${card.id}`)}
+                              className={`p-2 rounded-lg transition-colors ${
+                                isDark ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                              }`}
+                            >
+                              <DollarSign className="w-4 h-4 mx-auto" />
+                            </button>
+                            <button 
+                              onClick={() => {
+                                setSelectedCardId(`card-${card.id}`)
+                                setShowPinModal(true)
+                                setShowPin(false)
+                                setTransferPassword("")
+                              }}
+                              className={`p-2 rounded-lg transition-colors ${
+                                isDark ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                              }`}
+                            >
+                              <Eye className="w-4 h-4 mx-auto" />
+                            </button>
+                            <button 
+                              onClick={() => console.log(`冻结卡片 for card-${card.id}`)}
+                              className={`p-2 rounded-lg transition-colors ${
+                                isDark ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                              }`}
+                            >
+                              <PauseCircle className="w-4 h-4 mx-auto" />
+                            </button>
+                            <button 
+                              onClick={() => console.log(`设置 for card-${card.id}`)}
+                              className={`p-2 rounded-lg transition-colors ${
+                                isDark ? 'bg-gray-500/20 text-gray-400 hover:bg-gray-500/30' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                              }`}
+                            >
+                              <Settings className="w-4 h-4 mx-auto" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                       <div className={`relative p-4 rounded-t-lg ${
                         isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
                       }`} style={{aspectRatio: '16/9'}}>
