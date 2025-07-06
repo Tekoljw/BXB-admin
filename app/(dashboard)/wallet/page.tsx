@@ -4301,7 +4301,7 @@ export default function WalletPage() {
               )}
             </div>
           </div>
-        )
+        );
 
       case "U卡账户":
         return (
