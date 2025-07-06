@@ -4504,9 +4504,9 @@ export default function WalletPage() {
                     <div className={`relative group overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${
                       isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
                     }`}>
-                      <div className={`relative p-4 rounded-t-lg ${
+                      <div className={`relative p-3 rounded-t-lg ${
                         isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
-                      }`} style={{aspectRatio: '16/9'}}>
+                      }`} style={{aspectRatio: '20/9'}}>
                         <div className="text-white h-full flex flex-col justify-between">
                           {/* 顶部logo区域 */}
                           <div className="flex justify-between items-start">
@@ -4638,12 +4638,7 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    {/* 微博芽专用虚拟卡 */}
-                    <div 
-                      className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
-                        isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
-                      }`}
-                    >
+
                       <div className={`relative p-4 rounded-t-lg ${
                         isDark ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
                       }`} style={{aspectRatio: '16/9'}}>
