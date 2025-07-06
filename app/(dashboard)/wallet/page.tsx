@@ -4929,6 +4929,106 @@ export default function WalletPage() {
                     </div>
                   </div>
 
+                  {/* 冻结状态虚拟卡 */}
+                  <div 
+                    className={`w-full max-w-lg min-w-0 border rounded-lg transition-all ${
+                      isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
+                    }`}
+                  >
+                    <div className={`relative p-4 rounded-t-lg ${
+                      isDark ? 'bg-gradient-to-r from-gray-600 to-gray-700' : 'bg-gradient-to-r from-gray-400 to-gray-500'
+                    }`} style={{aspectRatio: '16/9'}}>
+                      {/* 冻结覆盖层 */}
+                      <div className="absolute inset-0 bg-black/60 rounded-t-lg z-10 flex items-center justify-center">
+                        <div className="flex flex-col items-center">
+                          <PauseCircle className="h-6 w-6 text-blue-400 mb-1" />
+                          <span className="text-xs font-medium text-white">已冻结</span>
+                        </div>
+                      </div>
+
+                      <div className="text-white h-full flex flex-col justify-between relative z-0">
+                        {/* 顶部logo区域 */}
+                        <div className="flex justify-between items-start">
+                          <div className="text-sm font-bold opacity-50">BeDAO</div>
+                          <div className="flex items-center opacity-50">
+                            <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
+                            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                          </div>
+                        </div>
+
+                        {/* 卡号区域 */}
+                        <div className="text-left">
+                          <div className="flex items-center">
+                            <span className="text-sm font-mono tracking-wider font-bold opacity-50">4323 4323 4323 0000</span>
+                            <button 
+                              className="ml-2 opacity-30 hover:opacity-50"
+                              onClick={() => navigator.clipboard.writeText("4323432343230000")}
+                            >
+                              <Copy className="h-3 w-3" />
+                            </button>
+                          </div>
+                          <div className="text-xs opacity-30 mt-2">有效期: 12/25</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* 卡名和余额信息 */}
+                    <div className="flex justify-between items-center px-4 py-2">
+                      <div className="flex items-center">
+                        <span className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>冻结限制卡</span>
+                        <PauseCircle className={`h-3 w-3 ml-2 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+                      </div>
+                      <div className="flex items-center">
+                        <div className={`text-lg font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>0.00 USDT</div>
+                      </div>
+                    </div>
+
+                    {/* 操作按钮 */}
+                    <div className="px-4 pb-3">
+                      <div className="grid grid-cols-4 gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            console.log("解冻卡片")
+                          }}
+                          className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                            isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                          }`}
+                          title="解冻卡片"
+                        >
+                          <PauseCircle className="h-4 w-4" />
+                        </button>
+                        
+                        <button
+                          disabled
+                          className={`flex items-center justify-center p-2 rounded-lg opacity-30 cursor-not-allowed ${
+                            isDark ? 'bg-gray-700/50 text-gray-500' : 'bg-gray-100 text-gray-400'
+                          }`}
+                        >
+                          <DollarSign className="h-4 w-4" />
+                        </button>
+                        
+                        <button
+                          disabled
+                          className={`flex items-center justify-center p-2 rounded-lg opacity-30 cursor-not-allowed ${
+                            isDark ? 'bg-gray-700/50 text-gray-500' : 'bg-gray-100 text-gray-400'
+                          }`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                        
+                        <button
+                          disabled
+                          className={`flex items-center justify-center p-2 rounded-lg opacity-30 cursor-not-allowed ${
+                            isDark ? 'bg-gray-700/50 text-gray-500' : 'bg-gray-100 text-gray-400'
+                          }`}
+                        >
+                          <Settings className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
 
                 </div>
               )}
