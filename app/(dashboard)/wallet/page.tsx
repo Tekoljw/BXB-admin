@@ -75,7 +75,8 @@ import {
   Key,
   Ban,
   Unlink,
-  ChevronRight
+  ChevronRight,
+  PauseCircle
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
@@ -4927,6 +4928,102 @@ export default function WalletPage() {
                       </div>
                     </div>
                   </div>
+
+                  {/* 冻结状态虚拟卡 */}
+                  <div className={`relative rounded-xl overflow-hidden transition-all hover:shadow-lg ${
+                    isDark ? 'bg-gray-800/50 border border-gray-700/50' : 'bg-gray-100/50 border border-gray-300/50'
+                  }`}>
+                    {/* 卡片主体 */}
+                    <div className={`relative rounded-xl overflow-hidden ${
+                      isDark ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-400 to-gray-500'
+                    } text-white opacity-50`}>
+                      {/* 冻结覆盖层 */}
+                      <div className="absolute inset-0 bg-gray-900/40 z-10 flex items-center justify-center">
+                        <div className="flex flex-col items-center">
+                          <PauseCircle className="h-8 w-8 text-blue-400 mb-2" />
+                          <span className="text-sm font-medium text-white">已冻结</span>
+                        </div>
+                      </div>
+
+                      <div className="p-4 relative z-0">
+                        {/* 顶部标题栏 */}
+                        <div className="flex justify-between items-center mb-6">
+                          <div className="flex items-center">
+                            <div className="w-8 h-5 bg-white/80 rounded-sm mr-2 flex items-center justify-center">
+                              <span className="text-xs font-bold text-gray-700">BE</span>
+                            </div>
+                            <span className="text-sm font-medium opacity-90">BeDAO</span>
+                          </div>
+                          <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-red-500 -mr-0.5"></div>
+                            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                          </div>
+                        </div>
+
+                        {/* 卡号和有效期区域 */}
+                        <div className="text-left mt-3">
+                          <div className="flex items-center">
+                            <span className="text-sm font-mono tracking-wider font-bold">4323 4323 4323 8888</span>
+                            <button 
+                              className="ml-2 opacity-90 hover:opacity-100"
+                              onClick={() => navigator.clipboard.writeText("4323432343238888")}
+                            >
+                              <Copy className="h-3 w-3" />
+                            </button>
+                          </div>
+                          <div className="text-xs opacity-75 mt-2">有效期: 12/29</div>
+                        </div>
+
+                        {/* Pin码区域 - 右下角 */}
+                        <div className="absolute bottom-3 right-3 flex items-center">
+                          <button 
+                            className="text-xs opacity-90 hover:opacity-100 mr-2"
+                            onClick={() => {
+                              setSelectedCardId("card-frozen")
+                              setShowPinModal(true)
+                              setShowPin(false)
+                              setTransferPassword("")
+                            }}
+                          >
+                            <Eye className="h-2.5 w-2.5" />
+                          </button>
+                          <div className="flex items-center">
+                            <span className="text-xs mr-1 font-medium">Pin码</span>
+                            <div className="bg-white/20 rounded px-2 py-0.5 text-xs font-mono font-bold">***</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* 卡名和余额信息 */}
+                    <div className="flex justify-between items-center px-4 py-2">
+                      <div className="flex items-center">
+                        <span className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>交易限制卡</span>
+                        <PauseCircle className={`h-3 w-3 ml-2 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+                      </div>
+                      <div className="flex items-center">
+                        <div className={`text-lg font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>0.00 USDT</div>
+                      </div>
+                    </div>
+
+                    {/* 操作按钮 - 冻结状态下只显示解冻按钮 */}
+                    <div className="px-4 pb-3">
+                      <div className="flex justify-center">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            console.log("解冻卡片 for card-frozen")
+                          }}
+                          className={`flex items-center justify-center px-4 py-2 rounded-lg transition-all hover:scale-105 ${
+                            isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 border border-blue-500/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200'
+                          }`}
+                        >
+                          <PauseCircle className="h-4 w-4 mr-2" />
+                          <span className="text-sm font-medium">解冻卡片</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -5133,6 +5230,60 @@ export default function WalletPage() {
                     <div className="absolute bottom-4 left-6">
                       <div className="text-xs opacity-75">持卡人</div>
                       <div className="text-sm font-medium">DAVID ZHAO</div>
+                    </div>
+                  </div>
+
+                  {/* 冻结状态实体卡 */}
+                  <div className={`relative rounded-2xl p-6 w-80 h-44 ${
+                    isDark ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-400 to-gray-500'
+                  } shadow-lg text-white flex-shrink-0 opacity-50`}>
+                    {/* 冻结覆盖层 */}
+                    <div className="absolute inset-0 bg-gray-900/50 rounded-2xl z-10 flex items-center justify-center">
+                      <div className="flex flex-col items-center">
+                        <PauseCircle className="h-12 w-12 text-blue-300 mb-3" />
+                        <span className="text-lg font-bold text-white">已冻结</span>
+                        <span className="text-xs text-gray-200 mt-1">卡片已被冻结</span>
+                      </div>
+                    </div>
+
+                    {/* 卡片内容 */}
+                    <div className="relative z-0">
+                      {/* 顶部logo区域 */}
+                      <div className="flex justify-between items-start mb-6">
+                        <div className="text-sm font-bold opacity-70">BeDAO</div>
+                        <div className="flex items-center">
+                          <div className="w-3 h-3 rounded-full bg-gray-400 -mr-0.5"></div>
+                          <div className="w-3 h-3 rounded-full bg-gray-300"></div>
+                        </div>
+                      </div>
+
+                      {/* 卡号区域 */}
+                      <div className="mb-4">
+                        <div className="flex items-center">
+                          <span className="text-sm font-mono tracking-wider font-bold opacity-70">5555 5555 5555 5555</span>
+                          <button 
+                            className="ml-2 opacity-50 hover:opacity-70"
+                            onClick={() => navigator.clipboard.writeText("5555555555555555")}
+                          >
+                            <Copy className="h-3 w-3" />
+                          </button>
+                        </div>
+                        <div className="text-xs opacity-50 mt-2">有效期: 06/30</div>
+                      </div>
+
+                      {/* 持卡人姓名 */}
+                      <div className="absolute bottom-4 left-6">
+                        <div className="text-xs opacity-50">持卡人</div>
+                        <div className="text-sm font-medium opacity-70">FROZEN CARD</div>
+                      </div>
+
+                      {/* 冻结标识 */}
+                      <div className="absolute bottom-4 right-6">
+                        <div className="flex items-center bg-blue-500/20 rounded-full px-2 py-1">
+                          <PauseCircle className="h-3 w-3 text-blue-300 mr-1" />
+                          <span className="text-xs font-medium text-blue-200">FROZEN</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
