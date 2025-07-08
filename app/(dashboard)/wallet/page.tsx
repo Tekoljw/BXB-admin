@@ -4508,7 +4508,7 @@ export default function WalletPage() {
                     >
                       <div className={`relative p-3 rounded-t-lg ${
                         isDark ? 'bg-gradient-to-r from-green-600 to-teal-600' : 'bg-gradient-to-r from-green-500 to-teal-500'
-                      }`} style={{aspectRatio: '20/9'}}>
+                      }`} style={{aspectRatio: '24/9'}}>
                         <div className="text-white h-full flex flex-col justify-between">
                           {/* 顶部logo区域 */}
                           <div className="flex justify-between items-start">
