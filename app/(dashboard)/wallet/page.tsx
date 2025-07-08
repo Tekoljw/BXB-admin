@@ -4502,13 +4502,13 @@ export default function WalletPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {/* 工薪卡虚拟卡 */}
                     <div 
-                      className={`w-full max-w-sm min-w-0 border rounded-lg transition-all ${
+                      className={`w-full max-w-md min-w-80 border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
-                      <div className={`relative p-4 rounded-t-lg ${
+                      <div className={`relative p-3 rounded-t-lg ${
                         isDark ? 'bg-gradient-to-r from-green-600 to-teal-600' : 'bg-gradient-to-r from-green-500 to-teal-500'
-                      }`} style={{aspectRatio: '16/9'}}>
+                      }`} style={{aspectRatio: '20/9'}}>
                         <div className="text-white h-full flex flex-col justify-between">
                           {/* 顶部logo区域 */}
                           <div className="flex justify-between items-start">
