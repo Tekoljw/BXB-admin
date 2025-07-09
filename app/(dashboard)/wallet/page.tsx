@@ -76,7 +76,8 @@ import {
   Ban,
   Unlink,
   ChevronRight,
-  PauseCircle
+  PauseCircle,
+  Play
 } from "lucide-react"
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
