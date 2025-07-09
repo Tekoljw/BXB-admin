@@ -172,7 +172,7 @@ export default function WalletPage() {
   const [showPersonalInfoModal, setShowPersonalInfoModal] = useState(false) // 个人信息弹窗
   const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false) // 个人信息编辑状态
   const [shippingAddresses, setShippingAddresses] = useState([
-    { id: 1, address: '', city: '', postalCode: '', country: '' },
+    { id: 1, address: '', city: '', postalCode: '', country: '', sameAsResidential: false },
   ]) // 收款地址列表
   const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
   
@@ -11840,7 +11840,8 @@ export default function WalletPage() {
                           address: '', 
                           city: '', 
                           postalCode: '', 
-                          country: '' 
+                          country: '',
+                          sameAsResidential: false
                         }])
                       }}
                       className={`px-3 py-1 text-xs rounded-lg border transition-colors ${
@@ -11875,117 +11876,196 @@ export default function WalletPage() {
                         )}
                       </div>
                       
-                      <div className="space-y-3">
-                        {/* 国家/地区 */}
-                        <div>
-                          <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                            国家/地区
+                      {/* 与居住地址相同选项 */}
+                      {isEditingPersonalInfo && (
+                        <div className="flex items-center mb-3">
+                          <input
+                            type="checkbox"
+                            id={`same-as-residential-${shippingAddr.id}`}
+                            checked={shippingAddr.sameAsResidential}
+                            onChange={(e) => {
+                              setShippingAddresses(prev => prev.map(addr => 
+                                addr.id === shippingAddr.id 
+                                  ? { 
+                                      ...addr, 
+                                      sameAsResidential: e.target.checked,
+                                      // 如果勾选，复制居住地址信息
+                                      ...(e.target.checked ? {
+                                        country: cardApplicationInfo.country,
+                                        city: cardApplicationInfo.city,
+                                        postalCode: cardApplicationInfo.postalCode,
+                                        address: cardApplicationInfo.address
+                                      } : {})
+                                    }
+                                  : addr
+                              ))
+                            }}
+                            className="mr-2 w-4 h-4 text-[#00D4AA] border-gray-300 rounded focus:ring-[#00D4AA]"
+                          />
+                          <label 
+                            htmlFor={`same-as-residential-${shippingAddr.id}`}
+                            className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} cursor-pointer`}
+                          >
+                            与居住地址相同
                           </label>
-                          {isEditingPersonalInfo ? (
-                            <select
-                              value={shippingAddr.country}
-                              onChange={(e) => {
-                                setShippingAddresses(prev => prev.map(addr => 
-                                  addr.id === shippingAddr.id 
-                                    ? { ...addr, country: e.target.value }
-                                    : addr
-                                ))
-                              }}
-                              className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                                isDark 
-                                  ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                                  : 'bg-white border-gray-300 text-gray-900'
-                              }`}
-                            >
-                              <option value="">请选择国家/地区</option>
-                              <option value="CN">中国</option>
-                              <option value="HK">香港</option>
-                              <option value="US">美国</option>
-                              <option value="GB">英国</option>
-                              <option value="DE">德国</option>
-                              <option value="FR">法国</option>
-                              <option value="JP">日本</option>
-                              <option value="SG">新加坡</option>
-                            </select>
-                          ) : (
-                            <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                              isDark 
-                                ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                                : 'bg-white border-gray-300 text-gray-900'
-                            }`}>
-                              {shippingAddr.country ? 
-                                {
-                                  "CN": "中国",
-                                  "HK": "香港", 
-                                  "US": "美国",
-                                  "GB": "英国",
-                                  "DE": "德国",
-                                  "FR": "法国",
-                                  "JP": "日本",
-                                  "SG": "新加坡"
-                                }[shippingAddr.country] || shippingAddr.country
-                                : '未设置'
-                              }
-                            </div>
-                          )}
                         </div>
-                        
-                        {/* 城市和邮编 */}
-                        <div className="grid grid-cols-2 gap-3">
+                      )}
+                      
+                      {!isEditingPersonalInfo && shippingAddr.sameAsResidential && (
+                        <div className={`mb-3 px-3 py-2 rounded-lg text-sm ${
+                          isDark ? 'bg-[#252842] text-gray-400' : 'bg-gray-100 text-gray-600'
+                        }`}>
+                          与居住地址相同
+                        </div>
+                      )}
+                      
+                      {!shippingAddr.sameAsResidential && (
+                        <div className="space-y-3">
+                          {/* 国家/地区 */}
                           <div>
                             <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                              城市
+                              国家/地区
                             </label>
                             {isEditingPersonalInfo ? (
-                              <input
-                                type="text"
-                                value={shippingAddr.city}
+                              <select
+                                value={shippingAddr.country}
                                 onChange={(e) => {
                                   setShippingAddresses(prev => prev.map(addr => 
                                     addr.id === shippingAddr.id 
-                                      ? { ...addr, city: e.target.value }
+                                      ? { ...addr, country: e.target.value }
                                       : addr
                                   ))
                                 }}
                                 className={`w-full px-3 py-2 border rounded-lg text-sm ${
                                   isDark 
-                                    ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                                    : 'bg-white border-gray-300 text-gray-900'
                                 }`}
-                                placeholder="城市"
-                              />
+                              >
+                                <option value="">请选择国家/地区</option>
+                                <option value="CN">中国</option>
+                                <option value="HK">香港</option>
+                                <option value="US">美国</option>
+                                <option value="GB">英国</option>
+                                <option value="DE">德国</option>
+                                <option value="FR">法国</option>
+                                <option value="JP">日本</option>
+                                <option value="SG">新加坡</option>
+                              </select>
                             ) : (
                               <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
                                 isDark 
                                   ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
                                   : 'bg-white border-gray-300 text-gray-900'
                               }`}>
-                                {shippingAddr.city || '未设置'}
+                                {shippingAddr.country ? 
+                                  {
+                                    "CN": "中国",
+                                    "HK": "香港", 
+                                    "US": "美国",
+                                    "GB": "英国",
+                                    "DE": "德国",
+                                    "FR": "法国",
+                                    "JP": "日本",
+                                    "SG": "新加坡"
+                                  }[shippingAddr.country] || shippingAddr.country
+                                  : '未设置'
+                                }
                               </div>
                             )}
                           </div>
                           
+                          {/* 城市和邮编 */}
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                城市
+                              </label>
+                              {isEditingPersonalInfo ? (
+                                <input
+                                  type="text"
+                                  value={shippingAddr.city}
+                                  onChange={(e) => {
+                                    setShippingAddresses(prev => prev.map(addr => 
+                                      addr.id === shippingAddr.id 
+                                        ? { ...addr, city: e.target.value }
+                                        : addr
+                                    ))
+                                  }}
+                                  className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                                    isDark 
+                                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                                  }`}
+                                  placeholder="城市"
+                                />
+                              ) : (
+                                <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                                  isDark 
+                                    ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                                    : 'bg-white border-gray-300 text-gray-900'
+                                }`}>
+                                  {shippingAddr.city || '未设置'}
+                                </div>
+                              )}
+                            </div>
+                            
+                            <div>
+                              <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                邮编
+                              </label>
+                              {isEditingPersonalInfo ? (
+                                <input
+                                  type="text"
+                                  value={shippingAddr.postalCode}
+                                  onChange={(e) => {
+                                    setShippingAddresses(prev => prev.map(addr => 
+                                      addr.id === shippingAddr.id 
+                                        ? { ...addr, postalCode: e.target.value }
+                                        : addr
+                                    ))
+                                  }}
+                                  className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                                    isDark 
+                                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                                  }`}
+                                  placeholder="邮编"
+                                />
+                              ) : (
+                                <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                                  isDark 
+                                    ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                                    : 'bg-white border-gray-300 text-gray-900'
+                                }`}>
+                                  {shippingAddr.postalCode || '未设置'}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          
+                          {/* 详细地址 */}
                           <div>
                             <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                              邮编
+                              详细地址
                             </label>
                             {isEditingPersonalInfo ? (
-                              <input
-                                type="text"
-                                value={shippingAddr.postalCode}
+                              <textarea
+                                value={shippingAddr.address}
                                 onChange={(e) => {
                                   setShippingAddresses(prev => prev.map(addr => 
                                     addr.id === shippingAddr.id 
-                                      ? { ...addr, postalCode: e.target.value }
+                                      ? { ...addr, address: e.target.value }
                                       : addr
                                   ))
                                 }}
+                                rows={2}
                                 className={`w-full px-3 py-2 border rounded-lg text-sm ${
                                   isDark 
                                     ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
                                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                                 }`}
-                                placeholder="邮编"
+                                placeholder="请输入详细收款地址"
                               />
                             ) : (
                               <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
@@ -11993,46 +12073,12 @@ export default function WalletPage() {
                                   ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
                                   : 'bg-white border-gray-300 text-gray-900'
                               }`}>
-                                {shippingAddr.postalCode || '未设置'}
+                                {shippingAddr.address || '未设置'}
                               </div>
                             )}
                           </div>
                         </div>
-                        
-                        {/* 详细地址 */}
-                        <div>
-                          <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                            详细地址
-                          </label>
-                          {isEditingPersonalInfo ? (
-                            <textarea
-                              value={shippingAddr.address}
-                              onChange={(e) => {
-                                setShippingAddresses(prev => prev.map(addr => 
-                                  addr.id === shippingAddr.id 
-                                    ? { ...addr, address: e.target.value }
-                                    : addr
-                                ))
-                              }}
-                              rows={2}
-                              className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                                isDark 
-                                  ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                              }`}
-                              placeholder="请输入详细收款地址"
-                            />
-                          ) : (
-                            <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                              isDark 
-                                ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                                : 'bg-white border-gray-300 text-gray-900'
-                            }`}>
-                              {shippingAddr.address || '未设置'}
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      )}
                     </div>
                   ))}
                 </div>
