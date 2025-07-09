@@ -5146,10 +5146,10 @@ export default function WalletPage() {
                         <div className={`text-xs opacity-75 mt-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>有效期: 12/28</div>
                       </div>
 
-                      {/* 持卡人姓名 */}
+                      {/* 卡片余额 */}
                       <div className="absolute bottom-4 left-6">
-                        <div className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>持卡人</div>
-                        <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>JOHN DOE</div>
+                        <div className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>卡片余额</div>
+                        <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>2,345.67 USDT</div>
                       </div>
                     </div>
 
@@ -5250,10 +5250,10 @@ export default function WalletPage() {
                         <div className="text-xs opacity-75 mt-2">有效期: 08/29</div>
                       </div>
 
-                      {/* 持卡人姓名 */}
+                      {/* 卡片余额 */}
                       <div className="absolute bottom-4 left-6">
-                        <div className="text-xs opacity-75">持卡人</div>
-                        <div className="text-sm font-medium">JANE SMITH</div>
+                        <div className="text-xs opacity-75">卡片余额</div>
+                        <div className="text-sm font-medium">5,678.90 USDT</div>
                       </div>
                     </div>
 
@@ -5352,10 +5352,10 @@ export default function WalletPage() {
                         <div className="text-xs opacity-75 mt-2">有效期: 05/30</div>
                       </div>
 
-                      {/* 持卡人姓名 */}
+                      {/* 卡片余额 */}
                       <div className="absolute bottom-4 left-6">
-                        <div className="text-xs opacity-75">持卡人</div>
-                        <div className="text-sm font-medium">ALICE WANG</div>
+                        <div className="text-xs opacity-75">卡片余额</div>
+                        <div className="text-sm font-medium">12,345.12 USDT</div>
                       </div>
                     </div>
 
@@ -5454,10 +5454,10 @@ export default function WalletPage() {
                         <div className="text-xs opacity-75 mt-2">有效期: 03/31</div>
                       </div>
 
-                      {/* 持卡人姓名 */}
+                      {/* 卡片余额 */}
                       <div className="absolute bottom-4 left-6">
-                        <div className="text-xs opacity-75">持卡人</div>
-                        <div className="text-sm font-medium">BOB CHEN</div>
+                        <div className="text-xs opacity-75">卡片余额</div>
+                        <div className="text-sm font-medium">8,901.23 USDT</div>
                       </div>
                     </div>
 
@@ -5556,10 +5556,10 @@ export default function WalletPage() {
                         <div className="text-xs opacity-75 mt-2">有效期: 01/32</div>
                       </div>
 
-                      {/* 持卡人姓名 */}
+                      {/* 卡片余额 */}
                       <div className="absolute bottom-4 left-6">
-                        <div className="text-xs opacity-75">持卡人</div>
-                        <div className="text-sm font-medium">EMMA LI</div>
+                        <div className="text-xs opacity-75">卡片余额</div>
+                        <div className="text-sm font-medium">1,567.45 USDT</div>
                       </div>
                     </div>
 
@@ -5658,10 +5658,10 @@ export default function WalletPage() {
                         <div className="text-xs opacity-75 mt-2">有效期: 11/33</div>
                       </div>
 
-                      {/* 持卡人姓名 */}
+                      {/* 卡片余额 */}
                       <div className="absolute bottom-4 left-6">
-                        <div className="text-xs opacity-75">持卡人</div>
-                        <div className="text-sm font-medium">DAVID ZHAO</div>
+                        <div className="text-xs opacity-75">卡片余额</div>
+                        <div className="text-sm font-medium">6,789.01 USDT</div>
                       </div>
                     </div>
 
@@ -5770,10 +5770,10 @@ export default function WalletPage() {
                           <div className="text-xs opacity-75 mt-2">有效期: 06/30</div>
                         </div>
 
-                        {/* 持卡人姓名 */}
+                        {/* 卡片余额 */}
                         <div className="absolute bottom-4 left-6">
-                          <div className="text-xs opacity-75">持卡人</div>
-                          <div className="text-sm font-medium">FROZEN CARD</div>
+                          <div className="text-xs opacity-75">卡片余额</div>
+                          <div className="text-sm font-medium">0.00 USDT</div>
                         </div>
 
                         {/* 冻结标识 - 替换右下角的支付标识 */}
