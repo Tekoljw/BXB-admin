@@ -5127,9 +5127,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡1操作按钮 - 小舌头设计 */}
-                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border z-0 ${
-                      isDark ? 'border-gray-400' : 'border-gray-600'
-                    }`}>
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5229,7 +5227,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡2操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-yellow-300 z-0">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5329,7 +5327,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡3操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-gray-400 z-0">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5429,7 +5427,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡4操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-green-300 z-0">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5529,7 +5527,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡5操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-blue-300 z-0">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5629,7 +5627,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡6操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-red-300 z-0">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5748,7 +5746,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 冻结实体卡操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-gray-500 z-0">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
