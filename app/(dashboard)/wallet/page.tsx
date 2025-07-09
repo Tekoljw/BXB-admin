@@ -4499,8 +4499,8 @@ export default function WalletPage() {
               {selectedUCardView === "virtual" && (
                 <div className="space-y-6">
                   {/* 虚拟卡列表 */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {/* 工薪卡虚拟卡 */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                    {/* 虚拟卡1 - 工薪卡专用 */}
                     <div 
                       className={`w-full max-w-md min-w-80 border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
@@ -4611,6 +4611,434 @@ export default function WalletPage() {
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            }`}
+                          >
+                            <Settings className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 虚拟卡2 - 购物专用卡 */}
+                    <div 
+                      className={`w-full max-w-md min-w-80 border rounded-lg transition-all ${
+                        isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
+                      }`}
+                    >
+                      <div className={`relative p-3 rounded-t-lg ${
+                        isDark ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-gradient-to-r from-purple-500 to-pink-500'
+                      }`} style={{aspectRatio: '24/9'}}>
+                        <div className="text-white h-full flex flex-col justify-between">
+                          <div className="flex justify-between items-start">
+                            <div className="text-sm font-bold">BeDAO</div>
+                            <div className="flex items-center">
+                              <div className="w-3 h-3 rounded-full bg-blue-500 -mr-0.5"></div>
+                              <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                            </div>
+                          </div>
+                          <div className="text-left mt-3">
+                            <div className="flex items-center">
+                              <span className="text-sm font-mono tracking-wider font-bold">5124 5124 5124 8888</span>
+                              <button 
+                                className="ml-2 opacity-90 hover:opacity-100"
+                                onClick={() => navigator.clipboard.writeText("5124512451248888")}
+                              >
+                                <Copy className="h-3 w-3" />
+                              </button>
+                            </div>
+                            <div className="text-xs opacity-75 mt-2">有效期: 08/28</div>
+                          </div>
+                          <div className="absolute bottom-3 right-3 flex items-center">
+                            <button 
+                              className="text-xs opacity-90 hover:opacity-100 mr-2"
+                              onClick={() => {
+                                setSelectedCardId("card-shopping")
+                                setShowPinModal(true)
+                                setShowPin(false)
+                                setTransferPassword("")
+                              }}
+                            >
+                              <Eye className="h-2.5 w-2.5" />
+                            </button>
+                            <div className="flex items-center">
+                              <span className="text-xs mr-1 font-medium">Pin码</span>
+                              <div className="bg-white/20 rounded px-2 py-0.5 text-xs font-mono font-bold">***</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center px-4 py-2">
+                        <div className="flex items-center">
+                          <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>购物专用卡</span>
+                          <div className={`h-2 w-2 ml-2 rounded-full ${isDark ? 'bg-purple-400' : 'bg-purple-500'}`}></div>
+                        </div>
+                        <div className="flex items-center">
+                          <div className={`text-lg font-bold ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>2,180.50 USDT</div>
+                        </div>
+                      </div>
+                      <div className="px-4 pb-3">
+                        <div className="grid grid-cols-4 gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("充值/退款 for shopping card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-purple-600/20 text-purple-400 hover:bg-purple-600/30' : 'bg-purple-50 text-purple-600 hover:bg-purple-100'
+                            }`}
+                          >
+                            <DollarSign className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("冻结卡片 for shopping card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                            }`}
+                          >
+                            <PauseCircle className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("删除卡片 for shopping card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            }`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("修改密码 for shopping card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            }`}
+                          >
+                            <Settings className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 虚拟卡3 - 旅行消费卡 */}
+                    <div 
+                      className={`w-full max-w-md min-w-80 border rounded-lg transition-all ${
+                        isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
+                      }`}
+                    >
+                      <div className={`relative p-3 rounded-t-lg ${
+                        isDark ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                      }`} style={{aspectRatio: '24/9'}}>
+                        <div className="text-white h-full flex flex-col justify-between">
+                          <div className="flex justify-between items-start">
+                            <div className="text-sm font-bold">BeDAO</div>
+                            <div className="flex items-center">
+                              <div className="w-3 h-3 rounded-full bg-orange-500 -mr-0.5"></div>
+                              <div className="w-3 h-3 rounded-full bg-blue-400"></div>
+                            </div>
+                          </div>
+                          <div className="text-left mt-3">
+                            <div className="flex items-center">
+                              <span className="text-sm font-mono tracking-wider font-bold">6789 6789 6789 1234</span>
+                              <button 
+                                className="ml-2 opacity-90 hover:opacity-100"
+                                onClick={() => navigator.clipboard.writeText("6789678967891234")}
+                              >
+                                <Copy className="h-3 w-3" />
+                              </button>
+                            </div>
+                            <div className="text-xs opacity-75 mt-2">有效期: 12/27</div>
+                          </div>
+                          <div className="absolute bottom-3 right-3 flex items-center">
+                            <button 
+                              className="text-xs opacity-90 hover:opacity-100 mr-2"
+                              onClick={() => {
+                                setSelectedCardId("card-travel")
+                                setShowPinModal(true)
+                                setShowPin(false)
+                                setTransferPassword("")
+                              }}
+                            >
+                              <Eye className="h-2.5 w-2.5" />
+                            </button>
+                            <div className="flex items-center">
+                              <span className="text-xs mr-1 font-medium">Pin码</span>
+                              <div className="bg-white/20 rounded px-2 py-0.5 text-xs font-mono font-bold">***</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center px-4 py-2">
+                        <div className="flex items-center">
+                          <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>旅行消费卡</span>
+                          <div className={`h-2 w-2 ml-2 rounded-full ${isDark ? 'bg-blue-400' : 'bg-blue-500'}`}></div>
+                        </div>
+                        <div className="flex items-center">
+                          <div className={`text-lg font-bold ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>8,950.75 USDT</div>
+                        </div>
+                      </div>
+                      <div className="px-4 pb-3">
+                        <div className="grid grid-cols-4 gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("充值/退款 for travel card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            }`}
+                          >
+                            <DollarSign className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("冻结卡片 for travel card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                            }`}
+                          >
+                            <PauseCircle className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("删除卡片 for travel card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            }`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("修改密码 for travel card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-cyan-600/20 text-cyan-400 hover:bg-cyan-600/30' : 'bg-cyan-50 text-cyan-600 hover:bg-cyan-100'
+                            }`}
+                          >
+                            <Settings className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 虚拟卡4 - 娱乐专用卡 */}
+                    <div 
+                      className={`w-full max-w-md min-w-80 border rounded-lg transition-all ${
+                        isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
+                      }`}
+                    >
+                      <div className={`relative p-3 rounded-t-lg ${
+                        isDark ? 'bg-gradient-to-r from-orange-600 to-red-600' : 'bg-gradient-to-r from-orange-500 to-red-500'
+                      }`} style={{aspectRatio: '24/9'}}>
+                        <div className="text-white h-full flex flex-col justify-between">
+                          <div className="flex justify-between items-start">
+                            <div className="text-sm font-bold">BeDAO</div>
+                            <div className="flex items-center">
+                              <div className="w-3 h-3 rounded-full bg-yellow-500 -mr-0.5"></div>
+                              <div className="w-3 h-3 rounded-full bg-orange-400"></div>
+                            </div>
+                          </div>
+                          <div className="text-left mt-3">
+                            <div className="flex items-center">
+                              <span className="text-sm font-mono tracking-wider font-bold">9876 9876 9876 5432</span>
+                              <button 
+                                className="ml-2 opacity-90 hover:opacity-100"
+                                onClick={() => navigator.clipboard.writeText("9876987698765432")}
+                              >
+                                <Copy className="h-3 w-3" />
+                              </button>
+                            </div>
+                            <div className="text-xs opacity-75 mt-2">有效期: 03/29</div>
+                          </div>
+                          <div className="absolute bottom-3 right-3 flex items-center">
+                            <button 
+                              className="text-xs opacity-90 hover:opacity-100 mr-2"
+                              onClick={() => {
+                                setSelectedCardId("card-entertainment")
+                                setShowPinModal(true)
+                                setShowPin(false)
+                                setTransferPassword("")
+                              }}
+                            >
+                              <Eye className="h-2.5 w-2.5" />
+                            </button>
+                            <div className="flex items-center">
+                              <span className="text-xs mr-1 font-medium">Pin码</span>
+                              <div className="bg-white/20 rounded px-2 py-0.5 text-xs font-mono font-bold">***</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center px-4 py-2">
+                        <div className="flex items-center">
+                          <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>娱乐专用卡</span>
+                          <div className={`h-2 w-2 ml-2 rounded-full ${isDark ? 'bg-orange-400' : 'bg-orange-500'}`}></div>
+                        </div>
+                        <div className="flex items-center">
+                          <div className={`text-lg font-bold ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>1,356.89 USDT</div>
+                        </div>
+                      </div>
+                      <div className="px-4 pb-3">
+                        <div className="grid grid-cols-4 gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("充值/退款 for entertainment card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                            }`}
+                          >
+                            <DollarSign className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("冻结卡片 for entertainment card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-yellow-600/20 text-yellow-400 hover:bg-yellow-600/30' : 'bg-yellow-50 text-yellow-600 hover:bg-yellow-100'
+                            }`}
+                          >
+                            <PauseCircle className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("删除卡片 for entertainment card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            }`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("修改密码 for entertainment card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            }`}
+                          >
+                            <Settings className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 虚拟卡5 - 投资理财卡 */}
+                    <div 
+                      className={`w-full max-w-md min-w-80 border rounded-lg transition-all ${
+                        isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
+                      }`}
+                    >
+                      <div className={`relative p-3 rounded-t-lg ${
+                        isDark ? 'bg-gradient-to-r from-indigo-600 to-purple-600' : 'bg-gradient-to-r from-indigo-500 to-purple-500'
+                      }`} style={{aspectRatio: '24/9'}}>
+                        <div className="text-white h-full flex flex-col justify-between">
+                          <div className="flex justify-between items-start">
+                            <div className="text-sm font-bold">BeDAO</div>
+                            <div className="flex items-center">
+                              <div className="w-3 h-3 rounded-full bg-purple-500 -mr-0.5"></div>
+                              <div className="w-3 h-3 rounded-full bg-indigo-400"></div>
+                            </div>
+                          </div>
+                          <div className="text-left mt-3">
+                            <div className="flex items-center">
+                              <span className="text-sm font-mono tracking-wider font-bold">1122 1122 1122 9999</span>
+                              <button 
+                                className="ml-2 opacity-90 hover:opacity-100"
+                                onClick={() => navigator.clipboard.writeText("1122112211229999")}
+                              >
+                                <Copy className="h-3 w-3" />
+                              </button>
+                            </div>
+                            <div className="text-xs opacity-75 mt-2">有效期: 11/30</div>
+                          </div>
+                          <div className="absolute bottom-3 right-3 flex items-center">
+                            <button 
+                              className="text-xs opacity-90 hover:opacity-100 mr-2"
+                              onClick={() => {
+                                setSelectedCardId("card-investment")
+                                setShowPinModal(true)
+                                setShowPin(false)
+                                setTransferPassword("")
+                              }}
+                            >
+                              <Eye className="h-2.5 w-2.5" />
+                            </button>
+                            <div className="flex items-center">
+                              <span className="text-xs mr-1 font-medium">Pin码</span>
+                              <div className="bg-white/20 rounded px-2 py-0.5 text-xs font-mono font-bold">***</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center px-4 py-2">
+                        <div className="flex items-center">
+                          <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>投资理财卡</span>
+                          <div className={`h-2 w-2 ml-2 rounded-full ${isDark ? 'bg-indigo-400' : 'bg-indigo-500'}`}></div>
+                        </div>
+                        <div className="flex items-center">
+                          <div className={`text-lg font-bold ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>15,642.30 USDT</div>
+                        </div>
+                      </div>
+                      <div className="px-4 pb-3">
+                        <div className="grid grid-cols-4 gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("充值/退款 for investment card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
+                            }`}
+                          >
+                            <DollarSign className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("冻结卡片 for investment card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                            }`}
+                          >
+                            <PauseCircle className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("删除卡片 for investment card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                            }`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log("修改密码 for investment card")
+                            }}
+                            className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                              isDark ? 'bg-purple-600/20 text-purple-400 hover:bg-purple-600/30' : 'bg-purple-50 text-purple-600 hover:bg-purple-100'
                             }`}
                           >
                             <Settings className="h-4 w-4" />
