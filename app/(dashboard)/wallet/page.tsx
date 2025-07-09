@@ -5113,6 +5113,63 @@ export default function WalletPage() {
                     </div>
                   </div>
 
+                  {/* 实体卡1操作按钮 */}
+                  <div className="px-4 pb-3 mt-4">
+                    <div className="grid grid-cols-4 gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("充值 for 白金卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                        }`}
+                        title="充值"
+                      >
+                        <DollarSign className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("冻结 for 白金卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                        }`}
+                        title="冻结"
+                      >
+                        <PauseCircle className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("删除 for 白金卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                        }`}
+                        title="删除"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("设置 for 白金卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                        }`}
+                        title="设置"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+
                   {/* 实体卡2 - 钻石卡 */}
                   <div className={`relative rounded-2xl p-4 sm:p-6 w-full min-w-[280px] max-w-[400px] ${
                     isDark ? 'bg-gradient-to-br from-purple-800 to-purple-900' : 'bg-gradient-to-br from-purple-500 to-purple-600'
@@ -5144,6 +5201,63 @@ export default function WalletPage() {
                     <div className="absolute bottom-4 left-6">
                       <div className="text-xs opacity-75">持卡人</div>
                       <div className="text-sm font-medium">JANE SMITH</div>
+                    </div>
+                  </div>
+
+                  {/* 实体卡2操作按钮 */}
+                  <div className="px-4 pb-3 mt-4">
+                    <div className="grid grid-cols-4 gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("充值 for 钻石卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                        }`}
+                        title="充值"
+                      >
+                        <DollarSign className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("冻结 for 钻石卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                        }`}
+                        title="冻结"
+                      >
+                        <PauseCircle className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("删除 for 钻石卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                        }`}
+                        title="删除"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("设置 for 钻石卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                        }`}
+                        title="设置"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
 
@@ -5181,6 +5295,63 @@ export default function WalletPage() {
                     </div>
                   </div>
 
+                  {/* 实体卡3操作按钮 */}
+                  <div className="px-4 pb-3 mt-4">
+                    <div className="grid grid-cols-4 gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("充值 for 黑金卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                        }`}
+                        title="充值"
+                      >
+                        <DollarSign className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("冻结 for 黑金卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                        }`}
+                        title="冻结"
+                      >
+                        <PauseCircle className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("删除 for 黑金卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                        }`}
+                        title="删除"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("设置 for 黑金卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                        }`}
+                        title="设置"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+
                   {/* 实体卡4 - 商务卡 */}
                   <div className={`relative rounded-2xl p-4 sm:p-6 w-full min-w-[280px] max-w-[400px] ${
                     isDark ? 'bg-gradient-to-br from-green-800 to-green-900' : 'bg-gradient-to-br from-green-600 to-green-700'
@@ -5212,6 +5383,63 @@ export default function WalletPage() {
                     <div className="absolute bottom-4 left-6">
                       <div className="text-xs opacity-75">持卡人</div>
                       <div className="text-sm font-medium">BOB CHEN</div>
+                    </div>
+                  </div>
+
+                  {/* 实体卡4操作按钮 */}
+                  <div className="px-4 pb-3 mt-4">
+                    <div className="grid grid-cols-4 gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("充值 for 商务卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                        }`}
+                        title="充值"
+                      >
+                        <DollarSign className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("冻结 for 商务卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                        }`}
+                        title="冻结"
+                      >
+                        <PauseCircle className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("删除 for 商务卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                        }`}
+                        title="删除"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("设置 for 商务卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                        }`}
+                        title="设置"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
 
@@ -5249,6 +5477,63 @@ export default function WalletPage() {
                     </div>
                   </div>
 
+                  {/* 实体卡5操作按钮 */}
+                  <div className="px-4 pb-3 mt-4">
+                    <div className="grid grid-cols-4 gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("充值 for 学生卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                        }`}
+                        title="充值"
+                      >
+                        <DollarSign className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("冻结 for 学生卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                        }`}
+                        title="冻结"
+                      >
+                        <PauseCircle className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("删除 for 学生卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                        }`}
+                        title="删除"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("设置 for 学生卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                        }`}
+                        title="设置"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+
                   {/* 实体卡6 - 高级卡 */}
                   <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
                     isDark ? 'bg-gradient-to-br from-red-800 to-red-900' : 'bg-gradient-to-br from-red-500 to-red-600'
@@ -5280,6 +5565,63 @@ export default function WalletPage() {
                     <div className="absolute bottom-4 left-6">
                       <div className="text-xs opacity-75">持卡人</div>
                       <div className="text-sm font-medium">DAVID ZHAO</div>
+                    </div>
+                  </div>
+
+                  {/* 实体卡6操作按钮 */}
+                  <div className="px-4 pb-3 mt-4">
+                    <div className="grid grid-cols-4 gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("充值 for 高级卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                        }`}
+                        title="充值"
+                      >
+                        <DollarSign className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("冻结 for 高级卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                        }`}
+                        title="冻结"
+                      >
+                        <PauseCircle className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("删除 for 高级卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                        }`}
+                        title="删除"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("设置 for 高级卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                        }`}
+                        title="设置"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
 
@@ -5333,6 +5675,63 @@ export default function WalletPage() {
                           <span className="text-xs font-medium text-blue-100">FROZEN</span>
                         </div>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* 冻结实体卡操作按钮 */}
+                  <div className="px-4 pb-3 mt-4">
+                    <div className="grid grid-cols-4 gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("充值 for 冻结卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
+                        }`}
+                        title="充值"
+                      >
+                        <DollarSign className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("解冻 for 冻结卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                        }`}
+                        title="解冻"
+                      >
+                        <Play className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("删除 for 冻结卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                        }`}
+                        title="删除"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          console.log("设置 for 冻结卡")
+                        }}
+                        className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
+                          isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                        }`}
+                        title="设置"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
                 </div>
