@@ -172,8 +172,9 @@ export default function WalletPage() {
   const [showPersonalInfoModal, setShowPersonalInfoModal] = useState(false) // 个人信息弹窗
   const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false) // 个人信息编辑状态
   const [shippingAddresses, setShippingAddresses] = useState([
-    { id: 1, address: '', city: '', postalCode: '', country: '', sameAsResidential: false },
+    { id: 1, address: '', city: '', postalCode: '', country: '', sameAsResidential: true },
   ]) // 收款地址列表
+  const [showShippingAddress, setShowShippingAddress] = useState(false) // 是否显示收款地址详情
   const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
   
   // 激活卡片多步骤状态
@@ -199,6 +200,8 @@ export default function WalletPage() {
     phoneNumber: "",
     email: "",
     idNumber: "",
+    nationality: "",
+    passportNumber: "",
     address: "",
     city: "",
     postalCode: "",
@@ -229,6 +232,8 @@ export default function WalletPage() {
       phoneNumber: "",
       email: "",
       idNumber: "",
+      nationality: "",
+      passportNumber: "",
       address: "",
       city: "",
       postalCode: "",
@@ -11534,9 +11539,9 @@ export default function WalletPage() {
               setIsEditingPersonalInfo(false)
             }}
           />
-          <div className={`relative w-full max-w-4xl mx-4 p-6 rounded-xl ${
+          <div className={`relative w-full max-w-2xl mx-4 p-6 rounded-xl ${
             isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl max-h-[80vh] overflow-y-auto`}>
+          } shadow-2xl max-h-[90vh] overflow-y-auto`}>
             <div className="flex justify-between items-center mb-6">
               <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 个人信息
@@ -11673,8 +11678,68 @@ export default function WalletPage() {
                 )}
               </div>
               
-              {/* 地址信息 - 两列布局 */}
-              <div className="grid grid-cols-2 gap-6">
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  国籍
+                </label>
+                {isEditingPersonalInfo ? (
+                  <input
+                    type="text"
+                    value={cardApplicationInfo.nationality}
+                    onChange={(e) => setCardApplicationInfo(prev => ({
+                      ...prev,
+                      nationality: e.target.value
+                    }))}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                    placeholder="请输入国籍"
+                  />
+                ) : (
+                  <div className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}>
+                    {cardApplicationInfo.nationality || '未设置'}
+                  </div>
+                )}
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  护照号
+                </label>
+                {isEditingPersonalInfo ? (
+                  <input
+                    type="text"
+                    value={cardApplicationInfo.passportNumber}
+                    onChange={(e) => setCardApplicationInfo(prev => ({
+                      ...prev,
+                      passportNumber: e.target.value
+                    }))}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                    placeholder="请输入护照号"
+                  />
+                ) : (
+                  <div className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}>
+                    {cardApplicationInfo.passportNumber || '未设置'}
+                  </div>
+                )}
+              </div>
+              
+              {/* 地址信息 - 竖版布局 */}
+              <div className="space-y-6">
                 {/* 居住地址 */}
                 <div className={`p-4 border rounded-lg ${
                   isDark ? 'border-[#3a3d4a] bg-[#1a1d29]' : 'border-gray-200 bg-gray-50'
@@ -11837,33 +11902,74 @@ export default function WalletPage() {
                   <label className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     收款地址
                   </label>
-                  {isEditingPersonalInfo && (
-                    <button
-                      onClick={() => {
-                        const newId = Math.max(...shippingAddresses.map(addr => addr.id)) + 1
-                        setShippingAddresses(prev => [...prev, { 
-                          id: newId, 
-                          address: '', 
-                          city: '', 
-                          postalCode: '', 
-                          country: '',
-                          sameAsResidential: false
-                        }])
-                      }}
-                      className={`px-3 py-1 text-xs rounded-lg border transition-colors ${
-                        isDark 
-                          ? 'border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black' 
-                          : 'border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white'
-                      }`}
-                    >
-                      + 添加地址
-                    </button>
-                  )}
                 </div>
                 
-                <div className="space-y-4">
-                  {shippingAddresses.map((shippingAddr, index) => (
-                    <div key={shippingAddr.id} className="space-y-3">
+                {/* 与居住地址相同的复选框 */}
+                <div className="flex items-center mb-3">
+                  <input
+                    type="checkbox"
+                    id="sameAsResidential"
+                    checked={shippingAddresses[0]?.sameAsResidential || false}
+                    onChange={(e) => {
+                      const isChecked = e.target.checked
+                      setShowShippingAddress(!isChecked)
+                      setShippingAddresses(prev => prev.map((addr, index) => 
+                        index === 0 
+                          ? { 
+                              ...addr, 
+                              sameAsResidential: isChecked,
+                              // 如果勾选，则复制居住地址信息
+                              ...(isChecked ? {
+                                country: cardApplicationInfo.country,
+                                city: cardApplicationInfo.city,
+                                postalCode: cardApplicationInfo.postalCode,
+                                address: cardApplicationInfo.address
+                              } : {})
+                            }
+                          : addr
+                      ))
+                    }}
+                    className="mr-2"
+                  />
+                  <label 
+                    htmlFor="sameAsResidential" 
+                    className={`text-sm cursor-pointer ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+                  >
+                    与居住地址相同
+                  </label>
+                </div>
+                
+                {/* 收款地址详情 - 只在未勾选"与居住地址相同"时显示 */}
+                {showShippingAddress && (
+                  <div className="space-y-4">
+                    {/* 添加地址按钮 */}
+                    {isEditingPersonalInfo && shippingAddresses.length < 3 && (
+                      <div className="flex justify-end">
+                        <button
+                          onClick={() => {
+                            const newId = Math.max(...shippingAddresses.map(addr => addr.id)) + 1
+                            setShippingAddresses(prev => [...prev, { 
+                              id: newId, 
+                              address: '', 
+                              city: '', 
+                              postalCode: '', 
+                              country: '',
+                              sameAsResidential: false
+                            }])
+                          }}
+                          className={`px-3 py-1 text-xs rounded-lg border transition-colors ${
+                            isDark 
+                              ? 'border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black' 
+                              : 'border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white'
+                          }`}
+                        >
+                          + 添加地址
+                        </button>
+                      </div>
+                    )}
+                    
+                    {shippingAddresses.map((shippingAddr, index) => (
+                      <div key={shippingAddr.id} className="space-y-3">
                       {isEditingPersonalInfo && shippingAddresses.length > 1 && (
                         <div className="flex justify-end mb-3">
                           <button
@@ -12081,8 +12187,9 @@ export default function WalletPage() {
                         </div>
                       )}
                     </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
                 </div>
               </div>
             </div>
