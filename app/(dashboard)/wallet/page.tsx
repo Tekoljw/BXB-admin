@@ -145,6 +145,21 @@ export default function WalletPage() {
     }
   }, [selectedCurrencies, currencyTab])
   
+  // 点击外部关闭下拉菜单
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showCardDropdown) {
+        const target = event.target as HTMLElement
+        if (!target.closest('.card-dropdown')) {
+          setShowCardDropdown(false)
+        }
+      }
+    }
+    
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [showCardDropdown])
+  
   // 代付备用金充值弹窗状态
   const [showStandbyRechargeModal, setShowStandbyRechargeModal] = useState(false)
   const [standbyRechargeAnimating, setStandbyRechargeAnimating] = useState(false)
@@ -173,6 +188,7 @@ export default function WalletPage() {
   const [rechargeCardType, setRechargeCardType] = useState<"virtual" | "physical">("virtual")
   const [selectedRechargeCard, setSelectedRechargeCard] = useState("shopping")
   const [rechargeAmount, setRechargeAmount] = useState("")
+  const [showCardDropdown, setShowCardDropdown] = useState(false)
 
   // 今日汇率 (示例汇率)
   const exchangeRates = {
@@ -10056,30 +10072,160 @@ export default function WalletPage() {
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   选择卡片
                 </label>
-                <select 
-                  value={selectedRechargeCard}
-                  onChange={(e) => setSelectedRechargeCard(e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                >
-                  {rechargeCardType === "virtual" ? (
-                    <>
-                      <option value="shopping">购物专用卡 - **** 1122</option>
-                      <option value="travel">旅行专用卡 - **** 3344</option>
-                      <option value="entertainment">娱乐专用卡 - **** 5432</option>
-                      <option value="investment">投资理财卡 - **** 9999</option>
-                    </>
-                  ) : (
-                    <>
-                      <option value="platinum">白金卡 - **** 1234</option>
-                      <option value="gold">金卡 - **** 5678</option>
-                      <option value="diamond">钻石卡 - **** 9012</option>
-                    </>
+                <div className="relative card-dropdown">
+                  <button
+                    type="button"
+                    onClick={() => setShowCardDropdown(!showCardDropdown)}
+                    className={`w-full px-3 py-2 border rounded-lg text-left flex items-center justify-between transition-all duration-200 ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white hover:border-[#4a4d5a]' 
+                        : 'bg-white border-gray-300 text-gray-900 hover:border-gray-400'
+                    } ${showCardDropdown ? 'ring-2 ring-[#00D4AA] ring-opacity-50' : ''}`}
+                  >
+                    <span>
+                      {rechargeCardType === "virtual" ? (
+                        selectedRechargeCard === "shopping" ? "购物专用卡 - **** 1122" :
+                        selectedRechargeCard === "travel" ? "旅行专用卡 - **** 3344" :
+                        selectedRechargeCard === "entertainment" ? "娱乐专用卡 - **** 5432" :
+                        selectedRechargeCard === "investment" ? "投资理财卡 - **** 9999" : "请选择卡片"
+                      ) : (
+                        selectedRechargeCard === "platinum" ? "白金卡 - **** 1234" :
+                        selectedRechargeCard === "gold" ? "金卡 - **** 5678" :
+                        selectedRechargeCard === "diamond" ? "钻石卡 - **** 9012" : "请选择卡片"
+                      )}
+                    </span>
+                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${showCardDropdown ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {/* 下拉菜单 */}
+                  {showCardDropdown && (
+                    <div className={`absolute z-10 w-full mt-1 rounded-lg shadow-lg border animate-in fade-in-0 slide-in-from-top-2 duration-200 ${
+                      isDark ? 'bg-[#252842] border-[#3a3d4a]' : 'bg-white border-gray-200'
+                    }`}>
+                      <div className="py-1 max-h-60 overflow-y-auto">
+                        {rechargeCardType === "virtual" ? (
+                          <>
+                            <button
+                              onClick={() => {
+                                setSelectedRechargeCard("shopping")
+                                setShowCardDropdown(false)
+                              }}
+                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
+                                isDark 
+                                  ? 'text-white hover:bg-white' 
+                                  : 'text-gray-900 hover:bg-gray-900'
+                              } ${selectedRechargeCard === "shopping" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
+                            >
+                              <div className="flex items-center">
+                                <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                                购物专用卡 - **** 1122
+                              </div>
+                            </button>
+                            <button
+                              onClick={() => {
+                                setSelectedRechargeCard("travel")
+                                setShowCardDropdown(false)
+                              }}
+                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
+                                isDark 
+                                  ? 'text-white hover:bg-white' 
+                                  : 'text-gray-900 hover:bg-gray-900'
+                              } ${selectedRechargeCard === "travel" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
+                            >
+                              <div className="flex items-center">
+                                <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                旅行专用卡 - **** 3344
+                              </div>
+                            </button>
+                            <button
+                              onClick={() => {
+                                setSelectedRechargeCard("entertainment")
+                                setShowCardDropdown(false)
+                              }}
+                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
+                                isDark 
+                                  ? 'text-white hover:bg-white' 
+                                  : 'text-gray-900 hover:bg-gray-900'
+                              } ${selectedRechargeCard === "entertainment" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
+                            >
+                              <div className="flex items-center">
+                                <div className="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
+                                娱乐专用卡 - **** 5432
+                              </div>
+                            </button>
+                            <button
+                              onClick={() => {
+                                setSelectedRechargeCard("investment")
+                                setShowCardDropdown(false)
+                              }}
+                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
+                                isDark 
+                                  ? 'text-white hover:bg-white' 
+                                  : 'text-gray-900 hover:bg-gray-900'
+                              } ${selectedRechargeCard === "investment" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
+                            >
+                              <div className="flex items-center">
+                                <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
+                                投资理财卡 - **** 9999
+                              </div>
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => {
+                                setSelectedRechargeCard("platinum")
+                                setShowCardDropdown(false)
+                              }}
+                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
+                                isDark 
+                                  ? 'text-white hover:bg-white' 
+                                  : 'text-gray-900 hover:bg-gray-900'
+                              } ${selectedRechargeCard === "platinum" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
+                            >
+                              <div className="flex items-center">
+                                <div className="w-3 h-3 rounded-full bg-gray-400 mr-2"></div>
+                                白金卡 - **** 1234
+                              </div>
+                            </button>
+                            <button
+                              onClick={() => {
+                                setSelectedRechargeCard("gold")
+                                setShowCardDropdown(false)
+                              }}
+                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
+                                isDark 
+                                  ? 'text-white hover:bg-white' 
+                                  : 'text-gray-900 hover:bg-gray-900'
+                              } ${selectedRechargeCard === "gold" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
+                            >
+                              <div className="flex items-center">
+                                <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
+                                金卡 - **** 5678
+                              </div>
+                            </button>
+                            <button
+                              onClick={() => {
+                                setSelectedRechargeCard("diamond")
+                                setShowCardDropdown(false)
+                              }}
+                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
+                                isDark 
+                                  ? 'text-white hover:bg-white' 
+                                  : 'text-gray-900 hover:bg-gray-900'
+                              } ${selectedRechargeCard === "diamond" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
+                            >
+                              <div className="flex items-center">
+                                <div className="w-3 h-3 rounded-full bg-black mr-2"></div>
+                                钻石卡 - **** 9012
+                              </div>
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   )}
-                </select>
+                </div>
               </div>
               
               {/* 3. USDT金额输入 */}
