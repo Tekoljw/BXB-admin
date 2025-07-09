@@ -11450,7 +11450,26 @@ export default function WalletPage() {
                     <User className={`h-12 w-12 ${theme === "dark" ? 'text-gray-400' : 'text-gray-500'}`} />
                   )}
                 </div>
-                <button className="absolute bottom-0 right-0 w-8 h-8 bg-[#00D4AA] rounded-full flex items-center justify-center text-white hover:bg-[#00D4AA]/90 transition-colors">
+                <button 
+                  onClick={() => {
+                    // 创建一个隐藏的文件输入元素
+                    const input = document.createElement('input')
+                    input.type = 'file'
+                    input.accept = 'image/*'
+                    input.onchange = (e) => {
+                      const file = (e.target as HTMLInputElement).files?.[0]
+                      if (file) {
+                        const reader = new FileReader()
+                        reader.onload = (e) => {
+                          setPersonalInfo(prev => ({ ...prev, avatar: e.target?.result as string }))
+                        }
+                        reader.readAsDataURL(file)
+                      }
+                    }
+                    input.click()
+                  }}
+                  className="absolute bottom-0 right-0 w-8 h-8 bg-[#00D4AA] rounded-full flex items-center justify-center text-white hover:bg-[#00D4AA]/90 transition-colors"
+                >
                   <Camera className="h-4 w-4" />
                 </button>
               </div>
