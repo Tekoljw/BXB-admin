@@ -5082,7 +5082,7 @@ export default function WalletPage() {
                 }}>
                   {/* 实体卡1 - 白金卡 */}
                   <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
+                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'
                     } shadow-lg transition-all hover:shadow-xl`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
@@ -5127,7 +5127,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡1操作按钮 - 小舌头设计 */}
-                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border ${
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border z-0 ${
                       isDark ? 'border-gray-400' : 'border-gray-600'
                     }`}>
                       <div className="grid grid-cols-4 gap-2">
@@ -5188,7 +5188,7 @@ export default function WalletPage() {
 
                   {/* 实体卡2 - 钻石卡 */}
                   <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
+                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-purple-800 to-purple-900' : 'bg-gradient-to-br from-purple-500 to-purple-600'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
@@ -5229,7 +5229,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡2操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-yellow-300">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-yellow-300 z-0">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5288,7 +5288,7 @@ export default function WalletPage() {
 
                   {/* 实体卡3 - 黑金卡 */}
                   <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
+                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-gray-900 to-black' : 'bg-gradient-to-br from-gray-800 to-gray-900'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
@@ -5329,7 +5329,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡3操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-gray-400">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-gray-400 z-0">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5388,7 +5388,7 @@ export default function WalletPage() {
 
                   {/* 实体卡4 - 商务卡 */}
                   <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
+                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-green-800 to-green-900' : 'bg-gradient-to-br from-green-600 to-green-700'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
@@ -5429,7 +5429,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡4操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-green-300">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-green-300 z-0">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5488,7 +5488,7 @@ export default function WalletPage() {
 
                   {/* 实体卡5 - 学生卡 */}
                   <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
+                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-blue-800 to-blue-900' : 'bg-gradient-to-br from-blue-500 to-blue-600'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
@@ -5529,7 +5529,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡5操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-blue-300">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-blue-300 z-0">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5588,7 +5588,7 @@ export default function WalletPage() {
 
                   {/* 实体卡6 - 高级卡 */}
                   <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
+                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-red-800 to-red-900' : 'bg-gradient-to-br from-red-500 to-red-600'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
@@ -5629,7 +5629,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡6操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-red-300">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-red-300 z-0">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5688,7 +5688,7 @@ export default function WalletPage() {
 
                   {/* 冻结状态实体卡 */}
                   <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
+                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-400 to-gray-500'
                     } shadow-lg text-white transition-all hover:shadow-xl`} style={{aspectRatio: '16/9'}}>
                       {/* 冻结覆盖层 */}
@@ -5748,7 +5748,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 冻结实体卡操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-gray-500">
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-gray-500 z-0">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
