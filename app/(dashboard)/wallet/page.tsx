@@ -11827,10 +11827,12 @@ export default function WalletPage() {
                     </div>
                   )}
                 </div>
-              </div>
+                </div>
 
-              {/* 收款地址 */}
-              <div>
+                {/* 收款地址 */}
+                <div className={`p-4 border rounded-lg ${
+                  isDark ? 'border-[#3a3d4a] bg-[#1a1d29]' : 'border-gray-200 bg-gray-50'
+                }`}>
                 <div className="flex justify-between items-center mb-3">
                   <label className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     收款地址
@@ -12082,6 +12084,7 @@ export default function WalletPage() {
                       )}
                     </div>
                   ))}
+                </div>
                 </div>
               </div>
             </div>
