@@ -4499,10 +4499,13 @@ export default function WalletPage() {
               {selectedUCardView === "virtual" && (
                 <div className="space-y-6">
                   {/* 虚拟卡列表 */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 auto-rows-fr">
+                  <div className="grid gap-6" style={{
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                    maxWidth: '100%'
+                  }}>
                     {/* 虚拟卡1 - 工薪卡专用 */}
                     <div 
-                      className={`w-full border rounded-lg transition-all ${
+                      className={`w-full min-w-[280px] max-w-[400px] border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
@@ -4621,7 +4624,7 @@ export default function WalletPage() {
 
                     {/* 虚拟卡2 - 购物专用卡 */}
                     <div 
-                      className={`w-full border rounded-lg transition-all ${
+                      className={`w-full min-w-[280px] max-w-[400px] border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
@@ -4728,7 +4731,7 @@ export default function WalletPage() {
 
                     {/* 虚拟卡3 - 旅行消费卡 */}
                     <div 
-                      className={`w-full border rounded-lg transition-all ${
+                      className={`w-full min-w-[280px] max-w-[400px] border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
@@ -4835,7 +4838,7 @@ export default function WalletPage() {
 
                     {/* 虚拟卡4 - 娱乐专用卡 */}
                     <div 
-                      className={`w-full border rounded-lg transition-all ${
+                      className={`w-full min-w-[280px] max-w-[400px] border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
@@ -4942,7 +4945,7 @@ export default function WalletPage() {
 
                     {/* 虚拟卡5 - 投资理财卡 */}
                     <div 
-                      className={`w-full border rounded-lg transition-all ${
+                      className={`w-full min-w-[280px] max-w-[400px] border rounded-lg transition-all ${
                         isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
                       }`}
                     >
