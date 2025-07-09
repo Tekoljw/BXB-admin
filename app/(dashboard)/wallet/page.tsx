@@ -171,6 +171,9 @@ export default function WalletPage() {
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [showPersonalInfoModal, setShowPersonalInfoModal] = useState(false) // 个人信息弹窗
   const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false) // 个人信息编辑状态
+  const [shippingAddresses, setShippingAddresses] = useState([
+    { id: 1, address: '', city: '', postalCode: '', country: '' },
+  ]) // 收款地址列表
   const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
   
   // 激活卡片多步骤状态
@@ -11670,9 +11673,10 @@ export default function WalletPage() {
                 )}
               </div>
               
+              {/* 居住地址 */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  详细地址
+                  居住地址
                 </label>
                 {isEditingPersonalInfo ? (
                   <textarea
@@ -11687,7 +11691,7 @@ export default function WalletPage() {
                         ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
                         : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                     }`}
-                    placeholder="请输入详细地址"
+                    placeholder="请输入居住地址"
                   />
                 ) : (
                   <div className={`w-full px-3 py-2 border rounded-lg ${
@@ -11810,6 +11814,216 @@ export default function WalletPage() {
                     }
                   </div>
                 )}
+              </div>
+
+              {/* 收款地址 */}
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <label className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    收款地址
+                  </label>
+                  {isEditingPersonalInfo && (
+                    <button
+                      onClick={() => {
+                        const newId = Math.max(...shippingAddresses.map(addr => addr.id)) + 1
+                        setShippingAddresses(prev => [...prev, { 
+                          id: newId, 
+                          address: '', 
+                          city: '', 
+                          postalCode: '', 
+                          country: '' 
+                        }])
+                      }}
+                      className={`px-3 py-1 text-xs rounded-lg border transition-colors ${
+                        isDark 
+                          ? 'border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black' 
+                          : 'border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white'
+                      }`}
+                    >
+                      + 添加地址
+                    </button>
+                  )}
+                </div>
+                
+                <div className="space-y-4">
+                  {shippingAddresses.map((shippingAddr, index) => (
+                    <div key={shippingAddr.id} className={`p-4 border rounded-lg ${
+                      isDark ? 'border-[#3a3d4a] bg-[#1a1d29]' : 'border-gray-200 bg-gray-50'
+                    }`}>
+                      <div className="flex justify-between items-center mb-3">
+                        <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                          地址{index + 1}
+                        </span>
+                        {isEditingPersonalInfo && shippingAddresses.length > 1 && (
+                          <button
+                            onClick={() => {
+                              setShippingAddresses(prev => prev.filter(addr => addr.id !== shippingAddr.id))
+                            }}
+                            className="text-red-500 hover:text-red-700 text-xs"
+                          >
+                            删除
+                          </button>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <div>
+                          <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            详细地址
+                          </label>
+                          {isEditingPersonalInfo ? (
+                            <textarea
+                              value={shippingAddr.address}
+                              onChange={(e) => {
+                                setShippingAddresses(prev => prev.map(addr => 
+                                  addr.id === shippingAddr.id 
+                                    ? { ...addr, address: e.target.value }
+                                    : addr
+                                ))
+                              }}
+                              rows={2}
+                              className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                                isDark 
+                                  ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                              }`}
+                              placeholder="请输入收款地址"
+                            />
+                          ) : (
+                            <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                              isDark 
+                                ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                                : 'bg-white border-gray-300 text-gray-900'
+                            }`}>
+                              {shippingAddr.address || '未设置'}
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                              城市
+                            </label>
+                            {isEditingPersonalInfo ? (
+                              <input
+                                type="text"
+                                value={shippingAddr.city}
+                                onChange={(e) => {
+                                  setShippingAddresses(prev => prev.map(addr => 
+                                    addr.id === shippingAddr.id 
+                                      ? { ...addr, city: e.target.value }
+                                      : addr
+                                  ))
+                                }}
+                                className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                                  isDark 
+                                    ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                                }`}
+                                placeholder="城市"
+                              />
+                            ) : (
+                              <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                                isDark 
+                                  ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                                  : 'bg-white border-gray-300 text-gray-900'
+                              }`}>
+                                {shippingAddr.city || '未设置'}
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div>
+                            <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                              邮编
+                            </label>
+                            {isEditingPersonalInfo ? (
+                              <input
+                                type="text"
+                                value={shippingAddr.postalCode}
+                                onChange={(e) => {
+                                  setShippingAddresses(prev => prev.map(addr => 
+                                    addr.id === shippingAddr.id 
+                                      ? { ...addr, postalCode: e.target.value }
+                                      : addr
+                                  ))
+                                }}
+                                className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                                  isDark 
+                                    ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                                }`}
+                                placeholder="邮编"
+                              />
+                            ) : (
+                              <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                                isDark 
+                                  ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                                  : 'bg-white border-gray-300 text-gray-900'
+                              }`}>
+                                {shippingAddr.postalCode || '未设置'}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            国家/地区
+                          </label>
+                          {isEditingPersonalInfo ? (
+                            <select
+                              value={shippingAddr.country}
+                              onChange={(e) => {
+                                setShippingAddresses(prev => prev.map(addr => 
+                                  addr.id === shippingAddr.id 
+                                    ? { ...addr, country: e.target.value }
+                                    : addr
+                                ))
+                              }}
+                              className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                                isDark 
+                                  ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                                  : 'bg-white border-gray-300 text-gray-900'
+                              }`}
+                            >
+                              <option value="">请选择国家/地区</option>
+                              <option value="CN">中国</option>
+                              <option value="HK">香港</option>
+                              <option value="US">美国</option>
+                              <option value="GB">英国</option>
+                              <option value="DE">德国</option>
+                              <option value="FR">法国</option>
+                              <option value="JP">日本</option>
+                              <option value="SG">新加坡</option>
+                            </select>
+                          ) : (
+                            <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                              isDark 
+                                ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                                : 'bg-white border-gray-300 text-gray-900'
+                            }`}>
+                              {shippingAddr.country ? 
+                                {
+                                  "CN": "中国",
+                                  "HK": "香港", 
+                                  "US": "美国",
+                                  "GB": "英国",
+                                  "DE": "德国",
+                                  "FR": "法国",
+                                  "JP": "日本",
+                                  "SG": "新加坡"
+                                }[shippingAddr.country] || shippingAddr.country
+                                : '未设置'
+                              }
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             
