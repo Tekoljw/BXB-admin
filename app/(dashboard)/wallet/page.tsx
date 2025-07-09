@@ -5095,7 +5095,7 @@ export default function WalletPage() {
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-16 left-6">
+                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
                         <div className={`w-8 h-6 rounded border-2 ${
                           isDark ? 'border-gray-400 bg-gray-300' : 'border-gray-600 bg-gray-400'
                         } flex items-center justify-center`}>
@@ -5126,8 +5126,10 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    {/* 实体卡1操作按钮 */}
-                    <div className="mt-4">
+                    {/* 实体卡1操作按钮 - 小舌头设计 */}
+                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
+                      isDark ? 'bg-gray-700/80' : 'bg-gray-200/80'
+                    } backdrop-blur-sm`}>
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5199,7 +5201,7 @@ export default function WalletPage() {
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-16 left-6">
+                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
                         <div className="w-8 h-6 rounded border-2 border-yellow-300 bg-yellow-200 flex items-center justify-center">
                           <div className="w-4 h-3 rounded-sm bg-yellow-400"></div>
                         </div>
@@ -5226,8 +5228,10 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    {/* 实体卡2操作按钮 */}
-                    <div className="mt-4">
+                    {/* 实体卡2操作按钮 - 小舌头设计 */}
+                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
+                      isDark ? 'bg-purple-700/80' : 'bg-purple-200/80'
+                    } backdrop-blur-sm`}>
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5299,7 +5303,7 @@ export default function WalletPage() {
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-16 left-6">
+                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
                         <div className="w-8 h-6 rounded border-2 border-gray-400 bg-gray-300 flex items-center justify-center">
                           <div className="w-4 h-3 rounded-sm bg-gray-500"></div>
                         </div>
@@ -5326,8 +5330,10 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    {/* 实体卡3操作按钮 */}
-                    <div className="mt-4">
+                    {/* 实体卡3操作按钮 - 小舌头设计 */}
+                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
+                      isDark ? 'bg-gray-800/80' : 'bg-gray-600/80'
+                    } backdrop-blur-sm`}>
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5399,7 +5405,7 @@ export default function WalletPage() {
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-16 left-6">
+                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
                         <div className="w-8 h-6 rounded border-2 border-green-300 bg-green-200 flex items-center justify-center">
                           <div className="w-4 h-3 rounded-sm bg-green-400"></div>
                         </div>
@@ -5426,8 +5432,10 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    {/* 实体卡4操作按钮 */}
-                    <div className="mt-4">
+                    {/* 实体卡4操作按钮 - 小舌头设计 */}
+                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
+                      isDark ? 'bg-green-800/80' : 'bg-green-600/80'
+                    } backdrop-blur-sm`}>
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5499,7 +5507,7 @@ export default function WalletPage() {
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-16 left-6">
+                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
                         <div className="w-8 h-6 rounded border-2 border-blue-300 bg-blue-200 flex items-center justify-center">
                           <div className="w-4 h-3 rounded-sm bg-blue-400"></div>
                         </div>
@@ -5526,8 +5534,10 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    {/* 实体卡5操作按钮 */}
-                    <div className="mt-4">
+                    {/* 实体卡5操作按钮 - 小舌头设计 */}
+                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
+                      isDark ? 'bg-blue-800/80' : 'bg-blue-500/80'
+                    } backdrop-blur-sm`}>
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5599,7 +5609,7 @@ export default function WalletPage() {
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-16 left-6">
+                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
                         <div className="w-8 h-6 rounded border-2 border-red-300 bg-red-200 flex items-center justify-center">
                           <div className="w-4 h-3 rounded-sm bg-red-400"></div>
                         </div>
@@ -5626,8 +5636,10 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    {/* 实体卡6操作按钮 */}
-                    <div className="mt-4">
+                    {/* 实体卡6操作按钮 - 小舌头设计 */}
+                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
+                      isDark ? 'bg-red-800/80' : 'bg-red-500/80'
+                    } backdrop-blur-sm`}>
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5709,7 +5721,7 @@ export default function WalletPage() {
                         </div>
 
                         {/* 芯片图标 */}
-                        <div className="absolute top-16 left-6">
+                        <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
                           <div className="w-8 h-6 rounded border-2 border-gray-500 bg-gray-400 flex items-center justify-center">
                             <div className="w-4 h-3 rounded-sm bg-gray-600"></div>
                           </div>
@@ -5745,8 +5757,10 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    {/* 冻结实体卡操作按钮 */}
-                    <div className="mt-4">
+                    {/* 冻结实体卡操作按钮 - 小舌头设计 */}
+                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
+                      isDark ? 'bg-gray-700/80' : 'bg-gray-400/80'
+                    } backdrop-blur-sm`}>
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
