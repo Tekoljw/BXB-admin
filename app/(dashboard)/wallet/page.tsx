@@ -160,6 +160,14 @@ export default function WalletPage() {
   
   // OTC供应商选择状态
   const [selectedSupplier, setSelectedSupplier] = useState("MoonPay")
+  
+  // 卡片操作弹窗状态
+  const [showRechargeModal, setShowRechargeModal] = useState(false)
+  const [showNewCardModal, setShowNewCardModal] = useState(false)
+  const [showActivateModal, setShowActivateModal] = useState(false)
+  const [showCardTransferModal, setShowCardTransferModal] = useState(false)
+  const [showProfileModal, setShowProfileModal] = useState(false)
+  const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
 
   // 今日汇率 (示例汇率)
   const exchangeRates = {
@@ -5132,7 +5140,8 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("充值 for 白金卡")
+                            setSelectedCardInfo({ name: '白金卡', number: '**** **** **** 1234', type: 'physical' })
+                            setShowRechargeModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
@@ -5171,12 +5180,13 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("设置 for 白金卡")
+                            setSelectedCardInfo({ name: '白金卡', number: '**** **** **** 1234', type: 'physical' })
+                            setShowProfileModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
                           }`}
-                          title="设置"
+                          title="个人信息"
                         >
                           <Settings className="h-4 w-4" />
                         </button>
@@ -5232,7 +5242,8 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("充值 for 钻石卡")
+                            setSelectedCardInfo({ name: '钻石卡', number: '**** **** **** 5678', type: 'physical' })
+                            setShowRechargeModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
@@ -5271,12 +5282,13 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("设置 for 钻石卡")
+                            setSelectedCardInfo({ name: '钻石卡', number: '**** **** **** 5678', type: 'physical' })
+                            setShowProfileModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
                           }`}
-                          title="设置"
+                          title="个人信息"
                         >
                           <Settings className="h-4 w-4" />
                         </button>
@@ -5332,7 +5344,8 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("充值 for 黑金卡")
+                            setSelectedCardInfo({ name: '黑金卡', number: '**** **** **** 6789', type: 'physical' })
+                            setShowRechargeModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
@@ -5371,12 +5384,13 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("设置 for 黑金卡")
+                            setSelectedCardInfo({ name: '黑金卡', number: '**** **** **** 6789', type: 'physical' })
+                            setShowProfileModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
                           }`}
-                          title="设置"
+                          title="个人信息"
                         >
                           <Settings className="h-4 w-4" />
                         </button>
@@ -5432,7 +5446,8 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("充值 for 商务卡")
+                            setSelectedCardInfo({ name: '商务卡', number: '**** **** **** 7890', type: 'physical' })
+                            setShowRechargeModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
@@ -5471,12 +5486,13 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("设置 for 商务卡")
+                            setSelectedCardInfo({ name: '商务卡', number: '**** **** **** 7890', type: 'physical' })
+                            setShowProfileModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
                           }`}
-                          title="设置"
+                          title="个人信息"
                         >
                           <Settings className="h-4 w-4" />
                         </button>
@@ -5532,7 +5548,8 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("充值 for 学生卡")
+                            setSelectedCardInfo({ name: '学生卡', number: '**** **** **** 1234', type: 'physical' })
+                            setShowRechargeModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
@@ -5571,12 +5588,13 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("设置 for 学生卡")
+                            setSelectedCardInfo({ name: '学生卡', number: '**** **** **** 1234', type: 'physical' })
+                            setShowProfileModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
                           }`}
-                          title="设置"
+                          title="个人信息"
                         >
                           <Settings className="h-4 w-4" />
                         </button>
@@ -5632,7 +5650,8 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("充值 for 高级卡")
+                            setSelectedCardInfo({ name: '高级卡', number: '**** **** **** 9876', type: 'physical' })
+                            setShowRechargeModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
@@ -5671,12 +5690,13 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("设置 for 高级卡")
+                            setSelectedCardInfo({ name: '高级卡', number: '**** **** **** 9876', type: 'physical' })
+                            setShowProfileModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
                           }`}
-                          title="设置"
+                          title="个人信息"
                         >
                           <Settings className="h-4 w-4" />
                         </button>
@@ -5984,7 +6004,7 @@ export default function WalletPage() {
                 </Button>
                 
                 <Button 
-                  onClick={() => setShowVirtualCardApplication(true)}
+                  onClick={() => setShowNewCardModal(true)}
                   className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
                     selectedAction === "apply-new-card"
                       ? "bg-[#00D4AA] text-black"
@@ -6010,7 +6030,10 @@ export default function WalletPage() {
                 </Button>
                 
                 <Button 
-                  onClick={() => setSelectedAction("transfer")}
+                  onClick={() => {
+                    setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
+                    setShowCardTransferModal(true)
+                  }}
                   className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
                     selectedAction === "transfer"
                       ? "bg-[#00D4AA] text-black"
@@ -9875,6 +9898,524 @@ export default function WalletPage() {
                   </Button>
                 </>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 充值弹窗 */}
+      {showRechargeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setShowRechargeModal(false)}
+          />
+          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl`}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                卡片充值
+              </h3>
+              <button
+                onClick={() => setShowRechargeModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  充值卡片: {selectedCardInfo.name}
+                </label>
+                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  卡号: {selectedCardInfo.number}
+                </p>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  充值金额
+                </label>
+                <input
+                  type="number"
+                  placeholder="请输入充值金额"
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  充值方式
+                </label>
+                <select className={`w-full px-3 py-2 border rounded-lg ${
+                  isDark 
+                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}>
+                  <option>银行转账</option>
+                  <option>USDT充值</option>
+                  <option>支付宝</option>
+                  <option>微信支付</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowRechargeModal(false)}
+                className="flex-1"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowRechargeModal(false)
+                  alert("充值申请已提交")
+                }}
+                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+              >
+                确认充值
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 申请新卡弹窗 */}
+      {showNewCardModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setShowNewCardModal(false)}
+          />
+          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl`}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                申请新卡
+              </h3>
+              <button
+                onClick={() => setShowNewCardModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  卡片类型
+                </label>
+                <select className={`w-full px-3 py-2 border rounded-lg ${
+                  isDark 
+                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}>
+                  <option>虚拟卡</option>
+                  <option>实体卡</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  卡片等级
+                </label>
+                <select className={`w-full px-3 py-2 border rounded-lg ${
+                  isDark 
+                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}>
+                  <option>标准卡</option>
+                  <option>白金卡</option>
+                  <option>钻石卡</option>
+                  <option>黑金卡</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  持卡人姓名
+                </label>
+                <input
+                  type="text"
+                  placeholder="请输入持卡人姓名"
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  邮寄地址（实体卡）
+                </label>
+                <textarea
+                  placeholder="请输入邮寄地址"
+                  rows={3}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowNewCardModal(false)}
+                className="flex-1"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowNewCardModal(false)
+                  alert("新卡申请已提交")
+                }}
+                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+              >
+                提交申请
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 激活卡片弹窗 */}
+      {showActivateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setShowActivateModal(false)}
+          />
+          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl`}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                激活卡片
+              </h3>
+              <button
+                onClick={() => setShowActivateModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  卡片信息: {selectedCardInfo.name}
+                </label>
+                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  卡号: {selectedCardInfo.number}
+                </p>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  激活码
+                </label>
+                <input
+                  type="text"
+                  placeholder="请输入6位激活码"
+                  maxLength={6}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  设置PIN码
+                </label>
+                <input
+                  type="password"
+                  placeholder="请设置4位PIN码"
+                  maxLength={4}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  确认PIN码
+                </label>
+                <input
+                  type="password"
+                  placeholder="请再次输入PIN码"
+                  maxLength={4}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowActivateModal(false)}
+                className="flex-1"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowActivateModal(false)
+                  alert("卡片激活成功")
+                }}
+                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+              >
+                激活卡片
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 划款弹窗 */}
+      {showCardTransferModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setShowCardTransferModal(false)}
+          />
+          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl`}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                卡片划款
+              </h3>
+              <button
+                onClick={() => setShowCardTransferModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  转出卡片: {selectedCardInfo.name}
+                </label>
+                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  卡号: {selectedCardInfo.number}
+                </p>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  转入账户
+                </label>
+                <select className={`w-full px-3 py-2 border rounded-lg ${
+                  isDark 
+                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}>
+                  <option>现货账户</option>
+                  <option>合约账户</option>
+                  <option>理财账户</option>
+                  <option>担保账户</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  划款金额
+                </label>
+                <input
+                  type="number"
+                  placeholder="请输入划款金额"
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  交易密码
+                </label>
+                <input
+                  type="password"
+                  placeholder="请输入交易密码"
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowCardTransferModal(false)}
+                className="flex-1"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowCardTransferModal(false)
+                  alert("划款申请已提交")
+                }}
+                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+              >
+                确认划款
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 个人信息弹窗 */}
+      {showProfileModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setShowProfileModal(false)}
+          />
+          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl`}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                个人信息
+              </h3>
+              <button
+                onClick={() => setShowProfileModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  持卡人姓名
+                </label>
+                <input
+                  type="text"
+                  value={selectedCardInfo.name}
+                  readOnly
+                  className={`w-full px-3 py-2 border rounded-lg bg-gray-100 ${
+                    isDark 
+                      ? 'border-[#3a3d4a] text-gray-400' 
+                      : 'border-gray-300 text-gray-600'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  身份证号
+                </label>
+                <input
+                  type="text"
+                  placeholder="请输入身份证号"
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  手机号码
+                </label>
+                <input
+                  type="tel"
+                  placeholder="请输入手机号码"
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  邮箱地址
+                </label>
+                <input
+                  type="email"
+                  placeholder="请输入邮箱地址"
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  地址信息
+                </label>
+                <textarea
+                  placeholder="请输入详细地址"
+                  rows={3}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                />
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowProfileModal(false)}
+                className="flex-1"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowProfileModal(false)
+                  alert("个人信息已更新")
+                }}
+                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+              >
+                保存信息
+              </Button>
             </div>
           </div>
         </div>
