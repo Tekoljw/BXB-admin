@@ -5077,11 +5077,11 @@ export default function WalletPage() {
 
               {selectedUCardView === "physical" && (
                 <div className="grid gap-6" style={{
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
                   maxWidth: '100%'
                 }}>
                   {/* 实体卡1 - 白金卡 */}
-                  <div className="w-full min-w-[280px] max-w-[400px]">
+                  <div className="w-full min-w-[350px] max-w-[450px]">
                     <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
                       isDark ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'
                     } shadow-lg transition-all hover:shadow-xl`} style={{aspectRatio: '16/9'}}>
@@ -5091,6 +5091,17 @@ export default function WalletPage() {
                         <div className="flex items-center">
                           <div className="w-3 h-3 rounded-full bg-blue-500 -mr-0.5"></div>
                           <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        </div>
+                      </div>
+
+                      {/* 芯片图标 */}
+                      <div className="absolute top-16 left-6">
+                        <div className={`w-8 h-6 rounded border-2 ${
+                          isDark ? 'border-gray-400 bg-gray-300' : 'border-gray-600 bg-gray-400'
+                        } flex items-center justify-center`}>
+                          <div className={`w-4 h-3 rounded-sm ${
+                            isDark ? 'bg-gray-500' : 'bg-gray-600'
+                          }`}></div>
                         </div>
                       </div>
 
@@ -5174,7 +5185,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡2 - 钻石卡 */}
-                  <div className="w-full min-w-[280px] max-w-[400px]">
+                  <div className="w-full min-w-[350px] max-w-[450px]">
                     <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
                       isDark ? 'bg-gradient-to-br from-purple-800 to-purple-900' : 'bg-gradient-to-br from-purple-500 to-purple-600'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
@@ -5184,6 +5195,13 @@ export default function WalletPage() {
                         <div className="flex items-center">
                           <div className="w-3 h-3 rounded-full bg-yellow-400 -mr-0.5"></div>
                           <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                        </div>
+                      </div>
+
+                      {/* 芯片图标 */}
+                      <div className="absolute top-16 left-6">
+                        <div className="w-8 h-6 rounded border-2 border-yellow-300 bg-yellow-200 flex items-center justify-center">
+                          <div className="w-4 h-3 rounded-sm bg-yellow-400"></div>
                         </div>
                       </div>
 
@@ -5267,7 +5285,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡3 - 黑金卡 */}
-                  <div className="w-full min-w-[280px] max-w-[400px]">
+                  <div className="w-full min-w-[350px] max-w-[450px]">
                     <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
                       isDark ? 'bg-gradient-to-br from-gray-900 to-black' : 'bg-gradient-to-br from-gray-800 to-gray-900'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
@@ -5277,6 +5295,13 @@ export default function WalletPage() {
                         <div className="flex items-center">
                           <div className="w-3 h-3 rounded-full bg-gold -mr-0.5" style={{backgroundColor: '#FFD700'}}></div>
                           <div className="w-3 h-3 rounded-full bg-silver" style={{backgroundColor: '#C0C0C0'}}></div>
+                        </div>
+                      </div>
+
+                      {/* 芯片图标 */}
+                      <div className="absolute top-16 left-6">
+                        <div className="w-8 h-6 rounded border-2 border-gray-400 bg-gray-300 flex items-center justify-center">
+                          <div className="w-4 h-3 rounded-sm bg-gray-500"></div>
                         </div>
                       </div>
 
@@ -5360,7 +5385,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡4 - 商务卡 */}
-                  <div className="w-full min-w-[280px] max-w-[400px]">
+                  <div className="w-full min-w-[350px] max-w-[450px]">
                     <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
                       isDark ? 'bg-gradient-to-br from-green-800 to-green-900' : 'bg-gradient-to-br from-green-600 to-green-700'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
@@ -5370,6 +5395,13 @@ export default function WalletPage() {
                         <div className="flex items-center">
                           <div className="w-3 h-3 rounded-full bg-blue-400 -mr-0.5"></div>
                           <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                        </div>
+                      </div>
+
+                      {/* 芯片图标 */}
+                      <div className="absolute top-16 left-6">
+                        <div className="w-8 h-6 rounded border-2 border-green-300 bg-green-200 flex items-center justify-center">
+                          <div className="w-4 h-3 rounded-sm bg-green-400"></div>
                         </div>
                       </div>
 
@@ -5453,7 +5485,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡5 - 学生卡 */}
-                  <div className="w-full min-w-[280px] max-w-[400px]">
+                  <div className="w-full min-w-[350px] max-w-[450px]">
                     <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
                       isDark ? 'bg-gradient-to-br from-blue-800 to-blue-900' : 'bg-gradient-to-br from-blue-500 to-blue-600'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
@@ -5463,6 +5495,13 @@ export default function WalletPage() {
                         <div className="flex items-center">
                           <div className="w-3 h-3 rounded-full bg-cyan-400 -mr-0.5"></div>
                           <div className="w-3 h-3 rounded-full bg-blue-400"></div>
+                        </div>
+                      </div>
+
+                      {/* 芯片图标 */}
+                      <div className="absolute top-16 left-6">
+                        <div className="w-8 h-6 rounded border-2 border-blue-300 bg-blue-200 flex items-center justify-center">
+                          <div className="w-4 h-3 rounded-sm bg-blue-400"></div>
                         </div>
                       </div>
 
@@ -5546,7 +5585,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡6 - 高级卡 */}
-                  <div className="w-full min-w-[280px] max-w-[400px]">
+                  <div className="w-full min-w-[350px] max-w-[450px]">
                     <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
                       isDark ? 'bg-gradient-to-br from-red-800 to-red-900' : 'bg-gradient-to-br from-red-500 to-red-600'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
@@ -5556,6 +5595,13 @@ export default function WalletPage() {
                         <div className="flex items-center">
                           <div className="w-3 h-3 rounded-full bg-pink-400 -mr-0.5"></div>
                           <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                        </div>
+                      </div>
+
+                      {/* 芯片图标 */}
+                      <div className="absolute top-16 left-6">
+                        <div className="w-8 h-6 rounded border-2 border-red-300 bg-red-200 flex items-center justify-center">
+                          <div className="w-4 h-3 rounded-sm bg-red-400"></div>
                         </div>
                       </div>
 
@@ -5639,7 +5685,7 @@ export default function WalletPage() {
                   </div>
 
                   {/* 冻结状态实体卡 */}
-                  <div className="w-full min-w-[280px] max-w-[400px]">
+                  <div className="w-full min-w-[350px] max-w-[450px]">
                     <div className={`relative rounded-2xl p-4 sm:p-6 w-full ${
                       isDark ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-400 to-gray-500'
                     } shadow-lg text-white transition-all hover:shadow-xl`} style={{aspectRatio: '16/9'}}>
@@ -5659,6 +5705,13 @@ export default function WalletPage() {
                           <div className="flex items-center">
                             <div className="w-3 h-3 rounded-full bg-gray-400 -mr-0.5"></div>
                             <div className="w-3 h-3 rounded-full bg-gray-300"></div>
+                          </div>
+                        </div>
+
+                        {/* 芯片图标 */}
+                        <div className="absolute top-16 left-6">
+                          <div className="w-8 h-6 rounded border-2 border-gray-500 bg-gray-400 flex items-center justify-center">
+                            <div className="w-4 h-3 rounded-sm bg-gray-600"></div>
                           </div>
                         </div>
 
