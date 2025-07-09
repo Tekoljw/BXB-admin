@@ -11538,34 +11538,15 @@ export default function WalletPage() {
               <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 个人信息
               </h3>
-              <div className="flex items-center space-x-2">
-                {!isEditingPersonalInfo ? (
-                  <button
-                    onClick={() => setIsEditingPersonalInfo(true)}
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                    title="编辑"
-                  >
-                    <Edit2 className="h-5 w-5" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setIsEditingPersonalInfo(false)}
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                    title="取消编辑"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                )}
-                <button
-                  onClick={() => {
-                    setShowPersonalInfoModal(false)
-                    setIsEditingPersonalInfo(false)
-                  }}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
+              <button
+                onClick={() => {
+                  setShowPersonalInfoModal(false)
+                  setIsEditingPersonalInfo(false)
+                }}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
             </div>
             
             <div className="space-y-4">
@@ -11834,26 +11815,44 @@ export default function WalletPage() {
             
             {/* 底部按钮 */}
             <div className="flex space-x-3 mt-8">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowPersonalInfoModal(false)
-                  setIsEditingPersonalInfo(false)
-                }}
-                className="flex-1"
-              >
-                {isEditingPersonalInfo ? "取消" : "关闭"}
-              </Button>
-              {isEditingPersonalInfo && (
-                <Button
-                  onClick={() => {
-                    setIsEditingPersonalInfo(false)
-                    alert("个人信息已更新")
-                  }}
-                  className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
-                >
-                  保存信息
-                </Button>
+              {isEditingPersonalInfo ? (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsEditingPersonalInfo(false)}
+                    className="flex-1"
+                  >
+                    取消
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setIsEditingPersonalInfo(false)
+                      alert("个人信息已更新")
+                    }}
+                    className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                  >
+                    保存信息
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowPersonalInfoModal(false)
+                      setIsEditingPersonalInfo(false)
+                    }}
+                    className="flex-1"
+                  >
+                    关闭
+                  </Button>
+                  <Button
+                    onClick={() => setIsEditingPersonalInfo(true)}
+                    className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                  >
+                    编辑
+                  </Button>
+                </>
               )}
             </div>
           </div>
