@@ -174,11 +174,12 @@ export default function WalletPage() {
   // 激活卡片多步骤状态
   const [activateStep, setActivateStep] = useState(1)
   const [activateCardType, setActivateCardType] = useState<"virtual" | "physical">("virtual")
-  const [activateCardNumber, setActivateCardNumber] = useState("")
   const [activationData, setActivationData] = useState({
-    activationCode: "",
-    pin: "",
-    confirmPin: ""
+    cardNumber: "",
+    expiryDate: "",
+    cvv: "",
+    bankPassword: "",
+    confirmBankPassword: ""
   })
   
   // 申请新卡多步骤状态
@@ -234,11 +235,12 @@ export default function WalletPage() {
   const resetActivateModal = () => {
     setActivateStep(1)
     setActivateCardType("virtual")
-    setActivateCardNumber("")
     setActivationData({
-      activationCode: "",
-      pin: "",
-      confirmPin: ""
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
+      bankPassword: "",
+      confirmBankPassword: ""
     })
   }
   
@@ -6011,20 +6013,20 @@ export default function WalletPage() {
               {/* 虚拟卡 */}
               <div 
                 className="relative cursor-pointer"
-                onClick={() => setSelectedCardType("virtual")}
+                onClick={() => setSelectedUCardView("virtual")}
               >
                 <div className={`w-full rounded-2xl p-8 relative transition-all duration-300 ${
                   isDark 
                     ? "bg-gradient-to-br from-[#2a2d3a] to-[#1e1f2e]" 
                     : "bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0]"
                 } ${
-                  selectedCardType === "virtual" 
+                  selectedUCardView === "virtual" 
                     ? "shadow-lg ring-2 ring-[#00D4AA] ring-opacity-40" 
                     : "shadow-lg hover:shadow-xl"
                 }`}>
                   
                   {/* 选中指示器 */}
-                  {selectedCardType === "virtual" && (
+                  {selectedUCardView === "virtual" && (
                     <div className="absolute top-4 right-4">
                       <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center">
                         <Check className="h-4 w-4 text-white" />
@@ -6088,20 +6090,20 @@ export default function WalletPage() {
               {/* 实体卡 */}
               <div 
                 className="relative cursor-pointer"
-                onClick={() => setSelectedCardType("physical")}
+                onClick={() => setSelectedUCardView("physical")}
               >
                 <div className={`w-full rounded-2xl p-8 relative transition-all duration-300 ${
                   isDark 
                     ? "bg-gradient-to-br from-[#2a2d3a] to-[#1e1f2e]" 
                     : "bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0]"
                 } ${
-                  selectedCardType === "physical" 
+                  selectedUCardView === "physical" 
                     ? "shadow-lg ring-2 ring-[#00D4AA] ring-opacity-40" 
                     : "shadow-lg hover:shadow-xl"
                 }`}>
                   
                   {/* 选中指示器 */}
-                  {selectedCardType === "physical" && (
+                  {selectedUCardView === "physical" && (
                     <div className="absolute top-4 right-4">
                       <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center">
                         <Check className="h-4 w-4 text-white" />
@@ -6164,7 +6166,7 @@ export default function WalletPage() {
             </div>
 
             {/* 功能按钮区域 */}
-            {selectedCardType === "virtual" ? (
+            {selectedUCardView === "virtual" ? (
               /* 虚拟卡按钮 */
               <div className="grid grid-cols-7 gap-3">
                 <Button 
@@ -10912,7 +10914,7 @@ export default function WalletPage() {
                   激活卡片
                 </h3>
                 <p className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
-                  步骤 {activateStep} / 3
+                  步骤 {activateStep} / 4
                 </p>
               </div>
               <button
@@ -10928,7 +10930,7 @@ export default function WalletPage() {
             
             {/* 步骤指示器 */}
             <div className="flex items-center justify-center mb-8">
-              {[1, 2, 3].map((step) => (
+              {[1, 2, 3, 4].map((step) => (
                 <div key={step} className="flex items-center">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                     step <= activateStep
@@ -10939,7 +10941,7 @@ export default function WalletPage() {
                   }`}>
                     {step}
                   </div>
-                  {step < 3 && (
+                  {step < 4 && (
                     <div className={`w-12 h-0.5 mx-2 ${
                       step < activateStep ? 'bg-[#00D4AA]' : theme === "dark" ? 'bg-[#3a3d4a]' : 'bg-gray-300'
                     }`} />
@@ -11000,70 +11002,190 @@ export default function WalletPage() {
                 </div>
               )}
               
-              {/* 第二步：选择要绑定的卡号 */}
+              {/* 第二步：填写卡片信息 */}
               {activateStep === 2 && (
                 <div className="space-y-6">
                   <div>
                     <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                      选择要激活的{activateCardType === "virtual" ? "虚拟卡" : "实体卡"}
+                      填写{activateCardType === "virtual" ? "虚拟卡" : "实体卡"}信息
                     </label>
-                    <div className="space-y-3">
-                      {/* 根据选择的卡片类型显示相应的卡片列表 */}
-                      {(activateCardType === "virtual" ? [
-                        { id: "vc001", name: "购物专用卡", number: "**** 1234", status: "未激活" },
-                        { id: "vc002", name: "订阅付费卡", number: "**** 5678", status: "未激活" },
-                        { id: "vc003", name: "海外消费卡", number: "**** 9012", status: "未激活" }
-                      ] : [
-                        { id: "pc001", name: "Visa经典卡", number: "**** 3456", status: "未激活" },
-                        { id: "pc002", name: "万事达金卡", number: "**** 7890", status: "未激活" }
-                      ]).map((card) => (
-                        <div
-                          key={card.id}
-                          onClick={() => setActivateCardNumber(card.number)}
-                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                            activateCardNumber === card.number
-                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
-                              : theme === "dark"
-                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
-                                : 'border-gray-200 hover:border-[#00D4AA]/50'
+                    <div className="space-y-4">
+                      <div>
+                        <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                          卡号
+                        </label>
+                        <input
+                          type="text"
+                          value={activationData.cardNumber}
+                          onChange={(e) => setActivationData(prev => ({ ...prev, cardNumber: e.target.value }))}
+                          placeholder="请输入16位卡号"
+                          maxLength={19}
+                          className={`w-full px-3 py-2 border rounded-lg ${
+                            theme === "dark"
+                              ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                              : 'bg-white border-gray-300 text-gray-900'
                           }`}
-                        >
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <div className={`font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                                {card.name}
-                              </div>
-                              <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
-                                {card.number}
-                              </div>
-                            </div>
-                            <div className={`text-xs px-2 py-1 rounded ${
-                              card.status === "未激活" 
-                                ? theme === "dark" ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-800'
-                                : theme === "dark" ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-800'
-                            }`}>
-                              {card.status}
-                            </div>
-                          </div>
+                          onInput={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            let value = target.value.replace(/\s/g, '').replace(/[^\d]/g, '');
+                            value = value.substring(0, 16);
+                            value = value.replace(/(.{4})/g, '$1 ').trim();
+                            target.value = value;
+                            setActivationData(prev => ({ ...prev, cardNumber: value }));
+                          }}
+                        />
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                            有效期
+                          </label>
+                          <input
+                            type="text"
+                            value={activationData.expiryDate}
+                            onChange={(e) => setActivationData(prev => ({ ...prev, expiryDate: e.target.value }))}
+                            placeholder="MM/YY"
+                            maxLength={5}
+                            className={`w-full px-3 py-2 border rounded-lg ${
+                              theme === "dark"
+                                ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                                : 'bg-white border-gray-300 text-gray-900'
+                            }`}
+                            onInput={(e) => {
+                              const target = e.target as HTMLInputElement;
+                              let value = target.value.replace(/[^\d]/g, '');
+                              if (value.length >= 2) {
+                                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                              }
+                              target.value = value;
+                              setActivationData(prev => ({ ...prev, expiryDate: value }));
+                            }}
+                          />
                         </div>
-                      ))}
+                        
+                        <div>
+                          <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                            CVV
+                          </label>
+                          <input
+                            type="text"
+                            value={activationData.cvv}
+                            onChange={(e) => setActivationData(prev => ({ ...prev, cvv: e.target.value }))}
+                            placeholder="3位安全码"
+                            maxLength={3}
+                            className={`w-full px-3 py-2 border rounded-lg ${
+                              theme === "dark"
+                                ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                                : 'bg-white border-gray-300 text-gray-900'
+                            }`}
+                            onInput={(e) => {
+                              const target = e.target as HTMLInputElement;
+                              target.value = target.value.replace(/[^\d]/g, '');
+                            }}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   
-                  {activateCardNumber && (
-                    <div className={`p-4 rounded-lg ${
-                      theme === "dark" ? 'bg-green-900/20 border border-green-800' : 'bg-green-50 border border-green-200'
-                    }`}>
-                      <div className={`text-sm ${theme === "dark" ? 'text-green-400' : 'text-green-800'}`}>
-                        已选择卡片：{activateCardNumber}
-                      </div>
+                  <div className={`p-4 rounded-lg ${
+                    theme === "dark" ? 'bg-yellow-900/20 border border-yellow-800' : 'bg-yellow-50 border border-yellow-200'
+                  }`}>
+                    <div className={`text-sm ${theme === "dark" ? 'text-yellow-400' : 'text-yellow-800'}`}>
+                      <strong>安全提示：</strong>
+                      <ul className="mt-2 space-y-1">
+                        <li>• 请确保卡片信息准确无误</li>
+                        <li>• 卡号和CVV将用于验证卡片有效性</li>
+                        <li>• 您的信息将被加密保存</li>
+                      </ul>
                     </div>
-                  )}
+                  </div>
                 </div>
               )}
               
-              {/* 第三步：提交激活 */}
+              {/* 第三步：设置银行卡密码 */}
               {activateStep === 3 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      设置银行卡密码
+                    </label>
+                    <div className="space-y-4">
+                      <div>
+                        <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                          设置密码
+                        </label>
+                        <input
+                          type="password"
+                          value={activationData.bankPassword}
+                          onChange={(e) => setActivationData(prev => ({ ...prev, bankPassword: e.target.value }))}
+                          placeholder="请设置6位数字密码"
+                          maxLength={6}
+                          className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${
+                            theme === "dark"
+                              ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                              : 'bg-white border-gray-300 text-gray-900'
+                          }`}
+                          onInput={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            target.value = target.value.replace(/[^\d]/g, '');
+                          }}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                          确认密码
+                        </label>
+                        <input
+                          type="password"
+                          value={activationData.confirmBankPassword}
+                          onChange={(e) => setActivationData(prev => ({ ...prev, confirmBankPassword: e.target.value }))}
+                          placeholder="请再次输入密码"
+                          maxLength={6}
+                          className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${
+                            theme === "dark"
+                              ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                              : 'bg-white border-gray-300 text-gray-900'
+                          }`}
+                          onInput={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            target.value = target.value.replace(/[^\d]/g, '');
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {activationData.bankPassword && activationData.confirmBankPassword && activationData.bankPassword !== activationData.confirmBankPassword && (
+                    <div className={`p-3 rounded-lg ${
+                      theme === "dark" ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'
+                    }`}>
+                      <div className={`text-sm ${theme === "dark" ? 'text-red-400' : 'text-red-800'}`}>
+                        两次输入的密码不一致，请重新输入
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className={`p-4 rounded-lg ${
+                    theme === "dark" ? 'bg-yellow-900/20 border border-yellow-800' : 'bg-yellow-50 border border-yellow-200'
+                  }`}>
+                    <div className={`text-sm ${theme === "dark" ? 'text-yellow-400' : 'text-yellow-800'}`}>
+                      <strong>密码安全提示：</strong>
+                      <ul className="mt-2 space-y-1">
+                        <li>• 密码用于卡片支付验证</li>
+                        <li>• 请勿使用连续数字或重复数字</li>
+                        <li>• 请妥善保管，切勿告知他人</li>
+                        <li>• 连续输错3次将锁定卡片</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* 第四步：提交激活 */}
+              {activateStep === 4 && (
                 <div className="space-y-6">
                   <div className={`p-6 rounded-lg ${theme === "dark" ? 'bg-[#252842]/50' : 'bg-gray-50'}`}>
                     <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
@@ -11079,7 +11201,19 @@ export default function WalletPage() {
                       <div className="flex justify-between">
                         <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>卡号：</span>
                         <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                          {activateCardNumber}
+                          {activationData.cardNumber || "未填写"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>有效期：</span>
+                        <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                          {activationData.expiryDate || "未填写"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>密码状态：</span>
+                        <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                          {activationData.bankPassword ? "已设置" : "未设置"}
                         </span>
                       </div>
                       <div className="flex justify-between">
@@ -11092,13 +11226,13 @@ export default function WalletPage() {
                   </div>
                   
                   <div className={`p-4 rounded-lg ${
-                    theme === "dark" ? 'bg-yellow-900/20 border border-yellow-800' : 'bg-yellow-50 border border-yellow-200'
+                    theme === "dark" ? 'bg-green-900/20 border border-green-800' : 'bg-green-50 border border-green-200'
                   }`}>
-                    <div className={`text-sm ${theme === "dark" ? 'text-yellow-400' : 'text-yellow-800'}`}>
-                      <strong>温馨提示：</strong>
+                    <div className={`text-sm ${theme === "dark" ? 'text-green-400' : 'text-green-800'}`}>
+                      <strong>即将完成激活：</strong>
                       <ul className="mt-2 space-y-1">
-                        <li>• 点击"确认激活"后卡片将立即生效</li>
-                        <li>• 激活后请妥善保管卡片信息</li>
+                        <li>• 点击"完成激活"后卡片将立即生效</li>
+                        <li>• 激活后可在"我的卡片"中查看和管理</li>
                         <li>• 如有疑问请联系客服</li>
                       </ul>
                     </div>
@@ -11125,21 +11259,36 @@ export default function WalletPage() {
               </Button>
               <Button
                 onClick={() => {
-                  if (activateStep === 3) {
-                    if (activateCardType && activateCardNumber) {
+                  if (activateStep === 4) {
+                    if (activateCardType && activationData.cardNumber && activationData.expiryDate && 
+                        activationData.cvv && activationData.bankPassword && 
+                        activationData.bankPassword === activationData.confirmBankPassword) {
                       setShowActivateModal(false)
                       resetActivateModal()
                       alert("🎉 卡片激活成功！现在可以正常使用了")
                     } else {
-                      alert("请选择卡片类型和卡号")
+                      alert("请完善所有必填信息")
                     }
                   } else {
+                    // 验证当前步骤
+                    if (activateStep === 1 && !activateCardType) {
+                      alert("请选择卡片类型")
+                      return
+                    }
+                    if (activateStep === 2 && (!activationData.cardNumber || !activationData.expiryDate || !activationData.cvv)) {
+                      alert("请完善卡片信息")
+                      return
+                    }
+                    if (activateStep === 3 && (!activationData.bankPassword || activationData.bankPassword !== activationData.confirmBankPassword)) {
+                      alert("请正确设置银行卡密码")
+                      return
+                    }
                     setActivateStep(prev => prev + 1)
                   }
                 }}
                 className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
               >
-                {activateStep === 3 ? "确认激活" : "下一步"}
+                {activateStep === 4 ? "完成激活" : "下一步"}
               </Button>
             </div>
           </div>
