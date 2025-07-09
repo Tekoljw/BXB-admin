@@ -168,6 +168,11 @@ export default function WalletPage() {
   const [showCardTransferModal, setShowCardTransferModal] = useState(false)
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
+  
+  // 充值弹窗状态
+  const [rechargeCardType, setRechargeCardType] = useState<"virtual" | "physical">("virtual")
+  const [selectedRechargeCard, setSelectedRechargeCard] = useState("shopping")
+  const [rechargeAmount, setRechargeAmount] = useState("")
 
   // 今日汇率 (示例汇率)
   const exchangeRates = {
@@ -9942,44 +9947,128 @@ export default function WalletPage() {
             </div>
             
             <div className="space-y-4">
+              {/* 1. 卡类型选择页签 */}
+              <div>
+                <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  选择卡类型
+                </label>
+                <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+                  <div
+                    className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
+                    style={{
+                      width: '50%',
+                      left: rechargeCardType === "virtual" ? '4px' : '50%'
+                    }}
+                  />
+                  <button
+                    className={`relative z-10 flex-1 text-sm font-medium py-2 transition-all duration-300 ${
+                      rechargeCardType === "virtual"
+                        ? isDark ? "text-black" : "text-white"
+                        : isDark ? "text-gray-300" : "text-gray-700"
+                    }`}
+                    onClick={() => setRechargeCardType("virtual")}
+                  >
+                    虚拟卡
+                  </button>
+                  <button
+                    className={`relative z-10 flex-1 text-sm font-medium py-2 transition-all duration-300 ${
+                      rechargeCardType === "physical"
+                        ? isDark ? "text-black" : "text-white"
+                        : isDark ? "text-gray-300" : "text-gray-700"
+                    }`}
+                    onClick={() => setRechargeCardType("physical")}
+                  >
+                    实体卡
+                  </button>
+                </div>
+              </div>
+
+              {/* 2. 卡片选择 */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  充值卡片: {selectedCardInfo.name}
+                  选择卡片
                 </label>
-                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  卡号: {selectedCardInfo.number}
-                </p>
+                <select 
+                  value={selectedRechargeCard}
+                  onChange={(e) => setSelectedRechargeCard(e.target.value)}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                >
+                  {rechargeCardType === "virtual" ? (
+                    <>
+                      <option value="shopping">购物专用卡 - **** 1122</option>
+                      <option value="travel">旅行专用卡 - **** 3344</option>
+                      <option value="entertainment">娱乐专用卡 - **** 5432</option>
+                      <option value="investment">投资理财卡 - **** 9999</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="platinum">白金卡 - **** 1234</option>
+                      <option value="gold">金卡 - **** 5678</option>
+                      <option value="diamond">钻石卡 - **** 9012</option>
+                    </>
+                  )}
+                </select>
               </div>
               
+              {/* 3. USDT金额输入 */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  充值金额
+                  充值金额 (USDT)
                 </label>
                 <input
                   type="number"
-                  placeholder="请输入充值金额"
+                  value={rechargeAmount}
+                  onChange={(e) => setRechargeAmount(e.target.value)}
+                  placeholder="请输入USDT金额"
                   className={`w-full px-3 py-2 border rounded-lg ${
                     isDark 
                       ? 'bg-[#252842] border-[#3a3d4a] text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
                   }`}
                 />
+                {rechargeAmount && (
+                  <div className={`mt-2 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    到账后余额: {(parseFloat(rechargeAmount || '0') + 3456.78).toFixed(2)} USDT
+                    <div className="flex space-x-4 mt-1">
+                      <span>≈ ${(parseFloat(rechargeAmount || '0') + 3456.78).toFixed(2)} 美金</span>
+                      <span>≈ ${((parseFloat(rechargeAmount || '0') + 3456.78) * 7.8).toFixed(2)} 港币</span>
+                      <span>≈ €{((parseFloat(rechargeAmount || '0') + 3456.78) * 0.92).toFixed(2)} 欧元</span>
+                    </div>
+                  </div>
+                )}
               </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  充值方式
-                </label>
-                <select className={`w-full px-3 py-2 border rounded-lg ${
-                  isDark 
-                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}>
-                  <option>银行转账</option>
-                  <option>USDT充值</option>
-                  <option>支付宝</option>
-                  <option>微信支付</option>
-                </select>
+
+              {/* 4. 账户余额显示 */}
+              <div className={`flex items-center justify-between p-3 rounded-lg ${
+                isDark ? 'bg-[#252842]/50' : 'bg-gray-50'
+              }`}>
+                <div>
+                  <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    当前账户余额
+                  </div>
+                  <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    3,456.78 USDT
+                  </div>
+                </div>
+                
+                {/* 5. 划款按钮 */}
+                <button
+                  onClick={() => {
+                    setShowRechargeModal(false)
+                    handleTransferClick()
+                  }}
+                  className={`px-3 py-1.5 text-xs rounded-lg border transition-colors ${
+                    isDark
+                      ? "border-white text-white hover:bg-white hover:text-black"
+                      : "border-black text-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  划款
+                </button>
               </div>
             </div>
             
