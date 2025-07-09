@@ -169,6 +169,7 @@ export default function WalletPage() {
   const [showActivateModal, setShowActivateModal] = useState(false)
   const [showCardTransferModal, setShowCardTransferModal] = useState(false)
   const [showProfileModal, setShowProfileModal] = useState(false)
+  const [showPersonalInfoModal, setShowPersonalInfoModal] = useState(false) // 个人信息弹窗
   const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
   
   // 激活卡片多步骤状态
@@ -6208,21 +6209,31 @@ export default function WalletPage() {
                   <span className="text-xs">如何使用虚拟卡</span>
                 </Button>
                 
-                <Button 
-                  onClick={() => {
-                    setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
-                    setShowCardTransferModal(true)
-                  }}
-                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
-                    selectedAction === "transfer"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <ArrowLeftRight className="h-5 w-5" />
-                  <span className="text-xs">划款</span>
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={() => {
+                      setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
+                      setShowCardTransferModal(true)
+                    }}
+                    className={`flex-1 h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
+                      selectedAction === "transfer"
+                        ? "bg-[#00D4AA] text-black"
+                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <ArrowLeftRight className="h-5 w-5" />
+                    <span className="text-xs">划款</span>
+                  </Button>
+                  
+                  <Button 
+                    onClick={() => setShowPersonalInfoModal(true)}
+                    className={`w-16 h-16 flex items-center justify-center transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800`}
+                    variant="outline"
+                  >
+                    <User className="h-5 w-5" />
+                  </Button>
+                </div>
                 
                 {/* 仅图标按钮 */}
                 <Button 
@@ -11507,6 +11518,223 @@ export default function WalletPage() {
               <Button
                 onClick={() => {
                   setShowProfileModal(false)
+                  alert("个人信息已更新")
+                }}
+                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+              >
+                保存信息
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 个人信息弹窗 */}
+      {showPersonalInfoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setShowPersonalInfoModal(false)}
+          />
+          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl max-h-[80vh] overflow-y-auto`}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                个人信息管理
+              </h3>
+              <button
+                onClick={() => setShowPersonalInfoModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  持卡人姓名
+                </label>
+                <input
+                  type="text"
+                  value={cardApplicationInfo.holderName}
+                  onChange={(e) => setCardApplicationInfo(prev => ({
+                    ...prev,
+                    holderName: e.target.value
+                  }))}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                  }`}
+                  placeholder="请输入持卡人姓名"
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  手机号码
+                </label>
+                <input
+                  type="tel"
+                  value={cardApplicationInfo.phoneNumber}
+                  onChange={(e) => setCardApplicationInfo(prev => ({
+                    ...prev,
+                    phoneNumber: e.target.value
+                  }))}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                  }`}
+                  placeholder="请输入手机号码"
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  电子邮箱
+                </label>
+                <input
+                  type="email"
+                  value={cardApplicationInfo.email}
+                  onChange={(e) => setCardApplicationInfo(prev => ({
+                    ...prev,
+                    email: e.target.value
+                  }))}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                  }`}
+                  placeholder="请输入电子邮箱"
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  身份证号
+                </label>
+                <input
+                  type="text"
+                  value={cardApplicationInfo.idNumber}
+                  onChange={(e) => setCardApplicationInfo(prev => ({
+                    ...prev,
+                    idNumber: e.target.value
+                  }))}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                  }`}
+                  placeholder="请输入身份证号"
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  详细地址
+                </label>
+                <textarea
+                  value={cardApplicationInfo.address}
+                  onChange={(e) => setCardApplicationInfo(prev => ({
+                    ...prev,
+                    address: e.target.value
+                  }))}
+                  rows={3}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                  }`}
+                  placeholder="请输入详细地址"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    城市
+                  </label>
+                  <input
+                    type="text"
+                    value={cardApplicationInfo.city}
+                    onChange={(e) => setCardApplicationInfo(prev => ({
+                      ...prev,
+                      city: e.target.value
+                    }))}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                    placeholder="城市"
+                  />
+                </div>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    邮政编码
+                  </label>
+                  <input
+                    type="text"
+                    value={cardApplicationInfo.postalCode}
+                    onChange={(e) => setCardApplicationInfo(prev => ({
+                      ...prev,
+                      postalCode: e.target.value
+                    }))}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                    placeholder="邮编"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  国家/地区
+                </label>
+                <select
+                  value={cardApplicationInfo.country}
+                  onChange={(e) => setCardApplicationInfo(prev => ({
+                    ...prev,
+                    country: e.target.value
+                  }))}
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                >
+                  <option value="">请选择国家/地区</option>
+                  <option value="CN">中国</option>
+                  <option value="HK">香港</option>
+                  <option value="US">美国</option>
+                  <option value="GB">英国</option>
+                  <option value="DE">德国</option>
+                  <option value="FR">法国</option>
+                  <option value="JP">日本</option>
+                  <option value="SG">新加坡</option>
+                </select>
+              </div>
+            </div>
+            
+            {/* 底部按钮 */}
+            <div className="flex space-x-3 mt-8">
+              <Button
+                variant="outline"
+                onClick={() => setShowPersonalInfoModal(false)}
+                className="flex-1"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowPersonalInfoModal(false)
                   alert("个人信息已更新")
                 }}
                 className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
