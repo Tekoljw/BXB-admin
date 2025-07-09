@@ -10601,7 +10601,7 @@ export default function WalletPage() {
               )}
               
               {/* 第四步：填写开卡信息 */}
-              {(newCardStep === 4) || (newCardStep === 3 && newCardType === "physical")} && (
+              {newCardStep === 4} && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -10752,7 +10752,7 @@ export default function WalletPage() {
               )}
               
               {/* 第五步：确认提交 */}
-              {(newCardStep === 5) || (newCardStep === 4 && newCardType === "physical")} && (
+              {newCardStep === 5} && (
                 <div className="space-y-6">
                   <div>
                     <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
@@ -10833,7 +10833,12 @@ export default function WalletPage() {
                 variant="outline"
                 onClick={() => {
                   if (newCardStep > 1) {
-                    setNewCardStep(prev => prev - 1)
+                    // 实体卡从第4步返回第2步，跳过第3步
+                    if (newCardType === "physical" && newCardStep === 4) {
+                      setNewCardStep(2)
+                    } else {
+                      setNewCardStep(prev => prev - 1)
+                    }
                   } else {
                     setShowNewCardModal(false)
                     resetNewCardModal()
@@ -10845,15 +10850,13 @@ export default function WalletPage() {
               </Button>
               <Button
                 onClick={() => {
-                  if (
-                    (newCardStep === 5) || 
-                    (newCardStep === 4 && newCardType === "physical")
-                  ) {
+                  if (newCardStep === 5) {
                     setShowNewCardModal(false)
                     resetNewCardModal()
                     alert("新卡申请已提交，请耐心等待审核")
                   } else {
-                    if (newCardType === "physical" && newCardStep === 3) {
+                    // 实体卡从第2步跳到第4步，虚拟卡正常进行
+                    if (newCardType === "physical" && newCardStep === 2) {
                       setNewCardStep(4)
                     } else {
                       setNewCardStep(prev => prev + 1)
@@ -10862,10 +10865,7 @@ export default function WalletPage() {
                 }}
                 className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
               >
-                {(newCardStep === 5) || (newCardStep === 4 && newCardType === "physical")
-                  ? "提交申请"
-                  : "下一步"
-                }
+                {newCardStep === 5 ? "提交申请" : "下一步"}
               </Button>
             </div>
           </div>
