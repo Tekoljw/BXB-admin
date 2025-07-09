@@ -11863,9 +11863,7 @@ export default function WalletPage() {
                 
                 <div className="space-y-4">
                   {shippingAddresses.map((shippingAddr, index) => (
-                    <div key={shippingAddr.id} className={`p-4 border rounded-lg ${
-                      isDark ? 'border-[#3a3d4a] bg-[#1a1d29]' : 'border-gray-200 bg-gray-50'
-                    }`}>
+                    <div key={shippingAddr.id} className="space-y-3">
                       {isEditingPersonalInfo && shippingAddresses.length > 1 && (
                         <div className="flex justify-end mb-3">
                           <button
