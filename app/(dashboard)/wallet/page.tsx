@@ -4427,6 +4427,11 @@ export default function WalletPage() {
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
+                  onClick={() => {
+                    console.log("顶部充值按钮被点击")
+                    setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
+                    setShowRechargeModal(true)
+                  }}
                   className="px-4 py-2 bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90 transition-all duration-200"
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -4434,6 +4439,10 @@ export default function WalletPage() {
                 </Button>
                 <Button
                   variant="outline"
+                  onClick={() => {
+                    console.log("顶部申请新卡按钮被点击")
+                    setShowNewCardModal(true)
+                  }}
                   className={`px-4 py-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
@@ -4445,6 +4454,11 @@ export default function WalletPage() {
                 </Button>
                 <Button
                   variant="outline"
+                  onClick={() => {
+                    console.log("顶部激活卡片按钮被点击")
+                    setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
+                    setShowActivateModal(true)
+                  }}
                   className={`px-4 py-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
