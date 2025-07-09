@@ -171,6 +171,16 @@ export default function WalletPage() {
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
   
+  // 激活卡片多步骤状态
+  const [activateStep, setActivateStep] = useState(1)
+  const [activationData, setActivationData] = useState({
+    activationCode: "",
+    pin: "",
+    confirmPin: "",
+    phoneVerification: "",
+    emailVerification: ""
+  })
+  
   // 申请新卡多步骤状态
   const [newCardStep, setNewCardStep] = useState(1)
   const [newCardType, setNewCardType] = useState<"virtual" | "physical">("virtual")
@@ -217,6 +227,18 @@ export default function WalletPage() {
       city: "",
       postalCode: "",
       country: ""
+    })
+  }
+  
+  // 重置激活卡片弹窗状态
+  const resetActivateModal = () => {
+    setActivateStep(1)
+    setActivationData({
+      activationCode: "",
+      pin: "",
+      confirmPin: "",
+      phoneVerification: "",
+      emailVerification: ""
     })
   }
   
@@ -10877,98 +10899,296 @@ export default function WalletPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div 
             className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => setShowActivateModal(false)}
+            onClick={() => {
+              setShowActivateModal(false)
+              resetActivateModal()
+            }}
           />
-          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl`}>
+          <div className={`relative w-full max-w-2xl mx-4 p-6 rounded-xl ${
+            theme === "dark" ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl max-h-[90vh] overflow-y-auto`}>
             <div className="flex justify-between items-center mb-6">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                激活卡片
-              </h3>
+              <div>
+                <h3 className={`text-lg font-semibold ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                  激活卡片
+                </h3>
+                <p className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
+                  步骤 {activateStep} / 4
+                </p>
+              </div>
               <button
-                onClick={() => setShowActivateModal(false)}
+                onClick={() => {
+                  setShowActivateModal(false)
+                  resetActivateModal()
+                }}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             
-            <div className="space-y-4">
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  卡片信息: {selectedCardInfo.name}
-                </label>
-                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  卡号: {selectedCardInfo.number}
-                </p>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  激活码
-                </label>
-                <input
-                  type="text"
-                  placeholder="请输入6位激活码"
-                  maxLength={6}
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  设置PIN码
-                </label>
-                <input
-                  type="password"
-                  placeholder="请设置4位PIN码"
-                  maxLength={4}
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  确认PIN码
-                </label>
-                <input
-                  type="password"
-                  placeholder="请再次输入PIN码"
-                  maxLength={4}
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
+            {/* 步骤指示器 */}
+            <div className="flex items-center justify-center mb-8">
+              {[1, 2, 3, 4].map((step) => (
+                <div key={step} className="flex items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                    step <= activateStep
+                      ? 'bg-[#00D4AA] text-white'
+                      : theme === "dark" 
+                        ? 'bg-[#252842] text-gray-400 border border-[#3a3d4a]'
+                        : 'bg-gray-100 text-gray-400 border border-gray-300'
+                  }`}>
+                    {step}
+                  </div>
+                  {step < 4 && (
+                    <div className={`w-12 h-0.5 mx-2 ${
+                      step < activateStep ? 'bg-[#00D4AA]' : theme === "dark" ? 'bg-[#3a3d4a]' : 'bg-gray-300'
+                    }`} />
+                  )}
+                </div>
+              ))}
             </div>
             
-            <div className="flex space-x-3 mt-6">
+            {/* 步骤内容 */}
+            <div className="space-y-6">
+              {/* 第一步：卡片信息确认 */}
+              {activateStep === 1 && (
+                <div className="space-y-6">
+                  <div className={`p-6 rounded-lg ${theme === "dark" ? 'bg-[#252842]/50' : 'bg-gray-50'}`}>
+                    <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                      确认卡片信息
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>卡片名称：</span>
+                        <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                          {selectedCardInfo.name}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>卡号：</span>
+                        <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                          {selectedCardInfo.number}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>卡片类型：</span>
+                        <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                          {selectedCardInfo.type === "virtual" ? "虚拟卡" : "实体卡"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className={`p-4 rounded-lg ${
+                    theme === "dark" ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'
+                  }`}>
+                    <div className={`text-sm ${theme === "dark" ? 'text-blue-400' : 'text-blue-800'}`}>
+                      <strong>激活须知：</strong>
+                      <ul className="mt-2 space-y-1">
+                        <li>• 请确保卡片信息正确无误</li>
+                        <li>• 激活过程需要验证手机号和邮箱</li>
+                        <li>• 请准备好6位激活码（已发送至注册邮箱）</li>
+                        <li>• 激活后将设置4位PIN码用于日常使用</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* 第二步：输入激活码 */}
+              {activateStep === 2 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      输入激活码
+                    </label>
+                    <input
+                      type="text"
+                      value={activationData.activationCode}
+                      onChange={(e) => setActivationData(prev => ({ ...prev, activationCode: e.target.value }))}
+                      placeholder="请输入6位激活码"
+                      maxLength={6}
+                      className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${
+                        theme === "dark"
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                    <p className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      激活码已发送至您的注册邮箱，请查收
+                    </p>
+                  </div>
+                  
+                  <div className="flex justify-center">
+                    <button
+                      className={`text-sm ${theme === "dark" ? 'text-[#00D4AA]' : 'text-[#00D4AA]'} hover:underline`}
+                      onClick={() => alert("激活码重发成功，请查收邮箱")}
+                    >
+                      没收到激活码？重新发送
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              {/* 第三步：手机和邮箱验证 */}
+              {activateStep === 3 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      手机验证码
+                    </label>
+                    <div className="flex space-x-3">
+                      <input
+                        type="text"
+                        value={activationData.phoneVerification}
+                        onChange={(e) => setActivationData(prev => ({ ...prev, phoneVerification: e.target.value }))}
+                        placeholder="请输入6位验证码"
+                        maxLength={6}
+                        className={`flex-1 px-3 py-2 border rounded-lg ${
+                          theme === "dark"
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                      <Button
+                        variant="outline"
+                        onClick={() => alert("验证码已发送")}
+                        className="whitespace-nowrap"
+                      >
+                        发送验证码
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      邮箱验证码
+                    </label>
+                    <div className="flex space-x-3">
+                      <input
+                        type="text"
+                        value={activationData.emailVerification}
+                        onChange={(e) => setActivationData(prev => ({ ...prev, emailVerification: e.target.value }))}
+                        placeholder="请输入6位验证码"
+                        maxLength={6}
+                        className={`flex-1 px-3 py-2 border rounded-lg ${
+                          theme === "dark"
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                      <Button
+                        variant="outline"
+                        onClick={() => alert("验证码已发送")}
+                        className="whitespace-nowrap"
+                      >
+                        发送验证码
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* 第四步：设置PIN码 */}
+              {activateStep === 4 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      设置PIN码
+                    </label>
+                    <input
+                      type="password"
+                      value={activationData.pin}
+                      onChange={(e) => setActivationData(prev => ({ ...prev, pin: e.target.value }))}
+                      placeholder="请设置4位PIN码"
+                      maxLength={4}
+                      className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${
+                        theme === "dark"
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      确认PIN码
+                    </label>
+                    <input
+                      type="password"
+                      value={activationData.confirmPin}
+                      onChange={(e) => setActivationData(prev => ({ ...prev, confirmPin: e.target.value }))}
+                      placeholder="请再次输入PIN码"
+                      maxLength={4}
+                      className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${
+                        theme === "dark"
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                  
+                  {activationData.pin && activationData.confirmPin && activationData.pin !== activationData.confirmPin && (
+                    <div className={`p-3 rounded-lg ${
+                      theme === "dark" ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'
+                    }`}>
+                      <div className={`text-sm ${theme === "dark" ? 'text-red-400' : 'text-red-800'}`}>
+                        两次输入的PIN码不一致，请重新输入
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className={`p-4 rounded-lg ${
+                    theme === "dark" ? 'bg-yellow-900/20 border border-yellow-800' : 'bg-yellow-50 border border-yellow-200'
+                  }`}>
+                    <div className={`text-sm ${theme === "dark" ? 'text-yellow-400' : 'text-yellow-800'}`}>
+                      <strong>PIN码安全提示：</strong>
+                      <ul className="mt-2 space-y-1">
+                        <li>• PIN码用于卡片支付验证</li>
+                        <li>• 请勿使用连续数字或重复数字</li>
+                        <li>• 请妥善保管，切勿告知他人</li>
+                        <li>• 连续输错3次将锁定卡片</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* 底部按钮 */}
+            <div className="flex space-x-3 mt-8">
               <Button
                 variant="outline"
-                onClick={() => setShowActivateModal(false)}
+                onClick={() => {
+                  if (activateStep > 1) {
+                    setActivateStep(prev => prev - 1)
+                  } else {
+                    setShowActivateModal(false)
+                    resetActivateModal()
+                  }
+                }}
                 className="flex-1"
               >
-                取消
+                {activateStep > 1 ? "上一步" : "取消"}
               </Button>
               <Button
                 onClick={() => {
-                  setShowActivateModal(false)
-                  alert("卡片激活成功")
+                  if (activateStep === 4) {
+                    if (activationData.pin && activationData.confirmPin && activationData.pin === activationData.confirmPin) {
+                      setShowActivateModal(false)
+                      resetActivateModal()
+                      alert("🎉 卡片激活成功！现在可以正常使用了")
+                    } else {
+                      alert("请正确设置PIN码")
+                    }
+                  } else {
+                    setActivateStep(prev => prev + 1)
+                  }
                 }}
                 className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
               >
-                激活卡片
+                {activateStep === 4 ? "完成激活" : "下一步"}
               </Button>
             </div>
           </div>
