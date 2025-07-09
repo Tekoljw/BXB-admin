@@ -49,6 +49,7 @@ import {
   CheckCircle,
   Calendar,
   User,
+  Camera,
   Briefcase,
   Rocket,
   MessageCircle,
@@ -170,6 +171,23 @@ export default function WalletPage() {
   const [showCardTransferModal, setShowCardTransferModal] = useState(false)
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
+  
+  // 个人信息弹窗状态
+  const [showPersonalInfoModal, setShowPersonalInfoModal] = useState(false)
+  const [personalInfo, setPersonalInfo] = useState({
+    avatar: "",
+    fullName: "",
+    phone: "",
+    email: "",
+    idType: "身份证",
+    idNumber: "",
+    address: "",
+    city: "",
+    postalCode: "",
+    country: "中国",
+    emergencyContact: "",
+    emergencyPhone: ""
+  })
   
   // 激活卡片多步骤状态
   const [activateStep, setActivateStep] = useState(1)
@@ -6226,15 +6244,15 @@ export default function WalletPage() {
                 
                 {/* 仅图标按钮 */}
                 <Button 
-                  onClick={() => setSelectedAction("fund-records")}
+                  onClick={() => setShowPersonalInfoModal(true)}
                   className={`h-16 flex items-center justify-center transition-all duration-200 ${
-                    selectedAction === "fund-records"
+                    selectedAction === "personal-info"
                       ? "bg-[#00D4AA] text-black"
                       : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                   }`}
                   variant="outline"
                 >
-                  <Wallet className="h-5 w-5" />
+                  <User className="h-5 w-5" />
                 </Button>
                 
                 <Button 
@@ -11397,6 +11415,314 @@ export default function WalletPage() {
       )}
 
       {/* 个人信息弹窗 */}
+      {showPersonalInfoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setShowPersonalInfoModal(false)}
+          />
+          <div className={`relative w-full max-w-2xl mx-4 p-6 rounded-xl ${
+            theme === "dark" ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl max-h-[90vh] overflow-y-auto`}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className={`text-xl font-semibold ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                个人信息管理
+              </h3>
+              <button
+                onClick={() => setShowPersonalInfoModal(false)}
+                className={`p-2 rounded-lg transition-colors ${
+                  theme === "dark" ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                }`}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            {/* 头像区域 */}
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                <div className={`w-24 h-24 rounded-full overflow-hidden ${
+                  theme === "dark" ? 'bg-gray-700' : 'bg-gray-200'
+                } flex items-center justify-center`}>
+                  {personalInfo.avatar ? (
+                    <img src={personalInfo.avatar} alt="头像" className="w-full h-full object-cover" />
+                  ) : (
+                    <User className={`h-12 w-12 ${theme === "dark" ? 'text-gray-400' : 'text-gray-500'}`} />
+                  )}
+                </div>
+                <button className="absolute bottom-0 right-0 w-8 h-8 bg-[#00D4AA] rounded-full flex items-center justify-center text-white hover:bg-[#00D4AA]/90 transition-colors">
+                  <Camera className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* 基本信息 */}
+              <div className="space-y-4">
+                <h4 className={`text-lg font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'} mb-4`}>
+                  基本信息
+                </h4>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                    姓名 *
+                  </label>
+                  <input
+                    type="text"
+                    value={personalInfo.fullName}
+                    onChange={(e) => setPersonalInfo(prev => ({ ...prev, fullName: e.target.value }))}
+                    placeholder="请输入真实姓名"
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      theme === "dark" 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  />
+                </div>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                    手机号码 *
+                  </label>
+                  <input
+                    type="tel"
+                    value={personalInfo.phone}
+                    onChange={(e) => setPersonalInfo(prev => ({ ...prev, phone: e.target.value }))}
+                    placeholder="请输入手机号码"
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      theme === "dark" 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  />
+                </div>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                    邮箱地址 *
+                  </label>
+                  <input
+                    type="email"
+                    value={personalInfo.email}
+                    onChange={(e) => setPersonalInfo(prev => ({ ...prev, email: e.target.value }))}
+                    placeholder="请输入邮箱地址"
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      theme === "dark" 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      证件类型
+                    </label>
+                    <select
+                      value={personalInfo.idType}
+                      onChange={(e) => setPersonalInfo(prev => ({ ...prev, idType: e.target.value }))}
+                      className={`w-full px-3 py-2 border rounded-lg ${
+                        theme === "dark" 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    >
+                      <option value="身份证">身份证</option>
+                      <option value="护照">护照</option>
+                      <option value="港澳通行证">港澳通行证</option>
+                      <option value="台胞证">台胞证</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      证件号码 *
+                    </label>
+                    <input
+                      type="text"
+                      value={personalInfo.idNumber}
+                      onChange={(e) => setPersonalInfo(prev => ({ ...prev, idNumber: e.target.value }))}
+                      placeholder="请输入证件号码"
+                      className={`w-full px-3 py-2 border rounded-lg ${
+                        theme === "dark" 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {/* 地址信息 */}
+              <div className="space-y-4">
+                <h4 className={`text-lg font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'} mb-4`}>
+                  地址信息
+                </h4>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                    国家/地区
+                  </label>
+                  <select
+                    value={personalInfo.country}
+                    onChange={(e) => setPersonalInfo(prev => ({ ...prev, country: e.target.value }))}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      theme === "dark" 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  >
+                    <option value="中国">中国</option>
+                    <option value="香港">香港</option>
+                    <option value="澳门">澳门</option>
+                    <option value="台湾">台湾</option>
+                    <option value="美国">美国</option>
+                    <option value="加拿大">加拿大</option>
+                    <option value="英国">英国</option>
+                    <option value="新加坡">新加坡</option>
+                    <option value="其他">其他</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                    详细地址
+                  </label>
+                  <textarea
+                    value={personalInfo.address}
+                    onChange={(e) => setPersonalInfo(prev => ({ ...prev, address: e.target.value }))}
+                    placeholder="请输入详细地址"
+                    rows={3}
+                    className={`w-full px-3 py-2 border rounded-lg resize-none ${
+                      theme === "dark" 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      城市
+                    </label>
+                    <input
+                      type="text"
+                      value={personalInfo.city}
+                      onChange={(e) => setPersonalInfo(prev => ({ ...prev, city: e.target.value }))}
+                      placeholder="请输入城市"
+                      className={`w-full px-3 py-2 border rounded-lg ${
+                        theme === "dark" 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      邮政编码
+                    </label>
+                    <input
+                      type="text"
+                      value={personalInfo.postalCode}
+                      onChange={(e) => setPersonalInfo(prev => ({ ...prev, postalCode: e.target.value }))}
+                      placeholder="请输入邮政编码"
+                      className={`w-full px-3 py-2 border rounded-lg ${
+                        theme === "dark" 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <h5 className={`text-md font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                    紧急联系人（可选）
+                  </h5>
+                  
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      联系人姓名
+                    </label>
+                    <input
+                      type="text"
+                      value={personalInfo.emergencyContact}
+                      onChange={(e) => setPersonalInfo(prev => ({ ...prev, emergencyContact: e.target.value }))}
+                      placeholder="请输入紧急联系人姓名"
+                      className={`w-full px-3 py-2 border rounded-lg ${
+                        theme === "dark" 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      联系人电话
+                    </label>
+                    <input
+                      type="tel"
+                      value={personalInfo.emergencyPhone}
+                      onChange={(e) => setPersonalInfo(prev => ({ ...prev, emergencyPhone: e.target.value }))}
+                      placeholder="请输入紧急联系人电话"
+                      className={`w-full px-3 py-2 border rounded-lg ${
+                        theme === "dark" 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* 安全提示 */}
+            <div className={`mt-6 p-4 rounded-lg ${
+              theme === "dark" ? 'bg-yellow-900/20 border border-yellow-800' : 'bg-yellow-50 border border-yellow-200'
+            }`}>
+              <div className={`text-sm ${theme === "dark" ? 'text-yellow-400' : 'text-yellow-800'}`}>
+                <strong>安全提示：</strong>
+                <ul className="mt-2 space-y-1">
+                  <li>• 请确保个人信息真实有效，以便账户安全验证</li>
+                  <li>• 标有 * 的为必填项，请务必完整填写</li>
+                  <li>• 个人信息将严格保密，仅用于身份验证和风控</li>
+                  <li>• 信息修改后可能需要重新进行身份认证</li>
+                </ul>
+              </div>
+            </div>
+            
+            {/* 底部按钮 */}
+            <div className="flex space-x-3 mt-8">
+              <Button
+                variant="outline"
+                onClick={() => setShowPersonalInfoModal(false)}
+                className="flex-1"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  if (!personalInfo.fullName || !personalInfo.phone || !personalInfo.email || !personalInfo.idNumber) {
+                    alert("请完善必填信息")
+                    return
+                  }
+                  setShowPersonalInfoModal(false)
+                  alert("个人信息保存成功")
+                }}
+                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+              >
+                保存信息
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 简单个人信息弹窗（保留原有功能） */}
       {showProfileModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div 
@@ -11408,7 +11734,7 @@ export default function WalletPage() {
           } shadow-2xl`}>
             <div className="flex justify-between items-center mb-6">
               <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                个人信息
+                卡片信息
               </h3>
               <button
                 onClick={() => setShowProfileModal(false)}
@@ -11421,7 +11747,7 @@ export default function WalletPage() {
             <div className="space-y-4">
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  持卡人姓名
+                  卡片名称
                 </label>
                 <input
                   type="text"
@@ -11437,45 +11763,16 @@ export default function WalletPage() {
               
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  身份证号
+                  卡号
                 </label>
                 <input
                   type="text"
-                  placeholder="请输入身份证号"
-                  className={`w-full px-3 py-2 border rounded-lg ${
+                  value={selectedCardInfo.number}
+                  readOnly
+                  className={`w-full px-3 py-2 border rounded-lg bg-gray-100 ${
                     isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  手机号码
-                </label>
-                <input
-                  type="tel"
-                  placeholder="请输入手机号码"
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  邮箱地址
-                </label>
-                <input
-                  type="email"
-                  placeholder="请输入邮箱地址"
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
+                      ? 'border-[#3a3d4a] text-gray-400' 
+                      : 'border-gray-300 text-gray-600'
                   }`}
                 />
               </div>
