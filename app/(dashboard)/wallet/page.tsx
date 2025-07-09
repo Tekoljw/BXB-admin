@@ -5098,6 +5098,44 @@ export default function WalletPage() {
                         </div>
                       </div>
                     </div>
+
+                    {/* 申请新卡空白卡片 */}
+                    <div 
+                      className={`w-full min-w-[280px] max-w-[400px] border rounded-lg transition-all cursor-pointer hover:shadow-lg ${
+                        isDark ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' : 'bg-white border-gray-200 hover:border-gray-300'
+                      }`}
+                      onClick={() => {
+                        setSelectedCardInfo({ name: '申请新卡', number: '', type: 'virtual' })
+                        setShowNewCardModal(true)
+                      }}
+                    >
+                      {/* 空白卡片区域 */}
+                      <div className={`relative p-3 rounded-t-lg ${
+                        isDark ? 'bg-gray-700/50' : 'bg-gray-50'
+                      }`} style={{aspectRatio: '24/9'}}>
+                        <div className="h-full flex items-center justify-center">
+                          <div className="text-center">
+                            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${
+                              isDark ? 'bg-gray-600' : 'bg-gray-200'
+                            }`}>
+                              <Plus className={`h-6 w-6 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                            </div>
+                            <div className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                              申请新卡
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* 底部信息区域 */}
+                      <div className="px-4 py-3">
+                        <div className="text-center">
+                          <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                            点击申请新的虚拟卡片
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -5840,6 +5878,36 @@ export default function WalletPage() {
                         >
                           <Settings className="h-4 w-4" />
                         </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 申请新卡空白卡片 - 实体卡 */}
+                  <div className="w-full min-w-[350px] max-w-[450px]">
+                    <div 
+                      className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 cursor-pointer transition-all hover:shadow-xl ${
+                        isDark ? 'bg-gray-800/50 border-2 border-gray-700 hover:border-gray-600' : 'bg-white border-2 border-gray-200 hover:border-gray-300'
+                      }`} 
+                      style={{aspectRatio: '16/9'}}
+                      onClick={() => {
+                        setSelectedCardInfo({ name: '申请新卡', number: '', type: 'physical' })
+                        setShowNewCardModal(true)
+                      }}
+                    >
+                      <div className="h-full flex items-center justify-center">
+                        <div className="text-center">
+                          <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
+                            isDark ? 'bg-gray-700' : 'bg-gray-100'
+                          }`}>
+                            <Plus className={`h-8 w-8 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                          </div>
+                          <div className={`text-lg font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                            申请新卡
+                          </div>
+                          <div className={`text-sm mt-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                            点击申请新的实体卡片
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
