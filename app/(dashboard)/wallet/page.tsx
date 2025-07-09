@@ -145,20 +145,7 @@ export default function WalletPage() {
     }
   }, [selectedCurrencies, currencyTab])
   
-  // 点击外部关闭下拉菜单
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCardDropdown) {
-        const target = event.target as HTMLElement
-        if (!target.closest('.card-dropdown')) {
-          setShowCardDropdown(false)
-        }
-      }
-    }
-    
-    document.addEventListener('click', handleClickOutside)
-    return () => document.removeEventListener('click', handleClickOutside)
-  }, [showCardDropdown])
+
   
   // 代付备用金充值弹窗状态
   const [showStandbyRechargeModal, setShowStandbyRechargeModal] = useState(false)
@@ -189,6 +176,21 @@ export default function WalletPage() {
   const [selectedRechargeCard, setSelectedRechargeCard] = useState("shopping")
   const [rechargeAmount, setRechargeAmount] = useState("")
   const [showCardDropdown, setShowCardDropdown] = useState(false)
+  
+  // 点击外部关闭下拉菜单
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showCardDropdown) {
+        const target = event.target as HTMLElement
+        if (!target.closest('.card-dropdown')) {
+          setShowCardDropdown(false)
+        }
+      }
+    }
+    
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [showCardDropdown])
 
   // 今日汇率 (示例汇率)
   const exchangeRates = {
@@ -10077,7 +10079,7 @@ export default function WalletPage() {
                     type="button"
                     onClick={() => setShowCardDropdown(!showCardDropdown)}
                     className={`w-full px-3 py-2 border rounded-lg text-left flex items-center justify-between transition-all duration-200 ${
-                      isDark 
+                      theme === "dark" 
                         ? 'bg-[#252842] border-[#3a3d4a] text-white hover:border-[#4a4d5a]' 
                         : 'bg-white border-gray-300 text-gray-900 hover:border-gray-400'
                     } ${showCardDropdown ? 'ring-2 ring-[#00D4AA] ring-opacity-50' : ''}`}
@@ -10100,7 +10102,7 @@ export default function WalletPage() {
                   {/* 下拉菜单 */}
                   {showCardDropdown && (
                     <div className={`absolute z-10 w-full mt-1 rounded-lg shadow-lg border animate-in fade-in-0 slide-in-from-top-2 duration-200 ${
-                      isDark ? 'bg-[#252842] border-[#3a3d4a]' : 'bg-white border-gray-200'
+                      theme === "dark" ? 'bg-[#252842] border-[#3a3d4a]' : 'bg-white border-gray-200'
                     }`}>
                       <div className="py-1 max-h-60 overflow-y-auto">
                         {rechargeCardType === "virtual" ? (
@@ -10111,7 +10113,7 @@ export default function WalletPage() {
                                 setShowCardDropdown(false)
                               }}
                               className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                isDark 
+                                theme === "dark" 
                                   ? 'text-white hover:bg-white' 
                                   : 'text-gray-900 hover:bg-gray-900'
                               } ${selectedRechargeCard === "shopping" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
@@ -10127,7 +10129,7 @@ export default function WalletPage() {
                                 setShowCardDropdown(false)
                               }}
                               className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                isDark 
+                                theme === "dark" 
                                   ? 'text-white hover:bg-white' 
                                   : 'text-gray-900 hover:bg-gray-900'
                               } ${selectedRechargeCard === "travel" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
@@ -10143,7 +10145,7 @@ export default function WalletPage() {
                                 setShowCardDropdown(false)
                               }}
                               className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                isDark 
+                                theme === "dark" 
                                   ? 'text-white hover:bg-white' 
                                   : 'text-gray-900 hover:bg-gray-900'
                               } ${selectedRechargeCard === "entertainment" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
@@ -10159,7 +10161,7 @@ export default function WalletPage() {
                                 setShowCardDropdown(false)
                               }}
                               className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                isDark 
+                                theme === "dark" 
                                   ? 'text-white hover:bg-white' 
                                   : 'text-gray-900 hover:bg-gray-900'
                               } ${selectedRechargeCard === "investment" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
@@ -10178,7 +10180,7 @@ export default function WalletPage() {
                                 setShowCardDropdown(false)
                               }}
                               className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                isDark 
+                                theme === "dark" 
                                   ? 'text-white hover:bg-white' 
                                   : 'text-gray-900 hover:bg-gray-900'
                               } ${selectedRechargeCard === "platinum" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
@@ -10194,7 +10196,7 @@ export default function WalletPage() {
                                 setShowCardDropdown(false)
                               }}
                               className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                isDark 
+                                theme === "dark" 
                                   ? 'text-white hover:bg-white' 
                                   : 'text-gray-900 hover:bg-gray-900'
                               } ${selectedRechargeCard === "gold" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
@@ -10210,7 +10212,7 @@ export default function WalletPage() {
                                 setShowCardDropdown(false)
                               }}
                               className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                isDark 
+                                theme === "dark" 
                                   ? 'text-white hover:bg-white' 
                                   : 'text-gray-900 hover:bg-gray-900'
                               } ${selectedRechargeCard === "diamond" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
