@@ -11534,7 +11534,7 @@ export default function WalletPage() {
               setIsEditingPersonalInfo(false)
             }}
           />
-          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
+          <div className={`relative w-full max-w-4xl mx-4 p-6 rounded-xl ${
             isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
           } shadow-2xl max-h-[80vh] overflow-y-auto`}>
             <div className="flex justify-between items-center mb-6">
@@ -11673,8 +11673,12 @@ export default function WalletPage() {
                 )}
               </div>
               
-              {/* 居住地址 */}
-              <div>
+              {/* 地址信息 - 两列布局 */}
+              <div className="grid grid-cols-2 gap-6">
+                {/* 居住地址 */}
+                <div className={`p-4 border rounded-lg ${
+                  isDark ? 'border-[#3a3d4a] bg-[#1a1d29]' : 'border-gray-200 bg-gray-50'
+                }`}>
                 <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   居住地址
                 </label>
@@ -11710,8 +11714,8 @@ export default function WalletPage() {
                   ) : (
                     <div className={`w-full px-3 py-2 border rounded-lg ${
                       isDark 
-                        ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                        : 'bg-gray-50 border-gray-300 text-gray-900'
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
                     }`}>
                       {cardApplicationInfo.country ? 
                         {
@@ -11754,8 +11758,8 @@ export default function WalletPage() {
                     ) : (
                       <div className={`w-full px-3 py-2 border rounded-lg ${
                         isDark 
-                          ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                          : 'bg-gray-50 border-gray-300 text-gray-900'
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
                       }`}>
                         {cardApplicationInfo.city || '未设置'}
                       </div>
@@ -11784,8 +11788,8 @@ export default function WalletPage() {
                     ) : (
                       <div className={`w-full px-3 py-2 border rounded-lg ${
                         isDark 
-                          ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                          : 'bg-gray-50 border-gray-300 text-gray-900'
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
                       }`}>
                         {cardApplicationInfo.postalCode || '未设置'}
                       </div>
@@ -11816,8 +11820,8 @@ export default function WalletPage() {
                   ) : (
                     <div className={`w-full px-3 py-2 border rounded-lg ${
                       isDark 
-                        ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                        : 'bg-gray-50 border-gray-300 text-gray-900'
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
                     }`}>
                       {cardApplicationInfo.address || '未设置'}
                     </div>
