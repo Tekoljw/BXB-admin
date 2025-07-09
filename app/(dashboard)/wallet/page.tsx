@@ -171,6 +171,55 @@ export default function WalletPage() {
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
   
+  // 申请新卡多步骤状态
+  const [newCardStep, setNewCardStep] = useState(1)
+  const [newCardType, setNewCardType] = useState<"virtual" | "physical">("virtual")
+  const [newCardBrand, setNewCardBrand] = useState<"visa" | "master">("visa")
+  const [newCardRegion, setNewCardRegion] = useState<"europe" | "hongkong" | "usa">("europe")
+  const [needMainlandChina, setNeedMainlandChina] = useState(false)
+  const [selectedScenarios, setSelectedScenarios] = useState<string[]>([])
+  const [cardApplicationInfo, setCardApplicationInfo] = useState({
+    holderName: "",
+    phoneNumber: "",
+    email: "",
+    idNumber: "",
+    address: "",
+    city: "",
+    postalCode: "",
+    country: ""
+  })
+  
+  // 50个付款场景选项
+  const paymentScenarios = [
+    "Amazon", "AWS", "Google Pay", "Apple Pay", "PayPal", "Alipay", "WeChat Pay", "Microsoft", 
+    "Netflix", "Spotify", "YouTube Premium", "Adobe Creative Cloud", "Dropbox", "iCloud", 
+    "OneDrive", "Zoom", "Slack", "Discord Nitro", "Twitch", "Steam", "Epic Games", "PlayStation", 
+    "Xbox Live", "Nintendo eShop", "App Store", "Google Play", "Uber", "Lyft", "DoorDash", 
+    "Grubhub", "Airbnb", "Booking.com", "Expedia", "Skyscanner", "Facebook Ads", "Instagram Ads", 
+    "Twitter Ads", "TikTok Ads", "LinkedIn Ads", "Shopify", "WooCommerce", "Etsy", "eBay", 
+    "AliExpress", "Wish", "Temu", "Stripe", "Square", "Venmo", "Revolut"
+  ]
+  
+  // 重置申请新卡弹窗状态
+  const resetNewCardModal = () => {
+    setNewCardStep(1)
+    setNewCardType("virtual")
+    setNewCardBrand("visa")
+    setNewCardRegion("europe")
+    setNeedMainlandChina(false)
+    setSelectedScenarios([])
+    setCardApplicationInfo({
+      holderName: "",
+      phoneNumber: "",
+      email: "",
+      idNumber: "",
+      address: "",
+      city: "",
+      postalCode: "",
+      country: ""
+    })
+  }
+  
   // 充值弹窗状态
   const [rechargeCardType, setRechargeCardType] = useState<"virtual" | "physical">("virtual")
   const [selectedRechargeCard, setSelectedRechargeCard] = useState("shopping")
@@ -10315,101 +10364,508 @@ export default function WalletPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div 
             className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => setShowNewCardModal(false)}
+            onClick={() => {
+              setShowNewCardModal(false)
+              resetNewCardModal()
+            }}
           />
-          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl`}>
+          <div className={`relative w-full max-w-2xl mx-4 p-6 rounded-xl ${
+            theme === "dark" ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl max-h-[90vh] overflow-y-auto`}>
             <div className="flex justify-between items-center mb-6">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                申请新卡
-              </h3>
+              <div>
+                <h3 className={`text-lg font-semibold ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                  申请新卡
+                </h3>
+                <p className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
+                  步骤 {newCardStep} / 5
+                </p>
+              </div>
               <button
-                onClick={() => setShowNewCardModal(false)}
+                onClick={() => {
+                  setShowNewCardModal(false)
+                  resetNewCardModal()
+                }}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             
-            <div className="space-y-4">
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  卡片类型
-                </label>
-                <select className={`w-full px-3 py-2 border rounded-lg ${
-                  isDark 
-                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}>
-                  <option>虚拟卡</option>
-                  <option>实体卡</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  卡片等级
-                </label>
-                <select className={`w-full px-3 py-2 border rounded-lg ${
-                  isDark 
-                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}>
-                  <option>标准卡</option>
-                  <option>白金卡</option>
-                  <option>钻石卡</option>
-                  <option>黑金卡</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  持卡人姓名
-                </label>
-                <input
-                  type="text"
-                  placeholder="请输入持卡人姓名"
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  邮寄地址（实体卡）
-                </label>
-                <textarea
-                  placeholder="请输入邮寄地址"
-                  rows={3}
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
+            {/* 步骤指示器 */}
+            <div className="flex items-center justify-center mb-8">
+              {[1, 2, 3, 4, 5].map((step) => (
+                <div key={step} className="flex items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                    step <= newCardStep
+                      ? 'bg-[#00D4AA] text-white'
+                      : theme === "dark" 
+                        ? 'bg-[#252842] text-gray-400 border border-[#3a3d4a]'
+                        : 'bg-gray-100 text-gray-400 border border-gray-300'
+                  }`}>
+                    {step}
+                  </div>
+                  {step < 5 && (
+                    <div className={`w-12 h-0.5 mx-2 ${
+                      step < newCardStep ? 'bg-[#00D4AA]' : theme === "dark" ? 'bg-[#3a3d4a]' : 'bg-gray-300'
+                    }`} />
+                  )}
+                </div>
+              ))}
             </div>
             
-            <div className="flex space-x-3 mt-6">
+            {/* 步骤内容 */}
+            <div className="space-y-6">
+              {/* 第一步：选择卡片类型、品牌和地区 */}
+              {newCardStep === 1 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      卡片类型
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { value: "virtual", label: "虚拟卡", desc: "即时发卡，在线支付" },
+                        { value: "physical", label: "实体卡", desc: "实体卡片，全球通用" }
+                      ].map((type) => (
+                        <div
+                          key={type.value}
+                          onClick={() => setNewCardType(type.value as "virtual" | "physical")}
+                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                            newCardType === type.value
+                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                              : theme === "dark"
+                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
+                                : 'border-gray-200 hover:border-[#00D4AA]/50'
+                          }`}
+                        >
+                          <div className={`font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                            {type.label}
+                          </div>
+                          <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
+                            {type.desc}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      卡片品牌
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { value: "visa", label: "Visa", desc: "全球通用，支付范围广" },
+                        { value: "master", label: "Mastercard", desc: "国际品牌，安全可靠" }
+                      ].map((brand) => (
+                        <div
+                          key={brand.value}
+                          onClick={() => setNewCardBrand(brand.value as "visa" | "master")}
+                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                            newCardBrand === brand.value
+                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                              : theme === "dark"
+                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
+                                : 'border-gray-200 hover:border-[#00D4AA]/50'
+                          }`}
+                        >
+                          <div className={`font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                            {brand.label}
+                          </div>
+                          <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
+                            {brand.desc}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      发卡地区
+                    </label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { value: "europe", label: "欧洲", desc: "欧盟地区发卡" },
+                        { value: "hongkong", label: "香港", desc: "香港地区发卡" },
+                        { value: "usa", label: "美国", desc: "美国地区发卡" }
+                      ].map((region) => (
+                        <div
+                          key={region.value}
+                          onClick={() => setNewCardRegion(region.value as "europe" | "hongkong" | "usa")}
+                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                            newCardRegion === region.value
+                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                              : theme === "dark"
+                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
+                                : 'border-gray-200 hover:border-[#00D4AA]/50'
+                          }`}
+                        >
+                          <div className={`font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                            {region.label}
+                          </div>
+                          <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
+                            {region.desc}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* 第二步：是否需要在中国大陆使用 */}
+              {newCardStep === 2 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      是否需要在中国大陆地区使用？
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { value: true, label: "是", desc: "需要在中国大陆使用" },
+                        { value: false, label: "否", desc: "不需要在中国大陆使用" }
+                      ].map((option) => (
+                        <div
+                          key={option.value.toString()}
+                          onClick={() => setNeedMainlandChina(option.value)}
+                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                            needMainlandChina === option.value
+                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                              : theme === "dark"
+                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
+                                : 'border-gray-200 hover:border-[#00D4AA]/50'
+                          }`}
+                        >
+                          <div className={`font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                            {option.label}
+                          </div>
+                          <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
+                            {option.desc}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {needMainlandChina && (
+                    <div className={`p-4 rounded-lg ${
+                      theme === "dark" ? 'bg-yellow-900/20 border border-yellow-800' : 'bg-yellow-50 border border-yellow-200'
+                    }`}>
+                      <div className={`text-sm ${theme === "dark" ? 'text-yellow-400' : 'text-yellow-800'}`}>
+                        <strong>温馨提示：</strong>在中国大陆使用可能会有额外的限制和手续费，建议根据实际需求选择。
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {/* 第三步：虚拟卡付款场景选择 */}
+              {newCardStep === 3 && newCardType === "virtual" && (
+                <div className="space-y-6">
+                  <div>
+                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                      选择付款场景（可多选）
+                    </label>
+                    <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto">
+                      {paymentScenarios.map((scenario) => (
+                        <div
+                          key={scenario}
+                          onClick={() => {
+                            setSelectedScenarios(prev => 
+                              prev.includes(scenario) 
+                                ? prev.filter(s => s !== scenario)
+                                : [...prev, scenario]
+                            )
+                          }}
+                          className={`p-3 rounded-lg border cursor-pointer transition-all text-center ${
+                            selectedScenarios.includes(scenario)
+                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                              : theme === "dark"
+                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
+                                : 'border-gray-200 hover:border-[#00D4AA]/50'
+                          }`}
+                        >
+                          <div className={`text-sm font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                            {scenario}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      已选择 {selectedScenarios.length} 个场景
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* 第四步：填写开卡信息 */}
+              {newCardStep === 4 || (newCardStep === 3 && newCardType === "physical")} && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                        持卡人姓名
+                      </label>
+                      <input
+                        type="text"
+                        value={cardApplicationInfo.holderName}
+                        onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, holderName: e.target.value }))}
+                        placeholder="请输入持卡人姓名"
+                        className={`w-full px-3 py-2 border rounded-lg ${
+                          theme === "dark"
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                        手机号码
+                      </label>
+                      <input
+                        type="tel"
+                        value={cardApplicationInfo.phoneNumber}
+                        onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, phoneNumber: e.target.value }))}
+                        placeholder="请输入手机号码"
+                        className={`w-full px-3 py-2 border rounded-lg ${
+                          theme === "dark"
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                        邮箱地址
+                      </label>
+                      <input
+                        type="email"
+                        value={cardApplicationInfo.email}
+                        onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, email: e.target.value }))}
+                        placeholder="请输入邮箱地址"
+                        className={`w-full px-3 py-2 border rounded-lg ${
+                          theme === "dark"
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                        身份证号码
+                      </label>
+                      <input
+                        type="text"
+                        value={cardApplicationInfo.idNumber}
+                        onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, idNumber: e.target.value }))}
+                        placeholder="请输入身份证号码"
+                        className={`w-full px-3 py-2 border rounded-lg ${
+                          theme === "dark"
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                    </div>
+                  </div>
+                  
+                  {newCardType === "physical" && (
+                    <>
+                      <div>
+                        <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                          邮寄地址
+                        </label>
+                        <input
+                          type="text"
+                          value={cardApplicationInfo.address}
+                          onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, address: e.target.value }))}
+                          placeholder="请输入详细地址"
+                          className={`w-full px-3 py-2 border rounded-lg ${
+                            theme === "dark"
+                              ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                              : 'bg-white border-gray-300 text-gray-900'
+                          }`}
+                        />
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                            城市
+                          </label>
+                          <input
+                            type="text"
+                            value={cardApplicationInfo.city}
+                            onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, city: e.target.value }))}
+                            placeholder="城市"
+                            className={`w-full px-3 py-2 border rounded-lg ${
+                              theme === "dark"
+                                ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                                : 'bg-white border-gray-300 text-gray-900'
+                            }`}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                            邮政编码
+                          </label>
+                          <input
+                            type="text"
+                            value={cardApplicationInfo.postalCode}
+                            onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, postalCode: e.target.value }))}
+                            placeholder="邮政编码"
+                            className={`w-full px-3 py-2 border rounded-lg ${
+                              theme === "dark"
+                                ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                                : 'bg-white border-gray-300 text-gray-900'
+                            }`}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
+                            国家
+                          </label>
+                          <input
+                            type="text"
+                            value={cardApplicationInfo.country}
+                            onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, country: e.target.value }))}
+                            placeholder="国家"
+                            className={`w-full px-3 py-2 border rounded-lg ${
+                              theme === "dark"
+                                ? 'bg-[#252842] border-[#3a3d4a] text-white'
+                                : 'bg-white border-gray-300 text-gray-900'
+                            }`}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+              
+              {/* 第五步：确认提交 */}
+              {newCardStep === 5 || (newCardStep === 4 && newCardType === "physical")} && (
+                <div className="space-y-6">
+                  <div>
+                    <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
+                      确认申请信息
+                    </h4>
+                    <div className={`p-4 rounded-lg ${
+                      theme === "dark" ? 'bg-[#252842]/50' : 'bg-gray-50'
+                    }`}>
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>卡片类型：</span>
+                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                            {newCardType === "virtual" ? "虚拟卡" : "实体卡"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>卡片品牌：</span>
+                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                            {newCardBrand === "visa" ? "Visa" : "Mastercard"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>发卡地区：</span>
+                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                            {newCardRegion === "europe" ? "欧洲" : newCardRegion === "hongkong" ? "香港" : "美国"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>中国大陆使用：</span>
+                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                            {needMainlandChina ? "是" : "否"}
+                          </span>
+                        </div>
+                        {newCardType === "virtual" && selectedScenarios.length > 0 && (
+                          <div className="flex justify-between">
+                            <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>付款场景：</span>
+                            <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                              {selectedScenarios.length} 个场景
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex justify-between">
+                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>持卡人姓名：</span>
+                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                            {cardApplicationInfo.holderName}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>联系方式：</span>
+                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
+                            {cardApplicationInfo.phoneNumber}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className={`p-4 rounded-lg ${
+                    theme === "dark" ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'
+                  }`}>
+                    <div className={`text-sm ${theme === "dark" ? 'text-blue-400' : 'text-blue-800'}`}>
+                      <strong>申请须知：</strong>
+                      <ul className="mt-2 space-y-1">
+                        <li>• 虚拟卡申请后即时生效，可立即使用</li>
+                        <li>• 实体卡需要7-15个工作日邮寄到指定地址</li>
+                        <li>• 申请提交后将无法修改，请确认信息无误</li>
+                        <li>• 如有问题请联系客服</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* 底部按钮 */}
+            <div className="flex space-x-3 mt-8">
               <Button
                 variant="outline"
-                onClick={() => setShowNewCardModal(false)}
+                onClick={() => {
+                  if (newCardStep > 1) {
+                    setNewCardStep(prev => prev - 1)
+                  } else {
+                    setShowNewCardModal(false)
+                    resetNewCardModal()
+                  }
+                }}
                 className="flex-1"
               >
-                取消
+                {newCardStep > 1 ? "上一步" : "取消"}
               </Button>
               <Button
                 onClick={() => {
-                  setShowNewCardModal(false)
-                  alert("新卡申请已提交")
+                  if (
+                    (newCardStep === 5) || 
+                    (newCardStep === 4 && newCardType === "physical")
+                  ) {
+                    setShowNewCardModal(false)
+                    resetNewCardModal()
+                    alert("新卡申请已提交，请耐心等待审核")
+                  } else {
+                    if (newCardType === "physical" && newCardStep === 3) {
+                      setNewCardStep(4)
+                    } else {
+                      setNewCardStep(prev => prev + 1)
+                    }
+                  }
                 }}
                 className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
               >
-                提交申请
+                {(newCardStep === 5) || (newCardStep === 4 && newCardType === "physical")
+                  ? "提交申请"
+                  : "下一步"
+                }
               </Button>
             </div>
           </div>
