@@ -195,6 +195,16 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Enhanced with comprehensive mock data showing different transaction states (USDT, BTC, ETH, SOL, NFT transactions)
   - Added expandable content functionality with relevant action buttons (催促对方, 确认收款, 申请仲裁, 查看仲裁等)
   - Implemented distinct visual states for 收款担保 and 付款担保 with appropriate progress tracking and status labels
+- January 29, 2025. Implemented multi-step card application system:
+  - Created comprehensive 5-step card application workflow with step indicator and progress tracking
+  - Step 1: Card type selection (virtual/physical), brand selection (Visa/Mastercard), region selection (Europe/Hong Kong/USA)
+  - Step 2: Mainland China usage preference with conditional warning messages
+  - Step 3: Payment scenario selection for virtual cards (50 scenarios including AWS, Google Pay, Apple Pay, Alipay, etc.) with multi-select functionality
+  - Step 4: Personal information collection (name, phone, email, ID number, shipping address for physical cards)
+  - Step 5: Application confirmation and submission with complete information review
+  - Physical cards automatically skip Step 3 (payment scenarios) and proceed directly from Step 2 to Step 4
+  - Enhanced UI with responsive grid layouts, hover effects, and comprehensive form validation
+  - Integrated custom dropdown component with fade animations for card selection in recharge modal
 
 ## User Preferences
 
