@@ -4552,32 +4552,28 @@ export default function WalletPage() {
                             </div>
                           </div>
                           
-                          {/* 冻结图标覆盖层 */}
-                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 rounded-t-lg">
-                            <div className={`p-3 rounded-full ${
-                              isDark ? 'bg-red-900/70' : 'bg-red-100/90'
-                            }`}>
-                              <svg className={`w-6 h-6 ${
-                                isDark ? 'text-red-400' : 'text-red-600'
-                              }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10" strokeWidth={2}/>
-                                <path d="m4.9 4.9 14.2 14.2" strokeWidth={2}/>
-                              </svg>
+                          {/* 冻结覆盖层 */}
+                          <div className="absolute inset-0 bg-black/30 rounded-t-lg">
+                            {/* 左上角冻结标签 */}
+                            <div className="absolute top-2 left-2 z-10">
+                              <div className={`px-2 py-1 rounded text-xs font-medium flex items-center ${
+                                isDark ? 'bg-red-900/80 text-red-400' : 'bg-red-100/90 text-red-700'
+                              }`}>
+                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <circle cx="12" cy="12" r="10" strokeWidth={2}/>
+                                  <path d="m4.9 4.9 14.2 14.2" strokeWidth={2}/>
+                                </svg>
+                                冻结
+                              </div>
                             </div>
-                            <div className="mt-2 text-center text-white text-xs">
-                              <div className="font-medium">已冻结</div>
-                              <div className="opacity-90">2025-01-29 14:32</div>
-                              <div className="opacity-80">异常交易检测</div>
+                            
+                            {/* 右上角冻结信息 */}
+                            <div className="absolute top-2 right-2 z-10 text-right">
+                              <div className="text-white text-xs">
+                                <div className="font-medium">2025-01-29 14:32</div>
+                                <div className="opacity-90">异常交易检测</div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        
-                        {/* 冻结状态标识 */}
-                        <div className="absolute top-2 right-2 z-10">
-                          <div className={`px-2 py-1 rounded text-xs font-medium ${
-                            isDark ? 'bg-red-900/80 text-red-400' : 'bg-red-100/90 text-red-700'
-                          }`}>
-                            已冻结
                           </div>
                         </div>
                       </div>
