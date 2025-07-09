@@ -4604,6 +4604,22 @@ export default function WalletPage() {
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
+                  title="资金记录"
+                  onClick={() => {
+                    // 跳转到订单记录页签并设置为资金记录
+                    setTopLevelTab("订单记录")
+                    setOrderTab("资金记录")
+                  }}
+                >
+                  <FileText className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className={`p-2 border transition-colors ${
+                    isDark
+                      ? "border-white text-white hover:bg-white hover:text-black"
+                      : "border-black text-black hover:bg-black hover:text-white"
+                  }`}
                   title="账单记录"
                 >
                   <History className="h-4 w-4" />
