@@ -5127,9 +5127,9 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡1操作按钮 - 小舌头设计 */}
-                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
-                      isDark ? 'bg-gray-700/80' : 'bg-gray-200/80'
-                    } backdrop-blur-sm`}>
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border ${
+                      isDark ? 'border-gray-400' : 'border-gray-600'
+                    }`}>
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5229,9 +5229,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡2操作按钮 - 小舌头设计 */}
-                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
-                      isDark ? 'bg-purple-700/80' : 'bg-purple-200/80'
-                    } backdrop-blur-sm`}>
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-yellow-300">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5331,9 +5329,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡3操作按钮 - 小舌头设计 */}
-                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
-                      isDark ? 'bg-gray-800/80' : 'bg-gray-600/80'
-                    } backdrop-blur-sm`}>
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-gray-400">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5433,9 +5429,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡4操作按钮 - 小舌头设计 */}
-                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
-                      isDark ? 'bg-green-800/80' : 'bg-green-600/80'
-                    } backdrop-blur-sm`}>
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-green-300">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5535,9 +5529,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡5操作按钮 - 小舌头设计 */}
-                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
-                      isDark ? 'bg-blue-800/80' : 'bg-blue-500/80'
-                    } backdrop-blur-sm`}>
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-blue-300">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5637,9 +5629,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡6操作按钮 - 小舌头设计 */}
-                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
-                      isDark ? 'bg-red-800/80' : 'bg-red-500/80'
-                    } backdrop-blur-sm`}>
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-red-300">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
@@ -5758,9 +5748,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 冻结实体卡操作按钮 - 小舌头设计 */}
-                    <div className={`relative mt-2 mx-auto w-[80%] rounded-b-lg px-4 py-3 ${
-                      isDark ? 'bg-gray-700/80' : 'bg-gray-400/80'
-                    } backdrop-blur-sm`}>
+                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 border border-gray-500">
                       <div className="grid grid-cols-4 gap-2">
                         <button
                           onClick={(e) => {
