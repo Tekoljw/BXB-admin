@@ -170,6 +170,7 @@ export default function WalletPage() {
   const [showCardTransferModal, setShowCardTransferModal] = useState(false)
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [showPersonalInfoModal, setShowPersonalInfoModal] = useState(false) // 个人信息弹窗
+  const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false) // 个人信息编辑状态
   const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
   
   // 激活卡片多步骤状态
@@ -11525,21 +11526,46 @@ export default function WalletPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div 
             className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => setShowPersonalInfoModal(false)}
+            onClick={() => {
+              setShowPersonalInfoModal(false)
+              setIsEditingPersonalInfo(false)
+            }}
           />
           <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
             isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
           } shadow-2xl max-h-[80vh] overflow-y-auto`}>
             <div className="flex justify-between items-center mb-6">
               <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                个人信息管理
+                个人信息
               </h3>
-              <button
-                onClick={() => setShowPersonalInfoModal(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <div className="flex items-center space-x-2">
+                {!isEditingPersonalInfo ? (
+                  <button
+                    onClick={() => setIsEditingPersonalInfo(true)}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    title="编辑"
+                  >
+                    <Edit2 className="h-5 w-5" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setIsEditingPersonalInfo(false)}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    title="取消编辑"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    setShowPersonalInfoModal(false)
+                    setIsEditingPersonalInfo(false)
+                  }}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
             
             <div className="space-y-4">
@@ -11547,100 +11573,150 @@ export default function WalletPage() {
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   持卡人姓名
                 </label>
-                <input
-                  type="text"
-                  value={cardApplicationInfo.holderName}
-                  onChange={(e) => setCardApplicationInfo(prev => ({
-                    ...prev,
-                    holderName: e.target.value
-                  }))}
-                  className={`w-full px-3 py-2 border rounded-lg ${
+                {isEditingPersonalInfo ? (
+                  <input
+                    type="text"
+                    value={cardApplicationInfo.holderName}
+                    onChange={(e) => setCardApplicationInfo(prev => ({
+                      ...prev,
+                      holderName: e.target.value
+                    }))}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                    placeholder="请输入持卡人姓名"
+                  />
+                ) : (
+                  <div className={`w-full px-3 py-2 border rounded-lg ${
                     isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                  }`}
-                  placeholder="请输入持卡人姓名"
-                />
+                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}>
+                    {cardApplicationInfo.holderName || '未设置'}
+                  </div>
+                )}
               </div>
               
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   手机号码
                 </label>
-                <input
-                  type="tel"
-                  value={cardApplicationInfo.phoneNumber}
-                  onChange={(e) => setCardApplicationInfo(prev => ({
-                    ...prev,
-                    phoneNumber: e.target.value
-                  }))}
-                  className={`w-full px-3 py-2 border rounded-lg ${
+                {isEditingPersonalInfo ? (
+                  <input
+                    type="tel"
+                    value={cardApplicationInfo.phoneNumber}
+                    onChange={(e) => setCardApplicationInfo(prev => ({
+                      ...prev,
+                      phoneNumber: e.target.value
+                    }))}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                    placeholder="请输入手机号码"
+                  />
+                ) : (
+                  <div className={`w-full px-3 py-2 border rounded-lg ${
                     isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                  }`}
-                  placeholder="请输入手机号码"
-                />
+                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}>
+                    {cardApplicationInfo.phoneNumber || '未设置'}
+                  </div>
+                )}
               </div>
               
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   电子邮箱
                 </label>
-                <input
-                  type="email"
-                  value={cardApplicationInfo.email}
-                  onChange={(e) => setCardApplicationInfo(prev => ({
-                    ...prev,
-                    email: e.target.value
-                  }))}
-                  className={`w-full px-3 py-2 border rounded-lg ${
+                {isEditingPersonalInfo ? (
+                  <input
+                    type="email"
+                    value={cardApplicationInfo.email}
+                    onChange={(e) => setCardApplicationInfo(prev => ({
+                      ...prev,
+                      email: e.target.value
+                    }))}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                    placeholder="请输入电子邮箱"
+                  />
+                ) : (
+                  <div className={`w-full px-3 py-2 border rounded-lg ${
                     isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                  }`}
-                  placeholder="请输入电子邮箱"
-                />
+                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}>
+                    {cardApplicationInfo.email || '未设置'}
+                  </div>
+                )}
               </div>
               
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   身份证号
                 </label>
-                <input
-                  type="text"
-                  value={cardApplicationInfo.idNumber}
-                  onChange={(e) => setCardApplicationInfo(prev => ({
-                    ...prev,
-                    idNumber: e.target.value
-                  }))}
-                  className={`w-full px-3 py-2 border rounded-lg ${
+                {isEditingPersonalInfo ? (
+                  <input
+                    type="text"
+                    value={cardApplicationInfo.idNumber}
+                    onChange={(e) => setCardApplicationInfo(prev => ({
+                      ...prev,
+                      idNumber: e.target.value
+                    }))}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                    placeholder="请输入身份证号"
+                  />
+                ) : (
+                  <div className={`w-full px-3 py-2 border rounded-lg ${
                     isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                  }`}
-                  placeholder="请输入身份证号"
-                />
+                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}>
+                    {cardApplicationInfo.idNumber || '未设置'}
+                  </div>
+                )}
               </div>
               
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   详细地址
                 </label>
-                <textarea
-                  value={cardApplicationInfo.address}
-                  onChange={(e) => setCardApplicationInfo(prev => ({
-                    ...prev,
-                    address: e.target.value
-                  }))}
-                  rows={3}
-                  className={`w-full px-3 py-2 border rounded-lg ${
+                {isEditingPersonalInfo ? (
+                  <textarea
+                    value={cardApplicationInfo.address}
+                    onChange={(e) => setCardApplicationInfo(prev => ({
+                      ...prev,
+                      address: e.target.value
+                    }))}
+                    rows={3}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                    placeholder="请输入详细地址"
+                  />
+                ) : (
+                  <div className={`w-full px-3 py-2 border rounded-lg ${
                     isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                  }`}
-                  placeholder="请输入详细地址"
-                />
+                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}>
+                    {cardApplicationInfo.address || '未设置'}
+                  </div>
+                )}
               </div>
               
               <div className="grid grid-cols-2 gap-3">
@@ -11648,40 +11724,60 @@ export default function WalletPage() {
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     城市
                   </label>
-                  <input
-                    type="text"
-                    value={cardApplicationInfo.city}
-                    onChange={(e) => setCardApplicationInfo(prev => ({
-                      ...prev,
-                      city: e.target.value
-                    }))}
-                    className={`w-full px-3 py-2 border rounded-lg ${
+                  {isEditingPersonalInfo ? (
+                    <input
+                      type="text"
+                      value={cardApplicationInfo.city}
+                      onChange={(e) => setCardApplicationInfo(prev => ({
+                        ...prev,
+                        city: e.target.value
+                      }))}
+                      className={`w-full px-3 py-2 border rounded-lg ${
+                        isDark 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                      }`}
+                      placeholder="城市"
+                    />
+                  ) : (
+                    <div className={`w-full px-3 py-2 border rounded-lg ${
                       isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                    placeholder="城市"
-                  />
+                        ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                        : 'bg-gray-50 border-gray-300 text-gray-900'
+                    }`}>
+                      {cardApplicationInfo.city || '未设置'}
+                    </div>
+                  )}
                 </div>
                 
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     邮政编码
                   </label>
-                  <input
-                    type="text"
-                    value={cardApplicationInfo.postalCode}
-                    onChange={(e) => setCardApplicationInfo(prev => ({
-                      ...prev,
-                      postalCode: e.target.value
-                    }))}
-                    className={`w-full px-3 py-2 border rounded-lg ${
+                  {isEditingPersonalInfo ? (
+                    <input
+                      type="text"
+                      value={cardApplicationInfo.postalCode}
+                      onChange={(e) => setCardApplicationInfo(prev => ({
+                        ...prev,
+                        postalCode: e.target.value
+                      }))}
+                      className={`w-full px-3 py-2 border rounded-lg ${
+                        isDark 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                      }`}
+                      placeholder="邮编"
+                    />
+                  ) : (
+                    <div className={`w-full px-3 py-2 border rounded-lg ${
                       isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                    placeholder="邮编"
-                  />
+                        ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                        : 'bg-gray-50 border-gray-300 text-gray-900'
+                    }`}>
+                      {cardApplicationInfo.postalCode || '未设置'}
+                    </div>
+                  )}
                 </div>
               </div>
               
@@ -11689,28 +11785,50 @@ export default function WalletPage() {
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   国家/地区
                 </label>
-                <select
-                  value={cardApplicationInfo.country}
-                  onChange={(e) => setCardApplicationInfo(prev => ({
-                    ...prev,
-                    country: e.target.value
-                  }))}
-                  className={`w-full px-3 py-2 border rounded-lg ${
+                {isEditingPersonalInfo ? (
+                  <select
+                    value={cardApplicationInfo.country}
+                    onChange={(e) => setCardApplicationInfo(prev => ({
+                      ...prev,
+                      country: e.target.value
+                    }))}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  >
+                    <option value="">请选择国家/地区</option>
+                    <option value="CN">中国</option>
+                    <option value="HK">香港</option>
+                    <option value="US">美国</option>
+                    <option value="GB">英国</option>
+                    <option value="DE">德国</option>
+                    <option value="FR">法国</option>
+                    <option value="JP">日本</option>
+                    <option value="SG">新加坡</option>
+                  </select>
+                ) : (
+                  <div className={`w-full px-3 py-2 border rounded-lg ${
                     isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                >
-                  <option value="">请选择国家/地区</option>
-                  <option value="CN">中国</option>
-                  <option value="HK">香港</option>
-                  <option value="US">美国</option>
-                  <option value="GB">英国</option>
-                  <option value="DE">德国</option>
-                  <option value="FR">法国</option>
-                  <option value="JP">日本</option>
-                  <option value="SG">新加坡</option>
-                </select>
+                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}>
+                    {cardApplicationInfo.country ? 
+                      {
+                        "CN": "中国",
+                        "HK": "香港", 
+                        "US": "美国",
+                        "GB": "英国",
+                        "DE": "德国",
+                        "FR": "法国",
+                        "JP": "日本",
+                        "SG": "新加坡"
+                      }[cardApplicationInfo.country] || cardApplicationInfo.country
+                      : '未设置'
+                    }
+                  </div>
+                )}
               </div>
             </div>
             
@@ -11718,20 +11836,25 @@ export default function WalletPage() {
             <div className="flex space-x-3 mt-8">
               <Button
                 variant="outline"
-                onClick={() => setShowPersonalInfoModal(false)}
-                className="flex-1"
-              >
-                取消
-              </Button>
-              <Button
                 onClick={() => {
                   setShowPersonalInfoModal(false)
-                  alert("个人信息已更新")
+                  setIsEditingPersonalInfo(false)
                 }}
-                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                className="flex-1"
               >
-                保存信息
+                {isEditingPersonalInfo ? "取消" : "关闭"}
               </Button>
+              {isEditingPersonalInfo && (
+                <Button
+                  onClick={() => {
+                    setIsEditingPersonalInfo(false)
+                    alert("个人信息已更新")
+                  }}
+                  className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                >
+                  保存信息
+                </Button>
+              )}
             </div>
           </div>
         </div>
