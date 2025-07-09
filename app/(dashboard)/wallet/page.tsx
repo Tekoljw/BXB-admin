@@ -8069,6 +8069,71 @@ export default function WalletPage() {
     }
   }
 
+  // 渲染订单记录内容
+  const renderOrderContent = () => {
+    const currentCategory = orderCategories[orderTab]
+    if (!currentCategory) return null
+
+    const records = currentCategory.data[secondaryTab] || []
+    const cardStyle = isDark ? 'bg-[#1a1d29] text-white' : 'bg-white text-gray-900'
+
+    return (
+      <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+        {/* 二级页签导航 */}
+        {currentCategory && Object.keys(currentCategory.tabs).length > 1 && (
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex flex-wrap gap-2">
+              {Object.entries(currentCategory.tabs).map(([key, label]) => (
+                <button
+                  key={key}
+                  onClick={() => setSecondaryTab(key)}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
+                    secondaryTab === key
+                      ? isDark 
+                        ? "bg-white text-black border-white" 
+                        : "bg-black text-white border-black"
+                      : isDark
+                        ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                        : "bg-transparent text-black border-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        <div className="p-6">
+          <div className="space-y-4">
+            <div className="space-y-3">
+              {records.map((record, index) => (
+                <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    {Object.entries(record).map(([key, value]) => (
+                      <div key={key}>
+                        <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
+                          {key === 'id' ? 'ID' : 
+                           key === 'type' ? '类型' :
+                           key === 'amount' ? '金额' :
+                           key === 'status' ? '状态' :
+                           key === 'time' ? '时间' : key}
+                        </div>
+                        <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium`}>
+                          {value}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={`min-h-screen ${isDark ? 'bg-background' : 'bg-gray-50'}`}>
       {isMobile ? (
