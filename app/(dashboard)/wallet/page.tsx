@@ -4584,6 +4584,7 @@ export default function WalletPage() {
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
                   title="个人信息"
+                  onClick={() => setShowPersonalInfoModal(true)}
                 >
                   <User className="h-4 w-4" />
                 </Button>
@@ -6223,14 +6224,6 @@ export default function WalletPage() {
                 >
                   <ArrowLeftRight className="h-5 w-5" />
                   <span className="text-xs">划款</span>
-                </Button>
-                
-                <Button 
-                  onClick={() => setShowPersonalInfoModal(true)}
-                  className={`h-16 flex items-center justify-center transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800`}
-                  variant="outline"
-                >
-                  <User className="h-5 w-5" />
                 </Button>
                 
                 {/* 仅图标按钮 */}
