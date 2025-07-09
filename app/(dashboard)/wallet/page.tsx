@@ -6209,31 +6209,29 @@ export default function WalletPage() {
                   <span className="text-xs">如何使用虚拟卡</span>
                 </Button>
                 
-                <div className="flex gap-2">
-                  <Button 
-                    onClick={() => {
-                      setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
-                      setShowCardTransferModal(true)
-                    }}
-                    className={`flex-1 h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
-                      selectedAction === "transfer"
-                        ? "bg-[#00D4AA] text-black"
-                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                  >
-                    <ArrowLeftRight className="h-5 w-5" />
-                    <span className="text-xs">划款</span>
-                  </Button>
-                  
-                  <Button 
-                    onClick={() => setShowPersonalInfoModal(true)}
-                    className={`w-16 h-16 flex items-center justify-center transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800`}
-                    variant="outline"
-                  >
-                    <User className="h-5 w-5" />
-                  </Button>
-                </div>
+                <Button 
+                  onClick={() => {
+                    setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
+                    setShowCardTransferModal(true)
+                  }}
+                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
+                    selectedAction === "transfer"
+                      ? "bg-[#00D4AA] text-black"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                >
+                  <ArrowLeftRight className="h-5 w-5" />
+                  <span className="text-xs">划款</span>
+                </Button>
+                
+                <Button 
+                  onClick={() => setShowPersonalInfoModal(true)}
+                  className={`h-16 flex items-center justify-center transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800`}
+                  variant="outline"
+                >
+                  <User className="h-5 w-5" />
+                </Button>
                 
                 {/* 仅图标按钮 */}
                 <Button 
