@@ -11860,11 +11860,8 @@ export default function WalletPage() {
                     <div key={shippingAddr.id} className={`p-4 border rounded-lg ${
                       isDark ? 'border-[#3a3d4a] bg-[#1a1d29]' : 'border-gray-200 bg-gray-50'
                     }`}>
-                      <div className="flex justify-between items-center mb-3">
-                        <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                          地址{index + 1}
-                        </span>
-                        {isEditingPersonalInfo && shippingAddresses.length > 1 && (
+                      {isEditingPersonalInfo && shippingAddresses.length > 1 && (
+                        <div className="flex justify-end mb-3">
                           <button
                             onClick={() => {
                               setShippingAddresses(prev => prev.filter(addr => addr.id !== shippingAddr.id))
@@ -11873,8 +11870,8 @@ export default function WalletPage() {
                           >
                             删除
                           </button>
-                        )}
-                      </div>
+                        </div>
+                      )}
                       
                       {/* 与居住地址相同选项 */}
                       {isEditingPersonalInfo && (
