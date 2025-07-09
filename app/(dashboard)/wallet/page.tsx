@@ -10601,7 +10601,7 @@ export default function WalletPage() {
               )}
               
               {/* 第四步：填写开卡信息 */}
-              {newCardStep === 4 || (newCardStep === 3 && newCardType === "physical")} && (
+              {(newCardStep === 4) || (newCardStep === 3 && newCardType === "physical")} && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -10752,7 +10752,7 @@ export default function WalletPage() {
               )}
               
               {/* 第五步：确认提交 */}
-              {newCardStep === 5 || (newCardStep === 4 && newCardType === "physical")} && (
+              {(newCardStep === 5) || (newCardStep === 4 && newCardType === "physical")} && (
                 <div className="space-y-6">
                   <div>
                     <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
