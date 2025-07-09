@@ -11675,84 +11675,143 @@ export default function WalletPage() {
               
               {/* 居住地址 */}
               <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   居住地址
                 </label>
-                {isEditingPersonalInfo ? (
-                  <textarea
-                    value={cardApplicationInfo.address}
-                    onChange={(e) => setCardApplicationInfo(prev => ({
-                      ...prev,
-                      address: e.target.value
-                    }))}
-                    rows={3}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                    placeholder="请输入居住地址"
-                  />
-                ) : (
-                  <div className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  }`}>
-                    {cardApplicationInfo.address || '未设置'}
-                  </div>
-                )}
-              </div>
-              
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    城市
+                
+                {/* 国家/地区 */}
+                <div className="mb-3">
+                  <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    国家/地区
                   </label>
                   {isEditingPersonalInfo ? (
-                    <input
-                      type="text"
-                      value={cardApplicationInfo.city}
+                    <select
+                      value={cardApplicationInfo.country}
                       onChange={(e) => setCardApplicationInfo(prev => ({
                         ...prev,
-                        city: e.target.value
+                        country: e.target.value
                       }))}
                       className={`w-full px-3 py-2 border rounded-lg ${
                         isDark 
-                          ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                          : 'bg-white border-gray-300 text-gray-900'
                       }`}
-                      placeholder="城市"
-                    />
+                    >
+                      <option value="">请选择国家/地区</option>
+                      <option value="CN">中国</option>
+                      <option value="HK">香港</option>
+                      <option value="US">美国</option>
+                      <option value="GB">英国</option>
+                      <option value="DE">德国</option>
+                      <option value="FR">法国</option>
+                      <option value="JP">日本</option>
+                      <option value="SG">新加坡</option>
+                    </select>
                   ) : (
                     <div className={`w-full px-3 py-2 border rounded-lg ${
                       isDark 
                         ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
                         : 'bg-gray-50 border-gray-300 text-gray-900'
                     }`}>
-                      {cardApplicationInfo.city || '未设置'}
+                      {cardApplicationInfo.country ? 
+                        {
+                          "CN": "中国",
+                          "HK": "香港", 
+                          "US": "美国",
+                          "GB": "英国",
+                          "DE": "德国",
+                          "FR": "法国",
+                          "JP": "日本",
+                          "SG": "新加坡"
+                        }[cardApplicationInfo.country] || cardApplicationInfo.country
+                        : '未设置'
+                      }
                     </div>
                   )}
                 </div>
                 
+                {/* 城市和邮编 */}
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div>
+                    <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      城市
+                    </label>
+                    {isEditingPersonalInfo ? (
+                      <input
+                        type="text"
+                        value={cardApplicationInfo.city}
+                        onChange={(e) => setCardApplicationInfo(prev => ({
+                          ...prev,
+                          city: e.target.value
+                        }))}
+                        className={`w-full px-3 py-2 border rounded-lg ${
+                          isDark 
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                            : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                        }`}
+                        placeholder="城市"
+                      />
+                    ) : (
+                      <div className={`w-full px-3 py-2 border rounded-lg ${
+                        isDark 
+                          ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                          : 'bg-gray-50 border-gray-300 text-gray-900'
+                      }`}>
+                        {cardApplicationInfo.city || '未设置'}
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div>
+                    <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      邮政编码
+                    </label>
+                    {isEditingPersonalInfo ? (
+                      <input
+                        type="text"
+                        value={cardApplicationInfo.postalCode}
+                        onChange={(e) => setCardApplicationInfo(prev => ({
+                          ...prev,
+                          postalCode: e.target.value
+                        }))}
+                        className={`w-full px-3 py-2 border rounded-lg ${
+                          isDark 
+                            ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                            : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                        }`}
+                        placeholder="邮编"
+                      />
+                    ) : (
+                      <div className={`w-full px-3 py-2 border rounded-lg ${
+                        isDark 
+                          ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
+                          : 'bg-gray-50 border-gray-300 text-gray-900'
+                      }`}>
+                        {cardApplicationInfo.postalCode || '未设置'}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* 详细地址 */}
                 <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    邮政编码
+                  <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    详细地址
                   </label>
                   {isEditingPersonalInfo ? (
-                    <input
-                      type="text"
-                      value={cardApplicationInfo.postalCode}
+                    <textarea
+                      value={cardApplicationInfo.address}
                       onChange={(e) => setCardApplicationInfo(prev => ({
                         ...prev,
-                        postalCode: e.target.value
+                        address: e.target.value
                       }))}
+                      rows={3}
                       className={`w-full px-3 py-2 border rounded-lg ${
                         isDark 
                           ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                       }`}
-                      placeholder="邮编"
+                      placeholder="请输入详细地址"
                     />
                   ) : (
                     <div className={`w-full px-3 py-2 border rounded-lg ${
@@ -11760,60 +11819,10 @@ export default function WalletPage() {
                         ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
                         : 'bg-gray-50 border-gray-300 text-gray-900'
                     }`}>
-                      {cardApplicationInfo.postalCode || '未设置'}
+                      {cardApplicationInfo.address || '未设置'}
                     </div>
                   )}
                 </div>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  国家/地区
-                </label>
-                {isEditingPersonalInfo ? (
-                  <select
-                    value={cardApplicationInfo.country}
-                    onChange={(e) => setCardApplicationInfo(prev => ({
-                      ...prev,
-                      country: e.target.value
-                    }))}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                        : 'bg-white border-gray-300 text-gray-900'
-                    }`}
-                  >
-                    <option value="">请选择国家/地区</option>
-                    <option value="CN">中国</option>
-                    <option value="HK">香港</option>
-                    <option value="US">美国</option>
-                    <option value="GB">英国</option>
-                    <option value="DE">德国</option>
-                    <option value="FR">法国</option>
-                    <option value="JP">日本</option>
-                    <option value="SG">新加坡</option>
-                  </select>
-                ) : (
-                  <div className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  }`}>
-                    {cardApplicationInfo.country ? 
-                      {
-                        "CN": "中国",
-                        "HK": "香港", 
-                        "US": "美国",
-                        "GB": "英国",
-                        "DE": "德国",
-                        "FR": "法国",
-                        "JP": "日本",
-                        "SG": "新加坡"
-                      }[cardApplicationInfo.country] || cardApplicationInfo.country
-                      : '未设置'
-                    }
-                  </div>
-                )}
               </div>
 
               {/* 收款地址 */}
@@ -11867,39 +11876,61 @@ export default function WalletPage() {
                       </div>
                       
                       <div className="space-y-3">
+                        {/* 国家/地区 */}
                         <div>
                           <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                            详细地址
+                            国家/地区
                           </label>
                           {isEditingPersonalInfo ? (
-                            <textarea
-                              value={shippingAddr.address}
+                            <select
+                              value={shippingAddr.country}
                               onChange={(e) => {
                                 setShippingAddresses(prev => prev.map(addr => 
                                   addr.id === shippingAddr.id 
-                                    ? { ...addr, address: e.target.value }
+                                    ? { ...addr, country: e.target.value }
                                     : addr
                                 ))
                               }}
-                              rows={2}
                               className={`w-full px-3 py-2 border rounded-lg text-sm ${
                                 isDark 
-                                  ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                                  ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                                  : 'bg-white border-gray-300 text-gray-900'
                               }`}
-                              placeholder="请输入收款地址"
-                            />
+                            >
+                              <option value="">请选择国家/地区</option>
+                              <option value="CN">中国</option>
+                              <option value="HK">香港</option>
+                              <option value="US">美国</option>
+                              <option value="GB">英国</option>
+                              <option value="DE">德国</option>
+                              <option value="FR">法国</option>
+                              <option value="JP">日本</option>
+                              <option value="SG">新加坡</option>
+                            </select>
                           ) : (
                             <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
                               isDark 
                                 ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
                                 : 'bg-white border-gray-300 text-gray-900'
                             }`}>
-                              {shippingAddr.address || '未设置'}
+                              {shippingAddr.country ? 
+                                {
+                                  "CN": "中国",
+                                  "HK": "香港", 
+                                  "US": "美国",
+                                  "GB": "英国",
+                                  "DE": "德国",
+                                  "FR": "法国",
+                                  "JP": "日本",
+                                  "SG": "新加坡"
+                                }[shippingAddr.country] || shippingAddr.country
+                                : '未设置'
+                              }
                             </div>
                           )}
                         </div>
                         
+                        {/* 城市和邮编 */}
                         <div className="grid grid-cols-2 gap-3">
                           <div>
                             <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
@@ -11968,55 +11999,36 @@ export default function WalletPage() {
                           </div>
                         </div>
                         
+                        {/* 详细地址 */}
                         <div>
                           <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                            国家/地区
+                            详细地址
                           </label>
                           {isEditingPersonalInfo ? (
-                            <select
-                              value={shippingAddr.country}
+                            <textarea
+                              value={shippingAddr.address}
                               onChange={(e) => {
                                 setShippingAddresses(prev => prev.map(addr => 
                                   addr.id === shippingAddr.id 
-                                    ? { ...addr, country: e.target.value }
+                                    ? { ...addr, address: e.target.value }
                                     : addr
                                 ))
                               }}
+                              rows={2}
                               className={`w-full px-3 py-2 border rounded-lg text-sm ${
                                 isDark 
-                                  ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                                  : 'bg-white border-gray-300 text-gray-900'
+                                  ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                               }`}
-                            >
-                              <option value="">请选择国家/地区</option>
-                              <option value="CN">中国</option>
-                              <option value="HK">香港</option>
-                              <option value="US">美国</option>
-                              <option value="GB">英国</option>
-                              <option value="DE">德国</option>
-                              <option value="FR">法国</option>
-                              <option value="JP">日本</option>
-                              <option value="SG">新加坡</option>
-                            </select>
+                              placeholder="请输入详细收款地址"
+                            />
                           ) : (
                             <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
                               isDark 
                                 ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
                                 : 'bg-white border-gray-300 text-gray-900'
                             }`}>
-                              {shippingAddr.country ? 
-                                {
-                                  "CN": "中国",
-                                  "HK": "香港", 
-                                  "US": "美国",
-                                  "GB": "英国",
-                                  "DE": "德国",
-                                  "FR": "法国",
-                                  "JP": "日本",
-                                  "SG": "新加坡"
-                                }[shippingAddr.country] || shippingAddr.country
-                                : '未设置'
-                              }
+                              {shippingAddr.address || '未设置'}
                             </div>
                           )}
                         </div>
