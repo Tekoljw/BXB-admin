@@ -5140,8 +5140,10 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
+                            console.log("充值按钮被点击")
                             setSelectedCardInfo({ name: '白金卡', number: '**** **** **** 1234', type: 'physical' })
                             setShowRechargeModal(true)
+                            console.log("showRechargeModal 设置为 true")
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
