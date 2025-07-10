@@ -12550,7 +12550,10 @@ export default function WalletPage() {
                 
                 <div className="text-center">
                   <button
-                    onClick={() => setResetPasswordMode(true)}
+                    onClick={() => {
+                      setResetPasswordMode(true)
+                      setChangePasswordStep(3)
+                    }}
                     className="text-sm text-blue-500 hover:text-blue-600 underline"
                   >
                     忘记PIN码？点击重置
@@ -12709,7 +12712,15 @@ export default function WalletPage() {
               {changePasswordStep > 1 && (
                 <Button
                   variant="outline"
-                  onClick={() => setChangePasswordStep(changePasswordStep - 1)}
+                  onClick={() => {
+                    if (changePasswordStep === 3 && resetPasswordMode) {
+                      // 从重置模式的第3步返回到第1步
+                      setChangePasswordStep(1)
+                      setResetPasswordMode(false)
+                    } else {
+                      setChangePasswordStep(changePasswordStep - 1)
+                    }
+                  }}
                   className="flex-1"
                 >
                   上一步
@@ -12730,10 +12741,10 @@ export default function WalletPage() {
               <Button
                 onClick={() => {
                   if (changePasswordStep === 1) {
-                    if (resetPasswordMode) {
-                      setChangePasswordStep(3)
-                    } else {
+                    if (currentPin.length === 6) {
                       setChangePasswordStep(2)
+                    } else {
+                      alert("请输入当前PIN码")
                     }
                   } else if (changePasswordStep === 2) {
                     if (newPin === confirmNewPin && newPin.length === 6) {
