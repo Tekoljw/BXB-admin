@@ -4807,7 +4807,7 @@ export default function WalletPage() {
                               setShowChangePasswordModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                              isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
                             }`}
                           >
                             <Settings className="h-4 w-4" />
@@ -4918,7 +4918,7 @@ export default function WalletPage() {
                               setShowChangePasswordModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                              isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
                             }`}
                           >
                             <Settings className="h-4 w-4" />
@@ -5029,7 +5029,7 @@ export default function WalletPage() {
                               setShowChangePasswordModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-cyan-600/20 text-cyan-400 hover:bg-cyan-600/30' : 'bg-cyan-50 text-cyan-600 hover:bg-cyan-100'
+                              isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
                             }`}
                           >
                             <Settings className="h-4 w-4" />
@@ -5140,7 +5140,7 @@ export default function WalletPage() {
                               setShowChangePasswordModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                              isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
                             }`}
                           >
                             <Settings className="h-4 w-4" />
@@ -5251,7 +5251,7 @@ export default function WalletPage() {
                               setShowChangePasswordModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                              isDark ? 'bg-purple-600/20 text-purple-400 hover:bg-purple-600/30' : 'bg-purple-50 text-purple-600 hover:bg-purple-100'
+                              isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
                             }`}
                           >
                             <Settings className="h-4 w-4" />
@@ -5406,7 +5406,7 @@ export default function WalletPage() {
                             setShowChangePasswordModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
-                            isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
                           }`}
                           title="修改密码"
                         >
@@ -10446,7 +10446,11 @@ export default function WalletPage() {
                   setShowRechargeModal(false)
                   alert("充值申请已提交")
                 }}
-                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                className={`flex-1 ${
+                  isDark 
+                    ? 'bg-white hover:bg-gray-100 text-black' 
+                    : 'bg-black hover:bg-gray-900 text-white'
+                }`}
               >
                 确认充值
               </Button>
@@ -10959,7 +10963,11 @@ export default function WalletPage() {
                     }
                   }
                 }}
-                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                className={`flex-1 ${
+                  isDark 
+                    ? 'bg-white hover:bg-gray-100 text-black' 
+                    : 'bg-black hover:bg-gray-900 text-white'
+                }`}
               >
                 {newCardStep === 5 ? "提交申请" : "下一步"}
               </Button>
@@ -11359,7 +11367,11 @@ export default function WalletPage() {
                     setActivateStep(prev => prev + 1)
                   }
                 }}
-                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                className={`flex-1 ${
+                  isDark 
+                    ? 'bg-white hover:bg-gray-100 text-black' 
+                    : 'bg-black hover:bg-gray-900 text-white'
+                }`}
               >
                 {activateStep === 4 ? "完成激活" : "下一步"}
               </Button>
@@ -11582,7 +11594,11 @@ export default function WalletPage() {
                   setShowProfileModal(false)
                   alert("个人信息已更新")
                 }}
-                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                className={`flex-1 ${
+                  isDark 
+                    ? 'bg-white hover:bg-gray-100 text-black' 
+                    : 'bg-black hover:bg-gray-900 text-white'
+                }`}
               >
                 保存信息
               </Button>
@@ -12272,7 +12288,11 @@ export default function WalletPage() {
                       setIsEditingPersonalInfo(false)
                       alert("个人信息已更新")
                     }}
-                    className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                    className={`flex-1 ${
+                      isDark 
+                        ? 'bg-white hover:bg-gray-100 text-black' 
+                        : 'bg-black hover:bg-gray-900 text-white'
+                    }`}
                   >
                     保存信息
                   </Button>
@@ -12291,7 +12311,11 @@ export default function WalletPage() {
                   </Button>
                   <Button
                     onClick={() => setIsEditingPersonalInfo(true)}
-                    className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
+                    className={`flex-1 ${
+                      isDark 
+                        ? 'bg-white hover:bg-gray-100 text-black' 
+                        : 'bg-black hover:bg-gray-900 text-white'
+                    }`}
                   >
                     编辑
                   </Button>
@@ -12510,7 +12534,7 @@ export default function WalletPage() {
                     </div>
                     {step < 3 && (
                       <div className={`w-8 h-0.5 mx-1 ${
-                        step < changePasswordStep ? 'bg-blue-500' : isDark ? 'bg-gray-600' : 'bg-gray-200'
+                        step < changePasswordStep ? 'bg-green-500' : isDark ? 'bg-gray-600' : 'bg-gray-200'
                       }`} />
                     )}
                   </div>
@@ -12521,10 +12545,10 @@ export default function WalletPage() {
             {/* 第1步：输入当前密码 */}
             {changePasswordStep === 1 && (
               <div className="space-y-4">
-                <div className={`p-4 rounded-lg ${isDark ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-blue-50 border border-blue-200'}`}>
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-green-500/10 border border-green-500/20' : 'bg-green-50 border border-green-200'}`}>
                   <div className="flex items-center">
-                    <Settings className="h-5 w-5 text-blue-500 mr-2" />
-                    <p className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
+                    <Settings className="h-5 w-5 text-green-500 mr-2" />
+                    <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-700'}`}>
                       请输入当前PIN码进行身份验证
                     </p>
                   </div>
@@ -12554,7 +12578,7 @@ export default function WalletPage() {
                       setResetPasswordMode(true)
                       setChangePasswordStep(3)
                     }}
-                    className="text-sm text-blue-500 hover:text-blue-600 underline"
+                    className="text-sm text-green-500 hover:text-green-600 underline"
                   >
                     忘记PIN码？点击重置
                   </button>
@@ -12699,8 +12723,8 @@ export default function WalletPage() {
                   </div>
                 </div>
                 
-                <div className={`p-3 rounded-lg ${isDark ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-blue-50 border border-blue-200'}`}>
-                  <p className={`text-xs ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
+                <div className={`p-3 rounded-lg ${isDark ? 'bg-green-500/10 border border-green-500/20' : 'bg-green-50 border border-green-200'}`}>
+                  <p className={`text-xs ${isDark ? 'text-green-400' : 'text-green-700'}`}>
                     为了您的账户安全，重置密码需要同时验证手机号和邮箱
                   </p>
                 </div>
@@ -12764,7 +12788,7 @@ export default function WalletPage() {
                     }
                   }
                 }}
-                className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
+                className="flex-1 bg-green-500 hover:bg-green-600 text-white"
               >
                 {changePasswordStep === 1 ? '下一步' : 
                  changePasswordStep === 2 ? '确认修改' : 
