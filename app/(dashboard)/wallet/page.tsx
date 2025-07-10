@@ -181,6 +181,13 @@ export default function WalletPage() {
   const [showFreezeModal, setShowFreezeModal] = useState(false) // 冻结卡片弹窗
   const [showDeleteModal, setShowDeleteModal] = useState(false) // 删除卡片弹窗
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false) // 修改密码弹窗
+  const [changePasswordStep, setChangePasswordStep] = useState(1) // 修改密码步骤
+  const [currentPin, setCurrentPin] = useState("") // 当前PIN码
+  const [newPin, setNewPin] = useState("") // 新PIN码
+  const [confirmNewPin, setConfirmNewPin] = useState("") // 确认新PIN码
+  const [resetPasswordMode, setResetPasswordMode] = useState(false) // 重置密码模式
+  const [phoneVerificationCode, setPhoneVerificationCode] = useState("") // 手机验证码
+  const [emailVerificationCode, setEmailVerificationCode] = useState("") // 邮箱验证码
   const [currentCardId, setCurrentCardId] = useState('') // 当前操作的卡片ID
   
   // 激活卡片多步骤状态
@@ -225,6 +232,17 @@ export default function WalletPage() {
     "AliExpress", "Wish", "Temu", "Stripe", "Square", "Venmo", "Revolut"
   ]
   
+  // 重置修改密码弹窗状态
+  const resetChangePasswordModal = () => {
+    setChangePasswordStep(1)
+    setCurrentPin("")
+    setNewPin("")
+    setConfirmNewPin("")
+    setResetPasswordMode(false)
+    setPhoneVerificationCode("")
+    setEmailVerificationCode("")
+  }
+
   // 重置申请新卡弹窗状态
   const resetNewCardModal = () => {
     setNewCardStep(1)
@@ -12450,114 +12468,296 @@ export default function WalletPage() {
         </div>
       )}
 
-      {/* 修改密码弹窗 */}
+      {/* 修改密码弹窗 - 三步流程 */}
       {showChangePasswordModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div 
             className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => setShowChangePasswordModal(false)}
+            onClick={() => {
+              setShowChangePasswordModal(false)
+              resetChangePasswordModal()
+            }}
           />
           <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
             isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
           } shadow-2xl`}>
             <div className="flex justify-between items-center mb-6">
               <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                修改密码
+                修改密码 - 第{changePasswordStep}步
               </h3>
               <button
-                onClick={() => setShowChangePasswordModal(false)}
+                onClick={() => {
+                  setShowChangePasswordModal(false)
+                  resetChangePasswordModal()
+                }}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             
-            <div className="space-y-4">
-              <div className={`p-4 rounded-lg ${isDark ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-blue-50 border border-blue-200'}`}>
-                <div className="flex items-center">
-                  <Settings className="h-5 w-5 text-blue-500 mr-2" />
-                  <p className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
-                    为了您的账户安全，请设置新的PIN码
-                  </p>
-                </div>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  当前PIN码
-                </label>
-                <input
-                  type="password"
-                  maxLength={6}
-                  placeholder="请输入当前PIN码"
-                  className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  新PIN码
-                </label>
-                <input
-                  type="password"
-                  maxLength={6}
-                  placeholder="请输入新PIN码"
-                  className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  确认新PIN码
-                </label>
-                <input
-                  type="password"
-                  maxLength={6}
-                  placeholder="请再次输入新PIN码"
-                  className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                  }`}
-                />
-              </div>
-              
-              <div className={`p-3 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
-                <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  PIN码要求：
-                </p>
-                <ul className={`text-xs mt-1 space-y-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  <li>• 6位数字</li>
-                  <li>• 不能使用连续数字（如123456）</li>
-                  <li>• 不能使用重复数字（如111111）</li>
-                </ul>
+            {/* 步骤指示器 */}
+            <div className="flex items-center justify-center mb-6">
+              <div className="flex items-center space-x-2">
+                {[1, 2, 3].map((step) => (
+                  <div key={step} className="flex items-center">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                      step <= changePasswordStep 
+                        ? 'bg-blue-500 text-white' 
+                        : isDark ? 'bg-gray-600 text-gray-400' : 'bg-gray-200 text-gray-600'
+                    }`}>
+                      {step}
+                    </div>
+                    {step < 3 && (
+                      <div className={`w-8 h-0.5 mx-1 ${
+                        step < changePasswordStep ? 'bg-blue-500' : isDark ? 'bg-gray-600' : 'bg-gray-200'
+                      }`} />
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
             
+            {/* 第1步：输入当前密码 */}
+            {changePasswordStep === 1 && (
+              <div className="space-y-4">
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-blue-50 border border-blue-200'}`}>
+                  <div className="flex items-center">
+                    <Settings className="h-5 w-5 text-blue-500 mr-2" />
+                    <p className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
+                      请输入当前PIN码进行身份验证
+                    </p>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    当前PIN码
+                  </label>
+                  <input
+                    type="password"
+                    maxLength={6}
+                    value={currentPin}
+                    onChange={(e) => setCurrentPin(e.target.value)}
+                    placeholder="请输入当前PIN码"
+                    className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                  />
+                </div>
+                
+                <div className="text-center">
+                  <button
+                    onClick={() => setResetPasswordMode(true)}
+                    className="text-sm text-blue-500 hover:text-blue-600 underline"
+                  >
+                    忘记PIN码？点击重置
+                  </button>
+                </div>
+              </div>
+            )}
+            
+            {/* 第2步：设置新密码 */}
+            {changePasswordStep === 2 && (
+              <div className="space-y-4">
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-green-500/10 border border-green-500/20' : 'bg-green-50 border border-green-200'}`}>
+                  <div className="flex items-center">
+                    <Settings className="h-5 w-5 text-green-500 mr-2" />
+                    <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-700'}`}>
+                      请设置新的PIN码
+                    </p>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    新PIN码
+                  </label>
+                  <input
+                    type="password"
+                    maxLength={6}
+                    value={newPin}
+                    onChange={(e) => setNewPin(e.target.value)}
+                    placeholder="请输入新PIN码"
+                    className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                  />
+                </div>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    确认新PIN码
+                  </label>
+                  <input
+                    type="password"
+                    maxLength={6}
+                    value={confirmNewPin}
+                    onChange={(e) => setConfirmNewPin(e.target.value)}
+                    placeholder="请再次输入新PIN码"
+                    className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
+                      isDark 
+                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                    }`}
+                  />
+                </div>
+                
+                {newPin && confirmNewPin && newPin !== confirmNewPin && (
+                  <div className={`p-3 rounded-lg ${isDark ? 'bg-red-500/10 border border-red-500/20' : 'bg-red-50 border border-red-200'}`}>
+                    <p className={`text-sm ${isDark ? 'text-red-400' : 'text-red-700'}`}>
+                      两次输入的PIN码不一致
+                    </p>
+                  </div>
+                )}
+                
+                <div className={`p-3 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    PIN码要求：
+                  </p>
+                  <ul className={`text-xs mt-1 space-y-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <li>• 6位数字</li>
+                    <li>• 不能使用连续数字（如123456）</li>
+                    <li>• 不能使用重复数字（如111111）</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+            
+            {/* 第3步：验证码验证（重置密码时） */}
+            {changePasswordStep === 3 && resetPasswordMode && (
+              <div className="space-y-4">
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-orange-500/10 border border-orange-500/20' : 'bg-orange-50 border border-orange-200'}`}>
+                  <div className="flex items-center">
+                    <Settings className="h-5 w-5 text-orange-500 mr-2" />
+                    <p className={`text-sm ${isDark ? 'text-orange-400' : 'text-orange-700'}`}>
+                      请验证您的身份以完成密码重置
+                    </p>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    手机验证码
+                  </label>
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={phoneVerificationCode}
+                      onChange={(e) => setPhoneVerificationCode(e.target.value)}
+                      placeholder="请输入手机验证码"
+                      className={`flex-1 px-3 py-2 border rounded-lg text-center tracking-widest ${
+                        isDark 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                      }`}
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => alert("验证码已发送到您的手机")}
+                      className="px-3"
+                    >
+                      获取验证码
+                    </Button>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    邮箱验证码
+                  </label>
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={emailVerificationCode}
+                      onChange={(e) => setEmailVerificationCode(e.target.value)}
+                      placeholder="请输入邮箱验证码"
+                      className={`flex-1 px-3 py-2 border rounded-lg text-center tracking-widest ${
+                        isDark 
+                          ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                      }`}
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => alert("验证码已发送到您的邮箱")}
+                      className="px-3"
+                    >
+                      获取验证码
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className={`p-3 rounded-lg ${isDark ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-blue-50 border border-blue-200'}`}>
+                  <p className={`text-xs ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
+                    为了您的账户安全，重置密码需要同时验证手机号和邮箱
+                  </p>
+                </div>
+              </div>
+            )}
+            
+            {/* 底部按钮 */}
             <div className="flex space-x-3 mt-6">
+              {changePasswordStep > 1 && (
+                <Button
+                  variant="outline"
+                  onClick={() => setChangePasswordStep(changePasswordStep - 1)}
+                  className="flex-1"
+                >
+                  上一步
+                </Button>
+              )}
+              
               <Button
                 variant="outline"
-                onClick={() => setShowChangePasswordModal(false)}
+                onClick={() => {
+                  setShowChangePasswordModal(false)
+                  resetChangePasswordModal()
+                }}
                 className="flex-1"
               >
                 取消
               </Button>
+              
               <Button
                 onClick={() => {
-                  setShowChangePasswordModal(false)
-                  alert("PIN码已更新")
+                  if (changePasswordStep === 1) {
+                    if (resetPasswordMode) {
+                      setChangePasswordStep(3)
+                    } else {
+                      setChangePasswordStep(2)
+                    }
+                  } else if (changePasswordStep === 2) {
+                    if (newPin === confirmNewPin && newPin.length === 6) {
+                      setShowChangePasswordModal(false)
+                      resetChangePasswordModal()
+                      alert("PIN码修改成功")
+                    } else {
+                      alert("请确认PIN码输入正确")
+                    }
+                  } else if (changePasswordStep === 3) {
+                    if (phoneVerificationCode && emailVerificationCode) {
+                      setShowChangePasswordModal(false)
+                      resetChangePasswordModal()
+                      alert("PIN码重置成功")
+                    } else {
+                      alert("请输入手机和邮箱验证码")
+                    }
+                  }
                 }}
                 className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
               >
-                确认修改
+                {changePasswordStep === 1 ? '下一步' : 
+                 changePasswordStep === 2 ? '确认修改' : 
+                 '完成重置'}
               </Button>
             </div>
           </div>
