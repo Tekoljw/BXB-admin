@@ -138,6 +138,10 @@ export default function WalletPage() {
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
   
+  // 佣金账户相关状态
+  const [commissionCategory, setCommissionCategory] = useState("合约佣金") // 佣金分类：合约佣金/理财佣金/U卡佣金/担保佣金/支付佣金
+  const [commissionSubTab, setCommissionSubTab] = useState("佣金规则") // 佣金子页签：佣金规则/查看记录
+  
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
     if (!selectedCurrencies.includes(currencyTab) && selectedCurrencies.length > 0) {
@@ -6082,2274 +6086,204 @@ export default function WalletPage() {
       case "佣金账户":
         return (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* 虚拟卡 */}
-              <div 
-                className="relative cursor-pointer"
-                onClick={() => setSelectedUCardView("virtual")}
-              >
-                <div className={`w-full rounded-2xl p-8 relative transition-all duration-300 ${
-                  isDark 
-                    ? "bg-gradient-to-br from-[#2a2d3a] to-[#1e1f2e]" 
-                    : "bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0]"
-                } ${
-                  selectedUCardView === "virtual" 
-                    ? "shadow-lg ring-2 ring-[#00D4AA] ring-opacity-40" 
-                    : "shadow-lg hover:shadow-xl"
-                }`}>
-                  
-                  {/* 选中指示器 */}
-                  {selectedUCardView === "virtual" && (
-                    <div className="absolute top-4 right-4">
-                      <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center">
-                        <Check className="h-4 w-4 text-white" />
+            {/* 顶部统计卡片 */}
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+              {[
+                { title: "本月合约佣金", amount: "1,234.56", currency: "USDT", icon: BarChart3, color: "blue" },
+                { title: "本月理财佣金", amount: "567.89", currency: "USDT", icon: PiggyBank, color: "green" },
+                { title: "本月U卡佣金", amount: "345.67", currency: "USDT", icon: CreditCard, color: "purple" },
+                { title: "本月担保佣金", amount: "123.45", currency: "USDT", icon: Shield, color: "orange" },
+                { title: "本月支付佣金", amount: "789.12", currency: "USDT", icon: Receipt, color: "pink" }
+              ].map((stat, index) => {
+                const Icon = stat.icon
+                return (
+                  <div key={index} className={`${cardStyle} rounded-lg p-4`}>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className={`p-2 rounded-lg ${
+                        stat.color === 'blue' ? 'bg-blue-100 dark:bg-blue-900/30' :
+                        stat.color === 'green' ? 'bg-green-100 dark:bg-green-900/30' :
+                        stat.color === 'purple' ? 'bg-purple-100 dark:bg-purple-900/30' :
+                        stat.color === 'orange' ? 'bg-orange-100 dark:bg-orange-900/30' :
+                        'bg-pink-100 dark:bg-pink-900/30'
+                      }`}>
+                        <Icon className={`h-4 w-4 ${
+                          stat.color === 'blue' ? 'text-blue-600 dark:text-blue-400' :
+                          stat.color === 'green' ? 'text-green-600 dark:text-green-400' :
+                          stat.color === 'purple' ? 'text-purple-600 dark:text-purple-400' :
+                          stat.color === 'orange' ? 'text-orange-600 dark:text-orange-400' :
+                          'text-pink-600 dark:text-pink-400'
+                        }`} />
                       </div>
                     </div>
-                  )}
-                  
-                  <div className="space-y-6">
-                    {/* 标题区域 */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                          虚拟U卡
-                        </h3>
-                      </div>
-                      <div className="text-right">
-                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"} mb-1`}>
-                          币种换算
-                        </div>
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            const currencies = ["USD", "EUR", "GBP", "JPY"]
-                            const currentIndex = currencies.indexOf(selectedDisplayCurrency)
-                            const nextCurrency = currencies[(currentIndex + 1) % currencies.length]
-                            setSelectedDisplayCurrency(nextCurrency)
-                          }}
-                          className={`text-sm font-medium transition-colors ${
-                            isDark ? "text-white hover:text-[#00D4AA]" : "text-gray-900 hover:text-[#00D4AA]"
-                          }`}
-                        >
-                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
-                        </button>
-                      </div>
-                    </div>
-                    
-                    {/* 余额区域 */}
-                    <div>
-                      <div className="flex items-baseline space-x-3">
-                        <div className={`text-4xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
-                        </div>
-                        <span className="text-lg font-medium text-[#00D4AA]">
-                          USDT
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* VISA & MasterCard logos */}
-                    <div className="flex justify-end mt-4">
-                      <img 
-                        src="/visa-mastercard-logo.png" 
-                        alt="VISA MasterCard" 
-                        className="h-6 opacity-80"
-                      />
-                    </div>
+                    <div className="text-xs text-gray-500 mb-1">{stat.title}</div>
+                    <div className="text-lg font-bold">{balanceVisible ? stat.amount : "****"}</div>
+                    <div className="text-xs text-gray-500">{stat.currency}</div>
                   </div>
-                </div>
-              </div>
-
-              {/* 实体卡 */}
-              <div 
-                className="relative cursor-pointer"
-                onClick={() => setSelectedUCardView("physical")}
-              >
-                <div className={`w-full rounded-2xl p-8 relative transition-all duration-300 ${
-                  isDark 
-                    ? "bg-gradient-to-br from-[#2a2d3a] to-[#1e1f2e]" 
-                    : "bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0]"
-                } ${
-                  selectedUCardView === "physical" 
-                    ? "shadow-lg ring-2 ring-[#00D4AA] ring-opacity-40" 
-                    : "shadow-lg hover:shadow-xl"
-                }`}>
-                  
-                  {/* 选中指示器 */}
-                  {selectedUCardView === "physical" && (
-                    <div className="absolute top-4 right-4">
-                      <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center">
-                        <Check className="h-4 w-4 text-white" />
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className="space-y-6">
-                    {/* 标题区域 */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                          实体U卡
-                        </h3>
-                      </div>
-                      <div className="text-right">
-                        <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"} mb-1`}>
-                          币种换算
-                        </div>
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            const currencies = ["USD", "EUR", "GBP", "JPY"]
-                            const currentIndex = currencies.indexOf(selectedDisplayCurrency)
-                            const nextCurrency = currencies[(currentIndex + 1) % currencies.length]
-                            setSelectedDisplayCurrency(nextCurrency)
-                          }}
-                          className={`text-sm font-medium transition-colors ${
-                            isDark ? "text-white hover:text-[#00D4AA]" : "text-gray-900 hover:text-[#00D4AA]"
-                          }`}
-                        >
-                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
-                        </button>
-                      </div>
-                    </div>
-                    
-                    {/* 余额区域 */}
-                    <div>
-                      <div className="flex items-baseline space-x-3">
-                        <div className={`text-4xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                          {balanceVisible ? convertBalance(walletData["U卡账户"].cardBalance, "USDT", selectedDisplayCurrency) : "****"}
-                        </div>
-                        <span className="text-lg font-medium text-[#00D4AA]">
-                          USDT
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* VISA & MasterCard logos */}
-                    <div className="flex justify-end mt-4">
-                      <img 
-                        src="/visa-mastercard-logo.png" 
-                        alt="VISA MasterCard" 
-                        className="h-6 opacity-80"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+                )
+              })}
             </div>
 
-            {/* 功能按钮区域 */}
-            {selectedUCardView === "virtual" ? (
-              /* 虚拟卡按钮 */
-              <div className="grid grid-cols-7 gap-3">
-                <Button 
-                  onClick={() => setSelectedAction("my-virtual-cards")}
-                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
-                    selectedAction === "my-virtual-cards"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <CreditCard className="h-5 w-5" />
-                  <span className="text-xs">我的虚拟卡</span>
-                </Button>
-                
-                <Button 
-                  onClick={() => setShowNewCardModal(true)}
-                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
-                    selectedAction === "apply-new-card"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <Plus className="h-5 w-5" />
-                  <span className="text-xs">申请新卡</span>
-                </Button>
-                
-                <Button 
-                  onClick={() => setSelectedAction("how-to-use")}
-                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
-                    selectedAction === "how-to-use"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <HelpCircle className="h-5 w-5" />
-                  <span className="text-xs">如何使用虚拟卡</span>
-                </Button>
-                
-                <Button 
-                  onClick={() => {
-                    setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
-                    setShowCardTransferModal(true)
-                  }}
-                  className={`h-16 flex flex-col items-center justify-center space-y-1 transition-all duration-200 ${
-                    selectedAction === "transfer"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <ArrowLeftRight className="h-5 w-5" />
-                  <span className="text-xs">划款</span>
-                </Button>
-                
-                {/* 仅图标按钮 */}
-                <Button 
-                  onClick={() => setSelectedAction("fund-records")}
-                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
-                    selectedAction === "fund-records"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <Wallet className="h-5 w-5" />
-                </Button>
-                
-                <Button 
-                  onClick={() => setSelectedAction("usage-bills")}
-                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
-                    selectedAction === "usage-bills"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <Receipt className="h-5 w-5" />
-                </Button>
-                
-                <Button 
-                  onClick={() => setSelectedAction("operation-records")}
-                  className={`h-16 flex items-center justify-center transition-all duration-200 ${
-                    selectedAction === "operation-records"
-                      ? "bg-[#00D4AA] text-black"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                >
-                  <FileText className="h-5 w-5" />
-                </Button>
-              </div>
-            ) : (
-              /* 实体卡网格布局 */
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* 实体卡1 - 白金卡 */}
-                <div className={`relative rounded-2xl p-6 h-52 ${
-                  isDark ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                } shadow-lg transition-all hover:shadow-xl`}>
-                  {/* 顶部logo区域 */}
-                  <div className="flex justify-between items-start mb-6">
-                    <div className={`text-sm font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>BeDAO</div>
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 rounded-full bg-blue-500 -mr-0.5"></div>
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    </div>
-                  </div>
+            {/* 佣金分类标签 */}
+            <div className="flex flex-wrap gap-2">
+              {[
+                { id: "合约佣金", label: "合约佣金", icon: BarChart3 },
+                { id: "理财佣金", label: "理财佣金", icon: PiggyBank },
+                { id: "U卡佣金", label: "U卡佣金", icon: CreditCard },
+                { id: "担保佣金", label: "担保佣金", icon: Shield },
+                { id: "支付佣金", label: "支付佣金", icon: Receipt }
+              ].map((category) => {
+                const Icon = category.icon
+                return (
+                  <button
+                    key={category.id}
+                    onClick={() => setCommissionCategory(category.id)}
+                    className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      commissionCategory === category.id
+                        ? 'bg-[#00D4AA] text-white'
+                        : isDark
+                          ? 'bg-[#252842] text-gray-300 hover:bg-[#2d3748]'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 mr-2" />
+                    {category.label}
+                  </button>
+                )
+              })}
+            </div>
 
-                  {/* 卡号区域 */}
-                  <div className={`mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                    <div className="flex items-center">
-                      <span className="text-sm font-mono tracking-wider font-bold">5234 5234 5234 1234</span>
-                      <button 
-                        className="ml-2 opacity-70 hover:opacity-100"
-                        onClick={() => navigator.clipboard.writeText("5234523452341234")}
-                      >
-                        <Copy className="h-3 w-3" />
-                      </button>
+            {/* 佣金详情卡片 */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { title: "未领取金额", amount: "456.78", currency: "USDT", status: "pending" },
+                { title: "已领取金额", amount: "1,234.56", currency: "USDT", status: "claimed" },
+                { title: "今日佣金", amount: "23.45", currency: "USDT", status: "today" },
+                { title: "本月佣金", amount: "1,691.34", currency: "USDT", status: "month" }
+              ].map((item, index) => (
+                <div key={index} className={`${cardStyle} rounded-lg p-4`}>
+                  <div className="text-xs text-gray-500 mb-2">{item.title}</div>
+                  <div className="text-xl font-bold mb-1">{balanceVisible ? item.amount : "****"}</div>
+                  <div className="text-xs text-gray-500 mb-3">{item.currency}</div>
+                  {item.status === "pending" && (
+                    <button className="w-full bg-[#00D4AA] text-white text-sm py-2 rounded-lg hover:bg-[#00D4AA]/90 transition-colors">
+                      领取佣金
+                    </button>
+                  )}
+                  {item.status === "today" && (
+                    <div className="text-xs text-green-500">
+                      +12.3% 较昨日
                     </div>
-                    <div className={`text-xs opacity-75 mt-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>有效期: 12/28</div>
-                  </div>
-
-                  {/* 持卡人姓名 */}
-                  <div className="absolute bottom-4 left-6">
-                    <div className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>持卡人</div>
-                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>JOHN DOE</div>
-                  </div>
+                  )}
+                  {item.status === "month" && (
+                    <div className="text-xs text-blue-500">
+                      +8.5% 较上月
+                    </div>
+                  )}
                 </div>
+              ))}
+            </div>
 
-                {/* 实体卡2 - 钻石卡 */}
-                <div className={`relative rounded-2xl p-6 h-52 ${
-                  isDark ? 'bg-gradient-to-br from-purple-800 to-purple-900' : 'bg-gradient-to-br from-purple-500 to-purple-600'
-                } shadow-lg transition-all hover:shadow-xl text-white`}>
-                  {/* 顶部logo区域 */}
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="text-sm font-bold">BeDAO</div>
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 rounded-full bg-yellow-400 -mr-0.5"></div>
-                      <div className="w-3 h-3 rounded-full bg-orange-500"></div>
-                    </div>
-                  </div>
-
-                  {/* 卡号区域 */}
-                  <div className="mb-4">
-                    <div className="flex items-center">
-                      <span className="text-sm font-mono tracking-wider font-bold">4456 4456 4456 7890</span>
-                      <button 
-                        className="ml-2 opacity-70 hover:opacity-100"
-                        onClick={() => navigator.clipboard.writeText("4456445644567890")}
-                      >
-                        <Copy className="h-3 w-3" />
-                      </button>
-                    </div>
-                    <div className="text-xs opacity-75 mt-2">有效期: 08/29</div>
-                  </div>
-
-                  {/* 持卡人姓名 */}
-                  <div className="absolute bottom-4 left-6">
-                    <div className="text-xs opacity-75">持卡人</div>
-                    <div className="text-sm font-medium">JANE SMITH</div>
-                  </div>
-                </div>
-
-                {/* 实体卡3 - 黑金卡 */}
-                <div className={`relative rounded-2xl p-6 h-52 ${
-                  isDark ? 'bg-gradient-to-br from-gray-900 to-black' : 'bg-gradient-to-br from-gray-800 to-gray-900'
-                } shadow-lg transition-all hover:shadow-xl text-white`}>
-                  {/* 顶部logo区域 */}
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="text-sm font-bold">BeDAO</div>
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 rounded-full bg-gold -mr-0.5" style={{backgroundColor: '#FFD700'}}></div>
-                      <div className="w-3 h-3 rounded-full bg-silver" style={{backgroundColor: '#C0C0C0'}}></div>
-                    </div>
-                  </div>
-
-                  {/* 卡号区域 */}
-                  <div className="mb-4">
-                    <div className="flex items-center">
-                      <span className="text-sm font-mono tracking-wider font-bold">6789 6789 6789 0123</span>
-                      <button 
-                        className="ml-2 opacity-70 hover:opacity-100"
-                        onClick={() => navigator.clipboard.writeText("6789678967890123")}
-                      >
-                        <Copy className="h-3 w-3" />
-                      </button>
-                    </div>
-                    <div className="text-xs opacity-75 mt-2">有效期: 05/30</div>
-                  </div>
-
-                  {/* 持卡人姓名 */}
-                  <div className="absolute bottom-4 left-6">
-                    <div className="text-xs opacity-75">持卡人</div>
-                    <div className="text-sm font-medium">ALICE WANG</div>
-                  </div>
-                </div>
-
-                {/* 实体卡4 - 商务卡 */}
-                <div className={`relative rounded-2xl p-6 h-52 ${
-                  isDark ? 'bg-gradient-to-br from-green-800 to-green-900' : 'bg-gradient-to-br from-green-600 to-green-700'
-                } shadow-lg transition-all hover:shadow-xl text-white`}>
-                  {/* 顶部logo区域 */}
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="text-sm font-bold">BeDAO</div>
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 rounded-full bg-blue-400 -mr-0.5"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                    </div>
-                  </div>
-
-                  {/* 卡号区域 */}
-                  <div className="mb-4">
-                    <div className="flex items-center">
-                      <span className="text-sm font-mono tracking-wider font-bold">7890 7890 7890 4567</span>
-                      <button 
-                        className="ml-2 opacity-70 hover:opacity-100"
-                        onClick={() => navigator.clipboard.writeText("7890789078904567")}
-                      >
-                        <Copy className="h-3 w-3" />
-                      </button>
-                    </div>
-                    <div className="text-xs opacity-75 mt-2">有效期: 03/31</div>
-                  </div>
-
-                  {/* 持卡人姓名 */}
-                  <div className="absolute bottom-4 left-6">
-                    <div className="text-xs opacity-75">持卡人</div>
-                    <div className="text-sm font-medium">BOB CHEN</div>
-                  </div>
-                </div>
-
-                {/* 实体卡5 - 学生卡 */}
-                <div className={`relative rounded-2xl p-6 h-52 ${
-                  isDark ? 'bg-gradient-to-br from-blue-800 to-blue-900' : 'bg-gradient-to-br from-blue-500 to-blue-600'
-                } shadow-lg transition-all hover:shadow-xl text-white`}>
-                  {/* 顶部logo区域 */}
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="text-sm font-bold">BeDAO</div>
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 rounded-full bg-cyan-400 -mr-0.5"></div>
-                      <div className="w-3 h-3 rounded-full bg-blue-400"></div>
-                    </div>
-                  </div>
-
-                  {/* 卡号区域 */}
-                  <div className="mb-4">
-                    <div className="flex items-center">
-                      <span className="text-sm font-mono tracking-wider font-bold">1234 1234 1234 5678</span>
-                      <button 
-                        className="ml-2 opacity-70 hover:opacity-100"
-                        onClick={() => navigator.clipboard.writeText("1234123412345678")}
-                      >
-                        <Copy className="h-3 w-3" />
-                      </button>
-                    </div>
-                    <div className="text-xs opacity-75 mt-2">有效期: 01/32</div>
-                  </div>
-
-                  {/* 持卡人姓名 */}
-                  <div className="absolute bottom-4 left-6">
-                    <div className="text-xs opacity-75">持卡人</div>
-                    <div className="text-sm font-medium">EMMA LI</div>
-                  </div>
-                </div>
-
-                {/* 实体卡6 - 高级卡 */}
-                <div className={`relative rounded-2xl p-6 h-52 ${
-                  isDark ? 'bg-gradient-to-br from-red-800 to-red-900' : 'bg-gradient-to-br from-red-500 to-red-600'
-                } shadow-lg transition-all hover:shadow-xl text-white`}>
-                  {/* 顶部logo区域 */}
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="text-sm font-bold">BeDAO</div>
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 rounded-full bg-pink-400 -mr-0.5"></div>
-                      <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                    </div>
-                  </div>
-
-                  {/* 卡号区域 */}
-                  <div className="mb-4">
-                    <div className="flex items-center">
-                      <span className="text-sm font-mono tracking-wider font-bold">9876 9876 9876 5432</span>
-                      <button 
-                        className="ml-2 opacity-70 hover:opacity-100"
-                        onClick={() => navigator.clipboard.writeText("9876987698765432")}
-                      >
-                        <Copy className="h-3 w-3" />
-                      </button>
-                    </div>
-                    <div className="text-xs opacity-75 mt-2">有效期: 11/33</div>
-                  </div>
-
-                  {/* 持卡人姓名 */}
-                  <div className="absolute bottom-4 left-6">
-                    <div className="text-xs opacity-75">持卡人</div>
-                    <div className="text-sm font-medium">DAVID ZHAO</div>
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* 佣金规则和记录标签 */}
+            <div className="flex space-x-4 border-b dark:border-gray-700">
+              {[
+                { id: "佣金规则", label: "佣金规则" },
+                { id: "查看记录", label: "查看记录" }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setCommissionSubTab(tab.id)}
+                  className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                    commissionSubTab === tab.id
+                      ? 'border-[#00D4AA] text-[#00D4AA]'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
 
             {/* 内容区域 */}
-            <div className={`${cardStyle} rounded-lg p-6 min-h-[400px]`}>
-              {selectedAction === "my-virtual-cards" ? (
-                <div className="space-y-6">
-                  <h3 className="text-lg font-semibold mb-4">我的虚拟卡</h3>
-                  
-                  {/* 虚拟卡列表 */}
+            {commissionSubTab === "佣金规则" ? (
+              <div className={`${cardStyle} rounded-lg p-6`}>
+                <h3 className="text-lg font-semibold mb-4">{commissionCategory}规则</h3>
+                <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className={`p-6 rounded-lg border ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'} hover:shadow-md transition-all`}>
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h4 className="font-medium">主卡 - USDT</h4>
-                          <p className="text-sm text-gray-500">虚拟借记卡</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">正常</span>
-                          <Button size="sm" variant="outline" className="border-[#00D4AA] text-[#00D4AA]">
-                            管理
-                          </Button>
-                        </div>
-                      </div>
-                      
+                    <div>
+                      <h4 className="font-medium mb-2">基础佣金率</h4>
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <span className="text-sm text-gray-500">卡号</span>
-                          <span className="text-sm font-mono">**** **** **** 5678</span>
+                          <span className="text-sm text-gray-500">一级推荐用户</span>
+                          <span className="font-medium">20%</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm text-gray-500">余额</span>
-                          <span className="text-sm font-bold text-[#00D4AA]">
-                            {balanceVisible ? "1,234.56 USDT" : "****"}
-                          </span>
+                          <span className="text-sm text-gray-500">二级推荐用户</span>
+                          <span className="font-medium">10%</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm text-gray-500">有效期</span>
-                          <span className="text-sm">12/28</span>
+                          <span className="text-sm text-gray-500">三级推荐用户</span>
+                          <span className="font-medium">5%</span>
                         </div>
-                      </div>
-                      
-                      <div className="flex space-x-2 mt-4">
-                        <Button size="sm" className="flex-1 bg-[#00D4AA] hover:bg-[#00B894] text-black">
-                          充值
-                        </Button>
-                        <Button size="sm" variant="outline" className="flex-1 border-red-500 text-red-500 hover:bg-red-50">
-                          冻结
-                        </Button>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ) : selectedAction === "my-cards" ? (
-                <div className="space-y-6">
-                  <h3 className="text-lg font-semibold mb-4">我的卡片</h3>
-                  
-                  {/* 实体卡列表 */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className={`p-6 rounded-lg border ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'} hover:shadow-md transition-all`}>
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h4 className="font-medium">白金卡 - USDT</h4>
-                          <p className="text-sm text-gray-500">实体借记卡</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">激活</span>
-                          <Button size="sm" variant="outline" className="border-[#00D4AA] text-[#00D4AA]">
-                            管理
-                          </Button>
-                        </div>
-                      </div>
-                      
+                    <div>
+                      <h4 className="font-medium mb-2">等级加成</h4>
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <span className="text-sm text-gray-500">卡号</span>
-                          <span className="text-sm font-mono">**** **** **** 1234</span>
+                          <span className="text-sm text-gray-500">VIP1</span>
+                          <span className="font-medium">+5%</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm text-gray-500">余额</span>
-                          <span className="text-sm font-bold text-[#00D4AA]">
-                            {balanceVisible ? "1,234.56 USDT" : "****"}
-                          </span>
+                          <span className="text-sm text-gray-500">VIP2</span>
+                          <span className="font-medium">+10%</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm text-gray-500">有效期</span>
-                          <span className="text-sm">12/28</span>
+                          <span className="text-sm text-gray-500">VIP3</span>
+                          <span className="font-medium">+15%</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm text-gray-500">持卡人</span>
-                          <span className="text-sm">JOHN DOE</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex space-x-2 mt-4">
-                        <Button size="sm" className="flex-1 bg-[#00D4AA] hover:bg-[#00B894] text-black">
-                          充值
-                        </Button>
-                        <Button size="sm" variant="outline" className="flex-1 border-red-500 text-red-500 hover:bg-red-50">
-                          冻结
-                        </Button>
                       </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="text-gray-500 mb-4">请选择功能</div>
-                  <p className="text-sm text-gray-400">选择上方按钮查看相应功能</p>
-                </div>
-              )}
-            </div>
-
-            {/* 虚拟卡申请流程模态框 */}
-            {showVirtualCardApplication && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className={`${cardStyle} rounded-lg p-6 w-full max-w-md mx-4`}>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold">申请虚拟U卡</h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setShowVirtualCardApplication(false)
-                        setCardApplicationStep(1)
-                        setVirtualCardApplicationData({
-                          fullName: "",
-                          idNumber: "",
-                          email: "",
-                          phone: "",
-                          agreeTerms: false
-                        })
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+                  <div className="border-t dark:border-gray-700 pt-4">
+                    <h4 className="font-medium mb-2">结算规则</h4>
+                    <ul className="text-sm text-gray-500 space-y-1">
+                      <li>• 佣金每日自动结算，次日可领取</li>
+                      <li>• 佣金有效期为90天，逾期自动失效</li>
+                      <li>• 最低领取金额为1 USDT</li>
+                      <li>• 佣金将自动发放到您的现货账户</li>
+                    </ul>
                   </div>
-
-                  {cardApplicationStep === 1 && (
-                    <div className="space-y-4">
-                      <div className="text-center mb-6">
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
-                          <CreditCard className="h-8 w-8 text-[#00D4AA]" />
-                        </div>
-                        <p className="text-sm text-gray-500">填写个人信息完成虚拟卡申请</p>
-                      </div>
-
+                </div>
+              </div>
+            ) : (
+              <div className={`${cardStyle} rounded-lg p-6`}>
+                <h3 className="text-lg font-semibold mb-4">{commissionCategory}记录</h3>
+                <div className="space-y-3">
+                  {[
+                    { date: "2024-01-15", user: "用户A***123", amount: "+15.67", status: "已发放", source: "现货交易" },
+                    { date: "2024-01-14", user: "用户B***456", amount: "+8.32", status: "已发放", source: "合约交易" },
+                    { date: "2024-01-13", user: "用户C***789", amount: "+23.45", status: "已发放", source: "理财投资" },
+                    { date: "2024-01-12", user: "用户D***012", amount: "+12.89", status: "待发放", source: "U卡消费" },
+                    { date: "2024-01-11", user: "用户E***345", amount: "+6.78", status: "已发放", source: "担保交易" }
+                  ].map((record, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 border dark:border-gray-700 rounded-lg">
                       <div>
-                        <label className="block text-sm font-medium mb-1">真实姓名</label>
-                        <input
-                          type="text"
-                          value={virtualCardApplicationData.fullName}
-                          onChange={(e) => setVirtualCardApplicationData({
-                            ...virtualCardApplicationData,
-                            fullName: e.target.value
-                          })}
-                          className={`w-full p-2 border rounded-lg ${
-                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                          }`}
-                          placeholder="请输入真实姓名"
-                        />
+                        <div className="font-medium">{record.user}</div>
+                        <div className="text-sm text-gray-500">{record.date} • {record.source}</div>
                       </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1">身份证号</label>
-                        <input
-                          type="text"
-                          value={virtualCardApplicationData.idNumber}
-                          onChange={(e) => setVirtualCardApplicationData({
-                            ...virtualCardApplicationData,
-                            idNumber: e.target.value
-                          })}
-                          className={`w-full p-2 border rounded-lg ${
-                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                          }`}
-                          placeholder="请输入身份证号"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1">邮箱地址</label>
-                        <input
-                          type="email"
-                          value={virtualCardApplicationData.email}
-                          onChange={(e) => setVirtualCardApplicationData({
-                            ...virtualCardApplicationData,
-                            email: e.target.value
-                          })}
-                          className={`w-full p-2 border rounded-lg ${
-                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                          }`}
-                          placeholder="请输入邮箱地址"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1">手机号码</label>
-                        <input
-                          type="tel"
-                          value={virtualCardApplicationData.phone}
-                          onChange={(e) => setVirtualCardApplicationData({
-                            ...virtualCardApplicationData,
-                            phone: e.target.value
-                          })}
-                          className={`w-full p-2 border rounded-lg ${
-                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                          }`}
-                          placeholder="请输入手机号码"
-                        />
-                      </div>
-
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          id="agreeTerms"
-                          checked={virtualCardApplicationData.agreeTerms}
-                          onChange={(e) => setVirtualCardApplicationData({
-                            ...virtualCardApplicationData,
-                            agreeTerms: e.target.checked
-                          })}
-                          className="rounded"
-                        />
-                        <label htmlFor="agreeTerms" className="text-sm">
-                          我已阅读并同意《U卡服务协议》和《隐私政策》
-                        </label>
-                      </div>
-
-                      <Button
-                        onClick={() => setCardApplicationStep(2)}
-                        disabled={!virtualCardApplicationData.fullName || !virtualCardApplicationData.idNumber || 
-                                 !virtualCardApplicationData.email || !virtualCardApplicationData.phone || 
-                                 !virtualCardApplicationData.agreeTerms}
-                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black"
-                      >
-                        下一步
-                      </Button>
-                    </div>
-                  )}
-
-                  {cardApplicationStep === 2 && (
-                    <div className="space-y-4 text-center">
-                      <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center">
-                        <CheckCircle className="h-8 w-8 text-green-500" />
-                      </div>
-                      <h4 className="text-lg font-semibold">申请提交成功！</h4>
-                      <p className="text-sm text-gray-500 mb-6">
-                        您的虚拟U卡申请已提交，预计3-5分钟内完成审核并自动开通
-                      </p>
-                      
-                      <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'} text-left`}>
-                        <h5 className="font-medium mb-2">申请信息</h5>
-                        <div className="space-y-1 text-sm">
-                          <div>姓名: {virtualCardApplicationData.fullName}</div>
-                          <div>身份证: {virtualCardApplicationData.idNumber.replace(/(.{6}).*(.{4})/, '$1****$2')}</div>
-                          <div>邮箱: {virtualCardApplicationData.email}</div>
-                          <div>手机: {virtualCardApplicationData.phone.replace(/(.{3}).*(.{4})/, '$1****$2')}</div>
+                      <div className="text-right">
+                        <div className="font-medium text-green-500">{record.amount} USDT</div>
+                        <div className={`text-xs ${
+                          record.status === "已发放" ? "text-green-500" : "text-yellow-500"
+                        }`}>
+                          {record.status}
                         </div>
                       </div>
-
-                      <Button
-                        onClick={() => {
-                          // 模拟开卡成功
-                          walletData["U卡账户"].hasVirtualCard = true
-                          setShowVirtualCardApplication(false)
-                          setCardApplicationStep(1)
-                          setVirtualCardApplicationData({
-                            fullName: "",
-                            idNumber: "",
-                            email: "",
-                            phone: "",
-                            agreeTerms: false
-                          })
-                        }}
-                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black"
-                      >
-                        完成申请
-                      </Button>
                     </div>
-                  )}
+                  ))}
                 </div>
               </div>
             )}
-
-            {/* 实体卡申请流程模态框 */}
-            {showPhysicalCardApplication && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className={`${cardStyle} rounded-lg p-6 w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto`}>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold">申请实体U卡</h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setShowPhysicalCardApplication(false)
-                        setCardApplicationStep(1)
-                        setPhysicalCardApplicationData({
-                          fullName: "",
-                          idNumber: "",
-                          email: "",
-                          phone: "",
-                          address: "",
-                          city: "",
-                          country: "",
-                          postalCode: "",
-                          agreeTerms: false,
-                          cardDesign: "classic"
-                        })
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  {cardApplicationStep === 1 && (
-                    <div className="space-y-4">
-                      <div className="text-center mb-6">
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
-                          <CardIcon className="h-8 w-8 text-[#00D4AA]" />
-                        </div>
-                        <p className="text-sm text-gray-500">填写个人信息和邮寄地址</p>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1">真实姓名</label>
-                        <input
-                          type="text"
-                          value={physicalCardApplicationData.fullName}
-                          onChange={(e) => setPhysicalCardApplicationData({
-                            ...physicalCardApplicationData,
-                            fullName: e.target.value
-                          })}
-                          className={`w-full p-2 border rounded-lg ${
-                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                          }`}
-                          placeholder="请输入真实姓名"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1">身份证号</label>
-                        <input
-                          type="text"
-                          value={physicalCardApplicationData.idNumber}
-                          onChange={(e) => setPhysicalCardApplicationData({
-                            ...physicalCardApplicationData,
-                            idNumber: e.target.value
-                          })}
-                          className={`w-full p-2 border rounded-lg ${
-                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                          }`}
-                          placeholder="请输入身份证号"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1">邮箱地址</label>
-                        <input
-                          type="email"
-                          value={physicalCardApplicationData.email}
-                          onChange={(e) => setPhysicalCardApplicationData({
-                            ...physicalCardApplicationData,
-                            email: e.target.value
-                          })}
-                          className={`w-full p-2 border rounded-lg ${
-                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                          }`}
-                          placeholder="请输入邮箱地址"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1">手机号码</label>
-                        <input
-                          type="tel"
-                          value={physicalCardApplicationData.phone}
-                          onChange={(e) => setPhysicalCardApplicationData({
-                            ...physicalCardApplicationData,
-                            phone: e.target.value
-                          })}
-                          className={`w-full p-2 border rounded-lg ${
-                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                          }`}
-                          placeholder="请输入手机号码"
-                        />
-                      </div>
-
-                      <Button
-                        onClick={() => setCardApplicationStep(2)}
-                        disabled={!physicalCardApplicationData.fullName || !physicalCardApplicationData.idNumber || 
-                                 !physicalCardApplicationData.email || !physicalCardApplicationData.phone}
-                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black"
-                      >
-                        下一步 - 邮寄地址
-                      </Button>
-                    </div>
-                  )}
-
-                  {cardApplicationStep === 2 && (
-                    <div className="space-y-4">
-                      <div className="text-center mb-6">
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
-                          <MapPin className="h-8 w-8 text-[#00D4AA]" />
-                        </div>
-                        <p className="text-sm text-gray-500">填写卡片邮寄地址</p>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1">详细地址</label>
-                        <input
-                          type="text"
-                          value={physicalCardApplicationData.address}
-                          onChange={(e) => setPhysicalCardApplicationData({
-                            ...physicalCardApplicationData,
-                            address: e.target.value
-                          })}
-                          className={`w-full p-2 border rounded-lg ${
-                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                          }`}
-                          placeholder="请输入详细地址"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-1">城市</label>
-                          <input
-                            type="text"
-                            value={physicalCardApplicationData.city}
-                            onChange={(e) => setPhysicalCardApplicationData({
-                              ...physicalCardApplicationData,
-                              city: e.target.value
-                            })}
-                            className={`w-full p-2 border rounded-lg ${
-                              isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                            }`}
-                            placeholder="城市"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-1">邮政编码</label>
-                          <input
-                            type="text"
-                            value={physicalCardApplicationData.postalCode}
-                            onChange={(e) => setPhysicalCardApplicationData({
-                              ...physicalCardApplicationData,
-                              postalCode: e.target.value
-                            })}
-                            className={`w-full p-2 border rounded-lg ${
-                              isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                            }`}
-                            placeholder="邮编"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1">国家/地区</label>
-                        <select
-                          value={physicalCardApplicationData.country}
-                          onChange={(e) => setPhysicalCardApplicationData({
-                            ...physicalCardApplicationData,
-                            country: e.target.value
-                          })}
-                          className={`w-full p-2 border rounded-lg ${
-                            isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                          }`}
-                        >
-                          <option value="">请选择国家/地区</option>
-                          <option value="CN">中国</option>
-                          <option value="US">美国</option>
-                          <option value="UK">英国</option>
-                          <option value="JP">日本</option>
-                          <option value="KR">韩国</option>
-                          <option value="SG">新加坡</option>
-                          <option value="CA">加拿大</option>
-                          <option value="AU">澳大利亚</option>
-                        </select>
-                      </div>
-
-                      <div className="flex space-x-4">
-                        <Button
-                          variant="outline"
-                          onClick={() => setCardApplicationStep(1)}
-                          className="flex-1"
-                        >
-                          上一步
-                        </Button>
-                        <Button
-                          onClick={() => setCardApplicationStep(3)}
-                          disabled={!physicalCardApplicationData.address || !physicalCardApplicationData.city || 
-                                   !physicalCardApplicationData.country || !physicalCardApplicationData.postalCode}
-                          className="flex-1 bg-[#00D4AA] hover:bg-[#00B894] text-black"
-                        >
-                          下一步 - 卡片设计
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-
-                  {cardApplicationStep === 3 && (
-                    <div className="space-y-4">
-                      <div className="text-center mb-6">
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
-                          <CreditCard className="h-8 w-8 text-[#00D4AA]" />
-                        </div>
-                        <p className="text-sm text-gray-500">选择卡片设计样式</p>
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-4">
-                        <div 
-                          onClick={() => setPhysicalCardApplicationData({
-                            ...physicalCardApplicationData,
-                            cardDesign: "classic"
-                          })}
-                          className={`p-4 border rounded-lg cursor-pointer transition-all ${
-                            physicalCardApplicationData.cardDesign === "classic"
-                              ? "border-[#00D4AA] bg-[#00D4AA]/10"
-                              : isDark ? "border-gray-700" : "border-gray-300"
-                          }`}
-                        >
-                          <div className="w-full h-24 rounded-lg bg-gradient-to-r from-gray-800 to-black mb-3 flex items-center justify-center text-white text-sm">
-                            经典黑金
-                          </div>
-                          <div className="font-medium">经典款</div>
-                          <div className="text-sm text-gray-500">经典黑金设计，商务专业</div>
-                        </div>
-
-                        <div 
-                          onClick={() => setPhysicalCardApplicationData({
-                            ...physicalCardApplicationData,
-                            cardDesign: "premium"
-                          })}
-                          className={`p-4 border rounded-lg cursor-pointer transition-all ${
-                            physicalCardApplicationData.cardDesign === "premium"
-                              ? "border-[#00D4AA] bg-[#00D4AA]/10"
-                              : isDark ? "border-gray-700" : "border-gray-300"
-                          }`}
-                        >
-                          <div className="w-full h-24 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 mb-3 flex items-center justify-center text-white text-sm">
-                            高端紫蓝
-                          </div>
-                          <div className="font-medium">高端款</div>
-                          <div className="text-sm text-gray-500">紫蓝渐变设计，时尚高端</div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          id="agreeTermsPhysical"
-                          checked={physicalCardApplicationData.agreeTerms}
-                          onChange={(e) => setPhysicalCardApplicationData({
-                            ...physicalCardApplicationData,
-                            agreeTerms: e.target.checked
-                          })}
-                          className="rounded"
-                        />
-                        <label htmlFor="agreeTermsPhysical" className="text-sm">
-                          我已阅读并同意《实体U卡服务协议》，确认支付$15 USDT开卡费
-                        </label>
-                      </div>
-
-                      <div className="flex space-x-4">
-                        <Button
-                          variant="outline"
-                          onClick={() => setCardApplicationStep(2)}
-                          className="flex-1"
-                        >
-                          上一步
-                        </Button>
-                        <Button
-                          onClick={() => setCardApplicationStep(4)}
-                          disabled={!physicalCardApplicationData.agreeTerms}
-                          className="flex-1 bg-[#00D4AA] hover:bg-[#00B894] text-black"
-                        >
-                          提交申请
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-
-                  {cardApplicationStep === 4 && (
-                    <div className="space-y-4 text-center">
-                      <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center">
-                        <CheckCircle className="h-8 w-8 text-green-500" />
-                      </div>
-                      <h4 className="text-lg font-semibold">申请提交成功！</h4>
-                      <p className="text-sm text-gray-500 mb-6">
-                        您的实体U卡申请已提交，预计1-2个工作日审核，审核通过后7-14个工作日内邮寄到您的地址
-                      </p>
-                      
-                      <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'} text-left`}>
-                        <h5 className="font-medium mb-2">申请信息</h5>
-                        <div className="space-y-1 text-sm">
-                          <div>姓名: {physicalCardApplicationData.fullName}</div>
-                          <div>邮寄地址: {physicalCardApplicationData.address}, {physicalCardApplicationData.city}</div>
-                          <div>国家: {physicalCardApplicationData.country}</div>
-                          <div>邮编: {physicalCardApplicationData.postalCode}</div>
-                          <div>卡片设计: {physicalCardApplicationData.cardDesign === "classic" ? "经典款" : "高端款"}</div>
-                          <div>开卡费用: $15 USDT</div>
-                        </div>
-                      </div>
-
-                      <Button
-                        onClick={() => {
-                          // 模拟申请提交成功
-                          walletData["U卡账户"].hasPhysicalCard = true
-                          setShowPhysicalCardApplication(false)
-                          setCardApplicationStep(1)
-                          setPhysicalCardApplicationData({
-                            fullName: "",
-                            idNumber: "",
-                            email: "",
-                            phone: "",
-                            address: "",
-                            city: "",
-                            country: "",
-                            postalCode: "",
-                            agreeTerms: false,
-                            cardDesign: "classic"
-                          })
-                        }}
-                        className="w-full bg-[#00D4AA] hover:bg-[#00B894] text-black"
-                      >
-                        完成申请
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        )
-
-      default:
-        return <div>内容加载中...</div>
-    }
-  }
-
-  // 担保账户相关状态和函数
-  const [selectedCard, setSelectedCard] = useState("receivable")
-  const [selectedGuaranteeTab, setSelectedGuaranteeTab] = useState("收款担保") // 新增担保页签状态
-  const [expandedGuaranteeItems, setExpandedGuaranteeItems] = useState<Set<string>>(new Set()) // 展开的担保项目
-  const [tradingPartnerDialog, setTradingPartnerDialog] = useState<{isOpen: boolean, partnerName: string, partnerId: string}>({
-    isOpen: false,
-    partnerName: '',
-    partnerId: ''
-  }) // 交易伙伴对话框状态
-  const [showAddCreditModal, setShowAddCreditModal] = useState(false)
-  const [showExtendTimeModal, setShowExtendTimeModal] = useState(false)
-  const [showContractModal, setShowContractModal] = useState(false)
-  const [selectedContract, setSelectedContract] = useState(null)
-  const [creditAmount, setCreditAmount] = useState("")
-  const [extendDays, setExtendDays] = useState("30")
-
-  const handleCardClick = (cardType: string) => {
-    if (cardType !== "balance") {
-      setSelectedCard(cardType)
-    }
-  }
-
-  // 应收担保记录
-  const receivableRecords = [
-    {
-      id: "RG001",
-      amount: "500.00 USDT",
-      counterparty: "用户***789",
-      status: "担保中",
-      startTime: "2024-01-15 10:30:00",
-      estimatedRelease: "2024-01-20 10:30:00",
-      contractId: "CT001",
-      description: "BTC交易担保"
-    },
-    {
-      id: "RG002", 
-      amount: "734.56 USDT",
-      counterparty: "用户***456",
-      status: "担保中",
-      startTime: "2024-01-14 15:20:00",
-      estimatedRelease: "2024-01-19 15:20:00",
-      contractId: "CT002",
-      description: "ETH交易担保"
-    }
-  ]
-
-  // 应付担保记录
-  const payableRecords = [
-    {
-      id: "PG001",
-      amount: "300.00 USDT",
-      counterparty: "用户***123",
-      status: "等待确认",
-      startTime: "2024-01-16 09:15:00",
-      estimatedRelease: "2024-01-21 09:15:00",
-      contractId: "CT003",
-      description: "USDT交易担保"
-    },
-    {
-      id: "PG002",
-      amount: "687.65 USDT", 
-      counterparty: "用户***321",
-      status: "担保中",
-      startTime: "2024-01-13 16:45:00",
-      estimatedRelease: "2024-01-18 16:45:00",
-      contractId: "CT004",
-      description: "多币种交易担保"
-    }
-  ]
-
-  // 合同详情数据
-  const contractDetails = {
-    "CT001": {
-      id: "CT001",
-      title: "BTC交易担保合同",
-      parties: {
-        guarantor: "用户***789",
-        beneficiary: "当前用户"
-      },
-      amount: "500.00 USDT",
-      tradePair: "BTC/USDT",
-      tradeAmount: "0.01 BTC",
-      guaranteePeriod: "5天",
-      terms: [
-        "担保方需在交易完成后确认收货",
-        "如有争议，平台将介入处理",
-        "担保期内资金将被冻结",
-        "双方同意遵守平台交易规则"
-      ],
-      createdTime: "2024-01-15 10:30:00",
-      status: "执行中"
-    },
-    "CT002": {
-      id: "CT002", 
-      title: "ETH交易担保合同",
-      parties: {
-        guarantor: "用户***456",
-        beneficiary: "当前用户"
-      },
-      amount: "734.56 USDT",
-      tradePair: "ETH/USDT", 
-      tradeAmount: "0.5 ETH",
-      guaranteePeriod: "5天",
-      terms: [
-        "担保方需在交易完成后确认收货",
-        "如有争议，平台将介入处理", 
-        "担保期内资金将被冻结",
-        "双方同意遵守平台交易规则"
-      ],
-      createdTime: "2024-01-14 15:20:00",
-      status: "执行中"
-    }
-  }
-
-  const handleViewContract = (contractId: string) => {
-    setSelectedContract(contractDetails[contractId])
-    setShowContractModal(true)
-  }
-
-  const handleTransfer = () => {
-    console.log("划转金额:", transferAmount)
-    setShowTransferModal(false)
-    setTransferAmount("")
-  }
-
-  const handleAddCredit = () => {
-    console.log("添加信誉担保:", creditAmount)
-    setShowAddCreditModal(false)
-    setCreditAmount("")
-  }
-
-  const handleExtendTime = () => {
-    console.log("延长天数:", extendDays)
-    setShowExtendTimeModal(false)
-    setExtendDays("30")
-  }
-
-  // 划转弹窗 - 使用统一格式 (此函数不再使用，改用主要的划转弹窗)
-  const renderTransferModal = () => {
-    // 这个函数已被统一的主划转弹窗替代，保留是为了避免报错
-    // 实际划转功能请使用页面底部的主划转弹窗实现
-    return null
-  }
-
-  // 查看合同弹窗
-  const renderContractModal = () => {
-    if (!selectedContract) return null;
-    
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowContractModal(false)}>
-        <div 
-          className={`max-w-2xl w-full mx-4 rounded-2xl shadow-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          }`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* 弹窗头部 */}
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                担保合同详情
-              </h3>
-              <button
-                onClick={() => setShowContractModal(false)}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-                }`}
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* 弹窗内容 */}
-          <div className="p-6 space-y-4 max-h-96 overflow-y-auto">
-            <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
-              <p><strong>合同编号：</strong>{selectedContract.id}</p>
-              <p><strong>担保金额：</strong>{selectedContract.amount} {selectedContract.currency}</p>
-              <p><strong>交易双方：</strong>{selectedContract.parties}</p>
-              <p><strong>担保条款：</strong></p>
-              <div className="ml-4 mt-2 space-y-2">
-                <p>1. 本合同为数字资产交易担保合同</p>
-                <p>2. 担保方需在指定时间内完成资金担保</p>
-                <p>3. 交易完成后，担保资金将按合同约定释放</p>
-                <p>4. 如发生争议，将按平台仲裁规则处理</p>
-              </div>
-            </div>
-          </div>
-
-          {/* 弹窗按钮 */}
-          <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
-            <button
-              onClick={() => setShowContractModal(false)}
-              className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
-                isDark 
-                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
-                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              关闭
-            </button>
-            <button
-              onClick={() => {
-                console.log('下载合同:', selectedContract);
-                // 这里可以添加下载合同的逻辑
-              }}
-              className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
-            >
-              下载合同
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // 增加信誉担保资金弹窗
-  const renderAddCreditModal = () => {
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowAddCreditModal(false)}>
-        <div 
-          className={`max-w-md w-full mx-4 rounded-2xl shadow-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          }`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* 弹窗头部 */}
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                增加信誉担保资金
-              </h3>
-              <button
-                onClick={() => setShowAddCreditModal(false)}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-                }`}
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* 弹窗内容 */}
-          <div className="p-6 space-y-4">
-            <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-              请输入要增加的担保资金金额：
-            </div>
-            
-            <div className="space-y-3">
-              <label className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                担保金额
-              </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  value={creditAmount}
-                  onChange={(e) => setCreditAmount(e.target.value)}
-                  placeholder="请输入金额"
-                  className={`w-full px-3 py-2 pr-16 rounded-lg border transition-colors ${
-                    isDark 
-                      ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500 placeholder-gray-400' 
-                      : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500 placeholder-gray-400'
-                  } focus:outline-none focus:ring-1 focus:ring-blue-500`}
-                />
-                <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm ${
-                  isDark ? 'text-gray-400' : 'text-gray-500'
-                }`}>
-                  USDT
-                </span>
-              </div>
-            </div>
-
-            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-              增加的担保资金将从您的可用余额中扣除，用于提升交易信誉度。
-            </div>
-          </div>
-
-          {/* 弹窗按钮 */}
-          <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
-            <button
-              onClick={() => setShowAddCreditModal(false)}
-              className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
-                isDark 
-                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
-                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              取消
-            </button>
-            <button
-              onClick={handleAddCredit}
-              disabled={!creditAmount || parseFloat(creditAmount) <= 0}
-              className="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
-            >
-              确认增加
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // 延长担保时间弹窗
-  const renderExtendTimeModal = () => {
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowExtendTimeModal(false)}>
-        <div 
-          className={`max-w-md w-full mx-4 rounded-2xl shadow-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          }`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* 弹窗头部 */}
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                延长信誉担保时间
-              </h3>
-              <button
-                onClick={() => setShowExtendTimeModal(false)}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-                }`}
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* 弹窗内容 */}
-          <div className="p-6 space-y-4">
-            <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-              请选择要延长的天数：
-            </div>
-            
-            <div className="space-y-3">
-              <label className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                延长天数
-              </label>
-              <select
-                value={extendDays}
-                onChange={(e) => setExtendDays(e.target.value)}
-                className={`w-full px-3 py-2 rounded-lg border transition-colors ${
-                  isDark 
-                    ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
-                    : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
-                } focus:outline-none focus:ring-1 focus:ring-blue-500`}
-              >
-                <option value="7">7天</option>
-                <option value="15">15天</option>
-                <option value="30">30天</option>
-                <option value="60">60天</option>
-                <option value="90">90天</option>
-              </select>
-            </div>
-
-            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-              延长后的担保时间将从当前时间开始计算，请确认您的选择。
-            </div>
-          </div>
-
-          {/* 弹窗按钮 */}
-          <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
-            <button
-              onClick={() => setShowExtendTimeModal(false)}
-              className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
-                isDark 
-                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
-                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              取消
-            </button>
-            <button
-              onClick={handleExtendTime}
-              className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
-            >
-              确认延长
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // 切换担保项目展开状态
-  const toggleGuaranteeItem = (itemId: string) => {
-    const newExpanded = new Set(expandedGuaranteeItems)
-    if (newExpanded.has(itemId)) {
-      newExpanded.delete(itemId)
-    } else {
-      newExpanded.add(itemId)
-    }
-    setExpandedGuaranteeItems(newExpanded)
-  }
-
-  // 渲染担保内容
-  const renderGuaranteeContent = () => {
-    switch (selectedGuaranteeTab) {
-      case "收款担保":
-        return (
-          <div className="space-y-6">
-            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
-              {/* USDT买卖担保 */}
-              <div 
-                className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("guarantee-1")}
-              >
-                <div className="flex items-start justify-between mb-3 mt-2">
-                  <div className="flex flex-col space-y-5">
-                    <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
-                      USDT买卖担保
-                    </span>
-                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      5,000.00 <span className="text-base font-normal text-gray-500">USDT</span>
-                    </div>
-                    
-                    {/* 查看合同按钮和联系人 */}
-                    <div className="flex items-center gap-3">
-                      {/* 查看合同按钮 */}
-                      <button 
-                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-blue-500 hover:text-blue-600 transition-colors border ${
-                          isDark 
-                            ? 'border-blue-500/30 hover:border-blue-500/50 hover:bg-blue-500/10' 
-                            : 'border-blue-200 hover:border-blue-300 hover:bg-blue-50'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleGuaranteeItem("guarantee-1");
-                        }}
-                      >
-                        查看合同
-                        <ChevronDown className="h-3 w-3" />
-                      </button>
-                      
-                      {/* 头像图标 */}
-                      <button 
-                        className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
-                          isDark 
-                            ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
-                            : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setTradingPartnerDialog({
-                            isOpen: true,
-                            partnerName: '123789',
-                            partnerId: 'user-123789'
-                          });
-                        }}
-                        title="联系交易对象"
-                      >
-                        <User className="h-5 w-5" />
-                      </button>
-                    </div>
-
-                  </div>
-                  
-                  {/* 进度条 - 与左上角标签对齐 */}
-                  <div className="flex-1 ml-6 -mt-3">
-                    <TransactionProgress 
-                      steps={[
-                        { id: '1', label: '发起交易', status: 'completed' },
-                        { id: '2', label: '已付担保金', status: 'completed' },
-                        { id: '3', label: '等待确认', status: 'current' },
-                        { id: '4', label: '争议仲裁', status: 'pending' },
-                        { id: '5', label: '完成交易', status: 'pending' }
-                      ]}
-                      className=""
-                    />
-                    {/* 交易发起时间和自动确认 */}
-                    <div className="mt-1 flex items-center justify-between">
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        发起时间: 2025-01-29
-                      </div>
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        <span className="text-orange-500 font-medium">自动确认: 23小时42分钟</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                
-                {/* 展开的合同内容 */}
-                {expandedGuaranteeItems.has("guarantee-1") && (
-                  <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className={`${isDark ? 'bg-gray-800/50' : 'bg-gray-50'} rounded-lg p-4`}>
-                      <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        数字资产担保交易合同
-                      </h3>
-                      
-                      <div className={`space-y-3 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
-                        <div>
-                          <strong>合同编号：</strong>CT-2025012901-USDT-5000
-                        </div>
-                        
-                        <div>
-                          <strong>交易标的：</strong>USDT (Tether USD)
-                        </div>
-                        
-                        <div>
-                          <strong>交易数量：</strong>5,000.00 USDT
-                        </div>
-                        
-                        <div>
-                          <strong>交易汇率：</strong>1 USDT = 7.20 人民币
-                        </div>
-                        
-                        <div>
-                          <strong>交易金额：</strong>36,000.00 人民币
-                        </div>
-                        
-                        <div>
-                          <strong>付款方式：</strong>银行卡转账
-                        </div>
-                        
-                        <div>
-                          <strong>买方：</strong>用户123789
-                        </div>
-                        
-                        <div>
-                          <strong>卖方：</strong>商户 CryptoTrade Pro
-                        </div>
-                        
-                        <div>
-                          <strong>担保方：</strong>BeDAO担保平台
-                        </div>
-                        
-                        <div>
-                          <strong>担保金额：</strong>5,000.00 USDT
-                        </div>
-                        
-                        <div>
-                          <strong>交易流程：</strong>
-                          <ol className="list-decimal list-inside mt-2 ml-4 space-y-1">
-                            <li>买方发起交易申请</li>
-                            <li>双方缴纳担保金至平台</li>
-                            <li>买方转账法币至卖方指定账户</li>
-                            <li>卖方确认收款后释放USDT至买方钱包</li>
-                            <li>平台释放双方担保金</li>
-                          </ol>
-                        </div>
-                        
-                        <div>
-                          <strong>自动确认时间：</strong>24小时（如卖方未在规定时间内确认，系统将自动释放数字资产）
-                        </div>
-                        
-                        <div>
-                          <strong>争议处理：</strong>如发生争议，由BeDAO仲裁委员会进行仲裁
-                        </div>
-                        
-                        <div className="pt-3 border-t border-gray-300 dark:border-gray-600 mt-4">
-                          <strong>签署时间：</strong>2025年1月29日 14:23:15
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* 第二个收款担保 - 其他交易担保争议状态 */}
-              <div 
-                className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("guarantee-2")}
-              >
-                <div className="flex items-start justify-between mb-3 mt-2">
-                  <div className="flex flex-col space-y-5">
-                    <span className="px-3 py-1.5 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold w-fit">
-                      其他交易担保
-                    </span>
-                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      4,500.00 <span className="text-base font-normal text-gray-500">USDT</span>
-                    </div>
-                    
-                    {/* 查看合同按钮和联系人 */}
-                    <div className="flex items-center gap-3">
-                      {/* 查看合同按钮 */}
-                      <button 
-                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-blue-500 hover:text-blue-600 transition-colors border ${
-                          isDark 
-                            ? 'border-blue-500/30 hover:border-blue-500/50 hover:bg-blue-500/10' 
-                            : 'border-blue-200 hover:border-blue-300 hover:bg-blue-50'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleGuaranteeItem("guarantee-2");
-                        }}
-                      >
-                        查看合同
-                        <ChevronDown className="h-3 w-3" />
-                      </button>
-                      
-                      {/* 头像图标 */}
-                      <button 
-                        className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
-                          isDark 
-                            ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
-                            : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setTradingPartnerDialog({
-                            isOpen: true,
-                            partnerName: 'Frank123',
-                            partnerId: 'user-frank123'
-                          });
-                        }}
-                        title="联系交易对象"
-                      >
-                        <User className="h-5 w-5" />
-                      </button>
-                    </div>
-
-                  </div>
-                  
-                  {/* 进度条 - 与左上角标签对齐 */}
-                  <div className="flex-1 ml-6 -mt-3">
-                    <TransactionProgress 
-                      steps={[
-                        { id: '1', label: '发起交易', status: 'completed' },
-                        { id: '2', label: '已付担保金', status: 'completed' },
-                        { id: '3', label: '等待确认', status: 'completed' },
-                        { id: '4', label: '争议仲裁', status: 'dispute' },
-                        { id: '5', label: '完成交易', status: 'pending' }
-                      ]}
-                      className=""
-                    />
-                    {/* 交易发起时间和自动确认 */}
-                    <div className="mt-1 flex items-center justify-between">
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        发起时间: 2025-01-26
-                      </div>
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        <span className="text-red-500 font-medium">争议处理中</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                
-                {/* 展开的合同内容 */}
-                {expandedGuaranteeItems.has("guarantee-2") && (
-                  <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div>
-                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          数字资产交易担保，您作为卖方向买方Frank123提供4,500 USDT的数字资产，目前交易出现争议，正在进行仲裁处理。
-                        </p>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          查看详情
-                        </button>
-                        <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
-                          查看仲裁
-                        </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          提交证据
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-
-            </div>
-
-          </div>
-        )
-
-      case "付款担保":
-        return (
-          <div className="space-y-6">
-            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
-              {/* 第一个付款担保 - USDT买卖担保 */}
-              <div 
-                className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("pay-guarantee-1")}
-              >
-                <div className="flex items-start justify-between mb-3 mt-2">
-                  <div className="flex flex-col space-y-5">
-                    <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
-                      USDT买卖担保
-                    </span>
-                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      3,200.00 <span className="text-base font-normal text-gray-500">USDT</span>
-                    </div>
-                    
-                    {/* 查看合同按钮和联系人 */}
-                    <div className="flex items-center gap-3">
-                      {/* 查看合同按钮 */}
-                      <button 
-                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-blue-500 hover:text-blue-600 transition-colors border ${
-                          isDark 
-                            ? 'border-blue-500/30 hover:border-blue-500/50 hover:bg-blue-500/10' 
-                            : 'border-blue-200 hover:border-blue-300 hover:bg-blue-50'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleGuaranteeItem("pay-guarantee-1");
-                        }}
-                      >
-                        查看合同
-                        <ChevronDown className="h-3 w-3" />
-                      </button>
-                      
-                      {/* 头像图标 */}
-                      <button 
-                        className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
-                          isDark 
-                            ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
-                            : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setTradingPartnerDialog({
-                            isOpen: true,
-                            partnerName: 'Bitcoin99',
-                            partnerId: 'user-bitcoin99'
-                          });
-                        }}
-                        title="联系交易对象"
-                      >
-                        <User className="h-5 w-5" />
-                      </button>
-                    </div>
-
-                  </div>
-                  
-                  {/* 进度条 - 与左上角标签对齐 */}
-                  <div className="flex-1 ml-6 -mt-3">
-                    <TransactionProgress 
-                      steps={[
-                        { id: '1', label: '发起交易', status: 'completed' },
-                        { id: '2', label: '已付担保金', status: 'current' },
-                        { id: '3', label: '等待确认', status: 'pending' },
-                        { id: '4', label: '完成交易', status: 'pending' }
-                      ]}
-                      className=""
-                    />
-                    {/* 交易发起时间和自动确认 */}
-                    <div className="mt-1 flex items-center justify-between">
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        发起时间: 2025-01-29
-                      </div>
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        自动确认: 24小时
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                
-                {/* 展开的合同内容 */}
-                {expandedGuaranteeItems.has("pay-guarantee-1") && (
-                  <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div>
-                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          USDT场外交易担保，您作为买方向卖方Bitcoin99购买3,200 USDT，单价7.2 CNY，总价值22,640 CNY。当前等待对方确认付款并释放担保。
-                        </p>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          查看详情
-                        </button>
-                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                          催促对方
-                        </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          申请仲裁
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* 第二个付款担保 - 其他交易担保 */}
-              <div 
-                className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("pay-guarantee-2")}
-              >
-                <div className="flex items-start justify-between mb-3 mt-2">
-                  <div className="flex flex-col space-y-5">
-                    <span className="px-3 py-1.5 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold w-fit">
-                      其他交易担保
-                    </span>
-                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      2,500.00 <span className="text-base font-normal text-gray-500">USDT</span>
-                    </div>
-                    
-                    {/* 查看合同按钮和联系人 */}
-                    <div className="flex items-center gap-3">
-                      {/* 查看合同按钮 */}
-                      <button 
-                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm text-blue-500 hover:text-blue-600 transition-colors border ${
-                          isDark 
-                            ? 'border-blue-500/30 hover:border-blue-500/50 hover:bg-blue-500/10' 
-                            : 'border-blue-200 hover:border-blue-300 hover:bg-blue-50'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleGuaranteeItem("pay-guarantee-2");
-                        }}
-                      >
-                        查看合同
-                        <ChevronDown className="h-3 w-3" />
-                      </button>
-                      
-                      {/* 头像图标 */}
-                      <button 
-                        className={`p-2 rounded-lg transition-all duration-200 hover:shadow-sm active:scale-[0.95] ${
-                          isDark 
-                            ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 hover:text-green-300' 
-                            : 'bg-green-100 hover:bg-green-200 text-green-600 hover:text-green-700'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setTradingPartnerDialog({
-                            isOpen: true,
-                            partnerName: 'TradeMaster456',
-                            partnerId: 'user-trademaster456'
-                          });
-                        }}
-                        title="联系交易对象"
-                      >
-                        <User className="h-5 w-5" />
-                      </button>
-                    </div>
-
-                  </div>
-                  
-                  {/* 进度条 - 与左上角标签对齐 */}
-                  <div className="flex-1 ml-6 -mt-3">
-                    <TransactionProgress 
-                      steps={[
-                        { id: '1', label: '发起交易', status: 'completed' },
-                        { id: '2', label: '已付担保金', status: 'completed' },
-                        { id: '3', label: '等待确认', status: 'completed' },
-                        { id: '4', label: '完成交易', status: 'completed' }
-                      ]}
-                      className=""
-                    />
-                    {/* 交易发起时间和自动确认 */}
-                    <div className="mt-1 flex items-center justify-between">
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        完成时间: 2025-01-27
-                      </div>
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        <span className="text-green-500 font-medium">已完成</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                
-                {/* 展开的合同内容 */}
-                {expandedGuaranteeItems.has("pay-guarantee-2") && (
-                  <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div>
-                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          其他数字资产担保交易，您作为买方向卖方TradeMaster456购买2,500 USDT价值的数字资产，交易已完成。双方均对交易过程满意，信誉良好。
-                        </p>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          查看详情
-                        </button>
-                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                          评价交易
-                        </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          下载凭证
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-
-            </div>
-
-          </div>
-        )
-
-      case "付款担保":
-        return (
-          <div className="space-y-6">
-            {/* USDT买卖担保 */}
-            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
-              <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("pay-guarantee-1")}
-              >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex flex-col space-y-3 flex-1">
-                    <span className="px-3 py-1.5 bg-[#00D4AA] text-black rounded-full text-xs font-semibold w-fit">
-                      USDT买卖担保
-                    </span>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      1,500.00 <span className="text-sm font-normal text-gray-500">USDT</span>
-                    </div>
-                    
-                    {/* 交易对象和担保群 - 放在担保金额下面 */}
-                    <div className="flex gap-2 mt-3">
-                      <button 
-                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
-                          isDark 
-                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          console.log('点击交易对象');
-                        }}
-                      >
-                        <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
-                          <User className="h-3 w-3 text-white" />
-                        </div>
-                        <span>交易对象: CryptoTrader123</span>
-                      </button>
-                      
-                      <button 
-                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
-                          isDark 
-                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          console.log('点击担保群');
-                        }}
-                      >
-                        <div className="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
-                          <Users className="h-3 w-3 text-white" />
-                        </div>
-                        <span>担保群: USDT交易群</span>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  {/* 进度条和时间信息 */}
-                  <div className="flex-1 flex flex-col items-stretch -mt-3 mx-4">
-                    <TransactionProgress 
-                      steps={[
-                        { id: 'start', label: '发起交易', status: 'completed' },
-                        { id: 'deposit', label: '您/对方已付担保金', status: 'completed' },
-                        { id: 'confirm', label: '等待确认完成交易', status: 'current' },
-                        { id: 'complete', label: '完成付款/争议待仲裁', status: 'pending' }
-                      ]}
-                      className=""
-                    />
-                    <div className={`text-xs mt-1 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      <span>发起时间：2025-01-29</span>
-                      <span className="mx-2">|</span>
-                      <span>自动确认：24小时</span>
-                    </div>
-                    
-                    {/* 查看合同链接 */}
-                    <div className="mt-2 text-center">
-                      <button 
-                        className={`flex items-center gap-1 text-xs transition-colors ${
-                          isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setExpandedContractItems(prev => 
-                            prev.has("pay-guarantee-1-contract") 
-                              ? new Set([...prev].filter(id => id !== "pay-guarantee-1-contract"))
-                              : new Set([...prev, "pay-guarantee-1-contract"])
-                          );
-                        }}
-                      >
-                        查看合同
-                        <ChevronDown className={`h-3 w-3 transition-transform ${
-                          expandedContractItems.has("pay-guarantee-1-contract") ? 'rotate-180' : ''
-                        }`} />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* 立即确认按钮 */}
-                  <div className="flex-shrink-0">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setConfirmTransactionInfo({
-                          id: "pay-guarantee-1",
-                          amount: "1,500.00",
-                          currency: "USDT",
-                          partner: "CryptoTrader123"
-                        });
-                        setShowConfirmDialog(true);
-                      }}
-                      className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm hover:shadow-md active:scale-[0.98]"
-                    >
-                      立即确认
-                    </button>
-                  </div>
-                </div>
-
-                {/* 可展开的内容简介和操作按钮 */}
-                {expandedGuaranteeItems.has("pay-guarantee-1") && (
-                  <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div>
-                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          USDT场外交易担保，作为卖方向买方CryptoTrader123出售1,500 USDT，单价1.01 USD，总价值1,515 USD。当前等待买方确认付款。
-                        </p>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          查看详情
-                        </button>
-                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                          确认收款
-                        </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          申请仲裁
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* 其他交易担保 */}
-            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
-              <div 
-                className="p-5 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-all duration-200 cursor-pointer"
-                onClick={() => toggleGuaranteeItem("pay-guarantee-2")}
-              >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex flex-col space-y-3 flex-1">
-                    <span className="px-3 py-1.5 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-semibold w-fit">
-                      其他交易担保
-                    </span>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      3,200.00 <span className="text-sm font-normal text-gray-500">USDT</span>
-                    </div>
-                    
-                    {/* 交易对象和担保群 - 放在担保金额下面 */}
-                    <div className="flex gap-2 mt-3">
-                      <button 
-                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
-                          isDark 
-                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          console.log('点击交易对象');
-                        }}
-                      >
-                        <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
-                          <User className="h-3 w-3 text-white" />
-                        </div>
-                        <span>交易对象: GameMaster999</span>
-                      </button>
-                      
-                      <button 
-                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-all duration-200 hover:shadow-sm active:scale-[0.98] ${
-                          isDark 
-                            ? 'border-gray-600 bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                            : 'border-gray-300 bg-gray-100/50 hover:bg-gray-200 text-gray-600 hover:text-gray-800'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          console.log('点击担保群');
-                        }}
-                      >
-                        <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                          <Users className="h-3 w-3 text-white" />
-                        </div>
-                        <span>担保群: 游戏道具交易群</span>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  {/* 进度条和时间信息 */}
-                  <div className="flex-1 flex flex-col items-stretch -mt-3 mx-4">
-                    <TransactionProgress 
-                      steps={[
-                        { id: 'start', label: '发起交易', status: 'completed' },
-                        { id: 'deposit', label: '您/对方已付担保金', status: 'completed' },
-                        { id: 'confirm', label: '等待确认完成交易', status: 'completed' },
-                        { id: 'complete', label: '完成付款/争议待仲裁', status: 'dispute' }
-                      ]}
-                      className=""
-                    />
-                    <div className={`text-xs mt-1 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      <span>争议时间：2025-01-28</span>
-                      <span className="mx-2">|</span>
-                      <span>等待仲裁</span>
-                    </div>
-                    
-                    {/* 查看合同链接 */}
-                    <div className="mt-2 text-center">
-                      <button 
-                        className={`flex items-center gap-1 text-xs transition-colors ${
-                          isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setExpandedContractItems(prev => 
-                            prev.has("pay-guarantee-2-contract") 
-                              ? new Set([...prev].filter(id => id !== "pay-guarantee-2-contract"))
-                              : new Set([...prev, "pay-guarantee-2-contract"])
-                          );
-                        }}
-                      >
-                        查看合同
-                        <ChevronDown className={`h-3 w-3 transition-transform ${
-                          expandedContractItems.has("pay-guarantee-2-contract") ? 'rotate-180' : ''
-                        }`} />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* 争议状态按钮 */}
-                  <div className="flex-shrink-0">
-                    <button
-                      disabled
-                      className="px-4 py-2 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed opacity-50"
-                    >
-                      争议中
-                    </button>
-                  </div>
-                </div>
-
-                {/* 可展开的内容简介和操作按钮 */}
-                {expandedGuaranteeItems.has("pay-guarantee-2") && (
-                  <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div>
-                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>担保内容：</span>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed mt-1`}>
-                          游戏道具交易担保，向买方GameMaster999出售稀有游戏装备，价值3,200 USDT。买方声称未收到道具，当前进入仲裁阶段。
-                        </p>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          查看详情
-                        </button>
-                        <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
-                          查看仲裁
-                        </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                          补充证据
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
         )
       default:
@@ -8411,4393 +6345,1533 @@ export default function WalletPage() {
     }
   }
 
-  // 渲染订单记录内容
-  const renderOrderContent = () => {
-    const currentCategory = orderCategories[orderTab]
-    if (!currentCategory) return null
-
-    const records = currentCategory.data[secondaryTab] || []
-    const cardStyle = isDark ? 'bg-[#1a1d29] text-white' : 'bg-white text-gray-900'
-
-    return (
-      <div className={`${cardStyle} rounded-lg overflow-hidden`}>
-        {/* 二级页签导航 */}
-        {currentCategory && Object.keys(currentCategory.tabs).length > 1 && (
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex flex-wrap gap-2">
-              {Object.entries(currentCategory.tabs).map(([key, label]) => (
+  return (
+    <div className="min-h-screen flex relative">
+      {/* 左侧导航栏 */}
+      <div className={`
+        fixed left-0 top-0 h-full z-30 transition-transform duration-300 ease-in-out
+        ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        md:translate-x-0 md:static md:block
+        w-48
+      `}>
+        <div className={`h-full ${cardStyle}`}>
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h2 className="text-lg font-semibold flex items-center">
+              <Wallet className="mr-2 h-5 w-5" />
+              钱包
+            </h2>
+          </div>
+          <nav className="p-4 space-y-2">
+            {walletTabs.map((tab) => {
+              const Icon = tab.icon
+              return (
                 <button
-                  key={key}
-                  onClick={() => setSecondaryTab(key)}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
-                    secondaryTab === key
-                      ? isDark 
-                        ? "bg-white text-black border-white" 
-                        : "bg-black text-white border-black"
+                  key={tab.id}
+                  onClick={() => {
+                    setActiveTab(tab.id)
+                    setIsMobileSidebarOpen(false)
+                  }}
+                  className={`w-full flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
+                    activeTab === tab.id
+                      ? 'bg-[#00D4AA] text-black'
                       : isDark
-                        ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
-                        : "bg-transparent text-black border-black hover:bg-black hover:text-white"
+                        ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-black'
                   }`}
                 >
-                  {label}
+                  <Icon className="mr-2 h-4 w-4" />
+                  {tab.label}
                 </button>
-              ))}
-            </div>
+              )
+            })}
+          </nav>
+        </div>
+      </div>
+
+      {/* 遮罩层 */}
+      {isMobileSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"
+          onClick={() => setIsMobileSidebarOpen(false)}
+        />
+      )}
+
+      {/* 主内容区域 */}
+      <div className="flex-1 md:ml-0">
+        <div className="p-4 md:p-6">
+          {/* 移动端标题栏 */}
+          <div className="md:hidden flex items-center justify-between mb-4">
+            <button
+              onClick={() => setIsMobileSidebarOpen(true)}
+              className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+            <h1 className="text-xl font-bold">钱包</h1>
+            <div className="w-10" />
           </div>
-        )}
-        
-        <div className="p-6">
-          <div className="space-y-4">
-            <div className="space-y-3">
-              {records.map((record, index) => (
-                <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    {Object.entries(record).map(([key, value]) => (
-                      <div key={key}>
-                        <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
-                          {key === 'id' ? 'ID' : 
-                           key === 'type' ? '类型' :
-                           key === 'amount' ? '金额' :
-                           key === 'status' ? '状态' :
-                           key === 'time' ? '时间' : key}
+
+          {/* 渲染当前标签页内容 */}
+          {renderTabContent()}
+        </div>
+      </div>
+
+      {/* 所有模态框组件 */}
+      {showNewCardModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`${cardStyle} rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto`}>
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">申请新卡</h2>
+                <button
+                  onClick={() => {
+                    setShowNewCardModal(false)
+                    setCardApplicationStep(1)
+                    setSelectedCardType('')
+                    setSelectedCardBrand('')
+                    setSelectedRegion('')
+                    setMainlandUsage('')
+                    setSelectedPaymentScenarios([])
+                    setPersonalInfo({ name: '', phone: '', email: '', idNumber: '', address: '' })
+                  }}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+
+              {/* 步骤指示器 */}
+              <div className="flex items-center justify-center space-x-4 mb-8">
+                {[1, 2, 3, 4, 5].map((step) => (
+                  <div key={step} className="flex items-center">
+                    <div className={`
+                      w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
+                      ${cardApplicationStep >= step
+                        ? 'bg-[#00D4AA] text-white'
+                        : isDark
+                          ? 'bg-gray-700 text-gray-400'
+                          : 'bg-gray-200 text-gray-600'
+                      }
+                    `}>
+                      {cardApplicationStep > step ? <Check className="h-5 w-5" /> : step}
+                    </div>
+                    {step < 5 && (
+                      <div className={`
+                        w-8 h-0.5 mx-2
+                        ${cardApplicationStep > step
+                          ? 'bg-[#00D4AA]'
+                          : isDark
+                            ? 'bg-gray-700'
+                            : 'bg-gray-200'
+                        }
+                      `} />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* 步骤内容 */}
+              {cardApplicationStep === 1 && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">第一步：选择卡片类型</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div 
+                      className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
+                        selectedCardType === 'virtual'
+                          ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                          : isDark
+                            ? 'border-gray-600 hover:border-gray-500'
+                            : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                      onClick={() => setSelectedCardType('virtual')}
+                    >
+                      <div className="text-center">
+                        <CreditCard className={`h-12 w-12 mx-auto mb-4 ${
+                          selectedCardType === 'virtual' ? 'text-[#00D4AA]' : 'text-gray-500'
+                        }`} />
+                        <h4 className="font-semibold mb-2">虚拟卡</h4>
+                        <p className="text-sm text-gray-500">
+                          即时开卡，适用于在线支付
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div 
+                      className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
+                        selectedCardType === 'physical'
+                          ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                          : isDark
+                            ? 'border-gray-600 hover:border-gray-500'
+                            : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                      onClick={() => setSelectedCardType('physical')}
+                    >
+                      <div className="text-center">
+                        <Wallet className={`h-12 w-12 mx-auto mb-4 ${
+                          selectedCardType === 'physical' ? 'text-[#00D4AA]' : 'text-gray-500'
+                        }`} />
+                        <h4 className="font-semibold mb-2">实体卡</h4>
+                        <p className="text-sm text-gray-500">
+                          实体卡片，支持ATM取现
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {selectedCardType && (
+                    <div className="space-y-4">
+                      <h4 className="font-medium">选择卡片品牌</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            selectedCardBrand === 'visa'
+                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                              : isDark
+                                ? 'border-gray-600 hover:border-gray-500'
+                                : 'border-gray-300 hover:border-gray-400'
+                          }`}
+                          onClick={() => setSelectedCardBrand('visa')}
+                        >
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-blue-600 mb-2">VISA</div>
+                            <p className="text-sm text-gray-500">全球通用</p>
+                          </div>
                         </div>
-                        <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium`}>
-                          {value}
+                        
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            selectedCardBrand === 'mastercard'
+                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                              : isDark
+                                ? 'border-gray-600 hover:border-gray-500'
+                                : 'border-gray-300 hover:border-gray-400'
+                          }`}
+                          onClick={() => setSelectedCardBrand('mastercard')}
+                        >
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-red-600 mb-2">MasterCard</div>
+                            <p className="text-sm text-gray-500">万事达卡</p>
+                          </div>
                         </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedCardBrand && (
+                    <div className="space-y-4">
+                      <h4 className="font-medium">选择发卡地区</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {['europe', 'hongkong', 'usa'].map((region) => (
+                          <div 
+                            key={region}
+                            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                              selectedRegion === region
+                                ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                                : isDark
+                                  ? 'border-gray-600 hover:border-gray-500'
+                                  : 'border-gray-300 hover:border-gray-400'
+                            }`}
+                            onClick={() => setSelectedRegion(region)}
+                          >
+                            <div className="text-center">
+                              <h5 className="font-medium mb-1">
+                                {region === 'europe' ? '欧洲' : region === 'hongkong' ? '香港' : '美国'}
+                              </h5>
+                              <p className="text-sm text-gray-500">
+                                {region === 'europe' ? '欧盟地区发卡' : 
+                                 region === 'hongkong' ? '香港地区发卡' : '美国地区发卡'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {cardApplicationStep === 2 && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">第二步：大陆使用偏好</h3>
+                  
+                  <div className="space-y-4">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      请选择您是否计划在中国大陆使用此卡片
+                    </p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div 
+                        className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
+                          mainlandUsage === 'yes'
+                            ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                            : isDark
+                              ? 'border-gray-600 hover:border-gray-500'
+                              : 'border-gray-300 hover:border-gray-400'
+                        }`}
+                        onClick={() => setMainlandUsage('yes')}
+                      >
+                        <div className="text-center">
+                          <MapPin className={`h-12 w-12 mx-auto mb-4 ${
+                            mainlandUsage === 'yes' ? 'text-[#00D4AA]' : 'text-gray-500'
+                          }`} />
+                          <h4 className="font-semibold mb-2">计划在大陆使用</h4>
+                          <p className="text-sm text-gray-500">
+                            将为您推荐适合大陆使用的卡片配置
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div 
+                        className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
+                          mainlandUsage === 'no'
+                            ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                            : isDark
+                              ? 'border-gray-600 hover:border-gray-500'
+                              : 'border-gray-300 hover:border-gray-400'
+                        }`}
+                        onClick={() => setMainlandUsage('no')}
+                      >
+                        <div className="text-center">
+                          <Globe className={`h-12 w-12 mx-auto mb-4 ${
+                            mainlandUsage === 'no' ? 'text-[#00D4AA]' : 'text-gray-500'
+                          }`} />
+                          <h4 className="font-semibold mb-2">仅海外使用</h4>
+                          <p className="text-sm text-gray-500">
+                            主要用于境外消费和在线支付
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {mainlandUsage === 'yes' && (
+                      <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                        <div className="flex items-start">
+                          <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-500 mt-0.5 mr-3 flex-shrink-0" />
+                          <div className="text-sm">
+                            <p className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">注意事项</p>
+                            <p className="text-yellow-700 dark:text-yellow-300">
+                              在中国大陆使用境外发行的卡片可能会受到外汇管制政策影响，部分商户可能不支持。
+                              建议您了解相关法规并合规使用。
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {cardApplicationStep === 3 && selectedCardType === 'virtual' && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">第三步：支付场景选择</h3>
+                  
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    请选择您主要的使用场景（可多选）
+                  </p>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-80 overflow-y-auto">
+                    {[
+                      { id: 'aws', name: 'AWS', category: '云服务' },
+                      { id: 'google-cloud', name: 'Google Cloud', category: '云服务' },
+                      { id: 'azure', name: 'Microsoft Azure', category: '云服务' },
+                      { id: 'google-ads', name: 'Google Ads', category: '广告推广' },
+                      { id: 'facebook-ads', name: 'Facebook Ads', category: '广告推广' },
+                      { id: 'apple-pay', name: 'Apple Pay', category: '移动支付' },
+                      { id: 'google-pay', name: 'Google Pay', category: '移动支付' },
+                      { id: 'paypal', name: 'PayPal', category: '移动支付' },
+                      { id: 'alipay', name: '支付宝', category: '移动支付' },
+                      { id: 'netflix', name: 'Netflix', category: '娱乐订阅' },
+                      { id: 'spotify', name: 'Spotify', category: '娱乐订阅' },
+                      { id: 'youtube-premium', name: 'YouTube Premium', category: '娱乐订阅' },
+                      { id: 'amazon', name: 'Amazon', category: '电商购物' },
+                      { id: 'ebay', name: 'eBay', category: '电商购物' },
+                      { id: 'shopify', name: 'Shopify', category: '电商购物' },
+                      { id: 'steam', name: 'Steam', category: '游戏平台' },
+                      { id: 'app-store', name: 'App Store', category: '应用商店' },
+                      { id: 'play-store', name: 'Google Play', category: '应用商店' },
+                      { id: 'github', name: 'GitHub', category: '开发工具' },
+                      { id: 'vercel', name: 'Vercel', category: '开发工具' },
+                      { id: 'notion', name: 'Notion', category: '办公软件' },
+                      { id: 'slack', name: 'Slack', category: '办公软件' },
+                      { id: 'zoom', name: 'Zoom', category: '办公软件' },
+                      { id: 'adobe', name: 'Adobe Creative', category: '设计软件' },
+                      { id: 'canva', name: 'Canva', category: '设计软件' },
+                      { id: 'uber', name: 'Uber', category: '出行服务' },
+                      { id: 'airbnb', name: 'Airbnb', category: '住宿服务' },
+                      { id: 'booking', name: 'Booking.com', category: '住宿服务' },
+                      { id: 'hotels', name: 'Hotels.com', category: '住宿服务' },
+                      { id: 'expedia', name: 'Expedia', category: '旅行服务' },
+                      { id: 'chatgpt', name: 'ChatGPT Plus', category: 'AI服务' },
+                      { id: 'midjourney', name: 'Midjourney', category: 'AI服务' },
+                      { id: 'claude', name: 'Claude Pro', category: 'AI服务' },
+                      { id: 'twitter', name: 'Twitter/X Premium', category: '社交媒体' },
+                      { id: 'linkedin', name: 'LinkedIn Premium', category: '社交媒体' },
+                      { id: 'telegram', name: 'Telegram Premium', category: '社交媒体' },
+                      { id: 'discord', name: 'Discord Nitro', category: '社交媒体' },
+                      { id: 'dropbox', name: 'Dropbox', category: '云存储' },
+                      { id: 'icloud', name: 'iCloud', category: '云存储' },
+                      { id: 'onedrive', name: 'OneDrive', category: '云存储' },
+                      { id: 'grammarly', name: 'Grammarly', category: '写作工具' },
+                      { id: 'coursera', name: 'Coursera', category: '在线教育' },
+                      { id: 'udemy', name: 'Udemy', category: '在线教育' },
+                      { id: 'skillshare', name: 'Skillshare', category: '在线教育' },
+                      { id: 'duolingo', name: 'Duolingo Plus', category: '在线教育' },
+                      { id: 'binance', name: 'Binance', category: '加密货币' },
+                      { id: 'coinbase', name: 'Coinbase', category: '加密货币' },
+                      { id: 'kraken', name: 'Kraken', category: '加密货币' },
+                      { id: 'other', name: '其他', category: '其他' }
+                    ].map((scenario) => (
+                      <div 
+                        key={scenario.id}
+                        className={`p-3 rounded-lg border cursor-pointer transition-all text-center ${
+                          selectedPaymentScenarios.includes(scenario.id)
+                            ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                            : isDark
+                              ? 'border-gray-600 hover:border-gray-500'
+                              : 'border-gray-300 hover:border-gray-400'
+                        }`}
+                        onClick={() => {
+                          setSelectedPaymentScenarios(prev => 
+                            prev.includes(scenario.id)
+                              ? prev.filter(id => id !== scenario.id)
+                              : [...prev, scenario.id]
+                          )
+                        }}
+                      >
+                        <div className="text-sm font-medium mb-1">{scenario.name}</div>
+                        <div className="text-xs text-gray-500">{scenario.category}</div>
                       </div>
                     ))}
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className={`min-h-screen ${isDark ? 'bg-background' : 'bg-gray-50'}`}>
-      {isMobile ? (
-        /* Mobile Layout - Top Tabs */
-        <div className="container mx-auto p-4 space-y-6">
-          {/* 顶级页签导航 - 移动端 */}
-          <div className="relative mb-2">
-            <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
-              {/* 滑动背景 */}
-              <div
-                className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'} ${
-                  topLevelTab === "账户资产" ? "left-1" : "left-1/2"
-                }`}
-              />
-              {/* 按钮 */}
-              {["账户资产", "订单记录"].map((tab) => (
-                <button
-                  key={tab}
-                  className={`relative z-10 flex-1 px-4 py-3 text-sm font-medium transition-all duration-300 ${
-                    topLevelTab === tab
-                      ? isDark ? "text-black" : "text-white"
-                      : isDark
-                      ? "text-gray-300 hover:text-white"
-                      : "text-gray-700 hover:text-gray-900"
-                  }`}
-                  onClick={() => setTopLevelTab(tab)}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 子页签导航 */}
-          {topLevelTab === "账户资产" ? (
-            <div className="flex flex-wrap gap-2 p-1 bg-gray-200 dark:bg-[#252842] rounded-lg">
-              {walletTabs.map((tab) => {
-                const Icon = tab.icon
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => handleTabChange(tab.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
-                      activeTab === tab.id
-                        ? isDark
-                          ? "border-white bg-white text-black shadow-sm"
-                          : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
-                        : isDark
-                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842]"
-                          : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{tab.label}</span>
-                  </button>
-                )
-              })}
-            </div>
-          ) : (
-            <div className="flex flex-wrap gap-2 p-1 bg-gray-200 dark:bg-[#252842] rounded-lg">
-              {orderTabs.map((tab) => {
-                const Icon = tab.icon
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => handleOrderTabChange(tab.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
-                      orderTab === tab.id
-                        ? isDark
-                          ? "border-white bg-white text-black shadow-sm"
-                          : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
-                        : isDark
-                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842]"
-                          : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{tab.label}</span>
-                  </button>
-                )
-              })}
-            </div>
-          )}
-
-          {/* Content */}
-          <div className={`transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-            {topLevelTab === "账户资产" ? renderTabContent() : renderOrderContent()}
-          </div>
-        </div>
-      ) : (
-        /* Desktop Layout - Left Sidebar */
-        <div className="flex h-screen">
-          {/* Left Sidebar */}
-          <div className={`w-64 ${isDark ? 'bg-[#1a1d29]' : 'bg-white'} border-r ${isDark ? 'border-[#252842]' : 'border-gray-200'} flex flex-col`}>
-            {/* 顶级页签导航 - 聊天界面风格 */}
-            <div className="p-3 pt-6">
-              <div className="relative mb-3">
-                <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
-                  {/* 滑动背景 */}
-                  <div
-                    className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'} ${
-                      topLevelTab === "账户资产" ? "left-1" : "left-1/2"
-                    }`}
-                  />
-                  {/* 按钮 */}
-                  {["账户资产", "订单记录"].map((tab) => (
-                    <button
-                      key={tab}
-                      className={`relative z-10 flex-1 px-3 py-2 text-xs font-medium transition-all duration-300 ${
-                        topLevelTab === tab
-                          ? isDark ? "text-black" : "text-white"
-                          : isDark
-                          ? "text-gray-300 hover:text-white"
-                          : "text-gray-700 hover:text-gray-900"
-                      }`}
-                      onClick={() => setTopLevelTab(tab)}
-                    >
-                      {tab}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            
-            <nav className="flex-1 px-3">
-              {/* 账户资产页签 */}
-              {topLevelTab === "账户资产" && (
-                <div className="space-y-1">
-                  {walletTabs.map((tab) => {
-                    const Icon = tab.icon
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => handleTabChange(tab.id)}
-                        className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 border ${
-                          activeTab === tab.id
-                            ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
-                            : isDark
-                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] "
-                              : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 "
-                        }`}
-                      >
-                        <Icon className="h-5 w-5" />
-                        <span>{tab.label}</span>
-                      </button>
-                    )
-                  })}
+                  
+                  <div className="text-sm text-gray-500">
+                    已选择 {selectedPaymentScenarios.length} 个支付场景
+                  </div>
                 </div>
               )}
-              
-              {/* 订单记录页签 */}
-              {topLevelTab === "订单记录" && (
-                <div className="space-y-1">
-                  {orderTabs.map((tab) => {
-                    const Icon = tab.icon
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => setOrderTab(tab.id)}
-                        className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 border ${
-                          orderTab === tab.id
-                            ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
-                            : isDark
-                              ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842] "
-                              : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100 "
-                        }`}
-                      >
-                        <Icon className="h-5 w-5" />
-                        <span>{tab.label}</span>
-                      </button>
-                    )
-                  })}
+
+              {(cardApplicationStep === 3 && selectedCardType === 'physical') || cardApplicationStep === 4 ? (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">
+                    第{selectedCardType === 'physical' && cardApplicationStep === 3 ? '三' : '四'}步：个人信息填写
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">姓名</label>
+                      <input
+                        type="text"
+                        value={personalInfo.name}
+                        onChange={(e) => setPersonalInfo({...personalInfo, name: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请输入您的姓名"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium mb-2">手机号码</label>
+                      <input
+                        type="tel"
+                        value={personalInfo.phone}
+                        onChange={(e) => setPersonalInfo({...personalInfo, phone: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请输入您的手机号码"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium mb-2">邮箱地址</label>
+                      <input
+                        type="email"
+                        value={personalInfo.email}
+                        onChange={(e) => setPersonalInfo({...personalInfo, email: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请输入您的邮箱地址"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium mb-2">身份证号码</label>
+                      <input
+                        type="text"
+                        value={personalInfo.idNumber}
+                        onChange={(e) => setPersonalInfo({...personalInfo, idNumber: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请输入您的身份证号码"
+                      />
+                    </div>
+                  </div>
+                  
+                  {selectedCardType === 'physical' && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">邮寄地址</label>
+                      <textarea
+                        value={personalInfo.address}
+                        onChange={(e) => setPersonalInfo({...personalInfo, address: e.target.value})}
+                        rows={3}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请输入实体卡片的邮寄地址"
+                      />
+                    </div>
+                  )}
                 </div>
               )}
-            </nav>
-          </div>
 
-          {/* Main Content */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container mx-auto p-6">
-              <div className={`transition-all duration-300 ${
-                isAnimating 
-                  ? 'translate-x-8 opacity-0 scale-95' 
-                  : 'translate-x-0 opacity-100 scale-100'
-              }`}>
-                {topLevelTab === "账户资产" ? renderTabContent() : renderOrderContent()}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 币种选择弹窗 - 从右侧滑出 */}
-      {showCurrencyModal && (
-        <div className="fixed inset-0 z-50">
-          {/* 背景遮罩 */}
-          <div 
-            className={`absolute inset-0 bg-black transition-opacity duration-300 ${
-              currencyModalAnimating ? 'bg-opacity-50' : 'bg-opacity-0'
-            }`}
-            onClick={closeCurrencyModal}
-          />
-          {/* 侧边栏 */}
-          <div className={`absolute right-0 top-0 h-full w-80 max-w-[90vw] ${cardStyle} transition-duration-300 ease-out ${
-            currencyModalAnimating ? 'translate-x-0' : 'translate-x-full'
-          }`}>
-            <div className="p-6 h-full overflow-y-auto">
-              {/* 币种类型切换 */}
-              <div className="flex justify-center mb-6">
-                <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
-                  <button
-                    onClick={() => handleCurrencyTypeChange("crypto")}
-                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
-                      currencyType === "crypto"
-                        ? isDark ? "bg-white text-black scale-105" : "bg-black text-white scale-105"
-                        : isDark ? "text-gray-400 hover:text-white " : "text-gray-600 hover:text-black "
-                    }`}
-                  >
-                    加密货币
-                  </button>
-                  <button
-                    onClick={() => handleCurrencyTypeChange("fiat")}
-                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
-                      currencyType === "fiat"
-                        ? isDark ? "bg-white text-black scale-105" : "bg-black text-white scale-105"
-                        : isDark ? "text-gray-400 hover:text-white " : "text-gray-600 hover:text-black "
-                    }`}
-                  >
-                    法币
-                  </button>
-                </div>
-              </div>
-              <div className={`space-y-3 transition-all duration-300 ${currencyTypeAnimating ? 'opacity-50 translate-x-2' : 'opacity-100 translate-x-0'}`}>
-                {(currencyType === "crypto" ? availableCurrencies : [
-                  { symbol: "USD", name: "美元", color: "bg-green-500" },
-                  { symbol: "EUR", name: "欧元", color: "bg-blue-500" },
-                  { symbol: "CNY", name: "人民币", color: "bg-red-500" },
-                  { symbol: "JPY", name: "日元", color: "bg-orange-500" },
-                  { symbol: "GBP", name: "英镑", color: "bg-purple-500" },
-                  { symbol: "KRW", name: "韩元", color: "bg-gray-500" }
-                ]).map((currency) => (
-                  <button
-                    key={currency.symbol}
-                    onClick={() => {
-                      setSelectedDisplayCurrency(currency.symbol)
-                      closeCurrencyModal()
-                    }}
-                    className={`w-full flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
-                      selectedDisplayCurrency === currency.symbol
-                        ? "border-[#00D4AA] bg-[#00D4AA]/10"
-                        : isDark
-                          ? "border-[#252842] hover:border-[#00D4AA]/50 hover:bg-[#252842]"
-                          : "border-gray-200 hover:border-[#00D4AA]/50 hover:bg-gray-50"
-                    }`}
-                  >
-                    <div className={`w-10 h-10 rounded-full ${currency.color} flex items-center justify-center`}>
-                      <span className="text-white font-bold">{currency.symbol.charAt(0)}</span>
-                    </div>
-                    <div className="text-left flex-1">
-                      <div className="font-medium">{currency.symbol}</div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {currency.name}
-                      </div>
-                    </div>
-                    {selectedDisplayCurrency === currency.symbol && (
-                      <Check className="h-5 w-5 text-[#00D4AA]" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 资产管理弹窗 - 从左侧滑出 */}
-      {showAssetModal && (
-        <div className="fixed inset-0 z-50">
-          {/* 背景遮罩 */}
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
-            onClick={() => setShowAssetModal(false)}
-          />
-          {/* 侧边栏 */}
-          <div className={`absolute left-0 top-0 h-full w-96 max-w-[90vw] ${cardStyle} transition-duration-300 ${
-            showAssetModal ? 'translate-x-0' : '-translate-x-full'
-          }`}>
-            <div className="p-6 h-full flex flex-col">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">管理显示资产</h3>
-                <button
-                  onClick={() => setShowAssetModal(false)}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-              <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                选择要在资产列表中显示的币种
-              </p>
-              
-              {/* 可滚动的资产列表 */}
-              <div className="flex-1 overflow-y-auto space-y-3 mb-6">
-                {accountsData.现金账户.currencies.map((currency) => (
-                  <div
-                    key={currency.symbol}
-                    className={`flex items-center justify-between p-4 rounded-lg border transition-all hover:shadow-md ${
-                      isDark ? 'border-[#3a3d4a] hover:border-[#00D4AA]/30' : 'border-gray-200 hover:border-[#00D4AA]/30'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
-                        <span className="text-[#00D4AA] font-bold">{currency.symbol.charAt(0)}</span>
-                      </div>
-                      <div>
-                        <div className="font-medium">{currency.symbol}</div>
-                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                          {currency.name}
+              {((selectedCardType === 'physical' && cardApplicationStep === 4) || cardApplicationStep === 5) && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">
+                    第{selectedCardType === 'physical' ? '四' : '五'}步：申请确认
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    <div className={`p-6 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-gray-50'}`}>
+                      <h4 className="font-semibold mb-4">申请信息确认</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="text-gray-500">卡片类型：</span>
+                          <span className="font-medium ml-2">{selectedCardType === 'virtual' ? '虚拟卡' : '实体卡'}</span>
                         </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="text-right">
-                        <div className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                          ${currency.value}
+                        <div>
+                          <span className="text-gray-500">卡片品牌：</span>
+                          <span className="font-medium ml-2">{selectedCardBrand === 'visa' ? 'VISA' : 'MasterCard'}</span>
                         </div>
-                        {currency.marketCap && (
-                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-                            市值: {currency.marketCap}
+                        <div>
+                          <span className="text-gray-500">发卡地区：</span>
+                          <span className="font-medium ml-2">
+                            {selectedRegion === 'europe' ? '欧洲' : selectedRegion === 'hongkong' ? '香港' : '美国'}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">大陆使用：</span>
+                          <span className="font-medium ml-2">{mainlandUsage === 'yes' ? '是' : '否'}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">姓名：</span>
+                          <span className="font-medium ml-2">{personalInfo.name}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">手机：</span>
+                          <span className="font-medium ml-2">{personalInfo.phone}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">邮箱：</span>
+                          <span className="font-medium ml-2">{personalInfo.email}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">身份证：</span>
+                          <span className="font-medium ml-2">{personalInfo.idNumber}</span>
+                        </div>
+                        {selectedCardType === 'physical' && personalInfo.address && (
+                          <div className="md:col-span-2">
+                            <span className="text-gray-500">邮寄地址：</span>
+                            <span className="font-medium ml-2">{personalInfo.address}</span>
+                          </div>
+                        )}
+                        {selectedCardType === 'virtual' && selectedPaymentScenarios.length > 0 && (
+                          <div className="md:col-span-2">
+                            <span className="text-gray-500">支付场景：</span>
+                            <span className="font-medium ml-2">已选择 {selectedPaymentScenarios.length} 个场景</span>
                           </div>
                         )}
                       </div>
-                      <button
-                        onClick={() => toggleAssetVisibility(currency.symbol)}
-                        className={`w-12 h-6 rounded-full transition-all duration-200 ${
-                          visibleAssets.includes(currency.symbol)
-                            ? "bg-[#00D4AA]"
-                            : isDark ? "bg-gray-600" : "bg-gray-300"
-                        }`}
-                      >
-                        <div className={`w-4 h-4 bg-white rounded-full transition-all duration-200 ${
-                          visibleAssets.includes(currency.symbol) ? "translate-x-7" : "translate-x-1"
-                        }`} />
-                      </button>
                     </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* 底部操作按钮 */}
-              <div className="flex justify-between space-x-3 pt-4 border-t border-gray-200 dark:border-[#3a3d4a]">
-                <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setVisibleAssets(accountsData.现金账户.currencies.map(c => c.symbol))}
-                    className="text-sm"
-                  >
-                    全选
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setVisibleAssets([])}
-                    className="text-sm"
-                  >
-                    全不选
-                  </Button>
-                </div>
-                <Button
-                  onClick={() => setShowAssetModal(false)}
-                  className="text-sm bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
-                >
-                  完成
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 添加资产弹窗 - 从右侧滑出 */}
-      {showAddAssetModal && (
-        <div className="fixed inset-0 z-50">
-          {/* 背景遮罩 */}
-          <div 
-            className={`absolute inset-0 bg-black transition-opacity duration-300 ${
-              addAssetModalAnimating ? 'bg-opacity-50' : 'bg-opacity-0'
-            }`}
-            onClick={closeAddAssetModal}
-          />
-          {/* 侧边栏 */}
-          <div className={`absolute right-0 top-0 h-full w-96 max-w-[90vw] ${cardStyle} transition-duration-300 ease-out ${
-            addAssetModalAnimating ? 'translate-x-0' : 'translate-x-full'
-          }`}>
-            <div className="p-6 h-full flex flex-col">
-              
-              {/* 搜索框 */}
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="搜索币种..."
-                  className={`w-full pl-10 pr-4 py-3 rounded-lg border text-sm ${
-                    isDark 
-                      ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
-                      : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
-                  }`}
-                />
-              </div>
-
-              {/* 可滚动的币种列表 */}
-              <div className="flex-1 overflow-y-auto space-y-3 mb-6">
-                {[
-                  { symbol: "DOGE", name: "Dogecoin", icon: "D", price: "$0.08" },
-                  { symbol: "MATIC", name: "Polygon", icon: "M", price: "$0.75" },
-                  { symbol: "DOT", name: "Polkadot", icon: "D", price: "$6.20" },
-                  { symbol: "AVAX", name: "Avalanche", icon: "A", price: "$15.40" },
-                  { symbol: "ATOM", name: "Cosmos", icon: "A", price: "$8.90" },
-                  { symbol: "FTM", name: "Fantom", icon: "F", price: "$0.32" }
-                ].map((currency) => (
-                  <div
-                    key={currency.symbol}
-                    className={`flex items-center justify-between p-4 rounded-lg border transition-all hover:shadow-md cursor-pointer ${
-                      isDark ? 'border-[#3a3d4a] hover:border-[#00D4AA]/30' : 'border-gray-200 hover:border-[#00D4AA]/30'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
-                        <span className="text-[#00D4AA] font-bold">{currency.icon}</span>
-                      </div>
-                      <div>
-                        <div className="font-medium">{currency.symbol}</div>
-                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                          {currency.name}
+                    
+                    <div className={`p-4 rounded-lg border ${isDark ? 'border-blue-700 bg-blue-900/20' : 'border-blue-300 bg-blue-50'}`}>
+                      <div className="flex items-start">
+                        <Info className="h-5 w-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
+                        <div className="text-sm">
+                          <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">申请说明</p>
+                          <ul className="text-blue-700 dark:text-blue-300 space-y-1">
+                            <li>• {selectedCardType === 'virtual' ? '虚拟卡将在审核通过后即时发放' : '实体卡审核通过后将在5-10个工作日内寄出'}</li>
+                            <li>• 首次申请免收年费，后续按标准收费</li>
+                            <li>• 请确保提供的信息真实有效</li>
+                            <li>• 如有疑问，请联系客服</li>
+                          </ul>
                         </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        {currency.price}
+                  </div>
+                </div>
+              )}
+
+              {/* 按钮区域 */}
+              <div className="flex space-x-4 pt-6">
+                {cardApplicationStep > 1 && (
+                  <button
+                    onClick={() => setCardApplicationStep(cardApplicationStep - 1)}
+                    className={`px-6 py-3 rounded-lg border transition-colors ${
+                      isDark 
+                        ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                        : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    上一步
+                  </button>
+                )}
+                
+                <button
+                  onClick={() => {
+                    if (
+                      (cardApplicationStep === 1 && selectedCardType && selectedCardBrand && selectedRegion) ||
+                      (cardApplicationStep === 2 && mainlandUsage) ||
+                      (cardApplicationStep === 3 && (selectedCardType === 'physical' || selectedPaymentScenarios.length > 0)) ||
+                      (cardApplicationStep === 4 && personalInfo.name && personalInfo.phone && personalInfo.email && personalInfo.idNumber) ||
+                      ((selectedCardType === 'physical' && cardApplicationStep === 4) || cardApplicationStep === 5)
+                    ) {
+                      if ((selectedCardType === 'physical' && cardApplicationStep < 4) || (selectedCardType === 'virtual' && cardApplicationStep < 5)) {
+                        setCardApplicationStep(cardApplicationStep + 1)
+                      } else {
+                        // 提交申请
+                        alert('申请已提交，我们将在1-2个工作日内审核您的申请')
+                        setShowNewCardModal(false)
+                        setCardApplicationStep(1)
+                        setSelectedCardType('')
+                        setSelectedCardBrand('')
+                        setSelectedRegion('')
+                        setMainlandUsage('')
+                        setSelectedPaymentScenarios([])
+                        setPersonalInfo({ name: '', phone: '', email: '', idNumber: '', address: '' })
+                      }
+                    }
+                  }}
+                  disabled={
+                    (cardApplicationStep === 1 && (!selectedCardType || !selectedCardBrand || !selectedRegion)) ||
+                    (cardApplicationStep === 2 && !mainlandUsage) ||
+                    (cardApplicationStep === 3 && selectedCardType === 'virtual' && selectedPaymentScenarios.length === 0) ||
+                    (cardApplicationStep === 4 && (!personalInfo.name || !personalInfo.phone || !personalInfo.email || !personalInfo.idNumber)) ||
+                    (selectedCardType === 'physical' && cardApplicationStep === 3 && (!personalInfo.name || !personalInfo.phone || !personalInfo.email || !personalInfo.idNumber || !personalInfo.address))
+                  }
+                  className={`flex-1 py-3 rounded-lg transition-colors ${
+                    (cardApplicationStep === 1 && (!selectedCardType || !selectedCardBrand || !selectedRegion)) ||
+                    (cardApplicationStep === 2 && !mainlandUsage) ||
+                    (cardApplicationStep === 3 && selectedCardType === 'virtual' && selectedPaymentScenarios.length === 0) ||
+                    (cardApplicationStep === 4 && (!personalInfo.name || !personalInfo.phone || !personalInfo.email || !personalInfo.idNumber)) ||
+                    (selectedCardType === 'physical' && cardApplicationStep === 3 && (!personalInfo.name || !personalInfo.phone || !personalInfo.email || !personalInfo.idNumber || !personalInfo.address))
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90'
+                  }`}
+                >
+                  {((selectedCardType === 'physical' && cardApplicationStep === 4) || cardApplicationStep === 5) ? '提交申请' : '下一步'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 卡片激活模态框 */}
+      {showCardActivationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`${cardStyle} rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto`}>
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">卡片激活</h2>
+                <button
+                  onClick={() => {
+                    setShowCardActivationModal(false)
+                    setActivationStep(1)
+                    setActivationInfo({ cardNumber: '', expiryDate: '', cvv: '', activationCode: '', phoneCode: '', emailCode: '', pin: '', confirmPin: '' })
+                  }}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+
+              {/* 步骤指示器 */}
+              <div className="flex items-center justify-center space-x-4 mb-8">
+                {[1, 2, 3, 4].map((step) => (
+                  <div key={step} className="flex items-center">
+                    <div className={`
+                      w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
+                      ${activationStep >= step
+                        ? 'bg-[#00D4AA] text-white'
+                        : isDark
+                          ? 'bg-gray-700 text-gray-400'
+                          : 'bg-gray-200 text-gray-600'
+                      }
+                    `}>
+                      {activationStep > step ? <Check className="h-5 w-5" /> : step}
+                    </div>
+                    {step < 4 && (
+                      <div className={`
+                        w-8 h-0.5 mx-2
+                        ${activationStep > step
+                          ? 'bg-[#00D4AA]'
+                          : isDark
+                            ? 'bg-gray-700'
+                            : 'bg-gray-200'
+                        }
+                      `} />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* 步骤内容 */}
+              {activationStep === 1 && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">第一步：卡片信息确认</h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">卡号</label>
+                      <input
+                        type="text"
+                        value={activationInfo.cardNumber}
+                        onChange={(e) => setActivationInfo({...activationInfo, cardNumber: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请输入16位卡号"
+                        maxLength={19}
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">有效期</label>
+                        <input
+                          type="text"
+                          value={activationInfo.expiryDate}
+                          onChange={(e) => setActivationInfo({...activationInfo, expiryDate: e.target.value})}
+                          className={`w-full p-3 rounded-lg border ${
+                            isDark 
+                              ? 'bg-gray-800 border-gray-600 text-white' 
+                              : 'bg-white border-gray-300 text-gray-900'
+                          } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                          placeholder="MM/YY"
+                          maxLength={5}
+                        />
                       </div>
-                      <button
-                        onClick={() => toggleAddAsset(currency.symbol)}
-                        className={`w-12 h-6 rounded-full transition-all duration-200 ${
-                          addAssetStates[currency.symbol] ? "bg-[#00D4AA]" : isDark ? "bg-gray-600" : "bg-gray-300"
-                        }`}
-                      >
-                        <div className={`w-4 h-4 bg-white rounded-full transition-all duration-200 ${
-                          addAssetStates[currency.symbol] ? "translate-x-7" : "translate-x-1"
-                        }`} />
+                      
+                      <div>
+                        <label className="block text-sm font-medium mb-2">CVV安全码</label>
+                        <input
+                          type="text"
+                          value={activationInfo.cvv}
+                          onChange={(e) => setActivationInfo({...activationInfo, cvv: e.target.value})}
+                          className={`w-full p-3 rounded-lg border ${
+                            isDark 
+                              ? 'bg-gray-800 border-gray-600 text-white' 
+                              : 'bg-white border-gray-300 text-gray-900'
+                          } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                          placeholder="CVV"
+                          maxLength={3}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-blue-700 bg-blue-900/20' : 'border-blue-300 bg-blue-50'}`}>
+                    <div className="flex items-start">
+                      <Info className="h-5 w-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">激活要求</p>
+                        <ul className="text-blue-700 dark:text-blue-300 space-y-1">
+                          <li>• 请确保卡片信息输入正确</li>
+                          <li>• 激活过程中请保持网络连接稳定</li>
+                          <li>• 如多次输入错误，卡片可能被临时锁定</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activationStep === 2 && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">第二步：激活码验证</h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">激活码</label>
+                      <input
+                        type="text"
+                        value={activationInfo.activationCode}
+                        onChange={(e) => setActivationInfo({...activationInfo, activationCode: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请输入邮件中的6位激活码"
+                        maxLength={6}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">未收到激活码？</span>
+                      <button className="text-sm text-[#00D4AA] hover:underline">
+                        重新发送
                       </button>
                     </div>
                   </div>
-                ))}
-              </div>
-
-              {/* 取消底部操作按钮 */}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 仓位分布弹窗 */}
-      {showPositionModal && (
-        <div className="fixed inset-0 z-50">
-          {/* 背景遮罩 */}
-          <div 
-            className={`absolute inset-0 bg-black transition-opacity duration-300 ${
-              positionModalAnimating ? 'bg-opacity-50' : 'bg-opacity-0'
-            }`}
-            onClick={closePositionModal}
-          />
-          {/* 弹窗内容 */}
-          <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 max-w-[90vw] ${cardStyle} rounded-lg transition-all duration-300 ease-out ${
-            positionModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-          }`}>
-            <div className="p-6">
-              {/* 标题 */}
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold">仓位分布</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={closePositionModal}
-                  className="h-8 w-8 p-0"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-
-              {/* 饼图区域 */}
-              <div className="mb-6">
-                <div className="relative w-48 h-48 mx-auto mb-4">
-                  {/* SVG 饼图 */}
-                  <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                    {/* USDT - 40% */}
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="30"
-                      fill="transparent"
-                      stroke="#00D4AA"
-                      strokeWidth="15"
-                      strokeDasharray="75.4 188.5"
-                      strokeDashoffset="0"
-                    />
-                    {/* BTC - 30% */}
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="30"
-                      fill="transparent"
-                      stroke="#F7931A"
-                      strokeWidth="15"
-                      strokeDasharray="56.55 188.5"
-                      strokeDashoffset="-75.4"
-                    />
-                    {/* ETH - 20% */}
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="30"
-                      fill="transparent"
-                      stroke="#627EEA"
-                      strokeWidth="15"
-                      strokeDasharray="37.7 188.5"
-                      strokeDashoffset="-131.95"
-                    />
-                    {/* 其他 - 10% */}
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="30"
-                      fill="transparent"
-                      stroke="#8B5CF6"
-                      strokeWidth="15"
-                      strokeDasharray="18.85 188.5"
-                      strokeDashoffset="-169.65"
-                    />
-                  </svg>
                   
-                  {/* 中心总值 */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-sm text-gray-500 dark:text-gray-400">总资产</div>
-                      <div className="text-lg font-bold text-[#00D4AA]">$12,847</div>
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-yellow-700 bg-yellow-900/20' : 'border-yellow-300 bg-yellow-50'}`}>
+                    <div className="flex items-start">
+                      <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5 mr-3 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">重要提醒</p>
+                        <p className="text-yellow-700 dark:text-yellow-300">
+                          激活码已发送至您的注册邮箱，请注意查收。激活码有效期为10分钟。
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              {/* 图例 */}
-              <div className="space-y-3">
-                {[
-                  { symbol: "USDT", percentage: "40%", value: "$5,139", color: "#00D4AA" },
-                  { symbol: "BTC", percentage: "30%", value: "$3,854", color: "#F7931A" },
-                  { symbol: "ETH", percentage: "20%", value: "$2,569", color: "#627EEA" },
-                  { symbol: "其他", percentage: "10%", value: "$1,285", color: "#8B5CF6" }
-                ].map((item) => (
-                  <div key={item.symbol} className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div 
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: item.color }}
-                      />
-                      <span className="text-sm font-medium">{item.symbol}</span>
+              {activationStep === 3 && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">第三步：双重验证</h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">手机验证码</label>
+                      <div className="flex space-x-3">
+                        <input
+                          type="text"
+                          value={activationInfo.phoneCode}
+                          onChange={(e) => setActivationInfo({...activationInfo, phoneCode: e.target.value})}
+                          className={`flex-1 p-3 rounded-lg border ${
+                            isDark 
+                              ? 'bg-gray-800 border-gray-600 text-white' 
+                              : 'bg-white border-gray-300 text-gray-900'
+                          } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                          placeholder="请输入手机验证码"
+                          maxLength={6}
+                        />
+                        <button className="px-4 py-3 bg-[#00D4AA] text-white rounded-lg hover:bg-[#00D4AA]/90 transition-colors whitespace-nowrap">
+                          发送验证码
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2 text-sm">
-                      <span className="text-gray-500">{item.percentage}</span>
-                      <span className="font-medium">{item.value}</span>
+                    
+                    <div>
+                      <label className="block text-sm font-medium mb-2">邮箱验证码</label>
+                      <div className="flex space-x-3">
+                        <input
+                          type="text"
+                          value={activationInfo.emailCode}
+                          onChange={(e) => setActivationInfo({...activationInfo, emailCode: e.target.value})}
+                          className={`flex-1 p-3 rounded-lg border ${
+                            isDark 
+                              ? 'bg-gray-800 border-gray-600 text-white' 
+                              : 'bg-white border-gray-300 text-gray-900'
+                          } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                          placeholder="请输入邮箱验证码"
+                          maxLength={6}
+                        />
+                        <button className="px-4 py-3 bg-[#00D4AA] text-white rounded-lg hover:bg-[#00D4AA]/90 transition-colors whitespace-nowrap">
+                          发送验证码
+                        </button>
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+                  
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-green-700 bg-green-900/20' : 'border-green-300 bg-green-50'}`}>
+                    <div className="flex items-start">
+                      <Shield className="h-5 w-5 text-green-600 mt-0.5 mr-3 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-medium text-green-800 dark:text-green-200 mb-1">安全验证</p>
+                        <p className="text-green-700 dark:text-green-300">
+                          为了保护您的账户安全，我们需要验证您的手机号码和邮箱地址。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-      {/* 划转弹窗 */}
-      {showTransferModal && (
-        <div className="fixed inset-0 z-50">
-          {/* 背景遮罩 */}
-          <div 
-            className={`absolute inset-0 bg-black transition-opacity duration-300 ${
-              transferModalAnimating ? 'bg-opacity-50' : 'bg-opacity-0'
-            }`}
-            onClick={closeTransferModal}
-          />
-          {/* 弹窗内容 */}
-          <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 max-w-[90vw] transition-all duration-300 ease-out ${
-            transferModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-          } ${
-            isDark 
-              ? 'bg-[#1a1d29] border border-[#252842]' 
-              : 'bg-white border border-gray-200 shadow-xl'
-          } rounded-lg`}>
-            <div className="p-6">
-              {/* 标题 */}
-              <div className="flex items-center justify-between mb-6">
-                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  划转
-                </h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={closeTransferModal}
-                  className={`h-8 w-8 p-0 ${
-                    isDark 
-                      ? 'text-gray-400 hover:text-white' 
-                      : 'text-gray-500 hover:text-gray-700'
+              {activationStep === 4 && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">第四步：设置PIN码</h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">设置PIN码</label>
+                      <input
+                        type="password"
+                        value={activationInfo.pin}
+                        onChange={(e) => setActivationInfo({...activationInfo, pin: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请设置6位PIN码"
+                        maxLength={6}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium mb-2">确认PIN码</label>
+                      <input
+                        type="password"
+                        value={activationInfo.confirmPin}
+                        onChange={(e) => setActivationInfo({...activationInfo, confirmPin: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请再次输入PIN码"
+                        maxLength={6}
+                      />
+                    </div>
+                    
+                    {activationInfo.pin && activationInfo.confirmPin && activationInfo.pin !== activationInfo.confirmPin && (
+                      <p className="text-sm text-red-500">两次输入的PIN码不一致</p>
+                    )}
+                  </div>
+                  
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-blue-700 bg-blue-900/20' : 'border-blue-300 bg-blue-50'}`}>
+                    <div className="flex items-start">
+                      <Key className="h-5 w-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">PIN码安全提示</p>
+                        <ul className="text-blue-700 dark:text-blue-300 space-y-1">
+                          <li>• PIN码用于ATM取现和部分线下消费</li>
+                          <li>• 请设置不易被猜测的6位数字</li>
+                          <li>• 不要使用生日、手机号等个人信息</li>
+                          <li>• 请妥善保管，不要告诉他人</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 按钮区域 */}
+              <div className="flex space-x-4 pt-6">
+                {activationStep > 1 && (
+                  <button
+                    onClick={() => setActivationStep(activationStep - 1)}
+                    className={`px-6 py-3 rounded-lg border transition-colors ${
+                      isDark 
+                        ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                        : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    上一步
+                  </button>
+                )}
+                
+                <button
+                  onClick={() => {
+                    if (activationStep < 4) {
+                      setActivationStep(activationStep + 1)
+                    } else {
+                      if (activationInfo.pin === activationInfo.confirmPin && activationInfo.pin.length === 6) {
+                        alert('卡片激活成功！')
+                        setShowCardActivationModal(false)
+                        setActivationStep(1)
+                        setActivationInfo({ cardNumber: '', expiryDate: '', cvv: '', activationCode: '', phoneCode: '', emailCode: '', pin: '', confirmPin: '' })
+                      }
+                    }
+                  }}
+                  disabled={
+                    (activationStep === 1 && (!activationInfo.cardNumber || !activationInfo.expiryDate || !activationInfo.cvv)) ||
+                    (activationStep === 2 && !activationInfo.activationCode) ||
+                    (activationStep === 3 && (!activationInfo.phoneCode || !activationInfo.emailCode)) ||
+                    (activationStep === 4 && (!activationInfo.pin || !activationInfo.confirmPin || activationInfo.pin !== activationInfo.confirmPin))
+                  }
+                  className={`flex-1 py-3 rounded-lg transition-colors ${
+                    (activationStep === 1 && (!activationInfo.cardNumber || !activationInfo.expiryDate || !activationInfo.cvv)) ||
+                    (activationStep === 2 && !activationInfo.activationCode) ||
+                    (activationStep === 3 && (!activationInfo.phoneCode || !activationInfo.emailCode)) ||
+                    (activationStep === 4 && (!activationInfo.pin || !activationInfo.confirmPin || activationInfo.pin !== activationInfo.confirmPin))
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90'
                   }`}
                 >
-                  <X className="h-4 w-4" />
-                </Button>
+                  {activationStep === 4 ? '完成激活' : '下一步'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 卡片充值模态框 */}
+      {showCardRechargeModal && selectedCardInfo && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`${cardStyle} rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto`}>
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold">卡片充值</h2>
+                <button
+                  onClick={() => {
+                    setShowCardRechargeModal(false)
+                    setSelectedCardInfo(null)
+                    setRechargeAmount('')
+                    setRechargeCurrency('USDT')
+                  }}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  <X className="h-6 w-6" />
+                </button>
               </div>
 
-              {/* 账户选择区域 */}
-              <div className="mb-6">
-                <div className="grid grid-cols-3 gap-3 items-end">
-                  {/* 从账户 */}
-                  <div>
-                    <label className={`block text-sm mb-2 ${
-                      isDark ? 'text-gray-400' : 'text-gray-600'
-                    }`}>
-                      从
-                    </label>
-                    <div className={`relative ${
-                      isDark 
-                        ? 'bg-[#2a2d42] border-[#3a3d4a]' 
-                        : 'bg-gray-50 border-gray-200'
-                    } border rounded-lg`}>
-                      <select
-                        value={transferFrom}
-                        onChange={(e) => setTransferFrom(e.target.value)}
-                        className={`w-full p-3 bg-transparent text-sm focus:outline-none appearance-none ${
-                          isDark 
-                            ? 'text-white focus:border-[#00D4AA]' 
-                            : 'text-gray-900 focus:border-[#00D4AA]'
-                        }`}
-                      >
-                        <option value="现货账户">现货账户</option>
-                        <option value="合约账户">合约账户</option>
-                        <option value="理财账户">理财账户</option>
-                        <option value="U卡账户">U卡账户</option>
-                      </select>
-                      <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none ${
-                        isDark ? 'text-gray-400' : 'text-gray-500'
-                      }`} />
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">充值卡片</label>
+                  <div className={`p-3 rounded-lg border ${isDark ? 'border-gray-600 bg-gray-800' : 'border-gray-300 bg-gray-50'}`}>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">{selectedCardInfo.name}</div>
+                        <div className="text-sm text-gray-500">{selectedCardInfo.number}</div>
+                      </div>
+                      <CreditCard className="h-8 w-8 text-gray-400" />
                     </div>
                   </div>
+                </div>
 
-                  {/* 交换按钮 */}
-                  <div className="flex justify-center pb-1">
-                    <Button
-                      onClick={swapTransferAccounts}
-                      variant="ghost"
-                      size="sm"
-                      className={`h-10 w-10 p-0 ${
-                        isDark 
-                          ? 'text-gray-400 hover:text-white hover:bg-[#252842]' 
-                          : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                <div>
+                  <label className="block text-sm font-medium mb-2">充值币种</label>
+                  <select
+                    value={rechargeCurrency}
+                    onChange={(e) => setRechargeCurrency(e.target.value)}
+                    className={`w-full p-3 rounded-lg border ${
+                      isDark 
+                        ? 'bg-gray-800 border-gray-600 text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
+                    } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                  >
+                    <option value="USDT">USDT</option>
+                    <option value="BTC">BTC</option>
+                    <option value="ETH">ETH</option>
+                    <option value="BNB">BNB</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">充值金额</label>
+                  <input
+                    type="number"
+                    value={rechargeAmount}
+                    onChange={(e) => setRechargeAmount(e.target.value)}
+                    className={`w-full p-3 rounded-lg border ${
+                      isDark 
+                        ? 'bg-gray-800 border-gray-600 text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
+                    } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                    placeholder="请输入充值金额"
+                  />
+                  <div className="flex space-x-2 mt-2">
+                    {['100', '500', '1000', '5000'].map((amount) => (
+                      <button
+                        key={amount}
+                        onClick={() => setRechargeAmount(amount)}
+                        className={`px-3 py-1 text-sm rounded-lg border transition-colors ${
+                          isDark 
+                            ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                            : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {amount}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {rechargeAmount && (
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-600 bg-gray-800' : 'border-gray-300 bg-gray-50'}`}>
+                    <div className="flex justify-between items-center text-sm">
+                      <span>充值金额：</span>
+                      <span className="font-medium">{rechargeAmount} {rechargeCurrency}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm mt-2">
+                      <span>手续费：</span>
+                      <span className="font-medium">0.00 {rechargeCurrency}</span>
+                    </div>
+                    <div className="border-t border-gray-300 dark:border-gray-600 mt-2 pt-2">
+                      <div className="flex justify-between items-center font-medium">
+                        <span>实际充值：</span>
+                        <span>{rechargeAmount} {rechargeCurrency}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex space-x-3 pt-6">
+                <button
+                  onClick={() => {
+                    setShowCardRechargeModal(false)
+                    setSelectedCardInfo(null)
+                    setRechargeAmount('')
+                    setRechargeCurrency('USDT')
+                  }}
+                  className={`flex-1 px-4 py-3 rounded-lg border transition-colors ${
+                    isDark 
+                      ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  取消
+                </button>
+                <button
+                  onClick={() => {
+                    if (rechargeAmount) {
+                      alert(`充值成功！已向 ${selectedCardInfo.name} 充值 ${rechargeAmount} ${rechargeCurrency}`)
+                      setShowCardRechargeModal(false)
+                      setSelectedCardInfo(null)
+                      setRechargeAmount('')
+                      setRechargeCurrency('USDT')
+                    }
+                  }}
+                  disabled={!rechargeAmount}
+                  className={`flex-1 px-4 py-3 rounded-lg transition-colors ${
+                    !rechargeAmount
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90'
+                  }`}
+                >
+                  确认充值
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 卡片划转模态框 */}
+      {showCardTransferModal && selectedCardInfo && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`${cardStyle} rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto`}>
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold">卡片划转</h2>
+                <button
+                  onClick={() => {
+                    setShowCardTransferModal(false)
+                    setSelectedCardInfo(null)
+                    setTransferAmount('')
+                    setTransferDirection('to-card')
+                    setTransferAccount('现货账户')
+                  }}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">卡片</label>
+                  <div className={`p-3 rounded-lg border ${isDark ? 'border-gray-600 bg-gray-800' : 'border-gray-300 bg-gray-50'}`}>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">{selectedCardInfo.name}</div>
+                        <div className="text-sm text-gray-500">{selectedCardInfo.number}</div>
+                      </div>
+                      <CreditCard className="h-8 w-8 text-gray-400" />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">划转方向</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => setTransferDirection('to-card')}
+                      className={`p-3 rounded-lg border-2 transition-all ${
+                        transferDirection === 'to-card'
+                          ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                          : isDark
+                            ? 'border-gray-600 hover:border-gray-500'
+                            : 'border-gray-300 hover:border-gray-400'
                       }`}
                     >
-                      <ArrowLeftRight className="h-4 w-4" />
-                    </Button>
+                      <ArrowDownLeft className="h-6 w-6 mx-auto mb-2" />
+                      <div className="text-sm">转入卡片</div>
+                    </button>
+                    <button
+                      onClick={() => setTransferDirection('from-card')}
+                      className={`p-3 rounded-lg border-2 transition-all ${
+                        transferDirection === 'from-card'
+                          ? 'border-[#00D4AA] bg-[#00D4AA]/10'
+                          : isDark
+                            ? 'border-gray-600 hover:border-gray-500'
+                            : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                    >
+                      <ArrowUpRight className="h-6 w-6 mx-auto mb-2" />
+                      <div className="text-sm">转出卡片</div>
+                    </button>
                   </div>
+                </div>
 
-                  {/* 到账户 */}
-                  <div>
-                    <label className={`block text-sm mb-2 ${
-                      isDark ? 'text-gray-400' : 'text-gray-600'
-                    }`}>
-                      到
-                    </label>
-                    <div className={`relative ${
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    {transferDirection === 'to-card' ? '转出账户' : '转入账户'}
+                  </label>
+                  <select
+                    value={transferAccount}
+                    onChange={(e) => setTransferAccount(e.target.value)}
+                    className={`w-full p-3 rounded-lg border ${
                       isDark 
-                        ? 'bg-[#2a2d42] border-[#3a3d4a]' 
-                        : 'bg-gray-50 border-gray-200'
-                    } border rounded-lg`}>
-                      <select
-                        value={transferTo}
-                        onChange={(e) => setTransferTo(e.target.value)}
-                        className={`w-full p-3 bg-transparent text-sm focus:outline-none appearance-none ${
-                          isDark 
-                            ? 'text-white focus:border-[#00D4AA]' 
-                            : 'text-gray-900 focus:border-[#00D4AA]'
-                        }`}
-                      >
-                        <option value="现货账户">现货账户</option>
-                        <option value="合约账户">合约账户</option>
-                        <option value="理财账户">理财账户</option>
-                        <option value="U卡账户">U卡账户</option>
-                      </select>
-                      <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none ${
-                        isDark ? 'text-gray-400' : 'text-gray-500'
-                      }`} />
-                    </div>
-                  </div>
+                        ? 'bg-gray-800 border-gray-600 text-white' 
+                        : 'bg-white border-gray-300 text-gray-900'
+                    } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                  >
+                    <option value="现货账户">现货账户</option>
+                    <option value="合约账户">合约账户</option>
+                    <option value="理财账户">理财账户</option>
+                    <option value="担保账户">担保账户</option>
+                  </select>
                 </div>
-              </div>
 
-              {/* 币种选择 */}
-              <div className="mb-6">
-                <label className={`block text-sm mb-2 ${
-                  isDark ? 'text-gray-400' : 'text-gray-600'
-                }`}>
-                  币种
-                </label>
-                <div className={`relative ${
-                  isDark 
-                    ? 'bg-[#2a2d42] border-[#3a3d4a]' 
-                    : 'bg-gray-50 border-gray-200'
-                } border rounded-lg`}>
-                  <div className="flex items-center p-3">
-                    <div className="w-6 h-6 bg-[#00D4AA] rounded-full flex items-center justify-center mr-3">
-                      <span className="text-white text-xs font-bold">U</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        USDT
-                      </div>
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        Tether USDt
-                      </div>
-                    </div>
-                    <ChevronDown className={`h-4 w-4 ${
-                      isDark ? 'text-gray-400' : 'text-gray-500'
-                    }`} />
-                  </div>
-                </div>
-              </div>
-
-              {/* 数量输入 */}
-              <div className="mb-4">
-                <label className={`block text-sm mb-2 ${
-                  isDark ? 'text-gray-400' : 'text-gray-600'
-                }`}>
-                  数量
-                </label>
-                <div className="flex space-x-3">
+                <div>
+                  <label className="block text-sm font-medium mb-2">划转金额</label>
                   <input
                     type="number"
                     value={transferAmount}
                     onChange={(e) => setTransferAmount(e.target.value)}
-                    placeholder="0"
-                    className={`flex-1 p-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+                    className={`w-full p-3 rounded-lg border ${
                       isDark 
-                        ? 'bg-[#252842] border-[#252842] text-white placeholder-gray-400' 
-                        : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
-                    } border`}
-                  />
-                  <Button
-                    variant="outline"
-                    className={`px-4 py-3 text-sm ${
-                      isDark 
-                        ? 'border-[#3a3d4a] text-[#00D4AA] hover:text-white hover:border-[#00D4AA]' 
-                        : 'border-gray-200 text-[#00D4AA] hover:text-white hover:bg-[#00D4AA] hover:border-[#00D4AA]'
-                    }`}
-                    onClick={() => setTransferAmount("0.00")}
-                  >
-                    全部
-                  </Button>
-                </div>
-              </div>
-
-              {/* 可用余额 */}
-              <div className="mb-6">
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  可用 USDT 资产: <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>0.00</span>
-                </div>
-              </div>
-
-              {/* 确认按钮 */}
-              <Button
-                className="w-full bg-[#4a4a4a] hover:bg-[#5a5a5a] text-white font-medium py-3 rounded-lg disabled:opacity-50"
-                disabled={!transferAmount || transferAmount === "0"}
-              >
-                确定
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 兑换USDT弹窗 */}
-      {showExchangeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* 背景遮罩 */}
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50"
-            onClick={() => setShowExchangeModal(false)}
-          />
-          
-          {/* 弹窗内容 */}
-          <div className={`relative w-full max-w-md mx-4 rounded-lg shadow-lg ${isDark ? 'bg-[#1a1b23] border border-[#3a3d4a]' : 'bg-white border border-gray-200'}`}>
-            <div className="p-6">
-              {/* 标题 */}
-              <div className="flex justify-between items-center mb-6">
-                <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  兑换成USDT
-                </h2>
-                <button
-                  onClick={() => setShowExchangeModal(false)}
-                  className={`p-2 rounded-lg hover:bg-opacity-80 ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-              
-              <div className="space-y-6">
-                {/* 选择法币资产 */}
-                <div className="space-y-2">
-                  <label className={`text-sm font-medium block ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    选择法币资产
-                  </label>
-                  <select
-                    value={selectedFiatCurrency}
-                    onChange={(e) => handleFiatCurrencyChange(e.target.value)}
-                    className={`w-full p-3 rounded-lg border ${isDark ? 'bg-[#2a2d3a] border-[#3a3d4a] text-white' : 'bg-white border-gray-300'}`}
-                  >
-                    <option value="">选择法币</option>
-                    <option value="USD">USD - 美元</option>
-                    <option value="EUR">EUR - 欧元</option>
-                    <option value="GBP">GBP - 英镑</option>
-                    <option value="JPY">JPY - 日元</option>
-                  </select>
-                </div>
-
-                {/* 输入金额 */}
-                <div className="space-y-2">
-                  <label className={`text-sm font-medium block ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    输入金额
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="请输入兑换金额"
-                    value={exchangeAmount}
-                    onChange={(e) => handleExchangeAmountChange(e.target.value)}
-                    className={`w-full p-3 rounded-lg border ${isDark ? 'bg-[#2a2d3a] border-[#3a3d4a] text-white placeholder-gray-400' : 'bg-white border-gray-300'}`}
-                  />
-                </div>
-
-                {/* 今日汇率显示 */}
-                {selectedFiatCurrency && (
-                  <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d3a]' : 'bg-gray-50'}`}>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      今日汇率
-                    </div>
-                    <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      1 {selectedFiatCurrency} = {exchangeRates[selectedFiatCurrency as keyof typeof exchangeRates]} USDT
-                    </div>
-                  </div>
-                )}
-
-                {/* 估算USDT金额 */}
-                {estimatedUSDT && (
-                  <div className={`p-3 rounded-lg ${isDark ? 'bg-[#00D4AA]/10 border border-[#00D4AA]/30' : 'bg-[#00D4AA]/10 border border-[#00D4AA]/30'}`}>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      预计可兑换
-                    </div>
-                    <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {estimatedUSDT} USDT
-                    </div>
-                  </div>
-                )}
-
-                {/* 确认按钮 */}
-                <div className="flex gap-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowExchangeModal(false)}
-                    className={`flex-1 ${isDark ? 'border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d3a]' : 'border-gray-300'}`}
-                  >
-                    取消
-                  </Button>
-                  <Button
-                    onClick={handleExchangeConfirm}
-                    disabled={!selectedFiatCurrency || !exchangeAmount || !estimatedUSDT}
-                    className="flex-1 bg-[#00D4AA] hover:bg-[#00B895] text-white disabled:opacity-50"
-                  >
-                    确认兑换
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 代付备用金充值弹窗 */}
-      {showStandbyRechargeModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className={`relative max-w-md w-full max-h-[90vh] overflow-y-auto ${
-            standbyRechargeAnimating 
-              ? "transition-all duration-300 ease-out scale-100 opacity-100" 
-              : "scale-95 opacity-0"
-          }`}>
-            <div className={`${cardStyle} rounded-lg p-6 relative`}>
-              {/* 标题栏 */}
-              <div className="flex items-center justify-between mb-6">
-                <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  充值代付备用金
-                </h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setStandbyRechargeAnimating(false)
-                    setTimeout(() => setShowStandbyRechargeModal(false), 200)
-                  }}
-                  className={`h-8 w-8 p-0 ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-
-              {/* 币种选择 */}
-              <div className="mb-6">
-                <label className={`block text-sm mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  选择充值币种
-                </label>
-                <div className={`relative ${isDark ? 'bg-[#2a2d42] border-[#3a3d4a]' : 'bg-gray-50 border-gray-200'} border rounded-lg`}>
-                  <select
-                    value={standbyRechargeCurrency}
-                    onChange={(e) => setStandbyRechargeCurrency(e.target.value)}
-                    className={`w-full p-3 bg-transparent text-sm focus:outline-none appearance-none ${
-                      isDark ? 'text-white focus:border-[#00D4AA]' : 'text-gray-900 focus:border-[#00D4AA]'
-                    }`}
-                  >
-                    <option value="USD">USD - 美元</option>
-                    <option value="EUR">EUR - 欧元</option>
-                    <option value="GBP">GBP - 英镑</option>
-                    <option value="JPY">JPY - 日元</option>
-                  </select>
-                  <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none ${
-                    isDark ? 'text-gray-400' : 'text-gray-500'
-                  }`} />
-                </div>
-              </div>
-
-              {/* 充值方式选择 */}
-              <div className="mb-6">
-                <div className="flex space-x-1 p-1 rounded-lg bg-gray-100 dark:bg-[#252842]">
-                  {["法币充值", "USDT充值"].map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setStandbyRechargeTab(tab)}
-                      className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                        standbyRechargeTab === tab
-                          ? 'bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm'
-                          : isDark ? 'text-gray-300 hover:text-white hover:bg-[#2a2d3a]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 当前余额显示 */}
-              <div className="mb-4">
-                <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-50'}`}>
-                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {standbyRechargeTab === "法币充值" ? `当前${standbyRechargeCurrency}余额` : "当前USDT余额"}
-                  </div>
-                  <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {standbyRechargeTab === "法币充值" 
-                      ? `${standbyRechargeCurrency === "USD" ? "$85,430.50" : 
-                          standbyRechargeCurrency === "EUR" ? "€12,680.25" : 
-                          standbyRechargeCurrency === "GBP" ? "£8,950.75" : "¥2,580,000"}`
-                      : "45,890.50 USDT"
-                    }
-                  </div>
-                </div>
-              </div>
-
-              {/* 充值金额输入 */}
-              <div className="mb-4">
-                <label className={`block text-sm mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  充值金额
-                </label>
-                <div className={`relative ${isDark ? 'bg-[#2a2d42] border-[#3a3d4a]' : 'bg-white border-gray-200'} border rounded-lg`}>
-                  <input
-                    type="number"
-                    value={standbyRechargeAmount}
-                    onChange={(e) => setStandbyRechargeAmount(e.target.value)}
-                    placeholder={standbyRechargeTab === "法币充值" ? `输入${standbyRechargeCurrency}金额` : "输入USDT金额"}
-                    className={`w-full p-3 bg-transparent text-sm focus:outline-none ${
-                      isDark ? 'text-white placeholder-gray-500' : 'text-gray-900 placeholder-gray-400'
-                    }`}
-                  />
-                  <div className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm ${
-                    isDark ? 'text-gray-400' : 'text-gray-500'
-                  }`}>
-                    {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
-                  </div>
-                </div>
-              </div>
-
-              {/* USDT充值时显示汇率和计算结果 */}
-              {standbyRechargeTab === "USDT充值" && standbyRechargeAmount && (
-                <div className="mb-4">
-                  <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d42]' : 'bg-blue-50'} border ${isDark ? 'border-[#3a3d4a]' : 'border-blue-200'}`}>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-blue-600'} mb-1`}>
-                      今日汇率：1 USDT = {exchangeRates[standbyRechargeCurrency as keyof typeof exchangeRates] || 1} {standbyRechargeCurrency}
-                    </div>
-                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-blue-800'}`}>
-                      可充值：{(parseFloat(standbyRechargeAmount) * (exchangeRates[standbyRechargeCurrency as keyof typeof exchangeRates] || 1)).toFixed(2)} {standbyRechargeCurrency}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* 确认按钮 */}
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setStandbyRechargeAnimating(false)
-                    setTimeout(() => setShowStandbyRechargeModal(false), 200)
-                  }}
-                  className={`flex-1 ${isDark ? 'border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d3a]' : 'border-gray-300'}`}
-                >
-                  取消
-                </Button>
-                <Button
-                  onClick={() => {
-                    console.log("代付备用金充值确认:", {
-                      currency: standbyRechargeCurrency,
-                      method: standbyRechargeTab,
-                      amount: standbyRechargeAmount
-                    })
-                    setStandbyRechargeAnimating(false)
-                    setTimeout(() => setShowStandbyRechargeModal(false), 200)
-                  }}
-                  disabled={!standbyRechargeAmount}
-                  className="flex-1 bg-[#00D4AA] hover:bg-[#00B895] text-white disabled:opacity-50"
-                >
-                  确认充值
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 更多币种弹窗 */}
-      {showMoreCurrencies && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`${cardStyle} rounded-lg p-6 max-w-md w-full mx-4`}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">选择显示币种</h3>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowMoreCurrencies(false)}
-                className="p-1"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-            
-            {/* 多选提示 */}
-            <div className="mb-4 text-sm text-gray-500">
-              最多可选择5个币种 ({selectedCurrencies.length}/5)
-            </div>
-            
-            <div className="grid grid-cols-2 gap-3">
-              {moreCurrencies.map((currency) => {
-                const isSelected = selectedCurrencies.includes(currency);
-                return (
-                  <button
-                    key={currency}
-                    onClick={() => {
-                      if (isSelected) {
-                        // 取消选择
-                        setSelectedCurrencies(prev => prev.filter(c => c !== currency));
-                      } else if (selectedCurrencies.length < 5) {
-                        // 添加选择
-                        setSelectedCurrencies(prev => [...prev, currency]);
-                      }
-                    }}
-                    disabled={!isSelected && selectedCurrencies.length >= 5}
-                    className={`p-3 rounded-lg border-2 text-center transition-all flex items-center space-x-2 ${
-                      isSelected
-                        ? "border-[#00D4AA] bg-[#00D4AA]/10 text-[#00D4AA]"
-                        : selectedCurrencies.length >= 5
-                          ? "border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed"
-                          : isDark
-                            ? "border-transparent bg-transparent hover:border-[#00D4AA]/50 hover:bg-[#00D4AA]/5"
-                            : "border-transparent bg-transparent hover:border-[#00D4AA]/50 hover:bg-[#00D4AA]/5"
-                    }`}
-                  >
-                    {/* 法币图标 */}
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                      currency === 'CNY' ? 'bg-red-500' :
-                      currency === 'USD' ? 'bg-green-500' :
-                      currency === 'EUR' ? 'bg-blue-500' :
-                      currency === 'GBP' ? 'bg-purple-500' :
-                      currency === 'JPY' ? 'bg-orange-500' :
-                      currency === 'CAD' ? 'bg-red-400' :
-                      currency === 'AUD' ? 'bg-green-400' :
-                      currency === 'CHF' ? 'bg-red-600' :
-                      currency === 'SEK' ? 'bg-blue-400' :
-                      currency === 'NOK' ? 'bg-blue-600' :
-                      'bg-gray-500'
-                    }`}>
-                      <span className="text-white">{currency.charAt(0)}</span>
-                    </div>
-                    <div className="text-sm font-medium">{currency}</div>
-                  </button>
-                );
-              })}
-            </div>
-            
-            {/* 确认按钮 */}
-            <div className="mt-6 flex justify-end space-x-3">
-              <button
-                onClick={() => setShowMoreCurrencies(false)}
-                className={`px-4 py-2 rounded-lg border transition-all ${
-                  isDark 
-                    ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]" 
-                    : "border-gray-300 text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                取消
-              </button>
-              <button
-                onClick={() => setShowMoreCurrencies(false)}
-                className="px-4 py-2 rounded-lg bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90 transition-all"
-              >
-                确认
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 购买地址弹窗 */}
-      {showPurchaseAddressModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`${cardStyle} rounded-lg p-6 w-full max-w-md mx-4`}>
-            <h3 className={`text-lg font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              购买地址
-            </h3>
-            
-            <div className="space-y-4">
-              {/* 选择链 */}
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  选择区块链网络
-                </label>
-                <select
-                  value={selectedChain}
-                  onChange={(e) => setSelectedChain(e.target.value)}
-                  className={`w-full p-3 rounded-lg border text-sm ${
-                    isDark 
-                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                      : "bg-white border-gray-300 text-gray-800"
-                  }`}
-                >
-                  {Object.keys(chainPrices).map((chain) => (
-                    <option key={chain} value={chain}>{chain}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* 显示单价 */}
-              <div className={`p-3 rounded-lg ${isDark ? 'bg-[#252842]' : 'bg-gray-50'}`}>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  {selectedChain} 地址单价
-                </div>
-                <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {chainPrices[selectedChain as keyof typeof chainPrices]} <span className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT/个</span>
-                </div>
-              </div>
-
-              {/* 输入数量 */}
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  购买数量
-                </label>
-                <input
-                  type="number"
-                  value={addressQuantity}
-                  onChange={(e) => setAddressQuantity(e.target.value)}
-                  placeholder="请输入地址数量"
-                  className={`w-full p-3 rounded-lg border text-sm ${
-                    isDark 
-                      ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400" 
-                      : "bg-white border-gray-300 text-gray-800 placeholder-gray-500"
-                  }`}
-                />
-              </div>
-
-              {/* 显示总价 */}
-              <div className={`p-3 rounded-lg ${isDark ? 'bg-[#252842]' : 'bg-gray-50'}`}>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  总费用
-                </div>
-                <div className={`text-xl font-bold text-[#00D4AA]`}>
-                  {totalPrice.toFixed(2)} <span className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>USDT</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* 按钮 */}
-            <div className="flex items-center space-x-3 mt-6">
-              <button
-                onClick={() => setShowPurchaseAddressModal(false)}
-                className={`flex-1 px-4 py-3 rounded-lg border text-sm font-medium transition-all ${
-                  isDark 
-                    ? "border-[#3a3d4a] text-gray-300 hover:bg-[#3a3d4a]" 
-                    : "border-gray-300 text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                取消
-              </button>
-              <button
-                onClick={handlePurchaseAddress}
-                disabled={!addressQuantity || parseInt(addressQuantity) <= 0}
-                className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                  !addressQuantity || parseInt(addressQuantity) <= 0
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90"
-                }`}
-              >
-                确认购买
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 释放地址确认弹窗 */}
-      {showReleaseModal && selectedAddress && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`${cardStyle} rounded-lg p-6 w-full max-w-md mx-4`}>
-            <h3 className={`text-lg font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              确认释放地址
-            </h3>
-            
-            <div className="space-y-4">
-              <div className={`p-4 rounded-lg ${isDark ? 'bg-[#252842]' : 'bg-gray-50'}`}>
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="text-lg">{getNetworkLogo(selectedAddress.network)}</span>
-                  <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {selectedAddress.network}
-                  </span>
-                </div>
-                <div className={`text-sm font-mono ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                  {selectedAddress.fullAddress}
-                </div>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
-                  用户ID: {selectedAddress.userId}
-                </div>
-              </div>
-              
-              <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                是否确认释放该地址？释放后该地址将与该用户解绑，重新回到未分配地址库，以后随机分配给其他用户。
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-3 mt-6">
-              <button
-                onClick={() => setShowReleaseModal(false)}
-                className={`flex-1 px-4 py-3 rounded-lg border text-sm font-medium transition-all ${
-                  isDark 
-                    ? "border-[#3a3d4a] text-gray-300 hover:bg-[#3a3d4a]" 
-                    : "border-gray-300 text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                取消
-              </button>
-              <button
-                onClick={confirmReleaseAddress}
-                className="flex-1 px-4 py-3 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all text-sm font-medium"
-              >
-                确认释放
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 交易伙伴操作对话框 */}
-      {tradingPartnerDialog.isOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className={`w-full max-w-md rounded-2xl ${isDark ? 'bg-[#1a1d29]' : 'bg-white'} shadow-2xl border ${isDark ? 'border-[#252842]' : 'border-gray-200'} overflow-hidden`}>
-            {/* 对话框头部 */}
-            <div className={`px-6 py-4 border-b ${isDark ? 'border-[#252842]' : 'border-gray-100'}`}>
-              <div className="flex items-center justify-between">
-                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  交易伙伴: {tradingPartnerDialog.partnerName}
-                </h3>
-                <button
-                  onClick={() => setTradingPartnerDialog({isOpen: false, partnerName: '', partnerId: ''})}
-                  className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-                >
-                  <X className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
-                </button>
-              </div>
-            </div>
-
-            {/* 对话框内容 */}
-            <div className="px-6 py-6 space-y-4">
-              <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                选择与交易伙伴的联系方式
-              </p>
-
-              {/* 私聊选项 */}
-              <button
-                onClick={() => {
-                  // 这里可以跳转到私聊页面或打开聊天功能
-                  console.log('打开私聊:', tradingPartnerDialog.partnerName);
-                  setTradingPartnerDialog({isOpen: false, partnerName: '', partnerId: ''});
-                }}
-                className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 hover:shadow-md ${
-                  isDark 
-                    ? 'border-[#252842] bg-[#0f1219] hover:bg-[#1a1d29] text-white' 
-                    : 'border-gray-200 bg-gray-50 hover:bg-white text-gray-900'
-                }`}
-              >
-                <div className={`p-2 rounded-lg ${isDark ? 'bg-blue-500/20' : 'bg-blue-50'}`}>
-                  <MessageCircle className={`h-5 w-5 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
-                </div>
-                <div className="text-left">
-                  <div className="font-medium">发起私聊</div>
-                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                    与 {tradingPartnerDialog.partnerName} 进行私人对话
-                  </div>
-                </div>
-                <ChevronRight className={`h-5 w-5 ml-auto ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
-              </button>
-
-              {/* 担保群选项 */}
-              <button
-                onClick={() => {
-                  // 这里可以跳转到担保群或打开群聊功能
-                  console.log('进入担保群:', tradingPartnerDialog.partnerName);
-                  setTradingPartnerDialog({isOpen: false, partnerName: '', partnerId: ''});
-                }}
-                className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 hover:shadow-md ${
-                  isDark 
-                    ? 'border-[#252842] bg-[#0f1219] hover:bg-[#1a1d29] text-white' 
-                    : 'border-gray-200 bg-gray-50 hover:bg-white text-gray-900'
-                }`}
-              >
-                <div className={`p-2 rounded-lg ${isDark ? 'bg-green-500/20' : 'bg-green-50'}`}>
-                  <Users className={`h-5 w-5 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
-                </div>
-                <div className="text-left">
-                  <div className="font-medium">进入担保群</div>
-                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                    在担保群中协商交易细节
-                  </div>
-                </div>
-                <ChevronRight className={`h-5 w-5 ml-auto ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 立即确认弹窗 */}
-      {showConfirmDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowConfirmDialog(false)}>
-          <div 
-            className={`max-w-md w-full mx-4 rounded-2xl shadow-xl ${
-              isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-            }`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* 弹窗头部 */}
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between">
-                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  确认交易
-                </h3>
-                <button
-                  onClick={() => setShowConfirmDialog(false)}
-                  className={`p-2 rounded-lg transition-colors ${
-                    isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-                  }`}
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* 弹窗内容 */}
-            <div className="p-6 space-y-4">
-              <div className={`p-4 rounded-lg ${isDark ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'}`}>
-                <div className={`text-sm ${isDark ? 'text-red-300' : 'text-red-800'}`}>
-                  ⚠️ 重要提醒
-                </div>
-                <div className={`text-sm mt-2 ${isDark ? 'text-red-200' : 'text-red-700'}`}>
-                  如果确认，则交易资金会解除担保，对方将收到这一笔钱！
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <span className="font-medium">交易金额：</span>
-                  <span className="font-bold text-green-500">{confirmTransactionInfo.amount} {confirmTransactionInfo.currency}</span>
-                </div>
-                <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <span className="font-medium">交易对象：</span>
-                  <span>{confirmTransactionInfo.partner}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* 弹窗按钮 */}
-            <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
-              <button
-                onClick={() => setShowConfirmDialog(false)}
-                className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
-                  isDark 
-                    ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                取消
-              </button>
-              <button
-                onClick={() => {
-                  // 确认交易逻辑
-                  console.log('确认交易:', confirmTransactionInfo);
-                  setShowConfirmDialog(false);
-                  // 这里可以添加成功提示和更新交易状态
-                }}
-                className="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
-              >
-                确认
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 资金分布弹窗 */}
-      {showFundDistribution && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className={`w-full max-w-lg rounded-2xl ${isDark ? 'bg-[#1a1d29]' : 'bg-white'} shadow-2xl border ${isDark ? 'border-[#252842]' : 'border-gray-200'} overflow-hidden`}>
-            {/* 弹窗头部 */}
-            <div className={`px-6 py-4 border-b ${isDark ? 'border-[#252842]' : 'border-gray-100'}`}>
-              <div className="flex items-center justify-between">
-                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  资金分布
-                </h3>
-                <button
-                  onClick={() => setShowFundDistribution(false)}
-                  className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-                >
-                  <X className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
-                </button>
-              </div>
-            </div>
-
-            {/* 弹窗内容 */}
-            <div className="px-6 py-6">
-              {/* 总资产 */}
-              <div className={`text-center mb-6 p-4 rounded-lg ${isDark ? 'bg-[#252842]' : 'bg-gray-50'}`}>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>
-                  总资产
-                </div>
-                <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  5,679.00 USDT
-                </div>
-              </div>
-
-              {/* 饼图区域 */}
-              <div className="flex items-center justify-center mb-6">
-                <div className="relative w-48 h-48">
-                  {/* 简化的饼图显示 */}
-                  <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
-                    {/* 虚拟卡1 - 39% */}
-                    <circle cx="50" cy="50" r="25" fill="none" stroke="#00D4AA" strokeWidth="20" 
-                           strokeDasharray="61.26 96.3" strokeDashoffset="0" />
-                    {/* 虚拟卡2 - 23% */}
-                    <circle cx="50" cy="50" r="25" fill="none" stroke="#3B82F6" strokeWidth="20" 
-                           strokeDasharray="36.19 121.37" strokeDashoffset="-61.26" />
-                    {/* 实体卡 - 21% */}
-                    <circle cx="50" cy="50" r="25" fill="none" stroke="#F59E0B" strokeWidth="20" 
-                           strokeDasharray="33.06 124.5" strokeDashoffset="-97.45" />
-                    {/* 余额 - 17% */}
-                    <circle cx="50" cy="50" r="25" fill="none" stroke="#EF4444" strokeWidth="20" 
-                           strokeDasharray="26.7 130.86" strokeDashoffset="-130.51" />
-                  </svg>
-                  
-                  {/* 中心文字 */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className={`text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      <div className="text-sm font-medium">U卡资金</div>
-                      <div className="text-xs text-gray-500">分布情况</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 图例 */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-[#00D4AA] mr-3"></div>
-                    <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>虚拟卡1</span>
-                  </div>
-                  <div className="text-right">
-                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>2,222.22 USDT</div>
-                    <div className="text-xs text-gray-500">39%</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-[#3B82F6] mr-3"></div>
-                    <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>虚拟卡2</span>
-                  </div>
-                  <div className="text-right">
-                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>1,306.11 USDT</div>
-                    <div className="text-xs text-gray-500">23%</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-[#F59E0B] mr-3"></div>
-                    <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>实体卡</span>
-                  </div>
-                  <div className="text-right">
-                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>1,192.59 USDT</div>
-                    <div className="text-xs text-gray-500">21%</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-[#EF4444] mr-3"></div>
-                    <span className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>账户余额</span>
-                  </div>
-                  <div className="text-right">
-                    <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>958.08 USDT</div>
-                    <div className="text-xs text-gray-500">17%</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 弹窗底部 */}
-            <div className={`px-6 py-4 border-t ${isDark ? 'border-[#252842]' : 'border-gray-100'}`}>
-              <Button
-                onClick={() => setShowFundDistribution(false)}
-                className={`w-full ${
-                  isDark 
-                    ? "bg-white text-black hover:bg-gray-200" 
-                    : "bg-black text-white hover:bg-gray-800"
-                }`}
-              >
-                知道了
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-
-
-      {/* PIN码查看弹窗 */}
-      {showPinModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowPinModal(false)}>
-          <div 
-            className={`max-w-md w-full mx-4 rounded-2xl shadow-xl ${
-              isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-            }`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* 弹窗头部 */}
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between">
-                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  查看卡片PIN码
-                </h3>
-                <button
-                  onClick={() => setShowPinModal(false)}
-                  className={`p-2 rounded-lg transition-colors ${
-                    isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-                  }`}
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* 弹窗内容 */}
-            <div className="p-6 space-y-4">
-              {!showPin ? (
-                <>
-                  <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    为了保护您的卡片安全，请输入转账密码以查看PIN码
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <label className={`block text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      转账密码
-                    </label>
-                    <input
-                      type="password"
-                      value={transferPassword}
-                      onChange={(e) => setTransferPassword(e.target.value)}
-                      placeholder="请输入6位转账密码"
-                      maxLength={6}
-                      className={`w-full px-3 py-3 rounded-lg border text-center font-mono tracking-widest ${
-                        isDark 
-                          ? 'bg-[#2a2d3a] border-[#3a3f54] text-white placeholder-gray-500' 
-                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                      } focus:outline-none focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
-                    />
-                  </div>
-                  
-                  <div className="flex space-x-3">
-                    <Button
-                      variant="outline"
-                      onClick={() => setShowPinModal(false)}
-                      className="flex-1"
-                    >
-                      取消
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        if (transferPassword === "123456") {
-                          setShowPin(true)
-                        } else {
-                          alert("密码错误，请重试")
-                        }
-                      }}
-                      disabled={transferPassword.length !== 6}
-                      className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
-                    >
-                      确认
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className={`text-center py-8 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    <div className="text-sm text-gray-500 mb-6">卡片PIN码</div>
-                    <div className="flex justify-center mb-6">
-                      <div className={`inline-flex items-center px-6 py-4 rounded-xl font-mono text-2xl font-bold tracking-wider ${
-                        isDark ? 'bg-[#00D4AA]/20 text-[#00D4AA] border border-[#00D4AA]/30' : 'bg-[#00D4AA]/10 text-[#00D4AA] border border-[#00D4AA]/20'
-                      }`}>
-                        {selectedCardId === "card-1" ? "123" : 
-                         selectedCardId === "card-2" ? "456" : "789"}
-                      </div>
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      请妥善保管PIN码，切勿泄露给他人
-                    </div>
-                  </div>
-                  
-                  <Button
-                    onClick={() => {
-                      setShowPinModal(false)
-                      setShowPin(false)
-                      setTransferPassword("")
-                    }}
-                    className="w-full bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
-                  >
-                    知道了
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 充值弹窗 */}
-      {showRechargeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => setShowRechargeModal(false)}
-          />
-          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl`}>
-            <div className="flex justify-between items-center mb-6">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                卡片充值
-              </h3>
-              <button
-                onClick={() => setShowRechargeModal(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              {/* 1. 卡类型选择页签 */}
-              <div>
-                <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  选择卡类型
-                </label>
-                <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
-                  <div
-                    className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
-                    style={{
-                      width: '50%',
-                      left: rechargeCardType === "virtual" ? '4px' : '50%'
-                    }}
-                  />
-                  <button
-                    className={`relative z-10 flex-1 text-sm font-medium py-2 transition-all duration-300 ${
-                      rechargeCardType === "virtual"
-                        ? isDark ? "text-black" : "text-white"
-                        : isDark ? "text-gray-300" : "text-gray-700"
-                    }`}
-                    onClick={() => setRechargeCardType("virtual")}
-                  >
-                    虚拟卡
-                  </button>
-                  <button
-                    className={`relative z-10 flex-1 text-sm font-medium py-2 transition-all duration-300 ${
-                      rechargeCardType === "physical"
-                        ? isDark ? "text-black" : "text-white"
-                        : isDark ? "text-gray-300" : "text-gray-700"
-                    }`}
-                    onClick={() => setRechargeCardType("physical")}
-                  >
-                    实体卡
-                  </button>
-                </div>
-              </div>
-
-              {/* 2. 卡片选择 */}
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  选择卡片
-                </label>
-                <div className="relative card-dropdown">
-                  <button
-                    type="button"
-                    onClick={() => setShowCardDropdown(!showCardDropdown)}
-                    className={`w-full px-3 py-2 border rounded-lg text-left flex items-center justify-between transition-all duration-200 ${
-                      theme === "dark" 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white hover:border-[#4a4d5a]' 
-                        : 'bg-white border-gray-300 text-gray-900 hover:border-gray-400'
-                    } ${showCardDropdown ? 'ring-2 ring-[#00D4AA] ring-opacity-50' : ''}`}
-                  >
-                    <span>
-                      {rechargeCardType === "virtual" ? (
-                        selectedRechargeCard === "shopping" ? "购物专用卡 - **** 1122" :
-                        selectedRechargeCard === "travel" ? "旅行专用卡 - **** 3344" :
-                        selectedRechargeCard === "entertainment" ? "娱乐专用卡 - **** 5432" :
-                        selectedRechargeCard === "investment" ? "投资理财卡 - **** 9999" : "请选择卡片"
-                      ) : (
-                        selectedRechargeCard === "platinum" ? "白金卡 - **** 1234" :
-                        selectedRechargeCard === "gold" ? "金卡 - **** 5678" :
-                        selectedRechargeCard === "diamond" ? "钻石卡 - **** 9012" : "请选择卡片"
-                      )}
-                    </span>
-                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${showCardDropdown ? 'rotate-180' : ''}`} />
-                  </button>
-                  
-                  {/* 下拉菜单 */}
-                  {showCardDropdown && (
-                    <div className={`absolute z-10 w-full mt-1 rounded-lg shadow-lg border animate-in fade-in-0 slide-in-from-top-2 duration-200 ${
-                      theme === "dark" ? 'bg-[#252842] border-[#3a3d4a]' : 'bg-white border-gray-200'
-                    }`}>
-                      <div className="py-1 max-h-60 overflow-y-auto">
-                        {rechargeCardType === "virtual" ? (
-                          <>
-                            <button
-                              onClick={() => {
-                                setSelectedRechargeCard("shopping")
-                                setShowCardDropdown(false)
-                              }}
-                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                theme === "dark" 
-                                  ? 'text-white hover:bg-white' 
-                                  : 'text-gray-900 hover:bg-gray-900'
-                              } ${selectedRechargeCard === "shopping" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
-                            >
-                              <div className="flex items-center">
-                                <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                                购物专用卡 - **** 1122
-                              </div>
-                            </button>
-                            <button
-                              onClick={() => {
-                                setSelectedRechargeCard("travel")
-                                setShowCardDropdown(false)
-                              }}
-                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                theme === "dark" 
-                                  ? 'text-white hover:bg-white' 
-                                  : 'text-gray-900 hover:bg-gray-900'
-                              } ${selectedRechargeCard === "travel" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
-                            >
-                              <div className="flex items-center">
-                                <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
-                                旅行专用卡 - **** 3344
-                              </div>
-                            </button>
-                            <button
-                              onClick={() => {
-                                setSelectedRechargeCard("entertainment")
-                                setShowCardDropdown(false)
-                              }}
-                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                theme === "dark" 
-                                  ? 'text-white hover:bg-white' 
-                                  : 'text-gray-900 hover:bg-gray-900'
-                              } ${selectedRechargeCard === "entertainment" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
-                            >
-                              <div className="flex items-center">
-                                <div className="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
-                                娱乐专用卡 - **** 5432
-                              </div>
-                            </button>
-                            <button
-                              onClick={() => {
-                                setSelectedRechargeCard("investment")
-                                setShowCardDropdown(false)
-                              }}
-                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                theme === "dark" 
-                                  ? 'text-white hover:bg-white' 
-                                  : 'text-gray-900 hover:bg-gray-900'
-                              } ${selectedRechargeCard === "investment" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
-                            >
-                              <div className="flex items-center">
-                                <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
-                                投资理财卡 - **** 9999
-                              </div>
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button
-                              onClick={() => {
-                                setSelectedRechargeCard("platinum")
-                                setShowCardDropdown(false)
-                              }}
-                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                theme === "dark" 
-                                  ? 'text-white hover:bg-white' 
-                                  : 'text-gray-900 hover:bg-gray-900'
-                              } ${selectedRechargeCard === "platinum" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
-                            >
-                              <div className="flex items-center">
-                                <div className="w-3 h-3 rounded-full bg-gray-400 mr-2"></div>
-                                白金卡 - **** 1234
-                              </div>
-                            </button>
-                            <button
-                              onClick={() => {
-                                setSelectedRechargeCard("gold")
-                                setShowCardDropdown(false)
-                              }}
-                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                theme === "dark" 
-                                  ? 'text-white hover:bg-white' 
-                                  : 'text-gray-900 hover:bg-gray-900'
-                              } ${selectedRechargeCard === "gold" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
-                            >
-                              <div className="flex items-center">
-                                <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
-                                金卡 - **** 5678
-                              </div>
-                            </button>
-                            <button
-                              onClick={() => {
-                                setSelectedRechargeCard("diamond")
-                                setShowCardDropdown(false)
-                              }}
-                              className={`w-full px-3 py-2 text-left hover:bg-opacity-10 transition-all duration-150 ${
-                                theme === "dark" 
-                                  ? 'text-white hover:bg-white' 
-                                  : 'text-gray-900 hover:bg-gray-900'
-                              } ${selectedRechargeCard === "diamond" ? 'bg-[#00D4AA] bg-opacity-10 text-[#00D4AA]' : ''}`}
-                            >
-                              <div className="flex items-center">
-                                <div className="w-3 h-3 rounded-full bg-black mr-2"></div>
-                                钻石卡 - **** 9012
-                              </div>
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              {/* 3. USDT金额输入 */}
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  充值金额 (USDT)
-                </label>
-                <input
-                  type="number"
-                  value={rechargeAmount}
-                  onChange={(e) => setRechargeAmount(e.target.value)}
-                  placeholder="请输入USDT金额"
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-                {rechargeAmount && (
-                  <div className={`mt-2 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    到账后余额: {(parseFloat(rechargeAmount || '0') + 3456.78).toFixed(2)} USDT
-                    <div className="flex space-x-4 mt-1">
-                      <span>≈ ${(parseFloat(rechargeAmount || '0') + 3456.78).toFixed(2)} 美金</span>
-                      <span>≈ ${((parseFloat(rechargeAmount || '0') + 3456.78) * 7.8).toFixed(2)} 港币</span>
-                      <span>≈ €{((parseFloat(rechargeAmount || '0') + 3456.78) * 0.92).toFixed(2)} 欧元</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* 4. 账户余额显示 */}
-              <div className={`flex items-center justify-between p-3 rounded-lg ${
-                isDark ? 'bg-[#252842]/50' : 'bg-gray-50'
-              }`}>
-                <div>
-                  <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    当前账户余额
-                  </div>
-                  <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    3,456.78 USDT
-                  </div>
-                </div>
-                
-                {/* 5. 划款按钮 */}
-                <button
-                  onClick={() => {
-                    setShowRechargeModal(false)
-                    handleTransferClick()
-                  }}
-                  className={`px-3 py-1.5 text-xs rounded-lg border transition-colors ${
-                    isDark
-                      ? "border-white text-white hover:bg-white hover:text-black"
-                      : "border-black text-black hover:bg-black hover:text-white"
-                  }`}
-                >
-                  划款
-                </button>
-              </div>
-            </div>
-            
-            <div className="flex space-x-3 mt-6">
-              <Button
-                variant="outline"
-                onClick={() => setShowRechargeModal(false)}
-                className="flex-1"
-              >
-                取消
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowRechargeModal(false)
-                  alert("充值申请已提交")
-                }}
-                className={`flex-1 ${
-                  isDark 
-                    ? 'bg-white hover:bg-gray-100 text-black' 
-                    : 'bg-black hover:bg-gray-900 text-white'
-                }`}
-              >
-                确认充值
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 申请新卡弹窗 */}
-      {showNewCardModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => {
-              setShowNewCardModal(false)
-              resetNewCardModal()
-            }}
-          />
-          <div className={`relative w-full max-w-2xl mx-4 p-6 rounded-xl ${
-            theme === "dark" ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl max-h-[90vh] overflow-y-auto`}>
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h3 className={`text-lg font-semibold ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                  申请新卡
-                </h3>
-                <p className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
-                  步骤 {newCardStep} / 5
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setShowNewCardModal(false)
-                  resetNewCardModal()
-                }}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            
-            {/* 步骤指示器 */}
-            <div className="flex items-center justify-center mb-8">
-              {[1, 2, 3, 4, 5].map((step) => (
-                <div key={step} className="flex items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    step <= newCardStep
-                      ? 'bg-[#00D4AA] text-white'
-                      : theme === "dark" 
-                        ? 'bg-[#252842] text-gray-400 border border-[#3a3d4a]'
-                        : 'bg-gray-100 text-gray-400 border border-gray-300'
-                  }`}>
-                    {step}
-                  </div>
-                  {step < 5 && (
-                    <div className={`w-12 h-0.5 mx-2 ${
-                      step < newCardStep ? 'bg-[#00D4AA]' : theme === "dark" ? 'bg-[#3a3d4a]' : 'bg-gray-300'
-                    }`} />
-                  )}
-                </div>
-              ))}
-            </div>
-            
-            {/* 步骤内容 */}
-            <div className="space-y-6">
-              {/* 第一步：选择卡片类型、品牌和地区 */}
-              {newCardStep === 1 && (
-                <div className="space-y-6">
-                  <div>
-                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                      卡片类型
-                    </label>
-                    <div className="grid grid-cols-2 gap-3">
-                      {[
-                        { value: "virtual", label: "虚拟卡", desc: "即时发卡，在线支付" },
-                        { value: "physical", label: "实体卡", desc: "实体卡片，全球通用" }
-                      ].map((type) => (
-                        <div
-                          key={type.value}
-                          onClick={() => setNewCardType(type.value as "virtual" | "physical")}
-                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                            newCardType === type.value
-                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
-                              : theme === "dark"
-                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
-                                : 'border-gray-200 hover:border-[#00D4AA]/50'
-                          }`}
-                        >
-                          <div className={`font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                            {type.label}
-                          </div>
-                          <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
-                            {type.desc}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                      卡片品牌
-                    </label>
-                    <div className="grid grid-cols-2 gap-3">
-                      {[
-                        { value: "visa", label: "Visa", desc: "全球通用，支付范围广" },
-                        { value: "master", label: "Mastercard", desc: "国际品牌，安全可靠" }
-                      ].map((brand) => (
-                        <div
-                          key={brand.value}
-                          onClick={() => setNewCardBrand(brand.value as "visa" | "master")}
-                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                            newCardBrand === brand.value
-                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
-                              : theme === "dark"
-                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
-                                : 'border-gray-200 hover:border-[#00D4AA]/50'
-                          }`}
-                        >
-                          <div className={`font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                            {brand.label}
-                          </div>
-                          <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
-                            {brand.desc}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                      发卡地区
-                    </label>
-                    <div className="grid grid-cols-3 gap-3">
-                      {[
-                        { value: "europe", label: "欧洲", desc: "欧盟地区发卡" },
-                        { value: "hongkong", label: "香港", desc: "香港地区发卡" },
-                        { value: "usa", label: "美国", desc: "美国地区发卡" }
-                      ].map((region) => (
-                        <div
-                          key={region.value}
-                          onClick={() => setNewCardRegion(region.value as "europe" | "hongkong" | "usa")}
-                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                            newCardRegion === region.value
-                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
-                              : theme === "dark"
-                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
-                                : 'border-gray-200 hover:border-[#00D4AA]/50'
-                          }`}
-                        >
-                          <div className={`font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                            {region.label}
-                          </div>
-                          <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
-                            {region.desc}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {/* 第二步：是否需要在中国大陆使用 */}
-              {newCardStep === 2 && (
-                <div className="space-y-6">
-                  <div>
-                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                      是否需要在中国大陆地区使用？
-                    </label>
-                    <div className="grid grid-cols-2 gap-3">
-                      {[
-                        { value: true, label: "是", desc: "需要在中国大陆使用" },
-                        { value: false, label: "否", desc: "不需要在中国大陆使用" }
-                      ].map((option) => (
-                        <div
-                          key={option.value.toString()}
-                          onClick={() => setNeedMainlandChina(option.value)}
-                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                            needMainlandChina === option.value
-                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
-                              : theme === "dark"
-                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
-                                : 'border-gray-200 hover:border-[#00D4AA]/50'
-                          }`}
-                        >
-                          <div className={`font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                            {option.label}
-                          </div>
-                          <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
-                            {option.desc}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {needMainlandChina && (
-                    <div className={`p-4 rounded-lg ${
-                      theme === "dark" ? 'bg-yellow-900/20 border border-yellow-800' : 'bg-yellow-50 border border-yellow-200'
-                    }`}>
-                      <div className={`text-sm ${theme === "dark" ? 'text-yellow-400' : 'text-yellow-800'}`}>
-                        <strong>温馨提示：</strong>在中国大陆使用可能会有额外的限制和手续费，建议根据实际需求选择。
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-              
-              {/* 第三步：虚拟卡付款场景选择 */}
-              {newCardStep === 3 && newCardType === "virtual" && (
-                <div className="space-y-6">
-                  <div>
-                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                      选择付款场景（可多选）
-                    </label>
-                    <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto">
-                      {paymentScenarios.map((scenario) => (
-                        <div
-                          key={scenario}
-                          onClick={() => {
-                            setSelectedScenarios(prev => 
-                              prev.includes(scenario) 
-                                ? prev.filter(s => s !== scenario)
-                                : [...prev, scenario]
-                            )
-                          }}
-                          className={`p-3 rounded-lg border cursor-pointer transition-all text-center ${
-                            selectedScenarios.includes(scenario)
-                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
-                              : theme === "dark"
-                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
-                                : 'border-gray-200 hover:border-[#00D4AA]/50'
-                          }`}
-                        >
-                          <div className={`text-sm font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                            {scenario}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      已选择 {selectedScenarios.length} 个场景
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {/* 第四步：填写开卡信息 */}
-              {newCardStep === 4 && (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                        持卡人姓名
-                      </label>
-                      <input
-                        type="text"
-                        value={cardApplicationInfo.holderName}
-                        onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, holderName: e.target.value }))}
-                        placeholder="请输入持卡人姓名"
-                        className={`w-full px-3 py-2 border rounded-lg ${
-                          theme === "dark"
-                            ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                            : 'bg-white border-gray-300 text-gray-900'
-                        }`}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                        手机号码
-                      </label>
-                      <input
-                        type="tel"
-                        value={cardApplicationInfo.phoneNumber}
-                        onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, phoneNumber: e.target.value }))}
-                        placeholder="请输入手机号码"
-                        className={`w-full px-3 py-2 border rounded-lg ${
-                          theme === "dark"
-                            ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                            : 'bg-white border-gray-300 text-gray-900'
-                        }`}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                        邮箱地址
-                      </label>
-                      <input
-                        type="email"
-                        value={cardApplicationInfo.email}
-                        onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, email: e.target.value }))}
-                        placeholder="请输入邮箱地址"
-                        className={`w-full px-3 py-2 border rounded-lg ${
-                          theme === "dark"
-                            ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                            : 'bg-white border-gray-300 text-gray-900'
-                        }`}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                        身份证号码
-                      </label>
-                      <input
-                        type="text"
-                        value={cardApplicationInfo.idNumber}
-                        onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, idNumber: e.target.value }))}
-                        placeholder="请输入身份证号码"
-                        className={`w-full px-3 py-2 border rounded-lg ${
-                          theme === "dark"
-                            ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                            : 'bg-white border-gray-300 text-gray-900'
-                        }`}
-                      />
-                    </div>
-                  </div>
-                  
-                  {newCardType === "physical" && (
-                    <>
-                      <div>
-                        <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                          邮寄地址
-                        </label>
-                        <input
-                          type="text"
-                          value={cardApplicationInfo.address}
-                          onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, address: e.target.value }))}
-                          placeholder="请输入详细地址"
-                          className={`w-full px-3 py-2 border rounded-lg ${
-                            theme === "dark"
-                              ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                              : 'bg-white border-gray-300 text-gray-900'
-                          }`}
-                        />
-                      </div>
-                      
-                      <div className="grid grid-cols-3 gap-4">
-                        <div>
-                          <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                            城市
-                          </label>
-                          <input
-                            type="text"
-                            value={cardApplicationInfo.city}
-                            onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, city: e.target.value }))}
-                            placeholder="城市"
-                            className={`w-full px-3 py-2 border rounded-lg ${
-                              theme === "dark"
-                                ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                                : 'bg-white border-gray-300 text-gray-900'
-                            }`}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                            邮政编码
-                          </label>
-                          <input
-                            type="text"
-                            value={cardApplicationInfo.postalCode}
-                            onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, postalCode: e.target.value }))}
-                            placeholder="邮政编码"
-                            className={`w-full px-3 py-2 border rounded-lg ${
-                              theme === "dark"
-                                ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                                : 'bg-white border-gray-300 text-gray-900'
-                            }`}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                            国家
-                          </label>
-                          <input
-                            type="text"
-                            value={cardApplicationInfo.country}
-                            onChange={(e) => setCardApplicationInfo(prev => ({ ...prev, country: e.target.value }))}
-                            placeholder="国家"
-                            className={`w-full px-3 py-2 border rounded-lg ${
-                              theme === "dark"
-                                ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                                : 'bg-white border-gray-300 text-gray-900'
-                            }`}
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-              
-              {/* 第五步：确认提交 */}
-              {newCardStep === 5 && (
-                <div className="space-y-6">
-                  <div>
-                    <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                      确认申请信息
-                    </h4>
-                    <div className={`p-4 rounded-lg ${
-                      theme === "dark" ? 'bg-[#252842]/50' : 'bg-gray-50'
-                    }`}>
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>卡片类型：</span>
-                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                            {newCardType === "virtual" ? "虚拟卡" : "实体卡"}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>卡片品牌：</span>
-                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                            {newCardBrand === "visa" ? "Visa" : "Mastercard"}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>发卡地区：</span>
-                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                            {newCardRegion === "europe" ? "欧洲" : newCardRegion === "hongkong" ? "香港" : "美国"}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>中国大陆使用：</span>
-                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                            {needMainlandChina ? "是" : "否"}
-                          </span>
-                        </div>
-                        {newCardType === "virtual" && selectedScenarios.length > 0 && (
-                          <div className="flex justify-between">
-                            <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>付款场景：</span>
-                            <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                              {selectedScenarios.length} 个场景
-                            </span>
-                          </div>
-                        )}
-                        <div className="flex justify-between">
-                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>持卡人姓名：</span>
-                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                            {cardApplicationInfo.holderName}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>联系方式：</span>
-                          <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                            {cardApplicationInfo.phoneNumber}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className={`p-4 rounded-lg ${
-                    theme === "dark" ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'
-                  }`}>
-                    <div className={`text-sm ${theme === "dark" ? 'text-blue-400' : 'text-blue-800'}`}>
-                      <strong>申请须知：</strong>
-                      <ul className="mt-2 space-y-1">
-                        <li>• 虚拟卡申请后即时生效，可立即使用</li>
-                        <li>• 实体卡需要7-15个工作日邮寄到指定地址</li>
-                        <li>• 申请提交后将无法修改，请确认信息无误</li>
-                        <li>• 如有问题请联系客服</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            {/* 底部按钮 */}
-            <div className="flex space-x-3 mt-8">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  if (newCardStep > 1) {
-                    // 实体卡从第4步返回第2步，跳过第3步
-                    if (newCardType === "physical" && newCardStep === 4) {
-                      setNewCardStep(2)
-                    } else {
-                      setNewCardStep(prev => prev - 1)
-                    }
-                  } else {
-                    setShowNewCardModal(false)
-                    resetNewCardModal()
-                  }
-                }}
-                className="flex-1"
-              >
-                {newCardStep > 1 ? "上一步" : "取消"}
-              </Button>
-              <Button
-                onClick={() => {
-                  if (newCardStep === 5) {
-                    setShowNewCardModal(false)
-                    resetNewCardModal()
-                    alert("新卡申请已提交，请耐心等待审核")
-                  } else {
-                    // 实体卡从第2步跳到第4步，虚拟卡正常进行
-                    if (newCardType === "physical" && newCardStep === 2) {
-                      setNewCardStep(4)
-                    } else {
-                      setNewCardStep(prev => prev + 1)
-                    }
-                  }
-                }}
-                className={`flex-1 ${
-                  isDark 
-                    ? 'bg-white hover:bg-gray-100 text-black' 
-                    : 'bg-black hover:bg-gray-900 text-white'
-                }`}
-              >
-                {newCardStep === 5 ? "提交申请" : "下一步"}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 激活卡片弹窗 */}
-      {showActivateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => {
-              setShowActivateModal(false)
-              resetActivateModal()
-            }}
-          />
-          <div className={`relative w-full max-w-2xl mx-4 p-6 rounded-xl ${
-            theme === "dark" ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl max-h-[90vh] overflow-y-auto`}>
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h3 className={`text-lg font-semibold ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                  激活卡片
-                </h3>
-                <p className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
-                  步骤 {activateStep} / 4
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setShowActivateModal(false)
-                  resetActivateModal()
-                }}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            
-            {/* 步骤指示器 */}
-            <div className="flex items-center justify-center mb-8">
-              {[1, 2, 3, 4].map((step) => (
-                <div key={step} className="flex items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    step <= activateStep
-                      ? 'bg-[#00D4AA] text-white'
-                      : theme === "dark" 
-                        ? 'bg-[#252842] text-gray-400 border border-[#3a3d4a]'
-                        : 'bg-gray-100 text-gray-400 border border-gray-300'
-                  }`}>
-                    {step}
-                  </div>
-                  {step < 4 && (
-                    <div className={`w-12 h-0.5 mx-2 ${
-                      step < activateStep ? 'bg-[#00D4AA]' : theme === "dark" ? 'bg-[#3a3d4a]' : 'bg-gray-300'
-                    }`} />
-                  )}
-                </div>
-              ))}
-            </div>
-            
-            {/* 步骤内容 */}
-            <div className="space-y-6">
-              {/* 第一步：选择要激活的卡片类型 */}
-              {activateStep === 1 && (
-                <div className="space-y-6">
-                  <div>
-                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                      选择要激活的卡片类型
-                    </label>
-                    <div className="grid grid-cols-2 gap-3">
-                      {[
-                        { value: "virtual", label: "虚拟卡", desc: "在线支付，即时激活" },
-                        { value: "physical", label: "实体卡", desc: "实体卡片，全球通用" }
-                      ].map((type) => (
-                        <div
-                          key={type.value}
-                          onClick={() => setActivateCardType(type.value as "virtual" | "physical")}
-                          className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                            activateCardType === type.value
-                              ? 'border-[#00D4AA] bg-[#00D4AA]/10'
-                              : theme === "dark"
-                                ? 'border-[#3a3d4a] hover:border-[#00D4AA]/50'
-                                : 'border-gray-200 hover:border-[#00D4AA]/50'
-                          }`}
-                        >
-                          <div className={`font-medium ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                            {type.label}
-                          </div>
-                          <div className={`text-sm ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
-                            {type.desc}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className={`p-4 rounded-lg ${
-                    theme === "dark" ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'
-                  }`}>
-                    <div className={`text-sm ${theme === "dark" ? 'text-blue-400' : 'text-blue-800'}`}>
-                      <strong>激活说明：</strong>
-                      <ul className="mt-2 space-y-1">
-                        <li>• 请选择您要激活的卡片类型</li>
-                        <li>• 虚拟卡可立即激活使用</li>
-                        <li>• 实体卡需要卡片到手后才能激活</li>
-                        <li>• 激活后卡片即可正常使用</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {/* 第二步：填写卡片信息 */}
-              {activateStep === 2 && (
-                <div className="space-y-6">
-                  <div>
-                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                      填写{activateCardType === "virtual" ? "虚拟卡" : "实体卡"}信息
-                    </label>
-                    <div className="space-y-4">
-                      <div>
-                        <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                          卡号
-                        </label>
-                        <input
-                          type="text"
-                          value={activationData.cardNumber}
-                          onChange={(e) => setActivationData(prev => ({ ...prev, cardNumber: e.target.value }))}
-                          placeholder="请输入16位卡号"
-                          maxLength={19}
-                          className={`w-full px-3 py-2 border rounded-lg ${
-                            theme === "dark"
-                              ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                              : 'bg-white border-gray-300 text-gray-900'
-                          }`}
-                          onInput={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            let value = target.value.replace(/\s/g, '').replace(/[^\d]/g, '');
-                            value = value.substring(0, 16);
-                            value = value.replace(/(.{4})/g, '$1 ').trim();
-                            target.value = value;
-                            setActivationData(prev => ({ ...prev, cardNumber: value }));
-                          }}
-                        />
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                            有效期
-                          </label>
-                          <input
-                            type="text"
-                            value={activationData.expiryDate}
-                            onChange={(e) => setActivationData(prev => ({ ...prev, expiryDate: e.target.value }))}
-                            placeholder="MM/YY"
-                            maxLength={5}
-                            className={`w-full px-3 py-2 border rounded-lg ${
-                              theme === "dark"
-                                ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                                : 'bg-white border-gray-300 text-gray-900'
-                            }`}
-                            onInput={(e) => {
-                              const target = e.target as HTMLInputElement;
-                              let value = target.value.replace(/[^\d]/g, '');
-                              if (value.length >= 2) {
-                                value = value.substring(0, 2) + '/' + value.substring(2, 4);
-                              }
-                              target.value = value;
-                              setActivationData(prev => ({ ...prev, expiryDate: value }));
-                            }}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                            CVV
-                          </label>
-                          <input
-                            type="text"
-                            value={activationData.cvv}
-                            onChange={(e) => setActivationData(prev => ({ ...prev, cvv: e.target.value }))}
-                            placeholder="3位安全码"
-                            maxLength={3}
-                            className={`w-full px-3 py-2 border rounded-lg ${
-                              theme === "dark"
-                                ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                                : 'bg-white border-gray-300 text-gray-900'
-                            }`}
-                            onInput={(e) => {
-                              const target = e.target as HTMLInputElement;
-                              target.value = target.value.replace(/[^\d]/g, '');
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className={`p-4 rounded-lg ${
-                    theme === "dark" ? 'bg-yellow-900/20 border border-yellow-800' : 'bg-yellow-50 border border-yellow-200'
-                  }`}>
-                    <div className={`text-sm ${theme === "dark" ? 'text-yellow-400' : 'text-yellow-800'}`}>
-                      <strong>安全提示：</strong>
-                      <ul className="mt-2 space-y-1">
-                        <li>• 请确保卡片信息准确无误</li>
-                        <li>• 卡号和CVV将用于验证卡片有效性</li>
-                        <li>• 您的信息将被加密保存</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {/* 第三步：设置银行卡密码 */}
-              {activateStep === 3 && (
-                <div className="space-y-6">
-                  <div>
-                    <label className={`block text-sm font-medium mb-3 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                      设置银行卡密码
-                    </label>
-                    <div className="space-y-4">
-                      <div>
-                        <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                          设置密码
-                        </label>
-                        <input
-                          type="password"
-                          value={activationData.bankPassword}
-                          onChange={(e) => setActivationData(prev => ({ ...prev, bankPassword: e.target.value }))}
-                          placeholder="请设置6位数字密码"
-                          maxLength={6}
-                          className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${
-                            theme === "dark"
-                              ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                              : 'bg-white border-gray-300 text-gray-900'
-                          }`}
-                          onInput={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            target.value = target.value.replace(/[^\d]/g, '');
-                          }}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className={`block text-sm font-medium mb-2 ${theme === "dark" ? 'text-gray-300' : 'text-gray-700'}`}>
-                          确认密码
-                        </label>
-                        <input
-                          type="password"
-                          value={activationData.confirmBankPassword}
-                          onChange={(e) => setActivationData(prev => ({ ...prev, confirmBankPassword: e.target.value }))}
-                          placeholder="请再次输入密码"
-                          maxLength={6}
-                          className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${
-                            theme === "dark"
-                              ? 'bg-[#252842] border-[#3a3d4a] text-white'
-                              : 'bg-white border-gray-300 text-gray-900'
-                          }`}
-                          onInput={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            target.value = target.value.replace(/[^\d]/g, '');
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {activationData.bankPassword && activationData.confirmBankPassword && activationData.bankPassword !== activationData.confirmBankPassword && (
-                    <div className={`p-3 rounded-lg ${
-                      theme === "dark" ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'
-                    }`}>
-                      <div className={`text-sm ${theme === "dark" ? 'text-red-400' : 'text-red-800'}`}>
-                        两次输入的密码不一致，请重新输入
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className={`p-4 rounded-lg ${
-                    theme === "dark" ? 'bg-yellow-900/20 border border-yellow-800' : 'bg-yellow-50 border border-yellow-200'
-                  }`}>
-                    <div className={`text-sm ${theme === "dark" ? 'text-yellow-400' : 'text-yellow-800'}`}>
-                      <strong>密码安全提示：</strong>
-                      <ul className="mt-2 space-y-1">
-                        <li>• 密码用于卡片支付验证</li>
-                        <li>• 请勿使用连续数字或重复数字</li>
-                        <li>• 请妥善保管，切勿告知他人</li>
-                        <li>• 连续输错3次将锁定卡片</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {/* 第四步：提交激活 */}
-              {activateStep === 4 && (
-                <div className="space-y-6">
-                  <div className={`p-6 rounded-lg ${theme === "dark" ? 'bg-[#252842]/50' : 'bg-gray-50'}`}>
-                    <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? 'text-white' : 'text-gray-900'}`}>
-                      确认激活信息
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>卡片类型：</span>
-                        <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                          {activateCardType === "virtual" ? "虚拟卡" : "实体卡"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>卡号：</span>
-                        <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                          {activationData.cardNumber || "未填写"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>有效期：</span>
-                        <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                          {activationData.expiryDate || "未填写"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>密码状态：</span>
-                        <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                          {activationData.bankPassword ? "已设置" : "未设置"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className={theme === "dark" ? 'text-gray-400' : 'text-gray-600'}>激活时间：</span>
-                        <span className={theme === "dark" ? 'text-white' : 'text-gray-900'}>
-                          {new Date().toLocaleString('zh-CN')}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className={`p-4 rounded-lg ${
-                    theme === "dark" ? 'bg-green-900/20 border border-green-800' : 'bg-green-50 border border-green-200'
-                  }`}>
-                    <div className={`text-sm ${theme === "dark" ? 'text-green-400' : 'text-green-800'}`}>
-                      <strong>即将完成激活：</strong>
-                      <ul className="mt-2 space-y-1">
-                        <li>• 点击"完成激活"后卡片将立即生效</li>
-                        <li>• 激活后可在"我的卡片"中查看和管理</li>
-                        <li>• 如有疑问请联系客服</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            {/* 底部按钮 */}
-            <div className="flex space-x-3 mt-8">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  if (activateStep > 1) {
-                    setActivateStep(prev => prev - 1)
-                  } else {
-                    setShowActivateModal(false)
-                    resetActivateModal()
-                  }
-                }}
-                className="flex-1"
-              >
-                {activateStep > 1 ? "上一步" : "取消"}
-              </Button>
-              <Button
-                onClick={() => {
-                  if (activateStep === 4) {
-                    if (activateCardType && activationData.cardNumber && activationData.expiryDate && 
-                        activationData.cvv && activationData.bankPassword && 
-                        activationData.bankPassword === activationData.confirmBankPassword) {
-                      setShowActivateModal(false)
-                      resetActivateModal()
-                      alert("🎉 卡片激活成功！现在可以正常使用了")
-                    } else {
-                      alert("请完善所有必填信息")
-                    }
-                  } else {
-                    // 验证当前步骤
-                    if (activateStep === 1 && !activateCardType) {
-                      alert("请选择卡片类型")
-                      return
-                    }
-                    if (activateStep === 2 && (!activationData.cardNumber || !activationData.expiryDate || !activationData.cvv)) {
-                      alert("请完善卡片信息")
-                      return
-                    }
-                    if (activateStep === 3 && (!activationData.bankPassword || activationData.bankPassword !== activationData.confirmBankPassword)) {
-                      alert("请正确设置银行卡密码")
-                      return
-                    }
-                    setActivateStep(prev => prev + 1)
-                  }
-                }}
-                className={`flex-1 ${
-                  isDark 
-                    ? 'bg-white hover:bg-gray-100 text-black' 
-                    : 'bg-black hover:bg-gray-900 text-white'
-                }`}
-              >
-                {activateStep === 4 ? "完成激活" : "下一步"}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 划款弹窗 */}
-      {showCardTransferModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => setShowCardTransferModal(false)}
-          />
-          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl`}>
-            <div className="flex justify-between items-center mb-6">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                卡片划款
-              </h3>
-              <button
-                onClick={() => setShowCardTransferModal(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  转出卡片: {selectedCardInfo.name}
-                </label>
-                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  卡号: {selectedCardInfo.number}
-                </p>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  转入账户
-                </label>
-                <select className={`w-full px-3 py-2 border rounded-lg ${
-                  isDark 
-                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}>
-                  <option>现货账户</option>
-                  <option>合约账户</option>
-                  <option>理财账户</option>
-                  <option>担保账户</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  划款金额
-                </label>
-                <input
-                  type="number"
-                  placeholder="请输入划款金额"
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  交易密码
-                </label>
-                <input
-                  type="password"
-                  placeholder="请输入交易密码"
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-            </div>
-            
-            <div className="flex space-x-3 mt-6">
-              <Button
-                variant="outline"
-                onClick={() => setShowCardTransferModal(false)}
-                className="flex-1"
-              >
-                取消
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowCardTransferModal(false)
-                  alert("划款申请已提交")
-                }}
-                className="flex-1 bg-[#00D4AA] hover:bg-[#00D4AA]/90 text-white"
-              >
-                确认划款
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 个人信息弹窗 */}
-      {showProfileModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => setShowProfileModal(false)}
-          />
-          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl`}>
-            <div className="flex justify-between items-center mb-6">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                个人信息
-              </h3>
-              <button
-                onClick={() => setShowProfileModal(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  持卡人姓名
-                </label>
-                <input
-                  type="text"
-                  value={selectedCardInfo.name}
-                  readOnly
-                  className={`w-full px-3 py-2 border rounded-lg bg-gray-100 ${
-                    isDark 
-                      ? 'border-[#3a3d4a] text-gray-400' 
-                      : 'border-gray-300 text-gray-600'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  身份证号
-                </label>
-                <input
-                  type="text"
-                  placeholder="请输入身份证号"
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  手机号码
-                </label>
-                <input
-                  type="tel"
-                  placeholder="请输入手机号码"
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  邮箱地址
-                </label>
-                <input
-                  type="email"
-                  placeholder="请输入邮箱地址"
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  地址信息
-                </label>
-                <textarea
-                  placeholder="请输入详细地址"
-                  rows={3}
-                  className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                />
-              </div>
-            </div>
-            
-            <div className="flex space-x-3 mt-6">
-              <Button
-                variant="outline"
-                onClick={() => setShowProfileModal(false)}
-                className="flex-1"
-              >
-                取消
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowProfileModal(false)
-                  alert("个人信息已更新")
-                }}
-                className={`flex-1 ${
-                  isDark 
-                    ? 'bg-white hover:bg-gray-100 text-black' 
-                    : 'bg-black hover:bg-gray-900 text-white'
-                }`}
-              >
-                保存信息
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 个人信息弹窗 */}
-      {showPersonalInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => {
-              setShowPersonalInfoModal(false)
-              setIsEditingPersonalInfo(false)
-            }}
-          />
-          <div className={`relative w-full max-w-2xl mx-4 p-6 rounded-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl max-h-[90vh] overflow-y-auto`}>
-            <div className="flex justify-between items-center mb-6">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                个人信息
-              </h3>
-              <button
-                onClick={() => {
-                  setShowPersonalInfoModal(false)
-                  setIsEditingPersonalInfo(false)
-                }}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  持卡人姓名
-                </label>
-                {isEditingPersonalInfo ? (
-                  <input
-                    type="text"
-                    value={cardApplicationInfo.holderName}
-                    onChange={(e) => setCardApplicationInfo(prev => ({
-                      ...prev,
-                      holderName: e.target.value
-                    }))}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                    placeholder="请输入持卡人姓名"
-                  />
-                ) : (
-                  <div className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  }`}>
-                    {cardApplicationInfo.holderName || '未设置'}
-                  </div>
-                )}
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  手机号码
-                </label>
-                {isEditingPersonalInfo ? (
-                  <input
-                    type="tel"
-                    value={cardApplicationInfo.phoneNumber}
-                    onChange={(e) => setCardApplicationInfo(prev => ({
-                      ...prev,
-                      phoneNumber: e.target.value
-                    }))}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                    placeholder="请输入手机号码"
-                  />
-                ) : (
-                  <div className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  }`}>
-                    {cardApplicationInfo.phoneNumber || '未设置'}
-                  </div>
-                )}
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  电子邮箱
-                </label>
-                {isEditingPersonalInfo ? (
-                  <input
-                    type="email"
-                    value={cardApplicationInfo.email}
-                    onChange={(e) => setCardApplicationInfo(prev => ({
-                      ...prev,
-                      email: e.target.value
-                    }))}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                    placeholder="请输入电子邮箱"
-                  />
-                ) : (
-                  <div className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  }`}>
-                    {cardApplicationInfo.email || '未设置'}
-                  </div>
-                )}
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  身份证号
-                </label>
-                {isEditingPersonalInfo ? (
-                  <input
-                    type="text"
-                    value={cardApplicationInfo.idNumber}
-                    onChange={(e) => setCardApplicationInfo(prev => ({
-                      ...prev,
-                      idNumber: e.target.value
-                    }))}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                    placeholder="请输入身份证号"
-                  />
-                ) : (
-                  <div className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  }`}>
-                    {cardApplicationInfo.idNumber || '未设置'}
-                  </div>
-                )}
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  国籍
-                </label>
-                {isEditingPersonalInfo ? (
-                  <input
-                    type="text"
-                    value={cardApplicationInfo.nationality}
-                    onChange={(e) => setCardApplicationInfo(prev => ({
-                      ...prev,
-                      nationality: e.target.value
-                    }))}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                    placeholder="请输入国籍"
-                  />
-                ) : (
-                  <div className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  }`}>
-                    {cardApplicationInfo.nationality || '未设置'}
-                  </div>
-                )}
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  护照号
-                </label>
-                {isEditingPersonalInfo ? (
-                  <input
-                    type="text"
-                    value={cardApplicationInfo.passportNumber}
-                    onChange={(e) => setCardApplicationInfo(prev => ({
-                      ...prev,
-                      passportNumber: e.target.value
-                    }))}
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                    placeholder="请输入护照号"
-                  />
-                ) : (
-                  <div className={`w-full px-3 py-2 border rounded-lg ${
-                    isDark 
-                      ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  }`}>
-                    {cardApplicationInfo.passportNumber || '未设置'}
-                  </div>
-                )}
-              </div>
-              
-              {/* 地址信息 - 竖版布局 */}
-              <div className="space-y-6">
-                {/* 居住地址 */}
-                <div className={`p-4 border rounded-lg ${
-                  isDark ? 'border-[#3a3d4a] bg-[#1a1d29]' : 'border-gray-200 bg-gray-50'
-                }`}>
-                <label className={`block text-sm font-medium mb-3 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  居住地址
-                </label>
-                
-                {/* 国家/地区 */}
-                <div className="mb-3">
-                  <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    国家/地区
-                  </label>
-                  {isEditingPersonalInfo ? (
-                    <select
-                      value={cardApplicationInfo.country}
-                      onChange={(e) => setCardApplicationInfo(prev => ({
-                        ...prev,
-                        country: e.target.value
-                      }))}
-                      className={`w-full px-3 py-2 border rounded-lg ${
-                        isDark 
-                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                          : 'bg-white border-gray-300 text-gray-900'
-                      }`}
-                    >
-                      <option value="">请选择国家/地区</option>
-                      <option value="CN">中国</option>
-                      <option value="HK">香港</option>
-                      <option value="US">美国</option>
-                      <option value="GB">英国</option>
-                      <option value="DE">德国</option>
-                      <option value="FR">法国</option>
-                      <option value="JP">日本</option>
-                      <option value="SG">新加坡</option>
-                    </select>
-                  ) : (
-                    <div className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                        ? 'bg-gray-800 border-gray-600 text-white' 
                         : 'bg-white border-gray-300 text-gray-900'
-                    }`}>
-                      {cardApplicationInfo.country ? 
-                        {
-                          "CN": "中国",
-                          "HK": "香港", 
-                          "US": "美国",
-                          "GB": "英国",
-                          "DE": "德国",
-                          "FR": "法国",
-                          "JP": "日本",
-                          "SG": "新加坡"
-                        }[cardApplicationInfo.country] || cardApplicationInfo.country
-                        : '未设置'
-                      }
-                    </div>
-                  )}
-                </div>
-                
-                {/* 城市和邮编 */}
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  <div>
-                    <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      城市
-                    </label>
-                    {isEditingPersonalInfo ? (
-                      <input
-                        type="text"
-                        value={cardApplicationInfo.city}
-                        onChange={(e) => setCardApplicationInfo(prev => ({
-                          ...prev,
-                          city: e.target.value
-                        }))}
-                        className={`w-full px-3 py-2 border rounded-lg ${
-                          isDark 
-                            ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                            : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                        }`}
-                        placeholder="城市"
-                      />
-                    ) : (
-                      <div className={`w-full px-3 py-2 border rounded-lg ${
-                        isDark 
-                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                          : 'bg-white border-gray-300 text-gray-900'
-                      }`}>
-                        {cardApplicationInfo.city || '未设置'}
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div>
-                    <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      邮政编码
-                    </label>
-                    {isEditingPersonalInfo ? (
-                      <input
-                        type="text"
-                        value={cardApplicationInfo.postalCode}
-                        onChange={(e) => setCardApplicationInfo(prev => ({
-                          ...prev,
-                          postalCode: e.target.value
-                        }))}
-                        className={`w-full px-3 py-2 border rounded-lg ${
-                          isDark 
-                            ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                            : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                        }`}
-                        placeholder="邮编"
-                      />
-                    ) : (
-                      <div className={`w-full px-3 py-2 border rounded-lg ${
-                        isDark 
-                          ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                          : 'bg-white border-gray-300 text-gray-900'
-                      }`}>
-                        {cardApplicationInfo.postalCode || '未设置'}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                {/* 详细地址 */}
-                <div>
-                  <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    详细地址
-                  </label>
-                  {isEditingPersonalInfo ? (
-                    <textarea
-                      value={cardApplicationInfo.address}
-                      onChange={(e) => setCardApplicationInfo(prev => ({
-                        ...prev,
-                        address: e.target.value
-                      }))}
-                      rows={3}
-                      className={`w-full px-3 py-2 border rounded-lg ${
-                        isDark 
-                          ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                      }`}
-                      placeholder="请输入详细地址"
-                    />
-                  ) : (
-                    <div className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                        : 'bg-white border-gray-300 text-gray-900'
-                    }`}>
-                      {cardApplicationInfo.address || '未设置'}
-                    </div>
-                  )}
-                </div>
-                </div>
-
-                {/* 收款地址 */}
-                <div className={`p-4 border rounded-lg ${
-                  isDark ? 'border-[#3a3d4a] bg-[#1a1d29]' : 'border-gray-200 bg-gray-50'
-                }`}>
-                <div className="flex justify-between items-center mb-3">
-                  <label className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    收款地址
-                  </label>
-                </div>
-                
-                {/* 与居住地址相同的复选框 */}
-                <div className="flex items-center mb-3">
-                  <input
-                    type="checkbox"
-                    id="sameAsResidential"
-                    checked={shippingAddresses[0]?.sameAsResidential || false}
-                    onChange={(e) => {
-                      const isChecked = e.target.checked
-                      setShowShippingAddress(!isChecked)
-                      setShippingAddresses(prev => prev.map((addr, index) => 
-                        index === 0 
-                          ? { 
-                              ...addr, 
-                              sameAsResidential: isChecked,
-                              // 如果勾选，则复制居住地址信息
-                              ...(isChecked ? {
-                                country: cardApplicationInfo.country,
-                                city: cardApplicationInfo.city,
-                                postalCode: cardApplicationInfo.postalCode,
-                                address: cardApplicationInfo.address
-                              } : {})
-                            }
-                          : addr
-                      ))
-                    }}
-                    className="mr-2"
+                    } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                    placeholder="请输入划转金额"
                   />
-                  <label 
-                    htmlFor="sameAsResidential" 
-                    className={`text-sm cursor-pointer ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
-                  >
-                    与居住地址相同
-                  </label>
-                </div>
-                
-                {/* 收款地址详情 - 只在未勾选"与居住地址相同"时显示 */}
-                {showShippingAddress && (
-                  <div className="space-y-4">
-                    {/* 添加地址按钮 */}
-                    {isEditingPersonalInfo && shippingAddresses.length < 3 && (
-                      <div className="flex justify-end">
-                        <button
-                          onClick={() => {
-                            const newId = Math.max(...shippingAddresses.map(addr => addr.id)) + 1
-                            setShippingAddresses(prev => [...prev, { 
-                              id: newId, 
-                              address: '', 
-                              city: '', 
-                              postalCode: '', 
-                              country: '',
-                              sameAsResidential: false
-                            }])
-                          }}
-                          className={`px-3 py-1 text-xs rounded-lg border transition-colors ${
-                            isDark 
-                              ? 'border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-black' 
-                              : 'border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA] hover:text-white'
-                          }`}
-                        >
-                          + 添加地址
-                        </button>
-                      </div>
-                    )}
-                    
-                    {shippingAddresses.map((shippingAddr, index) => (
-                      <div key={shippingAddr.id} className="space-y-3">
-                      {isEditingPersonalInfo && shippingAddresses.length > 1 && (
-                        <div className="flex justify-end mb-3">
-                          <button
-                            onClick={() => {
-                              setShippingAddresses(prev => prev.filter(addr => addr.id !== shippingAddr.id))
-                            }}
-                            className="text-red-500 hover:text-red-700 text-xs"
-                          >
-                            删除
-                          </button>
-                        </div>
-                      )}
-                      
-                      {/* 与居住地址相同选项 */}
-                      {isEditingPersonalInfo && (
-                        <div className="flex items-center mb-3">
-                          <input
-                            type="checkbox"
-                            id={`same-as-residential-${shippingAddr.id}`}
-                            checked={shippingAddr.sameAsResidential}
-                            onChange={(e) => {
-                              setShippingAddresses(prev => prev.map(addr => 
-                                addr.id === shippingAddr.id 
-                                  ? { 
-                                      ...addr, 
-                                      sameAsResidential: e.target.checked,
-                                      // 如果勾选，复制居住地址信息
-                                      ...(e.target.checked ? {
-                                        country: cardApplicationInfo.country,
-                                        city: cardApplicationInfo.city,
-                                        postalCode: cardApplicationInfo.postalCode,
-                                        address: cardApplicationInfo.address
-                                      } : {})
-                                    }
-                                  : addr
-                              ))
-                            }}
-                            className="mr-2 w-4 h-4 text-[#00D4AA] border-gray-300 rounded focus:ring-[#00D4AA]"
-                          />
-                          <label 
-                            htmlFor={`same-as-residential-${shippingAddr.id}`}
-                            className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} cursor-pointer`}
-                          >
-                            与居住地址相同
-                          </label>
-                        </div>
-                      )}
-                      
-                      {!isEditingPersonalInfo && shippingAddr.sameAsResidential && (
-                        <div className={`mb-3 px-3 py-2 rounded-lg text-sm ${
-                          isDark ? 'bg-[#252842] text-gray-400' : 'bg-gray-100 text-gray-600'
-                        }`}>
-                          与居住地址相同
-                        </div>
-                      )}
-                      
-                      {!shippingAddr.sameAsResidential && (
-                        <div className="space-y-3">
-                          {/* 国家/地区 */}
-                          <div>
-                            <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                              国家/地区
-                            </label>
-                            {isEditingPersonalInfo ? (
-                              <select
-                                value={shippingAddr.country}
-                                onChange={(e) => {
-                                  setShippingAddresses(prev => prev.map(addr => 
-                                    addr.id === shippingAddr.id 
-                                      ? { ...addr, country: e.target.value }
-                                      : addr
-                                  ))
-                                }}
-                                className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                                  isDark 
-                                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                                    : 'bg-white border-gray-300 text-gray-900'
-                                }`}
-                              >
-                                <option value="">请选择国家/地区</option>
-                                <option value="CN">中国</option>
-                                <option value="HK">香港</option>
-                                <option value="US">美国</option>
-                                <option value="GB">英国</option>
-                                <option value="DE">德国</option>
-                                <option value="FR">法国</option>
-                                <option value="JP">日本</option>
-                                <option value="SG">新加坡</option>
-                              </select>
-                            ) : (
-                              <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                                isDark 
-                                  ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                                  : 'bg-white border-gray-300 text-gray-900'
-                              }`}>
-                                {shippingAddr.country ? 
-                                  {
-                                    "CN": "中国",
-                                    "HK": "香港", 
-                                    "US": "美国",
-                                    "GB": "英国",
-                                    "DE": "德国",
-                                    "FR": "法国",
-                                    "JP": "日本",
-                                    "SG": "新加坡"
-                                  }[shippingAddr.country] || shippingAddr.country
-                                  : '未设置'
-                                }
-                              </div>
-                            )}
-                          </div>
-                          
-                          {/* 城市和邮编 */}
-                          <div className="grid grid-cols-2 gap-3">
-                            <div>
-                              <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                城市
-                              </label>
-                              {isEditingPersonalInfo ? (
-                                <input
-                                  type="text"
-                                  value={shippingAddr.city}
-                                  onChange={(e) => {
-                                    setShippingAddresses(prev => prev.map(addr => 
-                                      addr.id === shippingAddr.id 
-                                        ? { ...addr, city: e.target.value }
-                                        : addr
-                                    ))
-                                  }}
-                                  className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                                    isDark 
-                                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                                  }`}
-                                  placeholder="城市"
-                                />
-                              ) : (
-                                <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                                  isDark 
-                                    ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                                    : 'bg-white border-gray-300 text-gray-900'
-                                }`}>
-                                  {shippingAddr.city || '未设置'}
-                                </div>
-                              )}
-                            </div>
-                            
-                            <div>
-                              <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                邮编
-                              </label>
-                              {isEditingPersonalInfo ? (
-                                <input
-                                  type="text"
-                                  value={shippingAddr.postalCode}
-                                  onChange={(e) => {
-                                    setShippingAddresses(prev => prev.map(addr => 
-                                      addr.id === shippingAddr.id 
-                                        ? { ...addr, postalCode: e.target.value }
-                                        : addr
-                                    ))
-                                  }}
-                                  className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                                    isDark 
-                                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                                  }`}
-                                  placeholder="邮编"
-                                />
-                              ) : (
-                                <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                                  isDark 
-                                    ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                                    : 'bg-white border-gray-300 text-gray-900'
-                                }`}>
-                                  {shippingAddr.postalCode || '未设置'}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          
-                          {/* 详细地址 */}
-                          <div>
-                            <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                              详细地址
-                            </label>
-                            {isEditingPersonalInfo ? (
-                              <textarea
-                                value={shippingAddr.address}
-                                onChange={(e) => {
-                                  setShippingAddresses(prev => prev.map(addr => 
-                                    addr.id === shippingAddr.id 
-                                      ? { ...addr, address: e.target.value }
-                                      : addr
-                                  ))
-                                }}
-                                rows={2}
-                                className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                                  isDark 
-                                    ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                                }`}
-                                placeholder="请输入详细收款地址"
-                              />
-                            ) : (
-                              <div className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                                isDark 
-                                  ? 'bg-[#1a1d29] border-[#3a3d4a] text-white' 
-                                  : 'bg-white border-gray-300 text-gray-900'
-                              }`}>
-                                {shippingAddr.address || '未设置'}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                  <div className="flex space-x-2 mt-2">
+                    {['100', '500', '1000', '全部'].map((amount) => (
+                      <button
+                        key={amount}
+                        onClick={() => setTransferAmount(amount === '全部' ? '2500.00' : amount)}
+                        className={`px-3 py-1 text-sm rounded-lg border transition-colors ${
+                          isDark 
+                            ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                            : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {amount}
+                      </button>
                     ))}
                   </div>
+                </div>
+
+                {transferAmount && (
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-600 bg-gray-800' : 'border-gray-300 bg-gray-50'}`}>
+                    <div className="flex justify-between items-center text-sm">
+                      <span>划转金额：</span>
+                      <span className="font-medium">{transferAmount} USDT</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm mt-2">
+                      <span>手续费：</span>
+                      <span className="font-medium">0.00 USDT</span>
+                    </div>
+                    <div className="border-t border-gray-300 dark:border-gray-600 mt-2 pt-2">
+                      <div className="flex justify-between items-center font-medium">
+                        <span>实际{transferDirection === 'to-card' ? '转入' : '转出'}：</span>
+                        <span>{transferAmount} USDT</span>
+                      </div>
+                    </div>
+                  </div>
                 )}
-                </div>
               </div>
-            </div>
-            
-            {/* 底部按钮 */}
-            <div className="flex space-x-3 mt-8">
-              {isEditingPersonalInfo ? (
-                <>
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsEditingPersonalInfo(false)}
-                    className="flex-1"
-                  >
-                    取消
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setIsEditingPersonalInfo(false)
-                      alert("个人信息已更新")
-                    }}
-                    className={`flex-1 ${
-                      isDark 
-                        ? 'bg-white hover:bg-gray-100 text-black' 
-                        : 'bg-black hover:bg-gray-900 text-white'
-                    }`}
-                  >
-                    保存信息
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setShowPersonalInfoModal(false)
-                      setIsEditingPersonalInfo(false)
-                    }}
-                    className="flex-1"
-                  >
-                    关闭
-                  </Button>
-                  <Button
-                    onClick={() => setIsEditingPersonalInfo(true)}
-                    className={`flex-1 ${
-                      isDark 
-                        ? 'bg-white hover:bg-gray-100 text-black' 
-                        : 'bg-black hover:bg-gray-900 text-white'
-                    }`}
-                  >
-                    编辑
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
 
-      {/* 冻结卡片弹窗 */}
-      {showFreezeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => setShowFreezeModal(false)}
-          />
-          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl`}>
-            <div className="flex justify-between items-center mb-6">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                冻结卡片
-              </h3>
-              <button
-                onClick={() => setShowFreezeModal(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div className={`p-4 rounded-lg ${isDark ? 'bg-orange-500/10 border border-orange-500/20' : 'bg-orange-50 border border-orange-200'}`}>
-                <div className="flex items-center">
-                  <PauseCircle className="h-5 w-5 text-orange-500 mr-2" />
-                  <p className={`text-sm ${isDark ? 'text-orange-400' : 'text-orange-700'}`}>
-                    冻结后，此卡片将无法进行任何交易操作
-                  </p>
-                </div>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  冻结原因
-                </label>
-                <select className={`w-full px-3 py-2 border rounded-lg ${
-                  isDark 
-                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}>
-                  <option value="">请选择冻结原因</option>
-                  <option value="suspicious">异常交易检测</option>
-                  <option value="loss">卡片丢失</option>
-                  <option value="theft">卡片被盗</option>
-                  <option value="voluntary">主动冻结</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  备注说明（可选）
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="请输入备注说明..."
-                  className={`w-full px-3 py-2 border rounded-lg ${
+              <div className="flex space-x-3 pt-6">
+                <button
+                  onClick={() => {
+                    setShowCardTransferModal(false)
+                    setSelectedCardInfo(null)
+                    setTransferAmount('')
+                    setTransferDirection('to-card')
+                    setTransferAccount('现货账户')
+                  }}
+                  className={`flex-1 px-4 py-3 rounded-lg border transition-colors ${
                     isDark 
-                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                      ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                   }`}
-                />
+                >
+                  取消
+                </button>
+                <button
+                  onClick={() => {
+                    if (transferAmount) {
+                      const direction = transferDirection === 'to-card' ? '转入' : '转出'
+                      alert(`划转成功！已${direction} ${transferAmount} USDT`)
+                      setShowCardTransferModal(false)
+                      setSelectedCardInfo(null)
+                      setTransferAmount('')
+                      setTransferDirection('to-card')
+                      setTransferAccount('现货账户')
+                    }
+                  }}
+                  disabled={!transferAmount}
+                  className={`flex-1 px-4 py-3 rounded-lg transition-colors ${
+                    !transferAmount
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90'
+                  }`}
+                >
+                  确认划转
+                </button>
               </div>
-            </div>
-            
-            <div className="flex space-x-3 mt-6">
-              <Button
-                variant="outline"
-                onClick={() => setShowFreezeModal(false)}
-                className="flex-1"
-              >
-                取消
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowFreezeModal(false)
-                  alert("卡片已冻结")
-                }}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
-              >
-                确认冻结
-              </Button>
             </div>
           </div>
         </div>
       )}
 
-      {/* 删除卡片弹窗 */}
-      {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => setShowDeleteModal(false)}
-          />
-          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl`}>
-            <div className="flex justify-between items-center mb-6">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                删除卡片
-              </h3>
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div className={`p-4 rounded-lg ${isDark ? 'bg-red-500/10 border border-red-500/20' : 'bg-red-50 border border-red-200'}`}>
-                <div className="flex items-center">
-                  <Trash2 className="h-5 w-5 text-red-500 mr-2" />
-                  <p className={`text-sm ${isDark ? 'text-red-400' : 'text-red-700'}`}>
-                    删除后无法恢复，请确认是否继续？
-                  </p>
-                </div>
-              </div>
-              
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  删除原因
-                </label>
-                <select className={`w-full px-3 py-2 border rounded-lg ${
-                  isDark 
-                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}>
-                  <option value="">请选择删除原因</option>
-                  <option value="unused">不再使用</option>
-                  <option value="replaced">已被替换</option>
-                  <option value="security">安全原因</option>
-                  <option value="other">其他原因</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className={`flex items-center space-x-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <input type="checkbox" className="rounded" />
-                  <span>我确认要删除此卡片，并了解此操作不可撤销</span>
-                </label>
-              </div>
-            </div>
-            
-            <div className="flex space-x-3 mt-6">
-              <Button
-                variant="outline"
-                onClick={() => setShowDeleteModal(false)}
-                className="flex-1"
-              >
-                取消
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowDeleteModal(false)
-                  alert("卡片已删除")
-                }}
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white"
-              >
-                确认删除
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 修改密码弹窗 - 三步流程 */}
+      {/* 更改密码模态框 */}
       {showChangePasswordModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 bg-black bg-opacity-50" 
-            onClick={() => {
-              setShowChangePasswordModal(false)
-              resetChangePasswordModal()
-            }}
-          />
-          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
-            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
-          } shadow-2xl`}>
-            <div className="flex justify-between items-center mb-6">
-              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                修改密码 - 第{changePasswordStep}步
-              </h3>
-              <button
-                onClick={() => {
-                  setShowChangePasswordModal(false)
-                  resetChangePasswordModal()
-                }}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            
-            {/* 步骤指示器 */}
-            <div className="flex items-center justify-center mb-6">
-              <div className="flex items-center space-x-2">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`${cardStyle} rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto`}>
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">更改密码</h2>
+                <button
+                  onClick={() => {
+                    setShowChangePasswordModal(false)
+                    setChangePasswordStep(1)
+                    setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '', verificationCode: '' })
+                  }}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+
+              {/* 步骤指示器 */}
+              <div className="flex items-center justify-center space-x-4 mb-8">
                 {[1, 2, 3].map((step) => (
                   <div key={step} className="flex items-center">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                      step <= changePasswordStep 
-                        ? 'bg-[#00D4AA] text-white' 
-                        : isDark ? 'bg-gray-600 text-gray-400' : 'bg-gray-200 text-gray-600'
-                    }`}>
-                      {step}
+                    <div className={`
+                      w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
+                      ${changePasswordStep >= step
+                        ? 'bg-[#00D4AA] text-white'
+                        : isDark
+                          ? 'bg-gray-700 text-gray-400'
+                          : 'bg-gray-200 text-gray-600'
+                      }
+                    `}>
+                      {changePasswordStep > step ? <Check className="h-5 w-5" /> : step}
                     </div>
                     {step < 3 && (
-                      <div className={`w-8 h-0.5 mx-1 ${
-                        step < changePasswordStep ? 'bg-[#00D4AA]' : isDark ? 'bg-gray-600' : 'bg-gray-200'
-                      }`} />
+                      <div className={`
+                        w-8 h-0.5 mx-2
+                        ${changePasswordStep > step
+                          ? 'bg-[#00D4AA]'
+                          : isDark
+                            ? 'bg-gray-700'
+                            : 'bg-gray-200'
+                        }
+                      `} />
                     )}
                   </div>
                 ))}
               </div>
-            </div>
-            
-            {/* 第1步：输入当前密码 */}
-            {changePasswordStep === 1 && (
-              <div className="space-y-4">
-                <div className={`p-4 rounded-lg ${isDark ? 'bg-[#00D4AA]/10 border border-[#00D4AA]/20' : 'bg-[#00D4AA]/5 border border-[#00D4AA]/20'}`}>
-                  <div className="flex items-center">
-                    <Settings className="h-5 w-5 text-[#00D4AA] mr-2" />
-                    <p className={`text-sm ${isDark ? 'text-[#00D4AA]' : 'text-[#00D4AA]'}`}>
-                      请输入当前PIN码进行身份验证
-                    </p>
+
+              {/* 步骤内容 */}
+              {changePasswordStep === 1 && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">第一步：验证当前密码</h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">当前密码</label>
+                      <input
+                        type="password"
+                        value={passwordData.currentPassword}
+                        onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请输入当前密码"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={`p-4 rounded-lg border border-[#00D4AA]/30 bg-[#00D4AA]/10`}>
+                    <div className="flex items-start">
+                      <Info className="h-5 w-5 text-[#00D4AA] mt-0.5 mr-3 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-medium text-[#00D4AA] mb-1">安全提醒</p>
+                        <p className="text-[#00D4AA]/80">
+                          为了保护您的账户安全，我们需要验证您的当前密码。
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    当前PIN码
-                  </label>
-                  <input
-                    type="password"
-                    maxLength={6}
-                    value={currentPin}
-                    onChange={(e) => setCurrentPin(e.target.value)}
-                    placeholder="请输入当前PIN码"
-                    className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                  />
+              )}
+
+              {changePasswordStep === 2 && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">第二步：设置新密码</h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">新密码</label>
+                      <input
+                        type="password"
+                        value={passwordData.newPassword}
+                        onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请输入新密码"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium mb-2">确认新密码</label>
+                      <input
+                        type="password"
+                        value={passwordData.confirmPassword}
+                        onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                        className={`w-full p-3 rounded-lg border ${
+                          isDark 
+                            ? 'bg-gray-800 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                        placeholder="请再次输入新密码"
+                      />
+                    </div>
+                    
+                    {passwordData.newPassword && passwordData.confirmPassword && passwordData.newPassword !== passwordData.confirmPassword && (
+                      <p className="text-sm text-red-500">两次输入的新密码不一致</p>
+                    )}
+                  </div>
+                  
+                  <div className={`p-4 rounded-lg border border-[#00D4AA]/30 bg-[#00D4AA]/10`}>
+                    <div className="flex items-start">
+                      <Shield className="h-5 w-5 text-[#00D4AA] mt-0.5 mr-3 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-medium text-[#00D4AA] mb-1">密码安全要求</p>
+                        <ul className="text-[#00D4AA]/80 space-y-1">
+                          <li>• 密码长度至少8位</li>
+                          <li>• 包含大小写字母、数字和特殊字符</li>
+                          <li>• 不要使用常见密码或个人信息</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                
-                <div className="text-center">
+              )}
+
+              {changePasswordStep === 3 && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">第三步：验证身份</h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">验证码</label>
+                      <div className="flex space-x-3">
+                        <input
+                          type="text"
+                          value={passwordData.verificationCode}
+                          onChange={(e) => setPasswordData({...passwordData, verificationCode: e.target.value})}
+                          className={`flex-1 p-3 rounded-lg border ${
+                            isDark 
+                              ? 'bg-gray-800 border-gray-600 text-white' 
+                              : 'bg-white border-gray-300 text-gray-900'
+                          } focus:ring-2 focus:ring-[#00D4AA] focus:border-transparent`}
+                          placeholder="请输入验证码"
+                          maxLength={6}
+                        />
+                        <button className="px-4 py-3 bg-[#00D4AA] text-white rounded-lg hover:bg-[#00D4AA]/90 transition-colors whitespace-nowrap">
+                          发送验证码
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className={`p-4 rounded-lg border border-[#00D4AA]/30 bg-[#00D4AA]/10`}>
+                    <div className="flex items-start">
+                      <Check className="h-5 w-5 text-[#00D4AA] mt-0.5 mr-3 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-medium text-[#00D4AA] mb-1">即将完成</p>
+                        <p className="text-[#00D4AA]/80">
+                          验证码已发送至您的注册邮箱，输入验证码后即可完成密码修改。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 按钮区域 */}
+              <div className="flex space-x-4 pt-6">
+                {changePasswordStep > 1 && (
                   <button
-                    onClick={() => {
-                      setResetPasswordMode(true)
-                      setChangePasswordStep(3)
-                    }}
-                    className="text-sm text-[#00D4AA] hover:text-[#00D4AA]/80 underline"
+                    onClick={() => setChangePasswordStep(changePasswordStep - 1)}
+                    className={`px-6 py-3 rounded-lg border transition-colors ${
+                      isDark 
+                        ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                        : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
                   >
-                    忘记PIN码？点击重置
+                    上一步
                   </button>
-                </div>
-              </div>
-            )}
-            
-            {/* 第2步：设置新密码 */}
-            {changePasswordStep === 2 && (
-              <div className="space-y-4">
-                <div className={`p-4 rounded-lg ${isDark ? 'bg-[#00D4AA]/10 border border-[#00D4AA]/20' : 'bg-[#00D4AA]/5 border border-[#00D4AA]/20'}`}>
-                  <div className="flex items-center">
-                    <Settings className="h-5 w-5 text-[#00D4AA] mr-2" />
-                    <p className={`text-sm ${isDark ? 'text-[#00D4AA]' : 'text-[#00D4AA]'}`}>
-                      请设置新的PIN码
-                    </p>
-                  </div>
-                </div>
-                
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    新PIN码
-                  </label>
-                  <input
-                    type="password"
-                    maxLength={6}
-                    value={newPin}
-                    onChange={(e) => setNewPin(e.target.value)}
-                    placeholder="请输入新PIN码"
-                    className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                  />
-                </div>
-                
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    确认新PIN码
-                  </label>
-                  <input
-                    type="password"
-                    maxLength={6}
-                    value={confirmNewPin}
-                    onChange={(e) => setConfirmNewPin(e.target.value)}
-                    placeholder="请再次输入新PIN码"
-                    className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
-                      isDark 
-                        ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                  />
-                </div>
-                
-                {newPin && confirmNewPin && newPin !== confirmNewPin && (
-                  <div className={`p-3 rounded-lg ${isDark ? 'bg-red-500/10 border border-red-500/20' : 'bg-red-50 border border-red-200'}`}>
-                    <p className={`text-sm ${isDark ? 'text-red-400' : 'text-red-700'}`}>
-                      两次输入的PIN码不一致
-                    </p>
-                  </div>
                 )}
                 
-                <div className={`p-3 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
-                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    PIN码要求：
-                  </p>
-                  <ul className={`text-xs mt-1 space-y-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    <li>• 6位数字</li>
-                    <li>• 不能使用连续数字（如123456）</li>
-                    <li>• 不能使用重复数字（如111111）</li>
-                  </ul>
-                </div>
-              </div>
-            )}
-            
-            {/* 第3步：验证码验证（重置密码时） */}
-            {changePasswordStep === 3 && resetPasswordMode && (
-              <div className="space-y-4">
-                <div className={`p-4 rounded-lg ${isDark ? 'bg-orange-500/10 border border-orange-500/20' : 'bg-orange-50 border border-orange-200'}`}>
-                  <div className="flex items-center">
-                    <Settings className="h-5 w-5 text-orange-500 mr-2" />
-                    <p className={`text-sm ${isDark ? 'text-orange-400' : 'text-orange-700'}`}>
-                      请验证您的身份以完成密码重置
-                    </p>
-                  </div>
-                </div>
-                
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    手机验证码
-                  </label>
-                  <div className="flex space-x-2">
-                    <input
-                      type="text"
-                      maxLength={6}
-                      value={phoneVerificationCode}
-                      onChange={(e) => setPhoneVerificationCode(e.target.value)}
-                      placeholder="请输入手机验证码"
-                      className={`flex-1 px-3 py-2 border rounded-lg text-center tracking-widest ${
-                        isDark 
-                          ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                      }`}
-                    />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => alert("验证码已发送到您的手机")}
-                      className="px-3"
-                    >
-                      获取验证码
-                    </Button>
-                  </div>
-                </div>
-                
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    邮箱验证码
-                  </label>
-                  <div className="flex space-x-2">
-                    <input
-                      type="text"
-                      maxLength={6}
-                      value={emailVerificationCode}
-                      onChange={(e) => setEmailVerificationCode(e.target.value)}
-                      placeholder="请输入邮箱验证码"
-                      className={`flex-1 px-3 py-2 border rounded-lg text-center tracking-widest ${
-                        isDark 
-                          ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
-                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                      }`}
-                    />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => alert("验证码已发送到您的邮箱")}
-                      className="px-3"
-                    >
-                      获取验证码
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className={`p-3 rounded-lg ${isDark ? 'bg-[#00D4AA]/10 border border-[#00D4AA]/20' : 'bg-[#00D4AA]/5 border border-[#00D4AA]/20'}`}>
-                  <p className={`text-xs ${isDark ? 'text-[#00D4AA]' : 'text-[#00D4AA]'}`}>
-                    为了您的账户安全，重置密码需要同时验证手机号和邮箱
-                  </p>
-                </div>
-              </div>
-            )}
-            
-            {/* 底部按钮 */}
-            <div className="flex space-x-3 mt-6">
-              {changePasswordStep > 1 && (
                 <Button
-                  variant="outline"
                   onClick={() => {
-                    if (changePasswordStep === 3 && resetPasswordMode) {
-                      // 从重置模式的第3步返回到第1步
-                      setChangePasswordStep(1)
-                      setResetPasswordMode(false)
+                    if (changePasswordStep < 3) {
+                      setChangePasswordStep(changePasswordStep + 1)
                     } else {
-                      setChangePasswordStep(changePasswordStep - 1)
+                      if (passwordData.verificationCode) {
+                        alert('密码修改成功！')
+                        setShowChangePasswordModal(false)
+                        setChangePasswordStep(1)
+                        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '', verificationCode: '' })
+                      }
                     }
                   }}
-                  className="flex-1"
+                  className={`flex-1 ${
+                    isDark 
+                      ? 'bg-white hover:bg-gray-100 text-black' 
+                      : 'bg-black hover:bg-gray-900 text-white'
+                  }`}
                 >
-                  上一步
+                  {changePasswordStep === 1 ? '下一步' : 
+                   changePasswordStep === 2 ? '确认修改' : 
+                   '完成重置'}
                 </Button>
-              )}
-              
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowChangePasswordModal(false)
-                  resetChangePasswordModal()
-                }}
-                className="flex-1"
-              >
-                取消
-              </Button>
-              
-              <Button
-                onClick={() => {
-                  if (changePasswordStep === 1) {
-                    if (currentPin.length === 6) {
-                      setChangePasswordStep(2)
-                    } else {
-                      alert("请输入当前PIN码")
-                    }
-                  } else if (changePasswordStep === 2) {
-                    if (newPin === confirmNewPin && newPin.length === 6) {
-                      setShowChangePasswordModal(false)
-                      resetChangePasswordModal()
-                      alert("PIN码修改成功")
-                    } else {
-                      alert("请确认PIN码输入正确")
-                    }
-                  } else if (changePasswordStep === 3) {
-                    if (phoneVerificationCode && emailVerificationCode) {
-                      setShowChangePasswordModal(false)
-                      resetChangePasswordModal()
-                      alert("PIN码重置成功")
-                    } else {
-                      alert("请输入手机和邮箱验证码")
-                    }
-                  }
-                }}
-                className={`flex-1 ${
-                  isDark 
-                    ? 'bg-white hover:bg-gray-100 text-black' 
-                    : 'bg-black hover:bg-gray-900 text-white'
-                }`}
-              >
-                {changePasswordStep === 1 ? '下一步' : 
-                 changePasswordStep === 2 ? '确认修改' : 
-                 '完成重置'}
-              </Button>
+              </div>
             </div>
           </div>
         </div>
