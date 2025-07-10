@@ -12527,14 +12527,14 @@ export default function WalletPage() {
                   <div key={step} className="flex items-center">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                       step <= changePasswordStep 
-                        ? 'bg-blue-500 text-white' 
+                        ? 'bg-[#00D4AA] text-white' 
                         : isDark ? 'bg-gray-600 text-gray-400' : 'bg-gray-200 text-gray-600'
                     }`}>
                       {step}
                     </div>
                     {step < 3 && (
                       <div className={`w-8 h-0.5 mx-1 ${
-                        step < changePasswordStep ? 'bg-green-500' : isDark ? 'bg-gray-600' : 'bg-gray-200'
+                        step < changePasswordStep ? 'bg-[#00D4AA]' : isDark ? 'bg-gray-600' : 'bg-gray-200'
                       }`} />
                     )}
                   </div>
@@ -12545,10 +12545,10 @@ export default function WalletPage() {
             {/* 第1步：输入当前密码 */}
             {changePasswordStep === 1 && (
               <div className="space-y-4">
-                <div className={`p-4 rounded-lg ${isDark ? 'bg-green-500/10 border border-green-500/20' : 'bg-green-50 border border-green-200'}`}>
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-[#00D4AA]/10 border border-[#00D4AA]/20' : 'bg-[#00D4AA]/5 border border-[#00D4AA]/20'}`}>
                   <div className="flex items-center">
-                    <Settings className="h-5 w-5 text-green-500 mr-2" />
-                    <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-700'}`}>
+                    <Settings className="h-5 w-5 text-[#00D4AA] mr-2" />
+                    <p className={`text-sm ${isDark ? 'text-[#00D4AA]' : 'text-[#00D4AA]'}`}>
                       请输入当前PIN码进行身份验证
                     </p>
                   </div>
@@ -12578,7 +12578,7 @@ export default function WalletPage() {
                       setResetPasswordMode(true)
                       setChangePasswordStep(3)
                     }}
-                    className="text-sm text-green-500 hover:text-green-600 underline"
+                    className="text-sm text-[#00D4AA] hover:text-[#00D4AA]/80 underline"
                   >
                     忘记PIN码？点击重置
                   </button>
@@ -12589,10 +12589,10 @@ export default function WalletPage() {
             {/* 第2步：设置新密码 */}
             {changePasswordStep === 2 && (
               <div className="space-y-4">
-                <div className={`p-4 rounded-lg ${isDark ? 'bg-green-500/10 border border-green-500/20' : 'bg-green-50 border border-green-200'}`}>
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-[#00D4AA]/10 border border-[#00D4AA]/20' : 'bg-[#00D4AA]/5 border border-[#00D4AA]/20'}`}>
                   <div className="flex items-center">
-                    <Settings className="h-5 w-5 text-green-500 mr-2" />
-                    <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-700'}`}>
+                    <Settings className="h-5 w-5 text-[#00D4AA] mr-2" />
+                    <p className={`text-sm ${isDark ? 'text-[#00D4AA]' : 'text-[#00D4AA]'}`}>
                       请设置新的PIN码
                     </p>
                   </div>
@@ -12723,8 +12723,8 @@ export default function WalletPage() {
                   </div>
                 </div>
                 
-                <div className={`p-3 rounded-lg ${isDark ? 'bg-green-500/10 border border-green-500/20' : 'bg-green-50 border border-green-200'}`}>
-                  <p className={`text-xs ${isDark ? 'text-green-400' : 'text-green-700'}`}>
+                <div className={`p-3 rounded-lg ${isDark ? 'bg-[#00D4AA]/10 border border-[#00D4AA]/20' : 'bg-[#00D4AA]/5 border border-[#00D4AA]/20'}`}>
+                  <p className={`text-xs ${isDark ? 'text-[#00D4AA]' : 'text-[#00D4AA]'}`}>
                     为了您的账户安全，重置密码需要同时验证手机号和邮箱
                   </p>
                 </div>
@@ -12788,7 +12788,11 @@ export default function WalletPage() {
                     }
                   }
                 }}
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white"
+                className={`flex-1 ${
+                  isDark 
+                    ? 'bg-white hover:bg-gray-100 text-black' 
+                    : 'bg-black hover:bg-gray-900 text-white'
+                }`}
               >
                 {changePasswordStep === 1 ? '下一步' : 
                  changePasswordStep === 2 ? '确认修改' : 
