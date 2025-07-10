@@ -138,6 +138,11 @@ export default function WalletPage() {
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
   const [commissionTab, setCommissionTab] = useState("合约") // 佣金账户页签：合约/理财/支付/担保
+  const [selectedAccount, setSelectedAccount] = useState("钱包总览") // 选择的账户类型
+  const [selectedTimeRange, setSelectedTimeRange] = useState("7d") // 时间范围选择
+  
+  // 账户页签定义
+  const accountTabs = ["钱包总览", "合约账户", "理财账户", "佣金账户", "U卡账户", "担保账户", "BePAY账户"]
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
@@ -6421,5 +6426,3 @@ export default function WalletPage() {
     </div>
   )
 }
-
-export default WalletPage 
