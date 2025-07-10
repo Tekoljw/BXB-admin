@@ -177,6 +177,12 @@ export default function WalletPage() {
   const [showShippingAddress, setShowShippingAddress] = useState(false) // 是否显示收款地址详情
   const [selectedCardInfo, setSelectedCardInfo] = useState({ name: '', number: '', type: '' })
   
+  // 新增卡片操作弹窗状态
+  const [showFreezeModal, setShowFreezeModal] = useState(false) // 冻结卡片弹窗
+  const [showDeleteModal, setShowDeleteModal] = useState(false) // 删除卡片弹窗
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false) // 修改密码弹窗
+  const [currentCardId, setCurrentCardId] = useState('') // 当前操作的卡片ID
+  
   // 激活卡片多步骤状态
   const [activateStep, setActivateStep] = useState(1)
   const [activateCardType, setActivateCardType] = useState<"virtual" | "physical">("virtual")
@@ -4740,7 +4746,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("充值/退款 for card-frozen")
+                              setSelectedCardInfo({ name: '工薪卡专用', number: '4323 4323 4323 7777', type: 'virtual' })
+                              setShowRechargeModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' : 'bg-green-50 text-green-600 hover:bg-green-100'
@@ -4752,7 +4759,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("冻结卡片 for card-frozen")
+                              setCurrentCardId('card-frozen')
+                              setShowFreezeModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
@@ -4764,7 +4772,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("删除卡片 for card-frozen")
+                              setCurrentCardId('card-frozen')
+                              setShowDeleteModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
@@ -4776,7 +4785,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("修改密码 for card-frozen")
+                              setCurrentCardId('card-frozen')
+                              setShowChangePasswordModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
@@ -4850,7 +4860,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("充值/退款 for shopping card")
+                              setSelectedCardInfo({ name: '购物专用卡', number: '5124 5124 5124 8888', type: 'virtual' })
+                              setShowRechargeModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-purple-600/20 text-purple-400 hover:bg-purple-600/30' : 'bg-purple-50 text-purple-600 hover:bg-purple-100'
@@ -4861,7 +4872,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("冻结卡片 for shopping card")
+                              setCurrentCardId('card-shopping')
+                              setShowFreezeModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
@@ -4872,7 +4884,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("删除卡片 for shopping card")
+                              setCurrentCardId('card-shopping')
+                              setShowDeleteModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
@@ -4883,7 +4896,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("修改密码 for shopping card")
+                              setCurrentCardId('card-shopping')
+                              setShowChangePasswordModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
@@ -4957,7 +4971,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("充值/退款 for travel card")
+                              setSelectedCardInfo({ name: '旅行消费卡', number: '6789 6789 6789 1234', type: 'virtual' })
+                              setShowRechargeModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
@@ -4968,7 +4983,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("冻结卡片 for travel card")
+                              setCurrentCardId('card-travel')
+                              setShowFreezeModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
@@ -4979,7 +4995,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("删除卡片 for travel card")
+                              setCurrentCardId('card-travel')
+                              setShowDeleteModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
@@ -4990,7 +5007,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("修改密码 for travel card")
+                              setCurrentCardId('card-travel')
+                              setShowChangePasswordModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-cyan-600/20 text-cyan-400 hover:bg-cyan-600/30' : 'bg-cyan-50 text-cyan-600 hover:bg-cyan-100'
@@ -5064,7 +5082,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("充值/退款 for entertainment card")
+                              setSelectedCardInfo({ name: '娱乐专用卡', number: '9876 9876 9876 5432', type: 'virtual' })
+                              setShowRechargeModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
@@ -5075,7 +5094,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("冻结卡片 for entertainment card")
+                              setCurrentCardId('card-entertainment')
+                              setShowFreezeModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-yellow-600/20 text-yellow-400 hover:bg-yellow-600/30' : 'bg-yellow-50 text-yellow-600 hover:bg-yellow-100'
@@ -5086,7 +5106,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("删除卡片 for entertainment card")
+                              setCurrentCardId('card-entertainment')
+                              setShowDeleteModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
@@ -5097,7 +5118,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("修改密码 for entertainment card")
+                              setCurrentCardId('card-entertainment')
+                              setShowChangePasswordModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
@@ -5171,7 +5193,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("充值/退款 for investment card")
+                              setSelectedCardInfo({ name: '投资理财卡', number: '1122 1122 1122 9999', type: 'virtual' })
+                              setShowRechargeModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
@@ -5182,7 +5205,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("冻结卡片 for investment card")
+                              setCurrentCardId('card-investment')
+                              setShowFreezeModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
@@ -5193,7 +5217,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("删除卡片 for investment card")
+                              setCurrentCardId('card-investment')
+                              setShowDeleteModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
@@ -5204,7 +5229,8 @@ export default function WalletPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              console.log("修改密码 for investment card")
+                              setCurrentCardId('card-investment')
+                              setShowChangePasswordModal(true)
                             }}
                             className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                               isDark ? 'bg-purple-600/20 text-purple-400 hover:bg-purple-600/30' : 'bg-purple-50 text-purple-600 hover:bg-purple-100'
@@ -5330,7 +5356,8 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("冻结 for 白金卡")
+                            setCurrentCardId('physical-platinum')
+                            setShowFreezeModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'
@@ -5343,7 +5370,8 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("删除 for 白金卡")
+                            setCurrentCardId('physical-platinum')
+                            setShowDeleteModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
@@ -5356,13 +5384,13 @@ export default function WalletPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            setSelectedCardInfo({ name: '白金卡', number: '**** **** **** 1234', type: 'physical' })
-                            setShowProfileModal(true)
+                            setCurrentCardId('physical-platinum')
+                            setShowChangePasswordModal(true)
                           }}
                           className={`flex items-center justify-center p-2 rounded-lg transition-all hover:scale-105 ${
                             isDark ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
                           }`}
-                          title="个人信息"
+                          title="修改密码"
                         >
                           <Settings className="h-4 w-4" />
                         </button>
@@ -12251,6 +12279,286 @@ export default function WalletPage() {
                   </Button>
                 </>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 冻结卡片弹窗 */}
+      {showFreezeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setShowFreezeModal(false)}
+          />
+          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl`}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                冻结卡片
+              </h3>
+              <button
+                onClick={() => setShowFreezeModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className={`p-4 rounded-lg ${isDark ? 'bg-orange-500/10 border border-orange-500/20' : 'bg-orange-50 border border-orange-200'}`}>
+                <div className="flex items-center">
+                  <PauseCircle className="h-5 w-5 text-orange-500 mr-2" />
+                  <p className={`text-sm ${isDark ? 'text-orange-400' : 'text-orange-700'}`}>
+                    冻结后，此卡片将无法进行任何交易操作
+                  </p>
+                </div>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  冻结原因
+                </label>
+                <select className={`w-full px-3 py-2 border rounded-lg ${
+                  isDark 
+                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}>
+                  <option value="">请选择冻结原因</option>
+                  <option value="suspicious">异常交易检测</option>
+                  <option value="loss">卡片丢失</option>
+                  <option value="theft">卡片被盗</option>
+                  <option value="voluntary">主动冻结</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  备注说明（可选）
+                </label>
+                <textarea
+                  rows={3}
+                  placeholder="请输入备注说明..."
+                  className={`w-full px-3 py-2 border rounded-lg ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                  }`}
+                />
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowFreezeModal(false)}
+                className="flex-1"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowFreezeModal(false)
+                  alert("卡片已冻结")
+                }}
+                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
+              >
+                确认冻结
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 删除卡片弹窗 */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setShowDeleteModal(false)}
+          />
+          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl`}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                删除卡片
+              </h3>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className={`p-4 rounded-lg ${isDark ? 'bg-red-500/10 border border-red-500/20' : 'bg-red-50 border border-red-200'}`}>
+                <div className="flex items-center">
+                  <Trash2 className="h-5 w-5 text-red-500 mr-2" />
+                  <p className={`text-sm ${isDark ? 'text-red-400' : 'text-red-700'}`}>
+                    删除后无法恢复，请确认是否继续？
+                  </p>
+                </div>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  删除原因
+                </label>
+                <select className={`w-full px-3 py-2 border rounded-lg ${
+                  isDark 
+                    ? 'bg-[#252842] border-[#3a3d4a] text-white' 
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}>
+                  <option value="">请选择删除原因</option>
+                  <option value="unused">不再使用</option>
+                  <option value="replaced">已被替换</option>
+                  <option value="security">安全原因</option>
+                  <option value="other">其他原因</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className={`flex items-center space-x-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <input type="checkbox" className="rounded" />
+                  <span>我确认要删除此卡片，并了解此操作不可撤销</span>
+                </label>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowDeleteModal(false)
+                  alert("卡片已删除")
+                }}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+              >
+                确认删除
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 修改密码弹窗 */}
+      {showChangePasswordModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setShowChangePasswordModal(false)}
+          />
+          <div className={`relative w-full max-w-md mx-4 p-6 rounded-xl ${
+            isDark ? 'bg-[#1a1d29] border border-[#252842]' : 'bg-white border border-gray-200'
+          } shadow-2xl`}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                修改密码
+              </h3>
+              <button
+                onClick={() => setShowChangePasswordModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className={`p-4 rounded-lg ${isDark ? 'bg-blue-500/10 border border-blue-500/20' : 'bg-blue-50 border border-blue-200'}`}>
+                <div className="flex items-center">
+                  <Settings className="h-5 w-5 text-blue-500 mr-2" />
+                  <p className={`text-sm ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>
+                    为了您的账户安全，请设置新的PIN码
+                  </p>
+                </div>
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  当前PIN码
+                </label>
+                <input
+                  type="password"
+                  maxLength={6}
+                  placeholder="请输入当前PIN码"
+                  className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  新PIN码
+                </label>
+                <input
+                  type="password"
+                  maxLength={6}
+                  placeholder="请输入新PIN码"
+                  className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  确认新PIN码
+                </label>
+                <input
+                  type="password"
+                  maxLength={6}
+                  placeholder="请再次输入新PIN码"
+                  className={`w-full px-3 py-2 border rounded-lg text-center tracking-widest ${
+                    isDark 
+                      ? 'bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500' 
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                  }`}
+                />
+              </div>
+              
+              <div className={`p-3 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  PIN码要求：
+                </p>
+                <ul className={`text-xs mt-1 space-y-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <li>• 6位数字</li>
+                  <li>• 不能使用连续数字（如123456）</li>
+                  <li>• 不能使用重复数字（如111111）</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowChangePasswordModal(false)}
+                className="flex-1"
+              >
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowChangePasswordModal(false)
+                  alert("PIN码已更新")
+                }}
+                className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
+              >
+                确认修改
+              </Button>
             </div>
           </div>
         </div>
