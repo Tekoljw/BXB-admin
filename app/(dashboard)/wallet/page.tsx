@@ -986,7 +986,6 @@ export default function WalletPage() {
     { id: "U卡订单", label: "U卡订单", icon: CreditCard },
     { id: "担保记录", label: "担保记录", icon: Shield },
     { id: "支付订单", label: "支付订单", icon: Receipt },
-    { id: "划转记录", label: "划转记录", icon: ArrowLeftRight },
     { id: "佣金记录", label: "佣金记录", icon: Percent }
   ]
 
@@ -998,6 +997,7 @@ export default function WalletPage() {
         deposit: '入金记录',
         withdraw: '出金记录',
         internal_transfer: '内转记录',
+        transfer: '划转记录',
         usdt_trading: 'USDT买卖记录'
       }
     },
@@ -8625,6 +8625,28 @@ export default function WalletPage() {
           note: "业务合作款"
         }
       ],
+      "划转记录": [
+        {
+          id: "TR001",
+          type: "账户划转",
+          from: "现货账户",
+          to: "合约账户",
+          currency: "USDT",
+          amount: "1,000.00",
+          status: "已完成",
+          time: "2024-01-15 12:45:30"
+        },
+        {
+          id: "TR002",
+          type: "账户划转",
+          from: "合约账户",
+          to: "理财账户",
+          currency: "USDT",
+          amount: "500.00",
+          status: "已完成",
+          time: "2024-01-15 11:30:20"
+        }
+      ],
       "USDT买卖记录": [
         {
           id: "OTC001",
@@ -8715,6 +8737,7 @@ export default function WalletPage() {
           deposit: "入金记录",
           withdraw: "出金记录",
           internal_transfer: "内转记录",
+          transfer: "划转记录",
           usdt_trading: "USDT买卖记录"
         }
         return fundsData[tabNameMap[secondaryTab]] || []
