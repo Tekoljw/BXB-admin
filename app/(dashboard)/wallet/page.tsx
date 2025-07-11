@@ -3559,6 +3559,113 @@ export default function WalletPage() {
         
         return (
           <div className="space-y-6">
+            {/* 商户信息卡片 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold">商户信息</h3>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      BePay 商户配置管理
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="px-3 py-1 bg-green-100 text-green-800 text-xs rounded-full dark:bg-green-900 dark:text-green-200">
+                    已认证
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* 商户ID */}
+                <div className="space-y-2">
+                  <div className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    商户ID
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className={`text-sm font-mono ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      MP2025001234
+                    </div>
+                    <button
+                      onClick={() => navigator.clipboard.writeText("MP2025001234")}
+                      className={`p-1 rounded transition-colors ${
+                        isDark 
+                          ? 'hover:bg-gray-700 text-gray-400 hover:text-white' 
+                          : 'hover:bg-gray-100 text-gray-500 hover:text-gray-700'
+                      }`}
+                      title="复制商户ID"
+                    >
+                      <Copy className="h-3 w-3" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* 商户名称 */}
+                <div className="space-y-2">
+                  <div className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    商户名称
+                  </div>
+                  <div className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    BeDAO科技有限公司
+                  </div>
+                </div>
+
+                {/* 接入文档 */}
+                <div className="space-y-2">
+                  <div className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    接入文档
+                  </div>
+                  <button
+                    onClick={() => {
+                      // 打开接入文档
+                      window.open('/docs/bepay-integration', '_blank')
+                    }}
+                    className={`inline-flex items-center space-x-1 px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                      isDark 
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                        : 'bg-blue-500 hover:bg-blue-600 text-white'
+                    }`}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>查看文档</span>
+                  </button>
+                </div>
+
+                {/* 生成密钥 */}
+                <div className="space-y-2">
+                  <div className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    API密钥
+                  </div>
+                  <button
+                    onClick={() => {
+                      // 生成新的API密钥
+                      const newApiKey = 'sk_live_' + Math.random().toString(36).substr(2, 32)
+                      navigator.clipboard.writeText(newApiKey)
+                      alert('新的API密钥已生成并复制到剪贴板')
+                    }}
+                    className={`inline-flex items-center space-x-1 px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                      isDark 
+                        ? 'bg-purple-600 hover:bg-purple-700 text-white' 
+                        : 'bg-purple-500 hover:bg-purple-600 text-white'
+                    }`}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                    </svg>
+                    <span>生成密钥</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
             {/* 顶部卡片：法币支付API和加密货币支付API */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 商户法币资产卡片 */}
