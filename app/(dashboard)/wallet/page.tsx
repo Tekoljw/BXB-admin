@@ -9516,10 +9516,10 @@ export default function WalletPage() {
               currency: "USDT",
               guaranteeAmount: "300.00",
               guaranteeCurrency: "USDT",
-              status: "等待确认",
+              status: "进行中",
               time: "2024-01-15 18:20:00",
               tradeType: "数字货币交易",
-              progress: "等待对方确认"
+              progress: "等待付款确认"
             },
             {
               id: "GP002",
@@ -10548,8 +10548,15 @@ export default function WalletPage() {
                             return [record.time, record.type, record.merchant, `${record.amount} ${record.currency}`, record.currency, record.cardNumber, record.status]
                           case "担保记录":
                             // 根据不同页签返回不同的数据字段
-                            if (secondaryTabKey === 'receive' || secondaryTabKey === 'payment') {
+                            if (secondaryTabKey === 'receive') {
                               return [record.time, record.type, record.tradePartner, `${record.amount} ${record.currency}`, `${record.guaranteeAmount} ${record.guaranteeCurrency}`, record.tradeType, record.progress, record.status]
+                            } else if (secondaryTabKey === 'payment') {
+                              // 担保付款记录特殊处理：进行中状态显示按钮
+                              const statusDisplay = record.status === '进行中' ? 
+                                <button className={`px-3 py-1 rounded text-sm font-medium transition-colors ${isDark ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}>
+                                  确认付款
+                                </button> : record.status
+                              return [record.time, record.type, record.tradePartner, `${record.amount} ${record.currency}`, `${record.guaranteeAmount} ${record.guaranteeCurrency}`, record.tradeType, record.progress, statusDisplay]
                             } else if (secondaryTabKey === 'credit') {
                               return [record.time, record.type, `${record.amount} ${record.currency}`, `${record.creditLimit} ${record.currency}`, `${record.usedCredit} ${record.currency}`, `${record.availableCredit} ${record.currency}`, record.purpose, record.status]
                             }
