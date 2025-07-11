@@ -8926,6 +8926,7 @@ export default function WalletPage() {
               amount: "1,000.00 USDT",
               price: "7.20 CNY",
               total: "7,200.00 CNY",
+              fiatCurrency: "CNY",
               method: "银行卡",
               status: "已完成",
               time: "2024-01-15 16:45:30",
@@ -8935,12 +8936,25 @@ export default function WalletPage() {
               id: "C2C002",
               type: "卖出",
               amount: "500.00 USDT",
-              price: "7.18 CNY",
-              total: "3,590.00 CNY",
-              method: "支付宝",
+              price: "1.02 USD",
+              total: "510.00 USD",
+              fiatCurrency: "USD",
+              method: "银行转账",
               status: "处理中",
               time: "2024-01-15 14:30:20",
               merchant: "商户B"
+            },
+            {
+              id: "C2C003",
+              type: "买入",
+              amount: "800.00 USDT",
+              price: "0.95 EUR",
+              total: "760.00 EUR",
+              fiatCurrency: "EUR",
+              method: "SEPA转账",
+              status: "已完成",
+              time: "2024-01-15 13:15:10",
+              merchant: "商户C"
             }
           ],
           quick: [
@@ -8950,6 +8964,7 @@ export default function WalletPage() {
               amount: "2,000.00 USDT",
               price: "7.22 CNY",
               total: "14,440.00 CNY",
+              fiatCurrency: "CNY",
               method: "微信支付",
               status: "已完成",
               time: "2024-01-15 18:15:45",
@@ -8959,11 +8974,24 @@ export default function WalletPage() {
               id: "QUICK002",
               type: "快捷卖出",
               amount: "800.00 USDT",
-              price: "7.19 CNY",
-              total: "5,752.00 CNY",
-              method: "银行卡",
+              price: "1.01 USD",
+              total: "808.00 USD",
+              fiatCurrency: "USD",
+              method: "PayPal",
               status: "已完成",
               time: "2024-01-15 12:20:15",
+              merchant: "快捷通道"
+            },
+            {
+              id: "QUICK003",
+              type: "快捷买入",
+              amount: "1,500.00 USDT",
+              price: "154.50 JPY",
+              total: "231,750.00 JPY",
+              fiatCurrency: "JPY",
+              method: "银行转账",
+              status: "已完成",
+              time: "2024-01-15 10:30:25",
               merchant: "快捷通道"
             }
           ],
@@ -8974,6 +9002,7 @@ export default function WalletPage() {
               amount: "5,000.00 USDT",
               price: "7.25 CNY",
               total: "36,250.00 CNY",
+              fiatCurrency: "CNY",
               method: "银行转账",
               status: "已完成",
               time: "2024-01-15 20:30:00",
@@ -8983,12 +9012,25 @@ export default function WalletPage() {
               id: "OTC002",
               type: "OTC卖出",
               amount: "3,000.00 USDT",
-              price: "7.21 CNY",
-              total: "21,630.00 CNY",
-              method: "银行转账",
+              price: "1.03 USD",
+              total: "3,090.00 USD",
+              fiatCurrency: "USD",
+              method: "Wire Transfer",
               status: "处理中",
               time: "2024-01-15 10:45:30",
               merchant: "OTC机构"
+            },
+            {
+              id: "OTC003",
+              type: "OTC买入",
+              amount: "10,000.00 USDT",
+              price: "0.96 EUR",
+              total: "9,600.00 EUR",
+              fiatCurrency: "EUR",
+              method: "SWIFT转账",
+              status: "已完成",
+              time: "2024-01-15 09:15:20",
+              merchant: "OTC欧洲"
             }
           ]
         }
@@ -9190,7 +9232,7 @@ export default function WalletPage() {
                   case "USDT买卖记录":
                     return (
                       <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                           <div>
                             <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                               类型
@@ -9210,6 +9252,21 @@ export default function WalletPage() {
                               <option>已完成</option>
                               <option>处理中</option>
                               <option>已取消</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              法币币种
+                            </label>
+                            <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>全部</option>
+                              <option>CNY</option>
+                              <option>USD</option>
+                              <option>EUR</option>
+                              <option>GBP</option>
+                              <option>JPY</option>
+                              <option>KRW</option>
+                              <option>HKD</option>
                             </select>
                           </div>
                           <div>
