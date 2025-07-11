@@ -8524,7 +8524,94 @@ export default function WalletPage() {
             
             <div className="p-6">
               <div className="space-y-4">
-                <div className="space-y-3">
+                {/* PC端表格视图 */}
+                <div className="hidden md:block">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                          {(() => {
+                            const tabMap = {
+                              deposit: "入金记录",
+                              withdraw: "出金记录", 
+                              internal_transfer: "内转记录",
+                              transfer: "划转记录"
+                            }
+                            const recordType = tabMap[secondaryTab] || orderTab
+                            
+                            let headers = []
+                            switch (recordType) {
+                              case "入金记录":
+                                headers = ['时间', '币种', '数量', '地址/收款账号', '交易哈希', '状态']
+                                break
+                              case "出金记录":
+                                headers = ['时间', '币种', '数量', '提币网络', '地址/收款账号', '交易哈希', '状态']
+                                break
+                              case "内转记录":
+                                headers = ['时间', '币种', '转入/转出', '数量', '状态']
+                                break
+                              case "划转记录":
+                                headers = ['时间', '币种', '划出账户', '划入账户', '数量']
+                                break
+                              default:
+                                headers = ['时间', '类型', '金额', '状态']
+                                break
+                            }
+                            
+                            return headers.map((header, index) => (
+                              <th key={index} className={`px-4 py-3 text-left text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                {header}
+                              </th>
+                            ))
+                          })()}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {records.map((record, index) => {
+                          const tabMap = {
+                            deposit: "入金记录",
+                            withdraw: "出金记录", 
+                            internal_transfer: "内转记录",
+                            transfer: "划转记录"
+                          }
+                          const recordType = tabMap[secondaryTab] || orderTab
+                          
+                          let cellData = []
+                          switch (recordType) {
+                            case "入金记录":
+                              cellData = [record.time, record.currency, record.amount, record.address, record.txHash, record.status]
+                              break
+                            case "出金记录":
+                              cellData = [record.time, record.currency, record.amount, record.network, record.address, record.txHash, record.status]
+                              break
+                            case "内转记录":
+                              cellData = [record.time, record.currency, record.direction, record.amount, record.status]
+                              break
+                            case "划转记录":
+                              cellData = [record.time, record.currency, record.fromAccount, record.toAccount, record.amount]
+                              break
+                            default:
+                              cellData = Object.values(record)
+                              break
+                          }
+                          
+                          return (
+                            <tr key={index} className={`border-b ${isDark ? 'border-gray-700 hover:bg-gray-800' : 'border-gray-200 hover:bg-gray-50'} transition-colors`}>
+                              {cellData.map((cell, cellIndex) => (
+                                <td key={cellIndex} className={`px-4 py-3 text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  {cell || '-'}
+                                </td>
+                              ))}
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* 移动端卡片视图 */}
+                <div className="md:hidden space-y-3">
                   {records.map((record, index) => {
                     // 获取当前记录类型的列定义
                     const getColumnConfig = () => {
@@ -8581,13 +8668,13 @@ export default function WalletPage() {
                     
                     return (
                       <div key={index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
-                        <div className={`grid gap-4 text-sm ${columns.length <= 5 ? 'grid-cols-5' : 'grid-cols-6 lg:grid-cols-7'}`}>
+                        <div className="grid grid-cols-2 gap-3 text-sm">
                           {columns.map(({ key, label }) => (
                             <div key={key}>
                               <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
                                 {label}
                               </div>
-                              <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium`}>
+                              <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
                                 {record[key] || '-'}
                               </div>
                             </div>
@@ -8889,10 +8976,120 @@ export default function WalletPage() {
         
         <div className="p-6">
           <div className="space-y-4">
-            <div className="space-y-3">
+            {/* PC端表格视图 */}
+            <div className="hidden md:block">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                      {(() => {
+                        // 获取通用表头配置
+                        const getGenericHeaders = (orderTabType: string, secondaryTabKey: string) => {
+                          // 首先检查是否是资金记录的特殊情况
+                          if (orderTabType === "资金记录") {
+                            const tabMap = {
+                              deposit: "入金记录",
+                              withdraw: "出金记录", 
+                              internal_transfer: "内转记录",
+                              transfer: "划转记录"
+                            }
+                            const recordType = tabMap[secondaryTabKey]
+                            
+                            switch (recordType) {
+                              case "入金记录":
+                                return ['时间', '币种', '数量', '地址/收款账号', '交易哈希', '状态']
+                              case "出金记录":
+                                return ['时间', '币种', '数量', '提币网络', '地址/收款账号', '交易哈希', '状态']
+                              case "内转记录":
+                                return ['时间', '币种', '转入/转出', '数量', '状态']
+                              case "划转记录":
+                                return ['时间', '币种', '划出账户', '划入账户', '数量']
+                            }
+                          }
+                          
+                          // 其他订单类型的通用表头
+                          switch (orderTabType) {
+                            case "USDT买卖记录":
+                              return ['时间', '类型', '数量', '价格', '总金额', '支付方式', '商户', '状态']
+                            case "现货订单":
+                              return ['时间', '交易对', '类型', '数量', '价格', '成交金额', '手续费', '状态']
+                            case "合约订单":
+                              return ['时间', '合约', '方向', '数量', '开仓价', '平仓价', '盈亏', '状态']
+                            case "佣金记录":
+                              return ['时间', '类型', '币种', '金额', '来源', '费率', '状态']
+                            default:
+                              return ['时间', '类型', '金额', '状态']
+                          }
+                        }
+                        
+                        const headers = getGenericHeaders(orderTab, secondaryTab)
+                        return headers.map((header, index) => (
+                          <th key={index} className={`px-4 py-3 text-left text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                            {header}
+                          </th>
+                        ))
+                      })()}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {records.map((record, index) => {
+                      // 获取通用单元格数据
+                      const getGenericCellData = (orderTabType: string, secondaryTabKey: string, record: any) => {
+                        // 首先检查是否是资金记录的特殊情况
+                        if (orderTabType === "资金记录") {
+                          const tabMap = {
+                            deposit: "入金记录",
+                            withdraw: "出金记录", 
+                            internal_transfer: "内转记录",
+                            transfer: "划转记录"
+                          }
+                          const recordType = tabMap[secondaryTabKey]
+                          
+                          switch (recordType) {
+                            case "入金记录":
+                              return [record.time, record.currency, record.amount, record.address, record.txHash, record.status]
+                            case "出金记录":
+                              return [record.time, record.currency, record.amount, record.network, record.address, record.txHash, record.status]
+                            case "内转记录":
+                              return [record.time, record.currency, record.direction, record.amount, record.status]
+                            case "划转记录":
+                              return [record.time, record.currency, record.fromAccount, record.toAccount, record.amount]
+                          }
+                        }
+                        
+                        // 其他订单类型的通用数据
+                        switch (orderTabType) {
+                          case "USDT买卖记录":
+                            return [record.time, record.type, record.amount, record.price, record.total, record.method, record.merchant, record.status]
+                          case "佣金记录":
+                            return [record.time, record.type, record.currency, record.amount, record.source, record.rate, record.status]
+                          default:
+                            return Object.values(record).slice(0, 4) // 取前4个值作为默认显示
+                        }
+                      }
+                      
+                      const cellData = getGenericCellData(orderTab, secondaryTab, record)
+                      
+                      return (
+                        <tr key={index} className={`border-b ${isDark ? 'border-gray-700 hover:bg-gray-800' : 'border-gray-200 hover:bg-gray-50'} transition-colors`}>
+                          {cellData.map((cell, cellIndex) => (
+                            <td key={cellIndex} className={`px-4 py-3 text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              {cell || '-'}
+                            </td>
+                          ))}
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* 移动端卡片视图 */}
+            <div className="md:hidden space-y-3">
               {records.map((record, index) => (
                 <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <div className="grid grid-cols-2 gap-3 text-sm">
                     {Object.entries(record).map(([key, value]) => (
                       <div key={key}>
                         <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
@@ -8900,10 +9097,23 @@ export default function WalletPage() {
                            key === 'type' ? '类型' :
                            key === 'amount' ? '金额' :
                            key === 'status' ? '状态' :
-                           key === 'time' ? '时间' : key}
+                           key === 'time' ? '时间' :
+                           key === 'currency' ? '币种' :
+                           key === 'address' ? '地址/收款账号' :
+                           key === 'txHash' ? '交易哈希' :
+                           key === 'network' ? '提币网络' :
+                           key === 'direction' ? '转入/转出' :
+                           key === 'fromAccount' ? '划出账户' :
+                           key === 'toAccount' ? '划入账户' :
+                           key === 'source' ? '来源' :
+                           key === 'rate' ? '费率' :
+                           key === 'price' ? '价格' :
+                           key === 'total' ? '总金额' :
+                           key === 'method' ? '支付方式' :
+                           key === 'merchant' ? '商户' : key}
                         </div>
-                        <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium`}>
-                          {value}
+                        <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
+                          {value || '-'}
                         </div>
                       </div>
                     ))}
