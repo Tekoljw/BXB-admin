@@ -985,8 +985,6 @@ export default function WalletPage() {
     { id: "U卡订单", label: "U卡订单", icon: CreditCard },
     { id: "担保记录", label: "担保记录", icon: Shield },
     { id: "支付订单", label: "支付订单", icon: Receipt },
-    { id: "入金提币记录", label: "入金提币记录", icon: ArrowUpDown },
-    { id: "内转记录", label: "内转记录", icon: ArrowLeftRight },
     { id: "划转记录", label: "划转记录", icon: ArrowLeftRight },
     { id: "USDT买卖记录", label: "USDT买卖记录", icon: Banknote }
   ]
@@ -1038,19 +1036,6 @@ export default function WalletPage() {
         credit: '信用担保资金记录'
       }
     },
-    deposit: {
-      name: '入金提币记录',
-      tabs: {
-        deposit: '入金记录',
-        withdraw: '提币记录'
-      }
-    },
-    internal: {
-      name: '内转记录',
-      tabs: {
-        records: '内转记录'
-      }
-    },
     transfer: {
       name: '划转记录',
       tabs: {
@@ -1084,8 +1069,6 @@ export default function WalletPage() {
       "U卡订单": "ucard",
 
       "担保记录": "guarantee",
-      "入金提币记录": "deposit",
-      "内转记录": "internal",
       "划转记录": "transfer",
       "USDT买卖记录": "usdt"
     }
@@ -1283,65 +1266,6 @@ export default function WalletPage() {
         time: "2024-01-15 11:45:30",
         orderNo: "P202401151145003",
         fee: "0.96 USDT"
-      }
-    ],
-    "充提币记录": [
-      {
-        id: "DW001",
-        type: "充币",
-        currency: "BTC",
-        amount: "+0.01",
-        address: "bc1q...xyz",
-        txHash: "abc123...def",
-        status: "已确认",
-        time: "2024-01-15 12:45:30",
-        confirmations: "6/6"
-      },
-      {
-        id: "DW002",
-        type: "提币",
-        currency: "USDT",
-        amount: "-500.00",
-        address: "0x123...abc",
-        txHash: "def456...ghi",
-        status: "已完成",
-        time: "2024-01-14 20:30:15",
-        fee: "1.00 USDT"
-      }
-    ],
-    "内转记录": [
-      {
-        id: "IT001",
-        type: "用户转账",
-        from: "自己",
-        to: "用户A",
-        currency: "USDT",
-        amount: "-100.00",
-        status: "已完成",
-        time: "2024-01-15 16:20:30",
-        note: "朋友转账"
-      },
-      {
-        id: "IT002",
-        type: "接收转账",
-        from: "用户B",
-        to: "自己",
-        currency: "USDT",
-        amount: "+200.00",
-        status: "已完成",
-        time: "2024-01-15 15:45:15",
-        note: "业务合作款"
-      },
-      {
-        id: "IT003",
-        type: "群组空投",
-        from: "自己",
-        to: "交易群",
-        currency: "USDT",
-        amount: "-50.00",
-        status: "已完成",
-        time: "2024-01-15 14:30:45",
-        note: "感谢支持，空投奖励！"
       }
     ],
     "划转记录": [
