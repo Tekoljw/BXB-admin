@@ -9031,8 +9031,11 @@ export default function WalletPage() {
                                 <option>最近90天</option>
                               </select>
                             </div>
-                            <div className="flex items-end">
-                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}>
+                            <div className="flex items-end gap-2">
+                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                重置
+                              </button>
+                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                 筛选
                               </button>
                             </div>
@@ -9089,8 +9092,11 @@ export default function WalletPage() {
                                 <option>最近90天</option>
                               </select>
                             </div>
-                            <div className="flex items-end">
-                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}>
+                            <div className="flex items-end gap-2">
+                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                重置
+                              </button>
+                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                 筛选
                               </button>
                             </div>
@@ -9141,8 +9147,11 @@ export default function WalletPage() {
                               <option>最近90天</option>
                             </select>
                           </div>
-                          <div className="flex items-end">
-                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}>
+                          <div className="flex items-end gap-2">
+                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                              重置
+                            </button>
+                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                               筛选
                             </button>
                           </div>
@@ -9187,8 +9196,11 @@ export default function WalletPage() {
                               <option>最近90天</option>
                             </select>
                           </div>
-                          <div className="flex items-end">
-                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}>
+                          <div className="flex items-end gap-2">
+                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                              重置
+                            </button>
+                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                               筛选
                             </button>
                           </div>
