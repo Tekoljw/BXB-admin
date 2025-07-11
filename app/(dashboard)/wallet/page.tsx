@@ -1073,9 +1073,10 @@ export default function WalletPage() {
     payment: {
       name: '支付订单',
       tabs: {
-        collect: '收款记录',
-        proxy: '代付记录',
-        refund: '退款记录'
+        fiatReceive: '法币代收',
+        fiatPay: '法币代付',
+        cryptoReceive: '加密货币代收',
+        cryptoPay: '加密货币代付'
       }
     }
   }
@@ -1430,41 +1431,166 @@ export default function WalletPage() {
         time: "2024-01-15 13:15:10"
       }
     ],
-    "支付订单": [
-      {
-        id: "PAY001",
-        type: "收款",
-        merchant: "商户A",
-        amount: "1,250.00 USDT",
-        channel: "支付宝",
-        status: "已完成",
-        time: "2024-01-15 16:30:25",
-        orderNo: "P202401151630001",
-        fee: "3.75 USDT"
-      },
-      {
-        id: "PAY002", 
-        type: "代付",
-        merchant: "商户B",
-        amount: "850.00 USDT",
-        channel: "微信支付",
-        status: "处理中",
-        time: "2024-01-15 14:20:18",
-        orderNo: "P202401151420002",
-        fee: "2.55 USDT"
-      },
-      {
-        id: "PAY003",
-        type: "退款",
-        merchant: "商户C",
-        amount: "320.00 USDT",
-        channel: "银行卡",
-        status: "已完成",
-        time: "2024-01-15 11:45:30",
-        orderNo: "P202401151145003",
-        fee: "0.96 USDT"
-      }
-    ],
+    "支付订单": {
+      fiatReceive: [
+        {
+          id: "FR001",
+          type: "法币代收",
+          merchant: "电商平台A", 
+          customerName: "张三",
+          amount: "6,800.00",
+          currency: "CNY",
+          channel: "支付宝",
+          bankAccount: "中国银行****1234",
+          status: "已完成",
+          time: "2024-01-15 16:30:25",
+          orderNo: "FR202401151630001",
+          fee: "68.00 CNY",
+          settlement: "已结算"
+        },
+        {
+          id: "FR002",
+          type: "法币代收",
+          merchant: "游戏平台B",
+          customerName: "李四",
+          amount: "1,200.00",
+          currency: "USD",
+          channel: "信用卡",
+          bankAccount: "花旗银行****5678",
+          status: "处理中",
+          time: "2024-01-15 14:45:18",
+          orderNo: "FR202401151445002",
+          fee: "24.00 USD",
+          settlement: "待结算"
+        },
+        {
+          id: "FR003",
+          type: "法币代收",
+          merchant: "在线教育C",
+          customerName: "王五",
+          amount: "850.00",
+          currency: "EUR",
+          channel: "银行转账",
+          bankAccount: "德意志银行****9012",
+          status: "已完成",
+          time: "2024-01-15 12:20:30",
+          orderNo: "FR202401151220003",
+          fee: "12.75 EUR",
+          settlement: "已结算"
+        }
+      ],
+      fiatPay: [
+        {
+          id: "FP001",
+          type: "法币代付",
+          merchant: "供应商A",
+          recipientName: "赵六",
+          amount: "3,500.00",
+          currency: "CNY",
+          channel: "微信支付",
+          bankAccount: "工商银行****3456",
+          status: "已完成",
+          time: "2024-01-15 15:20:45",
+          orderNo: "FP202401151520001",
+          fee: "35.00 CNY",
+          purpose: "货款支付"
+        },
+        {
+          id: "FP002",
+          type: "法币代付",
+          merchant: "服务商B",
+          recipientName: "陈七",
+          amount: "2,200.00",
+          currency: "USD",
+          channel: "银行转账",
+          bankAccount: "摩根大通****7890",
+          status: "处理中",
+          time: "2024-01-15 13:35:20",
+          orderNo: "FP202401151335002",
+          fee: "44.00 USD",
+          purpose: "服务费支付"
+        }
+      ],
+      cryptoReceive: [
+        {
+          id: "CR001",
+          type: "加密货币代收",
+          merchant: "NFT市场A",
+          customerWallet: "0x1234...abcd",
+          amount: "1,250.00",
+          currency: "USDT",
+          network: "TRC20",
+          txHash: "0xabcd1234...efgh5678",
+          status: "已确认",
+          time: "2024-01-15 17:10:25",
+          orderNo: "CR202401151710001",
+          fee: "1.00 USDT",
+          confirmations: "32/32"
+        },
+        {
+          id: "CR002",
+          type: "加密货币代收",
+          merchant: "DeFi平台B",
+          customerWallet: "0x5678...efgh",
+          amount: "0.035",
+          currency: "BTC",
+          network: "Bitcoin",
+          txHash: "bc1234...def567",
+          status: "确认中",
+          time: "2024-01-15 16:25:18",
+          orderNo: "CR202401151625002",
+          fee: "0.0001 BTC",
+          confirmations: "2/6"
+        },
+        {
+          id: "CR003",
+          type: "加密货币代收",
+          merchant: "交易所C",
+          customerWallet: "0x9012...ijkl",
+          amount: "2.5",
+          currency: "ETH",
+          network: "Ethereum",
+          txHash: "0xef123...456789",
+          status: "已确认",
+          time: "2024-01-15 14:40:30",
+          orderNo: "CR202401151440003",
+          fee: "0.001 ETH",
+          confirmations: "12/12"
+        }
+      ],
+      cryptoPay: [
+        {
+          id: "CP001",
+          type: "加密货币代付",
+          merchant: "矿池A",
+          recipientWallet: "0xabcd...1234",
+          amount: "5,000.00",
+          currency: "USDT",
+          network: "ERC20",
+          txHash: "0x1234abcd...5678efgh",
+          status: "已发送",
+          time: "2024-01-15 18:15:45",
+          orderNo: "CP202401151815001",
+          fee: "2.50 USDT",
+          purpose: "挖矿收益分配"
+        },
+        {
+          id: "CP002",
+          type: "加密货币代付",
+          merchant: "游戏公会B",
+          recipientWallet: "0xefgh...5678",
+          amount: "0.8",
+          currency: "BNB",
+          network: "BSC",
+          txHash: "0x5678efgh...9012ijkl",
+          status: "处理中",
+          time: "2024-01-15 16:45:20",
+          orderNo: "CP202401151645002",
+          fee: "0.001 BNB",
+          purpose: "公会奖励发放"
+        }
+      ]
+    },
     "划转记录": [
       {
         id: "TR001",
@@ -9588,6 +9714,10 @@ export default function WalletPage() {
           ]
         }
         return guaranteeData[secondaryTab] || []
+      case "payment":
+        // 支付订单数据从新的数据结构中获取
+        const paymentData = orderRecordsData["支付订单"]
+        return paymentData[secondaryTab] || []
       default:
         return []
     }
@@ -10364,6 +10494,166 @@ export default function WalletPage() {
                         })()}
                       </div>
                     )
+                  case "支付订单":
+                    return (
+                      <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
+                        {(() => {
+                          // 根据不同页签显示不同的搜索选项
+                          if (secondaryTabKey === 'fiatReceive' || secondaryTabKey === 'fiatPay') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    商户
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>电商平台A</option>
+                                    <option>游戏平台B</option>
+                                    <option>在线教育C</option>
+                                    <option>供应商A</option>
+                                    <option>服务商B</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    币种
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>CNY</option>
+                                    <option>USD</option>
+                                    <option>EUR</option>
+                                    <option>GBP</option>
+                                    <option>JPY</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    支付渠道
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>支付宝</option>
+                                    <option>微信支付</option>
+                                    <option>银行转账</option>
+                                    <option>信用卡</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          } else if (secondaryTabKey === 'cryptoReceive' || secondaryTabKey === 'cryptoPay') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    商户
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>NFT市场A</option>
+                                    <option>DeFi平台B</option>
+                                    <option>交易所C</option>
+                                    <option>矿池A</option>
+                                    <option>游戏公会B</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    币种
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>USDT</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>BNB</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    网络
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>TRC20</option>
+                                    <option>ERC20</option>
+                                    <option>Bitcoin</option>
+                                    <option>Ethereum</option>
+                                    <option>BSC</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          }
+                          
+                          // 默认搜索选项
+                          return (
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  类型
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>法币支付</option>
+                                  <option>加密货币支付</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  状态
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>已完成</option>
+                                  <option>处理中</option>
+                                  <option>已确认</option>
+                                  <option>确认中</option>
+                                  <option>已发送</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  时间
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>今天</option>
+                                  <option>最近7天</option>
+                                  <option>最近30天</option>
+                                  <option>最近90天</option>
+                                </select>
+                              </div>
+                              <div className="flex items-end gap-2">
+                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  重置
+                                </button>
+                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  筛选
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        })()}
+                      </div>
+                    )
                   default:
                     return null
                 }
@@ -10466,6 +10756,18 @@ export default function WalletPage() {
                                 return ['时间', '类型', '金额', '信用额度', '已用额度', '可用额度', '用途', '状态']
                               }
                               return ['时间', '类型', '金额', '状态']
+                            case "支付订单":
+                              // 根据不同页签返回不同的表头
+                              if (secondaryTabKey === 'fiatReceive') {
+                                return ['时间', '类型', '商户', '客户姓名', '金额', '支付渠道', '银行账户', '手续费', '结算状态', '状态']
+                              } else if (secondaryTabKey === 'fiatPay') {
+                                return ['时间', '类型', '商户', '收款人', '金额', '支付渠道', '银行账户', '手续费', '用途', '状态']
+                              } else if (secondaryTabKey === 'cryptoReceive') {
+                                return ['时间', '类型', '商户', '客户钱包', '金额', '网络', '交易哈希', '手续费', '确认数', '状态']
+                              } else if (secondaryTabKey === 'cryptoPay') {
+                                return ['时间', '类型', '商户', '收款钱包', '金额', '网络', '交易哈希', '手续费', '用途', '状态']
+                              }
+                              return ['时间', '类型', '商户', '金额', '状态']
                             default:
                               return ['时间', '类型', '金额', '状态']
                           }
@@ -10561,6 +10863,18 @@ export default function WalletPage() {
                               return [record.time, record.type, `${record.amount} ${record.currency}`, `${record.creditLimit} ${record.currency}`, `${record.usedCredit} ${record.currency}`, `${record.availableCredit} ${record.currency}`, record.purpose, record.status]
                             }
                             return [record.time, record.type, record.amount, record.status]
+                          case "支付订单":
+                            // 根据不同页签返回不同的数据字段
+                            if (secondaryTabKey === 'fiatReceive') {
+                              return [record.time, record.type, record.merchant, record.customerName, `${record.amount} ${record.currency}`, record.channel, record.bankAccount, record.fee, record.settlement, record.status]
+                            } else if (secondaryTabKey === 'fiatPay') {
+                              return [record.time, record.type, record.merchant, record.recipientName, `${record.amount} ${record.currency}`, record.channel, record.bankAccount, record.fee, record.purpose, record.status]
+                            } else if (secondaryTabKey === 'cryptoReceive') {
+                              return [record.time, record.type, record.merchant, record.customerWallet, `${record.amount} ${record.currency}`, record.network, record.txHash, record.fee, record.confirmations, record.status]
+                            } else if (secondaryTabKey === 'cryptoPay') {
+                              return [record.time, record.type, record.merchant, record.recipientWallet, `${record.amount} ${record.currency}`, record.network, record.txHash, record.fee, record.purpose, record.status]
+                            }
+                            return [record.time, record.type, record.merchant, `${record.amount} ${record.currency}`, record.status]
                           default:
                             return Object.values(record).slice(0, 4) // 取前4个值作为默认显示
                         }
@@ -10641,7 +10955,17 @@ export default function WalletPage() {
                                key === 'creditLimit' ? '信用额度' :
                                key === 'usedCredit' ? '已用额度' :
                                key === 'availableCredit' ? '可用额度' :
-                               key === 'purpose' ? '用途' : key}
+                               key === 'purpose' ? '用途' :
+                               key === 'customerName' ? '客户姓名' :
+                               key === 'recipientName' ? '收款人' :
+                               key === 'recipientWallet' ? '收款钱包' :
+                               key === 'customerWallet' ? '客户钱包' :
+                               key === 'channel' ? '支付渠道' :
+                               key === 'bankAccount' ? '银行账户' :
+                               key === 'settlement' ? '结算状态' :
+                               key === 'txHash' ? '交易哈希' :
+                               key === 'confirmations' ? '确认数' :
+                               key === 'orderNo' ? '订单号' : key}
                             </div>
                             <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
                               {value || '-'}
