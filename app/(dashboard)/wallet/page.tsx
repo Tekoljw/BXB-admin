@@ -9733,7 +9733,13 @@ export default function WalletPage() {
                            key === 'fiatCurrency' ? '法币币种' :
                            key === 'source' ? '来源' :
                            key === 'description' ? '描述' :
-                           key === 'remark' ? '备注' : key}
+                           key === 'remark' ? '备注' :
+                           key === 'product' ? '理财产品' :
+                           key === 'apy' ? '年化收益' :
+                           key === 'earnings' ? '当前收益' :
+                           key === 'fromAmount' ? '兑换金额' :
+                           key === 'toAmount' ? '兑换数量' :
+                           key === 'rate' ? '兑换汇率' : key}
                         </div>
                         <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
                           {value || '-'}

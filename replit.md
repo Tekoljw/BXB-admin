@@ -213,6 +213,13 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Step 4: PIN code setup with confirmation validation and security guidelines
   - Added step progress indicator and form validation with real-time feedback
   - Implemented secure PIN code confirmation with mismatch warnings and security tips
+- January 29, 2025. Completed wealth order account records implementation:
+  - Added "理财账户记录" as 4th tab in wealth orders section
+  - Configured table columns: 时间、类型、币种、金额、相关账户、状态
+  - Implemented sample data for account transfers (转入、转出、收益发放)
+  - Updated desktop table headers and data mapping logic for all wealth order tabs
+  - Enhanced mobile view field mappings for wealth-related data display
+  - Resolved red warning message displaying on wealth account records page
 
 ## User Preferences
 
