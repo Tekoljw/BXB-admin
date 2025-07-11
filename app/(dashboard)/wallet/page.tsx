@@ -8930,7 +8930,7 @@ export default function WalletPage() {
               method: "银行卡",
               status: "已完成",
               time: "2024-01-15 16:45:30",
-              merchant: "商户A"
+              counterparty: "Bitcoin99"
             },
             {
               id: "C2C002",
@@ -8942,7 +8942,7 @@ export default function WalletPage() {
               method: "银行转账",
               status: "处理中",
               time: "2024-01-15 14:30:20",
-              merchant: "商户B"
+              counterparty: "CryptoTrader88"
             },
             {
               id: "C2C003",
@@ -8954,7 +8954,7 @@ export default function WalletPage() {
               method: "SEPA转账",
               status: "已完成",
               time: "2024-01-15 13:15:10",
-              merchant: "商户C"
+              counterparty: "EuroExchange"
             }
           ],
           quick: [
@@ -8968,7 +8968,7 @@ export default function WalletPage() {
               method: "微信支付",
               status: "已完成",
               time: "2024-01-15 18:15:45",
-              merchant: "快捷通道"
+              fee: "28.88 CNY"
             },
             {
               id: "QUICK002",
@@ -8980,7 +8980,7 @@ export default function WalletPage() {
               method: "PayPal",
               status: "已完成",
               time: "2024-01-15 12:20:15",
-              merchant: "快捷通道"
+              fee: "1.62 USD"
             },
             {
               id: "QUICK003",
@@ -8992,7 +8992,7 @@ export default function WalletPage() {
               method: "银行转账",
               status: "已完成",
               time: "2024-01-15 10:30:25",
-              merchant: "快捷通道"
+              fee: "4,635.00 JPY"
             }
           ],
           otc: [
@@ -9006,7 +9006,7 @@ export default function WalletPage() {
               method: "银行转账",
               status: "已完成",
               time: "2024-01-15 20:30:00",
-              merchant: "OTC大户"
+              provider: "MoonPay"
             },
             {
               id: "OTC002",
@@ -9018,7 +9018,7 @@ export default function WalletPage() {
               method: "Wire Transfer",
               status: "处理中",
               time: "2024-01-15 10:45:30",
-              merchant: "OTC机构"
+              provider: "Ramp"
             },
             {
               id: "OTC003",
@@ -9030,7 +9030,7 @@ export default function WalletPage() {
               method: "SWIFT转账",
               status: "已完成",
               time: "2024-01-15 09:15:20",
-              merchant: "OTC欧洲"
+              provider: "Simplex"
             }
           ]
         }
@@ -9383,7 +9383,15 @@ export default function WalletPage() {
                           // 其他订单类型的通用表头
                           switch (orderTabType) {
                             case "USDT买卖记录":
-                              return ['时间', '类型', '数量', '价格', '总金额', '支付方式', '商户', '状态']
+                              // 根据不同页签返回不同的表头
+                              if (secondaryTab === 'c2c') {
+                                return ['时间', '类型', '数量', '价格', '总金额', '支付方式', '交易对象', '状态']
+                              } else if (secondaryTab === 'quick') {
+                                return ['时间', '类型', '数量', '价格', '总金额', '支付方式', '手续费', '状态']
+                              } else if (secondaryTab === 'otc') {
+                                return ['时间', '类型', '数量', '价格', '总金额', '支付方式', '供应商', '状态']
+                              }
+                              return ['时间', '类型', '数量', '价格', '总金额', '支付方式', '状态']
                             case "现货订单":
                               return ['时间', '交易对', '类型', '数量', '价格', '成交金额', '手续费', '状态']
                             case "合约订单":
@@ -9433,7 +9441,15 @@ export default function WalletPage() {
                         // 其他订单类型的通用数据
                         switch (orderTabType) {
                           case "USDT买卖记录":
-                            return [record.time, record.type, record.amount, record.price, record.total, record.method, record.merchant, record.status]
+                            // 根据不同页签返回不同的数据字段
+                            if (secondaryTab === 'c2c') {
+                              return [record.time, record.type, record.amount, record.price, record.total, record.method, record.counterparty, record.status]
+                            } else if (secondaryTab === 'quick') {
+                              return [record.time, record.type, record.amount, record.price, record.total, record.method, record.fee, record.status]
+                            } else if (secondaryTab === 'otc') {
+                              return [record.time, record.type, record.amount, record.price, record.total, record.method, record.provider, record.status]
+                            }
+                            return [record.time, record.type, record.amount, record.price, record.total, record.method, record.status]
                           case "佣金记录":
                             return [record.time, record.type, record.currency, record.amount, record.source, record.rate, record.status]
                           default:
@@ -9483,7 +9499,11 @@ export default function WalletPage() {
                            key === 'price' ? '价格' :
                            key === 'total' ? '总金额' :
                            key === 'method' ? '支付方式' :
-                           key === 'merchant' ? '商户' : key}
+                           key === 'merchant' ? '商户' :
+                           key === 'counterparty' ? '交易对象' :
+                           key === 'fee' ? '手续费' :
+                           key === 'provider' ? '供应商' :
+                           key === 'fiatCurrency' ? '法币币种' : key}
                         </div>
                         <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
                           {value || '-'}
