@@ -8539,7 +8539,8 @@ export default function WalletPage() {
                               deposit: "入金记录",
                               withdraw: "出金记录", 
                               internal_transfer: "内转记录",
-                              transfer: "划转记录"
+                              transfer: "划转记录",
+                              other: "其他记录"
                             }
                             const recordType = tabMap[secondaryTab] || orderTab
                             
@@ -8579,7 +8580,8 @@ export default function WalletPage() {
                             deposit: "入金记录",
                             withdraw: "出金记录", 
                             internal_transfer: "内转记录",
-                            transfer: "划转记录"
+                            transfer: "划转记录",
+                            other: "其他记录"
                           }
                           const recordType = tabMap[secondaryTab] || orderTab
                           
@@ -8629,7 +8631,8 @@ export default function WalletPage() {
                         deposit: "入金记录",
                         withdraw: "出金记录", 
                         internal_transfer: "内转记录",
-                        transfer: "划转记录"
+                        transfer: "划转记录",
+                        other: "其他记录"
                       }
                       const recordType = tabMap[secondaryTab] || orderTab
                       
@@ -8668,6 +8671,14 @@ export default function WalletPage() {
                             { key: 'fromAccount', label: '划出账户' },
                             { key: 'toAccount', label: '划入账户' },
                             { key: 'amount', label: '数量' }
+                          ]
+                        case "其他记录":
+                          return [
+                            { key: 'time', label: '时间' },
+                            { key: 'currency', label: '币种' },
+                            { key: 'amount', label: '数量' },
+                            { key: 'type', label: '类型' },
+                            { key: 'remark', label: '备注' }
                           ]
                         default:
                           return Object.keys(record).map(key => ({ key, label: key }))
@@ -9113,7 +9124,8 @@ export default function WalletPage() {
                     deposit: "入金记录",
                     withdraw: "出金记录", 
                     internal_transfer: "内转记录",
-                    transfer: "划转记录"
+                    transfer: "划转记录",
+                    other: "其他记录"
                   }
                   const recordType = tabMap[secondaryTabKey]
                   
