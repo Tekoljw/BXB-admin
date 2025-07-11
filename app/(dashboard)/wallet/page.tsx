@@ -980,6 +980,7 @@ export default function WalletPage() {
 
   const orderTabs = [
     { id: "资金记录", label: "资金记录", icon: FileText },
+    { id: "USDT买卖记录", label: "USDT买卖记录", icon: DollarSign },
     { id: "现货订单", label: "现货订单", icon: BarChart2 },
     { id: "合约订单", label: "合约订单", icon: LineChart },
     { id: "理财订单", label: "理财订单", icon: PiggyBank },
@@ -997,8 +998,7 @@ export default function WalletPage() {
         deposit: '入金记录',
         withdraw: '出金记录',
         internal_transfer: '内转记录',
-        transfer: '划转记录',
-        usdt_trading: 'USDT买卖记录'
+        transfer: '划转记录'
       }
     },
     spot: {
@@ -1052,6 +1052,12 @@ export default function WalletPage() {
         records: '划转记录'
       }
     },
+    usdtTrading: {
+      name: 'USDT买卖记录',
+      tabs: {
+        all: '全部记录'
+      }
+    },
     commission: {
       name: '佣金记录',
       tabs: {
@@ -1074,11 +1080,11 @@ export default function WalletPage() {
   const getCategoryKey = (orderTabId: string) => {
     const mapping = {
       "资金记录": "funds",
+      "USDT买卖记录": "usdtTrading",
       "现货订单": "spot",
       "合约订单": "futures", 
       "理财订单": "wealth",
       "U卡订单": "ucard",
-
       "担保记录": "guarantee",
       "划转记录": "transfer",
       "佣金记录": "commission",
@@ -8737,8 +8743,7 @@ export default function WalletPage() {
           deposit: "入金记录",
           withdraw: "出金记录",
           internal_transfer: "内转记录",
-          transfer: "划转记录",
-          usdt_trading: "USDT买卖记录"
+          transfer: "划转记录"
         }
         return fundsData[tabNameMap[secondaryTab]] || []
       case "commission":
@@ -8750,6 +8755,8 @@ export default function WalletPage() {
         return commissionData.filter(r => r.type === typeMap[secondaryTab]) || []
       case "transfer":
         return transferData
+      case "usdtTrading":
+        return fundsData["USDT买卖记录"] || []
       default:
         return []
     }
