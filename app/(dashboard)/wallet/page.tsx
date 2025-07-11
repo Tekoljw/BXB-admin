@@ -979,18 +979,27 @@ export default function WalletPage() {
   ]
 
   const orderTabs = [
+    { id: "资金记录", label: "资金记录", icon: FileText },
     { id: "现货订单", label: "现货订单", icon: BarChart2 },
     { id: "合约订单", label: "合约订单", icon: LineChart },
     { id: "理财订单", label: "理财订单", icon: PiggyBank },
     { id: "U卡订单", label: "U卡订单", icon: CreditCard },
     { id: "担保记录", label: "担保记录", icon: Shield },
     { id: "支付订单", label: "支付订单", icon: Receipt },
-    { id: "划转记录", label: "划转记录", icon: ArrowLeftRight },
-    { id: "USDT买卖记录", label: "USDT买卖记录", icon: Banknote }
+    { id: "划转记录", label: "划转记录", icon: ArrowLeftRight }
   ]
 
   // 二级页签配置
   const orderCategories = {
+    funds: {
+      name: '资金记录',
+      tabs: {
+        deposit: '充值记录',
+        withdraw: '提现记录',
+        transfer: '转账记录',
+        fee: '手续费记录'
+      }
+    },
     spot: {
       name: '现货订单',
       tabs: {
@@ -1042,14 +1051,6 @@ export default function WalletPage() {
         records: '划转记录'
       }
     },
-    usdt: {
-      name: 'USDT买卖记录',
-      tabs: {
-        c2c: 'C2C记录',
-        otc: 'OTC记录',
-        quick: '快捷买卖记录'
-      }
-    },
     payment: {
       name: '支付订单',
       tabs: {
@@ -1063,6 +1064,7 @@ export default function WalletPage() {
   // 根据主页签ID获取对应的category key
   const getCategoryKey = (orderTabId: string) => {
     const mapping = {
+      "资金记录": "funds",
       "现货订单": "spot",
       "合约订单": "futures", 
       "理财订单": "wealth",
@@ -1070,7 +1072,7 @@ export default function WalletPage() {
 
       "担保记录": "guarantee",
       "划转记录": "transfer",
-      "USDT买卖记录": "usdt"
+      "支付订单": "payment"
     }
     return mapping[orderTabId] || "spot"
   }
@@ -1096,6 +1098,41 @@ export default function WalletPage() {
 
   // 订单记录数据
   const orderRecordsData = {
+    "资金记录": [
+      {
+        id: "FD001",
+        type: "充值",
+        currency: "USDT",
+        amount: "+1,000.00",
+        channel: "银行卡",
+        status: "已完成",
+        time: "2024-01-15 14:25:30",
+        fee: "0.00 USDT",
+        txHash: "0x123...abc"
+      },
+      {
+        id: "FD002",
+        type: "提现",
+        currency: "USDT",
+        amount: "-500.00",
+        channel: "银行卡",
+        status: "已完成",
+        time: "2024-01-14 20:30:15",
+        fee: "2.00 USDT",
+        txHash: "0x456...def"
+      },
+      {
+        id: "FD003",
+        type: "转账",
+        currency: "BTC",
+        amount: "-0.01",
+        channel: "链上转账",
+        status: "确认中",
+        time: "2024-01-14 15:45:20",
+        fee: "0.0005 BTC",
+        txHash: "0x789...ghi"
+      }
+    ],
     "现货订单": [
       {
         id: "SP001",
@@ -1288,30 +1325,6 @@ export default function WalletPage() {
         amount: "500.00",
         status: "已完成",
         time: "2024-01-15 11:30:20"
-      }
-    ],
-    "USDT买卖记录": [
-      {
-        id: "OTC001",
-        type: "买入",
-        amount: "1,000.00 USDT",
-        price: "7.20 CNY",
-        total: "7,200.00 CNY",
-        method: "银行卡",
-        status: "已完成",
-        time: "2024-01-15 16:45:30",
-        merchant: "商户A"
-      },
-      {
-        id: "OTC002",
-        type: "卖出",
-        amount: "500.00 USDT",
-        price: "7.22 CNY",
-        total: "3,610.00 CNY",
-        method: "支付宝",
-        status: "已完成",
-        time: "2024-01-14 19:20:15",
-        merchant: "商户B"
       }
     ]
   }
