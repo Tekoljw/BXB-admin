@@ -9405,46 +9405,60 @@ export default function WalletPage() {
           ],
           refund: [
             {
-              id: "RF001",
-              type: "消费退款",
-              merchant: "Amazon",
+              id: "WD001",
+              type: "余额提取",
               cardNumber: "****1234",
-              amount: "45.99",
+              amount: "500.00",
               currency: "USD",
-              creditAmount: "45.99",
-              creditCurrency: "USD",
+              creditAmount: "3,400.00",
+              creditCurrency: "USDT",
               status: "已完成",
-              time: "2024-01-10 13:40:25",
-              reason: "商品质量问题",
-              originalOrderId: "CS001"
+              time: "2024-01-15 16:20:00",
+              toAccount: "现货账户",
+              fee: "5.00 USD",
+              exchangeRate: "6.80"
             },
             {
-              id: "RF002",
-              type: "订阅退款",
-              merchant: "Spotify Premium",
-              cardNumber: "****1234",
-              amount: "9.99",
-              currency: "USD",
-              creditAmount: "9.99",
-              creditCurrency: "USD",
-              status: "处理中",
-              time: "2024-01-09 16:20:00",
-              reason: "用户主动取消",
-              originalOrderId: "CS008"
-            },
-            {
-              id: "RF003",
-              type: "服务退款",
-              merchant: "Google Play",
+              id: "WD002",
+              type: "余额提取",
               cardNumber: "****5678",
-              amount: "29.99",
+              amount: "200.00",
               currency: "USD",
-              creditAmount: "29.99",
-              creditCurrency: "USD",
+              creditAmount: "1,360.00",
+              creditCurrency: "USDT",
+              status: "处理中",
+              time: "2024-01-14 14:30:00",
+              toAccount: "理财账户",
+              fee: "2.00 USD",
+              exchangeRate: "6.80"
+            },
+            {
+              id: "WD003",
+              type: "余额提取",
+              cardNumber: "****9012",
+              amount: "1000.00",
+              currency: "USD",
+              creditAmount: "6,795.00",
+              creditCurrency: "USDT",
               status: "已完成",
-              time: "2024-01-08 10:30:15",
-              reason: "服务未提供",
-              originalOrderId: "CS003"
+              time: "2024-01-13 11:45:00",
+              toAccount: "现货账户",
+              fee: "5.00 USD",
+              exchangeRate: "6.80"
+            },
+            {
+              id: "WD004",
+              type: "余额提取",
+              cardNumber: "****1234",
+              amount: "150.00",
+              currency: "EUR",
+              creditAmount: "1,122.00",
+              creditCurrency: "USDT",
+              status: "已完成",
+              time: "2024-01-12 09:20:00",
+              toAccount: "现货账户",
+              fee: "3.00 EUR",
+              exchangeRate: "7.48"
             }
           ]
         }
@@ -9975,24 +9989,25 @@ export default function WalletPage() {
                               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div>
                                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    商户
+                                    提取币种
                                   </label>
                                   <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                                     <option>全部</option>
-                                    <option>Amazon</option>
-                                    <option>Spotify Premium</option>
-                                    <option>Google Play</option>
+                                    <option>USD</option>
+                                    <option>EUR</option>
+                                    <option>GBP</option>
+                                    <option>JPY</option>
                                   </select>
                                 </div>
                                 <div>
                                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    退款原因
+                                    目标账户
                                   </label>
                                   <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                                     <option>全部</option>
-                                    <option>商品质量问题</option>
-                                    <option>用户主动取消</option>
-                                    <option>服务未提供</option>
+                                    <option>现货账户</option>
+                                    <option>理财账户</option>
+                                    <option>合约账户</option>
                                   </select>
                                 </div>
                                 <div>
@@ -10003,7 +10018,7 @@ export default function WalletPage() {
                                     <option>全部</option>
                                     <option>已完成</option>
                                     <option>处理中</option>
-                                    <option>已拒绝</option>
+                                    <option>失败</option>
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
@@ -10159,7 +10174,7 @@ export default function WalletPage() {
                               } else if (secondaryTabKey === 'consume') {
                                 return ['时间', '类型', '商户', '卡号', '金额', '消费地区', '状态']
                               } else if (secondaryTabKey === 'refund') {
-                                return ['时间', '类型', '商户', '卡号', '金额', '到账金额', '到账币种', '状态']
+                                return ['时间', '类型', '卡号', '提取金额', '到账金额', '到账币种', '目标账户', '状态']
                               }
                               return ['时间', '类型', '商户', '金额', '币种', '卡号', '状态']
                             default:
@@ -10239,7 +10254,7 @@ export default function WalletPage() {
                             } else if (secondaryTabKey === 'consume') {
                               return [record.time, record.type, record.merchant, record.cardNumber, `${record.amount} ${record.currency}`, record.location, record.status]
                             } else if (secondaryTabKey === 'refund') {
-                              return [record.time, record.type, record.merchant, record.cardNumber, `${record.amount} ${record.currency}`, `${record.creditAmount} ${record.creditCurrency}`, record.creditCurrency, record.status]
+                              return [record.time, record.type, record.cardNumber, `${record.amount} ${record.currency}`, `${record.creditAmount} ${record.creditCurrency}`, record.creditCurrency, record.toAccount, record.status]
                             }
                             return [record.time, record.type, record.merchant, `${record.amount} ${record.currency}`, record.currency, record.cardNumber, record.status]
                           default:
@@ -10311,7 +10326,9 @@ export default function WalletPage() {
                                key === 'reason' ? '退款原因' :
                                key === 'originalOrderId' ? '原订单号' :
                                key === 'creditAmount' ? '到账金额' :
-                               key === 'creditCurrency' ? '到账币种' : key}
+                               key === 'creditCurrency' ? '到账币种' :
+                               key === 'toAccount' ? '目标账户' :
+                               key === 'exchangeRate' ? '汇率' : key}
                             </div>
                             <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
                               {value || '-'}
