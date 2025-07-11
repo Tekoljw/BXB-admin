@@ -10553,7 +10553,7 @@ export default function WalletPage() {
                             } else if (secondaryTabKey === 'payment') {
                               // 担保付款记录特殊处理：进行中状态显示按钮
                               const statusDisplay = record.status === '进行中' ? 
-                                <button className={`px-3 py-1 rounded text-sm font-medium transition-colors ${isDark ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}>
+                                <button className={`px-3 py-1 rounded text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                   确认付款
                                 </button> : record.status
                               return [record.time, record.type, record.tradePartner, `${record.amount} ${record.currency}`, `${record.guaranteeAmount} ${record.guaranteeCurrency}`, record.tradeType, record.progress, statusDisplay]
