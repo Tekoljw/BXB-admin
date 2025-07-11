@@ -3743,8 +3743,97 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 操作按钮区域 */}
+            {/* 页签切换和操作按钮区域 */}
             <div className="transition-all duration-300 ease-out">
+              {/* 页签切换区域 */}
+              <div className="flex items-center justify-between mb-6">
+                {/* 左侧页签 */}
+                <div className="flex space-x-2">
+                  <Button
+                    onClick={() => setSelectedPaymentCard("fiat")}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 ${
+                      selectedPaymentCard === "fiat"
+                        ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    法币支付
+                  </Button>
+                  <Button
+                    onClick={() => setSelectedPaymentCard("crypto")}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 ${
+                      selectedPaymentCard === "crypto"
+                        ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    加密货币支付
+                  </Button>
+                </div>
+                
+                {/* 右侧图标按钮 */}
+                <div className="flex gap-3">
+                  {selectedPaymentCard === "fiat" ? (
+                    fiatIconTabs.map((tab) => {
+                      const Icon = tab.icon
+                      const isSelected = fiatTab === tab.id
+                      
+                      return (
+                        <Button
+                          key={tab.id}
+                          onClick={tab.id === "资产分布" ? handlePositionModalClick : () => setFiatTab(tab.id)}
+                          className={`h-12 w-12 transition-all duration-200 ${
+                            isSelected
+                              ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                              : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                          }`}
+                          variant="outline"
+                          title={tab.id}
+                        >
+                          <Icon 
+                            className={`h-4 w-4 transition-colors ${
+                              isSelected 
+                                ? "text-[#00D4AA]"
+                                : "text-black dark:text-white"
+                            }`} 
+                          />
+                        </Button>
+                      )
+                    })
+                  ) : (
+                    cryptoIconTabs.map((tab) => {
+                      const Icon = tab.icon
+                      const isSelected = cryptoTab === tab.id
+                      
+                      return (
+                        <Button
+                          key={tab.id}
+                          onClick={tab.id === "资产分布" ? handlePositionModalClick : () => setCryptoTab(tab.id)}
+                          className={`h-12 w-12 transition-all duration-200 ${
+                            isSelected
+                              ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                              : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                          }`}
+                          variant="outline"
+                          title={tab.id}
+                        >
+                          <Icon 
+                            className={`h-4 w-4 transition-colors ${
+                              isSelected 
+                                ? "text-[#00D4AA]"
+                                : "text-black dark:text-white"
+                            }`} 
+                          />
+                        </Button>
+                      )
+                    })
+                  )}
+                </div>
+              </div>
+              
+              {/* 主要操作按钮区域 */}
               <div className="flex flex-col md:flex-row gap-4">
                 {/* 主要操作按钮 - 自动适配屏幕宽度 */}
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -3798,65 +3887,6 @@ export default function WalletPage() {
                         >
                           <Icon className="h-4 w-4 mr-2" />
                           {tab.label}
-                        </Button>
-                      )
-                    })
-                  )}
-                </div>
-                
-                {/* 图标按钮区域 - 右对齐 */}
-                <div className="flex justify-end md:justify-center gap-3">
-                  {selectedPaymentCard === "fiat" ? (
-                    fiatIconTabs.map((tab) => {
-                      const Icon = tab.icon
-                      const isSelected = fiatTab === tab.id
-                      
-                      return (
-                        <Button
-                          key={tab.id}
-                          onClick={tab.id === "资产分布" ? handlePositionModalClick : () => setFiatTab(tab.id)}
-                          className={`h-12 w-12 transition-all duration-200 ${
-                            isSelected
-                              ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                              : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                          }`}
-                          variant="outline"
-                          title={tab.id}
-                        >
-                          <Icon 
-                            className={`h-4 w-4 transition-colors ${
-                              isSelected 
-                                ? "text-[#00D4AA]"
-                                : "text-black dark:text-white"
-                            }`} 
-                          />
-                        </Button>
-                      )
-                    })
-                  ) : (
-                    cryptoIconTabs.map((tab) => {
-                      const Icon = tab.icon
-                      const isSelected = cryptoTab === tab.id
-                      
-                      return (
-                        <Button
-                          key={tab.id}
-                          onClick={tab.id === "资产分布" ? handlePositionModalClick : () => setCryptoTab(tab.id)}
-                          className={`h-12 w-12 transition-all duration-200 ${
-                            isSelected
-                              ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                              : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                          }`}
-                          variant="outline"
-                          title={tab.id}
-                        >
-                          <Icon 
-                            className={`h-4 w-4 transition-colors ${
-                              isSelected 
-                                ? "text-[#00D4AA]"
-                                : "text-black dark:text-white"
-                            }`} 
-                          />
                         </Button>
                       )
                     })
