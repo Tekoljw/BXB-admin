@@ -1296,16 +1296,117 @@ export default function WalletPage() {
         currency: "USD",
         status: "已完成",
         time: "2024-01-15 18:45:30",
-        cardNumber: "****1234"
+        cardNumber: "****1234",
+        cardType: "虚拟卡",
+        category: "购物"
       },
       {
         id: "UC002",
         type: "充值",
+        merchant: "平台充值",
         amount: "500.00",
         currency: "USDT",
         status: "已完成", 
         time: "2024-01-14 10:20:15",
-        cardNumber: "****1234"
+        cardNumber: "****1234",
+        cardType: "虚拟卡",
+        category: "充值"
+      },
+      {
+        id: "UC003",
+        type: "消费",
+        merchant: "Google Play",
+        amount: "29.99",
+        currency: "USD",
+        status: "已完成",
+        time: "2024-01-14 15:30:45",
+        cardNumber: "****5678",
+        cardType: "虚拟卡",
+        category: "应用服务"
+      },
+      {
+        id: "UC004",
+        type: "消费",
+        merchant: "Netflix",
+        amount: "15.99",
+        currency: "USD",
+        status: "已完成",
+        time: "2024-01-13 20:15:30",
+        cardNumber: "****1234",
+        cardType: "虚拟卡",
+        category: "娱乐"
+      },
+      {
+        id: "UC005",
+        type: "提现",
+        merchant: "银行提现",
+        amount: "200.00",
+        currency: "USD",
+        status: "处理中",
+        time: "2024-01-13 14:22:10",
+        cardNumber: "****5678",
+        cardType: "实体卡",
+        category: "提现"
+      },
+      {
+        id: "UC006",
+        type: "消费",
+        merchant: "Apple Store",
+        amount: "99.99",
+        currency: "USD",
+        status: "已完成",
+        time: "2024-01-12 11:45:00",
+        cardNumber: "****9012",
+        cardType: "实体卡",
+        category: "购物"
+      },
+      {
+        id: "UC007",
+        type: "充值",
+        merchant: "平台充值",
+        amount: "1000.00",
+        currency: "USDT",
+        status: "已完成",
+        time: "2024-01-12 09:30:20",
+        cardNumber: "****9012",
+        cardType: "实体卡",
+        category: "充值"
+      },
+      {
+        id: "UC008",
+        type: "消费",
+        merchant: "Spotify",
+        amount: "9.99",
+        currency: "USD",
+        status: "已完成",
+        time: "2024-01-11 16:20:15",
+        cardNumber: "****1234",
+        cardType: "虚拟卡",
+        category: "娱乐"
+      },
+      {
+        id: "UC009",
+        type: "消费",
+        merchant: "AWS",
+        amount: "156.78",
+        currency: "USD",
+        status: "已完成",
+        time: "2024-01-11 08:15:30",
+        cardNumber: "****5678",
+        cardType: "虚拟卡",
+        category: "云服务"
+      },
+      {
+        id: "UC010",
+        type: "退款",
+        merchant: "Amazon",
+        amount: "45.99",
+        currency: "USD",
+        status: "已完成",
+        time: "2024-01-10 13:40:25",
+        cardNumber: "****1234",
+        cardType: "虚拟卡",
+        category: "退款"
       }
     ],
 
@@ -9540,6 +9641,67 @@ export default function WalletPage() {
                         </div>
                       </div>
                     )
+                  case "U卡订单":
+                    return (
+                      <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                          <div>
+                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              类型
+                            </label>
+                            <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>全部</option>
+                              <option>消费</option>
+                              <option>充值</option>
+                              <option>提现</option>
+                              <option>退款</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              卡片类型
+                            </label>
+                            <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>全部</option>
+                              <option>虚拟卡</option>
+                              <option>实体卡</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              状态
+                            </label>
+                            <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>全部</option>
+                              <option>已完成</option>
+                              <option>处理中</option>
+                              <option>已取消</option>
+                              <option>失败</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              时间
+                            </label>
+                            <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>全部</option>
+                              <option>今天</option>
+                              <option>最近7天</option>
+                              <option>最近30天</option>
+                              <option>最近90天</option>
+                            </select>
+                          </div>
+                          <div className="flex items-end gap-2">
+                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                              重置
+                            </button>
+                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                              筛选
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )
                   default:
                     return null
                 }
@@ -9620,6 +9782,8 @@ export default function WalletPage() {
                               return ['时间', '类型', '金额', '状态']
                             case "佣金记录":
                               return ['时间', '类型', '币种', '金额', '来源', '费率', '状态']
+                            case "U卡订单":
+                              return ['时间', '类型', '商户', '金额', '币种', '卡号', '状态']
                             default:
                               return ['时间', '类型', '金额', '状态']
                           }
@@ -9688,6 +9852,8 @@ export default function WalletPage() {
                             return [record.time, record.type, record.amount, record.status]
                           case "佣金记录":
                             return [record.time, record.type, record.currency, record.amount, record.source, record.rate, record.status]
+                          case "U卡订单":
+                            return [record.time, record.type, record.merchant, `${record.amount} ${record.currency}`, record.currency, record.cardNumber, record.status]
                           default:
                             return Object.values(record).slice(0, 4) // 取前4个值作为默认显示
                         }
@@ -9748,7 +9914,10 @@ export default function WalletPage() {
                                key === 'earnings' ? '当前收益' :
                                key === 'fromAmount' ? '兑换金额' :
                                key === 'toAmount' ? '兑换数量' :
-                               key === 'rate' ? '兑换汇率' : key}
+                               key === 'rate' ? '兑换汇率' :
+                               key === 'cardNumber' ? '卡号' :
+                               key === 'cardType' ? '卡片类型' :
+                               key === 'category' ? '类别' : key}
                             </div>
                             <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
                               {value || '-'}
