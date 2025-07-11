@@ -1385,48 +1385,7 @@ export default function WalletPage() {
         time: "2024-01-15 11:30:20"
       }
     ],
-    "其他记录": [
-      {
-        id: "OTH001",
-        type: "空投奖励",
-        currency: "USDT",
-        amount: "50.00",
-        source: "平台活动",
-        status: "已完成",
-        time: "2024-01-15 14:20:15",
-        description: "新用户注册奖励"
-      },
-      {
-        id: "OTH002",
-        type: "推荐奖励",
-        currency: "BTC",
-        amount: "0.001",
-        source: "邀请好友",
-        status: "已完成",
-        time: "2024-01-15 10:35:45",
-        description: "成功邀请用户注册"
-      },
-      {
-        id: "OTH003",
-        type: "系统调整",
-        currency: "USDT",
-        amount: "-2.50",
-        source: "系统维护",
-        status: "已完成",
-        time: "2024-01-14 22:10:30",
-        description: "网络费用调整"
-      },
-      {
-        id: "OTH004",
-        type: "补偿奖励",
-        currency: "ETH",
-        amount: "0.01",
-        source: "客服处理",
-        status: "已完成",
-        time: "2024-01-14 16:45:20",
-        description: "交易延迟补偿"
-      }
-    ],
+    "其他记录": [],
     "佣金记录": [
       {
         id: "CM001",
@@ -8599,7 +8558,7 @@ export default function WalletPage() {
                                 headers = ['时间', '币种', '划出账户', '划入账户', '数量']
                                 break
                               case "其他记录":
-                                headers = ['时间', '类型', '币种', '金额', '来源', '描述', '状态']
+                                headers = ['时间', '币种', '数量', '类型', '备注']
                                 break
                               default:
                                 headers = ['时间', '类型', '金额', '状态']
@@ -8639,7 +8598,7 @@ export default function WalletPage() {
                               cellData = [record.time, record.currency, record.fromAccount, record.toAccount, record.amount]
                               break
                             case "其他记录":
-                              cellData = [record.time, record.type, record.currency, record.amount, record.source, record.description, record.status]
+                              cellData = [record.time, record.currency, record.amount, record.type, record.remark]
                               break
                             default:
                               cellData = Object.values(record)
@@ -9211,6 +9170,60 @@ export default function WalletPage() {
                           </div>
                         </div>
                       )
+                    case "其他记录":
+                      return (
+                        <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
+                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                币种
+                              </label>
+                              <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                <option>全部</option>
+                                <option>USDT</option>
+                                <option>BTC</option>
+                                <option>ETH</option>
+                                <option>BNB</option>
+                                <option>ADA</option>
+                                <option>SOL</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                类型
+                              </label>
+                              <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                <option>全部</option>
+                                <option>抵扣金</option>
+                                <option>系统发放</option>
+                                <option>系统减扣</option>
+                                <option>期权交易</option>
+                                <option>手续费</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                时间
+                              </label>
+                              <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                <option>全部</option>
+                                <option>今天</option>
+                                <option>最近7天</option>
+                                <option>最近30天</option>
+                                <option>最近90天</option>
+                              </select>
+                            </div>
+                            <div className="flex items-end gap-2">
+                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                重置
+                              </button>
+                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                筛选
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )
                     case "划转记录":
                       return (
                         <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
@@ -9428,7 +9441,7 @@ export default function WalletPage() {
                               case "划转记录":
                                 return ['时间', '币种', '划出账户', '划入账户', '数量']
                               case "其他记录":
-                                return ['时间', '类型', '币种', '金额', '来源', '描述', '状态']
+                                return ['时间', '币种', '数量', '类型', '备注']
                             }
                           }
                           
@@ -9488,7 +9501,7 @@ export default function WalletPage() {
                             case "划转记录":
                               return [record.time, record.currency, record.fromAccount, record.toAccount, record.amount]
                             case "其他记录":
-                              return [record.time, record.type, record.currency, record.amount, record.source, record.description, record.status]
+                              return [record.time, record.currency, record.amount, record.type, record.remark]
                           }
                         }
                         
@@ -9559,7 +9572,8 @@ export default function WalletPage() {
                            key === 'provider' ? '供应商' :
                            key === 'fiatCurrency' ? '法币币种' :
                            key === 'source' ? '来源' :
-                           key === 'description' ? '描述' : key}
+                           key === 'description' ? '描述' :
+                           key === 'remark' ? '备注' : key}
                         </div>
                         <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
                           {value || '-'}
