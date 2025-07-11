@@ -95,7 +95,7 @@ export default function WalletPage() {
   const [topLevelTab, setTopLevelTab] = useState("账户资产") // "账户资产" or "订单记录"
   const [activeTab, setActiveTab] = useState("钱包总览")
   const [orderTab, setOrderTab] = useState("现货订单")
-  const [secondaryTab, setSecondaryTab] = useState<string>("current") // 二级页签状态 // 订单记录子页签
+  const [secondaryTab, setSecondaryTab] = useState<string>("deposit") // 二级页签状态 // 订单记录子页签
   const [activeOrderCategory, setActiveOrderCategory] = useState('spot')
   const [activeOrderSubTab, setActiveOrderSubTab] = useState('current')
   const [overviewMode, setOverviewMode] = useState("现金账户") // "现金账户" or "总资产"
@@ -995,7 +995,8 @@ export default function WalletPage() {
     funds: {
       name: '资金记录',
       tabs: {
-        deposit_withdraw: '出金入金记录',
+        deposit: '入金记录',
+        withdraw: '出金记录',
         internal_transfer: '内转记录',
         usdt_trading: 'USDT买卖记录'
       }
@@ -8552,7 +8553,7 @@ export default function WalletPage() {
     
     // 资金记录数据
     const fundsData = {
-      "出金入金记录": [
+      "入金记录": [
         {
           id: "FD001",
           type: "充值",
@@ -8565,6 +8566,19 @@ export default function WalletPage() {
           txHash: "0x123...abc"
         },
         {
+          id: "FD003",
+          type: "充值",
+          currency: "BTC",
+          amount: "+0.05",
+          channel: "钱包转账",
+          status: "已完成",
+          time: "2024-01-15 10:15:20",
+          fee: "0.0001 BTC",
+          txHash: "0x789...ghi"
+        }
+      ],
+      "出金记录": [
+        {
           id: "FD002",
           type: "提现",
           currency: "USDT",
@@ -8574,6 +8588,17 @@ export default function WalletPage() {
           time: "2024-01-14 20:30:15",
           fee: "2.00 USDT",
           txHash: "0x456...def"
+        },
+        {
+          id: "FD004",
+          type: "提现",
+          currency: "ETH",
+          amount: "-2.5",
+          channel: "钱包转账",
+          status: "处理中",
+          time: "2024-01-14 16:45:10",
+          fee: "0.005 ETH",
+          txHash: "0xabc...123"
         }
       ],
       "内转记录": [
@@ -8687,7 +8712,8 @@ export default function WalletPage() {
     switch (categoryKey) {
       case "funds":
         const tabNameMap = {
-          deposit_withdraw: "出金入金记录",
+          deposit: "入金记录",
+          withdraw: "出金记录",
           internal_transfer: "内转记录",
           usdt_trading: "USDT买卖记录"
         }
