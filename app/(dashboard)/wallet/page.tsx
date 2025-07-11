@@ -6286,6 +6286,172 @@ export default function WalletPage() {
             )}
           </div>
         )
+      
+      case 'commission':
+        return (
+          <div className={`${cardStyle} rounded-lg overflow-hidden`}>
+            {/* 月度佣金概览卡片 */}
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                {[
+                  { label: '合约', amount: '1,234.56', change: '+12.5%', color: 'text-blue-500' },
+                  { label: '理财', amount: '892.34', change: '+8.9%', color: 'text-green-500' },
+                  { label: 'U卡', amount: '567.89', change: '+15.2%', color: 'text-purple-500' },
+                  { label: '担保', amount: '345.67', change: '+6.7%', color: 'text-orange-500' },
+                  { label: '支付', amount: '123.45', change: '+3.4%', color: 'text-pink-500' }
+                ].map((item, index) => (
+                  <div key={index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-600 bg-gray-800' : 'border-gray-300 bg-gray-50'}`}>
+                    <div className="text-sm text-gray-500 mb-1">{item.label}佣金</div>
+                    <div className="text-lg font-bold">{item.amount} USDT</div>
+                    <div className={`text-xs ${item.color}`}>{item.change}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 分类标签页 */}
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex flex-wrap gap-2">
+                {['合约', '理财', 'U卡', '担保', '支付'].map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setCommissionCategory(category)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
+                      commissionCategory === category
+                        ? isDark 
+                          ? "bg-white text-black border-white" 
+                          : "bg-black text-white border-black"
+                        : isDark
+                          ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                          : "bg-transparent text-black border-black hover:bg-black hover:text-white"
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 子导航：规则/记录 */}
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex space-x-4">
+                <button
+                  onClick={() => setCommissionTab('rules')}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
+                    commissionTab === 'rules'
+                      ? isDark 
+                        ? "bg-white text-black border-white" 
+                        : "bg-black text-white border-black"
+                      : isDark
+                        ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                        : "bg-transparent text-black border-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  佣金规则
+                </button>
+                <button
+                  onClick={() => setCommissionTab('records')}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
+                    commissionTab === 'records'
+                      ? isDark 
+                        ? "bg-white text-black border-white" 
+                        : "bg-black text-white border-black"
+                      : isDark
+                        ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                        : "bg-transparent text-black border-black hover:bg-black hover:text-white"
+                  }`}
+                >
+                  佣金记录
+                </button>
+              </div>
+            </div>
+
+            {/* 内容区域 */}
+            {commissionTab === 'rules' ? (
+              <div className="p-6">
+                <div className="space-y-6">
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-600 bg-gray-800' : 'border-gray-300 bg-gray-50'}`}>
+                    <h4 className="font-medium mb-3">{commissionCategory}佣金规则</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">一级推荐人佣金率：</span>
+                        <span className="font-medium">20%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">二级推荐人佣金率：</span>
+                        <span className="font-medium">10%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">最低结算金额：</span>
+                        <span className="font-medium">1 USDT</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">结算周期：</span>
+                        <span className="font-medium">每日自动结算</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-600 bg-gray-800' : 'border-gray-300 bg-gray-50'}`}>
+                    <h4 className="font-medium mb-3">VIP加成规则</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">VIP1</span>
+                        <span className="font-medium">+5%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">VIP2</span>
+                        <span className="font-medium">+10%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">VIP3</span>
+                        <span className="font-medium">+15%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border-t dark:border-gray-700 pt-4">
+                    <h4 className="font-medium mb-2">结算规则</h4>
+                    <ul className="text-sm text-gray-500 space-y-1">
+                      <li>• 佣金每日自动结算，次日可领取</li>
+                      <li>• 佣金有效期为90天，逾期自动失效</li>
+                      <li>• 最低领取金额为1 USDT</li>
+                      <li>• 佣金将自动发放到您的现货账户</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="p-6">
+                <h3 className="text-lg font-semibold mb-4">{commissionCategory}记录</h3>
+                <div className="space-y-3">
+                  {[
+                    { date: "2024-01-15", user: "用户A***123", amount: "+15.67", status: "已发放", source: "现货交易" },
+                    { date: "2024-01-14", user: "用户B***456", amount: "+8.32", status: "已发放", source: "合约交易" },
+                    { date: "2024-01-13", user: "用户C***789", amount: "+23.45", status: "已发放", source: "理财投资" },
+                    { date: "2024-01-12", user: "用户D***012", amount: "+12.89", status: "待发放", source: "U卡消费" },
+                    { date: "2024-01-11", user: "用户E***345", amount: "+6.78", status: "已发放", source: "担保交易" }
+                  ].map((record, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 border dark:border-gray-700 rounded-lg">
+                      <div>
+                        <div className="font-medium">{record.user}</div>
+                        <div className="text-sm text-gray-500">{record.date} • {record.source}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-medium text-green-500">{record.amount} USDT</div>
+                        <div className={`text-xs ${
+                          record.status === "已发放" ? "text-green-500" : "text-yellow-500"
+                        }`}>
+                          {record.status}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )
+      
       default:
         return (
           <div className={`${cardStyle} rounded-lg overflow-hidden`}>
