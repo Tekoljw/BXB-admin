@@ -8546,12 +8546,173 @@ export default function WalletPage() {
     }
   }
 
+  // 获取订单记录数据
+  const getOrderRecords = (orderTab: string, secondaryTab: string) => {
+    const categoryKey = getCategoryKey(orderTab)
+    
+    // 资金记录数据
+    const fundsData = {
+      "出金入金记录": [
+        {
+          id: "FD001",
+          type: "充值",
+          currency: "USDT",
+          amount: "+1,000.00",
+          channel: "银行卡",
+          status: "已完成",
+          time: "2024-01-15 14:25:30",
+          fee: "0.00 USDT",
+          txHash: "0x123...abc"
+        },
+        {
+          id: "FD002",
+          type: "提现",
+          currency: "USDT",
+          amount: "-500.00",
+          channel: "银行卡",
+          status: "已完成",
+          time: "2024-01-14 20:30:15",
+          fee: "2.00 USDT",
+          txHash: "0x456...def"
+        }
+      ],
+      "内转记录": [
+        {
+          id: "IT001",
+          type: "用户转账",
+          from: "自己",
+          to: "用户A",
+          currency: "USDT",
+          amount: "-100.00",
+          status: "已完成",
+          time: "2024-01-15 16:20:30",
+          note: "朋友转账"
+        },
+        {
+          id: "IT002",
+          type: "接收转账",
+          from: "用户B",
+          to: "自己",
+          currency: "USDT",
+          amount: "+200.00",
+          status: "已完成",
+          time: "2024-01-15 15:45:15",
+          note: "业务合作款"
+        }
+      ],
+      "USDT买卖记录": [
+        {
+          id: "OTC001",
+          type: "买入",
+          amount: "1,000.00 USDT",
+          price: "7.20 CNY",
+          total: "7,200.00 CNY",
+          method: "银行卡",
+          status: "已完成",
+          time: "2024-01-15 16:45:30",
+          merchant: "商户A"
+        },
+        {
+          id: "OTC002",
+          type: "卖出",
+          amount: "500.00 USDT",
+          price: "7.22 CNY",
+          total: "3,610.00 CNY",
+          method: "支付宝",
+          status: "已完成",
+          time: "2024-01-14 19:20:15",
+          merchant: "商户B"
+        }
+      ]
+    }
+    
+    // 佣金记录数据
+    const commissionData = [
+      {
+        id: "CM001",
+        type: "交易返佣",
+        currency: "USDT",
+        amount: "+12.34",
+        source: "BTC/USDT交易",
+        status: "已到账",
+        time: "2024-01-15 16:30:45",
+        rate: "0.1%"
+      },
+      {
+        id: "CM002",
+        type: "邀请返佣",
+        currency: "USDT",
+        amount: "+8.90",
+        source: "用户A邀请奖励",
+        status: "已到账",
+        time: "2024-01-14 14:20:30",
+        rate: "20%"
+      },
+      {
+        id: "CM003",
+        type: "奖励佣金",
+        currency: "USDT",
+        amount: "+50.00",
+        source: "月度活动奖励",
+        status: "已到账",
+        time: "2024-01-13 10:15:20",
+        rate: "固定"
+      }
+    ]
+    
+    // 划转记录数据
+    const transferData = [
+      {
+        id: "TR001",
+        type: "账户划转",
+        from: "现货账户",
+        to: "合约账户",
+        currency: "USDT",
+        amount: "1,000.00",
+        status: "已完成",
+        time: "2024-01-15 12:45:30"
+      },
+      {
+        id: "TR002",
+        type: "账户划转",
+        from: "合约账户",
+        to: "理财账户",
+        currency: "USDT",
+        amount: "500.00",
+        status: "已完成",
+        time: "2024-01-15 11:30:20"
+      }
+    ]
+    
+    switch (categoryKey) {
+      case "funds":
+        const tabNameMap = {
+          deposit_withdraw: "出金入金记录",
+          internal_transfer: "内转记录",
+          usdt_trading: "USDT买卖记录"
+        }
+        return fundsData[tabNameMap[secondaryTab]] || []
+      case "commission":
+        const typeMap = {
+          trading: "交易返佣",
+          referral: "邀请返佣", 
+          bonus: "奖励佣金"
+        }
+        return commissionData.filter(r => r.type === typeMap[secondaryTab]) || []
+      case "transfer":
+        return transferData
+      default:
+        return []
+    }
+  }
+
   // 渲染订单记录内容
   const renderOrderContent = () => {
-    const currentCategory = orderCategories[orderTab]
+    const categoryKey = getCategoryKey(orderTab)
+    const currentCategory = orderCategories[categoryKey]
     if (!currentCategory) return null
 
-    const records = currentCategory.data[secondaryTab] || []
+    const records = getOrderRecords(orderTab, secondaryTab)
     const cardStyle = isDark ? 'bg-[#1a1d29] text-white' : 'bg-white text-gray-900'
 
     return (
