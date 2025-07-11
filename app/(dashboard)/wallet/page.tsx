@@ -8525,26 +8525,77 @@ export default function WalletPage() {
             <div className="p-6">
               <div className="space-y-4">
                 <div className="space-y-3">
-                  {records.map((record, index) => (
-                    <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        {Object.entries(record).map(([key, value]) => (
-                          <div key={key}>
-                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
-                              {key === 'id' ? 'ID' : 
-                               key === 'type' ? '类型' :
-                               key === 'amount' ? '金额' :
-                               key === 'status' ? '状态' :
-                               key === 'time' ? '时间' : key}
+                  {records.map((record, index) => {
+                    // 获取当前记录类型的列定义
+                    const getColumnConfig = () => {
+                      const tabMap = {
+                        deposit: "入金记录",
+                        withdraw: "出金记录", 
+                        internal_transfer: "内转记录",
+                        transfer: "划转记录"
+                      }
+                      const recordType = tabMap[secondaryTab] || orderTab
+                      
+                      switch (recordType) {
+                        case "入金记录":
+                          return [
+                            { key: 'time', label: '时间' },
+                            { key: 'currency', label: '币种' },
+                            { key: 'amount', label: '数量' },
+                            { key: 'address', label: '地址/收款账号' },
+                            { key: 'txHash', label: '交易哈希' },
+                            { key: 'status', label: '状态' }
+                          ]
+                        case "出金记录":
+                          return [
+                            { key: 'time', label: '时间' },
+                            { key: 'currency', label: '币种' },
+                            { key: 'amount', label: '数量' },
+                            { key: 'network', label: '提币网络' },
+                            { key: 'address', label: '地址/收款账号' },
+                            { key: 'txHash', label: '交易哈希' },
+                            { key: 'status', label: '状态' }
+                          ]
+                        case "内转记录":
+                          return [
+                            { key: 'time', label: '时间' },
+                            { key: 'currency', label: '币种' },
+                            { key: 'direction', label: '转入/转出' },
+                            { key: 'amount', label: '数量' },
+                            { key: 'status', label: '状态' }
+                          ]
+                        case "划转记录":
+                          return [
+                            { key: 'time', label: '时间' },
+                            { key: 'currency', label: '币种' },
+                            { key: 'fromAccount', label: '划出账户' },
+                            { key: 'toAccount', label: '划入账户' },
+                            { key: 'amount', label: '数量' }
+                          ]
+                        default:
+                          return Object.keys(record).map(key => ({ key, label: key }))
+                      }
+                    }
+                    
+                    const columns = getColumnConfig()
+                    
+                    return (
+                      <div key={index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
+                        <div className={`grid gap-4 text-sm ${columns.length <= 5 ? 'grid-cols-5' : 'grid-cols-6 lg:grid-cols-7'}`}>
+                          {columns.map(({ key, label }) => (
+                            <div key={key}>
+                              <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
+                                {label}
+                              </div>
+                              <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium`}>
+                                {record[key] || '-'}
+                              </div>
                             </div>
-                            <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium`}>
-                              {value}
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -8561,96 +8612,117 @@ export default function WalletPage() {
     const fundsData = {
       "入金记录": [
         {
-          id: "FD001",
-          type: "充值",
-          currency: "USDT",
-          amount: "+1,000.00",
-          channel: "银行卡",
-          status: "已完成",
           time: "2024-01-15 14:25:30",
-          fee: "0.00 USDT",
-          txHash: "0x123...abc"
+          currency: "USDT",
+          amount: "1,000.00",
+          address: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+          txHash: "0x123...abc",
+          status: "已完成"
         },
         {
-          id: "FD003",
-          type: "充值",
-          currency: "BTC",
-          amount: "+0.05",
-          channel: "钱包转账",
-          status: "已完成",
           time: "2024-01-15 10:15:20",
-          fee: "0.0001 BTC",
-          txHash: "0x789...ghi"
+          currency: "BTC",
+          amount: "0.05",
+          address: "招商银行尾号1234",
+          txHash: "0x789...ghi",
+          status: "已完成"
+        },
+        {
+          time: "2024-01-14 18:30:15",
+          currency: "ETH",
+          amount: "2.5",
+          address: "0x742d35Cc6563C...3892",
+          txHash: "0xdef...456",
+          status: "处理中"
         }
       ],
       "出金记录": [
         {
-          id: "FD002",
-          type: "提现",
-          currency: "USDT",
-          amount: "-500.00",
-          channel: "银行卡",
-          status: "已完成",
           time: "2024-01-14 20:30:15",
-          fee: "2.00 USDT",
-          txHash: "0x456...def"
+          currency: "USDT",
+          amount: "500.00",
+          network: "TRC20",
+          address: "TNGjYc8Mq4LWjSBh8kBF...7X9K",
+          txHash: "0x456...def",
+          status: "已完成"
         },
         {
-          id: "FD004",
-          type: "提现",
-          currency: "ETH",
-          amount: "-2.5",
-          channel: "钱包转账",
-          status: "处理中",
           time: "2024-01-14 16:45:10",
-          fee: "0.005 ETH",
-          txHash: "0xabc...123"
+          currency: "ETH",
+          amount: "2.5",
+          network: "ERC20",
+          address: "0x8ba1f109551bD...892c",
+          txHash: "0xabc...123",
+          status: "处理中"
+        },
+        {
+          time: "2024-01-13 22:15:30",
+          currency: "BTC",
+          amount: "0.1",
+          network: "Bitcoin",
+          address: "工商银行尾号5678",
+          txHash: "0x987...654",
+          status: "已完成"
         }
       ],
       "内转记录": [
         {
-          id: "IT001",
-          type: "用户转账",
-          from: "自己",
-          to: "用户A",
-          currency: "USDT",
-          amount: "-100.00",
-          status: "已完成",
           time: "2024-01-15 16:20:30",
-          note: "朋友转账"
+          currency: "USDT",
+          direction: "转出",
+          amount: "100.00",
+          status: "已完成"
         },
         {
-          id: "IT002",
-          type: "接收转账",
-          from: "用户B",
-          to: "自己",
-          currency: "USDT",
-          amount: "+200.00",
-          status: "已完成",
           time: "2024-01-15 15:45:15",
-          note: "业务合作款"
+          currency: "USDT",
+          direction: "转入",
+          amount: "200.00",
+          status: "已完成"
+        },
+        {
+          time: "2024-01-14 19:30:45",
+          currency: "BTC",
+          direction: "转出",
+          amount: "0.05",
+          status: "已完成"
+        },
+        {
+          time: "2024-01-14 14:20:15",
+          currency: "ETH",
+          direction: "转入",
+          amount: "1.5",
+          status: "处理中"
         }
       ],
       "划转记录": [
         {
-          id: "TR001",
-          type: "账户划转",
-          from: "现货账户",
-          to: "合约账户",
+          time: "2024-01-15 12:45:30",
           currency: "USDT",
-          amount: "1,000.00",
-          status: "已完成",
-          time: "2024-01-15 12:45:30"
+          fromAccount: "现货账户",
+          toAccount: "合约账户",
+          amount: "1,000.00"
         },
         {
-          id: "TR002",
-          type: "账户划转",
-          from: "合约账户",
-          to: "理财账户",
+          time: "2024-01-15 11:30:20",
           currency: "USDT",
-          amount: "500.00",
-          status: "已完成",
-          time: "2024-01-15 11:30:20"
+          fromAccount: "合约账户",
+          toAccount: "理财账户",
+          amount: "500.00"
+        },
+        {
+          time: "2024-01-14 16:15:45",
+          currency: "BTC",
+          fromAccount: "现货账户",
+          toAccount: "合约账户",
+          amount: "0.2"
+        },
+        {
+          time: "2024-01-14 10:20:30",
+          currency: "ETH",
+          fromAccount: "理财账户",
+          toAccount: "现货账户",
+          amount: "3.0"
         }
       ],
       "USDT买卖记录": [
