@@ -9280,6 +9280,163 @@ export default function WalletPage() {
           ]
         }
         return wealthData[secondaryTab] || []
+      case "ucard":
+        // U卡订单数据
+        const ucardData = {
+          open: [
+            {
+              id: "OPEN001",
+              type: "虚拟卡开卡",
+              cardNumber: "****1234",
+              cardType: "Visa虚拟卡",
+              region: "欧洲",
+              status: "激活成功",
+              time: "2024-01-15 10:30:00",
+              fee: "5.00 USD"
+            },
+            {
+              id: "OPEN002", 
+              type: "实体卡开卡",
+              cardNumber: "****5678",
+              cardType: "Mastercard实体卡",
+              region: "香港",
+              status: "制卡中",
+              time: "2024-01-14 16:45:00",
+              fee: "15.00 USD"
+            },
+            {
+              id: "OPEN003",
+              type: "虚拟卡开卡", 
+              cardNumber: "****9012",
+              cardType: "Visa虚拟卡",
+              region: "美国",
+              status: "激活成功",
+              time: "2024-01-13 09:20:00",
+              fee: "5.00 USD"
+            }
+          ],
+          recharge: [
+            {
+              id: "RC001",
+              type: "USDT充值",
+              cardNumber: "****1234",
+              amount: "500.00",
+              currency: "USDT",
+              status: "已完成",
+              time: "2024-01-15 14:20:00",
+              fee: "2.50 USDT"
+            },
+            {
+              id: "RC002",
+              type: "BTC充值",
+              cardNumber: "****5678", 
+              amount: "0.01",
+              currency: "BTC",
+              status: "已完成",
+              time: "2024-01-14 11:30:00",
+              fee: "0.0001 BTC"
+            },
+            {
+              id: "RC003",
+              type: "USDT充值",
+              cardNumber: "****9012",
+              amount: "1000.00", 
+              currency: "USDT",
+              status: "处理中",
+              time: "2024-01-13 18:45:00",
+              fee: "5.00 USDT"
+            }
+          ],
+          consume: [
+            {
+              id: "CS001",
+              type: "在线消费",
+              merchant: "Amazon",
+              cardNumber: "****1234",
+              amount: "89.99",
+              currency: "USD",
+              status: "已完成",
+              time: "2024-01-15 18:45:30",
+              category: "购物",
+              location: "美国"
+            },
+            {
+              id: "CS002",
+              type: "订阅服务",
+              merchant: "Netflix",
+              cardNumber: "****1234", 
+              amount: "15.99",
+              currency: "USD",
+              status: "已完成",
+              time: "2024-01-13 20:15:30",
+              category: "娱乐",
+              location: "美国"
+            },
+            {
+              id: "CS003",
+              type: "云服务",
+              merchant: "AWS",
+              cardNumber: "****5678",
+              amount: "156.78",
+              currency: "USD",
+              status: "已完成", 
+              time: "2024-01-11 08:15:30",
+              category: "云服务",
+              location: "美国"
+            },
+            {
+              id: "CS004",
+              type: "应用购买",
+              merchant: "Apple Store",
+              cardNumber: "****9012",
+              amount: "99.99",
+              currency: "USD",
+              status: "已完成",
+              time: "2024-01-12 11:45:00",
+              category: "购物",
+              location: "美国"
+            }
+          ],
+          refund: [
+            {
+              id: "RF001",
+              type: "消费退款",
+              merchant: "Amazon",
+              cardNumber: "****1234",
+              amount: "45.99",
+              currency: "USD",
+              status: "已完成",
+              time: "2024-01-10 13:40:25",
+              reason: "商品质量问题",
+              originalOrderId: "CS001"
+            },
+            {
+              id: "RF002",
+              type: "订阅退款",
+              merchant: "Spotify Premium",
+              cardNumber: "****1234",
+              amount: "9.99",
+              currency: "USD",
+              status: "处理中",
+              time: "2024-01-09 16:20:00",
+              reason: "用户主动取消",
+              originalOrderId: "CS008"
+            },
+            {
+              id: "RF003",
+              type: "服务退款",
+              merchant: "Google Play",
+              cardNumber: "****5678",
+              amount: "29.99",
+              currency: "USD",
+              status: "已完成",
+              time: "2024-01-08 10:30:15",
+              reason: "服务未提供",
+              originalOrderId: "CS003"
+            }
+          ]
+        }
+        return ucardData[secondaryTab] || []
       default:
         return []
     }
@@ -9644,62 +9801,261 @@ export default function WalletPage() {
                   case "U卡订单":
                     return (
                       <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                          <div>
-                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              类型
-                            </label>
-                            <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                              <option>全部</option>
-                              <option>消费</option>
-                              <option>充值</option>
-                              <option>提现</option>
-                              <option>退款</option>
-                            </select>
-                          </div>
-                          <div>
-                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              卡片类型
-                            </label>
-                            <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                              <option>全部</option>
-                              <option>虚拟卡</option>
-                              <option>实体卡</option>
-                            </select>
-                          </div>
-                          <div>
-                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              状态
-                            </label>
-                            <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                              <option>全部</option>
-                              <option>已完成</option>
-                              <option>处理中</option>
-                              <option>已取消</option>
-                              <option>失败</option>
-                            </select>
-                          </div>
-                          <div>
-                            <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              时间
-                            </label>
-                            <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                              <option>全部</option>
-                              <option>今天</option>
-                              <option>最近7天</option>
-                              <option>最近30天</option>
-                              <option>最近90天</option>
-                            </select>
-                          </div>
-                          <div className="flex items-end gap-2">
-                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                              重置
-                            </button>
-                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                              筛选
-                            </button>
-                          </div>
-                        </div>
+                        {(() => {
+                          // 根据不同页签显示不同的搜索选项
+                          if (secondaryTabKey === 'open') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    卡片类型
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>Visa虚拟卡</option>
+                                    <option>Mastercard虚拟卡</option>
+                                    <option>Visa实体卡</option>
+                                    <option>Mastercard实体卡</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    地区
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>欧洲</option>
+                                    <option>美国</option>
+                                    <option>香港</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    状态
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>激活成功</option>
+                                    <option>制卡中</option>
+                                    <option>已寄出</option>
+                                    <option>申请失败</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          } else if (secondaryTabKey === 'recharge') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    币种
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>USDT</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>BNB</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    卡号
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部卡片</option>
+                                    <option>****1234</option>
+                                    <option>****5678</option>
+                                    <option>****9012</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    状态
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>已完成</option>
+                                    <option>处理中</option>
+                                    <option>失败</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          } else if (secondaryTabKey === 'consume') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    商户
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>Amazon</option>
+                                    <option>Netflix</option>
+                                    <option>Apple Store</option>
+                                    <option>Google Play</option>
+                                    <option>AWS</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    消费类别
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>购物</option>
+                                    <option>娱乐</option>
+                                    <option>云服务</option>
+                                    <option>应用服务</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    消费地区
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>美国</option>
+                                    <option>欧洲</option>
+                                    <option>亚洲</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    状态
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>已完成</option>
+                                    <option>处理中</option>
+                                    <option>失败</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          } else if (secondaryTabKey === 'refund') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    商户
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>Amazon</option>
+                                    <option>Spotify Premium</option>
+                                    <option>Google Play</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    退款原因
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>商品质量问题</option>
+                                    <option>用户主动取消</option>
+                                    <option>服务未提供</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    状态
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>已完成</option>
+                                    <option>处理中</option>
+                                    <option>已拒绝</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          }
+                          
+                          // 默认搜索选项
+                          return (
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  类型
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>消费</option>
+                                  <option>充值</option>
+                                  <option>提现</option>
+                                  <option>退款</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  状态
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>已完成</option>
+                                  <option>处理中</option>
+                                  <option>已取消</option>
+                                  <option>失败</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  时间
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>今天</option>
+                                  <option>最近7天</option>
+                                  <option>最近30天</option>
+                                  <option>最近90天</option>
+                                </select>
+                              </div>
+                              <div className="flex items-end gap-2">
+                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  重置
+                                </button>
+                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  筛选
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        })()}
                       </div>
                     )
                   default:
@@ -9783,6 +10139,16 @@ export default function WalletPage() {
                             case "佣金记录":
                               return ['时间', '类型', '币种', '金额', '来源', '费率', '状态']
                             case "U卡订单":
+                              // 根据不同页签返回不同的表头
+                              if (secondaryTabKey === 'open') {
+                                return ['时间', '类型', '卡号', '卡片类型', '地区', '手续费', '状态']
+                              } else if (secondaryTabKey === 'recharge') {
+                                return ['时间', '类型', '卡号', '金额', '币种', '手续费', '状态']
+                              } else if (secondaryTabKey === 'consume') {
+                                return ['时间', '类型', '商户', '卡号', '金额', '消费地区', '状态']
+                              } else if (secondaryTabKey === 'refund') {
+                                return ['时间', '类型', '商户', '卡号', '金额', '退款原因', '状态']
+                              }
                               return ['时间', '类型', '商户', '金额', '币种', '卡号', '状态']
                             default:
                               return ['时间', '类型', '金额', '状态']
@@ -9853,6 +10219,16 @@ export default function WalletPage() {
                           case "佣金记录":
                             return [record.time, record.type, record.currency, record.amount, record.source, record.rate, record.status]
                           case "U卡订单":
+                            // 根据不同页签返回不同的数据字段
+                            if (secondaryTabKey === 'open') {
+                              return [record.time, record.type, record.cardNumber, record.cardType, record.region, record.fee, record.status]
+                            } else if (secondaryTabKey === 'recharge') {
+                              return [record.time, record.type, record.cardNumber, `${record.amount} ${record.currency}`, record.currency, record.fee, record.status]
+                            } else if (secondaryTabKey === 'consume') {
+                              return [record.time, record.type, record.merchant, record.cardNumber, `${record.amount} ${record.currency}`, record.location, record.status]
+                            } else if (secondaryTabKey === 'refund') {
+                              return [record.time, record.type, record.merchant, record.cardNumber, `${record.amount} ${record.currency}`, record.reason, record.status]
+                            }
                             return [record.time, record.type, record.merchant, `${record.amount} ${record.currency}`, record.currency, record.cardNumber, record.status]
                           default:
                             return Object.values(record).slice(0, 4) // 取前4个值作为默认显示
@@ -9917,7 +10293,11 @@ export default function WalletPage() {
                                key === 'rate' ? '兑换汇率' :
                                key === 'cardNumber' ? '卡号' :
                                key === 'cardType' ? '卡片类型' :
-                               key === 'category' ? '类别' : key}
+                               key === 'category' ? '类别' :
+                               key === 'region' ? '地区' :
+                               key === 'location' ? '消费地区' :
+                               key === 'reason' ? '退款原因' :
+                               key === 'originalOrderId' ? '原订单号' : key}
                             </div>
                             <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
                               {value || '-'}
