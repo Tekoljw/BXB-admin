@@ -9548,10 +9548,19 @@ export default function WalletPage() {
               return getSearchFilters(orderTab, secondaryTab)
             })()}
 
-            {/* PC端表格视图 */}
-            <div className="hidden md:block">
-              <div className="overflow-x-auto">
-                <table className="w-full">
+            {/* 理财账户记录特殊提示 */}
+            {orderTab === "理财订单" && secondaryTab === "account" ? (
+              <div className={`p-6 rounded-lg border ${isDark ? 'border-red-600/20 bg-red-900/10' : 'border-red-200 bg-red-50'} text-center`}>
+                <div className={`text-sm ${isDark ? 'text-red-400' : 'text-red-700'}`}>
+                  本页面使用原交易所——现货账户——资金记录——理财账户中的页面
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* PC端表格视图 */}
+                <div className="hidden md:block">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
                   <thead>
                     <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                       {(() => {
@@ -9701,55 +9710,57 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 移动端卡片视图 */}
-            <div className="md:hidden space-y-3">
-              {records.map((record, index) => (
-                <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
-                  <div className="grid grid-cols-2 gap-3 text-sm">
-                    {Object.entries(record).map(([key, value]) => (
-                      <div key={key}>
-                        <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
-                          {key === 'id' ? 'ID' : 
-                           key === 'type' ? '类型' :
-                           key === 'amount' ? '金额' :
-                           key === 'status' ? '状态' :
-                           key === 'time' ? '时间' :
-                           key === 'currency' ? '币种' :
-                           key === 'address' ? '地址/收款账号' :
-                           key === 'txHash' ? '交易哈希' :
-                           key === 'network' ? '提币网络' :
-                           key === 'direction' ? '转入/转出' :
-                           key === 'fromAccount' ? '划出账户' :
-                           key === 'toAccount' ? '划入账户' :
-                           key === 'source' ? '来源' :
-                           key === 'rate' ? '费率' :
-                           key === 'price' ? '价格' :
-                           key === 'total' ? '总金额' :
-                           key === 'method' ? '支付方式' :
-                           key === 'merchant' ? '商户' :
-                           key === 'counterparty' ? '交易对象' :
-                           key === 'fee' ? '手续费' :
-                           key === 'provider' ? '供应商' :
-                           key === 'fiatCurrency' ? '法币币种' :
-                           key === 'source' ? '来源' :
-                           key === 'description' ? '描述' :
-                           key === 'remark' ? '备注' :
-                           key === 'product' ? '理财产品' :
-                           key === 'apy' ? '年化收益' :
-                           key === 'earnings' ? '当前收益' :
-                           key === 'fromAmount' ? '兑换金额' :
-                           key === 'toAmount' ? '兑换数量' :
-                           key === 'rate' ? '兑换汇率' : key}
-                        </div>
-                        <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
-                          {value || '-'}
-                        </div>
+                {/* 移动端卡片视图 */}
+                <div className="md:hidden space-y-3">
+                  {records.map((record, index) => (
+                    <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
+                      <div className="grid grid-cols-2 gap-3 text-sm">
+                        {Object.entries(record).map(([key, value]) => (
+                          <div key={key}>
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
+                              {key === 'id' ? 'ID' : 
+                               key === 'type' ? '类型' :
+                               key === 'amount' ? '金额' :
+                               key === 'status' ? '状态' :
+                               key === 'time' ? '时间' :
+                               key === 'currency' ? '币种' :
+                               key === 'address' ? '地址/收款账号' :
+                               key === 'txHash' ? '交易哈希' :
+                               key === 'network' ? '提币网络' :
+                               key === 'direction' ? '转入/转出' :
+                               key === 'fromAccount' ? '划出账户' :
+                               key === 'toAccount' ? '划入账户' :
+                               key === 'source' ? '来源' :
+                               key === 'rate' ? '费率' :
+                               key === 'price' ? '价格' :
+                               key === 'total' ? '总金额' :
+                               key === 'method' ? '支付方式' :
+                               key === 'merchant' ? '商户' :
+                               key === 'counterparty' ? '交易对象' :
+                               key === 'fee' ? '手续费' :
+                               key === 'provider' ? '供应商' :
+                               key === 'fiatCurrency' ? '法币币种' :
+                               key === 'source' ? '来源' :
+                               key === 'description' ? '描述' :
+                               key === 'remark' ? '备注' :
+                               key === 'product' ? '理财产品' :
+                               key === 'apy' ? '年化收益' :
+                               key === 'earnings' ? '当前收益' :
+                               key === 'fromAmount' ? '兑换金额' :
+                               key === 'toAmount' ? '兑换数量' :
+                               key === 'rate' ? '兑换汇率' : key}
+                            </div>
+                            <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
+                              {value || '-'}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>
