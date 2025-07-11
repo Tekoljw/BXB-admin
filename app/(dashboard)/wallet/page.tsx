@@ -9463,6 +9463,131 @@ export default function WalletPage() {
           ]
         }
         return ucardData[secondaryTab] || []
+      case "guarantee":
+        // 担保记录数据
+        const guaranteeData = {
+          receive: [
+            {
+              id: "GR001",
+              type: "收款担保",
+              tradePartner: "用户A1B2C3",
+              amount: "5,000.00",
+              currency: "USDT",
+              guaranteeAmount: "500.00",
+              guaranteeCurrency: "USDT",
+              status: "进行中",
+              time: "2024-01-15 14:30:00",
+              tradeType: "数字货币交易",
+              progress: "已付担保金"
+            },
+            {
+              id: "GR002",
+              type: "收款担保",
+              tradePartner: "用户D4E5F6",
+              amount: "2,000.00",
+              currency: "USDT",
+              guaranteeAmount: "200.00",
+              guaranteeCurrency: "USDT",
+              status: "已完成",
+              time: "2024-01-14 11:20:00",
+              tradeType: "NFT交易",
+              progress: "交易完成"
+            },
+            {
+              id: "GR003",
+              type: "收款担保",
+              tradePartner: "用户G7H8I9",
+              amount: "0.5",
+              currency: "BTC",
+              guaranteeAmount: "1,000.00",
+              guaranteeCurrency: "USDT",
+              status: "争议中",
+              time: "2024-01-13 16:45:00",
+              tradeType: "数字货币交易",
+              progress: "申请仲裁"
+            }
+          ],
+          payment: [
+            {
+              id: "GP001",
+              type: "付款担保",
+              tradePartner: "用户J1K2L3",
+              amount: "3,000.00",
+              currency: "USDT",
+              guaranteeAmount: "300.00",
+              guaranteeCurrency: "USDT",
+              status: "等待确认",
+              time: "2024-01-15 18:20:00",
+              tradeType: "数字货币交易",
+              progress: "等待对方确认"
+            },
+            {
+              id: "GP002",
+              type: "付款担保",
+              tradePartner: "用户M4N5O6",
+              amount: "1,500.00",
+              currency: "USDT",
+              guaranteeAmount: "150.00",
+              guaranteeCurrency: "USDT",
+              status: "已完成",
+              time: "2024-01-14 09:30:00",
+              tradeType: "商品交易",
+              progress: "交易完成"
+            },
+            {
+              id: "GP003",
+              type: "付款担保",
+              tradePartner: "用户P7Q8R9",
+              amount: "800.00",
+              currency: "USDT",
+              guaranteeAmount: "80.00",
+              guaranteeCurrency: "USDT",
+              status: "已取消",
+              time: "2024-01-12 13:15:00",
+              tradeType: "服务交易",
+              progress: "用户取消"
+            }
+          ],
+          credit: [
+            {
+              id: "GC001",
+              type: "信用担保充值",
+              amount: "10,000.00",
+              currency: "USDT",
+              creditLimit: "50,000.00",
+              usedCredit: "15,000.00",
+              availableCredit: "35,000.00",
+              status: "已完成",
+              time: "2024-01-15 10:00:00",
+              purpose: "增加信用额度"
+            },
+            {
+              id: "GC002",
+              type: "信用担保使用",
+              amount: "5,000.00",
+              currency: "USDT",
+              creditLimit: "50,000.00",
+              usedCredit: "20,000.00",
+              availableCredit: "30,000.00",
+              status: "已完成",
+              time: "2024-01-14 15:45:00",
+              purpose: "担保交易GR001"
+            },
+            {
+              id: "GC003",
+              type: "信用担保释放",
+              amount: "2,000.00",
+              currency: "USDT",
+              creditLimit: "50,000.00",
+              usedCredit: "18,000.00",
+              availableCredit: "32,000.00",
+              status: "已完成",
+              time: "2024-01-13 12:30:00",
+              purpose: "担保交易GR002完成"
+            }
+          ]
+        }
+        return guaranteeData[secondaryTab] || []
       default:
         return []
     }
@@ -10085,6 +10210,160 @@ export default function WalletPage() {
                         })()}
                       </div>
                     )
+                  case "担保记录":
+                    return (
+                      <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
+                        {(() => {
+                          // 根据不同页签显示不同的搜索选项
+                          if (secondaryTabKey === 'receive' || secondaryTabKey === 'payment') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    交易类型
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>数字货币交易</option>
+                                    <option>NFT交易</option>
+                                    <option>商品交易</option>
+                                    <option>服务交易</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    币种
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>USDT</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>BNB</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    状态
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>进行中</option>
+                                    <option>等待确认</option>
+                                    <option>已完成</option>
+                                    <option>争议中</option>
+                                    <option>已取消</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          } else if (secondaryTabKey === 'credit') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    操作类型
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>信用担保充值</option>
+                                    <option>信用担保使用</option>
+                                    <option>信用担保释放</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    币种
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>USDT</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>BNB</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    状态
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>已完成</option>
+                                    <option>处理中</option>
+                                    <option>失败</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          }
+                          
+                          // 默认搜索选项
+                          return (
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  类型
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>担保交易</option>
+                                  <option>信用担保</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  状态
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>进行中</option>
+                                  <option>已完成</option>
+                                  <option>争议中</option>
+                                  <option>已取消</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  时间
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>今天</option>
+                                  <option>最近7天</option>
+                                  <option>最近30天</option>
+                                  <option>最近90天</option>
+                                </select>
+                              </div>
+                              <div className="flex items-end gap-2">
+                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  重置
+                                </button>
+                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  筛选
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        })()}
+                      </div>
+                    )
                   default:
                     return null
                 }
@@ -10177,6 +10456,16 @@ export default function WalletPage() {
                                 return ['时间', '类型', '卡号', '提取金额', '到账金额', '到账币种', '目标账户', '状态']
                               }
                               return ['时间', '类型', '商户', '金额', '币种', '卡号', '状态']
+                            case "担保记录":
+                              // 根据不同页签返回不同的表头
+                              if (secondaryTabKey === 'receive') {
+                                return ['时间', '类型', '交易对象', '交易金额', '担保金额', '交易类型', '进度', '状态']
+                              } else if (secondaryTabKey === 'payment') {
+                                return ['时间', '类型', '交易对象', '交易金额', '担保金额', '交易类型', '进度', '状态']
+                              } else if (secondaryTabKey === 'credit') {
+                                return ['时间', '类型', '金额', '信用额度', '已用额度', '可用额度', '用途', '状态']
+                              }
+                              return ['时间', '类型', '金额', '状态']
                             default:
                               return ['时间', '类型', '金额', '状态']
                           }
@@ -10257,6 +10546,14 @@ export default function WalletPage() {
                               return [record.time, record.type, record.cardNumber, `${record.amount} ${record.currency}`, `${record.creditAmount} ${record.creditCurrency}`, record.creditCurrency, record.toAccount, record.status]
                             }
                             return [record.time, record.type, record.merchant, `${record.amount} ${record.currency}`, record.currency, record.cardNumber, record.status]
+                          case "担保记录":
+                            // 根据不同页签返回不同的数据字段
+                            if (secondaryTabKey === 'receive' || secondaryTabKey === 'payment') {
+                              return [record.time, record.type, record.tradePartner, `${record.amount} ${record.currency}`, `${record.guaranteeAmount} ${record.guaranteeCurrency}`, record.tradeType, record.progress, record.status]
+                            } else if (secondaryTabKey === 'credit') {
+                              return [record.time, record.type, `${record.amount} ${record.currency}`, `${record.creditLimit} ${record.currency}`, `${record.usedCredit} ${record.currency}`, `${record.availableCredit} ${record.currency}`, record.purpose, record.status]
+                            }
+                            return [record.time, record.type, record.amount, record.status]
                           default:
                             return Object.values(record).slice(0, 4) // 取前4个值作为默认显示
                         }
@@ -10328,7 +10625,16 @@ export default function WalletPage() {
                                key === 'creditAmount' ? '到账金额' :
                                key === 'creditCurrency' ? '到账币种' :
                                key === 'toAccount' ? '目标账户' :
-                               key === 'exchangeRate' ? '汇率' : key}
+                               key === 'exchangeRate' ? '汇率' :
+                               key === 'tradePartner' ? '交易对象' :
+                               key === 'guaranteeAmount' ? '担保金额' :
+                               key === 'guaranteeCurrency' ? '担保币种' :
+                               key === 'tradeType' ? '交易类型' :
+                               key === 'progress' ? '进度' :
+                               key === 'creditLimit' ? '信用额度' :
+                               key === 'usedCredit' ? '已用额度' :
+                               key === 'availableCredit' ? '可用额度' :
+                               key === 'purpose' ? '用途' : key}
                             </div>
                             <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
                               {value || '-'}
