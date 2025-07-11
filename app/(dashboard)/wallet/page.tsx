@@ -118,6 +118,7 @@ export default function WalletPage() {
   const [visibleAssets, setVisibleAssets] = useState(["USDT", "BTC", "ETH", "BNB", "ADA", "SOL"]) // 可见资产
   const [isMobile, setIsMobile] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false) // 移动端侧边栏状态
   // 移除加载动画状态
   const [showPositionModal, setShowPositionModal] = useState(false) // 仓位分布弹窗
   const [positionModalAnimating, setPositionModalAnimating] = useState(false) // 仓位弹窗动画状态
@@ -141,6 +142,23 @@ export default function WalletPage() {
   // 佣金账户相关状态
   const [commissionCategory, setCommissionCategory] = useState("合约佣金") // 佣金分类：合约佣金/理财佣金/U卡佣金/担保佣金/支付佣金
   const [commissionSubTab, setCommissionSubTab] = useState("佣金规则") // 佣金子页签：佣金规则/查看记录
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false) // 密码修改弹窗状态
+
+  // 缺失的变量定义
+  const isDark = theme === 'dark'
+  const cardStyle = isDark ? 'bg-gray-800 text-white' : 'bg-white text-black'
+  
+  // 钱包页签定义
+  const walletTabs = [
+    { id: "钱包总览", label: "钱包总览", icon: Wallet },
+    { id: "现货账户", label: "现货账户", icon: TrendingUp },
+    { id: "合约账户", label: "合约账户", icon: BarChart3 },
+    { id: "理财账户", label: "理财账户", icon: PiggyBank },
+    { id: "担保账户", label: "担保账户", icon: Shield },
+    { id: "U卡账户", label: "U卡账户", icon: CreditCard },
+    { id: "BePAY账户", label: "BePAY账户", icon: Receipt },
+    { id: "佣金账户", label: "佣金账户", icon: Percent }
+  ]
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
