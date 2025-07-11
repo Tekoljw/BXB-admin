@@ -1026,7 +1026,8 @@ export default function WalletPage() {
       tabs: {
         invest: '投资订单',
         exchange: '闪兑记录',
-        earnings: '理财收益记录'
+        earnings: '理财收益记录',
+        account: '理财账户记录'
       }
     },
     ucard: {
@@ -9084,6 +9085,100 @@ export default function WalletPage() {
           ]
         }
         return usdtTradingData[secondaryTab] || []
+      case "wealth":
+        // 理财订单数据
+        const wealthData = {
+          invest: [
+            {
+              id: "INV001",
+              product: "USDT活期理财",
+              amount: "1,000.00 USDT",
+              apy: "8.5%",
+              status: "持有中",
+              time: "2024-01-15 14:30:00",
+              earnings: "+12.34 USDT"
+            },
+            {
+              id: "INV002", 
+              product: "BTC定期理财30天",
+              amount: "0.5 BTC",
+              apy: "12.0%",
+              status: "已到期",
+              time: "2024-01-10 10:20:00",
+              earnings: "+0.015 BTC"
+            }
+          ],
+          exchange: [
+            {
+              id: "EX001",
+              type: "USDT → BTC",
+              fromAmount: "1,500.00 USDT",
+              toAmount: "0.035 BTC",
+              rate: "42,857.14",
+              status: "已完成",
+              time: "2024-01-15 16:45:00",
+              fee: "1.50 USDT"
+            },
+            {
+              id: "EX002",
+              type: "ETH → USDT", 
+              fromAmount: "2.0 ETH",
+              toAmount: "4,200.00 USDT",
+              rate: "2,100.00",
+              status: "已完成",
+              time: "2024-01-14 12:30:00",
+              fee: "4.20 USDT"
+            }
+          ],
+          earnings: [
+            {
+              id: "ER001",
+              product: "USDT活期理财",
+              amount: "+2.45 USDT",
+              type: "日收益",
+              time: "2024-01-15 00:00:00",
+              status: "已发放"
+            },
+            {
+              id: "ER002",
+              product: "BTC定期理财",
+              amount: "+0.002 BTC", 
+              type: "到期收益",
+              time: "2024-01-14 23:59:59",
+              status: "已发放"
+            }
+          ],
+          account: [
+            {
+              id: "AC001",
+              type: "理财转入",
+              currency: "USDT",
+              amount: "+2,000.00",
+              fromAccount: "现货账户",
+              status: "已完成",
+              time: "2024-01-15 15:20:00"
+            },
+            {
+              id: "AC002",
+              type: "理财转出",
+              currency: "USDT", 
+              amount: "-500.00",
+              toAccount: "现货账户",
+              status: "已完成",
+              time: "2024-01-14 11:30:00"
+            },
+            {
+              id: "AC003",
+              type: "收益发放",
+              currency: "BTC",
+              amount: "+0.015",
+              source: "BTC定期理财到期",
+              status: "已完成",
+              time: "2024-01-13 09:15:00"
+            }
+          ]
+        }
+        return wealthData[secondaryTab] || []
       default:
         return []
     }
@@ -9502,6 +9597,18 @@ export default function WalletPage() {
                               return ['时间', '交易对', '类型', '数量', '价格', '成交金额', '手续费', '状态']
                             case "合约订单":
                               return ['时间', '合约', '方向', '数量', '开仓价', '平仓价', '盈亏', '状态']
+                            case "理财订单":
+                              // 根据不同页签返回不同的表头
+                              if (secondaryTabKey === 'invest') {
+                                return ['时间', '理财产品', '投资金额', '年化收益', '当前收益', '状态']
+                              } else if (secondaryTabKey === 'exchange') {
+                                return ['时间', '兑换类型', '兑换金额', '兑换汇率', '手续费', '状态']
+                              } else if (secondaryTabKey === 'earnings') {
+                                return ['时间', '理财产品', '收益金额', '收益类型', '状态']
+                              } else if (secondaryTabKey === 'account') {
+                                return ['时间', '类型', '币种', '金额', '相关账户', '状态']
+                              }
+                              return ['时间', '类型', '金额', '状态']
                             case "佣金记录":
                               return ['时间', '类型', '币种', '金额', '来源', '费率', '状态']
                             default:
@@ -9558,6 +9665,18 @@ export default function WalletPage() {
                               return [record.time, record.type, record.amount, record.price, record.total, record.method, record.provider, record.status]
                             }
                             return [record.time, record.type, record.amount, record.price, record.total, record.method, record.status]
+                          case "理财订单":
+                            // 根据不同页签返回不同的数据字段
+                            if (secondaryTabKey === 'invest') {
+                              return [record.time, record.product, record.amount, record.apy, record.earnings, record.status]
+                            } else if (secondaryTabKey === 'exchange') {
+                              return [record.time, record.type, record.fromAmount, record.rate, record.fee, record.status]
+                            } else if (secondaryTabKey === 'earnings') {
+                              return [record.time, record.product, record.amount, record.type, record.status]
+                            } else if (secondaryTabKey === 'account') {
+                              return [record.time, record.type, record.currency, record.amount, record.fromAccount || record.toAccount || record.source, record.status]
+                            }
+                            return [record.time, record.type, record.amount, record.status]
                           case "佣金记录":
                             return [record.time, record.type, record.currency, record.amount, record.source, record.rate, record.status]
                           default:
