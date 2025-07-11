@@ -1055,7 +1055,9 @@ export default function WalletPage() {
     usdtTrading: {
       name: 'USDT买卖记录',
       tabs: {
-        all: '全部记录'
+        c2c: 'C2C',
+        quick: '快捷',
+        otc: 'OTC'
       }
     },
     commission: {
@@ -8915,7 +8917,82 @@ export default function WalletPage() {
       case "transfer":
         return transferData
       case "usdtTrading":
-        return fundsData["USDT买卖记录"] || []
+        // 根据页签类型返回不同的USDT买卖记录数据
+        const usdtTradingData = {
+          c2c: [
+            {
+              id: "C2C001",
+              type: "买入",
+              amount: "1,000.00 USDT",
+              price: "7.20 CNY",
+              total: "7,200.00 CNY",
+              method: "银行卡",
+              status: "已完成",
+              time: "2024-01-15 16:45:30",
+              merchant: "商户A"
+            },
+            {
+              id: "C2C002",
+              type: "卖出",
+              amount: "500.00 USDT",
+              price: "7.18 CNY",
+              total: "3,590.00 CNY",
+              method: "支付宝",
+              status: "处理中",
+              time: "2024-01-15 14:30:20",
+              merchant: "商户B"
+            }
+          ],
+          quick: [
+            {
+              id: "QUICK001",
+              type: "快捷买入",
+              amount: "2,000.00 USDT",
+              price: "7.22 CNY",
+              total: "14,440.00 CNY",
+              method: "微信支付",
+              status: "已完成",
+              time: "2024-01-15 18:15:45",
+              merchant: "快捷通道"
+            },
+            {
+              id: "QUICK002",
+              type: "快捷卖出",
+              amount: "800.00 USDT",
+              price: "7.19 CNY",
+              total: "5,752.00 CNY",
+              method: "银行卡",
+              status: "已完成",
+              time: "2024-01-15 12:20:15",
+              merchant: "快捷通道"
+            }
+          ],
+          otc: [
+            {
+              id: "OTC001",
+              type: "OTC买入",
+              amount: "5,000.00 USDT",
+              price: "7.25 CNY",
+              total: "36,250.00 CNY",
+              method: "银行转账",
+              status: "已完成",
+              time: "2024-01-15 20:30:00",
+              merchant: "OTC大户"
+            },
+            {
+              id: "OTC002",
+              type: "OTC卖出",
+              amount: "3,000.00 USDT",
+              price: "7.21 CNY",
+              total: "21,630.00 CNY",
+              method: "银行转账",
+              status: "处理中",
+              time: "2024-01-15 10:45:30",
+              merchant: "OTC机构"
+            }
+          ]
+        }
+        return usdtTradingData[secondaryTab] || []
       default:
         return []
     }
