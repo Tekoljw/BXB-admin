@@ -54,17 +54,11 @@ export default function HomePage() {
             </button>
 
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
-                {language === 'zh' ? '钱包' : 'Wallet'}
-              </Link>
               <Link href="#" className="text-[#14C2A3] font-medium">
                 SDK&API
               </Link>
               <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
                 {language === 'zh' ? '卡片' : 'Card'}
-              </Link>
-              <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
-                {language === 'zh' ? '代币经济' : 'Tokenomic'}
               </Link>
               <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
                 {language === 'zh' ? '新闻' : 'News'}
