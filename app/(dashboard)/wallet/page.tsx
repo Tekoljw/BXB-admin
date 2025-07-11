@@ -975,7 +975,7 @@ export default function WalletPage() {
 
     { id: "担保账户", label: "担保账户", icon: Shield },
     { id: "BePAY账户", label: "BePAY账户", icon: Receipt },
-    { id: "佣金账户", label: "佣金账户", icon: Gift }
+    { id: "佣金账户", label: "佣金账户", icon: Percent }
   ]
 
   const orderTabs = [
@@ -1345,7 +1345,7 @@ export default function WalletPage() {
 
         { name: "担保账户", balance: "5,000.00", icon: Shield, percentage: "22.5%" },
         { name: "BePAY账户", balance: "1,125.47", icon: Receipt, percentage: "5.0%" },
-        { name: "佣金账户", balance: "567.89", icon: Gift, percentage: "2.5%" }
+        { name: "佣金账户", balance: "567.89", icon: Percent, percentage: "2.5%" }
       ]
     }
   }
@@ -4348,7 +4348,7 @@ export default function WalletPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center mb-2">
-                      <Gift className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <Percent className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
                       <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                         总佣金
                       </h3>
