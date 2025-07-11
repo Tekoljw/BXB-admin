@@ -220,6 +220,20 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Updated desktop table headers and data mapping logic for all wealth order tabs
   - Enhanced mobile view field mappings for wealth-related data display
   - Resolved red warning message displaying on wealth account records page
+- January 30, 2025. Major homepage redesign - "Social + Guarantee + AI" platform presentation:
+  - Completely redesigned homepage to showcase crypto economic ecosystem instead of wallet-focused approach
+  - Updated hero section with new title "革新加密经济生态" and subtitle "全球首个「社交+担保+AI」一体化数字资产平台"
+  - Added platform core function icons: social (chat), USDT, guarantee (shield), AI (brain)
+  - Implemented P1 market pain points section highlighting trust deficit, high barriers, and fragmented features
+  - Created P2 solution section showcasing three core modules: crypto social network, smart guarantee trading, zero-threshold quantitative tools
+  - Added P3 core features detailed section with three subsections: social finance network, revolutionary guarantee trading (4-step process), AI trading ecosystem
+  - Implemented P4 technical advantages section: multi-sig guarantee accounts, NLP smart contract generation, fiat channel aggregation
+  - Created P5 business model section with revenue sources and 3-year user growth forecast
+  - Added P6 competitive advantages comparison matrix table showing superiority over competitors
+  - Implemented P7 development roadmap with three milestone phases: 2024 Q3 (Social+Guarantee MVP), 2025 Q1 (Contract Trading), 2025 Q4 (Strategy Market)
+  - Updated final CTA section with new slogan "让每一笔加密交易都安全可信任" and contact information
+  - Applied consistent color scheme: deep blue (#14C2A3) + tech purple + fluorescent green throughout design
+  - Fixed payment order data access logic in getOrderRecords function to support new 4-category structure
 
 ## User Preferences
 
