@@ -986,7 +986,8 @@ export default function WalletPage() {
     { id: "U卡订单", label: "U卡订单", icon: CreditCard },
     { id: "担保记录", label: "担保记录", icon: Shield },
     { id: "支付订单", label: "支付订单", icon: Receipt },
-    { id: "划转记录", label: "划转记录", icon: ArrowLeftRight }
+    { id: "划转记录", label: "划转记录", icon: ArrowLeftRight },
+    { id: "佣金记录", label: "佣金记录", icon: Percent }
   ]
 
   // 二级页签配置
@@ -994,10 +995,9 @@ export default function WalletPage() {
     funds: {
       name: '资金记录',
       tabs: {
-        deposit: '充值记录',
-        withdraw: '提现记录',
-        transfer: '转账记录',
-        fee: '手续费记录'
+        deposit_withdraw: '出金入金记录',
+        internal_transfer: '内转记录',
+        usdt_trading: 'USDT买卖记录'
       }
     },
     spot: {
@@ -1051,6 +1051,14 @@ export default function WalletPage() {
         records: '划转记录'
       }
     },
+    commission: {
+      name: '佣金记录',
+      tabs: {
+        trading: '交易返佣',
+        referral: '邀请返佣',
+        bonus: '奖励佣金'
+      }
+    },
     payment: {
       name: '支付订单',
       tabs: {
@@ -1072,6 +1080,7 @@ export default function WalletPage() {
 
       "担保记录": "guarantee",
       "划转记录": "transfer",
+      "佣金记录": "commission",
       "支付订单": "payment"
     }
     return mapping[orderTabId] || "spot"
@@ -1098,41 +1107,80 @@ export default function WalletPage() {
 
   // 订单记录数据
   const orderRecordsData = {
-    "资金记录": [
-      {
-        id: "FD001",
-        type: "充值",
-        currency: "USDT",
-        amount: "+1,000.00",
-        channel: "银行卡",
-        status: "已完成",
-        time: "2024-01-15 14:25:30",
-        fee: "0.00 USDT",
-        txHash: "0x123...abc"
-      },
-      {
-        id: "FD002",
-        type: "提现",
-        currency: "USDT",
-        amount: "-500.00",
-        channel: "银行卡",
-        status: "已完成",
-        time: "2024-01-14 20:30:15",
-        fee: "2.00 USDT",
-        txHash: "0x456...def"
-      },
-      {
-        id: "FD003",
-        type: "转账",
-        currency: "BTC",
-        amount: "-0.01",
-        channel: "链上转账",
-        status: "确认中",
-        time: "2024-01-14 15:45:20",
-        fee: "0.0005 BTC",
-        txHash: "0x789...ghi"
-      }
-    ],
+    "资金记录": {
+      "出金入金记录": [
+        {
+          id: "FD001",
+          type: "充值",
+          currency: "USDT",
+          amount: "+1,000.00",
+          channel: "银行卡",
+          status: "已完成",
+          time: "2024-01-15 14:25:30",
+          fee: "0.00 USDT",
+          txHash: "0x123...abc"
+        },
+        {
+          id: "FD002",
+          type: "提现",
+          currency: "USDT",
+          amount: "-500.00",
+          channel: "银行卡",
+          status: "已完成",
+          time: "2024-01-14 20:30:15",
+          fee: "2.00 USDT",
+          txHash: "0x456...def"
+        }
+      ],
+      "内转记录": [
+        {
+          id: "IT001",
+          type: "用户转账",
+          from: "自己",
+          to: "用户A",
+          currency: "USDT",
+          amount: "-100.00",
+          status: "已完成",
+          time: "2024-01-15 16:20:30",
+          note: "朋友转账"
+        },
+        {
+          id: "IT002",
+          type: "接收转账",
+          from: "用户B",
+          to: "自己",
+          currency: "USDT",
+          amount: "+200.00",
+          status: "已完成",
+          time: "2024-01-15 15:45:15",
+          note: "业务合作款"
+        }
+      ],
+      "USDT买卖记录": [
+        {
+          id: "OTC001",
+          type: "买入",
+          amount: "1,000.00 USDT",
+          price: "7.20 CNY",
+          total: "7,200.00 CNY",
+          method: "银行卡",
+          status: "已完成",
+          time: "2024-01-15 16:45:30",
+          merchant: "商户A"
+        },
+        {
+          id: "OTC002",
+          type: "卖出",
+          amount: "500.00 USDT",
+          price: "7.22 CNY",
+          total: "3,610.00 CNY",
+          method: "支付宝",
+          status: "已完成",
+          time: "2024-01-14 19:20:15",
+          merchant: "商户B"
+        }
+      ]
+    },
     "现货订单": [
       {
         id: "SP001",
@@ -1325,6 +1373,38 @@ export default function WalletPage() {
         amount: "500.00",
         status: "已完成",
         time: "2024-01-15 11:30:20"
+      }
+    ],
+    "佣金记录": [
+      {
+        id: "CM001",
+        type: "交易返佣",
+        currency: "USDT",
+        amount: "+12.34",
+        source: "BTC/USDT交易",
+        status: "已到账",
+        time: "2024-01-15 16:30:45",
+        rate: "0.1%"
+      },
+      {
+        id: "CM002",
+        type: "邀请返佣",
+        currency: "USDT",
+        amount: "+8.90",
+        source: "用户A邀请奖励",
+        status: "已到账",
+        time: "2024-01-14 14:20:30",
+        rate: "20%"
+      },
+      {
+        id: "CM003",
+        type: "奖励佣金",
+        currency: "USDT",
+        amount: "+50.00",
+        source: "月度活动奖励",
+        status: "已到账",
+        time: "2024-01-13 10:15:20",
+        rate: "固定"
       }
     ]
   }
