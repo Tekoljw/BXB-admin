@@ -933,8 +933,6 @@ export default function WalletPage() {
     setTransferFrom(transferTo)
     setTransferTo(temp)
   }
-  // 移除页面加载状态
-  const isDark = theme === "dark"
 
   // 趋势图数据
   const generateTrendData = (isPositive = true) => {
@@ -988,16 +986,6 @@ export default function WalletPage() {
   }, [])
 
   // 移除初始加载动画
-
-  const walletTabs = [
-    { id: "钱包总览", label: "钱包总览", icon: Wallet },
-    { id: "合约账户", label: "合约账户", icon: BarChart3 },
-    { id: "理财账户", label: "理财账户", icon: PiggyBank },
-    { id: "U卡账户", label: "U卡账户", icon: CreditCard },
-    { id: "佣金账户", label: "佣金账户", icon: Percent },
-    { id: "担保账户", label: "担保账户", icon: Shield },
-    { id: "BePAY账户", label: "BePAY账户", icon: Receipt }
-  ]
 
   const orderTabs = [
     { id: "现货订单", label: "现货订单", icon: BarChart2 },
