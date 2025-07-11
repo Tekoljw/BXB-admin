@@ -1385,7 +1385,35 @@ export default function WalletPage() {
         time: "2024-01-15 11:30:20"
       }
     ],
-    "其他记录": [],
+    "其他记录": [
+      {
+        id: "OTH001",
+        time: "2024-01-15 14:20:15",
+        currency: "USDT",
+        amount: "+50.00",
+        type: "抵扣金",
+        status: "已完成",
+        remark: "新用户注册奖励"
+      },
+      {
+        id: "OTH002", 
+        time: "2024-01-15 10:35:45",
+        currency: "BTC",
+        amount: "+0.001",
+        type: "系统发放",
+        status: "已完成",
+        remark: "成功邀请用户注册"
+      },
+      {
+        id: "OTH003",
+        time: "2024-01-14 22:10:30", 
+        currency: "USDT",
+        amount: "-2.50",
+        type: "系统减扣",
+        status: "已完成",
+        remark: "网络费用调整"
+      }
+    ],
     "佣金记录": [
       {
         id: "CM001",
@@ -8559,7 +8587,7 @@ export default function WalletPage() {
                                 headers = ['时间', '币种', '划出账户', '划入账户', '数量']
                                 break
                               case "其他记录":
-                                headers = ['时间', '币种', '数量', '类型', '备注']
+                                headers = ['时间', '币种', '数量', '类型', '状态', '备注']
                                 break
                               default:
                                 headers = ['时间', '类型', '金额', '状态']
@@ -8600,7 +8628,7 @@ export default function WalletPage() {
                               cellData = [record.time, record.currency, record.fromAccount, record.toAccount, record.amount]
                               break
                             case "其他记录":
-                              cellData = [record.time, record.currency, record.amount, record.type, record.remark]
+                              cellData = [record.time, record.currency, record.amount, record.type, record.status, record.remark]
                               break
                             default:
                               cellData = Object.values(record)
@@ -8678,6 +8706,7 @@ export default function WalletPage() {
                             { key: 'currency', label: '币种' },
                             { key: 'amount', label: '数量' },
                             { key: 'type', label: '类型' },
+                            { key: 'status', label: '状态' },
                             { key: 'remark', label: '备注' }
                           ]
                         default:
