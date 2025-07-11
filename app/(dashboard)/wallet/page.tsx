@@ -3709,10 +3709,10 @@ export default function WalletPage() {
                       // 打开接入文档
                       window.open('/docs/bepay-integration', '_blank')
                     }}
-                    className={`flex-1 inline-flex items-center justify-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                    className={`flex-1 inline-flex items-center justify-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-all border-2 ${
                       isDark 
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
+                        ? 'bg-transparent border-white text-white hover:bg-gray-800' 
+                        : 'bg-white border-black text-black hover:bg-gray-50'
                     }`}
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3730,8 +3730,8 @@ export default function WalletPage() {
                     }}
                     className={`flex-1 inline-flex items-center justify-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-all ${
                       isDark 
-                        ? 'bg-purple-600 hover:bg-purple-700 text-white' 
-                        : 'bg-purple-500 hover:bg-purple-600 text-white'
+                        ? 'bg-white text-black hover:bg-gray-100' 
+                        : 'bg-black text-white hover:bg-gray-800'
                     }`}
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
