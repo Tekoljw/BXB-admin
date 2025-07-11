@@ -972,9 +972,10 @@ export default function WalletPage() {
     { id: "合约账户", label: "合约账户", icon: BarChart3 },
     { id: "理财账户", label: "理财账户", icon: PiggyBank },
     { id: "U卡账户", label: "U卡账户", icon: CreditCard },
-    { id: "佣金账户", label: "佣金账户", icon: Percent },
+
     { id: "担保账户", label: "担保账户", icon: Shield },
-    { id: "BePAY账户", label: "BePAY账户", icon: Receipt }
+    { id: "BePAY账户", label: "BePAY账户", icon: Receipt },
+    { id: "佣金账户", label: "佣金账户", icon: Gift }
   ]
 
   const orderTabs = [
@@ -982,7 +983,6 @@ export default function WalletPage() {
     { id: "合约订单", label: "合约订单", icon: LineChart },
     { id: "理财订单", label: "理财订单", icon: PiggyBank },
     { id: "U卡订单", label: "U卡订单", icon: CreditCard },
-    { id: "佣金记录", label: "佣金记录", icon: Percent },
     { id: "担保记录", label: "担保记录", icon: Shield },
     { id: "支付订单", label: "支付订单", icon: Receipt },
     { id: "入金提币记录", label: "入金提币记录", icon: ArrowUpDown },
@@ -1029,15 +1029,7 @@ export default function WalletPage() {
         refund: '退款记录'
       }
     },
-    commission: {
-      name: '佣金记录',
-      tabs: {
-        futures: '合约佣金',
-        wealth: '理财佣金',
-        payment: '支付佣金',
-        ucard: 'U卡佣金'
-      }
-    },
+
     guarantee: {
       name: '担保记录',
       tabs: {
@@ -1090,7 +1082,7 @@ export default function WalletPage() {
       "合约订单": "futures", 
       "理财订单": "wealth",
       "U卡订单": "ucard",
-      "佣金记录": "commission",
+
       "担保记录": "guarantee",
       "入金提币记录": "deposit",
       "内转记录": "internal",
@@ -1237,28 +1229,7 @@ export default function WalletPage() {
         cardNumber: "****1234"
       }
     ],
-    "佣金记录": [
-      {
-        id: "CM001",
-        type: "推荐佣金",
-        user: "用户A",
-        amount: "+15.67 USDT",
-        rate: "20%",
-        source: "现货交易",
-        status: "已发放",
-        time: "2024-01-15 16:30:00"
-      },
-      {
-        id: "CM002",
-        type: "返佣奖励",
-        user: "用户B",
-        amount: "+8.32 USDT", 
-        rate: "15%",
-        source: "合约交易",
-        status: "已发放",
-        time: "2024-01-15 14:20:45"
-      }
-    ],
+
     "担保记录": [
       {
         id: "GR001",
@@ -1447,9 +1418,10 @@ export default function WalletPage() {
         { name: "合约账户", balance: "3,456.78", icon: BarChart3, percentage: "15.5%" },
         { name: "理财账户", balance: "2,345.67", icon: PiggyBank, percentage: "10.5%" },
         { name: "U卡账户", balance: "1,234.56", icon: DollarSign, percentage: "5.5%" },
-        { name: "佣金账户", balance: "567.89", icon: Gift, percentage: "2.5%" },
+
         { name: "担保账户", balance: "5,000.00", icon: Shield, percentage: "22.5%" },
-        { name: "BePAY账户", balance: "1,125.47", icon: Receipt, percentage: "5.0%" }
+        { name: "BePAY账户", balance: "1,125.47", icon: Receipt, percentage: "5.0%" },
+        { name: "佣金账户", balance: "567.89", icon: Gift, percentage: "2.5%" }
       ]
     }
   }
@@ -1508,17 +1480,7 @@ export default function WalletPage() {
         }
       ]
     },
-    佣金账户: {
-      totalCommission: "567.89",
-      todayCommission: "+12.34",
-      thisMonthCommission: "+234.56",
-      referrals: 25,
-      commissionHistory: [
-        { date: "2024-01-15", amount: "+12.34", source: "交易返佣" },
-        { date: "2024-01-14", amount: "+8.90", source: "邀请返佣" },
-        { date: "2024-01-13", amount: "+15.67", source: "交易返佣" }
-      ]
-    },
+
     "U卡账户": {
       cardBalance: "1,234.56",
       cardLimit: "10,000.00",
@@ -1563,6 +1525,17 @@ export default function WalletPage() {
       assetDistribution: [
         { name: "商户资产", value: 1125.47, percentage: 28.7, color: "#00D4AA" },
         { name: "代付备用金", value: 2800.00, percentage: 71.3, color: "#3B82F6" }
+      ]
+    },
+    佣金账户: {
+      totalCommission: "567.89",
+      todayCommission: "+12.34",
+      thisMonthCommission: "+234.56",
+      referrals: 25,
+      commissionHistory: [
+        { date: "2024-01-15", amount: "+12.34", source: "交易返佣" },
+        { date: "2024-01-14", amount: "+8.90", source: "邀请返佣" },
+        { date: "2024-01-13", amount: "+15.67", source: "交易返佣" }
       ]
     }
   }
@@ -4437,6 +4410,151 @@ export default function WalletPage() {
                   {/* 其他加密货币功能页签内容 */}
                 </div>
               )}
+            </div>
+          </div>
+        );
+
+      case "佣金账户":
+        return (
+          <div className="space-y-6">
+            {/* 佣金总览卡片 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* 总佣金 */}
+              <div className={`rounded-lg p-6 ${cardStyle}`}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center mb-2">
+                      <Gift className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        总佣金
+                      </h3>
+                    </div>
+                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {walletData.佣金账户.totalCommission} USDT
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 今日佣金 */}
+              <div className={`rounded-lg p-6 ${cardStyle}`}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center mb-2">
+                      <TrendingUp className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        今日佣金
+                      </h3>
+                    </div>
+                    <div className={`text-2xl font-bold text-green-500`}>
+                      {walletData.佣金账户.todayCommission} USDT
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 本月佣金 */}
+              <div className={`rounded-lg p-6 ${cardStyle}`}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center mb-2">
+                      <Calendar className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        本月佣金
+                      </h3>
+                    </div>
+                    <div className={`text-2xl font-bold text-blue-500`}>
+                      {walletData.佣金账户.thisMonthCommission} USDT
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 推荐统计 */}
+            <div className={`rounded-lg p-6 ${cardStyle}`}>
+              <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                推荐统计
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-center">
+                  <Users className={`h-8 w-8 mr-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                  <div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      推荐用户数
+                    </div>
+                    <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {walletData.佣金账户.referrals} 人
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 佣金记录 */}
+            <div className={`rounded-lg p-6 ${cardStyle}`}>
+              <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                最近佣金记录
+              </h3>
+              <div className="space-y-3">
+                {walletData.佣金账户.commissionHistory.map((record, index) => (
+                  <div key={index} className={`flex items-center justify-between p-3 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                    <div className="flex items-center">
+                      <div className={`w-2 h-2 rounded-full mr-3 ${record.amount.startsWith('+') ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                      <div>
+                        <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {record.source}
+                        </div>
+                        <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {record.date}
+                        </div>
+                      </div>
+                    </div>
+                    <div className={`text-sm font-medium ${record.amount.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+                      {record.amount}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 操作按钮 */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <button className={`p-4 rounded-xl border-2 transition-all ${
+                isDark 
+                  ? "border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700" 
+                  : "border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50"
+              } ${isDark ? "text-white" : "text-gray-900"}`}>
+                <Users className="h-6 w-6 mx-auto mb-2" />
+                <div className="text-sm font-medium">邀请好友</div>
+              </button>
+
+              <button className={`p-4 rounded-xl border-2 transition-all ${
+                isDark 
+                  ? "border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700" 
+                  : "border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50"
+              } ${isDark ? "text-white" : "text-gray-900"}`}>
+                <BarChart3 className="h-6 w-6 mx-auto mb-2" />
+                <div className="text-sm font-medium">佣金统计</div>
+              </button>
+
+              <button className={`p-4 rounded-xl border-2 transition-all ${
+                isDark 
+                  ? "border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700" 
+                  : "border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50"
+              } ${isDark ? "text-white" : "text-gray-900"}`}>
+                <Download className="h-6 w-6 mx-auto mb-2" />
+                <div className="text-sm font-medium">提取佣金</div>
+              </button>
+
+              <button className={`p-4 rounded-xl border-2 transition-all ${
+                isDark 
+                  ? "border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700" 
+                  : "border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50"
+              } ${isDark ? "text-white" : "text-gray-900"}`}>
+                <FileText className="h-6 w-6 mx-auto mb-2" />
+                <div className="text-sm font-medium">佣金明细</div>
+              </button>
             </div>
           </div>
         );
