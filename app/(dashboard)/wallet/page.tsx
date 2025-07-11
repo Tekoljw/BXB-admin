@@ -8720,15 +8720,25 @@ export default function WalletPage() {
         {/* 二级页签导航 - 滑动页签组件 */}
         {currentCategory && Object.keys(currentCategory.tabs).length > 1 && (
           <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+            <div className={`relative flex rounded-lg p-1 overflow-hidden ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
               {/* 滑动背景 */}
-              <div
-                className="absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out bg-white"
-                style={{
-                  width: `${100 / Object.keys(currentCategory.tabs).length}%`,
-                  left: `${(Object.keys(currentCategory.tabs).findIndex(key => key === secondaryTab) * 100) / Object.keys(currentCategory.tabs).length}%`
-                }}
-              />
+              {(() => {
+                const tabKeys = Object.keys(currentCategory.tabs)
+                const currentIndex = tabKeys.findIndex(key => key === secondaryTab)
+                const tabWidth = 100 / tabKeys.length
+                const leftPosition = currentIndex >= 0 ? currentIndex * tabWidth : 0
+                
+                return (
+                  <div
+                    className="absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out bg-white"
+                    style={{
+                      width: `${tabWidth}%`,
+                      left: `${leftPosition}%`
+                    }}
+                  />
+                )
+              })()}
+              
               {/* 页签按钮 */}
               {Object.entries(currentCategory.tabs).map(([key, label]) => (
                 <button
