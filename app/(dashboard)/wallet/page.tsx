@@ -9322,6 +9322,8 @@ export default function WalletPage() {
               cardNumber: "****1234",
               amount: "500.00",
               currency: "USDT",
+              creditAmount: "497.50",
+              creditCurrency: "USDT",
               status: "已完成",
               time: "2024-01-15 14:20:00",
               fee: "2.50 USDT"
@@ -9332,6 +9334,8 @@ export default function WalletPage() {
               cardNumber: "****5678", 
               amount: "0.01",
               currency: "BTC",
+              creditAmount: "0.0099",
+              creditCurrency: "BTC",
               status: "已完成",
               time: "2024-01-14 11:30:00",
               fee: "0.0001 BTC"
@@ -9342,6 +9346,8 @@ export default function WalletPage() {
               cardNumber: "****9012",
               amount: "1000.00", 
               currency: "USDT",
+              creditAmount: "995.00",
+              creditCurrency: "USDT",
               status: "处理中",
               time: "2024-01-13 18:45:00",
               fee: "5.00 USDT"
@@ -9405,6 +9411,8 @@ export default function WalletPage() {
               cardNumber: "****1234",
               amount: "45.99",
               currency: "USD",
+              creditAmount: "45.99",
+              creditCurrency: "USD",
               status: "已完成",
               time: "2024-01-10 13:40:25",
               reason: "商品质量问题",
@@ -9417,6 +9425,8 @@ export default function WalletPage() {
               cardNumber: "****1234",
               amount: "9.99",
               currency: "USD",
+              creditAmount: "9.99",
+              creditCurrency: "USD",
               status: "处理中",
               time: "2024-01-09 16:20:00",
               reason: "用户主动取消",
@@ -9429,6 +9439,8 @@ export default function WalletPage() {
               cardNumber: "****5678",
               amount: "29.99",
               currency: "USD",
+              creditAmount: "29.99",
+              creditCurrency: "USD",
               status: "已完成",
               time: "2024-01-08 10:30:15",
               reason: "服务未提供",
@@ -10143,11 +10155,11 @@ export default function WalletPage() {
                               if (secondaryTabKey === 'open') {
                                 return ['时间', '类型', '卡号', '卡片类型', '地区', '手续费', '状态']
                               } else if (secondaryTabKey === 'recharge') {
-                                return ['时间', '类型', '卡号', '金额', '币种', '手续费', '状态']
+                                return ['时间', '类型', '卡号', '金额', '币种', '到账金额', '到账币种', '状态']
                               } else if (secondaryTabKey === 'consume') {
                                 return ['时间', '类型', '商户', '卡号', '金额', '消费地区', '状态']
                               } else if (secondaryTabKey === 'refund') {
-                                return ['时间', '类型', '商户', '卡号', '金额', '退款原因', '状态']
+                                return ['时间', '类型', '商户', '卡号', '金额', '到账金额', '到账币种', '状态']
                               }
                               return ['时间', '类型', '商户', '金额', '币种', '卡号', '状态']
                             default:
@@ -10223,11 +10235,11 @@ export default function WalletPage() {
                             if (secondaryTabKey === 'open') {
                               return [record.time, record.type, record.cardNumber, record.cardType, record.region, record.fee, record.status]
                             } else if (secondaryTabKey === 'recharge') {
-                              return [record.time, record.type, record.cardNumber, `${record.amount} ${record.currency}`, record.currency, record.fee, record.status]
+                              return [record.time, record.type, record.cardNumber, `${record.amount} ${record.currency}`, record.currency, `${record.creditAmount} ${record.creditCurrency}`, record.creditCurrency, record.status]
                             } else if (secondaryTabKey === 'consume') {
                               return [record.time, record.type, record.merchant, record.cardNumber, `${record.amount} ${record.currency}`, record.location, record.status]
                             } else if (secondaryTabKey === 'refund') {
-                              return [record.time, record.type, record.merchant, record.cardNumber, `${record.amount} ${record.currency}`, record.reason, record.status]
+                              return [record.time, record.type, record.merchant, record.cardNumber, `${record.amount} ${record.currency}`, `${record.creditAmount} ${record.creditCurrency}`, record.creditCurrency, record.status]
                             }
                             return [record.time, record.type, record.merchant, `${record.amount} ${record.currency}`, record.currency, record.cardNumber, record.status]
                           default:
@@ -10297,7 +10309,9 @@ export default function WalletPage() {
                                key === 'region' ? '地区' :
                                key === 'location' ? '消费地区' :
                                key === 'reason' ? '退款原因' :
-                               key === 'originalOrderId' ? '原订单号' : key}
+                               key === 'originalOrderId' ? '原订单号' :
+                               key === 'creditAmount' ? '到账金额' :
+                               key === 'creditCurrency' ? '到账币种' : key}
                             </div>
                             <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
                               {value || '-'}
