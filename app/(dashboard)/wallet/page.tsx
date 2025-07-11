@@ -8723,7 +8723,7 @@ export default function WalletPage() {
             <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
               {/* 滑动背景 */}
               <div
-                className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
+                className="absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out bg-white"
                 style={{
                   width: `${100 / Object.keys(currentCategory.tabs).length}%`,
                   left: `${(Object.keys(currentCategory.tabs).findIndex(key => key === secondaryTab) * 100) / Object.keys(currentCategory.tabs).length}%`
@@ -8736,7 +8736,7 @@ export default function WalletPage() {
                   onClick={() => setSecondaryTab(key)}
                   className={`relative z-10 flex-1 px-4 py-2 text-sm font-medium transition-all duration-300 ${
                     secondaryTab === key
-                      ? isDark ? "text-black" : "text-white"
+                      ? "text-black"
                       : isDark
                       ? "text-gray-300 hover:text-white"
                       : "text-gray-700 hover:text-gray-900"
