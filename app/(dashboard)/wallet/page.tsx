@@ -3529,39 +3529,21 @@ export default function WalletPage() {
             {showExtendTimeModal && renderExtendTimeModal()}
             {showContractModal && selectedContract && renderContractModal()}
           </div>
-        )
+        );
 
       case "BePAY账户":
-        // 定义法币和加密货币页签
-        const fiatTabs = [
-          { id: "商户资产", label: "商户资产", icon: Landmark },
-          { id: "通道配置", label: "通道配置", icon: Network },
-          { id: "法币下发", label: "法币下发", icon: Repeat },
-          { id: "代付金充值", label: "代付金充值", icon: Plus }
-        ]
-        const fiatIconTabs = [
-          { id: "资金记录", icon: FileText },
-          { id: "订单记录", icon: BarChart2 },
-          { id: "资产分布", icon: PieChart }
-        ]
-        
-        const cryptoTabs = [
-          { id: "商户资产", label: "商户资产", icon: Landmark },
-          { id: "地址管理", label: "地址管理", icon: Link },
-          { id: "OTC供应商", label: "OTC供应商", icon: Network },
-          { id: "划转", label: "划转", icon: ArrowLeftRight }
-        ]
-        const cryptoIconTabs = [
-          { id: "划转记录", icon: FileText },
-          { id: "订单记录", icon: BarChart2 },
-          { id: "资产分布", icon: PieChart }
-        ]
+        const [selectedPaymentCard, setSelectedPaymentCard] = useState<"fiat" | "crypto">("fiat");
+        const [selectedCurrency, setSelectedCurrency] = useState("fiat");
+        const [selectedPaymentTab, setSelectedPaymentTab] = useState("商户资产");
+        const cardStyle = `bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] shadow-sm`;
         
         return (
           <div className="space-y-6">
-            {/* 顶部三个卡片：法币支付API、加密货币支付API和商户信息 */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* 商户法币资产卡片 */}
+            <h2 className="text-2xl font-bold mb-6">BePAY账户</h2>
+            
+            {/* 账户余额卡片 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* 法币总余额卡片 */}
               <div 
                 onClick={() => setSelectedPaymentCard("fiat")}
                 className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
@@ -3571,7 +3553,7 @@ export default function WalletPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <Banknote className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">法币支付API</h3>
+                    <h3 className="text-lg font-semibold">法币总余额</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -3597,30 +3579,166 @@ export default function WalletPage() {
                   <div className="text-gray-500 text-sm">
                     代付备用金：$38,520.00
                   </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      // Handle API documentation click
-                    }}
-                    className={`px-2 py-1 rounded text-xs font-medium transition-all ${
-                      isDark 
-                        ? "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white" 
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
-                    }`}
-                    title="API文档"
-                  >
-                    API文档
-                  </button>
                 </div>
               </div>
 
-              {/* 商户加密货币资产卡片 */}
+              {/* 加密货币总余额卡片 */}
               <div 
                 onClick={() => setSelectedPaymentCard("crypto")}
                 className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
                   selectedPaymentCard === "crypto" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
                 }`}
               >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <Coins className="h-6 w-6 text-[#3B82F6]" />
+                    <h3 className="text-lg font-semibold">加密货币总余额</h3>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                    }}
+                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
+                      isDark 
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className="w-3 h-3 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold">
+                      <span className="text-white text-[8px]">₮</span>
+                    </div>
+                    <span>USDT</span>
+                    <ChevronDown className="h-2 w-2" />
+                  </button>
+                </div>
+                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {balanceVisible ? "45,230.50 USDT" : "****"}
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="text-gray-500 text-sm">
+                    其他币种：28.95 ETH + 1.26 BTC
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 法币/加密货币切换标签 + 功能按钮 */}
+            <div className="flex items-center justify-between">
+              {/* 左侧：法币/Crypto切换标签 */}
+              <div className="flex bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
+                <button
+                  onClick={() => {
+                    setSelectedCurrency("fiat")
+                    setSelectedPaymentTab("商户资产")
+                  }}
+                  className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                    selectedCurrency === "fiat"
+                      ? "bg-white dark:bg-[#1a1d29] text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  法币
+                </button>
+                <button
+                  onClick={() => {
+                    setSelectedCurrency("crypto")
+                    setSelectedPaymentTab("商户资产")
+                  }}
+                  className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                    selectedCurrency === "crypto"
+                      ? "bg-white dark:bg-[#1a1d29] text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  Crypto
+                </button>
+              </div>
+
+              {/* 右侧：功能按钮 */}
+              <div className="flex space-x-3">
+                {selectedCurrency === "fiat" ? (
+                  <>
+                    <button
+                      onClick={() => setSelectedPaymentTab("结算")}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 border-black transition-all ${
+                        isDark 
+                          ? "bg-transparent text-white hover:bg-gray-800" 
+                          : "bg-white text-black hover:bg-gray-50"
+                      }`}
+                    >
+                      <CreditCard className="h-4 w-4" />
+                      <span>结算</span>
+                    </button>
+                    <button
+                      onClick={() => setSelectedPaymentTab("充值")}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 border-black transition-all ${
+                        isDark 
+                          ? "bg-transparent text-white hover:bg-gray-800" 
+                          : "bg-white text-black hover:bg-gray-50"
+                      }`}
+                    >
+                      <Plus className="h-4 w-4" />
+                      <span>充值</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setSelectedPaymentTab("地址管理")}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 border-black transition-all ${
+                        isDark 
+                          ? "bg-transparent text-white hover:bg-gray-800" 
+                          : "bg-white text-black hover:bg-gray-50"
+                      }`}
+                    >
+                      <MapPin className="h-4 w-4" />
+                      <span>地址管理</span>
+                    </button>
+                    <button
+                      onClick={() => setSelectedPaymentTab("划转")}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 border-black transition-all ${
+                        isDark 
+                          ? "bg-transparent text-white hover:bg-gray-800" 
+                          : "bg-white text-black hover:bg-gray-50"
+                      }`}
+                    >
+                      <ArrowLeftRight className="h-4 w-4" />
+                      <span>划转</span>
+                    </button>
+                  </>
+                )}
+                <button className="p-2 rounded-lg border-2 border-black bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <BarChart3 className="h-4 w-4" />
+                </button>
+                <button className="p-2 rounded-lg border-2 border-black bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <FileText className="h-4 w-4" />
+                </button>
+                <button className="p-2 rounded-lg border-2 border-black bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <Settings className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* 详细内容区域 */}
+            <div className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm overflow-hidden">
+              <div className="p-6">
+                <div className="text-center text-gray-500">
+                  {selectedCurrency === "fiat" ? "法币" : "加密货币"}支付功能正在开发中...
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "佣金账户":
+        return (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold mb-6">佣金账户</h2>
+            <div className="p-8 text-center text-gray-500">
+              佣金账户功能正在开发中...
+            </div>
+          </div>
+        );
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <Coins className="h-6 w-6 text-[#3B82F6]" />
@@ -3743,54 +3861,54 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 法币/Crypto切换页签 */}
-            <div className="flex justify-start">
-              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
-                {/* 滑动背景 */}
-                <div
-                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
-                  style={{
-                    width: '80px',
-                    left: selectedPaymentCard === "fiat" ? '4px' : '84px'
-                  }}
-                />
-                {/* 按钮 */}
-                {[
-                  { id: "fiat", label: "法币" },
-                  { id: "crypto", label: "Crypto" }
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
-                      selectedPaymentCard === tab.id
-                        ? isDark ? "text-black" : "text-white"
-                        : isDark
-                        ? "text-gray-300 hover:text-white"
-                        : "text-gray-700 hover:text-gray-900"
-                    }`}
+            {/* 法币/Crypto切换页签和操作按钮区域 */}
+            <div className="transition-all duration-300 ease-out">
+              <div className="flex justify-between items-center gap-4">
+                {/* 左侧：法币/Crypto切换页签 */}
+                <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+                  {/* 滑动背景 */}
+                  <div
+                    className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
                     style={{
                       width: '80px',
-                      height: '32px'
+                      left: selectedPaymentCard === "fiat" ? '4px' : '84px'
                     }}
-                    onClick={() => {
-                      setSelectedPaymentCard(tab.id)
-                      // 切换时重置对应的标签页
-                      if (tab.id === "fiat") {
-                        setFiatTab("商户资产")
-                      } else {
-                        setCryptoTab("商户资产")
-                      }
-                    }}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+                  />
+                  {/* 按钮 */}
+                  {[
+                    { id: "fiat", label: "法币" },
+                    { id: "crypto", label: "Crypto" }
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                        selectedPaymentCard === tab.id
+                          ? isDark ? "text-black" : "text-white"
+                          : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-700 hover:text-gray-900"
+                      }`}
+                      style={{
+                        width: '80px',
+                        height: '32px'
+                      }}
+                      onClick={() => {
+                        setSelectedPaymentCard(tab.id)
+                        // 切换时重置对应的标签页
+                        if (tab.id === "fiat") {
+                          setFiatTab("商户资产")
+                        } else {
+                          setCryptoTab("商户资产")
+                        }
+                      }}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
 
-            {/* 操作按钮区域 */}
-            <div className="transition-all duration-300 ease-out">
-              <div className="flex justify-end gap-4">
+                {/* 右侧：操作按钮区域 */}
+                <div className="flex gap-4">
                 {/* 主要操作按钮 - 右对齐 */}
                 <div className="flex gap-3">
                   {selectedPaymentCard === "fiat" ? (

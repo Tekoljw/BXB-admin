@@ -249,6 +249,13 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Modified market pain points section (P1) from red/orange/yellow cards to gray/green/blue color scheme
   - Replaced all background gradients and accent colors to match restricted palette
   - Maintained visual hierarchy while adhering to simplified color requirements
+- January 12, 2025. Enhanced BePay account page interface:
+  - Modified button layout from centered full-screen to right-aligned positioning
+  - Changed button container from grid layout to horizontal flex layout for better alignment
+  - Added 法币/Crypto toggle tabs positioned on the left side below account cards
+  - Implemented synchronized tab switching that resets corresponding sub-tabs
+  - Created proper alignment between left-side currency toggle and right-side action buttons
+  - Added smooth sliding animation and proper styling for currency type switcher
 
 ## User Preferences
 
