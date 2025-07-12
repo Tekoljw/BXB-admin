@@ -55,7 +55,7 @@ export default function HomePage() {
 
             <div className="hidden md:flex items-center space-x-8">
               <Link href="#" className="text-[#14C2A3] font-medium">
-                SDK&API
+                {language === 'zh' ? '首页' : 'Home'}
               </Link>
               <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
                 {language === 'zh' ? '卡片' : 'Card'}
@@ -271,32 +271,65 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* 行动按钮 - 重新设计 */}
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-16 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
-                <button 
-                  onClick={handleLogin}
-                  className="group relative px-12 py-5 bg-gradient-to-r from-[#14C2A3] via-[#12b89a] to-[#10a085] text-white rounded-2xl font-bold text-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-[#14C2A3]/30 border border-[#14C2A3]/20"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#10a085] via-[#12b89a] to-[#14C2A3] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <span className="relative z-10 flex items-center">
-                    {language === 'zh' ? '立即体验平台' : 'Experience Platform'}
-                    <svg className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#14C2A3]/0 via-white/10 to-[#14C2A3]/0 transform skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-1000"></div>
-                </button>
-                
-                <button className="group relative px-12 py-5 bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 text-white rounded-2xl font-bold text-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30 border border-purple-500/20">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-800 via-purple-700 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <span className="relative z-10 flex items-center">
-                    {language === 'zh' ? '下载白皮书' : 'Download Whitepaper'}
-                    <svg className="w-6 h-6 ml-3 group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                  </span>
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-600/0 via-white/10 to-purple-600/0 transform skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-1000"></div>
-                </button>
+              {/* 下载按钮 */}
+              <div className="text-center mb-16 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+                <h3 className="text-white text-2xl font-semibold mb-8">
+                  {language === 'zh' ? '多平台下载' : 'Multi-Platform Download'}
+                </h3>
+                <div className="flex flex-wrap justify-center items-center gap-4">
+                  {/* Web版 */}
+                  <button 
+                    onClick={handleLogin}
+                    className="group relative px-8 py-4 bg-gradient-to-r from-[#14C2A3] via-[#12b89a] to-[#10a085] text-white rounded-xl font-semibold text-base overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#14C2A3]/30"
+                  >
+                    <span className="relative z-10 flex items-center">
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
+                      </svg>
+                      {language === 'zh' ? 'Web版' : 'Web Version'}
+                    </span>
+                  </button>
+
+                  {/* Windows */}
+                  <button className="group relative px-8 py-4 bg-gray-700 hover:bg-gray-600 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    <span className="relative z-10 flex items-center">
+                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.851"/>
+                      </svg>
+                      Windows
+                    </span>
+                  </button>
+
+                  {/* 安卓APK */}
+                  <button className="group relative px-8 py-4 bg-green-600 hover:bg-green-500 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    <span className="relative z-10 flex items-center">
+                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.523 15.3414c-.5511 0-.9993-.4482-.9993-.9993s.4482-.9993.9993-.9993.9993.4482.9993.9993-.4482.9993-.9993.9993zm-11.046 0c-.5511 0-.9993-.4482-.9993-.9993s.4482-.9993.9993-.9993.9993.4482.9993.9993-.4482.9993-.9993.9993zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1518-.5972.416.416 0 00-.5972.1518l-2.0223 3.5021c-.8897-.4279-1.8968-.6662-2.9712-.6662-1.0744 0-2.0815.2383-2.9712.6662L8.1472 5.4568a.4161.4161 0 00-.5972-.1518.4161.4161 0 00-.1518.5972L9.3955 9.3214c-2.0905 1.0863-3.5414 3.2915-3.5414 5.8186 0 .2776.0156.5471.0444.8088h15.2031c.0288-.2617.0444-.5312.0444-.8088 0-2.5271-1.4509-4.7323-3.5415-5.8186z"/>
+                      </svg>
+                      {language === 'zh' ? '安卓APK' : 'Android APK'}
+                    </span>
+                  </button>
+
+                  {/* Google Play */}
+                  <button className="group relative px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    <span className="relative z-10 flex items-center">
+                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                      </svg>
+                      Google Play
+                    </span>
+                  </button>
+
+                  {/* App Store */}
+                  <button className="group relative px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    <span className="relative z-10 flex items-center">
+                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"/>
+                      </svg>
+                      App Store
+                    </span>
+                  </button>
+                </div>
               </div>
 
               {/* 统计数据 */}

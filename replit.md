@@ -236,6 +236,12 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Updated final CTA section with new slogan "让每一笔加密交易都安全可信任" and contact information
   - Applied consistent color scheme: deep blue (#14C2A3) + tech purple + fluorescent green throughout design
   - Fixed payment order data access logic in getOrderRecords function to support new 4-category structure
+- January 30, 2025. Enhanced navigation and download interface:
+  - Renamed top navigation "SDK&API" to "首页" (Home) with bilingual support
+  - Replaced banner action buttons with comprehensive multi-platform download section
+  - Added five download options: Web版 (with login functionality), Windows, 安卓APK, Google Play, and App Store
+  - Implemented platform-specific icons and color schemes for each download button
+  - Created responsive button layout with hover effects and proper spacing
 
 ## User Preferences
 
