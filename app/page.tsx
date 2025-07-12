@@ -33,13 +33,19 @@ export default function HomePage() {
   }
 
   return (
-    <div className="wrapper min-h-screen bg-gray-900 text-white flex flex-col">
+    <div className="wrapper min-h-screen bg-black text-white flex flex-col overflow-x-hidden">
       {/* Navigation */}
-      <nav className="navbar fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center">
-              <img src="/bedao-logo.png" alt="BeDAO" className="h-8" />
+      <nav className="navbar fixed top-0 w-full z-50 bg-black/90 backdrop-blur-xl border-b border-gray-800/50">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center justify-between h-20">
+            <Link href="/" className="flex items-center group">
+              <div className="relative">
+                <div className="w-10 h-10 bg-gradient-to-r from-[#14C2A3] to-blue-500 rounded-xl flex items-center justify-center font-bold text-lg">
+                  B
+                </div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#14C2A3] rounded-full animate-pulse"></div>
+              </div>
+              <span className="ml-3 text-xl font-bold">BeDAO</span>
             </Link>
 
             <button 
@@ -53,63 +59,85 @@ export default function HomePage() {
               </div>
             </button>
 
-            <div className="hidden md:flex items-center space-x-8">
-              <Link href="#" className="text-[#14C2A3] font-medium">
+            <div className="hidden md:flex items-center space-x-10">
+              <Link href="#" className="relative text-[#14C2A3] font-medium group">
                 {language === 'zh' ? '首页' : 'Home'}
+                <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#14C2A3] rounded-full"></div>
               </Link>
-              <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
+              <Link href="#" className="relative text-gray-300 hover:text-white transition-all duration-300 group">
                 {language === 'zh' ? '卡片' : 'Card'}
+                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#14C2A3] rounded-full group-hover:w-full transition-all duration-300"></div>
               </Link>
-              <Link href="#" className="text-white hover:text-[#14C2A3] transition-colors">
+              <Link href="#" className="relative text-gray-300 hover:text-white transition-all duration-300 group">
                 {language === 'zh' ? '新闻' : 'News'}
+                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#14C2A3] rounded-full group-hover:w-full transition-all duration-300"></div>
               </Link>
               
               <div className="relative group">
-                <button className="text-white hover:text-[#14C2A3] transition-colors flex items-center">
+                <button className="relative text-gray-300 hover:text-white transition-all duration-300 flex items-center">
                   {language === 'zh' ? '文档' : 'Documents'}
-                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
+                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#14C2A3] rounded-full group-hover:w-full transition-all duration-300"></div>
                 </button>
-                <div className="absolute top-full left-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                  <Link href="#" className="block px-4 py-2 text-white hover:bg-gray-700 rounded-lg">
-                    {language === 'zh' ? '白皮书' : 'White Paper'}
-                  </Link>
-                  <Link href="#" className="block px-4 py-2 text-white hover:bg-gray-700 rounded-lg">
-                    {language === 'zh' ? '开发文档' : 'Development DOCS'}
-                  </Link>
+                <div className="absolute top-full left-0 mt-4 w-56 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700/50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                  <div className="p-2">
+                    <Link href="#" className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-200">
+                      <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mr-3">
+                        <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                      {language === 'zh' ? '白皮书' : 'White Paper'}
+                    </Link>
+                    <Link href="#" className="flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-200">
+                      <div className="w-8 h-8 bg-[#14C2A3]/20 rounded-lg flex items-center justify-center mr-3">
+                        <svg className="w-4 h-4 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                      </div>
+                      {language === 'zh' ? '开发文档' : 'Development DOCS'}
+                    </Link>
+                  </div>
                 </div>
               </div>
 
               <div className="relative group">
-                <button className="flex items-center">
-                  <span className="w-6 h-6 bg-[#14C2A3] rounded-full flex items-center justify-center text-xs text-white">
+                <button className="flex items-center p-2 rounded-xl hover:bg-gray-800/50 transition-all duration-300">
+                  <div className="w-8 h-8 bg-gradient-to-r from-[#14C2A3] to-blue-500 rounded-lg flex items-center justify-center text-xs text-white font-semibold">
                     {language === 'zh' ? 'CN' : 'US'}
-                  </span>
+                  </div>
+                  <svg className="w-4 h-4 ml-2 text-gray-400 transform group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
                 </button>
-                <div className="absolute top-full right-0 mt-2 w-40 bg-gray-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                  <button 
-                    onClick={() => changeLang('en')}
-                    className="w-full flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
-                  >
-                    <span className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs mr-2">US</span>
-                    English
-                  </button>
-                  <button 
-                    onClick={() => changeLang('zh')}
-                    className="w-full flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
-                  >
-                    <span className="w-6 h-6 bg-gray-500 rounded-full flex items-center justify-center text-xs mr-2">CN</span>
-                    简体中文
-                  </button>
+                <div className="absolute top-full right-0 mt-4 w-48 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700/50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                  <div className="p-2">
+                    <button 
+                      onClick={() => changeLang('en')}
+                      className="w-full flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-200"
+                    >
+                      <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center text-xs font-semibold text-blue-400 mr-3">US</div>
+                      <span className="font-medium">English</span>
+                    </button>
+                    <button 
+                      onClick={() => changeLang('zh')}
+                      className="w-full flex items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-200"
+                    >
+                      <div className="w-8 h-8 bg-gray-500/20 rounded-lg flex items-center justify-center text-xs font-semibold text-gray-400 mr-3">CN</div>
+                      <span className="font-medium">简体中文</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
               <button 
                 onClick={handleLogin}
-                className="bg-[#14C2A3] text-white px-6 py-2 rounded-full hover:bg-[#10a085] transition-colors font-medium"
+                className="relative bg-gradient-to-r from-[#14C2A3] to-blue-500 text-white px-8 py-3 rounded-full hover:from-[#10a085] hover:to-blue-600 transition-all duration-300 font-semibold shadow-lg hover:shadow-[#14C2A3]/25 transform hover:scale-105 active:scale-95"
               >
-                {language === 'zh' ? '登录' : 'Login'}
+                <span className="relative z-10">{language === 'zh' ? '登录' : 'Login'}</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#14C2A3]/20 to-blue-500/20 rounded-full blur-xl"></div>
               </button>
             </div>
           </div>
@@ -138,195 +166,275 @@ export default function HomePage() {
       <main className="flex-1 pt-20">
         {/* Hero Section - 封面页 */}
         <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden">
-          {/* 动态网格背景 */}
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#14C2A3_1px,transparent_1px),linear-gradient(to_bottom,#14C2A3_1px,transparent_1px)] bg-[size:40px_40px] opacity-10 animate-pulse"></div>
-            <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900/95 to-black"></div>
+          {/* 高级动态背景系统 */}
+          <div className="absolute inset-0 bg-black">
+            {/* 精密网格背景 */}
+            <div className="absolute inset-0">
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(20,194,163,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(20,194,163,0.1)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(59,130,246,0.05)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+            </div>
+            
+            {/* 渐变层次 */}
+            <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-950/80 to-black"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/60"></div>
           </div>
           
-          {/* 3D几何背景效果 */}
+          {/* 高级光效系统 */}
           <div className="absolute inset-0">
-            <div className="absolute top-20 left-20 w-[600px] h-[600px] bg-gradient-conic from-[#14C2A3]/20 via-gray-900/20 to-[#14C2A3]/20 rounded-full blur-3xl animate-spin" style={{ animationDuration: '20s' }}></div>
-            <div className="absolute bottom-20 right-20 w-[500px] h-[500px] bg-gradient-conic from-gray-900/15 via-[#14C2A3]/15 to-gray-900/15 rounded-full blur-3xl animate-spin" style={{ animationDuration: '25s', animationDirection: 'reverse' }}></div>
+            {/* 主光源 */}
+            <div className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-gradient-radial from-[#14C2A3]/15 via-[#14C2A3]/5 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }}></div>
+            <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-gradient-radial from-blue-500/10 via-blue-500/3 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }}></div>
             
-            {/* 几何线条 */}
-            <div className="absolute top-1/4 left-1/2 w-px h-96 bg-gradient-to-b from-[#14C2A3]/50 to-transparent transform -rotate-45"></div>
-            <div className="absolute bottom-1/4 right-1/2 w-px h-96 bg-gradient-to-t from-blue-900/50 to-transparent transform rotate-45"></div>
-            <div className="absolute top-1/2 left-1/4 w-96 h-px bg-gradient-to-r from-[#14C2A3]/30 to-transparent"></div>
-            <div className="absolute top-1/2 right-1/4 w-96 h-px bg-gradient-to-l from-blue-900/30 to-transparent"></div>
+            {/* 动态几何光束 */}
+            <div className="absolute top-0 left-1/2 w-px h-full bg-gradient-to-b from-transparent via-[#14C2A3]/20 to-transparent animate-pulse" style={{ animationDuration: '8s' }}></div>
+            <div className="absolute left-0 top-1/2 w-full h-px bg-gradient-to-r from-transparent via-blue-400/15 to-transparent animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }}></div>
+            
+            {/* 对角线光束 */}
+            <div className="absolute top-1/3 left-1/3 w-px h-96 bg-gradient-to-b from-[#14C2A3]/30 to-transparent transform rotate-45 animate-pulse" style={{ animationDuration: '10s' }}></div>
+            <div className="absolute bottom-1/3 right-1/3 w-px h-96 bg-gradient-to-t from-blue-400/25 to-transparent transform -rotate-45 animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
           </div>
 
-          {/* 浮动粒子群 */}
+          {/* 高级粒子系统 */}
           <div className="absolute inset-0">
-            {[...Array(25)].map((_, i) => (
+            {[...Array(30)].map((_, i) => (
               <div
                 key={i}
-                className={`absolute rounded-full ${i % 3 === 0 ? 'bg-[#14C2A3]' : i % 3 === 1 ? 'bg-gray-600' : 'bg-white'} opacity-20 animate-float`}
+                className={`absolute rounded-full opacity-40 animate-float ${
+                  i % 4 === 0 ? 'bg-[#14C2A3] shadow-[0_0_20px_rgba(20,194,163,0.3)]' : 
+                  i % 4 === 1 ? 'bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]' : 
+                  i % 4 === 2 ? 'bg-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 
+                  'bg-gray-400'
+                }`}
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
-                  width: `${2 + Math.random() * 4}px`,
-                  height: `${2 + Math.random() * 4}px`,
-                  animationDelay: `${Math.random() * 5}s`,
-                  animationDuration: `${5 + Math.random() * 5}s`
+                  width: `${1 + Math.random() * 3}px`,
+                  height: `${1 + Math.random() * 3}px`,
+                  animationDelay: `${Math.random() * 10}s`,
+                  animationDuration: `${8 + Math.random() * 6}s`
                 }}
               ></div>
             ))}
           </div>
           
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-6xl mx-auto text-center">
-              {/* 标签徽章 */}
-              <div className="inline-flex items-center justify-center mb-8 animate-fade-in-up">
-                <div className="bg-gradient-to-r from-[#14C2A3]/20 to-gray-900/20 backdrop-blur-xl border border-[#14C2A3]/30 rounded-full px-8 py-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-[#14C2A3] rounded-full animate-ping"></div>
-                    <span className="text-[#14C2A3] font-medium text-sm">
-                      {language === 'zh' ? '🚀 下一代金融基础设施' : '🚀 Next-Gen Financial Infrastructure'}
-                    </span>
+          <div className="container mx-auto px-6 relative z-10">
+            <div className="max-w-7xl mx-auto text-center">
+              {/* 高级标签徽章 */}
+              <div className="inline-flex items-center justify-center mb-12 animate-fade-in-up">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#14C2A3]/30 to-blue-500/30 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                  <div className="relative bg-gradient-to-r from-[#14C2A3]/10 to-blue-500/10 backdrop-blur-2xl border border-white/10 rounded-full px-10 py-4 shadow-2xl">
+                    <div className="flex items-center space-x-3">
+                      <div className="relative">
+                        <div className="w-3 h-3 bg-[#14C2A3] rounded-full animate-ping"></div>
+                        <div className="absolute top-0 left-0 w-3 h-3 bg-[#14C2A3] rounded-full"></div>
+                      </div>
+                      <span className="text-white font-semibold text-base tracking-wide">
+                        {language === 'zh' ? '🚀 下一代金融基础设施' : '🚀 Next-Gen Financial Infrastructure'}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
               
-              {/* 主标题 */}
-              <div className="space-y-6 mb-12">
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                  <div className="relative inline-block">
-                    <span className="block bg-gradient-to-r from-white via-white to-gray-300 bg-clip-text text-transparent mb-4">
-                      {language === 'zh' ? '革新加密' : 'Revolutionize'}
-                    </span>
-                    <span className="block bg-gradient-to-r from-[#14C2A3] via-blue-400 to-[#14C2A3] bg-clip-text text-transparent animate-gradient bg-[size:300%_300%]">
-                      {language === 'zh' ? '经济生态' : 'Crypto Economy'}
-                    </span>
-                    {/* 装饰元素 */}
-                    <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#14C2A3]/20 rounded-full animate-pulse"></div>
-                    <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-blue-400/20 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+              {/* 重新设计的主标题 */}
+              <div className="space-y-8 mb-16">
+                <h1 className="relative animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                  <div className="text-6xl md:text-8xl lg:text-9xl font-black leading-none tracking-tight">
+                    <div className="relative inline-block mb-4">
+                      <span className="block bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent">
+                        {language === 'zh' ? '革新加密' : 'Revolutionize'}
+                      </span>
+                      {/* 高级装饰效果 */}
+                      <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-r from-[#14C2A3] to-blue-500 rounded-full blur-xl opacity-60 animate-pulse"></div>
+                    </div>
+                    <div className="relative inline-block">
+                      <span className="block bg-gradient-to-r from-[#14C2A3] via-blue-400 to-[#14C2A3] bg-clip-text text-transparent animate-gradient bg-[size:400%_400%]">
+                        {language === 'zh' ? '经济生态' : 'Crypto Economy'}
+                      </span>
+                      {/* 动态光效 */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#14C2A3]/20 via-blue-400/20 to-[#14C2A3]/20 blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+                      <div className="absolute -bottom-6 -left-6 w-8 h-8 bg-gradient-to-r from-blue-400 to-[#14C2A3] rounded-full blur-lg opacity-40 animate-pulse" style={{ animationDelay: '2s' }}></div>
+                    </div>
                   </div>
                 </h1>
                 
-                <div className="relative">
-                  <p className="text-xl md:text-2xl lg:text-3xl text-gray-300 max-w-5xl mx-auto leading-relaxed animate-fade-in-up backdrop-blur-sm" style={{ animationDelay: '0.4s' }}>
-                    {language === 'zh' ? '全球首个「社交+担保+AI」一体化数字资产平台' : 'World\'s First Integrated "Social + Guarantee + AI" Digital Asset Platform'}
+                <div className="relative max-w-6xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                  <div className="relative">
+                    <p className="text-2xl md:text-3xl lg:text-4xl text-gray-200 leading-relaxed font-light backdrop-blur-sm">
+                      {language === 'zh' ? '全球首个「社交+担保+AI」一体化数字资产平台' : 'World\'s First Integrated "Social + Guarantee + AI" Digital Asset Platform'}
+                    </p>
+                    {/* 高级装饰线条 */}
+                    <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-[#14C2A3] to-transparent rounded-full"></div>
+                    <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-16 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 高端重新设计的核心功能展示 */}
+              <div className="max-w-5xl mx-auto mb-20 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  {/* 社交网络 */}
+                  <div className="group relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#14C2A3]/20 to-green-500/10 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+                    <div className="relative bg-gradient-to-br from-gray-900/90 to-black/90 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 group-hover:border-[#14C2A3]/40 transition-all duration-500 group-hover:transform group-hover:scale-105">
+                      <div className="relative mb-4">
+                        <div className="w-16 h-16 bg-gradient-to-br from-[#14C2A3]/30 to-green-500/20 rounded-2xl flex items-center justify-center">
+                          <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                          </svg>
+                        </div>
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#14C2A3] rounded-full animate-pulse"></div>
+                      </div>
+                      <h4 className="text-white font-bold text-lg mb-2">{language === 'zh' ? '社交网络' : 'Social Network'}</h4>
+                      <p className="text-gray-400 text-sm leading-relaxed">{language === 'zh' ? '构建信任关系' : 'Build trusted relationships'}</p>
+                    </div>
+                  </div>
+
+                  {/* USDT生态 */}
+                  <div className="group relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#14C2A3]/20 to-green-500/10 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+                    <div className="relative bg-gradient-to-br from-gray-900/90 to-black/90 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 group-hover:border-[#14C2A3]/40 transition-all duration-500 group-hover:transform group-hover:scale-105">
+                      <div className="relative mb-4">
+                        <div className="w-16 h-16 bg-gradient-to-br from-[#14C2A3]/30 to-green-500/20 rounded-2xl flex items-center justify-center">
+                          <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
+                      </div>
+                      <h4 className="text-white font-bold text-lg mb-2">USDT {language === 'zh' ? '生态' : 'Ecosystem'}</h4>
+                      <p className="text-gray-400 text-sm leading-relaxed">{language === 'zh' ? '稳定币交易' : 'Stablecoin trading'}</p>
+                    </div>
+                  </div>
+
+                  {/* 智能担保 */}
+                  <div className="group relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#14C2A3]/20 to-green-500/10 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+                    <div className="relative bg-gradient-to-br from-gray-900/90 to-black/90 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 group-hover:border-[#14C2A3]/40 transition-all duration-500 group-hover:transform group-hover:scale-105">
+                      <div className="relative mb-4">
+                        <div className="w-16 h-16 bg-gradient-to-br from-[#14C2A3]/30 to-green-500/20 rounded-2xl flex items-center justify-center">
+                          <svg className="w-8 h-8 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                          </svg>
+                        </div>
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#14C2A3] rounded-full animate-pulse"></div>
+                      </div>
+                      <h4 className="text-white font-bold text-lg mb-2">{language === 'zh' ? '智能担保' : 'Smart Guarantee'}</h4>
+                      <p className="text-gray-400 text-sm leading-relaxed">{language === 'zh' ? '安全保障机制' : 'Security assurance'}</p>
+                    </div>
+                  </div>
+
+                  {/* AI引擎 */}
+                  <div className="group relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-blue-800/10 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+                    <div className="relative bg-gradient-to-br from-gray-900/90 to-black/90 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 group-hover:border-blue-400/40 transition-all duration-500 group-hover:transform group-hover:scale-105">
+                      <div className="relative mb-4">
+                        <div className="w-16 h-16 bg-gradient-to-br from-blue-500/30 to-blue-800/20 rounded-2xl flex items-center justify-center">
+                          <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                          </svg>
+                        </div>
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-400 rounded-full animate-pulse"></div>
+                      </div>
+                      <h4 className="text-white font-bold text-lg mb-2">AI {language === 'zh' ? '引擎' : 'Engine'}</h4>
+                      <p className="text-gray-400 text-sm leading-relaxed">{language === 'zh' ? '智能分析系统' : 'Intelligent analysis'}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 重新设计的下载区域 */}
+              <div className="text-center mb-20 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+                <div className="mb-12">
+                  <h3 className="text-4xl font-bold text-white mb-4">
+                    {language === 'zh' ? '立即体验' : 'Experience Now'}
+                  </h3>
+                  <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+                    {language === 'zh' ? '多平台支持，随时随地享受安全便捷的数字资产服务' : 'Multi-platform support for secure and convenient digital asset services anytime, anywhere'}
                   </p>
-                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#14C2A3] to-blue-400 rounded-full"></div>
                 </div>
-              </div>
-
-              {/* 核心功能图标 - 重新设计 */}
-              <div className="flex flex-wrap justify-center gap-8 mb-16 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-                <div className="group text-center cursor-pointer">
-                  <div className="relative">
-                    <div className="w-24 h-24 bg-gradient-to-br from-[#14C2A3]/30 via-[#14C2A3]/20 to-[#14C2A3]/10 rounded-3xl flex items-center justify-center mb-4 backdrop-blur-xl border border-[#14C2A3]/20 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-[#14C2A3]/25 transition-all duration-500 group-hover:border-[#14C2A3]/40">
-                      <svg className="w-12 h-12 text-[#14C2A3] group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#14C2A3] rounded-full animate-pulse opacity-80"></div>
-                    </div>
-                    <span className="text-lg font-semibold text-gray-300 group-hover:text-[#14C2A3] transition-colors duration-300">
-                      {language === 'zh' ? '社交网络' : 'Social Network'}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="group text-center cursor-pointer">
-                  <div className="relative">
-                    <div className="w-24 h-24 bg-gradient-to-br from-[#14C2A3]/30 via-[#14C2A3]/20 to-[#14C2A3]/10 rounded-3xl flex items-center justify-center mb-4 backdrop-blur-xl border border-[#14C2A3]/20 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-[#14C2A3]/25 transition-all duration-500 group-hover:border-[#14C2A3]/40">
-                      <svg className="w-12 h-12 text-[#14C2A3] group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full animate-pulse opacity-80"></div>
-                    </div>
-                    <span className="text-lg font-semibold text-gray-300 group-hover:text-[#14C2A3] transition-colors duration-300">
-                      USDT 生态
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="group text-center cursor-pointer">
-                  <div className="relative">
-                    <div className="w-24 h-24 bg-gradient-to-br from-[#14C2A3]/30 via-[#14C2A3]/20 to-[#14C2A3]/10 rounded-3xl flex items-center justify-center mb-4 backdrop-blur-xl border border-[#14C2A3]/20 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-[#14C2A3]/25 transition-all duration-500 group-hover:border-[#14C2A3]/40">
-                      <svg className="w-12 h-12 text-[#14C2A3] group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#14C2A3] rounded-full animate-pulse opacity-80"></div>
-                    </div>
-                    <span className="text-lg font-semibold text-gray-300 group-hover:text-[#14C2A3] transition-colors duration-300">
-                      {language === 'zh' ? '智能担保' : 'Smart Guarantee'}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="group text-center cursor-pointer">
-                  <div className="relative">
-                    <div className="w-24 h-24 bg-gradient-to-br from-blue-900/30 via-blue-900/20 to-blue-900/10 rounded-3xl flex items-center justify-center mb-4 backdrop-blur-xl border border-blue-900/20 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-blue-900/25 transition-all duration-500 group-hover:border-blue-900/40">
-                      <svg className="w-12 h-12 text-blue-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                      </svg>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-400 rounded-full animate-pulse opacity-80"></div>
-                    </div>
-                    <span className="text-lg font-semibold text-gray-300 group-hover:text-blue-400 transition-colors duration-300">
-                      AI 引擎
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* 下载按钮 */}
-              <div className="text-center mb-16 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
-                <h3 className="text-white text-2xl font-semibold mb-8">
-                  {language === 'zh' ? '多平台下载' : 'Multi-Platform Download'}
-                </h3>
-                <div className="flex flex-wrap justify-center items-center gap-4">
-                  {/* Web版 */}
+                <div className="flex flex-wrap justify-center items-center gap-6 max-w-4xl mx-auto">
+                  {/* Web版 - 主要按钮 */}
                   <button 
                     onClick={handleLogin}
-                    className="group relative px-8 py-4 bg-gradient-to-r from-[#14C2A3] via-[#12b89a] to-[#10a085] text-white rounded-xl font-semibold text-base overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#14C2A3]/30"
+                    className="group relative px-10 py-5 bg-gradient-to-r from-[#14C2A3] to-green-500 text-white rounded-2xl font-bold text-lg overflow-hidden transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-[#14C2A3]/40 transform-gpu"
                   >
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#14C2A3]/80 to-green-500/80 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <span className="relative z-10 flex items-center">
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
-                      </svg>
-                      {language === 'zh' ? 'Web版' : 'Web Version'}
+                      <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <div className="font-bold">{language === 'zh' ? 'Web版' : 'Web Version'}</div>
+                        <div className="text-sm opacity-80">{language === 'zh' ? '立即使用' : 'Use Now'}</div>
+                      </div>
                     </span>
                   </button>
 
                   {/* Windows */}
-                  <button className="group relative px-8 py-4 bg-gray-700 hover:bg-gray-600 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                  <button className="group relative px-8 py-5 bg-gradient-to-r from-gray-800 to-gray-700 text-white rounded-2xl font-semibold text-base overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl hover:shadow-gray-800/30 border border-gray-600/50 hover:border-gray-500">
+                    <div className="absolute inset-0 bg-gradient-to-r from-gray-700/50 to-gray-600/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <span className="relative z-10 flex items-center">
-                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.851"/>
-                      </svg>
-                      Windows
+                      <div className="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center mr-3">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.851"/>
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <div className="font-semibold">Windows</div>
+                        <div className="text-xs opacity-70">{language === 'zh' ? '桌面应用' : 'Desktop App'}</div>
+                      </div>
                     </span>
                   </button>
 
                   {/* 安卓APK */}
-                  <button className="group relative px-8 py-4 bg-green-600 hover:bg-green-500 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                  <button className="group relative px-8 py-5 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-2xl font-semibold text-base overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl hover:shadow-green-600/30 border border-green-500/50 hover:border-green-400">
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-500/50 to-green-400/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <span className="relative z-10 flex items-center">
-                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M17.523 15.3414c-.5511 0-.9993-.4482-.9993-.9993s.4482-.9993.9993-.9993.9993.4482.9993.9993-.4482.9993-.9993.9993zm-11.046 0c-.5511 0-.9993-.4482-.9993-.9993s.4482-.9993.9993-.9993.9993.4482.9993.9993-.4482.9993-.9993.9993zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1518-.5972.416.416 0 00-.5972.1518l-2.0223 3.5021c-.8897-.4279-1.8968-.6662-2.9712-.6662-1.0744 0-2.0815.2383-2.9712.6662L8.1472 5.4568a.4161.4161 0 00-.5972-.1518.4161.4161 0 00-.1518.5972L9.3955 9.3214c-2.0905 1.0863-3.5414 3.2915-3.5414 5.8186 0 .2776.0156.5471.0444.8088h15.2031c.0288-.2617.0444-.5312.0444-.8088 0-2.5271-1.4509-4.7323-3.5415-5.8186z"/>
-                      </svg>
-                      {language === 'zh' ? '安卓APK' : 'Android APK'}
+                      <div className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M17.523 15.3414c-.5511 0-.9993-.4482-.9993-.9993s.4482-.9993.9993-.9993.9993.4482.9993.9993-.4482.9993-.9993.9993zm-11.046 0c-.5511 0-.9993-.4482-.9993-.9993s.4482-.9993.9993-.9993.9993.4482.9993.9993-.4482.9993-.9993.9993zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1518-.5972.416.416 0 00-.5972.1518l-2.0223 3.5021c-.8897-.4279-1.8968-.6662-2.9712-.6662-1.0744 0-2.0815.2383-2.9712.6662L8.1472 5.4568a.4161.4161 0 00-.5972-.1518.4161.4161 0 00-.1518.5972L9.3955 9.3214c-2.0905 1.0863-3.5414 3.2915-3.5414 5.8186 0 .2776.0156.5471.0444.8088h15.2031c.0288-.2617.0444-.5312.0444-.8088 0-2.5271-1.4509-4.7323-3.5415-5.8186z"/>
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <div className="font-semibold">{language === 'zh' ? '安卓APK' : 'Android APK'}</div>
+                        <div className="text-xs opacity-80">{language === 'zh' ? '直接下载' : 'Direct Download'}</div>
+                      </div>
                     </span>
                   </button>
 
                   {/* Google Play */}
-                  <button className="group relative px-8 py-4 bg-gray-600 hover:bg-gray-500 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                  <button className="group relative px-8 py-5 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-2xl font-semibold text-base overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl hover:shadow-blue-600/30 border border-blue-500/50 hover:border-blue-400">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/50 to-blue-400/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <span className="relative z-10 flex items-center">
-                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
-                      </svg>
-                      Google Play
+                      <div className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <div className="font-semibold">Google Play</div>
+                        <div className="text-xs opacity-80">{language === 'zh' ? '应用商店' : 'Play Store'}</div>
+                      </div>
                     </span>
                   </button>
 
                   {/* App Store */}
-                  <button className="group relative px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                  <button className="group relative px-8 py-5 bg-gradient-to-r from-gray-800 to-gray-700 text-white rounded-2xl font-semibold text-base overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl hover:shadow-gray-800/30 border border-gray-600/50 hover:border-gray-500">
+                    <div className="absolute inset-0 bg-gradient-to-r from-gray-700/50 to-gray-600/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <span className="relative z-10 flex items-center">
-                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"/>
-                      </svg>
-                      App Store
+                      <div className="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center mr-3">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"/>
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <div className="font-semibold">App Store</div>
+                        <div className="text-xs opacity-70">{language === 'zh' ? '苹果商店' : 'iOS App'}</div>
+                      </div>
                     </span>
                   </button>
                 </div>
