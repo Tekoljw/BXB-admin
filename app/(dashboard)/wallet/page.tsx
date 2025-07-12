@@ -3745,9 +3745,9 @@ export default function WalletPage() {
 
             {/* 操作按钮区域 */}
             <div className="transition-all duration-300 ease-out">
-              <div className="flex flex-col md:flex-row gap-4">
-                {/* 主要操作按钮 - 自动适配屏幕宽度 */}
-                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="flex justify-end gap-4">
+                {/* 主要操作按钮 - 右对齐 */}
+                <div className="flex gap-3">
                   {selectedPaymentCard === "fiat" ? (
                     fiatTabs.map((tab) => {
                       const Icon = tab.icon
@@ -3768,7 +3768,7 @@ export default function WalletPage() {
                               setFiatTab(tab.id)
                             }
                           }}
-                          className={`h-12 transition-all duration-200 text-base font-bold ${
+                          className={`h-12 px-4 transition-all duration-200 text-base font-bold ${
                             isSelected
                               ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
@@ -3789,7 +3789,7 @@ export default function WalletPage() {
                         <Button 
                           key={tab.id}
                           onClick={() => setCryptoTab(tab.id)}
-                          className={`h-12 transition-all duration-200 text-base font-bold ${
+                          className={`h-12 px-4 transition-all duration-200 text-base font-bold ${
                             isSelected
                               ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
@@ -3805,7 +3805,7 @@ export default function WalletPage() {
                 </div>
                 
                 {/* 图标按钮区域 - 右对齐 */}
-                <div className="flex justify-end md:justify-center gap-3">
+                <div className="flex gap-3">
                   {selectedPaymentCard === "fiat" ? (
                     fiatIconTabs.map((tab) => {
                       const Icon = tab.icon
