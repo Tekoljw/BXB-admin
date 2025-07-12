@@ -498,141 +498,292 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* P3 核心功能详解 */}
+        {/* P3 三大核心功能 */}
         <section className="py-20 lg:py-32 bg-gray-800/20">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
+            <div className="text-center mb-20">
               <h2 className="text-white text-3xl md:text-5xl font-bold mb-8">
-                {language === 'zh' ? '核心功能详解' : 'Core Features Detailed'}
+                {language === 'zh' ? '三大核心功能' : 'Three Core Functions'}
               </h2>
+              <p className="text-gray-300 text-xl max-w-3xl mx-auto">
+                {language === 'zh' ? '社交+担保+AI，重新定义数字资产交易生态' : 'Social + Guarantee + AI, redefining digital asset trading ecosystem'}
+              </p>
             </div>
 
-            <div className="space-y-16">
-              {/* 社交金融网络 */}
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                  <h3 className="text-white text-2xl font-bold mb-6">
-                    {language === 'zh' ? '社交金融网络' : 'Social Finance Network'}
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-[#14C2A3] rounded-full flex items-center justify-center mt-1">
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <p className="text-gray-300">
-                        {language === 'zh' ? '加密红包/空投增强粘性' : 'Crypto red packets/airdrops enhance stickiness'}
-                      </p>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-[#14C2A3] rounded-full flex items-center justify-center mt-1">
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <p className="text-gray-300">
-                        {language === 'zh' ? '行业圈子精准匹配资源' : 'Industry circles precisely match resources'}
-                      </p>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-[#14C2A3] rounded-full flex items-center justify-center mt-1">
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <p className="text-gray-300">
-                        {language === 'zh' ? '支持「面对面现金交易」的C2C系统' : 'C2C system supporting "face-to-face cash trading"'}
-                      </p>
-                    </div>
+            <div className="space-y-32">
+              {/* 第一大功能：社交金融网络 */}
+              <div className="relative">
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8">
+                  <div className="bg-[#14C2A3] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow-2xl">
+                    01
                   </div>
                 </div>
-                <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-[#14C2A3]/20">
-                  <div className="w-full h-64 bg-gradient-to-r from-[#14C2A3]/10 to-purple-500/10 rounded-lg flex items-center justify-center">
-                    <svg className="w-24 h-24 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              {/* 革命性担保交易 */}
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                <div className="md:order-2">
-                  <h3 className="text-white text-2xl font-bold mb-6">
-                    {language === 'zh' ? '革命性担保交易' : 'Revolutionary Guarantee Trading'}
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-8 h-8 bg-[#14C2A3] rounded-full flex items-center justify-center text-white font-bold">1</div>
-                      <p className="text-gray-300">{language === 'zh' ? '建群谈判' : 'Group Negotiation'}</p>
-                      <svg className="w-4 h-4 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
+                <div className="bg-gradient-to-r from-[#14C2A3]/10 via-gray-800/50 to-[#14C2A3]/10 rounded-3xl border border-[#14C2A3]/30 p-12 backdrop-blur-lg">
+                  <div className="grid lg:grid-cols-2 gap-12 items-center">
+                    <div className="text-center lg:text-left">
+                      <div className="flex items-center justify-center lg:justify-start mb-6">
+                        <div className="w-20 h-20 bg-[#14C2A3]/20 rounded-2xl flex items-center justify-center mr-4">
+                          <svg className="w-12 h-12 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                          </svg>
+                        </div>
+                        <h3 className="text-white text-4xl font-bold">
+                          {language === 'zh' ? '社交金融网络' : 'Social Finance Network'}
+                        </h3>
+                      </div>
+                      <p className="text-gray-300 text-lg mb-8 leading-relaxed">
+                        {language === 'zh' ? '构建基于信任的金融社交生态，让每个用户都能在安全环境中进行价值交换' : 'Building a trust-based financial social ecosystem where every user can exchange value in a secure environment'}
+                      </p>
+                      <div className="grid gap-4">
+                        <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
+                          <div className="w-8 h-8 bg-[#14C2A3] rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <p className="text-white font-medium">
+                            {language === 'zh' ? '加密红包/空投增强用户粘性' : 'Crypto red packets/airdrops enhance user stickiness'}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
+                          <div className="w-8 h-8 bg-[#14C2A3] rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <p className="text-white font-medium">
+                            {language === 'zh' ? '行业圈子精准匹配优质资源' : 'Industry circles precisely match premium resources'}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
+                          <div className="w-8 h-8 bg-[#14C2A3] rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <p className="text-white font-medium">
+                            {language === 'zh' ? '面对面现金交易的C2C系统' : 'Face-to-face cash trading C2C system'}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="w-8 h-8 bg-[#14C2A3] rounded-full flex items-center justify-center text-white font-bold">2</div>
-                      <p className="text-gray-300">{language === 'zh' ? 'AI生成合同' : 'AI Generated Contract'}</p>
-                      <svg className="w-4 h-4 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
+                    <div className="relative">
+                      <div className="bg-gradient-to-br from-[#14C2A3]/20 to-[#14C2A3]/5 rounded-2xl p-8 border border-[#14C2A3]/20">
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                          <div className="bg-white/10 p-4 rounded-xl text-center">
+                            <div className="text-2xl font-bold text-[#14C2A3] mb-1">50万+</div>
+                            <div className="text-gray-300 text-sm">{language === 'zh' ? '活跃用户' : 'Active Users'}</div>
+                          </div>
+                          <div className="bg-white/10 p-4 rounded-xl text-center">
+                            <div className="text-2xl font-bold text-[#14C2A3] mb-1">1000+</div>
+                            <div className="text-gray-300 text-sm">{language === 'zh' ? '行业圈子' : 'Industry Circles'}</div>
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <div className="w-32 h-32 mx-auto bg-[#14C2A3]/10 rounded-full flex items-center justify-center">
+                            <svg className="w-16 h-16 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="w-8 h-8 bg-[#14C2A3] rounded-full flex items-center justify-center text-white font-bold">3</div>
-                      <p className="text-gray-300">{language === 'zh' ? '资金托管' : 'Fund Custody'}</p>
-                      <svg className="w-4 h-4 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="w-8 h-8 bg-[#14C2A3] rounded-full flex items-center justify-center text-white font-bold">4</div>
-                      <p className="text-gray-300">{language === 'zh' ? '验收放款' : 'Acceptance & Release'}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="md:order-1 bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-[#14C2A3]/20">
-                  <div className="w-full h-64 bg-gradient-to-r from-[#14C2A3]/10 to-purple-500/10 rounded-lg flex items-center justify-center">
-                    <svg className="w-24 h-24 text-[#14C2A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
                   </div>
                 </div>
               </div>
 
-              {/* AI交易生态 */}
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                  <h3 className="text-white text-2xl font-bold mb-6">
-                    {language === 'zh' ? 'AI交易生态' : 'AI Trading Ecosystem'}
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mt-1">
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
+              {/* 第二大功能：智能担保交易 */}
+              <div className="relative">
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8">
+                  <div className="bg-purple-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow-2xl">
+                    02
+                  </div>
+                </div>
+                <div className="bg-gradient-to-r from-purple-500/10 via-gray-800/50 to-purple-500/10 rounded-3xl border border-purple-500/30 p-12 backdrop-blur-lg">
+                  <div className="grid lg:grid-cols-2 gap-12 items-center">
+                    <div className="order-2 lg:order-1 relative">
+                      <div className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 rounded-2xl p-8 border border-purple-500/20">
+                        <div className="flex justify-center mb-8">
+                          <div className="w-32 h-32 bg-purple-500/10 rounded-full flex items-center justify-center">
+                            <svg className="w-16 h-16 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                          </div>
+                        </div>
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between bg-white/10 p-3 rounded-lg">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                              <span className="text-white">{language === 'zh' ? '建群谈判' : 'Group Negotiation'}</span>
+                            </div>
+                            <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                          </div>
+                          <div className="flex items-center justify-between bg-white/10 p-3 rounded-lg">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+                              <span className="text-white">{language === 'zh' ? 'AI生成合同' : 'AI Contract Generation'}</span>
+                            </div>
+                            <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                          </div>
+                          <div className="flex items-center justify-between bg-white/10 p-3 rounded-lg">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+                              <span className="text-white">{language === 'zh' ? '资金托管' : 'Fund Custody'}</span>
+                            </div>
+                            <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                          </div>
+                          <div className="flex items-center justify-between bg-white/10 p-3 rounded-lg">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
+                              <span className="text-white">{language === 'zh' ? '验收放款' : 'Acceptance & Release'}</span>
+                            </div>
+                            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-gray-300">
-                        {language === 'zh' ? '实时市场信号推送' : 'Real-time market signal push'}
-                      </p>
                     </div>
-                    <div className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mt-1">
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
+                    <div className="order-1 lg:order-2 text-center lg:text-left">
+                      <div className="flex items-center justify-center lg:justify-start mb-6">
+                        <div className="w-20 h-20 bg-purple-500/20 rounded-2xl flex items-center justify-center mr-4">
+                          <svg className="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                          </svg>
+                        </div>
+                        <h3 className="text-white text-4xl font-bold">
+                          {language === 'zh' ? '智能担保交易' : 'Smart Guarantee Trading'}
+                        </h3>
                       </div>
-                      <p className="text-gray-300">
-                        {language === 'zh' ? '量化策略「App Store」（用户共享策略获利）' : 'Quantitative Strategy "App Store" (users share strategies for profit)'}
+                      <p className="text-gray-300 text-lg mb-8 leading-relaxed">
+                        {language === 'zh' ? '革命性的四步担保流程，AI合同生成+多重签名托管，让每笔交易都安全可信' : 'Revolutionary 4-step guarantee process with AI contract generation + multi-sig custody, making every transaction secure and trustworthy'}
                       </p>
+                      <div className="grid gap-4">
+                        <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
+                          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                          </div>
+                          <p className="text-white font-medium">
+                            {language === 'zh' ? '多重签名担保账户，资金绝对安全' : 'Multi-signature guarantee accounts, absolutely secure funds'}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
+                          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                          </div>
+                          <p className="text-white font-medium">
+                            {language === 'zh' ? 'AI智能合同，支持20+语言' : 'AI smart contracts supporting 20+ languages'}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
+                          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                          </div>
+                          <p className="text-white font-medium">
+                            {language === 'zh' ? '0.3%超低手续费，高效快捷' : '0.3% ultra-low fees, efficient and fast'}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-purple-500/20">
-                  <div className="w-full h-64 bg-gradient-to-r from-purple-500/10 to-[#14C2A3]/10 rounded-lg flex items-center justify-center">
-                    <svg className="w-24 h-24 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
+              </div>
+
+              {/* 第三大功能：AI量化生态 */}
+              <div className="relative">
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8">
+                  <div className="bg-gradient-to-r from-[#14C2A3] to-purple-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow-2xl">
+                    03
+                  </div>
+                </div>
+                <div className="bg-gradient-to-r from-[#14C2A3]/10 via-purple-500/10 to-[#14C2A3]/10 rounded-3xl border border-purple-500/30 p-12 backdrop-blur-lg">
+                  <div className="grid lg:grid-cols-2 gap-12 items-center">
+                    <div className="text-center lg:text-left">
+                      <div className="flex items-center justify-center lg:justify-start mb-6">
+                        <div className="w-20 h-20 bg-gradient-to-br from-[#14C2A3]/20 to-purple-500/20 rounded-2xl flex items-center justify-center mr-4">
+                          <svg className="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                          </svg>
+                        </div>
+                        <h3 className="text-white text-4xl font-bold">
+                          {language === 'zh' ? 'AI量化生态' : 'AI Quantitative Ecosystem'}
+                        </h3>
+                      </div>
+                      <p className="text-gray-300 text-lg mb-8 leading-relaxed">
+                        {language === 'zh' ? '零门槛量化交易平台，AI策略App Store让每个人都能成为量化专家' : 'Zero-threshold quantitative trading platform, AI strategy App Store enables everyone to become a quant expert'}
+                      </p>
+                      <div className="grid gap-4">
+                        <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
+                          <div className="w-8 h-8 bg-gradient-to-r from-[#14C2A3] to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                          </div>
+                          <p className="text-white font-medium">
+                            {language === 'zh' ? 'AI实时市场信号推送' : 'AI real-time market signal push'}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
+                          <div className="w-8 h-8 bg-gradient-to-r from-[#14C2A3] to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                          </div>
+                          <p className="text-white font-medium">
+                            {language === 'zh' ? '量化策略App Store，共享收益' : 'Quantitative strategy App Store, shared profits'}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
+                          <div className="w-8 h-8 bg-gradient-to-r from-[#14C2A3] to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+                            </svg>
+                          </div>
+                          <p className="text-white font-medium">
+                            {language === 'zh' ? '智能策略自动执行，24小时无人值守' : 'Smart strategy auto-execution, 24/7 unattended'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <div className="bg-gradient-to-br from-purple-500/20 to-[#14C2A3]/20 rounded-2xl p-8 border border-purple-500/20">
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                          <div className="bg-white/10 p-4 rounded-xl text-center">
+                            <div className="text-2xl font-bold text-purple-500 mb-1">1000+</div>
+                            <div className="text-gray-300 text-sm">{language === 'zh' ? 'AI策略' : 'AI Strategies'}</div>
+                          </div>
+                          <div className="bg-white/10 p-4 rounded-xl text-center">
+                            <div className="text-2xl font-bold text-[#14C2A3] mb-1">85%+</div>
+                            <div className="text-gray-300 text-sm">{language === 'zh' ? '胜率' : 'Win Rate'}</div>
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-purple-500/10 to-[#14C2A3]/10 rounded-full flex items-center justify-center">
+                            <svg className="w-16 h-16 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                          </div>
+                          <div className="mt-4">
+                            <div className="text-sm text-gray-400 mb-2">{language === 'zh' ? '月平均收益' : 'Monthly Average Return'}</div>
+                            <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#14C2A3] to-purple-500">
+                              +15.8%
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
