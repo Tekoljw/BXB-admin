@@ -99,7 +99,7 @@ export default function HomePage() {
                     onClick={() => changeLang('zh')}
                     className="w-full flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
                   >
-                    <span className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-xs mr-2">CN</span>
+                    <span className="w-6 h-6 bg-gray-500 rounded-full flex items-center justify-center text-xs mr-2">CN</span>
                     简体中文
                   </button>
                 </div>
@@ -146,14 +146,14 @@ export default function HomePage() {
           
           {/* 3D几何背景效果 */}
           <div className="absolute inset-0">
-            <div className="absolute top-20 left-20 w-[600px] h-[600px] bg-gradient-conic from-[#14C2A3]/20 via-purple-500/20 to-[#14C2A3]/20 rounded-full blur-3xl animate-spin" style={{ animationDuration: '20s' }}></div>
-            <div className="absolute bottom-20 right-20 w-[500px] h-[500px] bg-gradient-conic from-purple-500/15 via-[#14C2A3]/15 to-purple-500/15 rounded-full blur-3xl animate-spin" style={{ animationDuration: '25s', animationDirection: 'reverse' }}></div>
+            <div className="absolute top-20 left-20 w-[600px] h-[600px] bg-gradient-conic from-[#14C2A3]/20 via-gray-900/20 to-[#14C2A3]/20 rounded-full blur-3xl animate-spin" style={{ animationDuration: '20s' }}></div>
+            <div className="absolute bottom-20 right-20 w-[500px] h-[500px] bg-gradient-conic from-gray-900/15 via-[#14C2A3]/15 to-gray-900/15 rounded-full blur-3xl animate-spin" style={{ animationDuration: '25s', animationDirection: 'reverse' }}></div>
             
             {/* 几何线条 */}
             <div className="absolute top-1/4 left-1/2 w-px h-96 bg-gradient-to-b from-[#14C2A3]/50 to-transparent transform -rotate-45"></div>
-            <div className="absolute bottom-1/4 right-1/2 w-px h-96 bg-gradient-to-t from-purple-500/50 to-transparent transform rotate-45"></div>
+            <div className="absolute bottom-1/4 right-1/2 w-px h-96 bg-gradient-to-t from-blue-900/50 to-transparent transform rotate-45"></div>
             <div className="absolute top-1/2 left-1/4 w-96 h-px bg-gradient-to-r from-[#14C2A3]/30 to-transparent"></div>
-            <div className="absolute top-1/2 right-1/4 w-96 h-px bg-gradient-to-l from-purple-500/30 to-transparent"></div>
+            <div className="absolute top-1/2 right-1/4 w-96 h-px bg-gradient-to-l from-blue-900/30 to-transparent"></div>
           </div>
 
           {/* 浮动粒子群 */}
@@ -161,7 +161,7 @@ export default function HomePage() {
             {[...Array(25)].map((_, i) => (
               <div
                 key={i}
-                className={`absolute rounded-full ${i % 3 === 0 ? 'bg-[#14C2A3]' : i % 3 === 1 ? 'bg-purple-500' : 'bg-white'} opacity-20 animate-float`}
+                className={`absolute rounded-full ${i % 3 === 0 ? 'bg-[#14C2A3]' : i % 3 === 1 ? 'bg-gray-600' : 'bg-white'} opacity-20 animate-float`}
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
@@ -178,7 +178,7 @@ export default function HomePage() {
             <div className="max-w-6xl mx-auto text-center">
               {/* 标签徽章 */}
               <div className="inline-flex items-center justify-center mb-8 animate-fade-in-up">
-                <div className="bg-gradient-to-r from-[#14C2A3]/20 to-purple-500/20 backdrop-blur-xl border border-[#14C2A3]/30 rounded-full px-8 py-3">
+                <div className="bg-gradient-to-r from-[#14C2A3]/20 to-gray-900/20 backdrop-blur-xl border border-[#14C2A3]/30 rounded-full px-8 py-3">
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-[#14C2A3] rounded-full animate-ping"></div>
                     <span className="text-[#14C2A3] font-medium text-sm">
@@ -195,12 +195,12 @@ export default function HomePage() {
                     <span className="block bg-gradient-to-r from-white via-white to-gray-300 bg-clip-text text-transparent mb-4">
                       {language === 'zh' ? '革新加密' : 'Revolutionize'}
                     </span>
-                    <span className="block bg-gradient-to-r from-[#14C2A3] via-purple-500 to-[#14C2A3] bg-clip-text text-transparent animate-gradient bg-[size:300%_300%]">
+                    <span className="block bg-gradient-to-r from-[#14C2A3] via-blue-400 to-[#14C2A3] bg-clip-text text-transparent animate-gradient bg-[size:300%_300%]">
                       {language === 'zh' ? '经济生态' : 'Crypto Economy'}
                     </span>
                     {/* 装饰元素 */}
                     <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#14C2A3]/20 rounded-full animate-pulse"></div>
-                    <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-purple-500/20 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-blue-400/20 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
                   </div>
                 </h1>
                 
@@ -208,7 +208,7 @@ export default function HomePage() {
                   <p className="text-xl md:text-2xl lg:text-3xl text-gray-300 max-w-5xl mx-auto leading-relaxed animate-fade-in-up backdrop-blur-sm" style={{ animationDelay: '0.4s' }}>
                     {language === 'zh' ? '全球首个「社交+担保+AI」一体化数字资产平台' : 'World\'s First Integrated "Social + Guarantee + AI" Digital Asset Platform'}
                   </p>
-                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#14C2A3] to-purple-500 rounded-full"></div>
+                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#14C2A3] to-blue-400 rounded-full"></div>
                 </div>
               </div>
 
@@ -248,7 +248,7 @@ export default function HomePage() {
                       <svg className="w-12 h-12 text-[#14C2A3] group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-500 rounded-full animate-pulse opacity-80"></div>
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#14C2A3] rounded-full animate-pulse opacity-80"></div>
                     </div>
                     <span className="text-lg font-semibold text-gray-300 group-hover:text-[#14C2A3] transition-colors duration-300">
                       {language === 'zh' ? '智能担保' : 'Smart Guarantee'}
@@ -258,13 +258,13 @@ export default function HomePage() {
                 
                 <div className="group text-center cursor-pointer">
                   <div className="relative">
-                    <div className="w-24 h-24 bg-gradient-to-br from-purple-500/30 via-purple-500/20 to-purple-500/10 rounded-3xl flex items-center justify-center mb-4 backdrop-blur-xl border border-purple-500/20 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-purple-500/25 transition-all duration-500 group-hover:border-purple-500/40">
-                      <svg className="w-12 h-12 text-purple-500 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-24 h-24 bg-gradient-to-br from-blue-900/30 via-blue-900/20 to-blue-900/10 rounded-3xl flex items-center justify-center mb-4 backdrop-blur-xl border border-blue-900/20 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-blue-900/25 transition-all duration-500 group-hover:border-blue-900/40">
+                      <svg className="w-12 h-12 text-blue-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                       </svg>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-purple-500 rounded-full animate-pulse opacity-80"></div>
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-400 rounded-full animate-pulse opacity-80"></div>
                     </div>
-                    <span className="text-lg font-semibold text-gray-300 group-hover:text-purple-500 transition-colors duration-300">
+                    <span className="text-lg font-semibold text-gray-300 group-hover:text-blue-400 transition-colors duration-300">
                       AI 引擎
                     </span>
                   </div>
@@ -311,7 +311,7 @@ export default function HomePage() {
                   </button>
 
                   {/* Google Play */}
-                  <button className="group relative px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                  <button className="group relative px-8 py-4 bg-gray-600 hover:bg-gray-500 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg">
                     <span className="relative z-10 flex items-center">
                       <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
@@ -358,23 +358,23 @@ export default function HomePage() {
         {/* P1 市场痛点 */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* 背景渐变效果 */}
-          <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-red-900/10 to-gray-900"></div>
-          <div className="absolute top-20 left-10 w-96 h-96 bg-red-500/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-red-600/8 rounded-full blur-3xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-800/10 to-gray-900"></div>
+          <div className="absolute top-20 left-10 w-96 h-96 bg-gray-700/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-gray-600/8 rounded-full blur-3xl"></div>
           
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center mb-20">
               <div className="inline-block mb-6">
-                <div className="bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-xl border border-red-500/30 rounded-full px-8 py-3">
+                <div className="bg-gradient-to-r from-gray-600/20 to-gray-700/20 backdrop-blur-xl border border-gray-600/30 rounded-full px-8 py-3">
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                    <span className="text-red-400 font-medium text-sm">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+                    <span className="text-gray-400 font-medium text-sm">
                       {language === 'zh' ? '⚠️ 当前市场挑战' : '⚠️ Current Market Challenges'}
                     </span>
                   </div>
                 </div>
               </div>
-              <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-white via-red-200 to-white bg-clip-text text-transparent mb-6">
+              <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent mb-6">
                 {language === 'zh' ? '为什么需要我们的平台？' : 'Why Do We Need Our Platform?'}
               </h2>
               <p className="text-xl text-gray-400 max-w-3xl mx-auto">
@@ -384,23 +384,23 @@ export default function HomePage() {
 
             <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
               <div className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 to-red-600/10 rounded-3xl blur-xl group-hover:from-red-500/30 group-hover:to-red-600/20 transition-all duration-500"></div>
-                <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 p-8 rounded-3xl backdrop-blur-xl border border-red-500/20 group-hover:border-red-500/40 transition-all duration-500 group-hover:transform group-hover:scale-105">
-                  <div className="relative w-20 h-20 bg-gradient-to-br from-red-500/30 to-red-600/20 rounded-3xl flex items-center justify-center mb-8 group-hover:animate-glow-pulse">
-                    <svg className="w-10 h-10 text-red-500 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-600/20 to-gray-700/10 rounded-3xl blur-xl group-hover:from-gray-600/30 group-hover:to-gray-700/20 transition-all duration-500"></div>
+                <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 p-8 rounded-3xl backdrop-blur-xl border border-gray-600/20 group-hover:border-gray-600/40 transition-all duration-500 group-hover:transform group-hover:scale-105">
+                  <div className="relative w-20 h-20 bg-gradient-to-br from-gray-600/30 to-gray-700/20 rounded-3xl flex items-center justify-center mb-8 group-hover:animate-glow-pulse">
+                    <svg className="w-10 h-10 text-gray-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full animate-pulse opacity-80"></div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-gray-400 rounded-full animate-pulse opacity-80"></div>
                   </div>
                   <div className="space-y-4">
-                    <h4 className="text-2xl font-bold text-white mb-4 group-hover:text-red-200 transition-colors duration-300">
+                    <h4 className="text-2xl font-bold text-white mb-4 group-hover:text-gray-200 transition-colors duration-300">
                       {language === 'zh' ? '信任缺失危机' : 'Trust Deficit Crisis'}
                     </h4>
                     <p className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
                       {language === 'zh' ? '加密货币交易欺诈频发，用户资金安全无保障，缺乏可信任的支付场景和交易环境' : 'Frequent cryptocurrency fraud, no protection for user funds, lacking trustworthy payment scenarios and trading environments'}
                     </p>
-                    <div className="flex items-center text-red-400 text-sm font-medium">
-                      <span className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span>
+                    <div className="flex items-center text-gray-400 text-sm font-medium">
+                      <span className="w-2 h-2 bg-gray-400 rounded-full mr-2 animate-pulse"></span>
                       {language === 'zh' ? '每年损失超过 $14B' : 'Annual losses exceed $14B'}
                     </div>
                   </div>
@@ -408,23 +408,23 @@ export default function HomePage() {
               </div>
 
               <div className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-red-500/10 rounded-3xl blur-xl group-hover:from-orange-500/30 group-hover:to-red-500/20 transition-all duration-500"></div>
-                <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 p-8 rounded-3xl backdrop-blur-xl border border-orange-500/20 group-hover:border-orange-500/40 transition-all duration-500 group-hover:transform group-hover:scale-105">
-                  <div className="relative w-20 h-20 bg-gradient-to-br from-orange-500/30 to-red-500/20 rounded-3xl flex items-center justify-center mb-8 group-hover:animate-glow-pulse">
-                    <svg className="w-10 h-10 text-orange-500 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#14C2A3]/20 to-green-600/10 rounded-3xl blur-xl group-hover:from-[#14C2A3]/30 group-hover:to-green-600/20 transition-all duration-500"></div>
+                <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 p-8 rounded-3xl backdrop-blur-xl border border-[#14C2A3]/20 group-hover:border-[#14C2A3]/40 transition-all duration-500 group-hover:transform group-hover:scale-105">
+                  <div className="relative w-20 h-20 bg-gradient-to-br from-[#14C2A3]/30 to-green-600/20 rounded-3xl flex items-center justify-center mb-8 group-hover:animate-glow-pulse">
+                    <svg className="w-10 h-10 text-[#14C2A3] group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-orange-500 rounded-full animate-pulse opacity-80"></div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#14C2A3] rounded-full animate-pulse opacity-80"></div>
                   </div>
                   <div className="space-y-4">
-                    <h4 className="text-2xl font-bold text-white mb-4 group-hover:text-orange-200 transition-colors duration-300">
+                    <h4 className="text-2xl font-bold text-white mb-4 group-hover:text-green-200 transition-colors duration-300">
                       {language === 'zh' ? '技术门槛过高' : 'Technical Barriers Too High'}
                     </h4>
                     <p className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
                       {language === 'zh' ? '普通用户难以参与量化交易和合约市场，复杂的技术要求阻碍了大众化普及' : 'Ordinary users cannot participate in quantitative trading and contract markets due to complex technical requirements hindering mass adoption'}
                     </p>
-                    <div className="flex items-center text-orange-400 text-sm font-medium">
-                      <span className="w-2 h-2 bg-orange-500 rounded-full mr-2 animate-pulse"></span>
+                    <div className="flex items-center text-[#14C2A3] text-sm font-medium">
+                      <span className="w-2 h-2 bg-[#14C2A3] rounded-full mr-2 animate-pulse"></span>
                       {language === 'zh' ? '95% 用户被技术壁垒拒绝' : '95% users excluded by technical barriers'}
                     </div>
                   </div>
@@ -432,23 +432,23 @@ export default function HomePage() {
               </div>
 
               <div className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/20 to-orange-500/10 rounded-3xl blur-xl group-hover:from-yellow-500/30 group-hover:to-orange-500/20 transition-all duration-500"></div>
-                <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 p-8 rounded-3xl backdrop-blur-xl border border-yellow-500/20 group-hover:border-yellow-500/40 transition-all duration-500 group-hover:transform group-hover:scale-105">
-                  <div className="relative w-20 h-20 bg-gradient-to-br from-yellow-500/30 to-orange-500/20 rounded-3xl flex items-center justify-center mb-8 group-hover:animate-glow-pulse">
-                    <svg className="w-10 h-10 text-yellow-500 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-blue-800/10 rounded-3xl blur-xl group-hover:from-blue-600/30 group-hover:to-blue-800/20 transition-all duration-500"></div>
+                <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 p-8 rounded-3xl backdrop-blur-xl border border-blue-600/20 group-hover:border-blue-600/40 transition-all duration-500 group-hover:transform group-hover:scale-105">
+                  <div className="relative w-20 h-20 bg-gradient-to-br from-blue-600/30 to-blue-800/20 rounded-3xl flex items-center justify-center mb-8 group-hover:animate-glow-pulse">
+                    <svg className="w-10 h-10 text-blue-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-500 rounded-full animate-pulse opacity-80"></div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-400 rounded-full animate-pulse opacity-80"></div>
                   </div>
                   <div className="space-y-4">
-                    <h4 className="text-2xl font-bold text-white mb-4 group-hover:text-yellow-200 transition-colors duration-300">
+                    <h4 className="text-2xl font-bold text-white mb-4 group-hover:text-blue-200 transition-colors duration-300">
                       {language === 'zh' ? '功能分散割裂' : 'Fragmented Features'}
                     </h4>
                     <p className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
                       {language === 'zh' ? '社交、交易、担保功能分散在不同平台，用户体验割裂，增加操作复杂性和成本' : 'Social, trading, and guarantee functions scattered across different platforms, creating fragmented user experience and increased complexity'}
                     </p>
-                    <div className="flex items-center text-yellow-400 text-sm font-medium">
-                      <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
+                    <div className="flex items-center text-blue-400 text-sm font-medium">
+                      <span className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></span>
                       {language === 'zh' ? '平均需要 8+ 个应用' : 'Average need for 8+ apps'}
                     </div>
                   </div>
@@ -460,15 +460,15 @@ export default function HomePage() {
             <div className="mt-20 text-center">
               <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-400 mb-2">$14B+</div>
+                  <div className="text-4xl md:text-5xl font-bold text-gray-400 mb-2">$14B+</div>
                   <div className="text-gray-400 text-sm">{language === 'zh' ? '年度欺诈损失' : 'Annual Fraud Loss'}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-orange-400 mb-2">95%</div>
+                  <div className="text-4xl md:text-5xl font-bold text-gray-400 mb-2">95%</div>
                   <div className="text-gray-400 text-sm">{language === 'zh' ? '用户被技术排斥' : 'Users Excluded by Tech'}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-yellow-400 mb-2">8+</div>
+                  <div className="text-4xl md:text-5xl font-bold text-gray-400 mb-2">8+</div>
                   <div className="text-gray-400 text-sm">{language === 'zh' ? '平均使用应用数' : 'Average Apps Required'}</div>
                 </div>
               </div>
@@ -514,9 +514,9 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-purple-500/20">
-                <div className="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6">
-                  <svg className="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-blue-500/20">
+                <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6">
+                  <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
                 </div>
@@ -628,17 +628,17 @@ export default function HomePage() {
               {/* 第二大功能：智能担保交易 */}
               <div className="relative">
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8">
-                  <div className="bg-purple-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow-2xl">
+                  <div className="bg-blue-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow-2xl">
                     02
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-purple-500/10 via-gray-800/50 to-purple-500/10 rounded-3xl border border-purple-500/30 p-12 backdrop-blur-lg">
+                <div className="bg-gradient-to-r from-blue-500/10 via-gray-800/50 to-blue-500/10 rounded-3xl border border-blue-500/30 p-12 backdrop-blur-lg">
                   <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div className="order-2 lg:order-1 relative">
-                      <div className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 rounded-2xl p-8 border border-purple-500/20">
+                      <div className="bg-gradient-to-br from-blue-500/20 to-blue-500/5 rounded-2xl p-8 border border-blue-500/20">
                         <div className="flex justify-center mb-8">
-                          <div className="w-32 h-32 bg-purple-500/10 rounded-full flex items-center justify-center">
-                            <svg className="w-16 h-16 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="w-32 h-32 bg-blue-500/10 rounded-full flex items-center justify-center">
+                            <svg className="w-16 h-16 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                           </div>
@@ -646,34 +646,34 @@ export default function HomePage() {
                         <div className="space-y-4">
                           <div className="flex items-center justify-between bg-white/10 p-3 rounded-lg">
                             <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
                               <span className="text-white">{language === 'zh' ? '建群谈判' : 'Group Negotiation'}</span>
                             </div>
-                            <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
                           </div>
                           <div className="flex items-center justify-between bg-white/10 p-3 rounded-lg">
                             <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+                              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
                               <span className="text-white">{language === 'zh' ? 'AI生成合同' : 'AI Contract Generation'}</span>
                             </div>
-                            <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
                           </div>
                           <div className="flex items-center justify-between bg-white/10 p-3 rounded-lg">
                             <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+                              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
                               <span className="text-white">{language === 'zh' ? '资金托管' : 'Fund Custody'}</span>
                             </div>
-                            <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
                           </div>
                           <div className="flex items-center justify-between bg-white/10 p-3 rounded-lg">
                             <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
+                              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
                               <span className="text-white">{language === 'zh' ? '验收放款' : 'Acceptance & Release'}</span>
                             </div>
                             <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -685,8 +685,8 @@ export default function HomePage() {
                     </div>
                     <div className="order-1 lg:order-2 text-center lg:text-left">
                       <div className="flex items-center justify-center lg:justify-start mb-6">
-                        <div className="w-20 h-20 bg-purple-500/20 rounded-2xl flex items-center justify-center mr-4">
-                          <svg className="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-20 h-20 bg-blue-500/20 rounded-2xl flex items-center justify-center mr-4">
+                          <svg className="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                           </svg>
                         </div>
@@ -699,7 +699,7 @@ export default function HomePage() {
                       </p>
                       <div className="grid gap-4">
                         <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
-                          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
@@ -709,7 +709,7 @@ export default function HomePage() {
                           </p>
                         </div>
                         <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
-                          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                             </svg>
@@ -719,7 +719,7 @@ export default function HomePage() {
                           </p>
                         </div>
                         <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
-                          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
@@ -737,16 +737,16 @@ export default function HomePage() {
               {/* 第三大功能：AI量化生态 */}
               <div className="relative">
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8">
-                  <div className="bg-gradient-to-r from-[#14C2A3] to-purple-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow-2xl">
+                  <div className="bg-gradient-to-r from-[#14C2A3] to-blue-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow-2xl">
                     03
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-[#14C2A3]/10 via-purple-500/10 to-[#14C2A3]/10 rounded-3xl border border-purple-500/30 p-12 backdrop-blur-lg">
+                <div className="bg-gradient-to-r from-[#14C2A3]/10 via-blue-500/10 to-[#14C2A3]/10 rounded-3xl border border-blue-500/30 p-12 backdrop-blur-lg">
                   <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div className="text-center lg:text-left">
                       <div className="flex items-center justify-center lg:justify-start mb-6">
-                        <div className="w-20 h-20 bg-gradient-to-br from-[#14C2A3]/20 to-purple-500/20 rounded-2xl flex items-center justify-center mr-4">
-                          <svg className="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-20 h-20 bg-gradient-to-br from-[#14C2A3]/20 to-blue-500/20 rounded-2xl flex items-center justify-center mr-4">
+                          <svg className="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                           </svg>
                         </div>
@@ -759,7 +759,7 @@ export default function HomePage() {
                       </p>
                       <div className="grid gap-4">
                         <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
-                          <div className="w-8 h-8 bg-gradient-to-r from-[#14C2A3] to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-8 h-8 bg-gradient-to-r from-[#14C2A3] to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
@@ -769,7 +769,7 @@ export default function HomePage() {
                           </p>
                         </div>
                         <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
-                          <div className="w-8 h-8 bg-gradient-to-r from-[#14C2A3] to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-8 h-8 bg-gradient-to-r from-[#14C2A3] to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                             </svg>
@@ -779,7 +779,7 @@ export default function HomePage() {
                           </p>
                         </div>
                         <div className="flex items-center space-x-4 bg-white/5 p-4 rounded-xl">
-                          <div className="w-8 h-8 bg-gradient-to-r from-[#14C2A3] to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-8 h-8 bg-gradient-to-r from-[#14C2A3] to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
                             </svg>
@@ -791,10 +791,10 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className="relative">
-                      <div className="bg-gradient-to-br from-purple-500/20 to-[#14C2A3]/20 rounded-2xl p-8 border border-purple-500/20">
+                      <div className="bg-gradient-to-br from-blue-500/20 to-[#14C2A3]/20 rounded-2xl p-8 border border-blue-500/20">
                         <div className="grid grid-cols-2 gap-4 mb-6">
                           <div className="bg-white/10 p-4 rounded-xl text-center">
-                            <div className="text-2xl font-bold text-purple-500 mb-1">1000+</div>
+                            <div className="text-2xl font-bold text-blue-500 mb-1">1000+</div>
                             <div className="text-gray-300 text-sm">{language === 'zh' ? 'AI策略' : 'AI Strategies'}</div>
                           </div>
                           <div className="bg-white/10 p-4 rounded-xl text-center">
@@ -803,14 +803,14 @@ export default function HomePage() {
                           </div>
                         </div>
                         <div className="text-center">
-                          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-purple-500/10 to-[#14C2A3]/10 rounded-full flex items-center justify-center">
-                            <svg className="w-16 h-16 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-blue-500/10 to-[#14C2A3]/10 rounded-full flex items-center justify-center">
+                            <svg className="w-16 h-16 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                             </svg>
                           </div>
                           <div className="mt-4">
                             <div className="text-sm text-gray-400 mb-2">{language === 'zh' ? '月平均收益' : 'Monthly Average Return'}</div>
-                            <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#14C2A3] to-purple-500">
+                            <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#14C2A3] to-blue-500">
                               +15.8%
                             </div>
                           </div>
@@ -848,9 +848,9 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-purple-500/20">
-                <div className="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6">
-                  <svg className="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-blue-500/20">
+                <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6">
+                  <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
                 </div>
@@ -884,7 +884,7 @@ export default function HomePage() {
 
 
         {/* 封底页 CTA Section */}
-        <section className="py-20 lg:py-32 bg-gradient-to-r from-[#14C2A3]/10 to-purple-500/10">
+        <section className="py-20 lg:py-32 bg-gradient-to-r from-[#14C2A3]/10 to-blue-500/10">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-white text-3xl md:text-5xl font-bold mb-8">
               {language === 'zh' ? '让每一笔加密交易都安全可信任' : 'Making every crypto transaction secure and trustworthy'}
@@ -899,7 +899,7 @@ export default function HomePage() {
               >
                 {language === 'zh' ? '立即开始' : 'Get Started Now'}
               </button>
-              <button className="bg-purple-600 text-white px-12 py-4 rounded-full hover:bg-purple-700 transition-colors font-semibold text-lg">
+              <button className="bg-blue-600 text-white px-12 py-4 rounded-full hover:bg-blue-700 transition-colors font-semibold text-lg">
                 {language === 'zh' ? '查看白皮书' : 'View Whitepaper'}
               </button>
             </div>
