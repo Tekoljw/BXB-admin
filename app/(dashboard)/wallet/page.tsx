@@ -3743,51 +3743,6 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 法币/Crypto切换页签 */}
-            <div className="flex justify-start">
-              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
-                {/* 滑动背景 */}
-                <div
-                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
-                  style={{
-                    width: '80px',
-                    left: selectedPaymentCard === "fiat" ? '4px' : '84px'
-                  }}
-                />
-                {/* 按钮 */}
-                {[
-                  { id: "fiat", label: "法币" },
-                  { id: "crypto", label: "Crypto" }
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
-                      selectedPaymentCard === tab.id
-                        ? isDark ? "text-black" : "text-white"
-                        : isDark
-                        ? "text-gray-300 hover:text-white"
-                        : "text-gray-700 hover:text-gray-900"
-                    }`}
-                    style={{
-                      width: '80px',
-                      height: '32px'
-                    }}
-                    onClick={() => {
-                      setSelectedPaymentCard(tab.id)
-                      // 切换时重置对应的标签页
-                      if (tab.id === "fiat") {
-                        setFiatTab("商户资产")
-                      } else {
-                        setCryptoTab("商户资产")
-                      }
-                    }}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {/* 操作按钮区域 */}
             <div className="transition-all duration-300 ease-out">
               <div className="flex justify-end gap-4">
