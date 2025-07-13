@@ -1969,25 +1969,25 @@ export default function WalletPage() {
       setOrderTab("理财订单")
       setSecondaryTab("理财资金记录")
     } else if (action === "finance-investment-records") {
-      // 理财投资记录按钮跳转到订单记录-投资订单
+      // 理财投资记录按钮跳转到订单记录-理财订单-投资订单
       setTopLevelTab("订单记录")
-      setOrderTab("投资订单")
-      setSecondaryTab("")
+      setOrderTab("理财订单")
+      setSecondaryTab("投资订单")
     } else if (action === "ucard-fund-records") {
       // U卡账户充值记录按钮跳转到订单记录-U卡订单-充值记录
       setTopLevelTab("订单记录")
       setOrderTab("U卡订单")
       setSecondaryTab("充值记录")
     } else if (action === "ucard-consume-records") {
-      // U卡账户消费记录按钮跳转到订单记录-U卡记录-消费记录
+      // U卡账户消费记录按钮跳转到订单记录-U卡订单-消费记录
       setTopLevelTab("订单记录")
-      setOrderTab("U卡记录")
+      setOrderTab("U卡订单")
       setSecondaryTab("消费记录")
     } else if (action === "guarantee-fund-records") {
-      // 担保账户资金记录按钮跳转到订单记录-担保记录-信誉担保资金记录
+      // 担保账户资金记录按钮跳转到订单记录-担保记录-信用担保资金记录
       setTopLevelTab("订单记录")
       setOrderTab("担保记录")
-      setSecondaryTab("信誉担保资金记录")
+      setSecondaryTab("信用担保资金记录")
     } else if (action === "guarantee-trade-records") {
       // 担保账户交易记录按钮跳转到订单记录-担保记录
       setTopLevelTab("订单记录")
