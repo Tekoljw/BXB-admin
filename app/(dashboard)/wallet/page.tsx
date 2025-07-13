@@ -3659,8 +3659,8 @@ export default function WalletPage() {
               </div>
               
               {/* 商户信息卡片 */}
-              <div className={`${cardStyle} rounded-lg p-6`}>
-                <div className="flex items-center justify-between mb-4">
+              <div className={`${cardStyle} rounded-lg p-6 flex flex-col justify-between`}>
+                <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
                       <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3669,7 +3669,7 @@ export default function WalletPage() {
                     </div>
                     <div>
                       <div className="flex items-center space-x-2">
-                        <div className={`text-sm font-mono ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        <div className={`text-lg font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           MP2025001234
                         </div>
                         <button
@@ -3681,7 +3681,7 @@ export default function WalletPage() {
                           }`}
                           title="复制商户ID"
                         >
-                          <Copy className="h-3 w-3" />
+                          <Copy className="h-4 w-4" />
                         </button>
                       </div>
                       <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -3694,10 +3694,10 @@ export default function WalletPage() {
                   </span>
                 </div>
 
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 mt-auto">
                   <button
                     onClick={() => {
-                      // 打开接入文档
+                      // 打开API文档
                       window.open('/docs/bepay-integration', '_blank')
                     }}
                     className={`flex-1 inline-flex items-center justify-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-all border-2 ${
@@ -3709,7 +3709,7 @@ export default function WalletPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <span>接入文档</span>
+                    <span>API文档</span>
                   </button>
 
                   <button
