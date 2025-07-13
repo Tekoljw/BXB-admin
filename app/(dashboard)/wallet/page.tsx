@@ -4835,18 +4835,22 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             {/* 佣金类型页签 */}
-            <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
-              {["合约佣金", "理财佣金", "U卡佣金", "担保佣金", "支付佣金"].map((tab) => (
-                <button
+            <div className="flex space-x-8 border-b border-gray-200 dark:border-gray-700">
+              {["合约佣金", "理财佣金", "U卡佣金", "担保佣金", "支付佣金"].map((tab, index) => (
+                <div
                   key={tab}
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
-                    isDark 
-                      ? "bg-white text-black hover:bg-gray-200" 
-                      : "bg-white text-black hover:bg-gray-50"
+                  className={`pb-3 cursor-pointer transition-all ${
+                    index === 0 
+                      ? "border-b-2 border-black dark:border-white" 
+                      : "border-b-2 border-transparent hover:border-gray-300"
                   }`}
                 >
-                  {tab}
-                </button>
+                  <span className={`text-lg font-bold ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>
+                    {tab}
+                  </span>
+                </div>
               ))}
             </div>
             
