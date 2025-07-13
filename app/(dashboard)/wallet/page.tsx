@@ -5126,7 +5126,7 @@ export default function WalletPage() {
                   
                   <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
                     <div className="flex items-center justify-center mb-3">
-                      <BarChart className={`h-6 w-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <TrendingUp className={`h-6 w-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
                     </div>
                     <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
                       256,789.12 <span className="text-lg">USDT</span>
