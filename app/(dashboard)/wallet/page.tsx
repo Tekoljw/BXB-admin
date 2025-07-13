@@ -95,7 +95,7 @@ export default function WalletPage() {
   const [topLevelTab, setTopLevelTab] = useState("账户资产") // "账户资产" or "订单记录"
   const [activeTab, setActiveTab] = useState("钱包总览")
   const [orderTab, setOrderTab] = useState("现货订单")
-  const [secondaryTab, setSecondaryTab] = useState<string>("deposit") // 二级页签状态 // 订单记录子页签
+  const [secondaryTab, setSecondaryTab] = useState<string>("") // 二级页签状态 // 订单记录子页签
   const [activeOrderCategory, setActiveOrderCategory] = useState('spot')
   const [activeOrderSubTab, setActiveOrderSubTab] = useState('current')
   const [overviewMode, setOverviewMode] = useState("现金账户") // "现金账户" or "总资产"
@@ -144,6 +144,19 @@ export default function WalletPage() {
       setCurrencyTab(selectedCurrencies[0])
     }
   }, [selectedCurrencies, currencyTab])
+
+  // 当订单类型切换时自动设置默认的二级页签
+  useEffect(() => {
+    const categoryKey = getCategoryKey(orderTab)
+    const category = orderCategories[categoryKey]
+    
+    if (category && Object.keys(category.tabs).length > 0) {
+      const firstTabKey = Object.keys(category.tabs)[0]
+      if (secondaryTab === "" || !Object.keys(category.tabs).includes(secondaryTab)) {
+        setSecondaryTab(firstTabKey)
+      }
+    }
+  }, [orderTab, secondaryTab])
   
 
   
@@ -1105,15 +1118,6 @@ export default function WalletPage() {
     const firstSubTab = Object.keys(orderCategories[categoryKey]?.tabs || {})[0]
     setSecondaryTab(firstSubTab || "current")
   }
-
-  // 初始化二级页签
-  useEffect(() => {
-    const categoryKey = getCategoryKey(orderTab)
-    const firstSubTab = Object.keys(orderCategories[categoryKey]?.tabs || {})[0]
-    if (firstSubTab && secondaryTab === "current" && !orderCategories[categoryKey]?.tabs[secondaryTab]) {
-      setSecondaryTab(firstSubTab)
-    }
-  }, [orderTab, secondaryTab])
 
 
 
