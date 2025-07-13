@@ -1967,27 +1967,27 @@ export default function WalletPage() {
       // 理财账户资金记录按钮跳转到订单记录-理财订单-理财资金记录
       setTopLevelTab("订单记录")
       setOrderTab("理财订单")
-      setSecondaryTab("理财资金记录")
+      setSecondaryTab("account")
     } else if (action === "finance-investment-records") {
       // 理财投资记录按钮跳转到订单记录-理财订单-投资订单
       setTopLevelTab("订单记录")
       setOrderTab("理财订单")
-      setSecondaryTab("投资订单")
+      setSecondaryTab("invest")
     } else if (action === "ucard-fund-records") {
       // U卡账户充值记录按钮跳转到订单记录-U卡订单-充值记录
       setTopLevelTab("订单记录")
       setOrderTab("U卡订单")
-      setSecondaryTab("充值记录")
+      setSecondaryTab("recharge")
     } else if (action === "ucard-consume-records") {
       // U卡账户消费记录按钮跳转到订单记录-U卡订单-消费记录
       setTopLevelTab("订单记录")
       setOrderTab("U卡订单")
-      setSecondaryTab("消费记录")
+      setSecondaryTab("consume")
     } else if (action === "guarantee-fund-records") {
       // 担保账户资金记录按钮跳转到订单记录-担保记录-信用担保资金记录
       setTopLevelTab("订单记录")
       setOrderTab("担保记录")
-      setSecondaryTab("信用担保资金记录")
+      setSecondaryTab("credit")
     } else if (action === "guarantee-trade-records") {
       // 担保账户交易记录按钮跳转到订单记录-担保记录
       setTopLevelTab("订单记录")
@@ -1997,12 +1997,12 @@ export default function WalletPage() {
       // Bepay账户商户资产法币订单跳转到订单记录-支付订单-法币代收
       setTopLevelTab("订单记录")
       setOrderTab("支付订单")
-      setSecondaryTab("法币代收")
+      setSecondaryTab("fiatReceive")
     } else if (action === "bepay-crypto-orders") {
       // Bepay账户加密货币订单跳转到订单记录-支付订单-加密货币代收
       setTopLevelTab("订单记录")
       setOrderTab("支付订单")
-      setSecondaryTab("加密货币代收")
+      setSecondaryTab("cryptoReceive")
     } else {
       setSelectedAction(selectedAction === action ? "" : action)
     }
@@ -3871,7 +3871,7 @@ export default function WalletPage() {
                               : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
                           }`}
                           variant="outline"
-                          title={tab.id === "资金记录" ? "商户资产法币订单" : tab.id}
+                          title={tab.id === "资金记录" ? "法币订单" : tab.id}
                         >
                           <Icon 
                             className={`h-4 w-4 transition-colors ${
