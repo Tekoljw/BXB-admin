@@ -4854,10 +4854,15 @@ export default function WalletPage() {
                     onClick={handleCurrencyModalClick}
                     className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
                       isDark 
-                        ? "bg-transparent border-white text-white hover:bg-gray-800" 
-                        : "bg-transparent border-black text-black hover:bg-gray-50"
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
                     }`}
                   >
+                    <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
+                      availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                    }`}>
+                      <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
+                    </div>
                     <span>{selectedDisplayCurrency}</span>
                     <ChevronDown className="h-3 w-3" />
                   </button>
@@ -4882,10 +4887,15 @@ export default function WalletPage() {
                     onClick={handleCurrencyModalClick}
                     className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
                       isDark 
-                        ? "bg-transparent border-white text-white hover:bg-gray-800" 
-                        : "bg-transparent border-black text-black hover:bg-gray-50"
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
                     }`}
                   >
+                    <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
+                      availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                    }`}>
+                      <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
+                    </div>
                     <span>{selectedDisplayCurrency}</span>
                     <ChevronDown className="h-3 w-3" />
                   </button>
@@ -4910,10 +4920,15 @@ export default function WalletPage() {
                     onClick={handleCurrencyModalClick}
                     className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
                       isDark 
-                        ? "bg-transparent border-white text-white hover:bg-gray-800" 
-                        : "bg-transparent border-black text-black hover:bg-gray-50"
+                        ? "bg-transparent text-white hover:bg-gray-800" 
+                        : "bg-white text-black hover:bg-gray-50"
                     }`}
                   >
+                    <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${
+                      availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                    }`}>
+                      <span className="text-white">{selectedDisplayCurrency.charAt(0)}</span>
+                    </div>
                     <span>{selectedDisplayCurrency}</span>
                     <ChevronDown className="h-3 w-3" />
                   </button>
