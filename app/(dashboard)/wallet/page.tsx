@@ -4859,46 +4859,45 @@ export default function WalletPage() {
             {/* 根据选中的页签渲染内容 */}
             {commissionTab === "合约佣金" && (
               <div className="space-y-6">
-                {/* 佣金快报 */}
-                <div className={`rounded-lg p-6 ${cardStyle}`}>
-                  <div className="flex items-center mb-4">
-                    <TrendingUp className={`h-6 w-6 mr-3 text-blue-500`} />
-                    <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      佣金快报
-                    </h3>
+                {/* 佣金快报 - 分成多个卡片 */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  {/* 今日佣金 */}
+                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
+                      2,456.78 <span className="text-lg">USDT</span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      今日佣金
+                    </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div className="text-center">
-                      <div className={`text-2xl font-bold text-green-500 mb-1`}>
-                        2,456.78 <span className="text-lg">USDT</span>
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        今日佣金
-                      </div>
+                  
+                  {/* 本月佣金 */}
+                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className={`text-2xl font-bold text-blue-500 mb-1`}>
+                      58,943.22 <span className="text-lg">USDT</span>
                     </div>
-                    <div className="text-center">
-                      <div className={`text-2xl font-bold text-blue-500 mb-1`}>
-                        58,943.22 <span className="text-lg">USDT</span>
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        本月佣金
-                      </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      本月佣金
                     </div>
-                    <div className="text-center">
-                      <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
-                        425,678.90 <span className="text-lg">USDT</span>
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        累计佣金
-                      </div>
+                  </div>
+                  
+                  {/* 累计佣金 */}
+                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
+                      425,678.90 <span className="text-lg">USDT</span>
                     </div>
-                    <div className="text-center">
-                      <div className={`text-2xl font-bold text-green-500 mb-1`}>
-                        12.5<span className="text-lg">%</span>
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        佣金比例
-                      </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      累计佣金
+                    </div>
+                  </div>
+                  
+                  {/* 佣金比例 */}
+                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
+                      12.5<span className="text-lg">%</span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      佣金比例
                     </div>
                   </div>
                 </div>
@@ -4907,18 +4906,12 @@ export default function WalletPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* 佣金领取 */}
                   <div className={`rounded-lg p-6 ${cardStyle}`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center">
-                        <Download className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                        <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          佣金领取
-                        </h3>
-                      </div>
+                    <div className="flex items-center justify-end mb-4">
                       <button
                         className={`px-4 py-2 rounded-lg font-medium transition-all ${
                           isDark 
-                            ? "bg-green-600 hover:bg-green-700 text-white" 
-                            : "bg-green-500 hover:bg-green-600 text-white"
+                            ? "bg-[#14C2A3] hover:bg-[#10a088] text-white" 
+                            : "bg-[#14C2A3] hover:bg-[#10a088] text-white"
                         }`}
                       >
                         立即领取
@@ -4929,7 +4922,7 @@ export default function WalletPage() {
                         <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                           可领取佣金
                         </span>
-                        <span className={`text-lg font-bold text-green-500`}>
+                        <span className={`text-lg font-bold text-[#14C2A3]`}>
                           1,234.56 USDT
                         </span>
                       </div>
@@ -4954,13 +4947,7 @@ export default function WalletPage() {
 
                   {/* 推广人数 */}
                   <div className={`rounded-lg p-6 ${cardStyle}`}>
-                    <div className="flex items-center mb-4">
-                      <Users className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                      <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        推广人数
-                      </h3>
-                    </div>
-                    <div className="space-y-3">
+                    <div className="space-y-3 mt-8">
                       <div className="flex justify-between items-center">
                         <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                           直推人数
@@ -5001,8 +4988,8 @@ export default function WalletPage() {
                     <div className="flex space-x-2">
                       <button className={`px-3 py-1.5 text-sm rounded-lg transition-all ${
                         isDark 
-                          ? "bg-blue-600 hover:bg-blue-700 text-white" 
-                          : "bg-blue-500 hover:bg-blue-600 text-white"
+                          ? "bg-black hover:bg-gray-800 text-white" 
+                          : "bg-black hover:bg-gray-800 text-white"
                       }`}>
                         今日
                       </button>
@@ -5068,13 +5055,13 @@ export default function WalletPage() {
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                               {record.volume} USDT
                             </td>
-                            <td className={`py-3 px-2 text-sm font-medium text-green-500`}>
+                            <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>
                               {record.commission} USDT
                             </td>
                             <td className={`py-3 px-2 text-sm`}>
                               <span className={`px-2 py-1 rounded-full text-xs ${
                                 record.status === "已发放" 
-                                  ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                                  ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
                                   : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
                               }`}>
                                 {record.status}
