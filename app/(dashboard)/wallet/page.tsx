@@ -1045,7 +1045,7 @@ export default function WalletPage() {
         invest: '投资订单',
         exchange: '闪兑记录',
         earnings: '理财收益记录',
-        account: '理财账户记录'
+        account: '理财资金记录'
       }
     },
     ucard: {
@@ -1963,6 +1963,46 @@ export default function WalletPage() {
     } else if (action === "trade") {
       // 合约账户的交易按钮跳转到合约交易页面
       router.push("/usdt-trade")
+    } else if (action === "finance-fund-records") {
+      // 理财账户资金记录按钮跳转到订单记录-理财订单-理财资金记录
+      setTopLevelTab("订单记录")
+      setOrderTab("理财订单")
+      setSecondaryTab("理财资金记录")
+    } else if (action === "finance-investment-records") {
+      // 理财投资记录按钮跳转到订单记录-投资订单
+      setTopLevelTab("订单记录")
+      setOrderTab("投资订单")
+      setSecondaryTab("")
+    } else if (action === "ucard-fund-records") {
+      // U卡账户充值记录按钮跳转到订单记录-U卡订单-充值记录
+      setTopLevelTab("订单记录")
+      setOrderTab("U卡订单")
+      setSecondaryTab("充值记录")
+    } else if (action === "ucard-consume-records") {
+      // U卡账户消费记录按钮跳转到订单记录-U卡记录-消费记录
+      setTopLevelTab("订单记录")
+      setOrderTab("U卡记录")
+      setSecondaryTab("消费记录")
+    } else if (action === "guarantee-fund-records") {
+      // 担保账户资金记录按钮跳转到订单记录-担保记录-信誉担保资金记录
+      setTopLevelTab("订单记录")
+      setOrderTab("担保记录")
+      setSecondaryTab("信誉担保资金记录")
+    } else if (action === "guarantee-trade-records") {
+      // 担保账户交易记录按钮跳转到订单记录-担保记录
+      setTopLevelTab("订单记录")
+      setOrderTab("担保记录")
+      setSecondaryTab("")
+    } else if (action === "bepay-fiat-orders") {
+      // Bepay账户商户资产法币订单跳转到订单记录-支付订单-法币代收
+      setTopLevelTab("订单记录")
+      setOrderTab("支付订单")
+      setSecondaryTab("法币代收")
+    } else if (action === "bepay-crypto-orders") {
+      // Bepay账户加密货币订单跳转到订单记录-支付订单-加密货币代收
+      setTopLevelTab("订单记录")
+      setOrderTab("支付订单")
+      setSecondaryTab("加密货币代收")
     } else {
       setSelectedAction(selectedAction === action ? "" : action)
     }
@@ -2988,7 +3028,7 @@ export default function WalletPage() {
                 <div className={`w-px h-10 ${isDark ? 'bg-gray-600' : 'bg-gray-300'}`} />
                 
                 {/* 图标按钮区域 */}
-                {/* 资金记录按钮 */}
+                {/* 理财资金记录按钮 */}
                 <Button
                   onClick={() => handleActionClick("finance-fund-records")}
                   onMouseDown={() => setClickedAction("finance-fund-records")}
@@ -3002,7 +3042,7 @@ export default function WalletPage() {
                         : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
                   }`}
                   variant="outline"
-                  title="资金记录"
+                  title="理财资金记录"
                 >
                   <FileText 
                     className={`h-4 w-4 transition-colors ${
@@ -3480,16 +3520,16 @@ export default function WalletPage() {
                 <div className={`w-px h-10 ${isDark ? 'bg-gray-600' : 'bg-gray-300'}`} />
                 
                 {/* 图标按钮区域 */}
-                {/* 资金记录按钮 */}
+                {/* 信誉担保资金记录按钮 */}
                 <Button
-                  onClick={() => setSelectedGuaranteeTab("资金记录")}
+                  onClick={() => handleActionClick("guarantee-fund-records")}
                   className={`h-10 w-10 transition-all duration-200 ${
                     selectedGuaranteeTab === "资金记录"
                       ? "bg-[#00D4AA] border-[#00D4AA] text-white"
                       : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                   }`}
                   variant="outline"
-                  title="资金记录"
+                  title="信誉担保资金记录"
                 >
                   <FileText 
                     className={`h-4 w-4 transition-colors ${
@@ -3500,16 +3540,16 @@ export default function WalletPage() {
                   />
                 </Button>
 
-                {/* 交易记录按钮 */}
+                {/* 担保记录按钮 */}
                 <Button
-                  onClick={() => setSelectedGuaranteeTab("交易记录")}
+                  onClick={() => handleActionClick("guarantee-trade-records")}
                   className={`h-10 w-10 transition-all duration-200 ${
                     selectedGuaranteeTab === "交易记录"
                       ? "bg-[#00D4AA] border-[#00D4AA] text-white"
                       : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                   }`}
                   variant="outline"
-                  title="交易记录"
+                  title="担保记录"
                 >
                   <BarChart3 
                     className={`h-4 w-4 transition-colors ${
@@ -3818,14 +3858,20 @@ export default function WalletPage() {
                       return (
                         <Button
                           key={tab.id}
-                          onClick={tab.id === "资产分布" ? handlePositionModalClick : () => setFiatTab(tab.id)}
+                          onClick={
+                            tab.id === "资产分布" 
+                              ? handlePositionModalClick 
+                              : tab.id === "资金记录"
+                                ? () => handleActionClick("bepay-fiat-orders")
+                                : () => setFiatTab(tab.id)
+                          }
                           className={`h-12 w-12 transition-all duration-200 ${
                             isSelected
                               ? "bg-[#00D4AA]/10 border-[#00D4AA]"
                               : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
                           }`}
                           variant="outline"
-                          title={tab.id}
+                          title={tab.id === "资金记录" ? "商户资产法币订单" : tab.id}
                         >
                           <Icon 
                             className={`h-4 w-4 transition-colors ${
@@ -3845,14 +3891,20 @@ export default function WalletPage() {
                       return (
                         <Button
                           key={tab.id}
-                          onClick={tab.id === "资产分布" ? handlePositionModalClick : () => setCryptoTab(tab.id)}
+                          onClick={
+                            tab.id === "资产分布" 
+                              ? handlePositionModalClick 
+                              : tab.id === "划转记录"
+                                ? () => handleActionClick("bepay-crypto-orders")
+                                : () => setCryptoTab(tab.id)
+                          }
                           className={`h-12 w-12 transition-all duration-200 ${
                             isSelected
                               ? "bg-[#00D4AA]/10 border-[#00D4AA]"
                               : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
                           }`}
                           variant="outline"
-                          title={tab.id}
+                          title={tab.id === "划转记录" ? "加密货币订单" : tab.id}
                         >
                           <Icon 
                             className={`h-4 w-4 transition-colors ${
@@ -5109,12 +5161,8 @@ export default function WalletPage() {
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
-                  title="资金记录"
-                  onClick={() => {
-                    // 跳转到订单记录页签并设置为资金记录
-                    setTopLevelTab("订单记录")
-                    setOrderTab("资金记录")
-                  }}
+                  title="充值记录"
+                  onClick={() => handleActionClick("ucard-fund-records")}
                 >
                   <FileText className="h-4 w-4" />
                 </Button>
@@ -5125,7 +5173,8 @@ export default function WalletPage() {
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
                   }`}
-                  title="账单记录"
+                  title="消费记录"
+                  onClick={() => handleActionClick("ucard-consume-records")}
                 >
                   <History className="h-4 w-4" />
                 </Button>
