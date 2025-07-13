@@ -138,6 +138,11 @@ export default function WalletPage() {
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
   
+  // API文档和生成密钥弹窗状态
+  const [showApiDocsModal, setShowApiDocsModal] = useState(false) // API文档选择弹窗
+  const [showGenerateKeyModal, setShowGenerateKeyModal] = useState(false) // 生成密钥弹窗
+  const [generatedApiKey, setGeneratedApiKey] = useState("") // 生成的临时密钥
+  
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
     if (!selectedCurrencies.includes(currencyTab) && selectedCurrencies.length > 0) {
@@ -3696,10 +3701,7 @@ export default function WalletPage() {
 
                 <div className="flex space-x-2 mt-auto">
                   <button
-                    onClick={() => {
-                      // 打开API文档
-                      window.open('/docs/bepay-integration', '_blank')
-                    }}
+                    onClick={() => setShowApiDocsModal(true)}
                     className={`flex-1 inline-flex items-center justify-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-all border-2 ${
                       isDark 
                         ? 'bg-transparent border-white text-white hover:bg-gray-800' 
@@ -3713,12 +3715,7 @@ export default function WalletPage() {
                   </button>
 
                   <button
-                    onClick={() => {
-                      // 生成新的API密钥
-                      const newApiKey = 'sk_live_' + Math.random().toString(36).substr(2, 32)
-                      navigator.clipboard.writeText(newApiKey)
-                      alert('新的API密钥已生成并复制到剪贴板')
-                    }}
+                    onClick={() => setShowGenerateKeyModal(true)}
                     className={`flex-1 inline-flex items-center justify-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-all ${
                       isDark 
                         ? 'bg-white text-black hover:bg-gray-100' 
@@ -15682,6 +15679,193 @@ export default function WalletPage() {
                  '完成重置'}
               </Button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* API文档选择弹窗 */}
+      {showApiDocsModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className={`relative w-full max-w-md mx-4 rounded-lg p-6 ${
+            isDark ? 'bg-gray-800' : 'bg-white'
+          }`}>
+            <button
+              onClick={() => setShowApiDocsModal(false)}
+              className={`absolute top-4 right-4 p-1 rounded-full transition-colors ${
+                isDark 
+                  ? 'hover:bg-gray-700 text-gray-400 hover:text-white' 
+                  : 'hover:bg-gray-100 text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="text-center mb-6">
+              <div className={`text-2xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                选择文档语言
+              </div>
+              <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                请选择您需要的API文档语言版本
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <button
+                onClick={() => {
+                  setShowApiDocsModal(false)
+                  window.open('/docs/bepay-integration/zh', '_blank')
+                }}
+                className={`w-full flex items-center justify-center space-x-3 p-4 rounded-lg border-2 transition-all ${
+                  isDark 
+                    ? 'border-gray-600 hover:border-white bg-gray-700 hover:bg-gray-600 text-white' 
+                    : 'border-gray-200 hover:border-black bg-gray-50 hover:bg-gray-100 text-gray-900'
+                }`}
+              >
+                <div className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">中</span>
+                </div>
+                <div className="text-left">
+                  <div className="font-semibold">中文文档</div>
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    完整的中文API接入指南
+                  </div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowApiDocsModal(false)
+                  window.open('/docs/bepay-integration/en', '_blank')
+                }}
+                className={`w-full flex items-center justify-center space-x-3 p-4 rounded-lg border-2 transition-all ${
+                  isDark 
+                    ? 'border-gray-600 hover:border-white bg-gray-700 hover:bg-gray-600 text-white' 
+                    : 'border-gray-200 hover:border-black bg-gray-50 hover:bg-gray-100 text-gray-900'
+                }`}
+              >
+                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">EN</span>
+                </div>
+                <div className="text-left">
+                  <div className="font-semibold">English Documentation</div>
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Complete English API integration guide
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 生成密钥弹窗 */}
+      {showGenerateKeyModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className={`relative w-full max-w-md mx-4 rounded-lg p-6 ${
+            isDark ? 'bg-gray-800' : 'bg-white'
+          }`}>
+            <button
+              onClick={() => {
+                setShowGenerateKeyModal(false)
+                setGeneratedApiKey("")
+              }}
+              className={`absolute top-4 right-4 p-1 rounded-full transition-colors ${
+                isDark 
+                  ? 'hover:bg-gray-700 text-gray-400 hover:text-white' 
+                  : 'hover:bg-gray-100 text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="text-center mb-6">
+              <div className={`text-2xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                生成API密钥
+              </div>
+              <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                为您的商户账户生成新的临时API密钥
+              </div>
+            </div>
+
+            {!generatedApiKey ? (
+              <div className="space-y-4">
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                  <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'} mb-2`}>
+                    密钥权限范围：
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                      <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>创建支付订单</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                      <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>查询订单状态</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                      <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>接收回调通知</span>
+                    </div>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={() => {
+                    const newApiKey = 'sk_live_' + Math.random().toString(36).substr(2, 32)
+                    setGeneratedApiKey(newApiKey)
+                  }}
+                  className={`w-full ${
+                    isDark 
+                      ? 'bg-white hover:bg-gray-100 text-black' 
+                      : 'bg-black hover:bg-gray-900 text-white'
+                  }`}
+                >
+                  生成新密钥
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                  <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'} mb-2`}>
+                    您的新API密钥：
+                  </div>
+                  <div className={`font-mono text-sm p-3 rounded bg-gray-900 text-green-400 break-all`}>
+                    {generatedApiKey}
+                  </div>
+                  <div className={`text-xs ${isDark ? 'text-yellow-300' : 'text-yellow-600'} mt-2`}>
+                    ⚠️ 请立即复制并保存此密钥，关闭弹窗后将无法再次查看
+                  </div>
+                </div>
+
+                <div className="flex space-x-2">
+                  <Button
+                    onClick={() => {
+                      navigator.clipboard.writeText(generatedApiKey)
+                      alert('API密钥已复制到剪贴板')
+                    }}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    <Copy className="h-4 w-4 mr-2" />
+                    复制密钥
+                  </Button>
+                  
+                  <Button
+                    onClick={() => {
+                      setShowGenerateKeyModal(false)
+                      setGeneratedApiKey("")
+                    }}
+                    className={`flex-1 ${
+                      isDark 
+                        ? 'bg-white hover:bg-gray-100 text-black' 
+                        : 'bg-black hover:bg-gray-900 text-white'
+                    }`}
+                  >
+                    完成
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
