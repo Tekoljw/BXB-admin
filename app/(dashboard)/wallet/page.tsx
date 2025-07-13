@@ -3565,109 +3565,96 @@ export default function WalletPage() {
           <div className="space-y-6">
             {/* 顶部三个卡片：法币支付API、加密货币支付API和商户信息 */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* 商户法币资产卡片 */}
-              <div 
-                onClick={() => setSelectedPaymentCard("fiat")}
-                className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
-                  selectedPaymentCard === "fiat" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
-                }`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <Banknote className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">法币支付API</h3>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                    }}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
-                      isDark 
-                        ? "bg-transparent text-white hover:bg-gray-800" 
-                        : "bg-white text-black hover:bg-gray-50"
-                    }`}
-                  >
-                    <div className="w-3 h-3 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold">
-                      <span className="text-white text-[8px]">$</span>
+              {/* 支付API区域 - 共同背景 */}
+              <div className="lg:col-span-2">
+                <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* 商户法币资产卡片 */}
+                    <div 
+                      onClick={() => setSelectedPaymentCard("fiat")}
+                      className={`cursor-pointer transition-all duration-300 ${
+                        selectedPaymentCard === "fiat" 
+                          ? isDark 
+                            ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
+                            : "bg-white ring-2 ring-[#00D4AA] ring-opacity-50"
+                          : isDark 
+                            ? "bg-gray-700/50 hover:bg-gray-700" 
+                            : "bg-white/50 hover:bg-white"
+                      } rounded-lg p-6 shadow-sm`}
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Banknote className="h-6 w-6 text-[#00D4AA]" />
+                          <h3 className="text-lg font-semibold">法币支付API</h3>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                          }}
+                          className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
+                            isDark 
+                              ? "bg-transparent text-white hover:bg-gray-800" 
+                              : "bg-white text-black hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="w-3 h-3 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold">
+                            <span className="text-white text-[8px]">$</span>
+                          </div>
+                          <span>USD</span>
+                          <ChevronDown className="h-2 w-2" />
+                        </button>
+                      </div>
+                      <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {balanceVisible ? "$125,860.00" : "****"}
+                      </div>
+                      <div className="text-gray-500 text-sm">
+                        代付备用金：$38,520.00
+                      </div>
                     </div>
-                    <span>USD</span>
-                    <ChevronDown className="h-2 w-2" />
-                  </button>
-                </div>
-                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? "$125,860.00" : "****"}
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="text-gray-500 text-sm">
-                    代付备用金：$38,520.00
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      // Handle API documentation click
-                    }}
-                    className={`px-2 py-1 rounded text-xs font-medium transition-all ${
-                      isDark 
-                        ? "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white" 
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
-                    }`}
-                    title="API文档"
-                  >
-                    API文档
-                  </button>
-                </div>
-              </div>
 
-              {/* 商户加密货币资产卡片 */}
-              <div 
-                onClick={() => setSelectedPaymentCard("crypto")}
-                className={`cursor-pointer transition-all duration-300 ${cardStyle} rounded-lg p-6 ${
-                  selectedPaymentCard === "crypto" ? "ring-2 ring-[#00D4AA] ring-opacity-50" : ""
-                }`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <Coins className="h-6 w-6 text-[#3B82F6]" />
-                    <h3 className="text-lg font-semibold">加密货币支付API</h3>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                    }}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
-                      isDark 
-                        ? "bg-transparent text-white hover:bg-gray-800" 
-                        : "bg-white text-black hover:bg-gray-50"
-                    }`}
-                  >
-                    <div className="w-3 h-3 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold">
-                      <span className="text-white text-[8px]">₮</span>
+                    {/* 商户加密货币资产卡片 */}
+                    <div 
+                      onClick={() => setSelectedPaymentCard("crypto")}
+                      className={`cursor-pointer transition-all duration-300 ${
+                        selectedPaymentCard === "crypto" 
+                          ? isDark 
+                            ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
+                            : "bg-white ring-2 ring-[#00D4AA] ring-opacity-50"
+                          : isDark 
+                            ? "bg-gray-700/50 hover:bg-gray-700" 
+                            : "bg-white/50 hover:bg-white"
+                      } rounded-lg p-6 shadow-sm`}
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Coins className="h-6 w-6 text-[#3B82F6]" />
+                          <h3 className="text-lg font-semibold">加密货币支付API</h3>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                          }}
+                          className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
+                            isDark 
+                              ? "bg-transparent text-white hover:bg-gray-800" 
+                              : "bg-white text-black hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="w-3 h-3 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold">
+                            <span className="text-white text-[8px]">₮</span>
+                          </div>
+                          <span>USDT</span>
+                          <ChevronDown className="h-2 w-2" />
+                        </button>
+                      </div>
+                      <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {balanceVisible ? "45,230.50 USDT" : "****"}
+                      </div>
+                      <div className="text-gray-500 text-sm">
+                        其他币种：28.95 ETH + 1.26 BTC
+                      </div>
                     </div>
-                    <span>USDT</span>
-                    <ChevronDown className="h-2 w-2" />
-                  </button>
-                </div>
-                <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {balanceVisible ? "45,230.50 USDT" : "****"}
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="text-gray-500 text-sm">
-                    其他币种：28.95 ETH + 1.26 BTC
                   </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      // Handle API documentation click
-                    }}
-                    className={`px-2 py-1 rounded text-xs font-medium transition-all ${
-                      isDark 
-                        ? "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white" 
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
-                    }`}
-                    title="API文档"
-                  >
-                    API文档
-                  </button>
                 </div>
               </div>
               
