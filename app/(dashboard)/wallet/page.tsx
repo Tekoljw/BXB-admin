@@ -5559,7 +5559,7 @@ export default function WalletPage() {
                     颠覆性代理模式
                   </h1>
                   <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    BePay采用<span className="text-[#14C2A3]">数据行业的代理模式</span>，打破无界层级无需费用的传统模式
+                    BeDAO采用<span className="text-[#14C2A3]">数据行业的代理模式</span>，打破无界层级无需费用的传统模式
                   </p>
                 </div>
 
@@ -5573,7 +5573,7 @@ export default function WalletPage() {
                       </div>
                     </div>
                     <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      1. 注册BePay钱包
+                      1. 注册BeDAO钱包
                     </h3>
                     <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                       申请成为代理
@@ -5591,7 +5591,7 @@ export default function WalletPage() {
                       2. 拉好友进群
                     </h3>
                     <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      好友注册BePay钱包
+                      好友注册BeDAO钱包
                     </p>
                   </div>
 
@@ -5673,7 +5673,7 @@ export default function WalletPage() {
                       <ul className={`space-y-2 mb-4 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                         <li className="flex items-start">
                           <span className="text-[#14C2A3] mr-2">•</span>
-                          将好友添加到BePay官方Telegram频道
+                          将好友添加到BeDAO官方Telegram频道
                         </li>
                         <li className="flex items-start">
                           <span className="text-[#14C2A3] mr-2">•</span>
@@ -5717,7 +5717,7 @@ export default function WalletPage() {
                         </li>
                         <li className="flex items-start">
                           <span className="text-[#14C2A3] mr-2">•</span>
-                          用户通过邀请码注册BePay钱包
+                          用户通过邀请码注册BeDAO钱包
                         </li>
                         <li className="flex items-start">
                           <span className="text-[#14C2A3] mr-2">•</span>
@@ -5797,7 +5797,7 @@ export default function WalletPage() {
                           我的邀请码：
                         </span>
                         <span className={`ml-2 text-lg font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          BEPAY2025
+                          BEDAO2025
                         </span>
                       </div>
                       <button className={`px-3 py-1 text-sm rounded border transition-all ${
