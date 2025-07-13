@@ -4836,7 +4836,7 @@ export default function WalletPage() {
           <div className="space-y-6">
             {/* 佣金类型页签 */}
             <div className="flex space-x-8 border-b border-gray-200 dark:border-gray-700">
-              {["合约佣金", "理财佣金", "U卡佣金", "担保佣金", "支付佣金"].map((tab, index) => (
+              {["合约佣金", "理财佣金", "U卡佣金", "担保佣金", "支付佣金", "邀请返佣"].map((tab, index) => (
                 <div
                   key={tab}
                   className={`pb-3 cursor-pointer transition-all ${
@@ -4950,91 +4950,7 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 推荐统计 */}
-            <div className={`rounded-lg p-6 ${cardStyle}`}>
-              <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                推荐统计
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-center">
-                  <Users className={`h-8 w-8 mr-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                  <div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      推荐用户数
-                    </div>
-                    <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {walletData.佣金账户.referrals} 人
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            {/* 佣金记录 */}
-            <div className={`rounded-lg p-6 ${cardStyle}`}>
-              <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                最近佣金记录
-              </h3>
-              <div className="space-y-3">
-                {walletData.佣金账户.commissionHistory.map((record, index) => (
-                  <div key={index} className={`flex items-center justify-between p-3 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
-                    <div className="flex items-center">
-                      <div className={`w-2 h-2 rounded-full mr-3 ${record.amount.startsWith('+') ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                      <div>
-                        <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          {record.source}
-                        </div>
-                        <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                          {record.date}
-                        </div>
-                      </div>
-                    </div>
-                    <div className={`text-sm font-medium ${record.amount.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
-                      {record.amount}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* 操作按钮 */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <button className={`p-4 rounded-xl border-2 transition-all ${
-                isDark 
-                  ? "border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700" 
-                  : "border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50"
-              } ${isDark ? "text-white" : "text-gray-900"}`}>
-                <Users className="h-6 w-6 mx-auto mb-2" />
-                <div className="text-sm font-medium">邀请好友</div>
-              </button>
-
-              <button className={`p-4 rounded-xl border-2 transition-all ${
-                isDark 
-                  ? "border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700" 
-                  : "border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50"
-              } ${isDark ? "text-white" : "text-gray-900"}`}>
-                <BarChart3 className="h-6 w-6 mx-auto mb-2" />
-                <div className="text-sm font-medium">佣金统计</div>
-              </button>
-
-              <button className={`p-4 rounded-xl border-2 transition-all ${
-                isDark 
-                  ? "border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700" 
-                  : "border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50"
-              } ${isDark ? "text-white" : "text-gray-900"}`}>
-                <Download className="h-6 w-6 mx-auto mb-2" />
-                <div className="text-sm font-medium">提取佣金</div>
-              </button>
-
-              <button className={`p-4 rounded-xl border-2 transition-all ${
-                isDark 
-                  ? "border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700" 
-                  : "border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50"
-              } ${isDark ? "text-white" : "text-gray-900"}`}>
-                <FileText className="h-6 w-6 mx-auto mb-2" />
-                <div className="text-sm font-medium">佣金明细</div>
-              </button>
-            </div>
           </div>
         );
 
