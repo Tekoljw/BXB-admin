@@ -4834,22 +4834,27 @@ export default function WalletPage() {
       case "佣金账户":
         return (
           <div className="space-y-6">
+            {/* 佣金类型页签 */}
+            <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+              {["合约佣金", "理财佣金", "U卡佣金", "担保佣金", "支付佣金"].map((tab) => (
+                <button
+                  key={tab}
+                  className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                    isDark 
+                      ? "bg-white text-black hover:bg-gray-200" 
+                      : "bg-white text-black hover:bg-gray-50"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+            
             {/* 佣金总览卡片 */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* 总佣金 */}
               <div className={`rounded-lg p-6 ${cardStyle}`}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <Percent className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                      <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        总佣金
-                      </h3>
-                    </div>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {walletData.佣金账户.totalCommission} USDT
-                    </div>
-                  </div>
+                <div className="flex items-start justify-between mb-4">
                   <button
                     onClick={handleCurrencyModalClick}
                     className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
@@ -4866,23 +4871,21 @@ export default function WalletPage() {
                     <span>{selectedDisplayCurrency}</span>
                     <ChevronDown className="h-3 w-3" />
                   </button>
+                </div>
+                <div className="flex items-center mb-2">
+                  <Percent className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                  <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    总佣金
+                  </h3>
+                </div>
+                <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {walletData.佣金账户.totalCommission} <span className="text-lg">USDT</span>
                 </div>
               </div>
 
               {/* 今日佣金 */}
               <div className={`rounded-lg p-6 ${cardStyle}`}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <TrendingUp className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                      <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        今日佣金
-                      </h3>
-                    </div>
-                    <div className={`text-2xl font-bold text-green-500`}>
-                      {walletData.佣金账户.todayCommission} USDT
-                    </div>
-                  </div>
+                <div className="flex items-start justify-between mb-4">
                   <button
                     onClick={handleCurrencyModalClick}
                     className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
@@ -4900,22 +4903,20 @@ export default function WalletPage() {
                     <ChevronDown className="h-3 w-3" />
                   </button>
                 </div>
+                <div className="flex items-center mb-2">
+                  <TrendingUp className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                  <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    今日佣金
+                  </h3>
+                </div>
+                <div className={`text-2xl font-bold text-green-500`}>
+                  {walletData.佣金账户.todayCommission} <span className="text-lg">USDT</span>
+                </div>
               </div>
 
               {/* 本月佣金 */}
               <div className={`rounded-lg p-6 ${cardStyle}`}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <Calendar className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                      <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        本月佣金
-                      </h3>
-                    </div>
-                    <div className={`text-2xl font-bold text-blue-500`}>
-                      {walletData.佣金账户.thisMonthCommission} USDT
-                    </div>
-                  </div>
+                <div className="flex items-start justify-between mb-4">
                   <button
                     onClick={handleCurrencyModalClick}
                     className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
@@ -4932,6 +4933,15 @@ export default function WalletPage() {
                     <span>{selectedDisplayCurrency}</span>
                     <ChevronDown className="h-3 w-3" />
                   </button>
+                </div>
+                <div className="flex items-center mb-2">
+                  <Calendar className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                  <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    本月佣金
+                  </h3>
+                </div>
+                <div className={`text-2xl font-bold text-blue-500`}>
+                  {walletData.佣金账户.thisMonthCommission} <span className="text-lg">USDT</span>
                 </div>
               </div>
             </div>
