@@ -140,6 +140,7 @@ export default function WalletPage() {
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
   const [commissionTab, setCommissionTab] = useState("合约佣金") // 佣金页签状态
+  const [showCommissionRuleModal, setShowCommissionRuleModal] = useState(false) // 佣金规则弹窗
   
   // API文档和生成密钥弹窗状态
   const [showApiDocsModal, setShowApiDocsModal] = useState(false) // API文档选择弹窗
@@ -4863,6 +4864,9 @@ export default function WalletPage() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   {/* 今日佣金 */}
                   <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-3">
+                      <Calendar className={`h-6 w-6 text-[#14C2A3]`} />
+                    </div>
                     <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
                       2,456.78 <span className="text-lg">USDT</span>
                     </div>
@@ -4873,6 +4877,9 @@ export default function WalletPage() {
                   
                   {/* 本月佣金 */}
                   <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-3">
+                      <TrendingUp className={`h-6 w-6 text-blue-500`} />
+                    </div>
                     <div className={`text-2xl font-bold text-blue-500 mb-1`}>
                       58,943.22 <span className="text-lg">USDT</span>
                     </div>
@@ -4883,6 +4890,9 @@ export default function WalletPage() {
                   
                   {/* 累计佣金 */}
                   <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-3">
+                      <Percent className={`h-6 w-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                    </div>
                     <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
                       425,678.90 <span className="text-lg">USDT</span>
                     </div>
@@ -4893,12 +4903,21 @@ export default function WalletPage() {
                   
                   {/* 佣金比例 */}
                   <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-3">
+                      <Target className={`h-6 w-6 text-[#14C2A3]`} />
+                    </div>
                     <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
                       12.5<span className="text-lg">%</span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-2`}>
                       佣金比例
                     </div>
+                    <button
+                      onClick={() => setShowCommissionRuleModal(true)}
+                      className={`text-xs ${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
+                    >
+                      查看佣金规则
+                    </button>
                   </div>
                 </div>
 
@@ -5081,6 +5100,121 @@ export default function WalletPage() {
               <div className={`rounded-lg p-12 text-center ${cardStyle}`}>
                 <div className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                   {commissionTab} 页面开发中...
+                </div>
+              </div>
+            )}
+
+            {/* 佣金规则弹窗 */}
+            {showCommissionRuleModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className={`rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto ${cardStyle}`}>
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      佣金规则说明
+                    </h3>
+                    <button
+                      onClick={() => setShowCommissionRuleModal(false)}
+                      className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors`}
+                    >
+                      <X className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                    </button>
+                  </div>
+
+                  <div className="space-y-6">
+                    {/* 佣金计算规则 */}
+                    <div>
+                      <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        佣金计算规则
+                      </h4>
+                      <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                        <div className={`text-sm space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                          <p>• 合约佣金 = 推荐用户交易手续费 × 佣金比例</p>
+                          <p>• 佣金每日结算一次，次日发放到账户</p>
+                          <p>• 直推用户和间推用户享受不同佣金比例</p>
+                          <p>• 佣金比例根据代理等级动态调整</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 代理等级和佣金比例 */}
+                    <div>
+                      <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        代理等级与佣金比例
+                      </h4>
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                              <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                代理等级
+                              </th>
+                              <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                升级条件
+                              </th>
+                              <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                直推佣金
+                              </th>
+                              <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                间推佣金
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="space-y-2">
+                            {[
+                              { level: "普通用户", condition: "注册完成", direct: "5%", indirect: "2%" },
+                              { level: "初级代理", condition: "直推5人 + 月交易量10万USDT", direct: "8%", indirect: "3%" },
+                              { level: "中级代理", condition: "直推20人 + 月交易量50万USDT", direct: "12%", indirect: "5%" },
+                              { level: "高级代理", condition: "直推50人 + 月交易量200万USDT", direct: "15%", indirect: "8%" },
+                              { level: "超级代理", condition: "直推100人 + 月交易量500万USDT", direct: "20%", indirect: "10%" }
+                            ].map((row, index) => (
+                              <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
+                                <td className={`py-3 px-4 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  {row.level}
+                                </td>
+                                <td className={`py-3 px-4 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  {row.condition}
+                                </td>
+                                <td className={`py-3 px-4 text-sm font-medium text-[#14C2A3]`}>
+                                  {row.direct}
+                                </td>
+                                <td className={`py-3 px-4 text-sm font-medium text-blue-500`}>
+                                  {row.indirect}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* 特殊说明 */}
+                    <div>
+                      <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        特殊说明
+                      </h4>
+                      <div className={`p-4 rounded-lg ${isDark ? 'bg-yellow-900 border border-yellow-700' : 'bg-yellow-50 border border-yellow-200'}`}>
+                        <div className={`text-sm space-y-1 ${isDark ? 'text-yellow-200' : 'text-yellow-800'}`}>
+                          <p>• 代理等级每月1日统计更新，满足条件即可升级</p>
+                          <p>• 佣金比例按照当前等级计算，升级后即时生效</p>
+                          <p>• 系统会自动识别有效推荐关系，防止刷量行为</p>
+                          <p>• 更多详情请联系客服咨询</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end mt-6">
+                    <button
+                      onClick={() => setShowCommissionRuleModal(false)}
+                      className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                        isDark 
+                          ? "bg-black hover:bg-gray-800 text-white" 
+                          : "bg-black hover:bg-gray-800 text-white"
+                      }`}
+                    >
+                      关闭
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
