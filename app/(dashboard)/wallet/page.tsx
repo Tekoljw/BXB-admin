@@ -139,7 +139,7 @@ export default function WalletPage() {
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
-  const [commissionTab, setCommissionTab] = useState("合约佣金") // 佣金页签状态
+  const [commissionTab, setCommissionTab] = useState("邀请好友") // 佣金页签状态
   const [showCommissionRuleModal, setShowCommissionRuleModal] = useState(false) // 佣金规则弹窗
   
   // API文档和生成密钥弹窗状态
@@ -4838,7 +4838,7 @@ export default function WalletPage() {
           <div className="space-y-6">
             {/* 佣金类型页签 */}
             <div className="flex space-x-8 border-b border-gray-200 dark:border-gray-700">
-              {["合约佣金", "理财佣金", "U卡佣金", "担保佣金", "支付佣金", "邀请好友"].map((tab, index) => (
+              {["邀请好友", "合约佣金", "理财佣金", "U卡佣金", "担保佣金", "支付佣金"].map((tab, index) => (
                 <div
                   key={tab}
                   onClick={() => setCommissionTab(tab)}
