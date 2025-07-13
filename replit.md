@@ -249,6 +249,12 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Modified market pain points section (P1) from red/orange/yellow cards to gray/green/blue color scheme
   - Replaced all background gradients and accent colors to match restricted palette
   - Maintained visual hierarchy while adhering to simplified color requirements
+- January 30, 2025. Removed homepage and implemented direct redirect:
+  - Simplified app/page.tsx to automatically redirect users to /wallet page
+  - Replaced complex homepage content with simple loading screen during redirect
+  - Configured wallet button navigation to jump to specific order record tabs (资金记录 and 订单记录)
+  - Users now access main project directly without homepage intermediary step
+  - Maintained loading indicator with BeDAO branding during redirect process
 
 ## User Preferences
 
