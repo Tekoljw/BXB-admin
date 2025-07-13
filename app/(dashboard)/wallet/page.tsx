@@ -9398,20 +9398,35 @@ export default function WalletPage() {
             {
               id: "INV001",
               product: "USDT活期理财",
-              amount: "1,000.00 USDT",
-              apy: "8.5%",
-              status: "持有中",
-              time: "2024-01-15 14:30:00",
-              earnings: "+12.34 USDT"
+              pledgeValue: "1,000.00 USDT",
+              pledgeAmount: "1,000.00",
+              earnAmount: "+12.34 USDT",
+              pledgeLevel: "活期",
+              expectedRedeem: "随时",
+              expireTime: "无期限",
+              status: "持有中"
             },
             {
               id: "INV002", 
               product: "BTC定期理财30天",
-              amount: "0.5 BTC",
-              apy: "12.0%",
-              status: "已到期",
-              time: "2024-01-10 10:20:00",
-              earnings: "+0.015 BTC"
+              pledgeValue: "0.5 BTC",
+              pledgeAmount: "0.5000",
+              earnAmount: "+0.015 BTC",
+              pledgeLevel: "30天定期",
+              expectedRedeem: "2024-02-10",
+              expireTime: "2024-02-10 10:20:00",
+              status: "已到期"
+            },
+            {
+              id: "INV003",
+              product: "ETH流动性挖矿",
+              pledgeValue: "5.0 ETH",
+              pledgeAmount: "5.0000",
+              earnAmount: "+0.25 ETH",
+              pledgeLevel: "高收益",
+              expectedRedeem: "2024-01-25",
+              expireTime: "2024-01-25 15:30:00",
+              status: "投资中"
             }
           ],
           exchange: [
@@ -9439,19 +9454,31 @@ export default function WalletPage() {
           earnings: [
             {
               id: "ER001",
-              product: "USDT活期理财",
-              amount: "+2.45 USDT",
+              currency: "USDT",
+              amount: "+2.45",
               type: "日收益",
-              time: "2024-01-15 00:00:00",
-              status: "已发放"
+              time: "2024-01-15 00:00:00"
             },
             {
               id: "ER002",
-              product: "BTC定期理财",
-              amount: "+0.002 BTC", 
+              currency: "BTC",
+              amount: "+0.002", 
               type: "到期收益",
-              time: "2024-01-14 23:59:59",
-              status: "已发放"
+              time: "2024-01-14 23:59:59"
+            },
+            {
+              id: "ER003",
+              currency: "ETH",
+              amount: "+0.125",
+              type: "周收益",
+              time: "2024-01-13 23:59:59"
+            },
+            {
+              id: "ER004",
+              currency: "USDT",
+              amount: "+15.67",
+              type: "月收益",
+              time: "2024-01-12 23:59:59"
             }
           ],
           account: [
@@ -10116,10 +10143,10 @@ export default function WalletPage() {
                           // 根据不同页签显示不同的搜索选项
                           if (secondaryTabKey === 'invest') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                                 <div>
                                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    理财产品
+                                    产品
                                   </label>
                                   <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                                     <option>全部</option>
@@ -10132,14 +10159,14 @@ export default function WalletPage() {
                                 </div>
                                 <div>
                                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    收益率
+                                    币种
                                   </label>
                                   <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                                     <option>全部</option>
-                                    <option>0-5%</option>
-                                    <option>5-10%</option>
-                                    <option>10-20%</option>
-                                    <option>20%以上</option>
+                                    <option>USDT</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>BNB</option>
                                   </select>
                                 </div>
                                 <div>
@@ -10152,6 +10179,18 @@ export default function WalletPage() {
                                     <option>已到期</option>
                                     <option>已赎回</option>
                                     <option>已取消</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    日期
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>今天</option>
+                                    <option>最近7天</option>
+                                    <option>最近30天</option>
+                                    <option>最近90天</option>
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
@@ -10217,14 +10256,14 @@ export default function WalletPage() {
                               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div>
                                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    理财产品
+                                    币种
                                   </label>
                                   <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                                     <option>全部</option>
-                                    <option>USDT理财</option>
-                                    <option>BTC定期</option>
-                                    <option>ETH流动性</option>
-                                    <option>DeFi挖矿</option>
+                                    <option>USDT</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>BNB</option>
                                   </select>
                                 </div>
                                 <div>
@@ -10241,7 +10280,7 @@ export default function WalletPage() {
                                 </div>
                                 <div>
                                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    时间
+                                    日期
                                   </label>
                                   <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                                     <option>全部</option>
@@ -11054,11 +11093,11 @@ export default function WalletPage() {
                             case "理财订单":
                               // 根据不同页签返回不同的表头
                               if (secondaryTabKey === 'invest') {
-                                return ['时间', '理财产品', '投资金额', '年化收益', '当前收益', '状态']
+                                return ['理财产品', '质押价值', '质押数量', '收益数量', '质押档位', '预计赎回', '到期时间', '状态', '操作']
                               } else if (secondaryTabKey === 'exchange') {
                                 return ['时间', '兑换类型', '兑换金额', '兑换汇率', '手续费', '状态']
                               } else if (secondaryTabKey === 'earnings') {
-                                return ['时间', '理财产品', '收益金额', '收益类型', '状态']
+                                return ['时间', '币种', '数量', '类型', '操作']
                               } else if (secondaryTabKey === 'account') {
                                 return ['时间', '类型', '币种', '金额', '相关账户', '状态']
                               }
@@ -11156,11 +11195,11 @@ export default function WalletPage() {
                           case "理财订单":
                             // 根据不同页签返回不同的数据字段
                             if (secondaryTabKey === 'invest') {
-                              return [record.time, record.product, record.amount, record.apy, record.earnings, record.status]
+                              return [record.product, record.pledgeValue, record.pledgeAmount, record.earnAmount, record.pledgeLevel, record.expectedRedeem, record.expireTime, record.status, '操作']
                             } else if (secondaryTabKey === 'exchange') {
                               return [record.time, record.type, record.fromAmount, record.rate, record.fee, record.status]
                             } else if (secondaryTabKey === 'earnings') {
-                              return [record.time, record.product, record.amount, record.type, record.status]
+                              return [record.time, record.currency, record.amount, record.type, '操作']
                             } else if (secondaryTabKey === 'account') {
                               return [record.time, record.type, record.currency, record.amount, record.fromAccount || record.toAccount || record.source, record.status]
                             }
