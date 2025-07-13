@@ -10109,6 +10109,258 @@ export default function WalletPage() {
                         </div>
                       </div>
                     )
+                  case "理财订单":
+                    return (
+                      <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
+                        {(() => {
+                          // 根据不同页签显示不同的搜索选项
+                          if (secondaryTabKey === 'invest') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    理财产品
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>USDT理财</option>
+                                    <option>BTC定期</option>
+                                    <option>ETH流动性</option>
+                                    <option>DeFi挖矿</option>
+                                    <option>双币投资</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    收益率
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>0-5%</option>
+                                    <option>5-10%</option>
+                                    <option>10-20%</option>
+                                    <option>20%以上</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    状态
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>投资中</option>
+                                    <option>已到期</option>
+                                    <option>已赎回</option>
+                                    <option>已取消</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          } else if (secondaryTabKey === 'exchange') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    兑换类型
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>USDT转BTC</option>
+                                    <option>BTC转USDT</option>
+                                    <option>ETH转USDT</option>
+                                    <option>法币兑换</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    币种
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>USDT</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>BNB</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    状态
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>兑换成功</option>
+                                    <option>兑换中</option>
+                                    <option>兑换失败</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          } else if (secondaryTabKey === 'earnings') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    理财产品
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>USDT理财</option>
+                                    <option>BTC定期</option>
+                                    <option>ETH流动性</option>
+                                    <option>DeFi挖矿</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    收益类型
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>日收益</option>
+                                    <option>周收益</option>
+                                    <option>月收益</option>
+                                    <option>到期收益</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    时间
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>今天</option>
+                                    <option>最近7天</option>
+                                    <option>最近30天</option>
+                                    <option>最近90天</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          } else if (secondaryTabKey === 'account') {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    操作类型
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>转入</option>
+                                    <option>转出</option>
+                                    <option>收益发放</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    币种
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>USDT</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>BNB</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    相关账户
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>现货账户</option>
+                                    <option>合约账户</option>
+                                    <option>资金账户</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-end gap-2">
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                    重置
+                                  </button>
+                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                    筛选
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          }
+                          
+                          // 默认搜索选项
+                          return (
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  类型
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>投资</option>
+                                  <option>兑换</option>
+                                  <option>收益</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  币种
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>USDT</option>
+                                  <option>BTC</option>
+                                  <option>ETH</option>
+                                  <option>BNB</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  时间
+                                </label>
+                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>全部</option>
+                                  <option>今天</option>
+                                  <option>最近7天</option>
+                                  <option>最近30天</option>
+                                  <option>最近90天</option>
+                                </select>
+                              </div>
+                              <div className="flex items-end gap-2">
+                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  重置
+                                </button>
+                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  筛选
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        })()}
+                      </div>
+                    )
                   case "佣金记录":
                     return (
                       <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
