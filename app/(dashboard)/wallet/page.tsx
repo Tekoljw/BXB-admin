@@ -4850,6 +4850,17 @@ export default function WalletPage() {
                       {walletData.佣金账户.totalCommission} USDT
                     </div>
                   </div>
+                  <button
+                    onClick={handleCurrencyModalClick}
+                    className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
+                      isDark 
+                        ? "bg-transparent border-white text-white hover:bg-gray-800" 
+                        : "bg-transparent border-black text-black hover:bg-gray-50"
+                    }`}
+                  >
+                    <span>{selectedDisplayCurrency}</span>
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
                 </div>
               </div>
 
@@ -4867,6 +4878,17 @@ export default function WalletPage() {
                       {walletData.佣金账户.todayCommission} USDT
                     </div>
                   </div>
+                  <button
+                    onClick={handleCurrencyModalClick}
+                    className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
+                      isDark 
+                        ? "bg-transparent border-white text-white hover:bg-gray-800" 
+                        : "bg-transparent border-black text-black hover:bg-gray-50"
+                    }`}
+                  >
+                    <span>{selectedDisplayCurrency}</span>
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
                 </div>
               </div>
 
@@ -4884,6 +4906,17 @@ export default function WalletPage() {
                       {walletData.佣金账户.thisMonthCommission} USDT
                     </div>
                   </div>
+                  <button
+                    onClick={handleCurrencyModalClick}
+                    className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
+                      isDark 
+                        ? "bg-transparent border-white text-white hover:bg-gray-800" 
+                        : "bg-transparent border-black text-black hover:bg-gray-50"
+                    }`}
+                  >
+                    <span>{selectedDisplayCurrency}</span>
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
                 </div>
               </div>
             </div>
