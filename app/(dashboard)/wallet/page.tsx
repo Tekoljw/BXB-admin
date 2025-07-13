@@ -63,6 +63,7 @@ import {
   Zap,
   Unlock,
   MapPin,
+  Crown,
   Building2,
   University,
   Link,
@@ -5553,6 +5554,57 @@ export default function WalletPage() {
             {/* 邀请好友页面 */}
             {commissionTab === "邀请好友" && (
               <div className="space-y-8">
+                {/* 我的邀请统计 - 顶部卡片 */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-3">
+                      <User className={`h-6 w-6 text-[#14C2A3]`} />
+                    </div>
+                    <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
+                      1,256
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      直推用户
+                    </div>
+                  </div>
+                  
+                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-3">
+                      <Users className={`h-6 w-6 text-blue-500`} />
+                    </div>
+                    <div className={`text-2xl font-bold text-blue-500 mb-1`}>
+                      432
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      间推用户
+                    </div>
+                  </div>
+                  
+                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-3">
+                      <DollarSign className={`h-6 w-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                    </div>
+                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
+                      89,456.78
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      累计佣金 (USDT)
+                    </div>
+                  </div>
+                  
+                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-3">
+                      <Crown className={`h-6 w-6 text-[#14C2A3]`} />
+                    </div>
+                    <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
+                      高级代理
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      当前等级
+                    </div>
+                  </div>
+                </div>
+
                 {/* 颠覆性代理模式标题部分 */}
                 <div className="text-center space-y-4">
                   <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -5736,11 +5788,11 @@ export default function WalletPage() {
                   </div>
                 </div>
 
-                {/* 我的邀请统计 */}
+                {/* 邀请码显示 */}
                 <div className={`rounded-lg p-6 ${cardStyle}`}>
-                  <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between mb-4">
                     <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      我的邀请统计
+                      我的邀请码
                     </h3>
                     <button className={`px-4 py-2 rounded-lg text-sm transition-all ${
                       isDark 
@@ -5751,50 +5803,11 @@ export default function WalletPage() {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div className="text-center">
-                      <div className={`text-3xl font-bold text-[#14C2A3] mb-2`}>
-                        156
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        直推用户
-                      </div>
-                    </div>
-                    
-                    <div className="text-center">
-                      <div className={`text-3xl font-bold text-blue-500 mb-2`}>
-                        432
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        间推用户
-                      </div>
-                    </div>
-                    
-                    <div className="text-center">
-                      <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-2`}>
-                        89,456.78
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        累计佣金 (USDT)
-                      </div>
-                    </div>
-                    
-                    <div className="text-center">
-                      <div className={`text-3xl font-bold text-[#14C2A3] mb-2`}>
-                        高级代理
-                      </div>
-                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        当前等级
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 邀请码显示 */}
-                  <div className="mt-6 p-4 rounded-lg bg-gray-100 dark:bg-gray-700">
+                  <div className="p-4 rounded-lg bg-gray-100 dark:bg-gray-700">
                     <div className="flex items-center justify-between">
                       <div>
                         <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          我的邀请码：
+                          专属邀请码：
                         </span>
                         <span className={`ml-2 text-lg font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           BEDAO2025
