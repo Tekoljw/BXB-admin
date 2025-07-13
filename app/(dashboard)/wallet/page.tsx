@@ -45,6 +45,9 @@ import {
   Banknote,
   Percent,
   CreditCard as CardIcon,
+  HandCoins,
+  Coins,
+  CurrencyDollar,
   Clock,
   CheckCircle,
   Calendar,
@@ -55,7 +58,6 @@ import {
   Users,
   ExternalLink,
   Receipt,
-  Coins,
   Target,
   HelpCircle,
   Zap,
@@ -1003,7 +1005,7 @@ export default function WalletPage() {
     { id: "合约订单", label: "合约订单", icon: LineChart },
     { id: "理财订单", label: "理财订单", icon: PiggyBank },
     { id: "U卡订单", label: "U卡订单", icon: CreditCard },
-    { id: "担保记录", label: "担保记录", icon: Shield },
+    { id: "担保记录", label: "担保记录", icon: HandCoins },
     { id: "支付订单", label: "支付订单", icon: Receipt },
     { id: "佣金记录", label: "佣金记录", icon: Percent }
   ]
@@ -3605,7 +3607,7 @@ export default function WalletPage() {
           { id: "代付金充值", label: "代付金充值", icon: Plus }
         ]
         const fiatIconTabs = [
-          { id: "资金记录", icon: FileText },
+          { id: "资金记录", icon: Banknote },
           { id: "订单记录", icon: BarChart2 },
           { id: "资产分布", icon: PieChart }
         ]
@@ -3617,7 +3619,7 @@ export default function WalletPage() {
           { id: "划转", label: "划转", icon: ArrowLeftRight }
         ]
         const cryptoIconTabs = [
-          { id: "划转记录", icon: FileText },
+          { id: "划转记录", icon: Coins },
           { id: "订单记录", icon: BarChart2 },
           { id: "资产分布", icon: PieChart }
         ]
