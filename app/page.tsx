@@ -17,7 +17,7 @@ export default function HomePage() {
   }, [])
 
   if (!mounted) {
-    return <div className="min-h-screen bg-gray-900"></div>
+    return <div className="min-h-screen bg-black"></div>
   }
 
   const handleLogin = () => {
