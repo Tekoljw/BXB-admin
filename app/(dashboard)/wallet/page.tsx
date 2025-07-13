@@ -5211,7 +5211,7 @@ export default function WalletPage() {
                   
                   <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
                     <div className="flex items-center justify-center mb-3">
-                      <PlusCircle className={`h-6 w-6 text-blue-500`} />
+                      <Plus className={`h-6 w-6 text-blue-500`} />
                     </div>
                     <div className={`text-2xl font-bold text-blue-500 mb-1`}>
                       156 <span className="text-lg">张</span>
