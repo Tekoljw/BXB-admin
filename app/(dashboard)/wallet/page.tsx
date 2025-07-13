@@ -2144,7 +2144,11 @@ export default function WalletPage() {
                   {/* 图标按钮区域 */}
                   {/* 资金记录按钮 */}
                   <Button
-                    onClick={() => handleActionClick("fund-records")}
+                    onClick={() => {
+                      setTopLevelTab("订单记录")
+                      setOrderTab("资金记录")
+                      setSecondaryTab("deposit")
+                    }}
                     onMouseDown={() => setClickedAction("fund-records")}
                     onMouseUp={() => setClickedAction("")}
                     onMouseLeave={() => setClickedAction("")}
@@ -2171,7 +2175,11 @@ export default function WalletPage() {
 
                   {/* 订单记录按钮 */}
                   <Button
-                    onClick={() => handleActionClick("order-records")}
+                    onClick={() => {
+                      setTopLevelTab("订单记录")
+                      setOrderTab("现货订单")
+                      setSecondaryTab("current")
+                    }}
                     onMouseDown={() => setClickedAction("order-records")}
                     onMouseUp={() => setClickedAction("")}
                     onMouseLeave={() => setClickedAction("")}
@@ -2543,7 +2551,11 @@ export default function WalletPage() {
                 {/* 图标按钮区域 */}
                 {/* 资金记录按钮 */}
                 <Button
-                  onClick={() => handleActionClick("contract-fund-records")}
+                  onClick={() => {
+                    setTopLevelTab("订单记录")
+                    setOrderTab("合约订单")
+                    setSecondaryTab("funding")
+                  }}
                   onMouseDown={() => setClickedAction("contract-fund-records")}
                   onMouseUp={() => setClickedAction("")}
                   onMouseLeave={() => setClickedAction("")}
@@ -2570,7 +2582,11 @@ export default function WalletPage() {
 
                 {/* 交易记录按钮 */}
                 <Button
-                  onClick={() => handleActionClick("contract-trade-records")}
+                  onClick={() => {
+                    setTopLevelTab("订单记录")
+                    setOrderTab("合约订单")
+                    setSecondaryTab("current")
+                  }}
                   onMouseDown={() => setClickedAction("contract-trade-records")}
                   onMouseUp={() => setClickedAction("")}
                   onMouseLeave={() => setClickedAction("")}
