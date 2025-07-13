@@ -5555,52 +5555,40 @@ export default function WalletPage() {
             {commissionTab === "邀请好友" && (
               <div className="space-y-8">
                 {/* 我的邀请统计 - 顶部卡片 */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <User className={`h-6 w-6 text-[#14C2A3]`} />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className={`rounded-lg p-4 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-2">
+                      <User className={`h-5 w-5 text-[#14C2A3]`} />
                     </div>
-                    <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
+                    <div className={`text-xl font-bold text-[#14C2A3] mb-1`}>
                       1,256
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                       直推用户
                     </div>
                   </div>
                   
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <Users className={`h-6 w-6 text-blue-500`} />
+                  <div className={`rounded-lg p-4 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-2">
+                      <Users className={`h-5 w-5 text-blue-500`} />
                     </div>
-                    <div className={`text-2xl font-bold text-blue-500 mb-1`}>
+                    <div className={`text-xl font-bold text-blue-500 mb-1`}>
                       432
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                       间推用户
                     </div>
                   </div>
                   
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <DollarSign className={`h-6 w-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                  <div className={`rounded-lg p-4 text-center ${cardStyle}`}>
+                    <div className="flex items-center justify-center mb-2">
+                      <DollarSign className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
                     </div>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
+                    <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
                       89,456.78
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                       累计佣金 (USDT)
-                    </div>
-                  </div>
-                  
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <Crown className={`h-6 w-6 text-[#14C2A3]`} />
-                    </div>
-                    <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
-                      高级代理
-                    </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      当前等级
                     </div>
                   </div>
                 </div>
