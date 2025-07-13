@@ -5698,7 +5698,7 @@ export default function WalletPage() {
                     <div className={`rounded-lg p-6 border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
                       <div className="flex items-center mb-4">
                         <div className="w-12 h-12 rounded-lg bg-gray-600 flex items-center justify-center mr-4">
-                          <Hash className="h-6 w-6 text-white" />
+                          <User className="h-6 w-6 text-white" />
                         </div>
                         <div>
                           <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
