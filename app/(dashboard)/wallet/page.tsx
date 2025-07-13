@@ -4836,7 +4836,7 @@ export default function WalletPage() {
           <div className="space-y-6">
             {/* 佣金类型页签 */}
             <div className="flex space-x-8 border-b border-gray-200 dark:border-gray-700">
-              {["合约佣金", "理财佣金", "U卡佣金", "担保佣金", "支付佣金", "邀请返佣"].map((tab, index) => (
+              {["合约佣金", "理财佣金", "U卡佣金", "担保佣金", "支付佣金", "邀请好友"].map((tab, index) => (
                 <div
                   key={tab}
                   className={`pb-3 cursor-pointer transition-all ${
