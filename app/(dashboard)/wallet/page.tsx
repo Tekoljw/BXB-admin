@@ -5643,11 +5643,11 @@ export default function WalletPage() {
                       <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         推广方式1
                       </h3>
-                      <h4 className={`text-2xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        Telegram拉群推广
-                      </h4>
-                      <div className="flex items-center">
-                        <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm rounded-full">
+                      <div className="flex items-center gap-3">
+                        <h4 className={`text-2xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          Telegram拉群推广
+                        </h4>
+                        <span className="px-3 py-1 bg-red-500 text-white text-sm rounded-full">
                           推荐
                         </span>
                       </div>
