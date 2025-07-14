@@ -5637,20 +5637,24 @@ export default function WalletPage() {
                 {/* 推广方式1和推广方式2并列展示 */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* 推广方式1（推荐） */}
-                  <div className={`rounded-lg p-6 ${cardStyle}`}>
-                    <div className="flex items-center mb-6">
-                      <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mr-3`}>
-                        推广方式1
-                      </h3>
-                      <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm rounded-full">
-                        推荐
-                      </span>
-                    </div>
-
-                    <div className="mb-6">
-                      <h4 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>
+                  <div className="space-y-4">
+                    {/* 标题和副标题在卡片外面 */}
+                    <div className="space-y-2">
+                      <div className="flex items-center">
+                        <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mr-3`}>
+                          推广方式1
+                        </h3>
+                        <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm rounded-full">
+                          推荐
+                        </span>
+                      </div>
+                      <h4 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         Telegram拉群推广
                       </h4>
+                    </div>
+
+                    {/* 卡片内容 */}
+                    <div className={`rounded-lg p-6 ${cardStyle}`}>
                       
                       <div className="grid grid-cols-2 gap-4">
                         {/* 步骤1 */}
@@ -5717,15 +5721,19 @@ export default function WalletPage() {
                   </div>
 
                   {/* 推广方式2 */}
-                  <div className={`rounded-lg p-6 ${cardStyle}`}>
-                    <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-6`}>
-                      推广方式2
-                    </h3>
-
-                    <div className="mb-6">
-                      <h4 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>
+                  <div className="space-y-4">
+                    {/* 标题和副标题在卡片外面 */}
+                    <div className="space-y-2">
+                      <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        推广方式2
+                      </h3>
+                      <h4 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         常规推广
                       </h4>
+                    </div>
+
+                    {/* 卡片内容 */}
+                    <div className={`rounded-lg p-6 ${cardStyle}`}>
                       <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6`}>
                         分享推广码或者推广链接给好友去注册
                       </p>
@@ -5777,10 +5785,6 @@ export default function WalletPage() {
                     </div>
                   </div>
                 </div>
-
-
-
-
               </div>
             )}
 
