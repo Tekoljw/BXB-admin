@@ -5555,41 +5555,26 @@ export default function WalletPage() {
             {commissionTab === "邀请好友" && (
               <div className="space-y-8">
                 {/* 我的邀请统计 - 顶部卡片 */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className={`rounded-lg p-4 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-2">
-                      <User className={`h-5 w-5 text-[#14C2A3]`} />
-                    </div>
-                    <div className={`text-xl font-bold text-[#14C2A3] mb-1`}>
-                      1,256
-                    </div>
-                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      直推用户
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* 直推用户 */}
+                  <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                    <div className="text-xs text-gray-500 mb-1">直推用户</div>
+                    <div className="text-lg font-bold text-[#14C2A3]">1,256</div>
+                    <div className="text-xs text-[#14C2A3]">人</div>
                   </div>
-                  
-                  <div className={`rounded-lg p-4 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-2">
-                      <Users className={`h-5 w-5 text-blue-500`} />
-                    </div>
-                    <div className={`text-xl font-bold text-blue-500 mb-1`}>
-                      432
-                    </div>
-                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      间推用户
-                    </div>
+
+                  {/* 间推用户 */}
+                  <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                    <div className="text-xs text-gray-500 mb-1">间推用户</div>
+                    <div className="text-lg font-bold text-blue-500">432</div>
+                    <div className="text-xs text-blue-500">人</div>
                   </div>
-                  
-                  <div className={`rounded-lg p-4 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-2">
-                      <DollarSign className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                    </div>
-                    <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
-                      89,456.78
-                    </div>
-                    <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      累计佣金 (USDT)
-                    </div>
+
+                  {/* 累计佣金 */}
+                  <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                    <div className="text-xs text-gray-500 mb-1">累计佣金</div>
+                    <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>89,456.78</div>
+                    <div className="text-xs text-gray-500">USDT</div>
                   </div>
                 </div>
 
