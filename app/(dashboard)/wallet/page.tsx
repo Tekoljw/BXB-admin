@@ -5658,6 +5658,38 @@ export default function WalletPage() {
                           推荐
                         </span>
                       </div>
+                      
+                      {/* 特色标签 */}
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        <span className={`px-3 py-1 text-xs rounded-full border ${
+                          isDark 
+                            ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
+                            : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
+                        }`}>
+                          无需维护客户
+                        </span>
+                        <span className={`px-3 py-1 text-xs rounded-full border ${
+                          isDark 
+                            ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
+                            : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
+                        }`}>
+                          无需讨论价格
+                        </span>
+                        <span className={`px-3 py-1 text-xs rounded-full border ${
+                          isDark 
+                            ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
+                            : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
+                        }`}>
+                          永久绑定关系
+                        </span>
+                        <span className={`px-3 py-1 text-xs rounded-full border ${
+                          isDark 
+                            ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
+                            : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
+                        }`}>
+                          无限自动裂变
+                        </span>
+                      </div>
                     </div>
 
                     {/* 卡片内容 */}
