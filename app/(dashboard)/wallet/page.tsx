@@ -5868,10 +5868,10 @@ export default function WalletPage() {
                             </div>
                             <div className="flex-1">
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                通过WhatsApp分享
+                                通过社交软件分享邀请码/邀请链接
                               </h5>
                               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                将邀请码/链接通过WhatsApp发送给好友或朋友圈
+                                将邀请码/链接通过WhatsApp、微信等社交软件发送给好友
                               </p>
                             </div>
                           </div>
