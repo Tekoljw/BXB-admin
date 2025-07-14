@@ -5554,30 +5554,6 @@ export default function WalletPage() {
             {/* 邀请好友页面 */}
             {commissionTab === "邀请好友" && (
               <div className="space-y-8">
-                {/* 我的邀请统计 - 顶部卡片 */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* 直推用户 */}
-                  <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                    <div className="text-xs text-gray-500 mb-1">直推用户</div>
-                    <div className="text-lg font-bold text-[#14C2A3]">1,256</div>
-                    <div className="text-xs text-[#14C2A3]">人</div>
-                  </div>
-
-                  {/* 间推用户 */}
-                  <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                    <div className="text-xs text-gray-500 mb-1">间推用户</div>
-                    <div className="text-lg font-bold text-blue-500">432</div>
-                    <div className="text-xs text-blue-500">人</div>
-                  </div>
-
-                  {/* 累计佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                    <div className="text-xs text-gray-500 mb-1">累计佣金</div>
-                    <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>89,456.78</div>
-                    <div className="text-xs text-gray-500">USDT</div>
-                  </div>
-                </div>
-
                 {/* 邀请码和邀请链接 */}
                 <div className={`rounded-lg p-6 ${cardStyle}`}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
