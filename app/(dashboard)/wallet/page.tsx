@@ -5753,11 +5753,48 @@ export default function WalletPage() {
                             </div>
                             <div className="flex-1">
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                好友使用支付/U卡
+                                好友使用BeDAO的服务
                               </h5>
-                              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-3`}>
                                 好友注册并使用BeDAO服务，自动获得佣金分成
                               </p>
+                              <div className="flex flex-wrap gap-1">
+                                <span className={`px-2 py-1 text-xs rounded border ${
+                                  isDark 
+                                    ? 'border-blue-400 text-blue-400 bg-blue-400/10' 
+                                    : 'border-blue-500 text-blue-500 bg-blue-500/10'
+                                }`}>
+                                  合约交易
+                                </span>
+                                <span className={`px-2 py-1 text-xs rounded border ${
+                                  isDark 
+                                    ? 'border-purple-400 text-purple-400 bg-purple-400/10' 
+                                    : 'border-purple-500 text-purple-500 bg-purple-500/10'
+                                }`}>
+                                  投资理财
+                                </span>
+                                <span className={`px-2 py-1 text-xs rounded border ${
+                                  isDark 
+                                    ? 'border-orange-400 text-orange-400 bg-orange-400/10' 
+                                    : 'border-orange-500 text-orange-500 bg-orange-500/10'
+                                }`}>
+                                  U卡服务
+                                </span>
+                                <span className={`px-2 py-1 text-xs rounded border ${
+                                  isDark 
+                                    ? 'border-green-400 text-green-400 bg-green-400/10' 
+                                    : 'border-green-500 text-green-500 bg-green-500/10'
+                                }`}>
+                                  担保交易
+                                </span>
+                                <span className={`px-2 py-1 text-xs rounded border ${
+                                  isDark 
+                                    ? 'border-pink-400 text-pink-400 bg-pink-400/10' 
+                                    : 'border-pink-500 text-pink-500 bg-pink-500/10'
+                                }`}>
+                                  支付通道
+                                </span>
+                              </div>
                             </div>
                           </div>
                           <div className="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
