@@ -5639,18 +5639,18 @@ export default function WalletPage() {
                   {/* 推广方式1（推荐） */}
                   <div className="space-y-4">
                     {/* 标题和副标题在卡片外面 */}
-                    <div className="space-y-2">
+                    <div className="space-y-3">
+                      <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        推广方式1
+                      </h3>
+                      <h4 className={`text-2xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        Telegram拉群推广
+                      </h4>
                       <div className="flex items-center">
-                        <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mr-3`}>
-                          推广方式1
-                        </h3>
                         <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm rounded-full">
                           推荐
                         </span>
                       </div>
-                      <h4 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        Telegram拉群推广
-                      </h4>
                     </div>
 
                     {/* 卡片内容 */}
@@ -5723,12 +5723,12 @@ export default function WalletPage() {
                   {/* 推广方式2 */}
                   <div className="space-y-4">
                     {/* 标题和副标题在卡片外面 */}
-                    <div className="space-y-2">
-                      <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className="space-y-3">
+                      <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         推广方式2
                       </h3>
-                      <h4 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        常规推广
+                      <h4 className={`text-2xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        分享邀请码/邀请连接
                       </h4>
                     </div>
 
