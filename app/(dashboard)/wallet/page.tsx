@@ -5662,90 +5662,98 @@ export default function WalletPage() {
 
                     {/* 卡片内容 */}
                     <div className={`rounded-lg p-6 ${cardStyle}`}>
-                      <div className="space-y-6">
+                      <div className="space-y-8">
                         {/* 步骤1 */}
-                        <div className="flex items-center gap-4">
-                          <div className="flex-shrink-0">
-                            <div className="w-12 h-12 rounded-full bg-[#14C2A3] flex items-center justify-center">
-                              <span className="text-lg font-bold text-white">1</span>
+                        <div className="space-y-4">
+                          <div className="flex items-start gap-4">
+                            <div className="flex-shrink-0">
+                              <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm font-semibold rounded-full">
+                                第一步
+                              </span>
+                            </div>
+                            <div className="flex-1">
+                              <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                注册BeDAO钱包
+                              </h5>
+                              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                申请成为代理，获得推广资格
+                              </p>
                             </div>
                           </div>
-                          <div className="flex-1">
-                            <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              注册BeDAO钱包
-                            </h5>
-                            <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                              申请成为代理，获得推广资格
-                            </p>
-                          </div>
-                          <div className="flex-shrink-0 w-20 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
                         </div>
 
                         {/* 步骤2 */}
-                        <div className="flex items-center gap-4">
-                          <div className="flex-shrink-0">
-                            <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
-                              <span className="text-lg font-bold text-white">2</span>
+                        <div className="space-y-4">
+                          <div className="flex items-start gap-4">
+                            <div className="flex-shrink-0">
+                              <span className="px-3 py-1 bg-blue-500 text-white text-sm font-semibold rounded-full">
+                                第二步
+                              </span>
+                            </div>
+                            <div className="flex-1">
+                              <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                拉好友进群
+                              </h5>
+                              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                通过Telegram邀请好友加入群组
+                              </p>
                             </div>
                           </div>
-                          <div className="flex-1">
-                            <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              拉好友进群
-                            </h5>
-                            <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                              通过Telegram邀请好友加入群组
-                            </p>
-                          </div>
-                          <div className="flex-shrink-0 w-20 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
                         </div>
 
                         {/* 步骤3 */}
-                        <div className="flex items-center gap-4">
-                          <div className="flex-shrink-0">
-                            <div className="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center">
-                              <span className="text-lg font-bold text-white">3</span>
+                        <div className="space-y-4">
+                          <div className="flex items-start gap-4">
+                            <div className="flex-shrink-0">
+                              <span className="px-3 py-1 bg-purple-500 text-white text-sm font-semibold rounded-full">
+                                第三步
+                              </span>
+                            </div>
+                            <div className="flex-1">
+                              <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                好友使用支付/U卡
+                              </h5>
+                              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                好友注册并使用BeDAO服务，自动获得佣金分成
+                              </p>
                             </div>
                           </div>
-                          <div className="flex-1">
-                            <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              好友使用支付/U卡
-                            </h5>
-                            <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                              好友注册并使用BeDAO服务，自动获得佣金分成
-                            </p>
-                          </div>
-                          <div className="flex-shrink-0 w-20 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
                         </div>
 
                         {/* 步骤4 */}
-                        <div className="flex items-center gap-4">
-                          <div className="flex-shrink-0">
-                            <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center">
-                              <span className="text-lg font-bold text-white">4</span>
+                        <div className="space-y-4">
+                          <div className="flex items-start gap-4">
+                            <div className="flex-shrink-0">
+                              <span className="px-3 py-1 bg-orange-500 text-white text-sm font-semibold rounded-full">
+                                第四步
+                              </span>
+                            </div>
+                            <div className="flex-1">
+                              <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                好友成为代理
+                              </h5>
+                              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                好友升级为代理，全面提升收益（无手续费）
+                              </p>
                             </div>
                           </div>
-                          <div className="flex-1">
-                            <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              好友成为代理
-                            </h5>
-                            <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                              好友升级为代理，全面提升收益（无手续费）
-                            </p>
-                          </div>
-                          <div className="flex-shrink-0 w-20 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
