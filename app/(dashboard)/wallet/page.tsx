@@ -56,6 +56,7 @@ import {
   Rocket,
   MessageCircle,
   Users,
+  UserPlus,
   ExternalLink,
   Receipt,
   Target,
