@@ -5554,235 +5554,186 @@ export default function WalletPage() {
             {/* 邀请好友页面 */}
             {commissionTab === "邀请好友" && (
               <div className="space-y-8">
-                {/* 邀请码和邀请链接 */}
+                {/* 顶部统计卡片 */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {/* 直推用户 */}
+                  <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                    <div className="text-xs text-gray-500 mb-1">直推用户</div>
+                    <div className="text-lg font-bold text-[#14C2A3]">1,256</div>
+                    <div className="text-xs text-[#14C2A3]">人</div>
+                  </div>
+
+                  {/* 间推用户 */}
+                  <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                    <div className="text-xs text-gray-500 mb-1">间推用户</div>
+                    <div className="text-lg font-bold text-blue-500">432</div>
+                    <div className="text-xs text-blue-500">人</div>
+                  </div>
+
+                  {/* 总佣金 */}
+                  <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                    <div className="text-xs text-gray-500 mb-1">总佣金</div>
+                    <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>89,456.78</div>
+                    <div className="text-xs text-gray-500">USDT</div>
+                  </div>
+
+                  {/* 未结算佣金 */}
+                  <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                    <div className="text-xs text-gray-500 mb-1">未结算佣金</div>
+                    <div className={`text-lg font-bold text-orange-500`}>1,234.56</div>
+                    <div className="text-xs text-orange-500">USDT</div>
+                  </div>
+                </div>
+
+                {/* 如何开始推广标题 */}
+                <div className="text-center">
+                  <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    如何开始推广？
+                  </h2>
+                </div>
+
+                {/* 推广方式1（推荐） */}
                 <div className={`rounded-lg p-6 ${cardStyle}`}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* 邀请码 */}
-                    <div className="space-y-3">
-                      <h4 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        我的邀请码
-                      </h4>
-                      <div className="p-4 rounded-lg bg-gray-100 dark:bg-gray-700">
-                        <div className="flex items-center justify-between">
-                          <span className={`text-lg font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                            BEDAO2025
-                          </span>
-                          <button className={`px-3 py-1 text-sm rounded border transition-all ${
-                            isDark 
-                              ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
-                              : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
-                          }`}>
-                            复制
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 邀请链接 */}
-                    <div className="space-y-3">
-                      <h4 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        邀请链接
-                      </h4>
-                      <div className="p-4 rounded-lg bg-gray-100 dark:bg-gray-700">
-                        <div className="flex items-center justify-between">
-                          <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} truncate mr-2`}>
-                            https://bedao.com/invite/BEDAO2025
-                          </span>
-                          <button className={`px-3 py-1 text-sm rounded border transition-all flex-shrink-0 ${
-                            isDark 
-                              ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
-                              : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
-                          }`}>
-                            复制链接
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 颠覆性代理模式标题部分 */}
-                <div className="text-center space-y-4">
-                  <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    颠覆性代理模式
-                  </h1>
-                  <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    BeDAO采用<span className="text-[#14C2A3]">数据行业的代理模式</span>，打破无界层级无需费用的传统模式
-                  </p>
-                </div>
-
-                {/* 4个步骤流程 */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                  {/* 步骤1 */}
-                  <div className={`rounded-lg p-6 text-center border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
-                    <div className="flex items-center justify-center mb-4">
-                      <div className="w-16 h-16 rounded-full bg-[#14C2A3] flex items-center justify-center">
-                        <span className="text-2xl font-bold text-white">B</span>
-                      </div>
-                    </div>
-                    <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      1. 注册BeDAO钱包
+                  <div className="flex items-center mb-6">
+                    <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mr-3`}>
+                      推广方式1
                     </h3>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      申请成为代理
-                    </p>
+                    <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm rounded-full">
+                      推荐
+                    </span>
                   </div>
 
-                  {/* 步骤2 */}
-                  <div className={`rounded-lg p-6 text-center border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
-                    <div className="flex items-center justify-center mb-4">
-                      <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center">
-                        <MessageCircle className="h-8 w-8 text-white" />
+                  <div className="mb-6">
+                    <h4 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>
+                      Telegram拉群推广
+                    </h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                      {/* 步骤1 */}
+                      <div className="text-center">
+                        <div className="flex items-center justify-center mb-3">
+                          <div className="w-12 h-12 rounded-full bg-[#14C2A3] flex items-center justify-center">
+                            <span className="text-lg font-bold text-white">1</span>
+                          </div>
+                        </div>
+                        <h5 className={`text-md font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          注册BeDAO钱包
+                        </h5>
+                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          申请成为代理
+                        </p>
                       </div>
-                    </div>
-                    <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      2. 拉好友进群
-                    </h3>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      好友注册BeDAO钱包
-                    </p>
-                  </div>
 
-                  {/* 步骤3 */}
-                  <div className={`rounded-lg p-6 text-center border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
-                    <div className="flex items-center justify-center mb-4">
-                      <div className="w-16 h-16 rounded-full bg-gray-600 flex items-center justify-center">
-                        <CreditCard className="h-8 w-8 text-white" />
+                      {/* 步骤2 */}
+                      <div className="text-center">
+                        <div className="flex items-center justify-center mb-3">
+                          <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
+                            <span className="text-lg font-bold text-white">2</span>
+                          </div>
+                        </div>
+                        <h5 className={`text-md font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          拉好友进群
+                        </h5>
+                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          好友注册BeDAO钱包
+                        </p>
                       </div>
-                    </div>
-                    <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      3. 好友使用支付/U卡
-                    </h3>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      自动获得佣金分成
-                    </p>
-                  </div>
 
-                  {/* 步骤4 */}
-                  <div className={`rounded-lg p-6 text-center border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
-                    <div className="flex items-center justify-center mb-4">
-                      <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center">
-                        <Plus className="h-8 w-8 text-white" />
+                      {/* 步骤3 */}
+                      <div className="text-center">
+                        <div className="flex items-center justify-center mb-3">
+                          <div className="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center">
+                            <span className="text-lg font-bold text-white">3</span>
+                          </div>
+                        </div>
+                        <h5 className={`text-md font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          好友使用支付/U卡
+                        </h5>
+                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          自动获得佣金分成
+                        </p>
+                      </div>
+
+                      {/* 步骤4 */}
+                      <div className="text-center">
+                        <div className="flex items-center justify-center mb-3">
+                          <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center">
+                            <span className="text-lg font-bold text-white">4</span>
+                          </div>
+                        </div>
+                        <h5 className={`text-md font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          好友成为代理
+                        </h5>
+                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          全面提升收益（无手续费）
+                        </p>
                       </div>
                     </div>
-                    <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      4. 好友成为代理
-                    </h3>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      全面提升收益（无手续费）
-                    </p>
                   </div>
                 </div>
 
-                {/* 特色标签 */}
-                <div className="flex flex-wrap justify-center gap-4">
-                  <span className={`px-4 py-2 rounded-full text-sm border ${isDark ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'}`}>
-                    • 无需保证金
-                  </span>
-                  <span className={`px-4 py-2 rounded-full text-sm border ${isDark ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'}`}>
-                    • 无需门槛费
-                  </span>
-                  <span className={`px-4 py-2 rounded-full text-sm border ${isDark ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'}`}>
-                    • 永久收益关系
-                  </span>
-                  <span className={`px-4 py-2 rounded-full text-sm border ${isDark ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'}`}>
-                    • 无月支佣金费率
-                  </span>
-                </div>
+                {/* 推广方式2 */}
+                <div className={`rounded-lg p-6 ${cardStyle}`}>
+                  <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-6`}>
+                    推广方式2
+                  </h3>
 
-                {/* 推广方式部分 */}
-                <div className="space-y-6">
-                  <div className="text-center space-y-2">
-                    <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      推广方式
-                    </h2>
-                    <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      选择最适合您的推广方式，开始您的代理之旅
+                  <div className="mb-6">
+                    <h4 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>
+                      常规推广
+                    </h4>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6`}>
+                      分享推广码或者推广链接给好友去注册
                     </p>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Telegram拉群推广 */}
-                    <div className={`rounded-lg p-6 border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
-                      <div className="flex items-center mb-4">
-                        <div className="w-12 h-12 rounded-lg bg-[#14C2A3] flex items-center justify-center mr-4">
-                          <Check className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                            Telegram拉群推广
-                          </h3>
-                          <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                            最受欢迎的方式
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <ul className={`space-y-2 mb-4 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        <li className="flex items-start">
-                          <span className="text-[#14C2A3] mr-2">•</span>
-                          将好友添加到BeDAO官方Telegram频道
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-[#14C2A3] mr-2">•</span>
-                          用Telegram账号与动态查询数据的代理链接
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-[#14C2A3] mr-2">•</span>
-                          将好友的身份信息推广一同送到我客服人员处
-                        </li>
-                      </ul>
-
-                      <button className={`w-full py-3 px-4 rounded-lg border transition-all ${
-                        isDark 
-                          ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
-                          : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
-                      }`}>
-                        立又加微好友，无需任何填该
-                      </button>
-                    </div>
-
-                    {/* 邀请码推广 */}
-                    <div className={`rounded-lg p-6 border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
-                      <div className="flex items-center mb-4">
-                        <div className="w-12 h-12 rounded-lg bg-gray-600 flex items-center justify-center mr-4">
-                          <User className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                            邀请码推广
-                          </h3>
-                          <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                            标准邀请制
-                          </p>
+                    {/* 邀请码和邀请链接 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* 邀请码 */}
+                      <div className="space-y-3">
+                        <h5 className={`text-md font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          我的邀请码
+                        </h5>
+                        <div className="p-4 rounded-lg bg-gray-100 dark:bg-gray-700">
+                          <div className="flex items-center justify-between">
+                            <span className={`text-lg font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              BEDAO2025
+                            </span>
+                            <button className={`px-3 py-1 text-sm rounded border transition-all ${
+                              isDark 
+                                ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
+                                : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
+                            }`}>
+                              复制
+                            </button>
+                          </div>
                         </div>
                       </div>
-                      
-                      <ul className={`space-y-2 mb-4 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        <li className="flex items-start">
-                          <span className="text-[#14C2A3] mr-2">•</span>
-                          分享您的专属邀请码给目标客户
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-[#14C2A3] mr-2">•</span>
-                          用户通过邀请码注册BeDAO钱包
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-[#14C2A3] mr-2">•</span>
-                          系统自动建立代理关系并开始计费机会
-                        </li>
-                      </ul>
 
-                      <button className={`w-full py-3 px-4 rounded-lg border transition-all ${
-                        isDark 
-                          ? 'border-gray-600 text-gray-400 hover:border-gray-500 hover:text-gray-300' 
-                          : 'border-gray-300 text-gray-600 hover:border-gray-400 hover:text-gray-700'
-                      }`}>
-                        复制邀请码制，数据监控页面
-                      </button>
+                      {/* 邀请链接 */}
+                      <div className="space-y-3">
+                        <h5 className={`text-md font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          邀请链接
+                        </h5>
+                        <div className="p-4 rounded-lg bg-gray-100 dark:bg-gray-700">
+                          <div className="flex items-center justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} truncate mr-2`}>
+                              https://bedao.com/invite/BEDAO2025
+                            </span>
+                            <button className={`px-3 py-1 text-sm rounded border transition-all flex-shrink-0 ${
+                              isDark 
+                                ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
+                                : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
+                            }`}>
+                              复制链接
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+
+
 
 
               </div>
