@@ -5592,140 +5592,143 @@ export default function WalletPage() {
                   </h2>
                 </div>
 
-                {/* 推广方式1（推荐） */}
-                <div className={`rounded-lg p-6 ${cardStyle}`}>
-                  <div className="flex items-center mb-6">
-                    <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mr-3`}>
-                      推广方式1
-                    </h3>
-                    <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm rounded-full">
-                      推荐
-                    </span>
-                  </div>
+                {/* 推广方式1和推广方式2并列展示 */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* 推广方式1（推荐） */}
+                  <div className={`rounded-lg p-6 ${cardStyle}`}>
+                    <div className="flex items-center mb-6">
+                      <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mr-3`}>
+                        推广方式1
+                      </h3>
+                      <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm rounded-full">
+                        推荐
+                      </span>
+                    </div>
 
-                  <div className="mb-6">
-                    <h4 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>
-                      Telegram拉群推广
-                    </h4>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                      {/* 步骤1 */}
-                      <div className="text-center">
-                        <div className="flex items-center justify-center mb-3">
-                          <div className="w-12 h-12 rounded-full bg-[#14C2A3] flex items-center justify-center">
-                            <span className="text-lg font-bold text-white">1</span>
+                    <div className="mb-6">
+                      <h4 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>
+                        Telegram拉群推广
+                      </h4>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* 步骤1 */}
+                        <div className="text-center">
+                          <div className="flex items-center justify-center mb-3">
+                            <div className="w-10 h-10 rounded-full bg-[#14C2A3] flex items-center justify-center">
+                              <span className="text-sm font-bold text-white">1</span>
+                            </div>
                           </div>
+                          <h5 className={`text-sm font-semibold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            注册BeDAO钱包
+                          </h5>
+                          <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            申请成为代理
+                          </p>
                         </div>
-                        <h5 className={`text-md font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          注册BeDAO钱包
-                        </h5>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          申请成为代理
-                        </p>
-                      </div>
 
-                      {/* 步骤2 */}
-                      <div className="text-center">
-                        <div className="flex items-center justify-center mb-3">
-                          <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
-                            <span className="text-lg font-bold text-white">2</span>
+                        {/* 步骤2 */}
+                        <div className="text-center">
+                          <div className="flex items-center justify-center mb-3">
+                            <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+                              <span className="text-sm font-bold text-white">2</span>
+                            </div>
                           </div>
+                          <h5 className={`text-sm font-semibold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            拉好友进群
+                          </h5>
+                          <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            好友注册BeDAO钱包
+                          </p>
                         </div>
-                        <h5 className={`text-md font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          拉好友进群
-                        </h5>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          好友注册BeDAO钱包
-                        </p>
-                      </div>
 
-                      {/* 步骤3 */}
-                      <div className="text-center">
-                        <div className="flex items-center justify-center mb-3">
-                          <div className="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center">
-                            <span className="text-lg font-bold text-white">3</span>
+                        {/* 步骤3 */}
+                        <div className="text-center">
+                          <div className="flex items-center justify-center mb-3">
+                            <div className="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center">
+                              <span className="text-sm font-bold text-white">3</span>
+                            </div>
                           </div>
+                          <h5 className={`text-sm font-semibold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            好友使用支付/U卡
+                          </h5>
+                          <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            自动获得佣金分成
+                          </p>
                         </div>
-                        <h5 className={`text-md font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          好友使用支付/U卡
-                        </h5>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          自动获得佣金分成
-                        </p>
-                      </div>
 
-                      {/* 步骤4 */}
-                      <div className="text-center">
-                        <div className="flex items-center justify-center mb-3">
-                          <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center">
-                            <span className="text-lg font-bold text-white">4</span>
+                        {/* 步骤4 */}
+                        <div className="text-center">
+                          <div className="flex items-center justify-center mb-3">
+                            <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center">
+                              <span className="text-sm font-bold text-white">4</span>
+                            </div>
                           </div>
+                          <h5 className={`text-sm font-semibold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            好友成为代理
+                          </h5>
+                          <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            全面提升收益（无手续费）
+                          </p>
                         </div>
-                        <h5 className={`text-md font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          好友成为代理
-                        </h5>
-                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          全面提升收益（无手续费）
-                        </p>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* 推广方式2 */}
-                <div className={`rounded-lg p-6 ${cardStyle}`}>
-                  <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-6`}>
-                    推广方式2
-                  </h3>
+                  {/* 推广方式2 */}
+                  <div className={`rounded-lg p-6 ${cardStyle}`}>
+                    <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-6`}>
+                      推广方式2
+                    </h3>
 
-                  <div className="mb-6">
-                    <h4 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>
-                      常规推广
-                    </h4>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6`}>
-                      分享推广码或者推广链接给好友去注册
-                    </p>
+                    <div className="mb-6">
+                      <h4 className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>
+                        常规推广
+                      </h4>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6`}>
+                        分享推广码或者推广链接给好友去注册
+                      </p>
 
-                    {/* 邀请码和邀请链接 */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* 邀请码 */}
-                      <div className="space-y-3">
-                        <h5 className={`text-md font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          我的邀请码
-                        </h5>
-                        <div className="p-4 rounded-lg bg-gray-100 dark:bg-gray-700">
-                          <div className="flex items-center justify-between">
-                            <span className={`text-lg font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              BEDAO2025
-                            </span>
-                            <button className={`px-3 py-1 text-sm rounded border transition-all ${
-                              isDark 
-                                ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
-                                : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
-                            }`}>
-                              复制
-                            </button>
+                      {/* 邀请码和邀请链接 */}
+                      <div className="space-y-4">
+                        {/* 邀请码 */}
+                        <div className="space-y-3">
+                          <h5 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            我的邀请码
+                          </h5>
+                          <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
+                            <div className="flex items-center justify-between">
+                              <span className={`text-md font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                BEDAO2025
+                              </span>
+                              <button className={`px-2 py-1 text-xs rounded border transition-all ${
+                                isDark 
+                                  ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
+                                  : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
+                              }`}>
+                                复制
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* 邀请链接 */}
-                      <div className="space-y-3">
-                        <h5 className={`text-md font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                          邀请链接
-                        </h5>
-                        <div className="p-4 rounded-lg bg-gray-100 dark:bg-gray-700">
-                          <div className="flex items-center justify-between">
-                            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} truncate mr-2`}>
-                              https://bedao.com/invite/BEDAO2025
-                            </span>
-                            <button className={`px-3 py-1 text-sm rounded border transition-all flex-shrink-0 ${
-                              isDark 
-                                ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
-                                : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
-                            }`}>
-                              复制链接
-                            </button>
+                        {/* 邀请链接 */}
+                        <div className="space-y-3">
+                          <h5 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            邀请链接
+                          </h5>
+                          <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
+                            <div className="flex items-center justify-between">
+                              <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'} truncate mr-2`}>
+                                https://bedao.com/invite/BEDAO2025
+                              </span>
+                              <button className={`px-2 py-1 text-xs rounded border transition-all flex-shrink-0 ${
+                                isDark 
+                                  ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
+                                  : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
+                              }`}>
+                                复制链接
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
