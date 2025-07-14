@@ -4905,21 +4905,23 @@ export default function WalletPage() {
                   
                   {/* 佣金比例 */}
                   <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
+                    <div className="flex items-center justify-center gap-2 mb-3">
                       <Target className={`h-6 w-6 text-[#14C2A3]`} />
+                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        佣金比例
+                      </span>
                     </div>
-                    <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
-                      12.5<span className="text-lg">%</span>
+                    <div className="flex items-center justify-center gap-2">
+                      <span className={`text-2xl font-bold text-[#14C2A3]`}>
+                        12.5<span className="text-lg">%</span>
+                      </span>
+                      <button
+                        onClick={() => setShowCommissionRuleModal(true)}
+                        className={`text-xs ${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
+                      >
+                        查看佣金规则
+                      </button>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-2`}>
-                      佣金比例
-                    </div>
-                    <button
-                      onClick={() => setShowCommissionRuleModal(true)}
-                      className={`text-xs ${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
-                    >
-                      查看佣金规则
-                    </button>
                   </div>
                 </div>
 
