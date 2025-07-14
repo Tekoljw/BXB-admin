@@ -5572,7 +5572,7 @@ export default function WalletPage() {
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      直接邀请用户数量
+                      本月直推人数
                     </div>
                   </div>
 
@@ -5591,7 +5591,7 @@ export default function WalletPage() {
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      间接邀请用户数量
+                      本月间推人数
                     </div>
                   </div>
 
@@ -5610,7 +5610,7 @@ export default function WalletPage() {
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      累计获得佣金总额
+                      本月总佣金
                     </div>
                   </div>
 
@@ -5629,7 +5629,7 @@ export default function WalletPage() {
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      待结算佣金金额
+                      即将到期佣金
                     </div>
                   </div>
                 </div>
