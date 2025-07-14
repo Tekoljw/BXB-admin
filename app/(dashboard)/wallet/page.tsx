@@ -5572,7 +5572,7 @@ export default function WalletPage() {
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      本月直推人数
+                      本月直推人数：156人
                     </div>
                   </div>
 
@@ -5591,7 +5591,7 @@ export default function WalletPage() {
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      本月间推人数
+                      本月间推人数：89人
                     </div>
                   </div>
 
@@ -5610,7 +5610,7 @@ export default function WalletPage() {
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      本月总佣金
+                      本月总佣金：12,345.67 USDT
                     </div>
                   </div>
 
@@ -5629,7 +5629,7 @@ export default function WalletPage() {
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      即将到期佣金
+                      即将到期佣金：567.89 USDT
                     </div>
                   </div>
                 </div>
