@@ -5662,29 +5662,29 @@ export default function WalletPage() {
                       </div>
                       
                       {/* 特色标签 */}
-                      <div className="flex flex-wrap gap-2 mt-3">
-                        <span className={`px-3 py-1 text-xs rounded-full border ${
+                      <div className="flex flex-wrap gap-3 mt-3">
+                        <span className={`px-4 py-2 text-sm font-medium rounded-full border ${
                           isDark 
                             ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
                             : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
                         }`}>
                           无需维护客户
                         </span>
-                        <span className={`px-3 py-1 text-xs rounded-full border ${
+                        <span className={`px-4 py-2 text-sm font-medium rounded-full border ${
                           isDark 
                             ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
                             : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
                         }`}>
                           无需讨论价格
                         </span>
-                        <span className={`px-3 py-1 text-xs rounded-full border ${
+                        <span className={`px-4 py-2 text-sm font-medium rounded-full border ${
                           isDark 
                             ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
                             : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
                         }`}>
                           永久绑定关系
                         </span>
-                        <span className={`px-3 py-1 text-xs rounded-full border ${
+                        <span className={`px-4 py-2 text-sm font-medium rounded-full border ${
                           isDark 
                             ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
                             : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
@@ -5852,59 +5852,58 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    {/* 卡片内容 */}
+                    {/* 邀请码卡片 */}
+                    <div className={`rounded-lg p-6 ${cardStyle}`}>
+                      <div className="space-y-3">
+                        <h5 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          我的邀请码
+                        </h5>
+                        <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
+                          <div className="flex items-center justify-between">
+                            <span className={`text-md font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              BEDAO2025
+                            </span>
+                            <button className={`px-2 py-1 text-xs rounded border transition-all ${
+                              isDark 
+                                ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
+                                : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
+                            }`}>
+                              复制
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 邀请链接卡片 */}
+                    <div className={`rounded-lg p-6 ${cardStyle}`}>
+                      <div className="space-y-3">
+                        <h5 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          邀请链接
+                        </h5>
+                        <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
+                          <div className="flex items-center justify-between">
+                            <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'} truncate mr-2`}>
+                              https://bedao.com/invite/BEDAO2025
+                            </span>
+                            <button className={`px-2 py-1 text-xs rounded border transition-all flex-shrink-0 ${
+                              isDark 
+                                ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
+                                : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
+                            }`}>
+                              复制链接
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 推广步骤卡片 */}
                     <div className={`rounded-lg p-6 ${cardStyle}`}>
                       <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6`}>
                         分享推广码或者推广链接给好友去注册
                       </p>
-
-                      {/* 邀请码和邀请链接 */}
-                      <div className="space-y-4">
-                        {/* 邀请码 */}
-                        <div className="space-y-3">
-                          <h5 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                            我的邀请码
-                          </h5>
-                          <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
-                            <div className="flex items-center justify-between">
-                              <span className={`text-md font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                BEDAO2025
-                              </span>
-                              <button className={`px-2 py-1 text-xs rounded border transition-all ${
-                                isDark 
-                                  ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
-                                  : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
-                              }`}>
-                                复制
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* 邀请链接 */}
-                        <div className="space-y-3">
-                          <h5 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                            邀请链接
-                          </h5>
-                          <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
-                            <div className="flex items-center justify-between">
-                              <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'} truncate mr-2`}>
-                                https://bedao.com/invite/BEDAO2025
-                              </span>
-                              <button className={`px-2 py-1 text-xs rounded border transition-all flex-shrink-0 ${
-                                isDark 
-                                  ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
-                                  : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
-                              }`}>
-                                复制链接
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 推广步骤 */}
-                      <div className="mt-8 space-y-8">
+                      <div className="space-y-8">
                         {/* 步骤1 */}
                         <div className="space-y-4">
                           <div className="flex items-start gap-4">
