@@ -5359,7 +5359,7 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <Users className="h-6 w-6 text-blue-500" />
-                        <h3 className="text-lg font-semibold">理财客户数</h3>
+                        <h3 className="text-lg font-semibold">直推理财用户</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-blue-500`}>
@@ -5390,7 +5390,7 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <PiggyBank className="h-6 w-6 text-purple-500" />
-                        <h3 className="text-lg font-semibold">活跃产品数</h3>
+                        <h3 className="text-lg font-semibold">间推理财用户</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-purple-500`}>
@@ -6019,24 +6019,24 @@ export default function WalletPage() {
                               </span>
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {uCardSubTab === "开卡佣金" ? record.cardType : record.currency}
+                              {uCardSubTab === "开卡佣金" ? (record as any).cardType : (record as any).currency}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {uCardSubTab === "开卡佣金" ? `${record.fee} USD` : `${record.amount} ${record.currency}`}
+                              {uCardSubTab === "开卡佣金" ? `${(record as any).fee} USD` : `${(record as any).amount} ${(record as any).currency}`}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {record.feeRate}
+                              {(record as any).feeRate}
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>
-                              {record.commission} {uCardSubTab === "开卡佣金" ? "USD" : "USDT"}
+                              {(record as any).commission} {uCardSubTab === "开卡佣金" ? "USD" : "USDT"}
                             </td>
                             <td className={`py-3 px-2 text-sm`}>
                               <span className={`px-2 py-1 rounded-full text-xs ${
-                                record.status === "已发放" 
+                                (record as any).status === "已发放" 
                                   ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
                                   : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
                               }`}>
-                                {record.status}
+                                {(record as any).status}
                               </span>
                             </td>
                           </tr>
@@ -6279,7 +6279,7 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <Users className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">直推用户</h3>
+                        <h3 className="text-lg font-semibold">直推合约用户</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-[#14C2A3]`}>
@@ -6298,7 +6298,7 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <UserPlus className="h-6 w-6 text-blue-500" />
-                        <h3 className="text-lg font-semibold">间推用户</h3>
+                        <h3 className="text-lg font-semibold">间推合约用户</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-blue-500`}>
