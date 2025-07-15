@@ -4862,62 +4862,83 @@ export default function WalletPage() {
             {/* 根据选中的页签渲染内容 */}
             {commissionTab === "合约佣金" && (
               <div className="space-y-6">
-                {/* 佣金快报 - 分成多个卡片 */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {/* 佣金快报 - 使用理财账户样式 */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                   {/* 今日佣金 */}
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <Calendar className={`h-6 w-6 text-[#14C2A3]`} />
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="h-6 w-6 text-[#14C2A3]" />
+                        <h3 className="text-lg font-semibold">今日佣金</h3>
+                      </div>
                     </div>
-                    <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
-                      2,456.78 <span className="text-lg">USDT</span>
+                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                      2,456.78
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        USDT
+                      </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      今日佣金
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      昨日佣金：1,234.56 USDT
                     </div>
                   </div>
-                  
+
                   {/* 本月佣金 */}
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <TrendingUp className={`h-6 w-6 text-blue-500`} />
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <TrendingUp className="h-6 w-6 text-blue-500" />
+                        <h3 className="text-lg font-semibold">本月佣金</h3>
+                      </div>
                     </div>
-                    <div className={`text-2xl font-bold text-blue-500 mb-1`}>
-                      58,943.22 <span className="text-lg">USDT</span>
+                    <div className={`text-3xl font-bold text-blue-500`}>
+                      58,943.22
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        USDT
+                      </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      本月佣金
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      上月佣金：48,567.89 USDT
                     </div>
                   </div>
-                  
+
                   {/* 累计佣金 */}
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <Percent className={`h-6 w-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <DollarSign className="h-6 w-6 text-[#14C2A3]" />
+                        <h3 className="text-lg font-semibold">累计佣金</h3>
+                      </div>
                     </div>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
-                      425,678.90 <span className="text-lg">USDT</span>
+                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      425,678.90
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        USDT
+                      </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      累计佣金
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      今年累计：234,567.89 USDT
                     </div>
                   </div>
-                  
+
                   {/* 佣金比例 */}
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center gap-2 mb-3">
-                      <Target className={`h-6 w-6 text-[#14C2A3]`} />
-                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        佣金比例
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Target className="h-6 w-6 text-[#14C2A3]" />
+                        <h3 className="text-lg font-semibold">佣金比例</h3>
+                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                      12.5
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        %
                       </span>
                     </div>
-                    <div className="flex items-center justify-center gap-2">
-                      <span className={`text-2xl font-bold text-[#14C2A3]`}>
-                        12.5<span className="text-lg">%</span>
-                      </span>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       <button
                         onClick={() => setShowCommissionRuleModal(true)}
-                        className={`text-xs ${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
+                        className={`${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
                       >
                         查看佣金规则
                       </button>

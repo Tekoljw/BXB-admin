@@ -275,6 +275,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Integrated official Telegram channel link: https://t.me/bxb_official
   - Added styled link card with Telegram icon, channel name, and copy button functionality
   - Used blue color scheme consistent with Telegram branding
+- January 30, 2025. Enhanced contract commission card design layout:
+  - Updated contract commission cards to match invite friends top card layout pattern
+  - Changed from centered icon-top layout to left-aligned header with icon and title
+  - Added subtitle descriptions for better context (yesterday/last month comparison data)
+  - Implemented consistent grid layout (2 columns on mobile, 4 on desktop)
+  - Applied transition animations and proper spacing matching the invite friends design
+  - Maintained color scheme and functionality while improving visual hierarchy
 
 ## User Preferences
 
