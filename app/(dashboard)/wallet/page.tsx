@@ -1019,7 +1019,7 @@ export default function WalletPage() {
     { id: "U卡订单", label: "U卡订单", icon: CreditCard },
     { id: "担保记录", label: "担保记录", icon: HandCoins },
     { id: "支付订单", label: "支付订单", icon: Receipt },
-    { id: "佣金记录", label: "佣金记录", icon: Percent }
+    { id: "佣金结算记录", label: "佣金结算记录", icon: Percent }
   ]
 
   // 二级页签配置
@@ -1095,11 +1095,13 @@ export default function WalletPage() {
       }
     },
     commission: {
-      name: '佣金记录',
+      name: '佣金结算记录',
       tabs: {
-        trading: '交易返佣',
-        referral: '邀请返佣',
-        bonus: '奖励佣金'
+        contract: '合约佣金',
+        wealth: '理财佣金',
+        ucard: 'U卡佣金',
+        guarantee: '担保佣金',
+        payment: '支付佣金'
       }
     },
     payment: {
@@ -1124,7 +1126,7 @@ export default function WalletPage() {
       "U卡订单": "ucard",
       "担保记录": "guarantee",
       "划转记录": "transfer",
-      "佣金记录": "commission",
+      "佣金结算记录": "commission",
       "支付订单": "payment"
     }
     return mapping[orderTabId] || "spot"
@@ -1665,38 +1667,108 @@ export default function WalletPage() {
         remark: "网络费用调整"
       }
     ],
-    "佣金记录": [
-      {
-        id: "CM001",
-        type: "交易返佣",
-        currency: "USDT",
-        amount: "+12.34",
-        source: "BTC/USDT交易",
-        status: "已到账",
-        time: "2024-01-15 16:30:45",
-        rate: "0.1%"
-      },
-      {
-        id: "CM002",
-        type: "邀请返佣",
-        currency: "USDT",
-        amount: "+8.90",
-        source: "用户A邀请奖励",
-        status: "已到账",
-        time: "2024-01-14 14:20:30",
-        rate: "20%"
-      },
-      {
-        id: "CM003",
-        type: "奖励佣金",
-        currency: "USDT",
-        amount: "+50.00",
-        source: "月度活动奖励",
-        status: "已到账",
-        time: "2024-01-13 10:15:20",
-        rate: "固定"
-      }
-    ]
+    "佣金结算记录": {
+      contract: [
+        {
+          id: "CM001",
+          type: "合约交易",
+          currency: "USDT",
+          amount: "+125.50",
+          time: "2024-01-20 14:30:22",
+          status: "已发放",
+          remark: "合约交易返佣"
+        },
+        {
+          id: "CM002", 
+          type: "合约推荐",
+          currency: "USDT",
+          amount: "+89.20",
+          time: "2024-01-19 16:45:11",
+          status: "已发放",
+          remark: "推荐用户合约交易"
+        }
+      ],
+      wealth: [
+        {
+          id: "WM001",
+          type: "理财产品",
+          currency: "USDT",
+          amount: "+56.80",
+          time: "2024-01-20 10:20:15",
+          status: "已发放",
+          remark: "理财产品推荐佣金"
+        },
+        {
+          id: "WM002",
+          type: "收益分成",
+          currency: "USDT",
+          amount: "+34.50",
+          time: "2024-01-19 14:35:42",
+          status: "已发放",
+          remark: "用户理财收益分成"
+        }
+      ],
+      ucard: [
+        {
+          id: "UC001",
+          type: "开卡佣金",
+          currency: "USDT",
+          amount: "+25.00",
+          time: "2024-01-20 11:45:30",
+          status: "已发放",
+          remark: "推荐用户开卡"
+        },
+        {
+          id: "UC002",
+          type: "充值佣金",
+          currency: "USDT",
+          amount: "+15.60",
+          time: "2024-01-19 16:20:18",
+          status: "已发放",
+          remark: "用户卡片充值佣金"
+        }
+      ],
+      guarantee: [
+        {
+          id: "GT001",
+          type: "担保交易",
+          currency: "USDT",
+          amount: "+45.30",
+          time: "2024-01-20 13:15:25",
+          status: "已发放",
+          remark: "担保交易佣金"
+        },
+        {
+          id: "GT002",
+          type: "信用担保",
+          currency: "USDT",
+          amount: "+78.90",
+          time: "2024-01-19 09:40:55",
+          status: "已发放",
+          remark: "信用担保服务佣金"
+        }
+      ],
+      payment: [
+        {
+          id: "PM001",
+          type: "支付通道",
+          currency: "CNY",
+          amount: "+120.00",
+          time: "2024-01-20 15:25:40",
+          status: "已发放",
+          remark: "支付通道佣金"
+        },
+        {
+          id: "PM002",
+          type: "商户推荐",
+          currency: "CNY",
+          amount: "+85.50",
+          time: "2024-01-19 12:10:33",
+          status: "已发放",
+          remark: "推荐商户佣金"
+        }
+      ]
+    }
   }
 
   // 添加新的数据结构
@@ -11848,12 +11920,12 @@ export default function WalletPage() {
         }
         return fundsData[tabNameMap[secondaryTab]] || []
       case "commission":
-        const typeMap = {
-          trading: "交易返佣",
-          referral: "邀请返佣", 
-          bonus: "奖励佣金"
+        // 从新的数据结构中获取对应类型的佣金记录
+        const commissionData = orderRecordsData["佣金结算记录"]
+        if (commissionData && typeof commissionData === 'object' && !Array.isArray(commissionData)) {
+          return commissionData[secondaryTab] || []
         }
-        return commissionData.filter(r => r.type === typeMap[secondaryTab]) || []
+        return []
       case "transfer":
         return transferData
       case "usdtTrading":
