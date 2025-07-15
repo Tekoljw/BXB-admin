@@ -294,6 +294,10 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Added appropriate icons and color schemes for each data type
   - Integrated claim button directly into the commission card
   - Enhanced data visualization with additional context (monthly growth, activity rates)
+- January 30, 2025. Adjusted commission card layout and button styling:
+  - Moved "可领取佣金" card to the last position in the grid
+  - Changed "立即领取" button from green to black color scheme
+  - Maintained consistent hover effects and accessibility
 
 ## User Preferences
 

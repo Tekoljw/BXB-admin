@@ -4955,36 +4955,6 @@ export default function WalletPage() {
 
                 {/* 佣金和推广数据 - 拆分成单独卡片 */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                  {/* 可领取佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Wallet className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">可领取佣金</h3>
-                      </div>
-                    </div>
-                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
-                      1,234.56
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
-                        USDT
-                      </span>
-                    </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      下次结算：2025-01-31
-                    </div>
-                    <div className="mt-3">
-                      <button
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
-                          isDark 
-                            ? "bg-[#14C2A3] hover:bg-[#10a088] text-white" 
-                            : "bg-[#14C2A3] hover:bg-[#10a088] text-white"
-                        }`}
-                      >
-                        立即领取
-                      </button>
-                    </div>
-                  </div>
-
                   {/* 直推人数 */}
                   <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
                     <div className="flex items-center justify-between mb-4">
@@ -5039,6 +5009,36 @@ export default function WalletPage() {
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       活跃率：78.2%
+                    </div>
+                  </div>
+
+                  {/* 可领取佣金 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Wallet className="h-6 w-6 text-[#14C2A3]" />
+                        <h3 className="text-lg font-semibold">可领取佣金</h3>
+                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                      1,234.56
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        USDT
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      下次结算：2025-01-31
+                    </div>
+                    <div className="mt-3">
+                      <button
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                          isDark 
+                            ? "bg-black hover:bg-gray-800 text-white" 
+                            : "bg-black hover:bg-gray-800 text-white"
+                        }`}
+                      >
+                        立即领取
+                      </button>
                     </div>
                   </div>
                 </div>
