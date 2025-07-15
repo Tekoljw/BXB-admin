@@ -6001,7 +6001,7 @@ export default function WalletPage() {
                           { time: "12:34:56", userId: "U11223344", type: "直推", currency: "USDT", amount: "500.00", feeRate: "2.5%", commission: "12.50", status: "处理中" },
                           { time: "11:12:33", userId: "U99887766", type: "间推", currency: "ETH", amount: "2.5", feeRate: "2.0%", commission: "18.50", status: "已发放" },
                           { time: "10:45:21", userId: "U55443322", type: "直推", currency: "USDT", amount: "2,000.00", feeRate: "2.5%", commission: "50.00", status: "已发放" }
-                        ].map((record, index) => (
+                        ].map((record: any, index) => (
                           <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                               {record.time}
