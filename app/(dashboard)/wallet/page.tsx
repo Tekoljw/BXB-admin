@@ -5914,10 +5914,21 @@ export default function WalletPage() {
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
                       } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">交易类型</option>
+                        <option value="card">开卡</option>
+                        <option value="recharge">充值</option>
+                      </select>
+                      <select className={`px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
                         <option value="">产品类型</option>
                         <option value="virtual">虚拟卡</option>
                         <option value="physical">实体卡</option>
-                        <option value="recharge">卡片充值</option>
+                        <option value="USDT">USDT</option>
+                        <option value="BTC">BTC</option>
+                        <option value="ETH">ETH</option>
                       </select>
                       <select className={`px-4 py-2 rounded-lg border ${
                         isDark 
@@ -5939,6 +5950,7 @@ export default function WalletPage() {
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>时间</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户ID</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>推荐类型</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>交易类型</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>产品类型</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>交易金额</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金比例</th>
@@ -5948,11 +5960,11 @@ export default function WalletPage() {
                       </thead>
                       <tbody className="space-y-2">
                         {[
-                          { time: "14:23:45", userId: "U12345678", type: "直推", productType: "Visa虚拟卡", amount: "15.00", feeRate: "25%", commission: "3.75", status: "已发放" },
-                          { time: "13:56:12", userId: "U87654321", type: "间推", productType: "Mastercard实体卡", amount: "25.00", feeRate: "25%", commission: "6.25", status: "已发放" },
-                          { time: "12:34:56", userId: "U11223344", type: "直推", productType: "USDT充值", amount: "500.00", feeRate: "2.5%", commission: "12.50", status: "处理中" },
-                          { time: "11:23:44", userId: "U99887766", type: "间推", productType: "Visa虚拟卡", amount: "15.00", feeRate: "20%", commission: "3.00", status: "已发放" },
-                          { time: "10:12:33", userId: "U55443322", type: "直推", productType: "BTC充值", amount: "0.05", feeRate: "2.0%", commission: "15.00", status: "已发放" }
+                          { time: "14:23:45", userId: "U12345678", type: "直推", transactionType: "开卡", productType: "Visa虚拟卡", amount: "15.00", feeRate: "25%", commission: "3.75", status: "已发放" },
+                          { time: "13:56:12", userId: "U87654321", type: "间推", transactionType: "开卡", productType: "Mastercard实体卡", amount: "25.00", feeRate: "25%", commission: "6.25", status: "已发放" },
+                          { time: "12:34:56", userId: "U11223344", type: "直推", transactionType: "充值", productType: "USDT", amount: "500.00", feeRate: "2.5%", commission: "12.50", status: "处理中" },
+                          { time: "11:23:44", userId: "U99887766", type: "间推", transactionType: "开卡", productType: "Visa虚拟卡", amount: "15.00", feeRate: "20%", commission: "3.00", status: "已发放" },
+                          { time: "10:12:33", userId: "U55443322", type: "直推", transactionType: "充值", productType: "BTC", amount: "0.05", feeRate: "2.0%", commission: "15.00", status: "已发放" }
                         ].map((record, index) => (
                           <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -5970,17 +5982,26 @@ export default function WalletPage() {
                                 {record.type}
                               </span>
                             </td>
+                            <td className={`py-3 px-2 text-sm`}>
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                record.transactionType === "开卡" 
+                                  ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                                  : "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300"
+                              }`}>
+                                {record.transactionType}
+                              </span>
+                            </td>
                             <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                               {record.productType}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {record.productType.includes('充值') ? `${record.amount} ${record.productType.replace('充值', '')}` : `${record.amount} USD`}
+                              {record.transactionType === "充值" ? `${record.amount} ${record.productType}` : `${record.amount} USD`}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                               {record.feeRate}
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>
-                              {record.commission} {record.productType.includes('充值') ? "USDT" : "USD"}
+                              {record.commission} {record.transactionType === "充值" ? "USDT" : "USD"}
                             </td>
                             <td className={`py-3 px-2 text-sm`}>
                               <span className={`px-2 py-1 rounded-full text-xs ${
