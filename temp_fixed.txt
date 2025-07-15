@@ -256,7 +256,7 @@ export default function WalletPage() {
         futures: '合约佣金',
         wealth: '理财佣金',
         payment: '支付佣金',
-        guarantee: '担保佣金'
+        ucard: 'U卡佣金'
       }
     },
     guarantee: {
