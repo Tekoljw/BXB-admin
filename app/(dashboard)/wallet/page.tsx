@@ -6710,6 +6710,19 @@ export default function WalletPage() {
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
                       } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">支付通道</option>
+                        <option value="支付宝直连">支付宝直连</option>
+                        <option value="微信商户号">微信商户号</option>
+                        <option value="银联在线">银联在线</option>
+                        <option value="招商银行">招商银行</option>
+                        <option value="建设银行">建设银行</option>
+                        <option value="工商银行">工商银行</option>
+                      </select>
+                      <select className={`px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
                         <option value="">业务类型</option>
                         <option value="收款">收款业务</option>
                         <option value="代付">代付业务</option>
@@ -6736,6 +6749,7 @@ export default function WalletPage() {
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>商户ID</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>推荐类型</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>支付方式</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>支付通道</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>业务类型</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>交易金额</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金比例</th>
@@ -6745,11 +6759,11 @@ export default function WalletPage() {
                       </thead>
                       <tbody className="space-y-2">
                         {[
-                          { time: "14:23:45", merchantId: "M12345678", type: "直推", paymentMethod: "支付宝", businessType: "收款业务", amount: "15,000.00", feeRate: "0.8%", commission: "120.00", status: "已结算" },
-                          { time: "13:56:12", merchantId: "M87654321", type: "间推", paymentMethod: "微信支付", businessType: "代付业务", amount: "8,500.00", feeRate: "0.6%", commission: "51.00", status: "已结算" },
-                          { time: "12:34:56", merchantId: "M11223344", type: "直推", paymentMethod: "银联支付", businessType: "收款业务", amount: "25,000.00", feeRate: "0.8%", commission: "200.00", status: "处理中" },
-                          { time: "11:23:44", merchantId: "M99887766", type: "间推", paymentMethod: "银行转账", businessType: "退款业务", amount: "3,200.00", feeRate: "0.5%", commission: "16.00", status: "已结算" },
-                          { time: "10:12:33", merchantId: "M55443322", type: "直推", paymentMethod: "支付宝", businessType: "收款业务", amount: "12,800.00", feeRate: "0.8%", commission: "102.40", status: "已结算" }
+                          { time: "14:23:45", merchantId: "M12345678", type: "直推", paymentMethod: "支付宝", paymentChannel: "支付宝直连", businessType: "收款业务", amount: "15,000.00", feeRate: "0.8%", commission: "120.00", status: "已结算" },
+                          { time: "13:56:12", merchantId: "M87654321", type: "间推", paymentMethod: "微信支付", paymentChannel: "微信商户号", businessType: "代付业务", amount: "8,500.00", feeRate: "0.6%", commission: "51.00", status: "已结算" },
+                          { time: "12:34:56", merchantId: "M11223344", type: "直推", paymentMethod: "银联支付", paymentChannel: "银联在线", businessType: "收款业务", amount: "25,000.00", feeRate: "0.8%", commission: "200.00", status: "处理中" },
+                          { time: "11:23:44", merchantId: "M99887766", type: "间推", paymentMethod: "银行转账", paymentChannel: "招商银行", businessType: "退款业务", amount: "3,200.00", feeRate: "0.5%", commission: "16.00", status: "已结算" },
+                          { time: "10:12:33", merchantId: "M55443322", type: "直推", paymentMethod: "支付宝", paymentChannel: "支付宝代扣", businessType: "收款业务", amount: "12,800.00", feeRate: "0.8%", commission: "102.40", status: "已结算" }
                         ].map((record, index) => (
                           <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -6776,6 +6790,9 @@ export default function WalletPage() {
                               }`}>
                                 {record.paymentMethod}
                               </span>
+                            </td>
+                            <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              {record.paymentChannel}
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                               {record.businessType}
