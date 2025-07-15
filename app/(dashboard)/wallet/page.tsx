@@ -6019,24 +6019,24 @@ export default function WalletPage() {
                               </span>
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {uCardSubTab === "开卡佣金" ? (record as any).cardType : (record as any).currency}
+                              {uCardSubTab === "开卡佣金" ? record.cardType : record.currency}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {uCardSubTab === "开卡佣金" ? `${(record as any).fee} USD` : `${(record as any).amount} ${(record as any).currency}`}
+                              {uCardSubTab === "开卡佣金" ? `${record.fee} USD` : `${record.amount} ${record.currency}`}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {(record as any).feeRate}
+                              {record.feeRate}
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>
-                              {(record as any).commission} {uCardSubTab === "开卡佣金" ? "USD" : "USDT"}
+                              {record.commission} {uCardSubTab === "开卡佣金" ? "USD" : "USDT"}
                             </td>
                             <td className={`py-3 px-2 text-sm`}>
                               <span className={`px-2 py-1 rounded-full text-xs ${
-                                (record as any).status === "已发放" 
+                                record.status === "已发放" 
                                   ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
                                   : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
                               }`}>
-                                {(record as any).status}
+                                {record.status}
                               </span>
                             </td>
                           </tr>
