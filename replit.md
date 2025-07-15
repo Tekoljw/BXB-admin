@@ -1,8 +1,8 @@
-# BeDAO-ho Cryptocurrency Trading Dashboard
+# BXB Cryptocurrency Trading Dashboard
 
 ## Overview
 
-BeDAO-ho is a modern cryptocurrency trading dashboard application built with Next.js 14 and React. The application provides real-time cryptocurrency price tracking, portfolio management, trading interfaces, and social features in a comprehensive web platform. It features a bilingual interface (Chinese/English) with both light and dark themes, designed for cryptocurrency traders and enthusiasts.
+BXB is a modern cryptocurrency trading dashboard application built with Next.js 14 and React. The application provides real-time cryptocurrency price tracking, portfolio management, trading interfaces, and social features in a comprehensive web platform. It features a bilingual interface (Chinese/English) with both light and dark themes, designed for cryptocurrency traders and enthusiasts.
 
 ## System Architecture
 
@@ -254,7 +254,14 @@ BeDAO-ho is a modern cryptocurrency trading dashboard application built with Nex
   - Replaced complex homepage content with simple loading screen during redirect
   - Configured wallet button navigation to jump to specific order record tabs (资金记录 and 订单记录)
   - Users now access main project directly without homepage intermediary step
-  - Maintained loading indicator with BeDAO branding during redirect process
+  - Maintained loading indicator with BXB branding during redirect process
+- January 30, 2025. Brand evolution completed - BeDAO to BXB:
+  - All "BeDAO" and "BEDAO" references replaced with "BXB" throughout the application
+  - Updated application metadata, titles, and user interface text
+  - Modified invite codes from "BEDAO2025" to "BXB2025"  
+  - Updated domain references from "bedao.com" to "bxb.com"
+  - Changed loading screens, web3 components, and product names to BXB branding
+  - Maintained consistent branding across all navigation, wallet, mall, and profile pages
 
 ## User Preferences
 

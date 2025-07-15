@@ -62,7 +62,7 @@ export default function Web3Loading({ onComplete }: Web3LoadingProps) {
         {/* Logo和文字 */}
         <div className="mt-12 text-center">
           <div className={`text-4xl font-bold mb-2 bg-gradient-to-r from-[#00D4AA] to-[#3B82F6] bg-clip-text text-transparent`}>
-            BeDAO
+            BXB
           </div>
           <div className={`text-lg mb-6 ${
             isDark ? 'text-gray-400' : 'text-gray-600'

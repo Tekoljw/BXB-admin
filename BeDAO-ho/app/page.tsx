@@ -10,7 +10,7 @@ export default function HomePage() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-            Welcome to <span className="text-primary">BeDAO</span>
+            Welcome to <span className="text-primary">BXB</span>
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Your comprehensive crypto trading platform with advanced analytics, social features, and secure wallet

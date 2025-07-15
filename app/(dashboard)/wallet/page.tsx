@@ -5707,7 +5707,7 @@ export default function WalletPage() {
                             </div>
                             <div className="flex-1">
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                注册BeDAO钱包
+                                注册BXB钱包
                               </h5>
                               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                                 申请成为代理，获得推广资格
@@ -5755,10 +5755,10 @@ export default function WalletPage() {
                             </div>
                             <div className="flex-1">
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                好友使用BeDAO的服务
+                                好友使用BXB的服务
                               </h5>
                               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-3`}>
-                                好友注册并使用BeDAO服务，自动获得佣金分成
+                                好友注册并使用BXB服务，自动获得佣金分成
                               </p>
                               <div className="flex flex-wrap gap-1">
                                 <span className={`px-2 py-1 text-xs rounded border ${
@@ -5898,7 +5898,7 @@ export default function WalletPage() {
                           <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
                             <div className="flex items-center justify-between">
                               <span className={`text-md font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                BEDAO2025
+                                BXB2025
                               </span>
                               <button className={`px-2 py-1 text-xs rounded border transition-all ${
                                 isDark 
@@ -5919,7 +5919,7 @@ export default function WalletPage() {
                           <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
                             <div className="flex items-center justify-between">
                               <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'} truncate mr-2`}>
-                                https://bedao.com/invite/BEDAO2025
+                                https://bxb.com/invite/BXB2025
                               </span>
                               <button className={`px-2 py-1 text-xs rounded border transition-all flex-shrink-0 ${
                                 isDark 
@@ -6001,7 +6001,7 @@ export default function WalletPage() {
                                 好友注册使用
                               </h5>
                               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                好友使用邀请码注册BeDAO账户并开始交易
+                                好友使用邀请码注册BXB账户并开始交易
                               </p>
                             </div>
                           </div>

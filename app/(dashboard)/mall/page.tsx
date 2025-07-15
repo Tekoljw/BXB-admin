@@ -23,7 +23,7 @@ export default function MallPage() {
   const products = [
     {
       id: 1,
-      name: "BeDAO Premium 会员卡",
+      name: "BXB Premium 会员卡",
       price: "199.99",
       originalPrice: "299.99",
       image: "/api/placeholder/300/200",

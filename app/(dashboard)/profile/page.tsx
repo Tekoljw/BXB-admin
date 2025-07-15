@@ -15,7 +15,7 @@ export default function ProfilePage() {
   const { isDark } = useTheme()
   const [activeSection, setActiveSection] = useState("personal")
   const [showEditModal, setShowEditModal] = useState(false)
-  const [selectedApiType, setSelectedApiType] = useState("bedao")
+  const [selectedApiType, setSelectedApiType] = useState("bxb")
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [favorites, setFavorites] = useState<string[]>(["post-1"])
   const [editForm, setEditForm] = useState({

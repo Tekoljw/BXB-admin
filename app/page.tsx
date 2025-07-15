@@ -16,7 +16,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="text-center">
         <div className="w-16 h-16 border-4 border-[#14C2A3] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-white text-lg">Loading BeDAO...</p>
+        <p className="text-white text-lg">Loading BXB...</p>
       </div>
     </div>
   )
