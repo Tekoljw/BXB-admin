@@ -282,6 +282,11 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Implemented consistent grid layout (2 columns on mobile, 4 on desktop)
   - Applied transition animations and proper spacing matching the invite friends design
   - Maintained color scheme and functionality while improving visual hierarchy
+- January 30, 2025. Added contract agent level display to commission ratio card:
+  - Added current contract agent level indicator in commission ratio card
+  - Shows "当前等级：超级合约代理" below the percentage value
+  - Used consistent color scheme with commission percentage for visual hierarchy
+  - Maintained existing "查看佣金规则" button functionality
 
 ## User Preferences
 

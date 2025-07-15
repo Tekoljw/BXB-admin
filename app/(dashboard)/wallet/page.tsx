@@ -4936,6 +4936,12 @@ export default function WalletPage() {
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      当前等级：
+                      <span className="text-[#14C2A3] font-semibold ml-1">
+                        超级合约代理
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
                       <button
                         onClick={() => setShowCommissionRuleModal(true)}
                         className={`${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
