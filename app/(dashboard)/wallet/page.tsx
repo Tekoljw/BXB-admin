@@ -143,6 +143,7 @@ export default function WalletPage() {
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
   const [commissionTab, setCommissionTab] = useState("邀请好友") // 佣金页签状态
+  const [uCardSubTab, setUCardSubTab] = useState("开卡佣金") // U卡佣金子页签: "开卡佣金" | "充值佣金"
   const [showCommissionRuleModal, setShowCommissionRuleModal] = useState(false) // 佣金规则弹窗
   const [showUserListModal, setShowUserListModal] = useState<{type: 'direct' | 'indirect' | 'active', isOpen: boolean}>({type: 'direct', isOpen: false}) // 用户名单弹窗
   const [showSettlementModal, setShowSettlementModal] = useState(false) // 结算弹窗
@@ -5640,53 +5641,219 @@ export default function WalletPage() {
             {/* U卡佣金 */}
             {commissionTab === "U卡佣金" && (
               <div className="space-y-6">
-                {/* U卡佣金卡片 */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <CreditCard className={`h-6 w-6 text-[#14C2A3]`} />
+                {/* U卡佣金快报 - 使用理财账户样式 */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* 今日佣金 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="h-6 w-6 text-[#14C2A3]" />
+                        <h3 className="text-lg font-semibold">今日佣金</h3>
+                      </div>
                     </div>
-                    <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
-                      892.34 <span className="text-lg">USDT</span>
+                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                      892.34
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        USDT
+                      </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      今日U卡佣金
-                    </div>
-                  </div>
-                  
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <Plus className={`h-6 w-6 text-blue-500`} />
-                    </div>
-                    <div className={`text-2xl font-bold text-blue-500 mb-1`}>
-                      156 <span className="text-lg">张</span>
-                    </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      本月开卡数量
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      昨日佣金：756.89 USDT
                     </div>
                   </div>
-                  
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <DollarSign className={`h-6 w-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+
+                  {/* 本月佣金 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <TrendingUp className="h-6 w-6 text-blue-500" />
+                        <h3 className="text-lg font-semibold">本月佣金</h3>
+                      </div>
                     </div>
-                    <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>
-                      48,567.89 <span className="text-lg">USDT</span>
+                    <div className={`text-3xl font-bold text-blue-500`}>
+                      23,567.89
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        USDT
+                      </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      累计U卡佣金
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      上月佣金：19,234.56 USDT
                     </div>
                   </div>
-                  
-                  <div className={`rounded-lg p-6 text-center ${cardStyle}`}>
-                    <div className="flex items-center justify-center mb-3">
-                      <Target className={`h-6 w-6 text-[#14C2A3]`} />
+
+                  {/* 累计佣金 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <DollarSign className="h-6 w-6 text-[#14C2A3]" />
+                        <h3 className="text-lg font-semibold">累计佣金</h3>
+                      </div>
                     </div>
-                    <div className={`text-2xl font-bold text-[#14C2A3] mb-1`}>
-                      2.5<span className="text-lg">%</span>
+                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      148,567.89
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        USDT
+                      </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      U卡佣金比例
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      今年累计：98,234.56 USDT
+                    </div>
+                  </div>
+
+                  {/* 佣金比例 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Target className="h-6 w-6 text-[#14C2A3]" />
+                        <h3 className="text-lg font-semibold">佣金比例</h3>
+                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                      2.5
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        %
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      当前等级：
+                      <span className="text-[#14C2A3] font-semibold ml-1">
+                        超级U卡代理
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
+                      <button
+                        onClick={() => setShowCommissionRuleModal(true)}
+                        className={`${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
+                      >
+                        查看佣金规则
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 佣金和推广数据 - 拆分成单独卡片 */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* U卡用户数 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Users className="h-6 w-6 text-blue-500" />
+                        <h3 className="text-lg font-semibold">U卡用户数</h3>
+                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-blue-500`}>
+                      1,234
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        人
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      本月新增：89 人
+                    </div>
+                    <div className="mt-3">
+                      <button
+                        onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                          isDark 
+                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
+                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
+                        }`}
+                      >
+                        查看名单
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 开卡数量 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <CreditCard className="h-6 w-6 text-purple-500" />
+                        <h3 className="text-lg font-semibold">开卡数量</h3>
+                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-purple-500`}>
+                      567
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        张
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      开卡成功率：95.6%
+                    </div>
+                    <div className="mt-3">
+                      <button
+                        onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                          isDark 
+                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
+                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
+                        }`}
+                      >
+                        查看名单
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 充值金额 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Plus className="h-6 w-6 text-orange-500" />
+                        <h3 className="text-lg font-semibold">充值金额</h3>
+                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-orange-500`}>
+                      2.8M
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        USDT
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      充值活跃率：78.9%
+                    </div>
+                    <div className="mt-3">
+                      <button
+                        onClick={() => setShowUserListModal({type: 'active', isOpen: true})}
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                          isDark 
+                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
+                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
+                        }`}
+                      >
+                        查看名单
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 未结算佣金 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Wallet className="h-6 w-6 text-[#14C2A3]" />
+                        <h3 className="text-lg font-semibold">未结算佣金</h3>
+                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                      234.56
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        USDT
+                      </span>
+                    </div>
+                    <div className={`text-sm text-red-500 mt-2`}>
+                      即将过期：12.34 USDT
+                    </div>
+                    <div className="mt-3">
+                      <button
+                        onClick={() => setShowSettlementModal(true)}
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                          isDark 
+                            ? "bg-black hover:bg-gray-800 text-white" 
+                            : "bg-black hover:bg-gray-800 text-white"
+                        }`}
+                      >
+                        立即结算
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -5696,61 +5863,111 @@ export default function WalletPage() {
                   {["开卡佣金", "充值佣金"].map((tab) => (
                     <div
                       key={tab}
-                      className={`pb-3 cursor-pointer transition-all border-b-2 border-transparent hover:border-gray-300`}
+                      onClick={() => setUCardSubTab(tab)}
+                      className={`pb-3 cursor-pointer transition-all border-b-2 ${
+                        uCardSubTab === tab 
+                          ? 'border-[#14C2A3] text-[#14C2A3]' 
+                          : 'border-transparent hover:border-gray-300'
+                      }`}
                     >
-                      <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      <span className={`text-lg font-bold ${
+                        uCardSubTab === tab 
+                          ? 'text-[#14C2A3]' 
+                          : isDark ? 'text-white' : 'text-gray-900'
+                      }`}>
                         {tab}
                       </span>
                     </div>
                   ))}
                 </div>
 
-                {/* 开卡佣金明细 */}
+                {/* 返佣明细 */}
                 <div className={`rounded-lg p-6 ${cardStyle}`}>
-                  <div className="flex items-center mb-4">
-                    <CreditCard className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                    <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      开卡佣金记录
-                    </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      <FileText className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        返佣明细
+                      </h3>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button className={`px-3 py-1.5 text-sm rounded-lg transition-all ${
+                        isDark 
+                          ? "bg-black hover:bg-gray-800 text-white" 
+                          : "bg-black hover:bg-gray-800 text-white"
+                      }`}>
+                        今日
+                      </button>
+                      <button className={`px-3 py-1.5 text-sm rounded-lg transition-all ${
+                        isDark 
+                          ? "bg-gray-700 hover:bg-gray-600 text-gray-300" 
+                          : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                      }`}>
+                        本周
+                      </button>
+                      <button className={`px-3 py-1.5 text-sm rounded-lg transition-all ${
+                        isDark 
+                          ? "bg-gray-700 hover:bg-gray-600 text-gray-300" 
+                          : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                      }`}>
+                        本月
+                      </button>
+                    </div>
                   </div>
-                  
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>时间</th>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户ID</th>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>卡片类型</th>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>开卡费用</th>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {[
-                          { time: "14:23:45", userId: "U12345678", cardType: "Visa虚拟卡", fee: "15.00", commission: "3.75" },
-                          { time: "13:56:12", userId: "U87654321", cardType: "Mastercard实体卡", fee: "25.00", commission: "6.25" },
-                          { time: "12:34:56", userId: "U11223344", cardType: "Visa虚拟卡", fee: "15.00", commission: "3.75" }
-                        ].map((record, index) => (
-                          <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
-                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.time}</td>
-                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.userId}</td>
-                            <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.cardType}</td>
-                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.fee} USD</td>
-                            <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>{record.commission} USD</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
 
-                {/* 充值佣金明细 */}
-                <div className={`rounded-lg p-6 ${cardStyle}`}>
-                  <div className="flex items-center mb-4">
-                    <Plus className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                    <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      充值佣金记录
-                    </h3>
+                  {/* 搜索和筛选 */}
+                  <div className="flex flex-col md:flex-row gap-4 mb-6">
+                    <div className="flex-1">
+                      <input
+                        type="text"
+                        placeholder={uCardSubTab === "开卡佣金" ? "搜索用户ID或卡片类型..." : "搜索用户ID或币种..."}
+                        className={`w-full px-4 py-2 rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <select className={`px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">推荐类型</option>
+                        <option value="direct">直推</option>
+                        <option value="indirect">间推</option>
+                      </select>
+                      <select className={`px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">{uCardSubTab === "开卡佣金" ? "卡片类型" : "币种类型"}</option>
+                        {uCardSubTab === "开卡佣金" ? (
+                          <>
+                            <option value="virtual">虚拟卡</option>
+                            <option value="physical">实体卡</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="USDT">USDT</option>
+                            <option value="BTC">BTC</option>
+                            <option value="ETH">ETH</option>
+                          </>
+                        )}
+                      </select>
+                      <select className={`px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">状态</option>
+                        <option value="paid">已发放</option>
+                        <option value="pending">处理中</option>
+                        <option value="expired">已过期</option>
+                      </select>
+                    </div>
                   </div>
                   
                   <div className="overflow-x-auto">
@@ -5759,27 +5976,84 @@ export default function WalletPage() {
                         <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>时间</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户ID</th>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>充值币种</th>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>充值金额</th>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>推荐类型</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            {uCardSubTab === "开卡佣金" ? "卡片类型" : "币种"}
+                          </th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            {uCardSubTab === "开卡佣金" ? "开卡费用" : "充值金额"}
+                          </th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金比例</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金金额</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>状态</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        {[
-                          { time: "14:23:45", userId: "U12345678", currency: "USDT", amount: "1,000.00", commission: "25.00" },
-                          { time: "13:56:12", userId: "U87654321", currency: "BTC", amount: "0.05", commission: "15.00" },
-                          { time: "12:34:56", userId: "U11223344", currency: "USDT", amount: "500.00", commission: "12.50" }
+                      <tbody className="space-y-2">
+                        {uCardSubTab === "开卡佣金" ? [
+                          { time: "14:23:45", userId: "U12345678", type: "直推", cardType: "Visa虚拟卡", fee: "15.00", feeRate: "25%", commission: "3.75", status: "已发放" },
+                          { time: "13:56:12", userId: "U87654321", type: "间推", cardType: "Mastercard实体卡", fee: "25.00", feeRate: "25%", commission: "6.25", status: "已发放" },
+                          { time: "12:34:56", userId: "U11223344", type: "直推", cardType: "Visa虚拟卡", fee: "15.00", feeRate: "25%", commission: "3.75", status: "处理中" },
+                          { time: "11:23:44", userId: "U99887766", type: "间推", cardType: "Mastercard虚拟卡", fee: "15.00", feeRate: "20%", commission: "3.00", status: "已发放" },
+                          { time: "10:12:33", userId: "U55443322", type: "直推", cardType: "Visa实体卡", fee: "25.00", feeRate: "25%", commission: "6.25", status: "已发放" }
+                        ] : [
+                          { time: "14:23:45", userId: "U12345678", type: "直推", currency: "USDT", amount: "1,000.00", feeRate: "2.5%", commission: "25.00", status: "已发放" },
+                          { time: "13:56:12", userId: "U87654321", type: "间推", currency: "BTC", amount: "0.05", feeRate: "2.0%", commission: "15.00", status: "已发放" },
+                          { time: "12:34:56", userId: "U11223344", type: "直推", currency: "USDT", amount: "500.00", feeRate: "2.5%", commission: "12.50", status: "处理中" },
+                          { time: "11:12:33", userId: "U99887766", type: "间推", currency: "ETH", amount: "2.5", feeRate: "2.0%", commission: "18.50", status: "已发放" },
+                          { time: "10:45:21", userId: "U55443322", type: "直推", currency: "USDT", amount: "2,000.00", feeRate: "2.5%", commission: "50.00", status: "已发放" }
                         ].map((record, index) => (
                           <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
-                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.time}</td>
-                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.userId}</td>
-                            <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.currency}</td>
-                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.amount}</td>
-                            <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>{record.commission} USDT</td>
+                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.time}
+                            </td>
+                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.userId}
+                            </td>
+                            <td className={`py-3 px-2 text-sm`}>
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                record.type === "直推" 
+                                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                  : "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                              }`}>
+                                {record.type}
+                              </span>
+                            </td>
+                            <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              {uCardSubTab === "开卡佣金" ? record.cardType : record.currency}
+                            </td>
+                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {uCardSubTab === "开卡佣金" ? `${record.fee} USD` : `${record.amount} ${record.currency}`}
+                            </td>
+                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.feeRate}
+                            </td>
+                            <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>
+                              {record.commission} {uCardSubTab === "开卡佣金" ? "USD" : "USDT"}
+                            </td>
+                            <td className={`py-3 px-2 text-sm`}>
+                              <span className={`px-2 py-1 rounded-full text-xs ${
+                                record.status === "已发放" 
+                                  ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
+                                  : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                              }`}>
+                                {record.status}
+                              </span>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* 加载更多按钮 */}
+                  <div className="flex justify-center mt-6">
+                    <button className={`px-6 py-2 rounded-lg font-medium transition-all border ${
+                      isDark 
+                        ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
+                        : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
+                    }`}>
+                      加载更多
+                    </button>
                   </div>
                 </div>
               </div>
