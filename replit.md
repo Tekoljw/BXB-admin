@@ -342,6 +342,11 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Implemented specialized transaction tables for each type with relevant columns and data structures
   - U卡佣金 includes sub-tabs for "开卡佣金" and "充值佣金" with separate tracking systems
   - All commission types maintain consistent styling, data formatting, and status indicators
+- January 30, 2025. Enhanced wealth commission layout to match contract commission:
+  - Updated 理财佣金 from 4-card layout to full 8-card layout matching 合约佣金 template
+  - Added detailed commission tracking cards: 理财客户数, 活跃产品数, 投资总额, 未结算佣金
+  - Integrated user list management buttons and settlement functionality for wealth commission
+  - Applied consistent left-aligned card layout with proper button styling and data presentation
 
 ## User Preferences
 
