@@ -5829,6 +5829,53 @@ export default function WalletPage() {
                             </svg>
                           </div>
                         </div>
+
+                        {/* 步骤5 */}
+                        <div className="space-y-4">
+                          <div className="flex items-start gap-4">
+                            <div className="flex-shrink-0">
+                              <span className="px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full">
+                                第五步
+                              </span>
+                            </div>
+                            <div className="flex-1">
+                              <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                无限层级佣金
+                              </h5>
+                              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-3`}>
+                                好友邀请的好友，好友的好友再邀请用户，永远都是你的推广用户，无限赚取佣金。
+                              </p>
+                              <div className="flex flex-wrap gap-1">
+                                <span className={`px-4 py-2 text-sm font-bold rounded border ${
+                                  isDark 
+                                    ? 'border-green-400 text-green-400 bg-green-400/10' 
+                                    : 'border-green-500 text-green-500 bg-green-500/10'
+                                }`}>
+                                  永久收益
+                                </span>
+                                <span className={`px-4 py-2 text-sm font-bold rounded border ${
+                                  isDark 
+                                    ? 'border-purple-400 text-purple-400 bg-purple-400/10' 
+                                    : 'border-purple-500 text-purple-500 bg-purple-500/10'
+                                }`}>
+                                  无限层级
+                                </span>
+                                <span className={`px-4 py-2 text-sm font-bold rounded border ${
+                                  isDark 
+                                    ? 'border-orange-400 text-orange-400 bg-orange-400/10' 
+                                    : 'border-orange-500 text-orange-500 bg-orange-500/10'
+                                }`}>
+                                  自动分佣
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

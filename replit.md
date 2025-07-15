@@ -262,6 +262,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Updated domain references from "bedao.com" to "bxb.com"
   - Changed loading screens, web3 components, and product names to BXB branding
   - Maintained consistent branding across all navigation, wallet, mall, and profile pages
+- January 30, 2025. Enhanced promotion method 1 with infinite commission system:
+  - Expanded promotion method 1 from 4 steps to 5 steps
+  - Added step 5: "无限层级佣金" (Infinite Level Commission)
+  - Implemented perpetual commission structure where friends of friends become permanent referrals
+  - Added feature tags: "永久收益" (Permanent Income), "无限层级" (Infinite Levels), "自动分佣" (Auto Commission)
+  - Used red color scheme for step 5 badge to distinguish from other steps
+  - Maintained consistent design pattern with visual icons and detailed descriptions
 
 ## User Preferences
 
