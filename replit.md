@@ -269,6 +269,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Added feature tags: "永久收益" (Permanent Income), "无限层级" (Infinite Levels), "自动分佣" (Auto Commission)
   - Used red color scheme for step 5 badge to distinguish from other steps
   - Maintained consistent design pattern with visual icons and detailed descriptions
+- January 30, 2025. Updated promotion method 1 step 2 with official Telegram channel integration:
+  - Changed step 2 from generic "拉好友进群" to "邀请好友加入BXB官方频道"
+  - Added detailed description about joining BXB's official Telegram channel/group for latest updates and communication
+  - Integrated official Telegram channel link: https://t.me/bxb_official
+  - Added styled link card with Telegram icon, channel name, and copy button functionality
+  - Used blue color scheme consistent with Telegram branding
 
 ## User Preferences
 
