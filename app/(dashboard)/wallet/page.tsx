@@ -145,6 +145,7 @@ export default function WalletPage() {
   const [commissionTab, setCommissionTab] = useState("邀请好友") // 佣金页签状态
   const [showCommissionRuleModal, setShowCommissionRuleModal] = useState(false) // 佣金规则弹窗
   const [showUserListModal, setShowUserListModal] = useState<{type: 'direct' | 'indirect' | 'active', isOpen: boolean}>({type: 'direct', isOpen: false}) // 用户名单弹窗
+  const [showSettlementModal, setShowSettlementModal] = useState(false) // 结算弹窗
   
   // API文档和生成密钥弹窗状态
   const [showApiDocsModal, setShowApiDocsModal] = useState(false) // API文档选择弹窗
@@ -5063,8 +5064,15 @@ export default function WalletPage() {
                         USDT
                       </span>
                     </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      上月未结：156.78 USDT
+                    </div>
+                    <div className="text-xs text-red-500 mt-1">
+                      即将过期金额：45.30 USDT
+                    </div>
                     <div className="mt-3">
                       <button
+                        onClick={() => setShowSettlementModal(true)}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
@@ -17453,6 +17461,123 @@ export default function WalletPage() {
                   }`}
                 >
                   加载更多
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 结算弹窗 */}
+      {showSettlementModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`rounded-lg shadow-xl w-full max-w-md ${
+            isDark ? 'bg-gray-800' : 'bg-white'
+          }`}>
+            <div className={`p-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="flex items-center justify-between">
+                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  佣金结算
+                </h3>
+                <button
+                  onClick={() => setShowSettlementModal(false)}
+                  className={`p-2 rounded-lg hover:bg-gray-100 ${isDark ? 'hover:bg-gray-700' : ''} transition-colors`}
+                >
+                  <X className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6">
+              <div className="space-y-4">
+                {/* 结算金额 */}
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      未结算佣金
+                    </span>
+                    <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      1,234.56 USDT
+                    </span>
+                  </div>
+                  
+                  <div className="flex justify-between items-center mb-2">
+                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      结算手续费 (0.5%)
+                    </span>
+                    <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      -6.17 USDT
+                    </span>
+                  </div>
+                  
+                  <div className={`border-t pt-2 mt-2 ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
+                    <div className="flex justify-between items-center">
+                      <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        实际到账金额
+                      </span>
+                      <span className="font-bold text-[#14C2A3] text-lg">
+                        1,228.39 USDT
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 到账说明 */}
+                <div className={`p-3 rounded-lg ${isDark ? 'bg-blue-900/20' : 'bg-blue-50'}`}>
+                  <div className="flex items-start space-x-2">
+                    <div className={`w-4 h-4 rounded-full bg-blue-500 flex-shrink-0 mt-0.5`}></div>
+                    <div>
+                      <p className={`text-sm ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                        结算说明
+                      </p>
+                      <p className={`text-xs ${isDark ? 'text-blue-400' : 'text-blue-600'} mt-1`}>
+                        结算后，资金将自动进入您的现货账户，通常在1-3分钟内到账
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 即将过期提醒 */}
+                <div className={`p-3 rounded-lg ${isDark ? 'bg-red-900/20' : 'bg-red-50'}`}>
+                  <div className="flex items-start space-x-2">
+                    <div className={`w-4 h-4 rounded-full bg-red-500 flex-shrink-0 mt-0.5`}></div>
+                    <div>
+                      <p className={`text-sm ${isDark ? 'text-red-300' : 'text-red-700'}`}>
+                        过期提醒
+                      </p>
+                      <p className={`text-xs ${isDark ? 'text-red-400' : 'text-red-600'} mt-1`}>
+                        45.30 USDT 佣金将在3天后过期，建议尽快结算
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* 按钮组 */}
+              <div className="flex space-x-3 mt-6">
+                <button
+                  onClick={() => setShowSettlementModal(false)}
+                  className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all border ${
+                    isDark 
+                      ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300" 
+                      : "border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700"
+                  }`}
+                >
+                  取消
+                </button>
+                <button
+                  onClick={() => {
+                    // 这里处理结算逻辑
+                    alert('结算成功！资金已转入现货账户')
+                    setShowSettlementModal(false)
+                  }}
+                  className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                    isDark 
+                      ? "bg-[#14C2A3] hover:bg-[#0ea888] text-white" 
+                      : "bg-[#14C2A3] hover:bg-[#0ea888] text-white"
+                  }`}
+                >
+                  确认结算
                 </button>
               </div>
             </div>

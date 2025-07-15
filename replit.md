@@ -320,6 +320,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Changed all "查看名单" buttons to uniform black border transparent style
   - Ensured visual alignment between "立即结算" and "查看名单" buttons
   - Maintained consistent hover effects across all commission card buttons
+- January 30, 2025. Implemented commission settlement system:
+  - Added red warning text for expiring commission amounts in unsettled commission card
+  - Created comprehensive settlement modal with fee calculation and account destination
+  - Displayed settlement fees (0.5%) and actual amount to be credited to spot account
+  - Added expiration reminders and settlement instructions with 1-3 minute processing time
+  - Integrated settlement confirmation flow with automatic fund transfer to spot account
 
 ## User Preferences
 
