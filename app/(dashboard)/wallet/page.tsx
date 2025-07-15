@@ -5068,8 +5068,8 @@ export default function WalletPage() {
                         USDT
                       </span>
                     </div>
-                    <div className="text-xs text-red-500 mt-2">
-                      即将过期金额：45.30 USDT
+                    <div className={`text-sm text-red-500 mt-2`}>
+                      即将过期：45.30 USDT
                     </div>
                     <div className="mt-3">
                       <button

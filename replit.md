@@ -333,6 +333,9 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Updated table structure to display registration country and city instead of referral time
   - Enhanced user data with international location information (China, US, Singapore, Japan, Korea, UK, Canada)
   - Integrated dynamic filtering logic with real-time search and multi-criteria selection
+- January 30, 2025. Refined commission expiration warning display:
+  - Changed "即将过期金额" to "即将过期" for cleaner text presentation
+  - Increased font size from text-xs to text-sm to match activity rate display consistency
 
 ## User Preferences
 
