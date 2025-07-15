@@ -4978,8 +4978,8 @@ export default function WalletPage() {
                         onClick={() => setShowUserListModal({ type: 'direct', isOpen: true })}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
-                            ? "border-blue-500 bg-transparent hover:bg-blue-500 text-blue-500 hover:text-white" 
-                            : "border-blue-500 bg-transparent hover:bg-blue-500 text-blue-500 hover:text-white"
+                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
+                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
                         }`}
                       >
                         查看名单
@@ -5009,8 +5009,8 @@ export default function WalletPage() {
                         onClick={() => setShowUserListModal({ type: 'indirect', isOpen: true })}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
-                            ? "border-purple-500 bg-transparent hover:bg-purple-500 text-purple-500 hover:text-white" 
-                            : "border-purple-500 bg-transparent hover:bg-purple-500 text-purple-500 hover:text-white"
+                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
+                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
                         }`}
                       >
                         查看名单
@@ -5040,8 +5040,8 @@ export default function WalletPage() {
                         onClick={() => setShowUserListModal({ type: 'active', isOpen: true })}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
-                            ? "border-orange-500 bg-transparent hover:bg-orange-500 text-orange-500 hover:text-white" 
-                            : "border-orange-500 bg-transparent hover:bg-orange-500 text-orange-500 hover:text-white"
+                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
+                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
                         }`}
                       >
                         查看名单
