@@ -57,6 +57,7 @@ import {
   MessageCircle,
   Users,
   UserPlus,
+  Activity,
   ExternalLink,
   Receipt,
   Target,
@@ -4952,13 +4953,28 @@ export default function WalletPage() {
                   </div>
                 </div>
 
-                {/* 佣金领取和推广人数 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* 佣金领取 */}
-                  <div className={`rounded-lg p-6 ${cardStyle}`}>
-                    <div className="flex items-center justify-end mb-4">
+                {/* 佣金和推广数据 - 拆分成单独卡片 */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* 可领取佣金 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Wallet className="h-6 w-6 text-[#14C2A3]" />
+                        <h3 className="text-lg font-semibold">可领取佣金</h3>
+                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                      1,234.56
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        USDT
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      下次结算：2025-01-31
+                    </div>
+                    <div className="mt-3">
                       <button
-                        className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
                           isDark 
                             ? "bg-[#14C2A3] hover:bg-[#10a088] text-white" 
                             : "bg-[#14C2A3] hover:bg-[#10a088] text-white"
@@ -4967,61 +4983,62 @@ export default function WalletPage() {
                         立即领取
                       </button>
                     </div>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          可领取佣金
-                        </span>
-                        <span className={`text-lg font-bold text-[#14C2A3]`}>
-                          1,234.56 USDT
-                        </span>
+                  </div>
+
+                  {/* 直推人数 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Users className="h-6 w-6 text-blue-500" />
+                        <h3 className="text-lg font-semibold">直推人数</h3>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          已领取佣金
-                        </span>
-                        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                          423,444.34 USDT
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          下次结算时间
-                        </span>
-                        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                          2025-01-31 12:00
-                        </span>
-                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-blue-500`}>
+                      1,256
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        人
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      本月新增：89人
                     </div>
                   </div>
 
-                  {/* 推广人数 */}
-                  <div className={`rounded-lg p-6 ${cardStyle}`}>
-                    <div className="space-y-3 mt-8">
-                      <div className="flex justify-between items-center">
-                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          直推人数
-                        </span>
-                        <span className={`text-lg font-bold text-blue-500`}>
-                          1,256 人
-                        </span>
+                  {/* 间推人数 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <UserPlus className="h-6 w-6 text-purple-500" />
+                        <h3 className="text-lg font-semibold">间推人数</h3>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          间推人数
-                        </span>
-                        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                          3,847 人
-                        </span>
+                    </div>
+                    <div className={`text-3xl font-bold text-purple-500`}>
+                      3,847
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        人
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      本月新增：234人
+                    </div>
+                  </div>
+
+                  {/* 活跃用户 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Activity className="h-6 w-6 text-orange-500" />
+                        <h3 className="text-lg font-semibold">活跃用户</h3>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                          活跃用户
-                        </span>
-                        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                          982 人
-                        </span>
-                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-orange-500`}>
+                      982
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        人
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      活跃率：78.2%
                     </div>
                   </div>
                 </div>
