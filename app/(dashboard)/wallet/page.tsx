@@ -144,6 +144,7 @@ export default function WalletPage() {
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
   const [commissionTab, setCommissionTab] = useState("邀请好友") // 佣金页签状态
   const [showCommissionRuleModal, setShowCommissionRuleModal] = useState(false) // 佣金规则弹窗
+  const [showUserListModal, setShowUserListModal] = useState<{type: 'direct' | 'indirect' | 'active', isOpen: boolean}>({type: 'direct', isOpen: false}) // 用户名单弹窗
   
   // API文档和生成密钥弹窗状态
   const [showApiDocsModal, setShowApiDocsModal] = useState(false) // API文档选择弹窗
@@ -4972,6 +4973,18 @@ export default function WalletPage() {
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：89人
                     </div>
+                    <div className="mt-3">
+                      <button
+                        onClick={() => setShowUserListModal({ type: 'direct', isOpen: true })}
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                          isDark 
+                            ? "border-blue-500 bg-transparent hover:bg-blue-500 text-blue-500 hover:text-white" 
+                            : "border-blue-500 bg-transparent hover:bg-blue-500 text-blue-500 hover:text-white"
+                        }`}
+                      >
+                        查看名单
+                      </button>
+                    </div>
                   </div>
 
                   {/* 间推人数 */}
@@ -4990,6 +5003,18 @@ export default function WalletPage() {
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：234人
+                    </div>
+                    <div className="mt-3">
+                      <button
+                        onClick={() => setShowUserListModal({ type: 'indirect', isOpen: true })}
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                          isDark 
+                            ? "border-purple-500 bg-transparent hover:bg-purple-500 text-purple-500 hover:text-white" 
+                            : "border-purple-500 bg-transparent hover:bg-purple-500 text-purple-500 hover:text-white"
+                        }`}
+                      >
+                        查看名单
+                      </button>
                     </div>
                   </div>
 
@@ -5010,6 +5035,18 @@ export default function WalletPage() {
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       活跃率：78.2%
                     </div>
+                    <div className="mt-3">
+                      <button
+                        onClick={() => setShowUserListModal({ type: 'active', isOpen: true })}
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                          isDark 
+                            ? "border-orange-500 bg-transparent hover:bg-orange-500 text-orange-500 hover:text-white" 
+                            : "border-orange-500 bg-transparent hover:bg-orange-500 text-orange-500 hover:text-white"
+                        }`}
+                      >
+                        查看名单
+                      </button>
+                    </div>
                   </div>
 
                   {/* 未结算佣金 */}
@@ -5028,10 +5065,10 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border-2 ${
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
                           isDark 
-                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
-                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
+                            ? "bg-black hover:bg-gray-800 text-white" 
+                            : "bg-black hover:bg-gray-800 text-white"
                         }`}
                       >
                         立即结算
@@ -17299,6 +17336,126 @@ export default function WalletPage() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* 用户名单弹窗 */}
+      {showUserListModal.isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`rounded-lg shadow-xl w-full max-w-4xl max-h-[80vh] overflow-hidden ${
+            isDark ? 'bg-gray-800' : 'bg-white'
+          }`}>
+            <div className={`p-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="flex items-center justify-between">
+                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {showUserListModal.type === 'direct' ? '直推用户名单' : 
+                   showUserListModal.type === 'indirect' ? '间推用户名单' : '活跃用户名单'}
+                </h3>
+                <button
+                  onClick={() => setShowUserListModal({...showUserListModal, isOpen: false})}
+                  className={`p-2 rounded-lg hover:bg-gray-100 ${isDark ? 'hover:bg-gray-700' : ''} transition-colors`}
+                >
+                  <X className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                      <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        用户ID
+                      </th>
+                      <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        用户名
+                      </th>
+                      <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        注册时间
+                      </th>
+                      <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {showUserListModal.type === 'active' ? '最后活跃' : '推荐时间'}
+                      </th>
+                      <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        状态
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(() => {
+                      const getUserData = () => {
+                        if (showUserListModal.type === 'direct') {
+                          return [
+                            { userId: "U12345678", username: "crypto_trader1", registerTime: "2024-01-15 10:30", referTime: "2024-01-15 14:20", status: "活跃" },
+                            { userId: "U87654321", username: "bitcoin_holder", registerTime: "2024-02-20 09:15", referTime: "2024-02-20 11:45", status: "活跃" },
+                            { userId: "U11223344", username: "eth_investor", registerTime: "2024-03-10 16:20", referTime: "2024-03-10 18:30", status: "休眠" },
+                            { userId: "U99887766", username: "defi_user", registerTime: "2024-04-05 12:10", referTime: "2024-04-05 15:25", status: "活跃" },
+                            { userId: "U55443322", username: "nft_collector", registerTime: "2024-05-12 08:45", referTime: "2024-05-12 10:15", status: "活跃" }
+                          ]
+                        } else if (showUserListModal.type === 'indirect') {
+                          return [
+                            { userId: "U22334455", username: "altcoin_fan", registerTime: "2024-02-01 14:20", referTime: "2024-02-01 16:30", status: "活跃" },
+                            { userId: "U66778899", username: "yield_farmer", registerTime: "2024-02-15 11:10", referTime: "2024-02-15 13:45", status: "休眠" },
+                            { userId: "U44556677", username: "dao_member", registerTime: "2024-03-05 09:30", referTime: "2024-03-05 12:20", status: "活跃" },
+                            { userId: "U77889900", username: "staking_pro", registerTime: "2024-03-20 15:45", referTime: "2024-03-20 17:15", status: "活跃" }
+                          ]
+                        } else {
+                          return [
+                            { userId: "U12345678", username: "crypto_trader1", registerTime: "2024-01-15 10:30", referTime: "2024-07-15 09:20", status: "在线" },
+                            { userId: "U87654321", username: "bitcoin_holder", registerTime: "2024-02-20 09:15", referTime: "2024-07-15 08:45", status: "在线" },
+                            { userId: "U22334455", username: "altcoin_fan", registerTime: "2024-02-01 14:20", referTime: "2024-07-14 22:30", status: "离线" },
+                            { userId: "U99887766", username: "defi_user", registerTime: "2024-04-05 12:10", referTime: "2024-07-15 07:15", status: "在线" }
+                          ]
+                        }
+                      }
+                      
+                      return getUserData().map((user, index) => (
+                        <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
+                          <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                            {user.userId}
+                          </td>
+                          <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            {user.username}
+                          </td>
+                          <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                            {user.registerTime}
+                          </td>
+                          <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                            {user.referTime}
+                          </td>
+                          <td className={`py-3 px-2 text-sm`}>
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              user.status === "活跃" || user.status === "在线"
+                                ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                                : user.status === "休眠" || user.status === "离线"
+                                ? "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                                : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                            }`}>
+                              {user.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    })()}
+                  </tbody>
+                </table>
+              </div>
+              
+              {/* 加载更多按钮 */}
+              <div className="mt-6 text-center">
+                <button
+                  className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                    isDark 
+                      ? "bg-gray-700 hover:bg-gray-600 text-gray-300" 
+                      : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                  }`}
+                >
+                  加载更多
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

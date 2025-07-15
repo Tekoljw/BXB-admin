@@ -310,6 +310,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Changed "立即领取" button to "立即结算" with transparent black border styling
   - Modified button design from solid black to black frame transparent with hover effects
   - Added "加载更多" button to commission details table for pagination functionality
+- January 30, 2025. Added comprehensive user list management system:
+  - Added "查看名单" buttons to direct referral, indirect referral, and active user cards
+  - Created modal popup displaying user lists with registration time and referral tracking
+  - Implemented color-coded border buttons matching each card's theme (blue/purple/orange)
+  - Built detailed user information table with user ID, username, registration time, and status
+  - Reverted settlement button to solid black styling for better visual emphasis
 
 ## User Preferences
 
