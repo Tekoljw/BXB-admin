@@ -6004,10 +6004,10 @@ export default function WalletPage() {
                         ].map((record: any, index) => (
                           <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {record.time}
+                              {String(record.time || '')}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {record.userId}
+                              {String(record.userId || '')}
                             </td>
                             <td className={`py-3 px-2 text-sm`}>
                               <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -6015,20 +6015,20 @@ export default function WalletPage() {
                                   ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
                                   : "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                               }`}>
-                                {record.type}
+                                {String(record.type || '')}
                               </span>
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {uCardSubTab === "开卡佣金" ? record.cardType : record.currency}
+                              {uCardSubTab === "开卡佣金" ? String(record.cardType || '') : String(record.currency || '')}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {uCardSubTab === "开卡佣金" ? `${record.fee} USD` : `${record.amount} ${record.currency}`}
+                              {uCardSubTab === "开卡佣金" ? `${String(record.fee || '')} USD` : `${String(record.amount || '')} ${String(record.currency || '')}`}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {record.feeRate}
+                              {String(record.feeRate || '')}
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>
-                              {record.commission} {uCardSubTab === "开卡佣金" ? "USD" : "USDT"}
+                              {String(record.commission || '')} {uCardSubTab === "开卡佣金" ? "USD" : "USDT"}
                             </td>
                             <td className={`py-3 px-2 text-sm`}>
                               <span className={`px-2 py-1 rounded-full text-xs ${
@@ -6036,7 +6036,7 @@ export default function WalletPage() {
                                   ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
                                   : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
                               }`}>
-                                {record.status}
+                                {String(record.status || '')}
                               </span>
                             </td>
                           </tr>
