@@ -5639,9 +5639,10 @@ export default function WalletPage() {
             )}
 
             {/* U卡佣金 */}
+            {/* U卡佣金 */}
             {commissionTab === "U卡佣金" && (
               <div className="space-y-6">
-                {/* U卡佣金快报 - 使用理财账户样式 */}
+                {/* U卡佣金快报 - 8卡片布局 */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                   {/* 今日佣金 */}
                   <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
@@ -5652,13 +5653,13 @@ export default function WalletPage() {
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-[#14C2A3]`}>
-                      892.34
+                      567.89
                       <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                         USDT
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      昨日佣金：756.89 USDT
+                      昨日佣金：432.10 USDT
                     </div>
                   </div>
 
@@ -5671,13 +5672,13 @@ export default function WalletPage() {
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-blue-500`}>
-                      23,567.89
+                      15,234.67
                       <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                         USDT
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      上月佣金：19,234.56 USDT
+                      上月佣金：12,890.45 USDT
                     </div>
                   </div>
 
@@ -5690,13 +5691,13 @@ export default function WalletPage() {
                       </div>
                     </div>
                     <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      148,567.89
+                      89,456.78
                       <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                         USDT
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      今年累计：98,234.56 USDT
+                      今年累计：56,789.12 USDT
                     </div>
                   </div>
 
@@ -5709,7 +5710,7 @@ export default function WalletPage() {
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-[#14C2A3]`}>
-                      2.5
+                      5.5
                       <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                         %
                       </span>
@@ -5717,46 +5718,71 @@ export default function WalletPage() {
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       当前等级：
                       <span className="text-[#14C2A3] font-semibold ml-1">
-                        超级U卡代理
+                        高级U卡代理
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
                       <button
-                        onClick={() => setShowCommissionRuleModal(true)}
-                        className={`${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
+                        className={`text-[#14C2A3] hover:underline`}
                       >
                         查看佣金规则
                       </button>
                     </div>
                   </div>
-                </div>
 
-                {/* 佣金和推广数据 - 拆分成单独卡片 */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                  {/* U卡用户数 */}
+                  {/* 直推U卡用户 */}
                   <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <Users className="h-6 w-6 text-blue-500" />
-                        <h3 className="text-lg font-semibold">U卡用户数</h3>
+                        <h3 className="text-lg font-semibold">直推U卡用户</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-blue-500`}>
-                      1,234
+                      156
                       <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                         人
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      本月新增：89 人
+                      本月新增：23 人
                     </div>
                     <div className="mt-3">
                       <button
-                        onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
-                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
-                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
+                            ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
+                            : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
+                        }`}
+                      >
+                        查看名单
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 间推U卡用户 */}
+                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <UserPlus className="h-6 w-6 text-purple-500" />
+                        <h3 className="text-lg font-semibold">间推U卡用户</h3>
+                      </div>
+                    </div>
+                    <div className={`text-3xl font-bold text-purple-500`}>
+                      89
+                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                        人
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                      本月新增：12 人
+                    </div>
+                    <div className="mt-3">
+                      <button
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                          isDark 
+                            ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
+                            : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
                         }`}
                       >
                         查看名单
@@ -5768,57 +5794,25 @@ export default function WalletPage() {
                   <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
-                        <CreditCard className="h-6 w-6 text-purple-500" />
+                        <CreditCard className="h-6 w-6 text-orange-500" />
                         <h3 className="text-lg font-semibold">开卡数量</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-purple-500`}>
-                      567
+                    <div className={`text-3xl font-bold text-orange-500`}>
+                      342
                       <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                         张
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      开卡成功率：95.6%
+                      本月开卡：45 张
                     </div>
                     <div className="mt-3">
                       <button
-                        onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
-                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
-                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
-                        }`}
-                      >
-                        查看名单
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* 充值金额 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Plus className="h-6 w-6 text-orange-500" />
-                        <h3 className="text-lg font-semibold">充值金额</h3>
-                      </div>
-                    </div>
-                    <div className={`text-3xl font-bold text-orange-500`}>
-                      2.8M
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
-                        USDT
-                      </span>
-                    </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      充值活跃率：78.9%
-                    </div>
-                    <div className="mt-3">
-                      <button
-                        onClick={() => setShowUserListModal({type: 'active', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
-                          isDark 
-                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
-                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
+                            ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
+                            : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
                         }`}
                       >
                         查看名单
@@ -5858,36 +5852,13 @@ export default function WalletPage() {
                   </div>
                 </div>
 
-                {/* U卡佣金类型页签 */}
-                <div className="flex space-x-6 border-b border-gray-200 dark:border-gray-700">
-                  {["开卡佣金", "充值佣金"].map((tab) => (
-                    <div
-                      key={tab}
-                      onClick={() => setUCardSubTab(tab)}
-                      className={`pb-3 cursor-pointer transition-all border-b-2 ${
-                        uCardSubTab === tab 
-                          ? 'border-[#14C2A3] text-[#14C2A3]' 
-                          : 'border-transparent hover:border-gray-300'
-                      }`}
-                    >
-                      <span className={`text-lg font-bold ${
-                        uCardSubTab === tab 
-                          ? 'text-[#14C2A3]' 
-                          : isDark ? 'text-white' : 'text-gray-900'
-                      }`}>
-                        {tab}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* 返佣明细 */}
+                {/* 佣金明细 */}
                 <div className={`rounded-lg p-6 ${cardStyle}`}>
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
                       <FileText className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
                       <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        返佣明细
+                        佣金明细
                       </h3>
                     </div>
                     <div className="flex space-x-2">
@@ -5920,7 +5891,7 @@ export default function WalletPage() {
                     <div className="flex-1">
                       <input
                         type="text"
-                        placeholder={uCardSubTab === "开卡佣金" ? "搜索用户ID或卡片类型..." : "搜索用户ID或币种..."}
+                        placeholder="搜索用户ID或产品名称..."
                         className={`w-full px-4 py-2 rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
@@ -5943,19 +5914,10 @@ export default function WalletPage() {
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
                       } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">{uCardSubTab === "开卡佣金" ? "卡片类型" : "币种类型"}</option>
-                        {uCardSubTab === "开卡佣金" ? (
-                          <>
-                            <option value="virtual">虚拟卡</option>
-                            <option value="physical">实体卡</option>
-                          </>
-                        ) : (
-                          <>
-                            <option value="USDT">USDT</option>
-                            <option value="BTC">BTC</option>
-                            <option value="ETH">ETH</option>
-                          </>
-                        )}
+                        <option value="">产品类型</option>
+                        <option value="virtual">虚拟卡</option>
+                        <option value="physical">实体卡</option>
+                        <option value="recharge">卡片充值</option>
                       </select>
                       <select className={`px-4 py-2 rounded-lg border ${
                         isDark 
@@ -5977,37 +5939,27 @@ export default function WalletPage() {
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>时间</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户ID</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>推荐类型</th>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                            {uCardSubTab === "开卡佣金" ? "卡片类型" : "币种"}
-                          </th>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                            {uCardSubTab === "开卡佣金" ? "开卡费用" : "充值金额"}
-                          </th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>产品类型</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>交易金额</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金比例</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金金额</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>状态</th>
                         </tr>
                       </thead>
                       <tbody className="space-y-2">
-                        {uCardSubTab === "开卡佣金" ? [
-                          { time: "14:23:45", userId: "U12345678", type: "直推", cardType: "Visa虚拟卡", fee: "15.00", feeRate: "25%", commission: "3.75", status: "已发放" },
-                          { time: "13:56:12", userId: "U87654321", type: "间推", cardType: "Mastercard实体卡", fee: "25.00", feeRate: "25%", commission: "6.25", status: "已发放" },
-                          { time: "12:34:56", userId: "U11223344", type: "直推", cardType: "Visa虚拟卡", fee: "15.00", feeRate: "25%", commission: "3.75", status: "处理中" },
-                          { time: "11:23:44", userId: "U99887766", type: "间推", cardType: "Mastercard虚拟卡", fee: "15.00", feeRate: "20%", commission: "3.00", status: "已发放" },
-                          { time: "10:12:33", userId: "U55443322", type: "直推", cardType: "Visa实体卡", fee: "25.00", feeRate: "25%", commission: "6.25", status: "已发放" }
-                        ] : [
-                          { time: "14:23:45", userId: "U12345678", type: "直推", currency: "USDT", amount: "1,000.00", feeRate: "2.5%", commission: "25.00", status: "已发放" },
-                          { time: "13:56:12", userId: "U87654321", type: "间推", currency: "BTC", amount: "0.05", feeRate: "2.0%", commission: "15.00", status: "已发放" },
-                          { time: "12:34:56", userId: "U11223344", type: "直推", currency: "USDT", amount: "500.00", feeRate: "2.5%", commission: "12.50", status: "处理中" },
-                          { time: "11:12:33", userId: "U99887766", type: "间推", currency: "ETH", amount: "2.5", feeRate: "2.0%", commission: "18.50", status: "已发放" },
-                          { time: "10:45:21", userId: "U55443322", type: "直推", currency: "USDT", amount: "2,000.00", feeRate: "2.5%", commission: "50.00", status: "已发放" }
-                        ].map((record: any, index) => (
+                        {[
+                          { time: "14:23:45", userId: "U12345678", type: "直推", productType: "Visa虚拟卡", amount: "15.00", feeRate: "25%", commission: "3.75", status: "已发放" },
+                          { time: "13:56:12", userId: "U87654321", type: "间推", productType: "Mastercard实体卡", amount: "25.00", feeRate: "25%", commission: "6.25", status: "已发放" },
+                          { time: "12:34:56", userId: "U11223344", type: "直推", productType: "USDT充值", amount: "500.00", feeRate: "2.5%", commission: "12.50", status: "处理中" },
+                          { time: "11:23:44", userId: "U99887766", type: "间推", productType: "Visa虚拟卡", amount: "15.00", feeRate: "20%", commission: "3.00", status: "已发放" },
+                          { time: "10:12:33", userId: "U55443322", type: "直推", productType: "BTC充值", amount: "0.05", feeRate: "2.0%", commission: "15.00", status: "已发放" }
+                        ].map((record, index) => (
                           <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {String(record.time || '')}
+                              {record.time}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {String(record.userId || '')}
+                              {record.userId}
                             </td>
                             <td className={`py-3 px-2 text-sm`}>
                               <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -6015,20 +5967,20 @@ export default function WalletPage() {
                                   ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
                                   : "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                               }`}>
-                                {String(record.type || '')}
+                                {record.type}
                               </span>
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {uCardSubTab === "开卡佣金" ? String(record.cardType || '') : String(record.currency || '')}
+                              {record.productType}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {uCardSubTab === "开卡佣金" ? `${String(record.fee || '')} USD` : `${String(record.amount || '')} ${String(record.currency || '')}`}
+                              {record.productType.includes('充值') ? `${record.amount} ${record.productType.replace('充值', '')}` : `${record.amount} USD`}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {String(record.feeRate || '')}
+                              {record.feeRate}
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>
-                              {String(record.commission || '')} {uCardSubTab === "开卡佣金" ? "USD" : "USDT"}
+                              {record.commission} {record.productType.includes('充值') ? "USDT" : "USD"}
                             </td>
                             <td className={`py-3 px-2 text-sm`}>
                               <span className={`px-2 py-1 rounded-full text-xs ${
@@ -6036,7 +5988,7 @@ export default function WalletPage() {
                                   ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
                                   : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
                               }`}>
-                                {String(record.status || '')}
+                                {record.status}
                               </span>
                             </td>
                           </tr>
@@ -6058,8 +6010,6 @@ export default function WalletPage() {
                 </div>
               </div>
             )}
-
-            {/* 担保佣金 */}
             {commissionTab === "担保佣金" && (
               <div className="space-y-6">
                 {/* 担保佣金卡片 */}
