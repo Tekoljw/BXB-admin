@@ -1633,17 +1633,6 @@ export default function WalletPage() {
     ],
     "其他记录": [
       {
-        id: "OTH000",
-        time: "2024-01-15 15:45:20",
-        currency: "USDT",
-        amount: "+1,228.39",
-        type: "佣金结算",
-        status: "已完成",
-        remark: "邀请佣金结算（扣除手续费6.17 USDT）",
-        originalAmount: "1,234.56",
-        fee: "6.17"
-      },
-      {
         id: "OTH001",
         time: "2024-01-15 14:20:15",
         currency: "USDT",
@@ -10637,50 +10626,6 @@ export default function WalletPage() {
           fromAccount: "理财账户",
           toAccount: "现货账户",
           amount: "3.0"
-        }
-      ],
-      "其他记录": [
-        {
-          time: "2024-01-15 15:45:20",
-          currency: "USDT",
-          amount: "1,228.39",
-          type: "佣金结算",
-          status: "已完成",
-          description: "邀请佣金结算（扣除手续费6.17 USDT）",
-          originalAmount: "1,234.56",
-          fee: "6.17"
-        },
-        {
-          time: "2024-01-15 11:30:20",
-          type: "活动奖励",
-          currency: "USDT",
-          amount: "50.00",
-          description: "新用户注册奖励",
-          status: "已完成"
-        },
-        {
-          time: "2024-01-14 22:15:30",
-          type: "推荐奖励",
-          currency: "USDT",
-          amount: "100.00",
-          description: "推荐好友注册奖励",
-          status: "已完成"
-        },
-        {
-          time: "2024-01-14 18:45:15",
-          type: "交易返现",
-          currency: "USDT",
-          amount: "25.30",
-          description: "合约交易手续费返现",
-          status: "已完成"
-        },
-        {
-          time: "2024-01-13 15:20:45",
-          type: "系统调账",
-          currency: "USDT",
-          amount: "15.50",
-          description: "系统维护补偿",
-          status: "已完成"
         }
       ],
       "USDT买卖记录": [
