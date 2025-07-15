@@ -326,6 +326,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Displayed settlement fees (0.5%) and actual amount to be credited to spot account
   - Added expiration reminders and settlement instructions with 1-3 minute processing time
   - Integrated settlement confirmation flow with automatic fund transfer to spot account
+- January 30, 2025. Enhanced user list modal with advanced filtering:
+  - Removed "上月未结" display from unsettled commission card for cleaner interface
+  - Added comprehensive search functionality for user ID and username filtering
+  - Implemented three-tier filtering: registration time, registration country, and registration city
+  - Updated table structure to display registration country and city instead of referral time
+  - Enhanced user data with international location information (China, US, Singapore, Japan, Korea, UK, Canada)
+  - Integrated dynamic filtering logic with real-time search and multi-criteria selection
 
 ## User Preferences
 

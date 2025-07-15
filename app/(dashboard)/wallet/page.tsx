@@ -146,6 +146,10 @@ export default function WalletPage() {
   const [showCommissionRuleModal, setShowCommissionRuleModal] = useState(false) // 佣金规则弹窗
   const [showUserListModal, setShowUserListModal] = useState<{type: 'direct' | 'indirect' | 'active', isOpen: boolean}>({type: 'direct', isOpen: false}) // 用户名单弹窗
   const [showSettlementModal, setShowSettlementModal] = useState(false) // 结算弹窗
+  const [userSearchTerm, setUserSearchTerm] = useState("") // 用户搜索关键词
+  const [userDateFilter, setUserDateFilter] = useState("") // 注册时间筛选
+  const [userCountryFilter, setUserCountryFilter] = useState("") // 注册国家筛选
+  const [userCityFilter, setUserCityFilter] = useState("") // 注册城市筛选
   
   // API文档和生成密钥弹窗状态
   const [showApiDocsModal, setShowApiDocsModal] = useState(false) // API文档选择弹窗
@@ -17366,7 +17370,102 @@ export default function WalletPage() {
               </div>
             </div>
             
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
+            <div className="p-6 overflow-y-auto max-h-[70vh]">
+              {/* 搜索和筛选区域 */}
+              <div className="mb-6 space-y-4">
+                {/* 搜索框 */}
+                <div className="relative">
+                  <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                  <input
+                    type="text"
+                    placeholder="搜索用户ID或用户名..."
+                    value={userSearchTerm}
+                    onChange={(e) => setUserSearchTerm(e.target.value)}
+                    className={`w-full pl-10 pr-4 py-2 rounded-lg border transition-colors ${
+                      isDark 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
+                    } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                  />
+                </div>
+                
+                {/* 筛选条件 */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      注册时间
+                    </label>
+                    <select
+                      value={userDateFilter}
+                      onChange={(e) => setUserDateFilter(e.target.value)}
+                      className={`w-full px-3 py-2 rounded-lg border text-sm transition-colors ${
+                        isDark 
+                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
+                          : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                      } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                    >
+                      <option value="">全部时间</option>
+                      <option value="today">今日</option>
+                      <option value="week">本周</option>
+                      <option value="month">本月</option>
+                      <option value="quarter">近3个月</option>
+                      <option value="year">本年</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      注册国家
+                    </label>
+                    <select
+                      value={userCountryFilter}
+                      onChange={(e) => setUserCountryFilter(e.target.value)}
+                      className={`w-full px-3 py-2 rounded-lg border text-sm transition-colors ${
+                        isDark 
+                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
+                          : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                      } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                    >
+                      <option value="">全部国家</option>
+                      <option value="CN">中国</option>
+                      <option value="US">美国</option>
+                      <option value="SG">新加坡</option>
+                      <option value="JP">日本</option>
+                      <option value="KR">韩国</option>
+                      <option value="UK">英国</option>
+                      <option value="CA">加拿大</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className={`block text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      注册城市
+                    </label>
+                    <select
+                      value={userCityFilter}
+                      onChange={(e) => setUserCityFilter(e.target.value)}
+                      className={`w-full px-3 py-2 rounded-lg border text-sm transition-colors ${
+                        isDark 
+                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
+                          : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                      } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                    >
+                      <option value="">全部城市</option>
+                      <option value="北京">北京</option>
+                      <option value="上海">上海</option>
+                      <option value="深圳">深圳</option>
+                      <option value="广州">广州</option>
+                      <option value="杭州">杭州</option>
+                      <option value="纽约">纽约</option>
+                      <option value="新加坡">新加坡</option>
+                      <option value="东京">东京</option>
+                      <option value="首尔">首尔</option>
+                      <option value="伦敦">伦敦</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -17381,7 +17480,10 @@ export default function WalletPage() {
                         注册时间
                       </th>
                       <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        {showUserListModal.type === 'active' ? '最后活跃' : '推荐时间'}
+                        注册国家
+                      </th>
+                      <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        注册城市
                       </th>
                       <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                         状态
@@ -17391,29 +17493,78 @@ export default function WalletPage() {
                   <tbody>
                     {(() => {
                       const getUserData = () => {
+                        let allUsers = []
                         if (showUserListModal.type === 'direct') {
-                          return [
-                            { userId: "U12345678", username: "crypto_trader1", registerTime: "2024-01-15 10:30", referTime: "2024-01-15 14:20", status: "活跃" },
-                            { userId: "U87654321", username: "bitcoin_holder", registerTime: "2024-02-20 09:15", referTime: "2024-02-20 11:45", status: "活跃" },
-                            { userId: "U11223344", username: "eth_investor", registerTime: "2024-03-10 16:20", referTime: "2024-03-10 18:30", status: "休眠" },
-                            { userId: "U99887766", username: "defi_user", registerTime: "2024-04-05 12:10", referTime: "2024-04-05 15:25", status: "活跃" },
-                            { userId: "U55443322", username: "nft_collector", registerTime: "2024-05-12 08:45", referTime: "2024-05-12 10:15", status: "活跃" }
+                          allUsers = [
+                            { userId: "U12345678", username: "crypto_trader1", registerTime: "2024-01-15 10:30", country: "中国", city: "北京", status: "活跃" },
+                            { userId: "U87654321", username: "bitcoin_holder", registerTime: "2024-02-20 09:15", country: "美国", city: "纽约", status: "活跃" },
+                            { userId: "U11223344", username: "eth_investor", registerTime: "2024-03-10 16:20", country: "新加坡", city: "新加坡", status: "休眠" },
+                            { userId: "U99887766", username: "defi_user", registerTime: "2024-04-05 12:10", country: "日本", city: "东京", status: "活跃" },
+                            { userId: "U55443322", username: "nft_collector", registerTime: "2024-05-12 08:45", country: "韩国", city: "首尔", status: "活跃" },
+                            { userId: "U33445566", username: "trader_pro", registerTime: "2024-06-01 14:20", country: "中国", city: "上海", status: "活跃" },
+                            { userId: "U77889911", username: "hodl_master", registerTime: "2024-06-15 11:30", country: "英国", city: "伦敦", status: "休眠" }
                           ]
                         } else if (showUserListModal.type === 'indirect') {
-                          return [
-                            { userId: "U22334455", username: "altcoin_fan", registerTime: "2024-02-01 14:20", referTime: "2024-02-01 16:30", status: "活跃" },
-                            { userId: "U66778899", username: "yield_farmer", registerTime: "2024-02-15 11:10", referTime: "2024-02-15 13:45", status: "休眠" },
-                            { userId: "U44556677", username: "dao_member", registerTime: "2024-03-05 09:30", referTime: "2024-03-05 12:20", status: "活跃" },
-                            { userId: "U77889900", username: "staking_pro", registerTime: "2024-03-20 15:45", referTime: "2024-03-20 17:15", status: "活跃" }
+                          allUsers = [
+                            { userId: "U22334455", username: "altcoin_fan", registerTime: "2024-02-01 14:20", country: "加拿大", city: "多伦多", status: "活跃" },
+                            { userId: "U66778899", username: "yield_farmer", registerTime: "2024-02-15 11:10", country: "中国", city: "深圳", status: "休眠" },
+                            { userId: "U44556677", username: "dao_member", registerTime: "2024-03-05 09:30", country: "美国", city: "洛杉矶", status: "活跃" },
+                            { userId: "U77889900", username: "staking_pro", registerTime: "2024-03-20 15:45", country: "中国", city: "广州", status: "活跃" },
+                            { userId: "U12378945", username: "defi_lover", registerTime: "2024-04-10 16:20", country: "新加坡", city: "新加坡", status: "活跃" }
                           ]
                         } else {
-                          return [
-                            { userId: "U12345678", username: "crypto_trader1", registerTime: "2024-01-15 10:30", referTime: "2024-07-15 09:20", status: "在线" },
-                            { userId: "U87654321", username: "bitcoin_holder", registerTime: "2024-02-20 09:15", referTime: "2024-07-15 08:45", status: "在线" },
-                            { userId: "U22334455", username: "altcoin_fan", registerTime: "2024-02-01 14:20", referTime: "2024-07-14 22:30", status: "离线" },
-                            { userId: "U99887766", username: "defi_user", registerTime: "2024-04-05 12:10", referTime: "2024-07-15 07:15", status: "在线" }
+                          allUsers = [
+                            { userId: "U12345678", username: "crypto_trader1", registerTime: "2024-01-15 10:30", country: "中国", city: "北京", status: "在线" },
+                            { userId: "U87654321", username: "bitcoin_holder", registerTime: "2024-02-20 09:15", country: "美国", city: "纽约", status: "在线" },
+                            { userId: "U22334455", username: "altcoin_fan", registerTime: "2024-02-01 14:20", country: "加拿大", city: "多伦多", status: "离线" },
+                            { userId: "U99887766", username: "defi_user", registerTime: "2024-04-05 12:10", country: "日本", city: "东京", status: "在线" },
+                            { userId: "U55443322", username: "nft_collector", registerTime: "2024-05-12 08:45", country: "韩国", city: "首尔", status: "在线" }
                           ]
                         }
+                        
+                        // 筛选逻辑
+                        return allUsers.filter(user => {
+                          // 搜索关键词筛选
+                          if (userSearchTerm && !user.userId.toLowerCase().includes(userSearchTerm.toLowerCase()) && 
+                              !user.username.toLowerCase().includes(userSearchTerm.toLowerCase())) {
+                            return false
+                          }
+                          
+                          // 国家筛选
+                          if (userCountryFilter && user.country !== userCountryFilter) {
+                            return false
+                          }
+                          
+                          // 城市筛选
+                          if (userCityFilter && user.city !== userCityFilter) {
+                            return false
+                          }
+                          
+                          // 时间筛选（简化处理，实际应用中需要更复杂的日期计算）
+                          if (userDateFilter) {
+                            const registerDate = new Date(user.registerTime)
+                            const now = new Date()
+                            
+                            switch (userDateFilter) {
+                              case 'today':
+                                return registerDate.toDateString() === now.toDateString()
+                              case 'week':
+                                const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+                                return registerDate >= weekAgo
+                              case 'month':
+                                return registerDate.getMonth() === now.getMonth() && registerDate.getFullYear() === now.getFullYear()
+                              case 'quarter':
+                                const threeMonthsAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000)
+                                return registerDate >= threeMonthsAgo
+                              case 'year':
+                                return registerDate.getFullYear() === now.getFullYear()
+                              default:
+                                return true
+                            }
+                          }
+                          
+                          return true
+                        })
                       }
                       
                       return getUserData().map((user, index) => (
@@ -17428,7 +17579,10 @@ export default function WalletPage() {
                             {user.registerTime}
                           </td>
                           <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                            {user.referTime}
+                            {user.country}
+                          </td>
+                          <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                            {user.city}
                           </td>
                           <td className={`py-3 px-2 text-sm`}>
                             <span className={`px-2 py-1 rounded-full text-xs ${
