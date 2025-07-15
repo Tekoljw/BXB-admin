@@ -13275,7 +13275,7 @@ export default function WalletPage() {
                         <tr key={index} className={`border-b ${isDark ? 'border-gray-700 hover:bg-gray-800' : 'border-gray-200 hover:bg-gray-50'} transition-colors`}>
                           {cellData.map((cell, cellIndex) => (
                             <td key={cellIndex} className={`px-4 py-3 text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {cell || '-'}
+                              {typeof cell === 'object' ? JSON.stringify(cell) : (cell || '-')}
                             </td>
                           ))}
                         </tr>
@@ -13357,7 +13357,7 @@ export default function WalletPage() {
                                key === 'orderNo' ? '订单号' : key}
                             </div>
                             <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
-                              {value || '-'}
+                              {typeof value === 'object' ? JSON.stringify(value) : (value || '-')}
                             </div>
                           </div>
                         ))}
