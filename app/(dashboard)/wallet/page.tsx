@@ -5026,9 +5026,6 @@ export default function WalletPage() {
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      下次结算：2025-01-31
-                    </div>
                     <div className="mt-3">
                       <button
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${

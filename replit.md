@@ -298,6 +298,7 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Moved "可领取佣金" card to the last position in the grid
   - Changed "立即领取" button from green to black color scheme
   - Maintained consistent hover effects and accessibility
+  - Removed next settlement time display from commission card
 
 ## User Preferences
 
