@@ -5073,6 +5073,41 @@ export default function WalletPage() {
                       </button>
                     </div>
                   </div>
+
+                  {/* 筛选检索功能 */}
+                  <div className="mb-4 flex flex-wrap gap-3">
+                    <div className="flex items-center space-x-2">
+                      <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <input
+                        type="text"
+                        placeholder="搜索用户ID或交易对"
+                        className={`px-3 py-2 text-sm rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                        } focus:outline-none focus:border-[#14C2A3]`}
+                      />
+                    </div>
+                    <select className={`px-3 py-2 text-sm rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:border-[#14C2A3]`}>
+                      <option value="">全部类型</option>
+                      <option value="direct">直推</option>
+                      <option value="indirect">间推</option>
+                    </select>
+                    <select className={`px-3 py-2 text-sm rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:border-[#14C2A3]`}>
+                      <option value="">全部状态</option>
+                      <option value="paid">已发放</option>
+                      <option value="processing">处理中</option>
+                      <option value="pending">待发放</option>
+                    </select>
+                  </div>
                   
                   <div className="overflow-x-auto">
                     <table className="w-full">
@@ -5085,10 +5120,19 @@ export default function WalletPage() {
                             用户ID
                           </th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            推荐类型
+                          </th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                             交易对
                           </th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                             交易量
+                          </th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            手续费比例
+                          </th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            手续费金额
                           </th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                             佣金
@@ -5100,11 +5144,11 @@ export default function WalletPage() {
                       </thead>
                       <tbody className="space-y-2">
                         {[
-                          { time: "14:23:45", userId: "U12345678", pair: "BTC/USDT", volume: "50,000.00", commission: "125.00", status: "已发放" },
-                          { time: "13:56:12", userId: "U87654321", pair: "ETH/USDT", volume: "25,000.00", commission: "62.50", status: "已发放" },
-                          { time: "12:34:56", userId: "U11223344", pair: "BNB/USDT", volume: "15,000.00", commission: "37.50", status: "处理中" },
-                          { time: "11:12:33", userId: "U99887766", pair: "SOL/USDT", volume: "8,000.00", commission: "20.00", status: "已发放" },
-                          { time: "10:45:21", userId: "U55443322", pair: "ADA/USDT", volume: "12,000.00", commission: "30.00", status: "已发放" }
+                          { time: "14:23:45", userId: "U12345678", type: "直推", pair: "BTC/USDT", volume: "50,000.00", feeRate: "0.25%", feeAmount: "125.00", commission: "31.25", status: "已发放" },
+                          { time: "13:56:12", userId: "U87654321", type: "间推", pair: "ETH/USDT", volume: "25,000.00", feeRate: "0.25%", feeAmount: "62.50", commission: "15.63", status: "已发放" },
+                          { time: "12:34:56", userId: "U11223344", type: "直推", pair: "BNB/USDT", volume: "15,000.00", feeRate: "0.30%", feeAmount: "45.00", commission: "11.25", status: "处理中" },
+                          { time: "11:12:33", userId: "U99887766", type: "间推", pair: "SOL/USDT", volume: "8,000.00", feeRate: "0.20%", feeAmount: "16.00", commission: "4.00", status: "已发放" },
+                          { time: "10:45:21", userId: "U55443322", type: "直推", pair: "ADA/USDT", volume: "12,000.00", feeRate: "0.25%", feeAmount: "30.00", commission: "7.50", status: "已发放" }
                         ].map((record, index) => (
                           <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -5113,11 +5157,26 @@ export default function WalletPage() {
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                               {record.userId}
                             </td>
+                            <td className={`py-3 px-2 text-sm`}>
+                              <span className={`px-2 py-1 rounded-full text-xs ${
+                                record.type === "直推" 
+                                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                  : "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                              }`}>
+                                {record.type}
+                              </span>
+                            </td>
                             <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                               {record.pair}
                             </td>
                             <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                               {record.volume} USDT
+                            </td>
+                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.feeRate}
+                            </td>
+                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.feeAmount} USDT
                             </td>
                             <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>
                               {record.commission} USDT
