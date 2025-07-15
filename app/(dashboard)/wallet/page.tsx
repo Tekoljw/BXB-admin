@@ -5484,8 +5484,77 @@ export default function WalletPage() {
                     <div className="flex items-center">
                       <FileText className={`h-5 w-5 mr-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
                       <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        理财佣金明细
+                        返佣明细
                       </h3>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button className={`px-3 py-1.5 text-sm rounded-lg transition-all ${
+                        isDark 
+                          ? "bg-black hover:bg-gray-800 text-white" 
+                          : "bg-black hover:bg-gray-800 text-white"
+                      }`}>
+                        今日
+                      </button>
+                      <button className={`px-3 py-1.5 text-sm rounded-lg transition-all ${
+                        isDark 
+                          ? "bg-gray-700 hover:bg-gray-600 text-gray-300" 
+                          : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                      }`}>
+                        本周
+                      </button>
+                      <button className={`px-3 py-1.5 text-sm rounded-lg transition-all ${
+                        isDark 
+                          ? "bg-gray-700 hover:bg-gray-600 text-gray-300" 
+                          : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                      }`}>
+                        本月
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 搜索和筛选 */}
+                  <div className="flex flex-col md:flex-row gap-4 mb-6">
+                    <div className="flex-1">
+                      <input
+                        type="text"
+                        placeholder="搜索用户ID或产品名称..."
+                        className={`w-full px-4 py-2 rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <select className={`px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">推荐类型</option>
+                        <option value="direct">直推</option>
+                        <option value="indirect">间推</option>
+                      </select>
+                      <select className={`px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">产品类型</option>
+                        <option value="fixed">定期产品</option>
+                        <option value="flexible">活期产品</option>
+                        <option value="high-yield">高收益产品</option>
+                      </select>
+                      <select className={`px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">状态</option>
+                        <option value="paid">已发放</option>
+                        <option value="pending">处理中</option>
+                        <option value="expired">已过期</option>
+                      </select>
                     </div>
                   </div>
                   
@@ -5495,27 +5564,74 @@ export default function WalletPage() {
                         <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>时间</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户ID</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>推荐类型</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>产品名称</th>
                           <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>投资金额</th>
-                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金比例</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金金额</th>
+                          <th className={`text-left py-3 px-2 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>状态</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="space-y-2">
                         {[
-                          { time: "14:23:45", userId: "U12345678", product: "USDT定期宝", amount: "10,000.00", commission: "85.00" },
-                          { time: "13:56:12", userId: "U87654321", product: "BTC增益宝", amount: "5,000.00", commission: "42.50" },
-                          { time: "12:34:56", userId: "U11223344", product: "ETH流动宝", amount: "8,000.00", commission: "68.00" }
+                          { time: "14:23:45", userId: "U12345678", type: "直推", product: "USDT定期宝", amount: "10,000.00", feeRate: "0.85%", commission: "85.00", status: "已发放" },
+                          { time: "13:56:12", userId: "U87654321", type: "间推", product: "BTC增益宝", amount: "5,000.00", feeRate: "0.85%", commission: "42.50", status: "已发放" },
+                          { time: "12:34:56", userId: "U11223344", type: "直推", product: "ETH流动宝", amount: "8,000.00", feeRate: "0.85%", commission: "68.00", status: "处理中" },
+                          { time: "11:12:33", userId: "U99887766", type: "间推", product: "SOL理财宝", amount: "3,000.00", feeRate: "0.70%", commission: "21.00", status: "已发放" },
+                          { time: "10:45:21", userId: "U55443322", type: "直推", product: "ADA增益宝", amount: "6,000.00", feeRate: "0.85%", commission: "51.00", status: "已发放" }
                         ].map((record, index) => (
                           <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
-                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.time}</td>
-                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.userId}</td>
-                            <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.product}</td>
-                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.amount} USDT</td>
-                            <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>{record.commission} USDT</td>
+                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.time}
+                            </td>
+                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.userId}
+                            </td>
+                            <td className={`py-3 px-2 text-sm`}>
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                record.type === "直推" 
+                                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                  : "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                              }`}>
+                                {record.type}
+                              </span>
+                            </td>
+                            <td className={`py-3 px-2 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              {record.product}
+                            </td>
+                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.amount} USDT
+                            </td>
+                            <td className={`py-3 px-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.feeRate}
+                            </td>
+                            <td className={`py-3 px-2 text-sm font-medium text-[#14C2A3]`}>
+                              {record.commission} USDT
+                            </td>
+                            <td className={`py-3 px-2 text-sm`}>
+                              <span className={`px-2 py-1 rounded-full text-xs ${
+                                record.status === "已发放" 
+                                  ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
+                                  : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                              }`}>
+                                {record.status}
+                              </span>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* 加载更多按钮 */}
+                  <div className="flex justify-center mt-6">
+                    <button className={`px-6 py-2 rounded-lg font-medium transition-all border ${
+                      isDark 
+                        ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
+                        : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
+                    }`}>
+                      加载更多
+                    </button>
                   </div>
                 </div>
               </div>
