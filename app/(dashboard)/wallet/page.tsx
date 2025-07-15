@@ -6520,7 +6520,7 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <Users className="h-6 w-6 text-blue-500" />
-                        <h3 className="text-lg font-semibold">直推支付用户</h3>
+                        <h3 className="text-lg font-semibold">直推支付商户</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-blue-500`}>
@@ -6550,7 +6550,7 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <UserPlus className="h-6 w-6 text-purple-500" />
-                        <h3 className="text-lg font-semibold">间推支付用户</h3>
+                        <h3 className="text-lg font-semibold">间推支付商户</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-purple-500`}>
@@ -6580,17 +6580,17 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <Receipt className="h-6 w-6 text-orange-500" />
-                        <h3 className="text-lg font-semibold">支付订单数</h3>
+                        <h3 className="text-lg font-semibold">交易总金额</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-orange-500`}>
-                      2,345
+                      2,345,678
                       <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
-                        笔
+                        CNY
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      本月订单：456 笔
+                      本月交易：1,234,567 CNY
                     </div>
                     <div className="mt-3">
                       <button
