@@ -5012,12 +5012,12 @@ export default function WalletPage() {
                     </div>
                   </div>
 
-                  {/* 可领取佣金 */}
+                  {/* 未结算佣金 */}
                   <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <Wallet className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">可领取佣金</h3>
+                        <h3 className="text-lg font-semibold">未结算佣金</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-[#14C2A3]`}>
@@ -5028,13 +5028,13 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border-2 ${
                           isDark 
-                            ? "bg-black hover:bg-gray-800 text-white" 
-                            : "bg-black hover:bg-gray-800 text-white"
+                            ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
+                            : "border-black bg-transparent hover:bg-black text-black hover:text-white"
                         }`}
                       >
-                        立即领取
+                        立即结算
                       </button>
                     </div>
                   </div>
@@ -5194,6 +5194,19 @@ export default function WalletPage() {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+                  
+                  {/* 加载更多按钮 */}
+                  <div className="mt-6 text-center">
+                    <button
+                      className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                        isDark 
+                          ? "bg-gray-700 hover:bg-gray-600 text-gray-300" 
+                          : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                      }`}
+                    >
+                      加载更多
+                    </button>
                   </div>
                 </div>
               </div>
