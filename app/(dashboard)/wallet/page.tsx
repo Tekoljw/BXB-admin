@@ -5064,10 +5064,7 @@ export default function WalletPage() {
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
-                      上月未结：156.78 USDT
-                    </div>
-                    <div className="text-xs text-red-500 mt-1">
+                    <div className="text-xs text-red-500 mt-2">
                       即将过期金额：45.30 USDT
                     </div>
                     <div className="mt-3">
