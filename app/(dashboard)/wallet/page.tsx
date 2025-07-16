@@ -5821,7 +5821,7 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        onClick={() => setShowUserListModal(true)}
+                        onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
                             ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
@@ -5852,7 +5852,7 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        onClick={() => setShowUserListModal(true)}
+                        onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
                             ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
@@ -5883,7 +5883,7 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        onClick={() => setShowUserListModal(true)}
+                        onClick={() => setShowUserListModal({type: 'active', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
                             ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
@@ -6216,7 +6216,7 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        onClick={() => setShowUserListModal(true)}
+                        onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
                             ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
@@ -6247,7 +6247,7 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        onClick={() => setShowUserListModal(true)}
+                        onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
                             ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
@@ -6611,7 +6611,7 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        onClick={() => setShowUserListModal(true)}
+                        onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
                             ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
@@ -6642,7 +6642,7 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        onClick={() => setShowUserListModal(true)}
+                        onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
                             ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
