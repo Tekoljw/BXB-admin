@@ -1031,6 +1031,7 @@ export default function WalletPage() {
         withdraw: '出金记录',
         internal_transfer: '内转记录',
         transfer: '划转记录',
+        commission: '佣金结算记录',
         other: '其他记录'
       }
     },
@@ -1215,6 +1216,63 @@ export default function WalletPage() {
           status: "已完成",
           time: "2024-01-14 19:20:15",
           merchant: "商户B"
+        }
+      ],
+      "佣金结算记录": [
+        {
+          id: "CM001",
+          type: "合约交易",
+          currency: "USDT",
+          amount: "125.50",
+          creditAmount: "123.24",
+          creditCurrency: "USDT",
+          time: "2024-01-20 14:30:22",
+          status: "已结算",
+          remark: "合约交易返佣"
+        },
+        {
+          id: "CM002", 
+          type: "理财收益",
+          currency: "USDT",
+          amount: "89.20",
+          creditAmount: "87.63",
+          creditCurrency: "USDT",
+          time: "2024-01-19 16:45:11",
+          status: "已结算",
+          remark: "理财产品返佣"
+        },
+        {
+          id: "CM003",
+          type: "U卡开卡",
+          currency: "USDT",
+          amount: "45.00",
+          creditAmount: "44.32",
+          creditCurrency: "USDT",
+          time: "2024-01-18 10:20:30",
+          status: "已结算",
+          remark: "U卡开卡返佣"
+        },
+        {
+          id: "CM004",
+          type: "担保交易",
+          currency: "USDT",
+          amount: "78.50",
+          creditAmount: "77.15",
+          creditCurrency: "USDT",
+          time: "2024-01-17 14:15:45",
+          status: "已结算",
+          remark: "担保交易返佣"
+        },
+        {
+          id: "CM005",
+          type: "支付通道",
+          currency: "USDT",
+          amount: "156.80",
+          creditAmount: "154.17",
+          creditCurrency: "USDT",
+          time: "2024-01-16 09:30:12",
+          status: "已结算",
+          remark: "支付通道返佣"
         }
       ]
     },
@@ -12106,6 +12164,7 @@ export default function WalletPage() {
           withdraw: "出金记录",
           internal_transfer: "内转记录",
           transfer: "划转记录",
+          commission: "佣金结算记录",
           other: "其他记录"
         }
         return fundsData[tabNameMap[secondaryTab]] || []
@@ -13902,7 +13961,8 @@ export default function WalletPage() {
                               deposit: "入金记录",
                               withdraw: "出金记录", 
                               internal_transfer: "内转记录",
-                              transfer: "划转记录"
+                              transfer: "划转记录",
+                              commission: "佣金结算记录"
                             }
                             const recordType = tabMap[secondaryTabKey]
                             
@@ -13915,6 +13975,8 @@ export default function WalletPage() {
                                 return ['时间', '币种', '转入/转出', '数量', '状态']
                               case "划转记录":
                                 return ['时间', '币种', '划出账户', '划入账户', '数量']
+                              case "佣金结算记录":
+                                return ['结算时间', '交易类型', '币种', '结算金额', '到账金额', '到账币种', '状态', '备注']
                               case "其他记录":
                                 return ['时间', '币种', '数量', '类型', '备注']
                             }
@@ -14010,7 +14072,8 @@ export default function WalletPage() {
                             deposit: "入金记录",
                             withdraw: "出金记录", 
                             internal_transfer: "内转记录",
-                            transfer: "划转记录"
+                            transfer: "划转记录",
+                            commission: "佣金结算记录"
                           }
                           const recordType = tabMap[secondaryTabKey]
                           
@@ -14023,6 +14086,8 @@ export default function WalletPage() {
                               return [record.time, record.currency, record.direction, record.amount, record.status]
                             case "划转记录":
                               return [record.time, record.currency, record.fromAccount, record.toAccount, record.amount]
+                            case "佣金结算记录":
+                              return [record.time, record.type, record.currency, `${record.amount} ${record.currency}`, `${record.creditAmount} ${record.creditCurrency}`, record.creditCurrency, record.status, record.remark]
                             case "其他记录":
                               return [record.time, record.currency, record.amount, record.type, record.remark]
                           }
