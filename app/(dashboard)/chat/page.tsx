@@ -45,7 +45,7 @@ interface Message {
   text: string
   time: string
   isRead: boolean
-  type?: 'text' | 'transfer' | 'redpacket'
+  type?: 'text' | 'transfer' | 'redpacket' | 'guarantee'
   transferData?: {
     amount: string
     currency: string
@@ -59,6 +59,24 @@ interface Message {
     note: string
     claimed?: number
     claimedBy?: string[]
+  }
+  guaranteeData?: {
+    amount: string
+    currency: string
+    description: string
+    type: 'buy' | 'sell'
+    duration: string
+    deposit: string
+    status: 'pending' | 'accepted' | 'completed' | 'disputed' | 'cancelled'
+    acceptedBy?: string
+    createdAt: string
+    expiresAt: string
+    steps: Array<{
+      id: string
+      title: string
+      status: 'pending' | 'current' | 'completed' | 'dispute'
+      timestamp?: string
+    }>
   }
 }
 
@@ -101,6 +119,12 @@ export default function ChatPage() {
   const [redPacketNote, setRedPacketNote] = useState("")
   const [selectedCurrency, setSelectedCurrency] = useState("USDT")
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false)
+  const [showGuaranteeModal, setShowGuaranteeModal] = useState(false)
+  const [guaranteeAmount, setGuaranteeAmount] = useState("")
+  const [guaranteeDescription, setGuaranteeDescription] = useState("")
+  const [guaranteeType, setGuaranteeType] = useState("buy") // buy or sell
+  const [guaranteeDuration, setGuaranteeDuration] = useState("24") // hours
+  const [guaranteeDeposit, setGuaranteeDeposit] = useState("5") // percentage
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -367,6 +391,108 @@ export default function ChatPage() {
     }))
   }
 
+  // Handle guarantee transaction
+  const handleGuaranteeTransaction = () => {
+    if (!guaranteeAmount || !guaranteeDescription || !selectedContact) return
+    
+    const now = new Date()
+    const expires = new Date(now.getTime() + parseInt(guaranteeDuration) * 60 * 60 * 1000)
+    
+    const newMessage: Message = {
+      id: `guarantee-${Date.now()}`,
+      senderId: "user",
+      text: "",
+      time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+      isRead: false,
+      type: 'guarantee',
+      guaranteeData: {
+        amount: guaranteeAmount,
+        currency: selectedCurrency,
+        description: guaranteeDescription,
+        type: guaranteeType,
+        duration: guaranteeDuration,
+        deposit: guaranteeDeposit,
+        status: 'pending',
+        createdAt: now.toISOString(),
+        expiresAt: expires.toISOString(),
+        steps: [
+          { id: 'step1', title: '发起担保交易', status: 'completed', timestamp: now.toISOString() },
+          { id: 'step2', title: '等待对方接受', status: 'current' },
+          { id: 'step3', title: '双方支付担保金', status: 'pending' },
+          { id: 'step4', title: '完成交易确认', status: 'pending' }
+        ]
+      }
+    }
+    
+    setMessages(prev => ({
+      ...prev,
+      [selectedContact]: [...(prev[selectedContact] || []), newMessage]
+    }))
+    
+    // Reset form
+    setGuaranteeAmount("")
+    setGuaranteeDescription("")
+    setGuaranteeType("buy")
+    setGuaranteeDuration("24")
+    setGuaranteeDeposit("5")
+    setShowGuaranteeModal(false)
+  }
+
+  const handleAcceptGuarantee = (messageId: string) => {
+    if (!selectedContact) return
+    
+    setMessages(prev => ({
+      ...prev,
+      [selectedContact]: prev[selectedContact]?.map(msg => 
+        msg.id === messageId && msg.guaranteeData 
+          ? { 
+              ...msg, 
+              guaranteeData: { 
+                ...msg.guaranteeData, 
+                status: 'accepted',
+                acceptedBy: 'current-user',
+                steps: msg.guaranteeData.steps.map(step => 
+                  step.id === 'step2' 
+                    ? { ...step, status: 'completed', timestamp: new Date().toISOString() }
+                    : step.id === 'step3'
+                    ? { ...step, status: 'current' }
+                    : step
+                )
+              }
+            }
+          : msg
+      ) || []
+    }))
+  }
+
+  const handleCompleteGuaranteeStep = (messageId: string, stepId: string) => {
+    if (!selectedContact) return
+    
+    setMessages(prev => ({
+      ...prev,
+      [selectedContact]: prev[selectedContact]?.map(msg => 
+        msg.id === messageId && msg.guaranteeData 
+          ? { 
+              ...msg, 
+              guaranteeData: { 
+                ...msg.guaranteeData, 
+                status: stepId === 'step4' ? 'completed' : msg.guaranteeData.status,
+                steps: msg.guaranteeData.steps.map((step, index) => {
+                  if (step.id === stepId) {
+                    return { ...step, status: 'completed', timestamp: new Date().toISOString() }
+                  }
+                  if (step.id === `step${parseInt(stepId.slice(-1)) + 1}`) {
+                    return { ...step, status: 'current' }
+                  }
+                  return step
+                })
+              }
+            }
+          : msg
+      ) || []
+    }))
+  }
+
   // Close currency dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -625,7 +751,7 @@ export default function ChatPage() {
   const addMenuItems = [
     { icon: User, label: "添加好友", action: () => console.log("添加好友") },
     { icon: Users, label: "创建群聊", action: () => console.log("创建群聊") },
-    { icon: Shield, label: "担保交易", action: () => console.log("担保交易") },
+    { icon: Shield, label: "担保交易", action: () => setShowGuaranteeModal(true) },
     { icon: BookOpen, label: "通讯录", action: () => console.log("通讯录") },
   ]
 
@@ -1969,6 +2095,163 @@ export default function ChatPage() {
                             </div>
                           </div>
                         </div>
+                      ) : msg.type === 'guarantee' ? (
+                        /* Guarantee Transaction Card */
+                        <div 
+                          className={`max-w-sm lg:max-w-lg rounded-xl overflow-hidden shadow-lg transition-all duration-200 hover:shadow-xl ${
+                            msg.senderId === 'user'
+                              ? 'bg-gradient-to-r from-[#6366F1] to-[#8B5CF6]'
+                              : isDark
+                                ? 'bg-gradient-to-r from-[#1E1B4B] to-[#312E81] border border-indigo-800 hover:border-[#00D4AA]'
+                                : 'bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200 hover:border-[#00D4AA]'
+                          }`}
+                        >
+                          <div className="p-4">
+                            {/* Header */}
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                                  msg.senderId === 'user' 
+                                    ? 'bg-white/20 backdrop-blur-sm' 
+                                    : isDark
+                                      ? 'bg-indigo-600 shadow-lg'
+                                      : 'bg-indigo-500 shadow-lg'
+                                }`}>
+                                  <Shield className={`w-5 h-5 ${
+                                    msg.senderId === 'user' ? 'text-white' : 'text-white'
+                                  }`} />
+                                </div>
+                                <div>
+                                  <h4 className={`text-sm font-semibold ${
+                                    msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-indigo-800'
+                                  }`}>
+                                    {msg.guaranteeData?.type === 'buy' ? '求购担保' : '出售担保'}
+                                  </h4>
+                                  <p className={`text-xs ${
+                                    msg.senderId === 'user' ? 'text-indigo-200' : isDark ? 'text-indigo-300' : 'text-indigo-600'
+                                  }`}>
+                                    担保金: {msg.guaranteeData?.deposit}% · 期限: {msg.guaranteeData?.duration}小时
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="flex items-center gap-2">
+                                  <div className={`w-5 h-5 rounded-full ${
+                                    currencies.find(c => c.symbol === msg.guaranteeData?.currency)?.color
+                                  } flex items-center justify-center text-white text-xs font-bold`}>
+                                    {currencies.find(c => c.symbol === msg.guaranteeData?.currency)?.icon}
+                                  </div>
+                                  <span className={`text-lg font-bold ${
+                                    msg.senderId === 'user' ? 'text-white' : isDark ? 'text-white' : 'text-indigo-800'
+                                  }`}>
+                                    {msg.guaranteeData?.amount}
+                                  </span>
+                                </div>
+                                <span className={`text-xs ${
+                                  msg.senderId === 'user' ? 'text-indigo-200' : isDark ? 'text-gray-400' : 'text-gray-500'
+                                }`}>
+                                  {msg.time}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Description */}
+                            <p className={`text-sm mb-4 ${
+                              msg.senderId === 'user' ? 'text-indigo-100' : isDark ? 'text-gray-300' : 'text-gray-700'
+                            }`}>
+                              {msg.guaranteeData?.description}
+                            </p>
+
+                            {/* Progress Steps */}
+                            <div className="mb-4">
+                              <div className="flex items-center justify-between mb-2">
+                                {msg.guaranteeData?.steps.map((step, index) => (
+                                  <div key={step.id} className="flex flex-col items-center">
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold ${
+                                      step.status === 'completed' 
+                                        ? 'bg-green-500 text-white' 
+                                        : step.status === 'current'
+                                        ? 'bg-blue-500 text-white'
+                                        : step.status === 'dispute'
+                                        ? 'bg-red-500 text-white'
+                                        : 'bg-gray-300 text-gray-600'
+                                    }`}>
+                                      {step.status === 'completed' ? '✓' : index + 1}
+                                    </div>
+                                    <span className={`text-xs mt-1 text-center ${
+                                      msg.senderId === 'user' ? 'text-indigo-200' : isDark ? 'text-gray-400' : 'text-gray-600'
+                                    }`}>
+                                      {step.title}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                              <div className="relative">
+                                <div className={`h-0.5 ${
+                                  msg.senderId === 'user' ? 'bg-indigo-400/30' : isDark ? 'bg-gray-700' : 'bg-gray-200'
+                                }`}>
+                                  <div 
+                                    className={`h-full transition-all duration-300 ${
+                                      msg.senderId === 'user' ? 'bg-indigo-300' : isDark ? 'bg-indigo-400' : 'bg-indigo-500'
+                                    }`}
+                                    style={{ 
+                                      width: `${((msg.guaranteeData?.steps.filter(s => s.status === 'completed').length || 0) / (msg.guaranteeData?.steps.length || 1)) * 100}%` 
+                                    }}
+                                  ></div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Status and Actions */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                  msg.guaranteeData?.status === 'pending'
+                                    ? isDark ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600'
+                                    : msg.guaranteeData?.status === 'accepted'
+                                    ? isDark ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-600'
+                                    : msg.guaranteeData?.status === 'completed'
+                                    ? isDark ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-600'
+                                    : msg.guaranteeData?.status === 'disputed'
+                                    ? isDark ? 'bg-red-900/30 text-red-400' : 'bg-red-100 text-red-600'
+                                    : isDark ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'
+                                }`}>
+                                  {msg.guaranteeData?.status === 'pending' ? '⏳ 等待接受' :
+                                   msg.guaranteeData?.status === 'accepted' ? '✅ 已接受' :
+                                   msg.guaranteeData?.status === 'completed' ? '🎉 已完成' :
+                                   msg.guaranteeData?.status === 'disputed' ? '⚠️ 争议中' : '❌ 已取消'}
+                                </span>
+                              </div>
+                              
+                              {/* Action Buttons */}
+                              {msg.senderId !== 'user' && msg.guaranteeData?.status === 'pending' && (
+                                <button
+                                  onClick={() => handleAcceptGuarantee(msg.id)}
+                                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                                    isDark 
+                                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white' 
+                                      : 'bg-indigo-500 hover:bg-indigo-600 text-white'
+                                  }`}
+                                >
+                                  接受担保
+                                </button>
+                              )}
+                              
+                              {msg.guaranteeData?.status === 'accepted' && (
+                                <button
+                                  onClick={() => handleCompleteGuaranteeStep(msg.id, 'step3')}
+                                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                                    isDark 
+                                      ? 'bg-green-600 hover:bg-green-700 text-white' 
+                                      : 'bg-green-500 hover:bg-green-600 text-white'
+                                  }`}
+                                >
+                                  支付担保金
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
                       ) : (
                         /* Regular Text Message */
                         <div
@@ -2748,6 +3031,223 @@ export default function ChatPage() {
                 }`}
               >
                 发送空投
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Guarantee Transaction Modal */}
+      {showGuaranteeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className={`${cardStyle} rounded-xl p-6 w-96 mx-4`}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                担保交易
+              </h3>
+              <button
+                onClick={() => setShowGuaranteeModal(false)}
+                className={`p-1 rounded-lg transition-colors ${
+                  isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                }`}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Transaction Type */}
+            <div className="mb-4">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                交易类型
+              </label>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setGuaranteeType("buy")}
+                  className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                    guaranteeType === "buy"
+                      ? isDark
+                        ? "bg-white text-black"
+                        : "bg-black text-white"
+                      : isDark
+                        ? "bg-[#252842] text-gray-300 hover:bg-[#2a2d42]"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  求购
+                </button>
+                <button
+                  onClick={() => setGuaranteeType("sell")}
+                  className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                    guaranteeType === "sell"
+                      ? isDark
+                        ? "bg-white text-black"
+                        : "bg-black text-white"
+                      : isDark
+                        ? "bg-[#252842] text-gray-300 hover:bg-[#2a2d42]"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  出售
+                </button>
+              </div>
+            </div>
+
+            {/* Currency Selection */}
+            <div className="mb-4">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                交易币种
+              </label>
+              <div className="relative" ref={currencyDropdownRef}>
+                <button
+                  onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+                  className={`w-full p-3 border rounded-lg flex items-center justify-between transition-colors ${
+                    isDark 
+                      ? "border-gray-600 bg-[#252842] text-white" 
+                      : "border-gray-300 bg-white text-gray-800"
+                  }`}
+                >
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-6 h-6 rounded-full ${
+                      currencies.find(c => c.symbol === selectedCurrency)?.color
+                    } flex items-center justify-center text-white text-sm font-bold`}>
+                      {currencies.find(c => c.symbol === selectedCurrency)?.icon}
+                    </div>
+                    <span>{selectedCurrency}</span>
+                  </div>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                
+                {showCurrencyDropdown && (
+                  <div className={`absolute top-full left-0 right-0 mt-2 ${cardStyle} rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto`}>
+                    {currencies.map((currency) => (
+                      <button
+                        key={currency.symbol}
+                        onClick={() => {
+                          setSelectedCurrency(currency.symbol)
+                          setShowCurrencyDropdown(false)
+                        }}
+                        className={`w-full p-3 flex items-center space-x-3 transition-colors ${
+                          isDark ? "hover:bg-[#252842] text-gray-300" : "hover:bg-gray-50 text-gray-700"
+                        }`}
+                      >
+                        <div className={`w-6 h-6 rounded-full ${currency.color} flex items-center justify-center text-white text-sm font-bold`}>
+                          {currency.icon}
+                        </div>
+                        <span>{currency.symbol}</span>
+                        <span className="text-sm text-gray-500">{currency.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Amount Input */}
+            <div className="mb-4">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                交易金额
+              </label>
+              <input
+                type="number"
+                value={guaranteeAmount}
+                onChange={(e) => setGuaranteeAmount(e.target.value)}
+                placeholder="请输入交易金额"
+                className={`w-full p-3 border rounded-lg transition-colors ${
+                  isDark 
+                    ? "border-gray-600 bg-[#252842] text-white placeholder-gray-400" 
+                    : "border-gray-300 bg-white text-gray-800 placeholder-gray-500"
+                }`}
+              />
+            </div>
+
+            {/* Description Input */}
+            <div className="mb-4">
+              <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                交易描述
+              </label>
+              <textarea
+                value={guaranteeDescription}
+                onChange={(e) => setGuaranteeDescription(e.target.value)}
+                placeholder="请描述交易详情、要求等..."
+                rows={3}
+                className={`w-full p-3 border rounded-lg transition-colors resize-none ${
+                  isDark 
+                    ? "border-gray-600 bg-[#252842] text-white placeholder-gray-400" 
+                    : "border-gray-300 bg-white text-gray-800 placeholder-gray-500"
+                }`}
+              />
+            </div>
+
+            {/* Duration and Deposit */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                  交易期限(小时)
+                </label>
+                <select
+                  value={guaranteeDuration}
+                  onChange={(e) => setGuaranteeDuration(e.target.value)}
+                  className={`w-full p-3 border rounded-lg transition-colors ${
+                    isDark 
+                      ? "border-gray-600 bg-[#252842] text-white" 
+                      : "border-gray-300 bg-white text-gray-800"
+                  }`}
+                >
+                  <option value="1">1小时</option>
+                  <option value="3">3小时</option>
+                  <option value="6">6小时</option>
+                  <option value="12">12小时</option>
+                  <option value="24">24小时</option>
+                  <option value="48">48小时</option>
+                  <option value="72">72小时</option>
+                </select>
+              </div>
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                  担保金比例(%)
+                </label>
+                <select
+                  value={guaranteeDeposit}
+                  onChange={(e) => setGuaranteeDeposit(e.target.value)}
+                  className={`w-full p-3 border rounded-lg transition-colors ${
+                    isDark 
+                      ? "border-gray-600 bg-[#252842] text-white" 
+                      : "border-gray-300 bg-white text-gray-800"
+                  }`}
+                >
+                  <option value="5">5%</option>
+                  <option value="10">10%</option>
+                  <option value="15">15%</option>
+                  <option value="20">20%</option>
+                  <option value="30">30%</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setShowGuaranteeModal(false)}
+                className={`flex-1 py-2.5 rounded-lg font-medium transition-colors border ${
+                  isDark 
+                    ? "border-gray-600 text-gray-300 hover:bg-[#252842]" 
+                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                取消
+              </button>
+              <button
+                onClick={handleGuaranteeTransaction}
+                disabled={!guaranteeAmount || !guaranteeDescription}
+                className={`flex-1 py-2.5 rounded-lg font-medium transition-colors ${
+                  guaranteeAmount && guaranteeDescription
+                    ? isDark
+                      ? "bg-white text-black hover:bg-gray-200"
+                      : "bg-black text-white hover:bg-gray-800"
+                    : "bg-gray-400 text-gray-600 cursor-not-allowed"
+                }`}
+              >
+                发起担保
               </button>
             </div>
           </div>

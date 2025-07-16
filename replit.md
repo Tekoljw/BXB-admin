@@ -342,6 +342,16 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Implemented specialized transaction tables for each type with relevant columns and data structures
   - U卡佣金 includes sub-tabs for "开卡佣金" and "充值佣金" with separate tracking systems
   - All commission types maintain consistent styling, data formatting, and status indicators
+- January 30, 2025. Implemented complete guarantee transaction workflow in chat interface:
+  - Added guarantee transaction message type with comprehensive data structure including amount, currency, description, type (buy/sell), duration, deposit percentage, and 4-step progress tracking
+  - Created guarantee transaction modal with transaction type selection (求购/出售), currency selection, amount input, description textarea, duration options (1-72 hours), and deposit percentage options (5-30%)
+  - Implemented interactive guarantee message display with gradient backgrounds, progress step visualization, status indicators, and action buttons
+  - Built 4-step guarantee process: 发起担保交易 → 等待对方接受 → 双方支付担保金 → 完成交易确认
+  - Added guarantee transaction functions: handleGuaranteeTransaction, handleAcceptGuarantee, handleCompleteGuaranteeStep with proper state management
+  - Integrated guarantee transaction option into chat add menu with Shield icon
+  - Created comprehensive guarantee message card with transaction details, progress tracking, and interactive buttons for accepting and completing steps
+  - Added support for 6 cryptocurrencies (USDT, BTC, ETH, BNB, ADA, SOL) with proper currency icons and color coding
+  - Implemented proper error handling, form validation, and modal state management for guarantee transactions
 - January 30, 2025. Restructured commission records system:
   - Renamed "佣金记录" to "佣金结算记录" across all navigation and data structures
   - Created 5 separate commission tabs within order records: 合约佣金, 理财佣金, U卡佣金, 担保佣金, 支付佣金
