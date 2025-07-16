@@ -13950,6 +13950,8 @@ export default function WalletPage() {
                               return ['时间', '类型', '金额', '状态']
                             case "佣金记录":
                               return ['结算时间', '结算金额', '到账金额', '结算状态']
+                            case "佣金结算记录":
+                              return ['结算时间', '交易类型', '币种', '结算金额', '到账金额', '到账币种', '状态', '备注']
                             case "U卡订单":
                               // 根据不同页签返回不同的表头
                               if (secondaryTabKey === 'open') {
@@ -14052,6 +14054,8 @@ export default function WalletPage() {
                             return [record.time, record.type, record.amount, record.status]
                           case "佣金记录":
                             return [record.time, `${record.amount} ${record.currency}`, `${record.creditAmount || record.amount} ${record.creditCurrency || record.currency}`, record.status]
+                          case "佣金结算记录":
+                            return [record.time, record.type, record.currency, `${record.amount} ${record.currency}`, `${record.creditAmount} ${record.creditCurrency}`, record.creditCurrency, record.status, record.remark]
                           case "U卡订单":
                             // 根据不同页签返回不同的数据字段
                             if (secondaryTabKey === 'open') {
