@@ -5795,6 +5795,7 @@ export default function WalletPage() {
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
                       <button
+                        onClick={() => setShowCommissionRuleModal(true)}
                         className={`text-[#14C2A3] hover:underline`}
                       >
                         查看佣金规则
@@ -6190,6 +6191,7 @@ export default function WalletPage() {
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
                       <button
+                        onClick={() => setShowCommissionRuleModal(true)}
                         className={`text-[#14C2A3] hover:underline`}
                       >
                         查看佣金规则
@@ -6585,6 +6587,7 @@ export default function WalletPage() {
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
                       <button
+                        onClick={() => setShowCommissionRuleModal(true)}
                         className={`text-[#14C2A3] hover:underline`}
                       >
                         查看佣金规则
