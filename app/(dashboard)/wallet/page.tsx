@@ -7579,6 +7579,73 @@ export default function WalletPage() {
                           </div>
                         </div>
                       </>
+                    ) : commissionTab === "U卡佣金" ? (
+                      <>
+                        {/* U卡佣金计算规则 */}
+                        <div>
+                          <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            U卡佣金计算规则
+                          </h4>
+                          <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                            <div className={`text-sm space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              <p>• 开卡佣金 = 推荐用户开卡费用 × 开卡佣金比例</p>
+                              <p>• 充值佣金 = 推荐用户充值金额 × 充值佣金比例</p>
+                              <p>• 佣金每日结算一次，次日发放到账户</p>
+                              <p>• 直推用户和间推用户享受不同佣金比例</p>
+                              <p>• 佣金比例根据代理等级动态调整</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* 代理等级和佣金比例 */}
+                        <div>
+                          <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            代理等级与佣金比例
+                          </h4>
+                          <div className="overflow-x-auto">
+                            <table className="w-full">
+                              <thead>
+                                <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    代理等级
+                                  </th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    升级条件
+                                  </th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    开卡佣金
+                                  </th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    充值佣金
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="space-y-2">
+                                {[
+                                  { level: "1级代理", condition: "直推5人 + 月开卡量10张", openCard: "8%", recharge: "0.5%" },
+                                  { level: "2级代理", condition: "直推20人 + 月开卡量50张", openCard: "12%", recharge: "0.8%" },
+                                  { level: "3级代理", condition: "直推50人 + 月开卡量100张", openCard: "15%", recharge: "1.2%" }
+                                ].map((row, index) => (
+                                  <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
+                                    <td className={`py-3 px-4 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                      {row.level}
+                                    </td>
+                                    <td className={`py-3 px-4 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      {row.condition}
+                                    </td>
+                                    <td className={`py-3 px-4 text-sm font-medium text-[#14C2A3]`}>
+                                      {row.openCard}
+                                    </td>
+                                    <td className={`py-3 px-4 text-sm font-medium text-blue-500`}>
+                                      {row.recharge}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </>
                     ) : (
                       <>
                         {/* 其他佣金类型的原有内容 */}
@@ -7588,7 +7655,7 @@ export default function WalletPage() {
                           </h4>
                           <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
                             <div className={`text-sm space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                              <p>• {commissionTab === "合约佣金" ? "合约佣金" : commissionTab === "U卡佣金" ? "U卡佣金" : commissionTab === "担保佣金" ? "担保佣金" : "支付佣金"} = 推荐用户{commissionTab === "合约佣金" ? "交易手续费" : commissionTab === "U卡佣金" ? "开卡/充值费用" : commissionTab === "担保佣金" ? "担保手续费" : "支付手续费"} × 佣金比例</p>
+                              <p>• {commissionTab === "合约佣金" ? "合约佣金" : commissionTab === "担保佣金" ? "担保佣金" : "支付佣金"} = 推荐用户{commissionTab === "合约佣金" ? "交易手续费" : commissionTab === "担保佣金" ? "担保手续费" : "支付手续费"} × 佣金比例</p>
                               <p>• 佣金每日结算一次，次日发放到账户</p>
                               <p>• 直推用户和间推用户享受不同佣金比例</p>
                               <p>• 佣金比例根据代理等级动态调整</p>
@@ -7661,6 +7728,14 @@ export default function WalletPage() {
                               <p>• 团队奖等级每月1日统计更新，满足条件即可升级</p>
                               <p>• 佣金比例按照当前团队等级计算，升级后即时生效</p>
                               <p>• 团队投资额按照有效投资金额累计计算</p>
+                              <p>• 系统会自动识别有效推荐关系，防止刷量行为</p>
+                              <p>• 更多详情请联系客服咨询</p>
+                            </>
+                          ) : commissionTab === "U卡佣金" ? (
+                            <>
+                              <p>• 代理等级每月1日统计更新，满足条件即可升级</p>
+                              <p>• 开卡佣金和充值佣金按照不同比例计算</p>
+                              <p>• 开卡佣金按开卡费用计算，充值佣金按充值金额计算</p>
                               <p>• 系统会自动识别有效推荐关系，防止刷量行为</p>
                               <p>• 更多详情请联系客服咨询</p>
                             </>
