@@ -1674,8 +1674,10 @@ export default function WalletPage() {
           type: "合约交易",
           currency: "USDT",
           amount: "+125.50",
+          creditAmount: "+123.24",
+          creditCurrency: "USDT",
           time: "2024-01-20 14:30:22",
-          status: "已发放",
+          status: "已结算",
           remark: "合约交易返佣"
         },
         {
@@ -1683,8 +1685,10 @@ export default function WalletPage() {
           type: "合约推荐",
           currency: "USDT",
           amount: "+89.20",
+          creditAmount: "+87.63",
+          creditCurrency: "USDT",
           time: "2024-01-19 16:45:11",
-          status: "已发放",
+          status: "已结算",
           remark: "推荐用户合约交易"
         }
       ],
@@ -1694,8 +1698,10 @@ export default function WalletPage() {
           type: "理财产品",
           currency: "USDT",
           amount: "+56.80",
+          creditAmount: "+55.82",
+          creditCurrency: "USDT",
           time: "2024-01-20 10:20:15",
-          status: "已发放",
+          status: "已结算",
           remark: "理财产品推荐佣金"
         },
         {
@@ -1703,8 +1709,10 @@ export default function WalletPage() {
           type: "收益分成",
           currency: "USDT",
           amount: "+34.50",
+          creditAmount: "+33.91",
+          creditCurrency: "USDT",
           time: "2024-01-19 14:35:42",
-          status: "已发放",
+          status: "已结算",
           remark: "用户理财收益分成"
         }
       ],
@@ -1714,8 +1722,10 @@ export default function WalletPage() {
           type: "开卡佣金",
           currency: "USDT",
           amount: "+25.00",
+          creditAmount: "+24.58",
+          creditCurrency: "USDT",
           time: "2024-01-20 11:45:30",
-          status: "已发放",
+          status: "已结算",
           remark: "推荐用户开卡"
         },
         {
@@ -1723,8 +1733,10 @@ export default function WalletPage() {
           type: "充值佣金",
           currency: "USDT",
           amount: "+15.60",
+          creditAmount: "+15.32",
+          creditCurrency: "USDT",
           time: "2024-01-19 16:20:18",
-          status: "已发放",
+          status: "已结算",
           remark: "用户卡片充值佣金"
         }
       ],
@@ -1734,8 +1746,10 @@ export default function WalletPage() {
           type: "担保交易",
           currency: "USDT",
           amount: "+45.30",
+          creditAmount: "+44.52",
+          creditCurrency: "USDT",
           time: "2024-01-20 13:15:25",
-          status: "已发放",
+          status: "已结算",
           remark: "担保交易佣金"
         },
         {
@@ -1743,8 +1757,10 @@ export default function WalletPage() {
           type: "信用担保",
           currency: "USDT",
           amount: "+78.90",
+          creditAmount: "+77.56",
+          creditCurrency: "USDT",
           time: "2024-01-19 09:40:55",
-          status: "已发放",
+          status: "已结算",
           remark: "信用担保服务佣金"
         }
       ],
@@ -1754,8 +1770,10 @@ export default function WalletPage() {
           type: "支付通道",
           currency: "CNY",
           amount: "+120.00",
+          creditAmount: "+117.80",
+          creditCurrency: "CNY",
           time: "2024-01-20 15:25:40",
-          status: "已发放",
+          status: "已结算",
           remark: "支付通道佣金"
         },
         {
@@ -1763,8 +1781,10 @@ export default function WalletPage() {
           type: "商户推荐",
           currency: "CNY",
           amount: "+85.50",
+          creditAmount: "+83.92",
+          creditCurrency: "CNY",
           time: "2024-01-19 12:10:33",
-          status: "已发放",
+          status: "已结算",
           remark: "推荐商户佣金"
         }
       ]
@@ -13854,7 +13874,7 @@ export default function WalletPage() {
                               }
                               return ['时间', '类型', '金额', '状态']
                             case "佣金记录":
-                              return ['时间', '类型', '币种', '金额', '来源', '费率', '状态']
+                              return ['结算时间', '结算金额', '到账金额', '结算状态']
                             case "U卡订单":
                               // 根据不同页签返回不同的表头
                               if (secondaryTabKey === 'open') {
@@ -13956,7 +13976,7 @@ export default function WalletPage() {
                             }
                             return [record.time, record.type, record.amount, record.status]
                           case "佣金记录":
-                            return [record.time, record.type, record.currency, record.amount, record.source, record.rate, record.status]
+                            return [record.time, `${record.amount} ${record.currency}`, `${record.creditAmount || record.amount} ${record.creditCurrency || record.currency}`, record.status]
                           case "U卡订单":
                             // 根据不同页签返回不同的数据字段
                             if (secondaryTabKey === 'open') {
