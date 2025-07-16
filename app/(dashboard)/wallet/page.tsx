@@ -5410,7 +5410,7 @@ export default function WalletPage() {
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       当前等级：
                       <span className="text-[#14C2A3] font-semibold ml-1">
-                        超级理财代理
+                        金牌团队
                       </span>
                     </div>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
@@ -7490,71 +7490,144 @@ export default function WalletPage() {
                   </div>
 
                   <div className="space-y-6">
-                    {/* 佣金计算规则 */}
-                    <div>
-                      <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        佣金计算规则
-                      </h4>
-                      <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
-                        <div className={`text-sm space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                          <p>• 合约佣金 = 推荐用户交易手续费 × 佣金比例</p>
-                          <p>• 佣金每日结算一次，次日发放到账户</p>
-                          <p>• 直推用户和间推用户享受不同佣金比例</p>
-                          <p>• 佣金比例根据代理等级动态调整</p>
+                    {/* 根据当前佣金类型显示不同内容 */}
+                    {commissionTab === "理财佣金" ? (
+                      <>
+                        {/* 理财佣金计算规则 */}
+                        <div>
+                          <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            理财佣金计算规则
+                          </h4>
+                          <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                            <div className={`text-sm space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              <p>• 理财佣金 = 推荐用户投资金额 × 年化收益率 × 佣金比例</p>
+                              <p>• 佣金按产品收益发放周期同步结算</p>
+                              <p>• 团队奖励根据团队总投资额计算</p>
+                              <p>• 不同等级团队奖享受不同佣金比例</p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
 
-                    {/* 代理等级和佣金比例 */}
-                    <div>
-                      <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        代理等级与佣金比例
-                      </h4>
-                      <div className="overflow-x-auto">
-                        <table className="w-full">
-                          <thead>
-                            <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-                              <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                代理等级
-                              </th>
-                              <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                升级条件
-                              </th>
-                              <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                直推佣金
-                              </th>
-                              <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                间推佣金
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="space-y-2">
-                            {[
-                              { level: "普通用户", condition: "注册完成", direct: "5%", indirect: "2%" },
-                              { level: "初级代理", condition: "直推5人 + 月交易量10万USDT", direct: "8%", indirect: "3%" },
-                              { level: "中级代理", condition: "直推20人 + 月交易量50万USDT", direct: "12%", indirect: "5%" },
-                              { level: "高级代理", condition: "直推50人 + 月交易量200万USDT", direct: "15%", indirect: "8%" },
-                              { level: "超级代理", condition: "直推100人 + 月交易量500万USDT", direct: "20%", indirect: "10%" }
-                            ].map((row, index) => (
-                              <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
-                                <td className={`py-3 px-4 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                  {row.level}
-                                </td>
-                                <td className={`py-3 px-4 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                  {row.condition}
-                                </td>
-                                <td className={`py-3 px-4 text-sm font-medium text-[#14C2A3]`}>
-                                  {row.direct}
-                                </td>
-                                <td className={`py-3 px-4 text-sm font-medium text-blue-500`}>
-                                  {row.indirect}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
+                        {/* 团队奖等级和佣金比例 */}
+                        <div>
+                          <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            团队奖等级与佣金比例
+                          </h4>
+                          <div className="overflow-x-auto">
+                            <table className="w-full">
+                              <thead>
+                                <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    团队奖等级
+                                  </th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    升级条件
+                                  </th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    直推佣金
+                                  </th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    间推佣金
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="space-y-2">
+                                {[
+                                  { level: "铜牌团队", condition: "团队总投资额 ≥ 5万USDT", direct: "8%", indirect: "3%" },
+                                  { level: "银牌团队", condition: "团队总投资额 ≥ 20万USDT", direct: "12%", indirect: "5%" },
+                                  { level: "金牌团队", condition: "团队总投资额 ≥ 50万USDT", direct: "15%", indirect: "8%" },
+                                  { level: "铂金团队", condition: "团队总投资额 ≥ 100万USDT", direct: "18%", indirect: "10%" },
+                                  { level: "钻石团队", condition: "团队总投资额 ≥ 500万USDT", direct: "22%", indirect: "12%" }
+                                ].map((row, index) => (
+                                  <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
+                                    <td className={`py-3 px-4 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                      {row.level}
+                                    </td>
+                                    <td className={`py-3 px-4 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      {row.condition}
+                                    </td>
+                                    <td className={`py-3 px-4 text-sm font-medium text-[#14C2A3]`}>
+                                      {row.direct}
+                                    </td>
+                                    <td className={`py-3 px-4 text-sm font-medium text-blue-500`}>
+                                      {row.indirect}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {/* 其他佣金类型的原有内容 */}
+                        <div>
+                          <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            佣金计算规则
+                          </h4>
+                          <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                            <div className={`text-sm space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              <p>• {commissionTab === "合约佣金" ? "合约佣金" : commissionTab === "U卡佣金" ? "U卡佣金" : commissionTab === "担保佣金" ? "担保佣金" : "支付佣金"} = 推荐用户{commissionTab === "合约佣金" ? "交易手续费" : commissionTab === "U卡佣金" ? "开卡/充值费用" : commissionTab === "担保佣金" ? "担保手续费" : "支付手续费"} × 佣金比例</p>
+                              <p>• 佣金每日结算一次，次日发放到账户</p>
+                              <p>• 直推用户和间推用户享受不同佣金比例</p>
+                              <p>• 佣金比例根据代理等级动态调整</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* 代理等级和佣金比例 */}
+                        <div>
+                          <h4 className={`text-lg font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            代理等级与佣金比例
+                          </h4>
+                          <div className="overflow-x-auto">
+                            <table className="w-full">
+                              <thead>
+                                <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    代理等级
+                                  </th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    升级条件
+                                  </th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    直推佣金
+                                  </th>
+                                  <th className={`text-left py-3 px-4 text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    间推佣金
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="space-y-2">
+                                {[
+                                  { level: "普通用户", condition: "注册完成", direct: "5%", indirect: "2%" },
+                                  { level: "初级代理", condition: "直推5人 + 月交易量10万USDT", direct: "8%", indirect: "3%" },
+                                  { level: "中级代理", condition: "直推20人 + 月交易量50万USDT", direct: "12%", indirect: "5%" },
+                                  { level: "高级代理", condition: "直推50人 + 月交易量200万USDT", direct: "15%", indirect: "8%" },
+                                  { level: "超级代理", condition: "直推100人 + 月交易量500万USDT", direct: "20%", indirect: "10%" }
+                                ].map((row, index) => (
+                                  <tr key={index} className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
+                                    <td className={`py-3 px-4 text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                      {row.level}
+                                    </td>
+                                    <td className={`py-3 px-4 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      {row.condition}
+                                    </td>
+                                    <td className={`py-3 px-4 text-sm font-medium text-[#14C2A3]`}>
+                                      {row.direct}
+                                    </td>
+                                    <td className={`py-3 px-4 text-sm font-medium text-blue-500`}>
+                                      {row.indirect}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </>
+                    )}
 
                     {/* 特殊说明 */}
                     <div>
@@ -7563,10 +7636,22 @@ export default function WalletPage() {
                       </h4>
                       <div className={`p-4 rounded-lg ${isDark ? 'bg-yellow-900 border border-yellow-700' : 'bg-yellow-50 border border-yellow-200'}`}>
                         <div className={`text-sm space-y-1 ${isDark ? 'text-yellow-200' : 'text-yellow-800'}`}>
-                          <p>• 代理等级每月1日统计更新，满足条件即可升级</p>
-                          <p>• 佣金比例按照当前等级计算，升级后即时生效</p>
-                          <p>• 系统会自动识别有效推荐关系，防止刷量行为</p>
-                          <p>• 更多详情请联系客服咨询</p>
+                          {commissionTab === "理财佣金" ? (
+                            <>
+                              <p>• 团队奖等级每月1日统计更新，满足条件即可升级</p>
+                              <p>• 佣金比例按照当前团队等级计算，升级后即时生效</p>
+                              <p>• 团队投资额按照有效投资金额累计计算</p>
+                              <p>• 系统会自动识别有效推荐关系，防止刷量行为</p>
+                              <p>• 更多详情请联系客服咨询</p>
+                            </>
+                          ) : (
+                            <>
+                              <p>• 代理等级每月1日统计更新，满足条件即可升级</p>
+                              <p>• 佣金比例按照当前等级计算，升级后即时生效</p>
+                              <p>• 系统会自动识别有效推荐关系，防止刷量行为</p>
+                              <p>• 更多详情请联系客服咨询</p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
