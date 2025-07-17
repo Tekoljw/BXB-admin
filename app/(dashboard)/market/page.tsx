@@ -115,6 +115,8 @@ export default function MarketPage() {
   // 二级页签
   const subTabs = [
     "全部",
+    "现货",
+    "合约",
     "USDT",
     "DEX",
     "Innovation",
