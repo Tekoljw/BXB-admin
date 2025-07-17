@@ -124,7 +124,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
     { path: "/moments", icon: Compass, label: "发现", component: MomentsPage },
     { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
-    { path: "/futures", icon: BarChart3, label: "交易", component: FuturesPage },
+    { path: "/spot", icon: BarChart3, label: "交易", component: SpotPage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
   ]
 
