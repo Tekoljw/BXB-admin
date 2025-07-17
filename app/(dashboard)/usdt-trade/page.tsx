@@ -1189,57 +1189,165 @@ export default function USDTTradePage() {
               
               {/* C2C模式 */}
               {tradeMode === "C2C" && (
-                <div className="divide-y divide-gray-200 dark:divide-[#3a3d4a]">
-                  {/* 商家卡片列表 */}
-                  {displayedMerchants.map((merchant, index) => (
-                    <div key={index} className="p-4 hover:bg-gray-50 dark:hover:bg-[#252842] transition-all">
-                      {/* 卡片布局 - 对齐设计 */}
-                      <div className="grid grid-cols-12 gap-4 items-center">
-                        {/* 商家信息 */}
-                        <div className="col-span-3 flex items-center space-x-3">
-                          <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center">
-                            <span className="text-xs font-bold text-blue-600 dark:text-blue-300">
-                              {merchant.name.charAt(0)}
-                            </span>
-                          </div>
-                          <div>
-                            <div className="flex items-center space-x-1">
-                              <span className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                                {merchant.name}
+                <div>
+                  {/* 桌面端列表布局 */}
+                  <div className="hidden md:block divide-y divide-gray-200 dark:divide-[#3a3d4a]">
+                    {displayedMerchants.map((merchant, index) => (
+                      <div key={index} className="p-4 hover:bg-gray-50 dark:hover:bg-[#252842] transition-all">
+                        {/* 桌面端网格布局 */}
+                        <div className="grid grid-cols-12 gap-4 items-center">
+                          {/* 商家信息 */}
+                          <div className="col-span-3 flex items-center space-x-3">
+                            <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center">
+                              <span className="text-xs font-bold text-blue-600 dark:text-blue-300">
+                                {merchant.name.charAt(0)}
                               </span>
-                              {merchant.verified && (
-                                <Shield className="w-3 h-3 text-blue-500" />
+                            </div>
+                            <div>
+                              <div className="flex items-center space-x-1">
+                                <span className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                  {merchant.name}
+                                </span>
+                                {merchant.verified && (
+                                  <Shield className="w-3 h-3 text-blue-500" />
+                                )}
+                              </div>
+                              <div className="flex items-center space-x-2 text-xs text-gray-500">
+                                <div className="flex items-center">
+                                  <Star className="w-3 h-3 text-yellow-400 mr-1" />
+                                  {merchant.rating}
+                                </div>
+                                <span>•</span>
+                                <span>{merchant.orders}单</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 价格 */}
+                          <div className="col-span-2">
+                            <div className="text-lg font-bold text-custom-green">¥{merchant.price}</div>
+                            <div className="text-xs text-gray-400">{merchant.responseTime}</div>
+                          </div>
+
+                          {/* 限额 */}
+                          <div className="col-span-2">
+                            <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
+                              ¥{merchant.limit}
+                            </div>
+                            <div className="text-xs text-blue-600">{merchant.note}</div>
+                          </div>
+
+                          {/* 支付方式 */}
+                          <div className="col-span-3">
+                            <div className="flex flex-wrap gap-1">
+                              {sortPaymentMethods(merchant.paymentMethods).slice(0, 2).map((method, index) => {
+                                const isCash = method.includes("现金")
+                                return (
+                                  <span 
+                                    key={index}
+                                    className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${
+                                      isCash 
+                                        ? "bg-orange-100 text-orange-800 border border-orange-200 font-medium" 
+                                        : "bg-yellow-100 text-yellow-800"
+                                    }`}
+                                  >
+                                    {getPaymentIcon(method)}
+                                    {method}
+                                    {isCash && merchant.cashLocation && (
+                                      <span className="ml-1 text-xs text-orange-600">
+                                        ({merchant.cashLocation.city})
+                                      </span>
+                                    )}
+                                  </span>
+                                )
+                              })}
+                              {merchant.paymentMethods.length > 2 && (
+                                <span className="text-xs text-gray-500">+{merchant.paymentMethods.length - 2}</span>
                               )}
                             </div>
-                            <div className="flex items-center space-x-2 text-xs text-gray-500">
-                              <div className="flex items-center">
-                                <Star className="w-3 h-3 text-yellow-400 mr-1" />
-                                {merchant.rating}
-                              </div>
-                              <span>•</span>
-                              <span>{merchant.orders}单</span>
+                          </div>
+
+                          {/* 操作按钮 */}
+                          <div className="col-span-2 flex items-center justify-end space-x-2">
+                            <button 
+                              className={`border px-2 py-1.5 rounded text-xs transition-all h-8 flex items-center justify-center ${
+                                isDark 
+                                  ? "bg-white border-white text-black hover:bg-gray-200" 
+                                  : isDark ? "bg-transparent border-white text-white hover:bg-white hover:text-black" : "bg-white border-black text-black hover:bg-gray-50"
+                              }`}
+                              onClick={() => {
+                                if (merchant.isFriend) {
+                                  console.log('开始对话:', merchant.name)
+                                } else {
+                                  console.log('添加好友:', merchant.name)
+                                }
+                              }}
+                            >
+                              {merchant.isFriend ? <MessageCircle className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+                            </button>
+                            <TradeButton
+                              type={activeTab.includes("买入") ? "buy" : "sell"}
+                              size="sm"
+                              onClick={() => handleOpenTradeModal(merchant, activeTab.includes("买入") ? "buy" : "sell")}
+                            >
+                              {activeTab.includes("买入") ? "买入" : "卖出"}
+                            </TradeButton>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* 手机端卡片布局 */}
+                  <div className="md:hidden space-y-3 p-4">
+                    {displayedMerchants.map((merchant, index) => (
+                      <div key={index} className={`${cardStyle} p-4 rounded-lg`}>
+                        {/* 商家信息头部 */}
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-3">
+                            <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center">
+                              <span className="text-sm font-bold text-blue-600 dark:text-blue-300">
+                                {merchant.name.charAt(0)}
+                              </span>
                             </div>
+                            <div>
+                              <div className="flex items-center space-x-1">
+                                <span className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                  {merchant.name}
+                                </span>
+                                {merchant.verified && (
+                                  <Shield className="w-4 h-4 text-blue-500" />
+                                )}
+                              </div>
+                              <div className="flex items-center space-x-2 text-xs text-gray-500">
+                                <div className="flex items-center">
+                                  <Star className="w-3 h-3 text-yellow-400 mr-1" />
+                                  {merchant.rating}
+                                </div>
+                                <span>•</span>
+                                <span>{merchant.orders}单</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-custom-green">¥{merchant.price}</div>
+                            <div className="text-xs text-gray-400">{merchant.responseTime}</div>
                           </div>
                         </div>
 
-                        {/* 价格 */}
-                        <div className="col-span-2">
-                          <div className="text-lg font-bold text-custom-green">¥{merchant.price}</div>
-                          <div className="text-xs text-gray-400">{merchant.responseTime}</div>
-                        </div>
-
-                        {/* 限额 */}
-                        <div className="col-span-2">
-                          <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
-                            ¥{merchant.limit}
+                        {/* 限额信息 */}
+                        <div className="mb-3">
+                          <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"} mb-1`}>
+                            限额：¥{merchant.limit}
                           </div>
                           <div className="text-xs text-blue-600">{merchant.note}</div>
                         </div>
 
                         {/* 支付方式 */}
-                        <div className="col-span-3">
-                          <div className="flex flex-wrap gap-1">
-                            {sortPaymentMethods(merchant.paymentMethods).slice(0, 2).map((method, index) => {
+                        <div className="mb-4">
+                          <div className="text-xs text-gray-500 mb-2">支付方式</div>
+                          <div className="flex flex-wrap gap-2">
+                            {sortPaymentMethods(merchant.paymentMethods).map((method, index) => {
                               const isCash = method.includes("现金")
                               return (
                                 <span 
@@ -1260,19 +1368,16 @@ export default function USDTTradePage() {
                                 </span>
                               )
                             })}
-                            {merchant.paymentMethods.length > 2 && (
-                              <span className="text-xs text-gray-500">+{merchant.paymentMethods.length - 2}</span>
-                            )}
                           </div>
                         </div>
 
                         {/* 操作按钮 */}
-                        <div className="col-span-2 flex items-center justify-end space-x-2">
+                        <div className="flex items-center space-x-2">
                           <button 
-                            className={`border px-2 py-1.5 rounded text-xs transition-all h-8 flex items-center justify-center ${
+                            className={`flex-1 border py-2 rounded text-sm transition-all flex items-center justify-center space-x-1 ${
                               isDark 
                                 ? "bg-white border-white text-black hover:bg-gray-200" 
-                                : isDark ? "bg-transparent border-white text-white hover:bg-white hover:text-black" : "bg-white border-black text-black hover:bg-gray-50"
+                                : "bg-white border-black text-black hover:bg-gray-50"
                             }`}
                             onClick={() => {
                               if (merchant.isFriend) {
@@ -1282,19 +1387,21 @@ export default function USDTTradePage() {
                               }
                             }}
                           >
-                            {merchant.isFriend ? <MessageCircle className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+                            {merchant.isFriend ? <MessageCircle className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                            <span>{merchant.isFriend ? "对话" : "加友"}</span>
                           </button>
                           <TradeButton
                             type={activeTab.includes("买入") ? "buy" : "sell"}
-                            size="sm"
+                            size="md"
+                            className="flex-1"
                             onClick={() => handleOpenTradeModal(merchant, activeTab.includes("买入") ? "buy" : "sell")}
                           >
                             {activeTab.includes("买入") ? "买入" : "卖出"}
                           </TradeButton>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                   
                   {/* 加载更多按钮 */}
                   {hasMore && (
