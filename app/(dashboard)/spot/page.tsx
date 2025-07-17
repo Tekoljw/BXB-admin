@@ -1,9 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { Star } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
-// Import the actual page components
+// Import page components for mobile tabs
 import FuturesPage from "../futures/page"
 import FinancePage from "../finance/page"
 
@@ -23,36 +24,92 @@ export default function SpotPage() {
 
   const mobileTabOptions = ["现货交易", "合约交易", "理财投资"]
 
-  // Mobile tab content switcher
-  const renderMobileContent = () => {
-    switch (activeMobileTab) {
-      case "合约交易":
-        return <FuturesPage />
-      case "理财投资":
-        return <FinancePage />
-      default:
-        return (
-          <div className="p-3 md:p-6">
-            <div className="text-center py-20">
-              <h2 className={`text-xl font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-                现货交易
-              </h2>
-              <p className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                现货交易功能正在开发中...
-              </p>
+  // Render content based on active mobile tab
+  if (activeMobileTab === "合约交易") {
+    return (
+      <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+        <div className="md:hidden">
+          <div className="p-4 pb-0">
+            <div className="relative flex bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
+              <div 
+                className="absolute bg-white dark:bg-white rounded-md transition-transform duration-300 ease-in-out"
+                style={{ 
+                  width: 'calc(33.333% - 4px)', 
+                  height: 'calc(100% - 8px)',
+                  top: '4px',
+                  left: '4px',
+                  transform: `translateX(${mobileTabOptions.indexOf(activeMobileTab) * 100}%)`
+                }}
+              />
+              {mobileTabOptions.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveMobileTab(tab)}
+                  className={`relative z-10 flex-1 py-2 px-3 text-sm font-medium transition-colors duration-300 ${
+                    activeMobileTab === tab
+                      ? "text-black"
+                      : isDark
+                        ? "text-gray-400"
+                        : "text-gray-600"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
             </div>
           </div>
-        )
-    }
+        </div>
+        <FuturesPage />
+      </div>
+    )
   }
 
+  if (activeMobileTab === "理财投资") {
+    return (
+      <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+        <div className="md:hidden">
+          <div className="p-4 pb-0">
+            <div className="relative flex bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
+              <div 
+                className="absolute bg-white dark:bg-white rounded-md transition-transform duration-300 ease-in-out"
+                style={{ 
+                  width: 'calc(33.333% - 4px)', 
+                  height: 'calc(100% - 8px)',
+                  top: '4px',
+                  left: '4px',
+                  transform: `translateX(${mobileTabOptions.indexOf(activeMobileTab) * 100}%)`
+                }}
+              />
+              {mobileTabOptions.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveMobileTab(tab)}
+                  className={`relative z-10 flex-1 py-2 px-3 text-sm font-medium transition-colors duration-300 ${
+                    activeMobileTab === tab
+                      ? "text-black"
+                      : isDark
+                        ? "text-gray-400"
+                        : "text-gray-600"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <FinancePage />
+      </div>
+    )
+  }
+
+  // Default: 现货交易 content
   return (
     <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
       {/* Mobile Tabs - Only visible on mobile */}
       <div className="md:hidden">
         <div className="p-4 pb-0">
           <div className="relative flex bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
-            {/* Sliding background */}
             <div 
               className="absolute bg-white dark:bg-white rounded-md transition-transform duration-300 ease-in-out"
               style={{ 
@@ -63,8 +120,6 @@ export default function SpotPage() {
                 transform: `translateX(${mobileTabOptions.indexOf(activeMobileTab) * 100}%)`
               }}
             />
-            
-            {/* Tab buttons */}
             {mobileTabOptions.map((tab) => (
               <button
                 key={tab}
@@ -84,21 +139,43 @@ export default function SpotPage() {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="md:hidden">
-        {renderMobileContent()}
-      </div>
-
-      {/* Desktop content - show original spot page content */}
-      <div className="hidden md:block">
-        <div className="p-3 md:p-6">
-          <div className="text-center py-20">
-            <h2 className={`text-xl font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-              现货交易 (桌面版)
-            </h2>
-            <p className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>
-              现货交易功能正在开发中...
+      {/* Spot Trading Content */}
+      <div className="p-3 md:p-6">
+        <div className="text-center py-20">
+          <h2 className={`text-2xl font-bold mb-6 ${isDark ? "text-white" : "text-gray-800"}`}>
+            现货交易
+          </h2>
+          <div className={`max-w-md mx-auto ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            <p className="mb-4">
+              现货交易功能包括实时价格监控、订单管理、资产交易等核心功能。
             </p>
+            <p>
+              支持BTC、ETH、USDT等主流数字货币的现货交易。
+            </p>
+          </div>
+          
+          {/* Sample trading interface placeholder */}
+          <div className="mt-12 max-w-4xl mx-auto">
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 ${isDark ? "text-white" : "text-gray-800"}`}>
+              <div className={`p-6 rounded-lg ${isDark ? "bg-[#1a1d29] border border-[#252842]" : "bg-white border border-gray-200"}`}>
+                <h3 className="font-semibold mb-2">实时行情</h3>
+                <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                  查看实时币价和市场趋势
+                </p>
+              </div>
+              <div className={`p-6 rounded-lg ${isDark ? "bg-[#1a1d29] border border-[#252842]" : "bg-white border border-gray-200"}`}>
+                <h3 className="font-semibold mb-2">交易订单</h3>
+                <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                  管理买入卖出订单
+                </p>
+              </div>
+              <div className={`p-6 rounded-lg ${isDark ? "bg-[#1a1d29] border border-[#252842]" : "bg-white border border-gray-200"}`}>
+                <h3 className="font-semibold mb-2">资产管理</h3>
+                <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                  查看账户余额和历史记录
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
