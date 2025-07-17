@@ -1384,15 +1384,19 @@ export default function USDTTradePage() {
 
                         {/* 限额信息 */}
                         <div className="mb-3">
-                          <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"} mb-1`}>
-                            限额：¥{merchant.limit}
+                          <div className="flex items-center justify-between mb-1">
+                            <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
+                              限额：¥{merchant.limit}
+                            </div>
+                            <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
+                              担保周期：24小时
+                            </div>
                           </div>
                           <div className="text-xs text-blue-600">{merchant.note}</div>
                         </div>
 
                         {/* 支付方式和操作按钮 */}
                         <div className="mb-0">
-                          <div className="text-xs text-gray-500 mb-2">支付方式</div>
                           <div className="flex items-center justify-between">
                             <div className="flex flex-wrap gap-2 flex-1">
                               {sortPaymentMethods(merchant.paymentMethods).filter(method => !method.includes("现金")).map((method, index) => (
