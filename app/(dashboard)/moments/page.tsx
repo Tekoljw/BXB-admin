@@ -19,26 +19,12 @@ export default function MomentsPage() {
   const [leftSidebarTab, setLeftSidebarTab] = useState("热门话题")
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
   const isDark = theme === "dark"
 
   // 解决闪烁问题
   useEffect(() => {
     setMounted(true)
   }, [])
-
-  // 检测移动端
-  useEffect(() => {
-    if (!mounted) return
-    
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [mounted])
 
   // 如果组件未挂载，返回空白内容，避免闪烁
   if (!mounted) {
@@ -317,12 +303,11 @@ export default function MomentsPage() {
   return (
     <div>
       <style dangerouslySetInnerHTML={{ __html: scrollbarHideStyle }} />
-      <div className={`${isMobile ? 'p-4' : 'p-6'} min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
-        {/* 响应式布局 */}
-        <div className={`${isMobile ? 'block' : 'grid grid-cols-12 gap-6'}`}>
-          {/* 左侧边栏 - 热门话题与圈子 (桌面端显示) */}
-          {!isMobile && (
-            <div className="col-span-3">
+      <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
+        {/* 三栏布局 */}
+        <div className="grid grid-cols-12 gap-6">
+          {/* 左侧边栏 - 热门话题与圈子 */}
+          <div className="col-span-3">
             <div className={`${cardStyle} rounded-lg sticky top-6 overflow-hidden`}>
               {/* 页签导航 */}
               <div className="flex border-b border-gray-100 dark:border-gray-700">
@@ -426,21 +411,20 @@ export default function MomentsPage() {
                 )}
               </div>
             </div>
-            </div>
-          )}
+          </div>
 
           {/* 中间主内容区 */}
-          <div className={`${isMobile ? 'w-full' : 'col-span-6'}`}>
+          <div className="col-span-6">
             {/* 两级页签导航和搜索框 */}
             <div className="mb-6">
-              {/* 一级页签和搜索框 - 响应式布局 */}
-              <div className={`${isMobile ? 'block space-y-4' : 'flex items-center justify-between'} mb-4`}>
+              {/* 一级页签和搜索框 */}
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-8 relative">
                   {mainTabs.map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveMainTab(tab)}
-                      className={`${isMobile ? 'text-base' : 'text-lg'} transition-all duration-300 relative pb-2 ${
+                      className={`text-lg transition-all duration-300 relative pb-2 ${
                         activeMainTab === tab
                           ? "font-black text-black dark:text-white"
                           : isDark
@@ -459,7 +443,7 @@ export default function MomentsPage() {
                   ))}
                 </div>
 
-                {/* 搜索框 - 移动端全宽 */}
+                {/* 搜索框 */}
                 <div className="relative">
                   <Search
                     className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
@@ -471,7 +455,7 @@ export default function MomentsPage() {
                     placeholder="搜索动态"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`pl-10 pr-4 py-2 ${isMobile ? 'w-full' : 'w-64'} rounded-lg border text-sm transition-colors ${
+                    className={`pl-10 pr-4 py-2 w-64 rounded-lg border text-sm transition-colors ${
                       isDark
                         ? "bg-[#1a1d29] border-[#252842] text-white placeholder-gray-400 focus:border-[#00D4AA]"
                         : "bg-white border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
@@ -823,9 +807,8 @@ export default function MomentsPage() {
             )}
           </div>
 
-          {/* 右侧边栏 - 推荐关注与交易员排行榜 (仅桌面端显示) */}
-          {!isMobile && (
-            <div className="col-span-3">
+          {/* 右侧边栏 - 推荐关注与交易员排行榜 */}
+          <div className="col-span-3">
             <div className={`${cardStyle} rounded-lg sticky top-6 overflow-hidden`}>
               {/* 页签导航 */}
               <div className="flex border-b border-gray-100 dark:border-gray-700">
@@ -981,8 +964,7 @@ export default function MomentsPage() {
                 )}
               </div>
             </div>
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

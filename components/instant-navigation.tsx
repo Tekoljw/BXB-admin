@@ -57,15 +57,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
   const { theme, language, setTheme, setLanguage } = useTheme()
 
-  // Handle mounting
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
   // Check for mobile viewport
   useEffect(() => {
-    if (!mounted) return
-    
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768) // md breakpoint
     }
@@ -73,7 +66,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
-  }, [mounted])
+  }, [])
 
   // Mobile navigation items - only 5 items as specified
   const mobileNavItems = [
@@ -272,14 +265,14 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
           {/* Settings and Language Section */}
           <div className="relative z-10 mt-auto p-4 backdrop-blur-sm">
-            <div className={`flex ${isExpanded ? 'justify-around' : 'flex-col space-y-2 items-center'} w-full`}>
+            <div className={`flex ${isExpanded ? 'justify-around' : 'flex-col space-y-2'} w-full`}>
               {/* Theme Toggle */}
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="p-3 rounded-xl transition-all duration-500 group relative hover:bg-gradient-to-r hover:from-yellow-500/10 hover:to-orange-500/10 hover:shadow-md hover:shadow-yellow-500/20 hover:-translate-y-1 hover:scale-110"
+                className="p-3 rounded-xl transition-all duration-500 group relative hover:bg-gradient-to-r hover:from-yellow-500/10 hover:to-orange-500/10 hover:shadow-md hover:shadow-yellow-500/20 hover:-translate-y-1"
                 title={theme === 'dark' ? '切换到浅色模式' : '切换到深色模式'}
               >
-                <div className="transition-all duration-500 transform group-hover:text-yellow-400 group-hover:rotate-180">
+                <div className="transition-all duration-500 transform group-hover:text-yellow-400 group-hover:rotate-12 group-hover:scale-125">
                   {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                 </div>
               </button>
@@ -292,15 +285,15 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                 }}
                 className={`p-3 rounded-xl transition-all duration-500 group relative ${
                   showLanguageDropdown 
-                    ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 shadow-md shadow-blue-500/20 -translate-y-1 scale-110' 
-                    : 'hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-cyan-500/10 hover:shadow-md hover:shadow-blue-500/20 hover:-translate-y-1 hover:scale-110'
+                    ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 shadow-md shadow-blue-500/20 -translate-y-1' 
+                    : 'hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-cyan-500/10 hover:shadow-md hover:shadow-blue-500/20 hover:-translate-y-1'
                 }`}
                 title="语言设置"
               >
                 <div className={`transition-all duration-500 transform ${
                   showLanguageDropdown 
-                    ? 'text-blue-400 rotate-180' 
-                    : 'group-hover:text-blue-400 group-hover:rotate-180'
+                    ? 'text-blue-400 rotate-12 scale-125' 
+                    : 'group-hover:text-blue-400 group-hover:rotate-12 group-hover:scale-125'
                 }`}>
                   <Globe2 size={20} />
                 </div>
@@ -310,19 +303,22 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               <button 
                 onClick={(e) => {
                   e.stopPropagation()
-                  setShowNotificationDropdown(!showNotificationDropdown)
+                  const newState = !showNotificationDropdown
+                  console.log("Instant notification button clicked, setting state to:", newState)
+                  setShowNotificationDropdown(newState)
+                  console.log("State should now be:", newState)
                 }}
                 className={`p-3 rounded-xl transition-all duration-500 group relative ${
                   showNotificationDropdown 
-                    ? 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 shadow-md shadow-purple-500/20 -translate-y-1 scale-110' 
-                    : 'hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-pink-500/10 hover:shadow-md hover:shadow-purple-500/20 hover:-translate-y-1 hover:scale-110'
+                    ? 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 shadow-md shadow-purple-500/20 -translate-y-1' 
+                    : 'hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-pink-500/10 hover:shadow-md hover:shadow-purple-500/20 hover:-translate-y-1'
                 }`}
                 title="通知"
               >
                 <div className={`transition-all duration-500 transform ${
                   showNotificationDropdown 
-                    ? 'text-purple-400 rotate-180' 
-                    : 'group-hover:text-purple-400 group-hover:rotate-180'
+                    ? 'text-purple-400 rotate-12 scale-125' 
+                    : 'group-hover:text-purple-400 group-hover:rotate-12 group-hover:scale-125'
                 }`}>
                   <Bell size={20} />
                 </div>
@@ -341,12 +337,12 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       </div>
 
       {/* Mobile Bottom Navigation */}
-      {mounted && isMobile && (
+      {isMobile && (
         <MobileBottomNavigation currentPage={currentPage} onNavigate={navigate} />
       )}
 
       {/* Notification Dropdown Portal - Desktop only */}
-      {!isMobile && mounted && typeof window !== 'undefined' && showNotificationDropdown && createPortal(
+      {!isMobile && mounted && showNotificationDropdown && createPortal(
         <div 
           style={{ 
             position: 'fixed',
@@ -418,7 +414,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       )}
 
       {/* Language Dropdown Portal - Desktop only */}
-      {!isMobile && mounted && typeof window !== 'undefined' && showLanguageDropdown && createPortal(
+      {!isMobile && mounted && showLanguageDropdown && createPortal(
         <div 
           style={{ 
             position: 'fixed',
