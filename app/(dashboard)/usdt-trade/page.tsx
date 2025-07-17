@@ -90,6 +90,9 @@ export default function USDTTradePage() {
   // OTC服务商选择
   const [selectedOtcProvider, setSelectedOtcProvider] = useState<number | null>(null)
   const [otcPurchaseAmount, setOtcPurchaseAmount] = useState("100")
+  
+  // C2C交易方式选择
+  const [c2cTransactionType, setC2cTransactionType] = useState<"现金交易" | "线上转账">("现金交易")
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -1304,6 +1307,39 @@ export default function USDTTradePage() {
 
                   {/* 手机端卡片布局 */}
                   <div className="md:hidden space-y-3 p-4">
+                    {/* 交易方式选择和发布按钮 */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex">
+                        {["现金交易", "线上转账"].map((type) => (
+                          <button
+                            key={type}
+                            onClick={() => setC2cTransactionType(type as "现金交易" | "线上转账")}
+                            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                              c2cTransactionType === type
+                                ? isDark
+                                  ? "bg-custom-green text-white"
+                                  : "bg-custom-green text-white"
+                                : isDark
+                                  ? "text-gray-400 hover:text-white"
+                                  : "text-gray-600 hover:text-gray-900"
+                            }`}
+                          >
+                            {type}
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => setShowPublishModal(true)}
+                        className={`px-4 py-2 text-sm font-medium rounded-lg border transition-all ${
+                          isDark
+                            ? "border-white text-white hover:bg-white hover:text-black"
+                            : "border-black text-black hover:bg-black hover:text-white"
+                        }`}
+                      >
+                        发布订单
+                      </button>
+                    </div>
+                    
                     {displayedMerchants.map((merchant, index) => (
                       <div key={index} className={`${cardStyle} p-4 rounded-lg`}>
                         {/* 商家信息头部 */}
@@ -1321,6 +1357,13 @@ export default function USDTTradePage() {
                                 </span>
                                 {merchant.verified && (
                                   <Shield className="w-4 h-4 text-blue-500" />
+                                )}
+                                {/* 现金交易标签 */}
+                                {merchant.paymentMethods.some(method => method.includes("现金")) && (
+                                  <span className="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-800 border border-orange-200 font-medium flex items-center gap-1">
+                                    <MapPin className="w-2.5 h-2.5" />
+                                    现金交易
+                                  </span>
                                 )}
                               </div>
                               <div className="flex items-center space-x-2 text-xs text-gray-500">
@@ -1347,61 +1390,50 @@ export default function USDTTradePage() {
                           <div className="text-xs text-blue-600">{merchant.note}</div>
                         </div>
 
-                        {/* 支付方式 */}
-                        <div className="mb-4">
+                        {/* 支付方式和操作按钮 */}
+                        <div className="mb-0">
                           <div className="text-xs text-gray-500 mb-2">支付方式</div>
-                          <div className="flex flex-wrap gap-2">
-                            {sortPaymentMethods(merchant.paymentMethods).map((method, index) => {
-                              const isCash = method.includes("现金")
-                              return (
+                          <div className="flex items-center justify-between">
+                            <div className="flex flex-wrap gap-2 flex-1">
+                              {sortPaymentMethods(merchant.paymentMethods).filter(method => !method.includes("现金")).map((method, index) => (
                                 <span 
                                   key={index}
-                                  className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${
-                                    isCash 
-                                      ? "bg-orange-100 text-orange-800 border border-orange-200 font-medium" 
-                                      : "bg-yellow-100 text-yellow-800"
-                                  }`}
+                                  className="text-xs px-2 py-1 rounded-full flex items-center gap-1 bg-yellow-100 text-yellow-800"
                                 >
                                   {getPaymentIcon(method)}
                                   {method}
-                                  {isCash && merchant.cashLocation && (
-                                    <span className="ml-1 text-xs text-orange-600">
-                                      ({merchant.cashLocation.city})
-                                    </span>
-                                  )}
                                 </span>
-                              )
-                            })}
+                              ))}
+                            </div>
+                            
+                            {/* 操作按钮 - 移到右下角 */}
+                            <div className="flex items-center space-x-2 ml-3">
+                              <button 
+                                className={`border p-2 rounded text-sm transition-all flex items-center justify-center ${
+                                  isDark 
+                                    ? "bg-white border-white text-black hover:bg-gray-200" 
+                                    : "bg-white border-black text-black hover:bg-gray-50"
+                                }`}
+                                onClick={() => {
+                                  if (merchant.isFriend) {
+                                    console.log('开始对话:', merchant.name)
+                                  } else {
+                                    console.log('添加好友:', merchant.name)
+                                  }
+                                }}
+                              >
+                                {merchant.isFriend ? <MessageCircle className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                              </button>
+                              <TradeButton
+                                type={activeTab.includes("买入") ? "buy" : "sell"}
+                                size="sm"
+                                className="px-3"
+                                onClick={() => handleOpenTradeModal(merchant, activeTab.includes("买入") ? "buy" : "sell")}
+                              >
+                                {activeTab.includes("买入") ? "买入" : "卖出"}
+                              </TradeButton>
+                            </div>
                           </div>
-                        </div>
-
-                        {/* 操作按钮 */}
-                        <div className="flex items-center space-x-2">
-                          <button 
-                            className={`flex-1 border py-2 rounded text-sm transition-all flex items-center justify-center space-x-1 ${
-                              isDark 
-                                ? "bg-white border-white text-black hover:bg-gray-200" 
-                                : "bg-white border-black text-black hover:bg-gray-50"
-                            }`}
-                            onClick={() => {
-                              if (merchant.isFriend) {
-                                console.log('开始对话:', merchant.name)
-                              } else {
-                                console.log('添加好友:', merchant.name)
-                              }
-                            }}
-                          >
-                            {merchant.isFriend ? <MessageCircle className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                            <span>{merchant.isFriend ? "对话" : "加友"}</span>
-                          </button>
-                          <TradeButton
-                            type={activeTab.includes("买入") ? "buy" : "sell"}
-                            size="md"
-                            className="flex-1"
-                            onClick={() => handleOpenTradeModal(merchant, activeTab.includes("买入") ? "buy" : "sell")}
-                          >
-                            {activeTab.includes("买入") ? "买入" : "卖出"}
-                          </TradeButton>
                         </div>
                       </div>
                     ))}
