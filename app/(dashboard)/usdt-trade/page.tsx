@@ -623,8 +623,15 @@ export default function USDTTradePage() {
                 </div>
               </div>
 
-              {/* 二级页签：C2C/快捷/OTC */}
-              <div className="flex space-x-2">
+
+            </div>
+          </div>
+
+          {/* 手机端独立的交易方式选择卡片 */}
+          <div className="md:hidden">
+            <div className={`${cardStyle} p-4 m-4`}>
+              {/* C2C/快捷/OTC三个页签 */}
+              <div className="flex space-x-2 mb-4">
                 {[
                   { 
                     mode: "C2C", 
@@ -658,6 +665,171 @@ export default function USDTTradePage() {
                     </div>
                   </button>
                 ))}
+              </div>
+
+              {/* 动态显示对应交易方式的标签 */}
+              <div className="flex flex-wrap gap-2">
+                {tradeMode === "C2C" && (
+                  <>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      灵活价格
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      多元支付
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      支持现金交易
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      支持大额
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-red-900/50 text-red-300" 
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      等待时间长
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-red-900/50 text-red-300" 
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      KYC
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-red-900/50 text-red-300" 
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      人工交易
+                    </span>
+                  </>
+                )}
+                
+                {tradeMode === "快捷" && (
+                  <>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      KYC
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      全自动
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      秒到账
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      银行卡
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-red-900/50 text-red-300" 
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      小额
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-red-900/50 text-red-300" 
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      每日限制
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-red-900/50 text-red-300" 
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      学生禁止
+                    </span>
+                  </>
+                )}
+
+                {tradeMode === "OTC" && (
+                  <>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      每日限额高
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      每月限额高
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      支持大额
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-green-900/50 text-green-300" 
+                        : "bg-green-100 text-green-700"
+                    }`}>
+                      银行监管
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-red-900/50 text-red-300" 
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      每日限额高
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-red-900/50 text-red-300" 
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      每月限额高
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      isDark 
+                        ? "bg-red-900/50 text-red-300" 
+                        : "bg-red-100 text-red-700"
+                    }`}>
+                      手续费高
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>

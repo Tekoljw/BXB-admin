@@ -405,6 +405,16 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Mobile table headers use smaller text and muted colors for better hierarchy
   - Updated MarketContent component to use same mobile layout as main market page
   - Share page market tab now displays consistent three-column mobile layout
+- January 30, 2025. Completed USDT trading page mobile adaptation:
+  - Moved left sidebar filter panel to mobile top header with 买入USDT/卖出USDT tabs and currency dropdown
+  - Hidden mobile filter functions: payment methods, transaction amounts, and custom ranges
+  - Created independent card for C2C/快捷/OTC trading mode selection with horizontal icon+text layout
+  - Implemented dynamic tag display system showing mode-specific advantages/disadvantages based on selected tab
+  - C2C tags: 灵活价格, 多元支付, 支持现金交易, 支持大额 (green) / 等待时间长, KYC, 人工交易 (red)
+  - 快捷 tags: KYC, 全自动, 秒到账, 银行卡 (green) / 小额, 每日限制, 学生禁止 (red)  
+  - OTC tags: 每日限额高, 每月限额高, 支持大额, 银行监管 (green) / 每日限额高, 每月限额高, 手续费高 (red)
+  - Desktop version maintains full functionality while mobile version provides streamlined interface
+  - Fixed tab sliding background positioning and reduced tab height for better mobile UX
 
 ## User Preferences
 
