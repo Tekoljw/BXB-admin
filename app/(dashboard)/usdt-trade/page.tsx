@@ -1639,7 +1639,7 @@ export default function USDTTradePage() {
                     </div>
 
                     {/* 桌面端底部按钮 */}
-                    <div className="mt-6 px-6 pb-6">
+                    <div className="mt-6">
                       <button className={`w-full py-3 rounded-lg font-medium transition-all ${
                         selectedOtcProvider !== null
                           ? "bg-custom-green text-white hover:bg-custom-green/90"
