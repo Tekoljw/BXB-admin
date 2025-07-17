@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Star, Search, Heart, MessageCircle, Share, MoreHorizontal, ImageIcon, Video, Smile } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
-import StatisticsContent from "@/components/statistics-content"
+import MarketTabs from "@/components/market-tabs"
 
 export default function MomentsPage() {
   const { theme } = useTheme()
@@ -807,7 +807,7 @@ export default function MomentsPage() {
 
             {/* 行情页签内容 */}
             {activeMainTab === "行情" && (
-              <StatisticsContent showHeader={false} />
+              <MarketTabs />
             )}
 
             {/* 动态列表 - 重新设计的卡片布局 */}
