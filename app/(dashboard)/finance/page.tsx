@@ -52,8 +52,9 @@ export default function FinancePage() {
 
   return (
     <div className={`min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
-      <div className="flex">
-        {/* Left Sidebar Menu - Full screen style */}
+      {/* Desktop Layout */}
+      <div className="hidden md:flex">
+        {/* Left Sidebar Menu - Desktop only */}
         <div className="w-56 flex-shrink-0">
           <div className={`${isDark ? "bg-[#1a1d29]" : "bg-white"} border-r sticky top-0 overflow-hidden h-screen ${isDark ? "border-[#252842]" : "border-gray-200"}`}>
             <div className="flex flex-col h-full">
@@ -87,7 +88,7 @@ export default function FinancePage() {
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* Desktop Main Content */}
         <div className="flex-1 p-6">
           {/* New User Exclusive Banner */}
           <div className="mb-6">
@@ -182,6 +183,151 @@ export default function FinancePage() {
 
                 {/* Duration */}
                 <div className="mb-6">
+                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                    质押期限: {product.duration}
+                  </div>
+                </div>
+
+                {/* Invest Button */}
+                <button className={`w-full py-3 rounded-lg font-medium transition-colors border ${
+                  isDark 
+                    ? "border-[#252842] text-gray-300 hover:bg-[#252842]" 
+                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                }`}>
+                  立即投资
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="md:hidden">
+        {/* New User Exclusive Banner - Mobile Top */}
+        <div className="p-4 pb-0">
+          <div className={`${cardStyle} rounded-lg p-4 relative overflow-hidden`}>
+            {/* Background pattern */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute top-2 right-4 w-8 h-8 rounded-full border-2 border-[#00D4AA]"></div>
+              <div className="absolute bottom-2 right-6 w-6 h-6 border border-[#00D4AA] rotate-45"></div>
+            </div>
+            
+            <div className="relative z-10">
+              <div className="mb-2">
+                <span className="text-[#00D4AA] text-xs font-medium bg-[#00D4AA]/10 px-2 py-1 rounded">
+                  新用户专属
+                </span>
+              </div>
+              
+              <div className="mb-2">
+                <div className="flex items-baseline space-x-2">
+                  <span className={`${isDark ? "text-white" : "text-gray-900"} text-xl font-bold`}>UBX挖矿</span>
+                  <span className="text-[#00D4AA] text-2xl font-bold">0.4%</span>
+                  <span className={`${isDark ? "text-gray-300" : "text-gray-600"} text-sm`}>日利率</span>
+                  <span className={`${isDark ? "text-gray-400" : "text-gray-500"} text-xs`}>7天</span>
+                </div>
+              </div>
+              
+              <div className="mb-3">
+                <span className={`${isDark ? "text-gray-300" : "text-gray-600"} text-xs`}>
+                  0.03% 基础利率 + 0.37% 活动奖励
+                </span>
+              </div>
+              
+              <button className="bg-[#00D4AA] hover:bg-[#00C097] text-white font-medium px-4 py-2 rounded-lg transition-colors text-sm">
+                立即投资
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Tabs for Mining */}
+        <div className="p-4 pb-0">
+          <div className="flex bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
+            {["UBX挖矿", "UBC挖矿"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setSelectedTab(tab)}
+                className={`relative flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                  selectedTab === tab
+                    ? isDark
+                      ? "bg-white text-black shadow-sm"
+                      : "bg-white text-gray-900 shadow-sm"
+                    : isDark
+                      ? "text-gray-400 hover:text-gray-200"
+                      : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {tab}
+                {tab === "UBC挖矿" && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 py-0.5 rounded-full">
+                    HOT
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Finance Products */}
+        <div className="p-4">
+          <div className="space-y-4">
+            {financeProducts.map((product) => (
+              <div key={product.id} className={`${cardStyle} rounded-lg p-4`}>
+                {/* Daily Rate */}
+                <div className="mb-3">
+                  <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"} mb-1`}>
+                    {product.dailyRate}
+                  </div>
+                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                    日利率
+                  </div>
+                </div>
+
+                {/* Rate Details */}
+                <div className="mb-3">
+                  <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                    {product.baseRate} 基础利率 + {product.activityRate} 活动加息
+                  </div>
+                </div>
+
+                {/* Token Icons and Tags */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    {product.tokens.map((token, index) => (
+                      <div key={index} className="flex items-center">
+                        {token === "USDT" && (
+                          <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center text-white text-xs font-bold">
+                            T
+                          </div>
+                        )}
+                        {token === "USDC" && (
+                          <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
+                            C
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex space-x-1">
+                    {product.tags.map((tag, index) => (
+                      <span 
+                        key={index}
+                        className={`text-xs px-2 py-1 rounded ${
+                          isDark 
+                            ? "bg-[#252842] text-gray-300" 
+                            : "bg-gray-100 text-gray-600"
+                        }`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Duration */}
+                <div className="mb-4">
                   <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                     质押期限: {product.duration}
                   </div>
