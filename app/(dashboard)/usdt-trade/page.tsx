@@ -86,7 +86,6 @@ export default function USDTTradePage() {
   const [selectedCountry, setSelectedCountry] = useState("中国")
   const [selectedCity, setSelectedCity] = useState("北京")
   const [locationSearchTerm, setLocationSearchTerm] = useState("")
-  const [selectedOTCProvider, setSelectedOTCProvider] = useState<any>(null)
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -1542,6 +1541,30 @@ export default function USDTTradePage() {
                 <div>
                   {/* 桌面端布局 */}
                   <div className="hidden md:block p-6">
+                    {/* 购买金额卡片 */}
+                    <div className={`${cardStyle} p-4 rounded-lg mb-6`}>
+                      <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                        购买USDT数量
+                      </h4>
+                      <div className="mb-4">
+                        <input
+                          type="text"
+                          placeholder="123"
+                          className={`w-full px-3 py-3 text-lg text-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                            isDark 
+                              ? "bg-[#1a1c2e] border-[#3a3d4a] text-white" 
+                              : "bg-white border-gray-300 text-gray-900"
+                          }`}
+                        />
+                      </div>
+                      <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                        最低兑换 100 USDT • 无上限
+                      </div>
+                      <button className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all">
+                        重新查看报价
+                      </button>
+                    </div>
+
                     <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
                       请选择服务商
                     </h3>
@@ -1606,94 +1629,106 @@ export default function USDTTradePage() {
                         </div>
                       ))}
                     </div>
+
+                    {/* 桌面端底部按钮 */}
+                    <div className="mt-6 px-6 pb-6">
+                      <button className="w-full py-3 bg-custom-green text-white rounded-lg font-medium hover:bg-custom-green/90 transition-all">
+                        使用Ramp 购买
+                      </button>
+                    </div>
                   </div>
 
                   {/* 手机端卡片布局 */}
-                  <div className="md:hidden pb-20">
-                    <div className="space-y-3 p-4">
-                      {otcProviders.map((provider, index) => (
-                        <div 
-                          key={index} 
-                          className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all ${
-                            selectedOTCProvider?.name === provider.name 
-                              ? "border-custom-green border-2 bg-custom-green bg-opacity-5" 
-                              : "hover:shadow-md hover:border-custom-green"
+                  <div className="md:hidden space-y-3 p-4">
+                    {/* 购买金额卡片 */}
+                    <div className={`${cardStyle} p-4 rounded-lg mb-4`}>
+                      <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                        购买USDT数量
+                      </h4>
+                      <div className="mb-4">
+                        <input
+                          type="text"
+                          placeholder="123"
+                          className={`w-full px-3 py-3 text-lg text-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                            isDark 
+                              ? "bg-[#1a1c2e] border-[#3a3d4a] text-white" 
+                              : "bg-white border-gray-300 text-gray-900"
                           }`}
-                          onClick={() => setSelectedOTCProvider(provider)}
-                        >
-                          <div className="flex items-center justify-between">
-                            {/* 左侧：服务商图标和名称 */}
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                                isDark ? "bg-[#3a3d4a] text-white" : "bg-gray-100 text-gray-600"
-                              }`}>
-                                <span className="text-lg">{provider.icon}</span>
-                              </div>
-                              <div>
-                                <div className="flex items-center space-x-2">
-                                  <span className={`text-base font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
-                                    {provider.name}
-                                  </span>
-                                  {provider.label && (
-                                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                                      isDark 
-                                        ? "bg-green-900/50 text-green-300" 
-                                        : "bg-green-100 text-green-800"
-                                    }`}>
-                                      {provider.label}
-                                    </span>
-                                  )}
-                                </div>
-                                {/* 支付方式图标 */}
-                                <div className="flex items-center space-x-2 mt-1">
-                                  {provider.payments.slice(0, 3).map((payment, payIndex) => (
-                                    <div key={payIndex} className="flex items-center">
-                                      {getPaymentIcon(payment)}
-                                    </div>
-                                  ))}
-                                  {provider.payments.length > 3 && (
-                                    <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                                      +{provider.payments.length - 3}
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
+                        />
+                      </div>
+                      <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                        最低兑换 100 USDT • 无上限
+                      </div>
+                      <button className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all">
+                        重新查看报价
+                      </button>
+                    </div>
 
-                            {/* 右侧：价格信息 */}
-                            <div className="text-right">
-                              <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                                ¥{provider.price}
+                    <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
+                      请选择服务商
+                    </h3>
+                    
+                    {otcProviders.map((provider, index) => (
+                      <div 
+                        key={index} 
+                        className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all hover:shadow-md hover:border-custom-green`}
+                      >
+                        <div className="flex items-center justify-between">
+                          {/* 左侧：服务商图标和名称 */}
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                              isDark ? "bg-[#3a3d4a] text-white" : "bg-gray-100 text-gray-600"
+                            }`}>
+                              <span className="text-lg">{provider.icon}</span>
+                            </div>
+                            <div>
+                              <div className="flex items-center space-x-2">
+                                <span className={`text-base font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
+                                  {provider.name}
+                                </span>
+                                {provider.label && (
+                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                    isDark 
+                                      ? "bg-green-900/50 text-green-300" 
+                                      : "bg-green-100 text-green-800"
+                                  }`}>
+                                    {provider.label}
+                                  </span>
+                                )}
                               </div>
-                              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                                折合 ¥{provider.rate}/USDT
+                              {/* 支付方式图标 */}
+                              <div className="flex items-center space-x-2 mt-1">
+                                {provider.payments.slice(0, 3).map((payment, payIndex) => (
+                                  <div key={payIndex} className="flex items-center">
+                                    {getPaymentIcon(payment)}
+                                  </div>
+                                ))}
+                                {provider.payments.length > 3 && (
+                                  <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                                    +{provider.payments.length - 3}
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
 
-                    {/* 底部按钮 */}
-                    <div className="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-[#1a1d29] border-t border-gray-200 dark:border-gray-700 md:hidden">
-                      <button
-                        className={`w-full py-3 rounded-lg font-medium transition-all ${
-                          selectedOTCProvider
-                            ? "bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
-                            : "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                        }`}
-                        disabled={!selectedOTCProvider}
-                        onClick={() => {
-                          if (selectedOTCProvider) {
-                            // 处理选择服务商后的操作
-                            console.log('选择服务商:', selectedOTCProvider.name)
-                          }
-                        }}
-                      >
-                        {selectedOTCProvider 
-                          ? `选择${selectedOTCProvider.name}${activeTab.includes("买入") ? "购买" : "卖出"}USDT`
-                          : "选择服务商以继续"
-                        }
+                          {/* 右侧：价格信息 */}
+                          <div className="text-right">
+                            <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                              ¥{provider.price}
+                            </div>
+                            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                              折合 ¥{provider.rate}/USDT
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* 手机端底部按钮 */}
+                    <div className="mt-6">
+                      <button className="w-full py-3 bg-custom-green text-white rounded-lg font-medium hover:bg-custom-green/90 transition-all">
+                        使用Ramp 购买
                       </button>
                     </div>
                   </div>
