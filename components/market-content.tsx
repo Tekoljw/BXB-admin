@@ -368,7 +368,9 @@ export default function MarketContent() {
         <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
           市场数据
         </h3>
-        <div className="overflow-x-auto">
+        
+        {/* 桌面端表格 */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -423,6 +425,68 @@ export default function MarketContent() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* 移动端表格标题 */}
+        <div className="md:hidden mb-3">
+          <div className="grid grid-cols-3 gap-4 text-sm font-medium">
+            <div className="text-left">
+              {isDark ? <span className="text-gray-400">交易对/成交量</span> : <span className="text-gray-600">交易对/成交量</span>}
+            </div>
+            <div className="text-center">
+              {isDark ? <span className="text-gray-400">价格</span> : <span className="text-gray-600">价格</span>}
+            </div>
+            <div className="text-right">
+              {isDark ? <span className="text-gray-400">24H涨跌</span> : <span className="text-gray-600">24H涨跌</span>}
+            </div>
+          </div>
+        </div>
+
+        {/* 移动端市场数据列表 */}
+        <div className="md:hidden space-y-1">
+          {marketData.map((crypto, index) => {
+            const pairName = `${crypto.symbol}/${crypto.pair}`
+            const isFavorite = favorites.includes(pairName)
+
+            return (
+              <div
+                key={index}
+                className={`py-3 border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}
+              >
+                <div className="grid grid-cols-3 gap-4 items-center">
+                  {/* 左侧：交易对和成交量 */}
+                  <div className="text-left">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <span className={`font-bold text-base ${isDark ? "text-white" : "text-gray-900"}`}>
+                        {pairName}
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                      {crypto.volume}
+                    </div>
+                  </div>
+
+                  {/* 中间：价格 */}
+                  <div className="text-center">
+                    <div className={`font-bold text-lg ${isDark ? "text-white" : "text-gray-900"}`}>
+                      ${crypto.price}
+                    </div>
+                  </div>
+
+                  {/* 右侧：24小时涨跌幅 */}
+                  <div className="text-right">
+                    <div
+                      className={`inline-block px-3 py-1 rounded-md text-sm font-medium text-white ${
+                        crypto.isPositive ? "bg-green-500" : "bg-red-500"
+                      }`}
+                    >
+                      {crypto.change}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>
