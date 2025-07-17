@@ -57,8 +57,15 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
   const { theme, language, setTheme, setLanguage } = useTheme()
 
+  // Handle mounting
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   // Check for mobile viewport
   useEffect(() => {
+    if (!mounted) return
+    
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768) // md breakpoint
     }
@@ -66,7 +73,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  }, [mounted])
 
   // Mobile navigation items - only 5 items as specified
   const mobileNavItems = [
@@ -334,12 +341,12 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       </div>
 
       {/* Mobile Bottom Navigation */}
-      {isMobile && (
+      {mounted && isMobile && (
         <MobileBottomNavigation currentPage={currentPage} onNavigate={navigate} />
       )}
 
       {/* Notification Dropdown Portal - Desktop only */}
-      {!isMobile && mounted && showNotificationDropdown && createPortal(
+      {!isMobile && mounted && typeof window !== 'undefined' && showNotificationDropdown && createPortal(
         <div 
           style={{ 
             position: 'fixed',
@@ -411,7 +418,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       )}
 
       {/* Language Dropdown Portal - Desktop only */}
-      {!isMobile && mounted && showLanguageDropdown && createPortal(
+      {!isMobile && mounted && typeof window !== 'undefined' && showLanguageDropdown && createPortal(
         <div 
           style={{ 
             position: 'fixed',
