@@ -1,13 +1,16 @@
 "use client"
 
 import { MessageCircle, Compass, DollarSign, TrendingUp, Wallet } from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
 import { useTranslation } from "@/hooks/use-translation"
+import TetherIcon from "@/components/tether-icon"
 
-export default function MobileBottomNavigation() {
-  const pathname = usePathname()
+interface MobileBottomNavigationProps {
+  currentPage?: string
+  onNavigate?: (path: string) => void
+}
+
+export default function MobileBottomNavigation({ currentPage, onNavigate }: MobileBottomNavigationProps) {
   const { theme } = useTheme()
   const { t } = useTranslation()
   const isDark = theme === "dark"
@@ -18,35 +21,35 @@ export default function MobileBottomNavigation() {
       icon: MessageCircle, 
       label: t("nav.chat"), 
       href: "/chat",
-      isActive: pathname === "/chat"
+      isActive: currentPage === "/chat"
     },
     { 
       id: "discover", 
       icon: Compass, 
       label: t("nav.discover"), 
       href: "/discover",
-      isActive: pathname === "/discover"
+      isActive: currentPage === "/discover"
     },
     { 
       id: "usdt", 
-      icon: DollarSign, 
+      icon: TetherIcon, 
       label: "USDT", 
       href: "/usdt-trade",
-      isActive: pathname === "/usdt-trade"
+      isActive: currentPage === "/usdt-trade"
     },
     { 
       id: "trading", 
       icon: TrendingUp, 
       label: t("nav.trading"), 
       href: "/trading",
-      isActive: pathname === "/trading" || pathname === "/spot" || pathname === "/futures"
+      isActive: currentPage === "/trading" || currentPage === "/spot" || currentPage === "/futures"
     },
     { 
       id: "wallet", 
       icon: Wallet, 
       label: t("nav.wallet"), 
       href: "/wallet",
-      isActive: pathname === "/wallet"
+      isActive: currentPage === "/wallet"
     }
   ]
 
@@ -58,9 +61,9 @@ export default function MobileBottomNavigation() {
         {navigationItems.map((item) => {
           const Icon = item.icon
           return (
-            <Link
+            <button
               key={item.id}
-              href={item.href}
+              onClick={() => onNavigate?.(item.href)}
               className={`flex flex-col items-center justify-center px-3 py-2 rounded-lg transition-colors min-w-0 flex-1 ${
                 item.isActive
                   ? isDark 
@@ -71,11 +74,15 @@ export default function MobileBottomNavigation() {
                     : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
               }`}
             >
-              <Icon className="w-5 h-5 mb-1" />
+              {item.icon === TetherIcon ? (
+                <TetherIcon size={20} />
+              ) : (
+                <Icon className="w-5 h-5 mb-1" />
+              )}
               <span className="text-xs font-medium truncate max-w-full">
                 {item.label}
               </span>
-            </Link>
+            </button>
           )
         })}
       </div>
