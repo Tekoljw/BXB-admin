@@ -19,6 +19,8 @@ export default function MomentsPage() {
   const [leftSidebarTab, setLeftSidebarTab] = useState("热门话题")
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [showPublishModal, setShowPublishModal] = useState(false)
+  const [publishContent, setPublishContent] = useState("")
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   
   // 解决闪烁问题
@@ -471,24 +473,41 @@ export default function MomentsPage() {
                   ))}
                 </div>
 
-                {/* 搜索框 - 移动端全宽 */}
-                <div className="relative">
-                  <Search
-                    className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
-                      isDark ? "text-gray-400" : "text-gray-500"
-                    }`}
-                  />
-                  <input
-                    type="text"
-                    placeholder="搜索动态"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`pl-10 pr-4 py-2 ${isMobile ? 'w-full' : 'w-64'} rounded-lg border text-sm transition-colors ${
-                      isDark
-                        ? "bg-[#1a1d29] border-[#252842] text-white placeholder-gray-400 focus:border-[#00D4AA]"
-                        : "bg-white border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
-                    } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
-                  />
+                {/* 搜索框和发布按钮 */}
+                <div className="flex items-center space-x-3">
+                  {/* 搜索框 - 移动端缩短 */}
+                  <div className="relative flex-1">
+                    <Search
+                      className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    />
+                    <input
+                      type="text"
+                      placeholder="搜索动态"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className={`pl-10 pr-4 py-2 ${isMobile ? 'w-full' : 'w-64'} rounded-lg border text-sm transition-colors ${
+                        isDark
+                          ? "bg-[#1a1d29] border-[#252842] text-white placeholder-gray-400 focus:border-[#00D4AA]"
+                          : "bg-white border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
+                      } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+                    />
+                  </div>
+                  
+                  {/* 移动端发布按钮 */}
+                  {isMobile && (
+                    <button
+                      onClick={() => setShowPublishModal(true)}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        isDark 
+                          ? "bg-white text-black hover:bg-gray-200" 
+                          : "bg-black text-white hover:bg-gray-800"
+                      }`}
+                    >
+                      + 发布
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -584,8 +603,8 @@ export default function MomentsPage() {
 
 
 
-            {/* 发布动态区域 */}
-            {(
+            {/* 发布动态区域 - 在移动端隐藏 */}
+            {!isMobile && (
               <div className={`${cardStyle} rounded-lg mb-6`}>
                 <div className="p-4">
                   <div className="flex items-start space-x-3">
@@ -1142,6 +1161,91 @@ export default function MomentsPage() {
           )}
         </div>
       </div>
+
+      {/* 移动端发布弹窗 */}
+      {isMobile && showPublishModal && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50 animate-in fade-in duration-300"
+          onClick={() => setShowPublishModal(false)}
+        >
+          <div 
+            className={`w-full max-w-md ${isDark ? 'bg-[#1a1d29]' : 'bg-white'} rounded-t-xl p-6 transform transition-transform duration-300 ease-out animate-in slide-in-from-bottom`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* 弹窗头部 */}
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                发布动态
+              </h3>
+              <button
+                onClick={() => setShowPublishModal(false)}
+                className={`p-2 rounded-full ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'} transition-colors`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* 用户信息 */}
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center text-black font-medium">
+                我
+              </div>
+              <div>
+                <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>我的动态</p>
+                <p className="text-sm text-gray-500">公开</p>
+              </div>
+            </div>
+
+            {/* 内容输入区 */}
+            <div className="mb-4">
+              <textarea
+                value={publishContent}
+                onChange={(e) => setPublishContent(e.target.value)}
+                placeholder="分享你的交易心得或市场观点..."
+                className={`w-full bg-transparent border-none resize-none focus:outline-none text-base ${
+                  isDark ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
+                }`}
+                rows={6}
+                autoFocus
+              />
+            </div>
+
+            {/* 工具栏 */}
+            <div className="flex items-center justify-between py-3 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center space-x-4">
+                <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'} transition-colors`}>
+                  <ImageIcon className="h-5 w-5 text-gray-500" />
+                </button>
+                <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'} transition-colors`}>
+                  <Video className="h-5 w-5 text-gray-500" />
+                </button>
+                <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'} transition-colors`}>
+                  <Smile className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
+              <button
+                onClick={() => {
+                  // 这里可以添加发布逻辑
+                  setPublishContent("")
+                  setShowPublishModal(false)
+                }}
+                disabled={!publishContent.trim()}
+                className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                  publishContent.trim()
+                    ? isDark 
+                      ? "bg-white text-black hover:bg-gray-200" 
+                      : "bg-black text-white hover:bg-gray-800"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+              >
+                发布
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
