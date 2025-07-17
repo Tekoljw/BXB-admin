@@ -13196,6 +13196,7 @@ export default function WalletPage() {
                     withdraw: "出金记录", 
                     internal_transfer: "内转记录",
                     transfer: "划转记录",
+                    commission: "佣金结算记录",
                     other: "其他记录"
                   }
                   const recordType = tabMap[secondaryTabKey]
