@@ -1,16 +1,13 @@
 "use client"
 
 import { MessageCircle, Compass, DollarSign, TrendingUp, Wallet } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useTheme } from "@/contexts/theme-context"
 import { useTranslation } from "@/hooks/use-translation"
-import TetherIcon from "@/components/tether-icon"
 
-interface MobileBottomNavigationProps {
-  currentPage?: string
-  onNavigate?: (path: string) => void
-}
-
-export default function MobileBottomNavigation({ currentPage, onNavigate }: MobileBottomNavigationProps) {
+export default function MobileBottomNavigation() {
+  const pathname = usePathname()
   const { theme } = useTheme()
   const { t } = useTranslation()
   const isDark = theme === "dark"
@@ -21,35 +18,35 @@ export default function MobileBottomNavigation({ currentPage, onNavigate }: Mobi
       icon: MessageCircle, 
       label: t("nav.chat"), 
       href: "/chat",
-      isActive: currentPage === "/chat"
+      isActive: pathname === "/chat"
     },
     { 
       id: "discover", 
       icon: Compass, 
       label: t("nav.discover"), 
       href: "/discover",
-      isActive: currentPage === "/discover"
+      isActive: pathname === "/discover"
     },
     { 
       id: "usdt", 
-      icon: TetherIcon, 
+      icon: DollarSign, 
       label: "USDT", 
       href: "/usdt-trade",
-      isActive: currentPage === "/usdt-trade"
+      isActive: pathname === "/usdt-trade"
     },
     { 
       id: "trading", 
       icon: TrendingUp, 
       label: t("nav.trading"), 
       href: "/trading",
-      isActive: currentPage === "/trading" || currentPage === "/spot" || currentPage === "/futures"
+      isActive: pathname === "/trading" || pathname === "/spot" || pathname === "/futures"
     },
     { 
       id: "wallet", 
       icon: Wallet, 
       label: t("nav.wallet"), 
       href: "/wallet",
-      isActive: currentPage === "/wallet"
+      isActive: pathname === "/wallet"
     }
   ]
 
@@ -61,9 +58,9 @@ export default function MobileBottomNavigation({ currentPage, onNavigate }: Mobi
         {navigationItems.map((item) => {
           const Icon = item.icon
           return (
-            <button
+            <Link
               key={item.id}
-              onClick={() => onNavigate?.(item.href)}
+              href={item.href}
               className={`flex flex-col items-center justify-center px-3 py-2 rounded-lg transition-colors min-w-0 flex-1 ${
                 item.isActive
                   ? isDark 
@@ -74,15 +71,11 @@ export default function MobileBottomNavigation({ currentPage, onNavigate }: Mobi
                     : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
               }`}
             >
-              {item.icon === TetherIcon ? (
-                <TetherIcon size={20} />
-              ) : (
-                <Icon className="w-5 h-5 mb-1" />
-              )}
+              <Icon className="w-5 h-5 mb-1" />
               <span className="text-xs font-medium truncate max-w-full">
                 {item.label}
               </span>
-            </button>
+            </Link>
           )
         })}
       </div>
