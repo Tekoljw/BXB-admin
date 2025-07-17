@@ -125,6 +125,26 @@ export default function ChatPage() {
   const [guaranteeType, setGuaranteeType] = useState("buy") // buy or sell
   const [guaranteeDuration, setGuaranteeDuration] = useState("24") // hours
   const [guaranteeDeposit, setGuaranteeDeposit] = useState("5") // percentage
+  const [guaranteeProcessExpanded, setGuaranteeProcessExpanded] = useState(false)
+  const [activeGuaranteeProcess, setActiveGuaranteeProcess] = useState<null | {
+    id: string
+    type: 'buy' | 'sell'
+    amount: string
+    currency: string
+    description: string
+    duration: string
+    deposit: string
+    currentStep: number
+    steps: Array<{
+      id: string
+      title: string
+      status: 'pending' | 'current' | 'completed' | 'dispute'
+      timestamp?: string
+      description?: string
+    }>
+    createdAt: string
+    acceptedBy?: string
+  }>(null)
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -491,6 +511,89 @@ export default function ChatPage() {
           : msg
       ) || []
     }))
+  }
+
+  // Create active guarantee process for display at top of chat
+  const createActiveGuaranteeProcess = () => {
+    const now = new Date()
+    const processId = `guarantee-process-${Date.now()}`
+    
+    const newProcess = {
+      id: processId,
+      type: guaranteeType as 'buy' | 'sell',
+      amount: guaranteeAmount,
+      currency: selectedCurrency,
+      description: guaranteeDescription,
+      duration: guaranteeDuration,
+      deposit: guaranteeDeposit,
+      currentStep: 1,
+      steps: [
+        { 
+          id: 'step1', 
+          title: '发起担保交易', 
+          status: 'completed' as const, 
+          timestamp: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+          description: '您已成功发起担保交易，等待对方接受'
+        },
+        { 
+          id: 'step2', 
+          title: '等待对方接受', 
+          status: 'current' as const,
+          description: '等待交易对方确认接受此担保交易'
+        },
+        { 
+          id: 'step3', 
+          title: '双方支付担保金', 
+          status: 'pending' as const,
+          description: '双方需要支付担保金以确保交易安全进行'
+        },
+        { 
+          id: 'step4', 
+          title: '完成交易确认', 
+          status: 'pending' as const,
+          description: '确认商品/服务交付完成，释放担保金'
+        }
+      ],
+      createdAt: now.toISOString(),
+      acceptedBy: undefined
+    }
+    
+    setActiveGuaranteeProcess(newProcess)
+    
+    // Also create the guarantee message
+    handleGuaranteeTransaction()
+  }
+
+  // Function to simulate different guarantee states for testing
+  const simulateGuaranteeProgress = () => {
+    if (!activeGuaranteeProcess) return
+    
+    const nextStep = Math.min(activeGuaranteeProcess.currentStep + 1, 4)
+    const now = new Date()
+    
+    setActiveGuaranteeProcess(prev => {
+      if (!prev) return null
+      
+      return {
+        ...prev,
+        currentStep: nextStep,
+        steps: prev.steps.map((step, index) => {
+          if (index < nextStep - 1) {
+            return { 
+              ...step, 
+              status: 'completed' as const, 
+              timestamp: step.timestamp || now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
+            }
+          } else if (index === nextStep - 1) {
+            return { 
+              ...step, 
+              status: 'current' as const
+            }
+          }
+          return step
+        })
+      }
+    })
   }
 
   // Close currency dropdown on outside click
@@ -1900,11 +2003,250 @@ export default function ChatPage() {
                             <MoreHorizontal className="w-5 h-5" />
                           </button>
                         )}
+                        {/* Test Button for Guarantee Flow */}
+                        <button 
+                          onClick={() => {
+                            if (!activeGuaranteeProcess) {
+                              setGuaranteeAmount("1000")
+                              setGuaranteeDescription("测试担保交易")
+                              setGuaranteeType("buy")
+                              setGuaranteeDuration("24")
+                              setGuaranteeDeposit("10")
+                              setSelectedCurrency("USDT")
+                              createActiveGuaranteeProcess()
+                            } else {
+                              simulateGuaranteeProgress()
+                            }
+                          }}
+                          className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                            isDark 
+                              ? "bg-indigo-600 hover:bg-indigo-700 text-white" 
+                              : "bg-indigo-500 hover:bg-indigo-600 text-white"
+                          }`}
+                        >
+                          {!activeGuaranteeProcess ? "测试担保" : "下一步"}
+                        </button>
                       </div>
                     </>
                   )
                 })()}
               </div>
+
+              {/* Guarantee Process Flow - Collapsible */}
+              {activeGuaranteeProcess && (
+                <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-gray-50"}`}>
+                  <div 
+                    onClick={() => setGuaranteeProcessExpanded(!guaranteeProcessExpanded)}
+                    className={`rounded-lg p-4 cursor-pointer transition-all duration-300 ${
+                      isDark 
+                        ? "bg-gradient-to-r from-indigo-900/30 to-purple-900/30 border border-indigo-700/50 hover:border-indigo-600" 
+                        : "bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200 hover:border-indigo-300"
+                    }`}
+                  >
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${
+                          isDark ? "bg-indigo-600" : "bg-indigo-500"
+                        }`}>
+                          <Shield className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                          <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                            担保交易进行中
+                          </h3>
+                          <p className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                            {activeGuaranteeProcess.type === 'buy' ? '求购' : '出售'} {activeGuaranteeProcess.amount} {activeGuaranteeProcess.currency}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          isDark ? "bg-indigo-900/50 text-indigo-300" : "bg-indigo-100 text-indigo-600"
+                        }`}>
+                          第{activeGuaranteeProcess.currentStep}/4步
+                        </span>
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${
+                          guaranteeProcessExpanded ? 'rotate-180' : ''
+                        } ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+                      </div>
+                    </div>
+
+                    {/* Collapsed View - Current Step */}
+                    {!guaranteeProcessExpanded && (
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${
+                            activeGuaranteeProcess.steps[activeGuaranteeProcess.currentStep - 1]?.status === 'completed'
+                              ? isDark ? "bg-green-600 text-white" : "bg-green-500 text-white"
+                              : activeGuaranteeProcess.steps[activeGuaranteeProcess.currentStep - 1]?.status === 'current'
+                              ? isDark ? "bg-yellow-600 text-white" : "bg-yellow-500 text-white"
+                              : isDark ? "bg-gray-600 text-gray-300" : "bg-gray-300 text-gray-600"
+                          }`}>
+                            {activeGuaranteeProcess.steps[activeGuaranteeProcess.currentStep - 1]?.status === 'completed' ? '✓' : activeGuaranteeProcess.currentStep}
+                          </div>
+                          <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                            {activeGuaranteeProcess.steps[activeGuaranteeProcess.currentStep - 1]?.title}
+                          </span>
+                        </div>
+                        {activeGuaranteeProcess.currentStep < 4 && (
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              // Handle next step action
+                            }}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                              isDark 
+                                ? "bg-indigo-600 hover:bg-indigo-700 text-white" 
+                                : "bg-indigo-500 hover:bg-indigo-600 text-white"
+                            }`}
+                          >
+                            下一步
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Expanded View - Full Progress */}
+                    {guaranteeProcessExpanded && (
+                      <div className="space-y-4">
+                        {/* Transaction Details */}
+                        <div className={`p-3 rounded-lg ${
+                          isDark ? "bg-black/20" : "bg-white/50"
+                        }`}>
+                          <div className="grid grid-cols-2 gap-4 text-xs">
+                            <div>
+                              <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>交易类型：</span>
+                              <span className={`ml-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {activeGuaranteeProcess.type === 'buy' ? '求购' : '出售'}
+                              </span>
+                            </div>
+                            <div>
+                              <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>担保金额：</span>
+                              <span className={`ml-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {activeGuaranteeProcess.deposit}%
+                              </span>
+                            </div>
+                            <div>
+                              <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>交易金额：</span>
+                              <span className={`ml-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {activeGuaranteeProcess.amount} {activeGuaranteeProcess.currency}
+                              </span>
+                            </div>
+                            <div>
+                              <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>有效期：</span>
+                              <span className={`ml-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {activeGuaranteeProcess.duration}小时
+                              </span>
+                            </div>
+                          </div>
+                          <div className="mt-2">
+                            <span className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>交易描述：</span>
+                            <span className={`ml-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                              {activeGuaranteeProcess.description}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Vertical Progress Steps */}
+                        <div className="space-y-3">
+                          {activeGuaranteeProcess.steps.map((step, index) => (
+                            <div key={step.id} className="flex items-start gap-3">
+                              {/* Step Circle */}
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${
+                                step.status === 'completed'
+                                  ? isDark ? "bg-green-600 text-white" : "bg-green-500 text-white"
+                                  : step.status === 'current'
+                                  ? isDark ? "bg-yellow-600 text-white" : "bg-yellow-500 text-white"
+                                  : step.status === 'dispute'
+                                  ? isDark ? "bg-red-600 text-white" : "bg-red-500 text-white"
+                                  : isDark ? "bg-gray-600 text-gray-300" : "bg-gray-300 text-gray-600"
+                              }`}>
+                                {step.status === 'completed' ? '✓' : 
+                                 step.status === 'dispute' ? '!' : 
+                                 index + 1}
+                              </div>
+                              
+                              {/* Step Content */}
+                              <div className="flex-1">
+                                <h4 className={`text-sm font-medium ${
+                                  step.status === 'completed' ? isDark ? "text-green-400" : "text-green-600"
+                                  : step.status === 'current' ? isDark ? "text-yellow-400" : "text-yellow-600"
+                                  : step.status === 'dispute' ? isDark ? "text-red-400" : "text-red-600"
+                                  : isDark ? "text-gray-400" : "text-gray-500"
+                                }`}>
+                                  {step.title}
+                                </h4>
+                                {step.description && (
+                                  <p className={`text-xs mt-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                                    {step.description}
+                                  </p>
+                                )}
+                                {step.timestamp && (
+                                  <p className={`text-xs mt-1 ${isDark ? "text-gray-500" : "text-gray-400"}`}>
+                                    {step.timestamp}
+                                  </p>
+                                )}
+                                
+                                {/* Action Buttons for Current Step */}
+                                {step.status === 'current' && (
+                                  <div className="flex gap-2 mt-2">
+                                    {index === 1 && (
+                                      <button className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                        isDark 
+                                          ? "bg-indigo-600 hover:bg-indigo-700 text-white" 
+                                          : "bg-indigo-500 hover:bg-indigo-600 text-white"
+                                      }`}>
+                                        接受担保
+                                      </button>
+                                    )}
+                                    {index === 2 && (
+                                      <>
+                                        <button className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                          isDark 
+                                            ? "bg-green-600 hover:bg-green-700 text-white" 
+                                            : "bg-green-500 hover:bg-green-600 text-white"
+                                        }`}>
+                                          支付担保金
+                                        </button>
+                                        <button className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                          isDark 
+                                            ? "bg-yellow-600 hover:bg-yellow-700 text-white" 
+                                            : "bg-yellow-500 hover:bg-yellow-600 text-white"
+                                        }`}>
+                                          催促对方
+                                        </button>
+                                      </>
+                                    )}
+                                    {index === 3 && (
+                                      <>
+                                        <button className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                          isDark 
+                                            ? "bg-green-600 hover:bg-green-700 text-white" 
+                                            : "bg-green-500 hover:bg-green-600 text-white"
+                                        }`}>
+                                          确认收款
+                                        </button>
+                                        <button className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                          isDark 
+                                            ? "bg-red-600 hover:bg-red-700 text-white" 
+                                            : "bg-red-500 hover:bg-red-600 text-white"
+                                        }`}>
+                                          申请仲裁
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Messages Area */}
               <div className="flex-1 p-4 overflow-y-auto">
