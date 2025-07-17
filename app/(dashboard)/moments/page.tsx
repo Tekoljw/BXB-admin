@@ -954,46 +954,48 @@ export default function MomentsPage() {
                   ))}
                 </div>
 
-                {/* 搜索框和发布按钮 */}
-                <div className="flex items-center space-x-3">
-                  {/* 搜索框 - 移动端缩短 */}
-                  <div className="relative flex-1">
-                    <Search
-                      className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
-                        isDark ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    />
-                    <input
-                      type="text"
-                      placeholder="搜索动态"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className={`pl-10 pr-4 py-2 ${isMobile ? 'w-full' : 'w-64'} rounded-lg border text-sm transition-colors ${
-                        isDark
-                          ? "bg-[#1a1d29] border-[#252842] text-white placeholder-gray-400 focus:border-[#00D4AA]"
-                          : "bg-white border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
-                      } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
-                    />
+                {/* 搜索框和发布按钮 - 在行情页签下隐藏 */}
+                {activeMainTab !== "行情" && (
+                  <div className="flex items-center space-x-3">
+                    {/* 搜索框 - 移动端缩短 */}
+                    <div className="relative flex-1">
+                      <Search
+                        className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
+                          isDark ? "text-gray-400" : "text-gray-500"
+                        }`}
+                      />
+                      <input
+                        type="text"
+                        placeholder="搜索动态"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className={`pl-10 pr-4 py-2 ${isMobile ? 'w-full' : 'w-64'} rounded-lg border text-sm transition-colors ${
+                          isDark
+                            ? "bg-[#1a1d29] border-[#252842] text-white placeholder-gray-400 focus:border-[#00D4AA]"
+                            : "bg-white border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
+                        } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+                      />
+                    </div>
+                    
+                    {/* 移动端发布按钮 */}
+                    {isMobile && (
+                      <button
+                        onClick={() => setShowPublishModal(true)}
+                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                          isDark 
+                            ? "bg-white text-black hover:bg-gray-200" 
+                            : "bg-black text-white hover:bg-gray-800"
+                        }`}
+                      >
+                        + 发布
+                      </button>
+                    )}
                   </div>
-                  
-                  {/* 移动端发布按钮 */}
-                  {isMobile && (
-                    <button
-                      onClick={() => setShowPublishModal(true)}
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        isDark 
-                          ? "bg-white text-black hover:bg-gray-200" 
-                          : "bg-black text-white hover:bg-gray-800"
-                      }`}
-                    >
-                      + 发布
-                    </button>
-                  )}
-                </div>
+                )}
               </div>
 
-              {/* 二级页签 - 只在非圈子页签时显示 */}
-              {activeMainTab !== "圈子" && (
+              {/* 二级页签 - 只在非圈子且非行情页签时显示 */}
+              {activeMainTab !== "圈子" && activeMainTab !== "行情" && (
                 <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
                   <div
                     ref={scrollContainerRef}
@@ -1084,8 +1086,8 @@ export default function MomentsPage() {
 
 
 
-            {/* 发布动态区域 - 在移动端隐藏 */}
-            {!isMobile && (
+            {/* 发布动态区域 - 在移动端和行情页签下隐藏 */}
+            {!isMobile && activeMainTab !== "行情" && (
               <div className={`${cardStyle} rounded-lg mb-6`}>
                 <div className="p-4">
                   <div className="flex items-start space-x-3">
