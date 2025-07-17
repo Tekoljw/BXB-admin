@@ -1309,18 +1309,23 @@ export default function USDTTradePage() {
                   <div className="md:hidden space-y-3 p-4">
                     {/* 交易方式选择和发布按钮 */}
                     <div className="flex items-center justify-between mb-4">
-                      <div className="flex">
+                      <div className="relative flex bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
+                        {/* 滑动背景 */}
+                        <div 
+                          className={`absolute top-1 bottom-1 bg-white dark:bg-white rounded-md transition-transform duration-300 ease-in-out ${
+                            c2cTransactionType === "现金交易" ? "left-1" : "translate-x-full left-1"
+                          }`}
+                          style={{ width: 'calc(50% - 4px)' }}
+                        />
                         {["现金交易", "线上转账"].map((type) => (
                           <button
                             key={type}
                             onClick={() => setC2cTransactionType(type as "现金交易" | "线上转账")}
-                            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                            className={`relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                               c2cTransactionType === type
-                                ? isDark
-                                  ? "bg-custom-green text-white"
-                                  : "bg-custom-green text-white"
+                                ? "text-black"
                                 : isDark
-                                  ? "text-gray-400 hover:text-white"
+                                  ? "text-gray-400 hover:text-gray-200"
                                   : "text-gray-600 hover:text-gray-900"
                             }`}
                           >
@@ -1330,13 +1335,14 @@ export default function USDTTradePage() {
                       </div>
                       <button
                         onClick={() => setShowPublishModal(true)}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg border transition-all ${
+                        className={`flex items-center space-x-1 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                           isDark
-                            ? "border-white text-white hover:bg-white hover:text-black"
-                            : "border-black text-black hover:bg-black hover:text-white"
+                            ? "bg-black text-white hover:bg-gray-800"
+                            : "bg-black text-white hover:bg-gray-800"
                         }`}
                       >
-                        发布订单
+                        <Plus className="w-4 h-4" />
+                        <span>发布订单</span>
                       </button>
                     </div>
                     
