@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Star, Search, Heart, MessageCircle, Share, MoreHorizontal, ImageIcon, Video, Smile } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
+import StatisticsContent from "@/components/statistics-content"
 
 export default function MomentsPage() {
   const { theme } = useTheme()
@@ -23,133 +24,7 @@ export default function MomentsPage() {
   const [publishContent, setPublishContent] = useState("")
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  // 行情数据
-  const marketData = [
-    {
-      name: "Bitcoin",
-      symbol: "BTC",
-      icon: "₿",
-      iconColor: "bg-orange-500",
-      price: "$45,123.45",
-      change: "+2.34%",
-      changeValue: "+$1,023.45",
-      isPositive: true,
-      marketCap: "$847.2B",
-      volume: "$28.4B"
-    },
-    {
-      name: "Ethereum",
-      symbol: "ETH",
-      icon: "Ξ",
-      iconColor: "bg-blue-500",
-      price: "$3,234.56",
-      change: "+1.87%",
-      changeValue: "+$59.45",
-      isPositive: true,
-      marketCap: "$389.1B",
-      volume: "$15.2B"
-    },
-    {
-      name: "Tether",
-      symbol: "USDT",
-      icon: "₮",
-      iconColor: "bg-green-500",
-      price: "$1.00",
-      change: "+0.01%",
-      changeValue: "+$0.0001",
-      isPositive: true,
-      marketCap: "$95.3B",
-      volume: "$42.1B"
-    },
-    {
-      name: "BNB",
-      symbol: "BNB",
-      icon: "⬢",
-      iconColor: "bg-yellow-500",
-      price: "$312.89",
-      change: "-0.87%",
-      changeValue: "-$2.75",
-      isPositive: false,
-      marketCap: "$50.7B",
-      volume: "$1.8B"
-    },
-    {
-      name: "XRP",
-      symbol: "XRP",
-      icon: "✕",
-      iconColor: "bg-gray-700",
-      price: "$0.6234",
-      change: "+3.45%",
-      changeValue: "+$0.0208",
-      isPositive: true,
-      marketCap: "$34.2B",
-      volume: "$2.1B"
-    },
-    {
-      name: "Solana",
-      symbol: "SOL",
-      icon: "◎",
-      iconColor: "bg-purple-500",
-      price: "$98.76",
-      change: "+5.23%",
-      changeValue: "+$4.91",
-      isPositive: true,
-      marketCap: "$42.8B",
-      volume: "$3.4B"
-    },
-    {
-      name: "Cardano",
-      symbol: "ADA",
-      icon: "₳",
-      iconColor: "bg-blue-600",
-      price: "$0.4567",
-      change: "-1.23%",
-      changeValue: "-$0.0057",
-      isPositive: false,
-      marketCap: "$16.1B",
-      volume: "$0.9B"
-    },
-    {
-      name: "Dogecoin",
-      symbol: "DOGE",
-      icon: "Ð",
-      iconColor: "bg-yellow-600",
-      price: "$0.0876",
-      change: "-2.45%",
-      changeValue: "-$0.0022",
-      isPositive: false,
-      marketCap: "$12.4B",
-      volume: "$0.8B"
-    }
-  ]
 
-  // 市场统计数据
-  const marketStats = [
-    {
-      title: "Total Market Cap",
-      value: "$2.14T",
-      change: "+2.3%",
-      trend: "up",
-    },
-    {
-      title: "24h Volume",
-      value: "$84.5B",
-      change: "-1.2%",
-      trend: "down",
-    },
-    {
-      title: "BTC Dominance",
-      value: "42.1%",
-      change: "+0.5%",
-      trend: "up",
-    },
-    {
-      title: "Fear & Greed Index",
-      value: "72",
-      change: "Greed",
-      trend: "up",
-    },
-  ]
   
   // 解决闪烁问题
   useEffect(() => {
@@ -932,65 +807,7 @@ export default function MomentsPage() {
 
             {/* 行情页签内容 */}
             {activeMainTab === "行情" && (
-              <div className="space-y-6">
-                {/* 市场统计卡片 */}
-                <div className="grid grid-cols-2 gap-4">
-                  {marketStats.map((stat, index) => (
-                    <div key={index} className={`${cardStyle} rounded-lg p-4`}>
-                      <div className="text-sm text-gray-500 mb-1">{stat.title}</div>
-                      <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        {stat.value}
-                      </div>
-                      <div className={`text-sm ${
-                        stat.trend === 'up' ? 'text-green-500' : 'text-red-500'
-                      }`}>
-                        {stat.change}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* 加密货币列表 */}
-                <div className="space-y-3">
-                  {marketData.map((crypto, index) => (
-                    <div key={index} className={`${cardStyle} rounded-lg p-4 hover:shadow-lg transition-shadow`}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-10 h-10 rounded-full ${crypto.iconColor} flex items-center justify-center text-white font-bold`}>
-                            {crypto.icon}
-                          </div>
-                          <div>
-                            <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {crypto.name}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {crypto.symbol}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                            {crypto.price}
-                          </div>
-                          <div className={`text-sm ${
-                            crypto.isPositive ? 'text-green-500' : 'text-red-500'
-                          }`}>
-                            {crypto.change}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                        <div className="text-xs text-gray-500">
-                          Market Cap: <span className="font-medium">{crypto.marketCap}</span>
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          Volume: <span className="font-medium">{crypto.volume}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <StatisticsContent showHeader={false} />
             )}
 
             {/* 动态列表 - 重新设计的卡片布局 */}
