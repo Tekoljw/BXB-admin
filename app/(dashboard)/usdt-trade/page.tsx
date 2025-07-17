@@ -1702,27 +1702,6 @@ export default function USDTTradePage() {
                         </span>
                       </div>
                       
-                      {/* 快捷金额按钮 */}
-                      <div className="grid grid-cols-4 gap-2 mb-4">
-                        {["100", "500", "1000", "5000"].map((amount) => (
-                          <button
-                            key={amount}
-                            onClick={() => setOtcPurchaseAmount(amount)}
-                            className={`py-2 px-3 text-sm border rounded-lg transition-all hover:border-custom-green transform hover:scale-105 ${
-                              otcPurchaseAmount === amount
-                                ? isDark
-                                  ? "border-custom-green bg-custom-green/10 text-custom-green"
-                                  : "border-custom-green bg-custom-green/10 text-custom-green"
-                                : isDark 
-                                  ? "border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42]" 
-                                  : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                            }`}
-                          >
-                            {amount}
-                          </button>
-                        ))}
-                      </div>
-                      
                       <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                         最低兑换 100 USDT • 无上限
                       </div>
