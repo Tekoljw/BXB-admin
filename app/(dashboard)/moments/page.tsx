@@ -242,8 +242,44 @@ const MarketPageContent = () => {
 
   const cardStyle = isDark ? "bg-[#1a1f2e] border-[#252842]" : "bg-white border-gray-200"
 
+  // 拖动功能处理函数
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollContainerRef.current) return
+    setIsDragging(true)
+    setStartX(e.pageX - scrollContainerRef.current.offsetLeft)
+    setScrollLeft(scrollContainerRef.current.scrollLeft)
+  }
+
+  const handleMouseLeave = () => {
+    setIsDragging(false)
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollContainerRef.current) return
+    e.preventDefault()
+    const x = e.pageX - scrollContainerRef.current.offsetLeft
+    const walk = (x - startX) * 2
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk
+  }
+
+  // 隐藏滚动条的样式
+  const scrollbarHideStyle = `
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  `;
+
   return (
     <div className="space-y-6">
+      <style dangerouslySetInnerHTML={{ __html: scrollbarHideStyle }} />
       {/* 一级页签 */}
       <div className="flex flex-wrap gap-2">
         {mainTabs.map((tab) => (
@@ -263,23 +299,40 @@ const MarketPageContent = () => {
         ))}
       </div>
 
-      {/* 二级页签 */}
-      <div className="flex flex-wrap gap-2">
-        {subTabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveSubTab(tab)}
-            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-              activeSubTab === tab
-                ? "bg-[#00D4AA] text-white shadow-md"
-                : isDark
-                ? "bg-[#1e2332] text-gray-400 hover:bg-[#252842] hover:text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
+      {/* 二级页签 - 滑动组件样式 */}
+      <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
+        <div
+          ref={scrollContainerRef}
+          className="flex items-center space-x-1 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+        >
+          {subTabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveSubTab(tab)}
+              className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 pointer-events-auto ${
+                activeSubTab === tab
+                  ? isDark
+                    ? "bg-white text-black shadow-sm"
+                    : "bg-black text-white shadow-sm"
+                  : isDark
+                    ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
+                    : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
+              }`}
+              style={{
+                transform: activeSubTab === tab ? 'translateY(-2px)' : 'translateY(0)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: activeSubTab === tab ? '0 4px 8px rgba(0, 0, 0, 0.1)' : 'none'
+              }}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* 移动端搜索框 */}
