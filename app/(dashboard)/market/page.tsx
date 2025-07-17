@@ -582,8 +582,8 @@ export default function MarketPage() {
           </div>
         </div>
 
-        {/* 市场数据标题栏 */}
-        <div className={`${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
+        {/* 桌面端市场数据标题栏 */}
+        <div className={`hidden md:block ${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
           <div className="grid grid-cols-10 gap-4 p-4 text-base font-bold">
             <div className="col-span-2">
               {isDark ? <span className="text-white">交易对</span> : <span className="text-gray-800">交易对</span>}
@@ -617,8 +617,23 @@ export default function MarketPage() {
           </div>
         </div>
 
-        {/* 市场数据横条卡片 */}
-        <div className="space-y-3">
+        {/* 移动端市场数据标题栏 */}
+        <div className={`md:hidden ${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
+          <div className="grid grid-cols-3 gap-4 p-4 text-base font-bold">
+            <div className="text-left">
+              {isDark ? <span className="text-white">交易对/成交量</span> : <span className="text-gray-800">交易对/成交量</span>}
+            </div>
+            <div className="text-center">
+              {isDark ? <span className="text-white">价格</span> : <span className="text-gray-800">价格</span>}
+            </div>
+            <div className="text-right">
+              {isDark ? <span className="text-white">24H涨跌</span> : <span className="text-gray-800">24H涨跌</span>}
+            </div>
+          </div>
+        </div>
+
+        {/* 桌面端市场数据横条卡片 */}
+        <div className="hidden md:block space-y-3">
           {filteredMarketData.map((item, index) => {
             const pairName = `${item.symbol}/${item.pair}`
             const isFavorite = favorites.includes(pairName)
@@ -681,6 +696,56 @@ export default function MarketPage() {
                     <button className="bg-black hover:bg-gray-800 text-white py-2 px-6 rounded-md text-sm font-medium transition-colors">
                       交易
                     </button>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* 移动端市场数据列表 */}
+        <div className="md:hidden space-y-1">
+          {filteredMarketData.map((item, index) => {
+            const pairName = `${item.symbol}/${item.pair}`
+            const isFavorite = favorites.includes(pairName)
+
+            return (
+              <div
+                key={index}
+                className={`px-4 py-3 border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}
+              >
+                <div className="grid grid-cols-3 gap-4 items-center">
+                  {/* 左侧：交易对和成交量 */}
+                  <div className="text-left">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <span className={`font-bold text-base ${isDark ? "text-white" : "text-gray-900"}`}>
+                        {pairName}
+                      </span>
+                    </div>
+                    <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                      {item.volume}
+                    </div>
+                  </div>
+
+                  {/* 中间：价格 */}
+                  <div className="text-center">
+                    <div className={`font-bold text-lg ${isDark ? "text-white" : "text-gray-900"}`}>
+                      {item.price}
+                    </div>
+                    <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                      {item.high}/{item.low}
+                    </div>
+                  </div>
+
+                  {/* 右侧：24小时涨跌幅 */}
+                  <div className="text-right">
+                    <div
+                      className={`inline-block px-3 py-1 rounded-md text-sm font-medium text-white ${
+                        item.isPositive ? "bg-green-500" : "bg-red-500"
+                      }`}
+                    >
+                      {item.change}
+                    </div>
                   </div>
                 </div>
               </div>
