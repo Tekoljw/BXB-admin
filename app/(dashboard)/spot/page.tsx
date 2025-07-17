@@ -606,12 +606,10 @@ export default function SpotPage() {
                 <button
                   key={tab}
                   onClick={() => setActiveMobileTab(tab)}
-                  className={`pb-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  className={`pb-2 px-1 border-b-2 text-base transition-colors ${
                     activeMobileTab === tab
-                      ? "border-custom-green text-custom-green"
-                      : isDark
-                        ? "border-transparent text-gray-400 hover:text-gray-300"
-                        : "border-transparent text-gray-500 hover:text-gray-700"
+                      ? "border-black text-black font-bold"
+                      : "border-transparent text-black font-medium hover:text-gray-700"
                   }`}
                 >
                   {tab}
@@ -635,12 +633,10 @@ export default function SpotPage() {
                 <button
                   key={tab}
                   onClick={() => setActiveMobileTab(tab)}
-                  className={`pb-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  className={`pb-2 px-1 border-b-2 text-base transition-colors ${
                     activeMobileTab === tab
-                      ? "border-custom-green text-custom-green"
-                      : isDark
-                        ? "border-transparent text-gray-400 hover:text-gray-300"
-                        : "border-transparent text-gray-500 hover:text-gray-700"
+                      ? "border-black text-black font-bold"
+                      : "border-transparent text-black font-medium hover:text-gray-700"
                   }`}
                 >
                   {tab}
@@ -665,12 +661,10 @@ export default function SpotPage() {
               <button
                 key={tab}
                 onClick={() => setActiveMobileTab(tab)}
-                className={`pb-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                className={`pb-2 px-1 border-b-2 text-base transition-colors ${
                   activeMobileTab === tab
-                    ? "border-custom-green text-custom-green"
-                    : isDark
-                      ? "border-transparent text-gray-400 hover:text-gray-300"
-                      : "border-transparent text-gray-500 hover:text-gray-700"
+                    ? "border-black text-black font-bold"
+                    : "border-transparent text-black font-medium hover:text-gray-700"
                 }`}
               >
                 {tab}
