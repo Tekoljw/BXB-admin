@@ -522,13 +522,7 @@ export default function USDTTradePage() {
 
   return (
     <div 
-      className={`min-h-screen transition-all duration-500 ease-in-out ${isDark ? "bg-background" : "bg-gray-50"} ${
-        // 桌面端保持原有的padding和margin
-        'md:p-6'
-      } ${
-        // 移动端无padding，全屏显示
-        'p-0'
-      }`}
+      className={`min-h-screen transition-all duration-500 ease-in-out ${isDark ? "bg-background" : "bg-gray-50"} md:p-6 p-0`}
       style={{ 
         marginRight: shouldUseOutwardMode && (showTradeModal || showPublishModal) ? '384px' : '0px',
         transition: 'margin-right 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
