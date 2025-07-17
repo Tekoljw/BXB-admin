@@ -527,19 +527,12 @@ export default function USDTTradePage() {
             <div className={`${cardStyle} p-4 m-4`}>
               {/* 买入/卖出切换和法币选择 */}
               <div className="flex items-center justify-between mb-4">
-                <div className="flex bg-gray-200 dark:bg-[#252842] rounded-md p-1 flex-1 mr-4">
+                <div className="relative flex bg-gray-200 dark:bg-[#252842] rounded-md p-1 flex-1 mr-4">
                   {/* 滑动背景 */}
                   <div
-                    className={`absolute w-1/2 h-8 rounded-md transition-all duration-300 ease-in-out ${
+                    className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${
                       activeTab === "买入USDT" || activeTab === "买入" ? "bg-custom-green left-1" : "bg-red-500 left-1/2"
                     }`}
-                    style={{
-                      position: 'absolute',
-                      top: '4px',
-                      bottom: '4px',
-                      width: 'calc(50% - 4px)',
-                      left: activeTab === "买入USDT" || activeTab === "买入" ? '4px' : 'calc(50% + 2px)'
-                    }}
                   />
 
                   {/* 买入按钮 */}
