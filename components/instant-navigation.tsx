@@ -153,6 +153,10 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     return <ChatPage />
   }
 
+  if (!mounted) {
+    return <div className="h-screen bg-gray-900"></div>
+  }
+
   return (
     <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
       {/* Desktop Sidebar - Hidden on Mobile */}
