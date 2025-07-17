@@ -89,7 +89,7 @@ export default function MarketPage() {
   const { theme } = useTheme()
   const [searchTerm, setSearchTerm] = useState("")
   const [favorites, setFavorites] = useState<string[]>(["BTC/USDT", "VGX/USDT"])
-  const [activeMainTab, setActiveMainTab] = useState("现货")
+  const [activeMainTab, setActiveMainTab] = useState("热门")
   const [activeSubTab, setActiveSubTab] = useState("全部")
   const [mounted, setMounted] = useState(false)
   const isDark = theme === "dark"
@@ -110,7 +110,7 @@ export default function MarketPage() {
   }
 
   // 一级页签
-  const mainTabs = ["自选", "现货", "合约"]
+  const mainTabs = ["自选", "热门", "涨幅榜", "跌幅榜", "新币榜", "成交额榜"]
 
   // 二级页签
   const subTabs = [
@@ -342,11 +342,54 @@ export default function MarketPage() {
     setFavorites((prev) => (prev.includes(pair) ? prev.filter((f) => f !== pair) : [...prev, pair]))
   }
 
-  // 过滤市场数据
-  const filteredMarketData = marketData.filter((item) => {
-    const pairName = `${item.symbol}/${item.pair}`.toLowerCase()
-    return pairName.includes(searchTerm.toLowerCase())
-  })
+  // 过滤和排序市场数据
+  const getFilteredMarketData = () => {
+    let filteredData = marketData.filter((item) => {
+      const pairName = `${item.symbol}/${item.pair}`.toLowerCase()
+      return pairName.includes(searchTerm.toLowerCase())
+    })
+
+    // 根据不同页签进行排序
+    switch (activeMainTab) {
+      case "自选":
+        filteredData = filteredData.filter(item => 
+          favorites.includes(`${item.symbol}/${item.pair}`)
+        )
+        break
+      case "热门":
+        // 热门：按成交量排序
+        filteredData = [...filteredData].sort((a, b) => 
+          parseFloat(b.volume.replace(/[^\d.]/g, '')) - parseFloat(a.volume.replace(/[^\d.]/g, ''))
+        )
+        break
+      case "涨幅榜":
+        // 涨幅榜：按涨幅排序（只显示正涨幅）
+        filteredData = filteredData.filter(item => item.isPositive)
+          .sort((a, b) => parseFloat(b.change.replace(/[^\d.]/g, '')) - parseFloat(a.change.replace(/[^\d.]/g, '')))
+        break
+      case "跌幅榜":
+        // 跌幅榜：按跌幅排序（只显示负跌幅）
+        filteredData = filteredData.filter(item => !item.isPositive)
+          .sort((a, b) => parseFloat(a.change.replace(/[^\d.]/g, '')) - parseFloat(b.change.replace(/[^\d.]/g, '')))
+        break
+      case "新币榜":
+        // 新币榜：模拟新币数据（实际应该从API获取）
+        filteredData = filteredData.slice(0, 10) // 显示前10个作为新币
+        break
+      case "成交额榜":
+        // 成交额榜：按成交额排序
+        filteredData = [...filteredData].sort((a, b) => 
+          parseFloat(b.turnover.replace(/[^\d.]/g, '')) - parseFloat(a.turnover.replace(/[^\d.]/g, ''))
+        )
+        break
+      default:
+        break
+    }
+
+    return filteredData
+  }
+
+  const filteredMarketData = getFilteredMarketData()
 
   // 统一的卡片样式
   const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
