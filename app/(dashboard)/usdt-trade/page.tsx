@@ -86,6 +86,7 @@ export default function USDTTradePage() {
   const [selectedCountry, setSelectedCountry] = useState("中国")
   const [selectedCity, setSelectedCity] = useState("北京")
   const [locationSearchTerm, setLocationSearchTerm] = useState("")
+  const [selectedOTCProvider, setSelectedOTCProvider] = useState<any>(null)
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -1608,67 +1609,93 @@ export default function USDTTradePage() {
                   </div>
 
                   {/* 手机端卡片布局 */}
-                  <div className="md:hidden space-y-3 p-4">
-                    <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-                      请选择服务商
-                    </h3>
-                    
-                    {otcProviders.map((provider, index) => (
-                      <div 
-                        key={index} 
-                        className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all hover:shadow-md hover:border-custom-green`}
-                      >
-                        <div className="flex items-center justify-between">
-                          {/* 左侧：服务商图标和名称 */}
-                          <div className="flex items-center space-x-3">
-                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                              isDark ? "bg-[#3a3d4a] text-white" : "bg-gray-100 text-gray-600"
-                            }`}>
-                              <span className="text-lg">{provider.icon}</span>
-                            </div>
-                            <div>
-                              <div className="flex items-center space-x-2">
-                                <span className={`text-base font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
-                                  {provider.name}
-                                </span>
-                                {provider.label && (
-                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                                    isDark 
-                                      ? "bg-green-900/50 text-green-300" 
-                                      : "bg-green-100 text-green-800"
-                                  }`}>
-                                    {provider.label}
-                                  </span>
-                                )}
+                  <div className="md:hidden pb-20">
+                    <div className="space-y-3 p-4">
+                      {otcProviders.map((provider, index) => (
+                        <div 
+                          key={index} 
+                          className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all ${
+                            selectedOTCProvider?.name === provider.name 
+                              ? "border-custom-green border-2 bg-custom-green bg-opacity-5" 
+                              : "hover:shadow-md hover:border-custom-green"
+                          }`}
+                          onClick={() => setSelectedOTCProvider(provider)}
+                        >
+                          <div className="flex items-center justify-between">
+                            {/* 左侧：服务商图标和名称 */}
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                                isDark ? "bg-[#3a3d4a] text-white" : "bg-gray-100 text-gray-600"
+                              }`}>
+                                <span className="text-lg">{provider.icon}</span>
                               </div>
-                              {/* 支付方式图标 */}
-                              <div className="flex items-center space-x-2 mt-1">
-                                {provider.payments.slice(0, 3).map((payment, payIndex) => (
-                                  <div key={payIndex} className="flex items-center">
-                                    {getPaymentIcon(payment)}
-                                  </div>
-                                ))}
-                                {provider.payments.length > 3 && (
-                                  <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                                    +{provider.payments.length - 3}
+                              <div>
+                                <div className="flex items-center space-x-2">
+                                  <span className={`text-base font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
+                                    {provider.name}
                                   </span>
-                                )}
+                                  {provider.label && (
+                                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                      isDark 
+                                        ? "bg-green-900/50 text-green-300" 
+                                        : "bg-green-100 text-green-800"
+                                    }`}>
+                                      {provider.label}
+                                    </span>
+                                  )}
+                                </div>
+                                {/* 支付方式图标 */}
+                                <div className="flex items-center space-x-2 mt-1">
+                                  {provider.payments.slice(0, 3).map((payment, payIndex) => (
+                                    <div key={payIndex} className="flex items-center">
+                                      {getPaymentIcon(payment)}
+                                    </div>
+                                  ))}
+                                  {provider.payments.length > 3 && (
+                                    <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                                      +{provider.payments.length - 3}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-                          {/* 右侧：价格信息 */}
-                          <div className="text-right">
-                            <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                              ¥{provider.price}
-                            </div>
-                            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                              折合 ¥{provider.rate}/USDT
+                            {/* 右侧：价格信息 */}
+                            <div className="text-right">
+                              <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                                ¥{provider.price}
+                              </div>
+                              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                                折合 ¥{provider.rate}/USDT
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+
+                    {/* 底部按钮 */}
+                    <div className="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-[#1a1d29] border-t border-gray-200 dark:border-gray-700 md:hidden">
+                      <button
+                        className={`w-full py-3 rounded-lg font-medium transition-all ${
+                          selectedOTCProvider
+                            ? "bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
+                            : "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                        }`}
+                        disabled={!selectedOTCProvider}
+                        onClick={() => {
+                          if (selectedOTCProvider) {
+                            // 处理选择服务商后的操作
+                            console.log('选择服务商:', selectedOTCProvider.name)
+                          }
+                        }}
+                      >
+                        {selectedOTCProvider 
+                          ? `选择${selectedOTCProvider.name}${activeTab.includes("买入") ? "购买" : "卖出"}USDT`
+                          : "选择服务商以继续"
+                        }
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
