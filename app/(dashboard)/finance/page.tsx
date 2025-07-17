@@ -235,7 +235,7 @@ export default function FinancePage() {
                 </span>
               </div>
               
-              <button className="bg-[#00D4AA] hover:bg-[#00C097] text-white font-medium px-4 py-2 rounded-lg transition-colors text-sm">
+              <button className="w-full bg-[#00D4AA] hover:bg-[#00C097] text-white font-medium py-3 rounded-lg transition-colors text-sm">
                 立即投资
               </button>
             </div>
@@ -244,16 +244,16 @@ export default function FinancePage() {
 
         {/* Mobile Tabs for Mining */}
         <div className="p-4 pb-0">
-          <div className="flex bg-gray-100 dark:bg-[#252842] rounded-lg p-1">
+          <div className="flex space-x-6">
             {["UBX挖矿", "UBC挖矿"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setSelectedTab(tab)}
-                className={`relative flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                className={`relative text-left text-sm font-medium transition-all duration-200 ${
                   selectedTab === tab
                     ? isDark
-                      ? "bg-white text-black shadow-sm"
-                      : "bg-white text-gray-900 shadow-sm"
+                      ? "text-white"
+                      : "text-gray-900"
                     : isDark
                       ? "text-gray-400 hover:text-gray-200"
                       : "text-gray-600 hover:text-gray-900"
@@ -265,6 +265,9 @@ export default function FinancePage() {
                     HOT
                   </span>
                 )}
+                {selectedTab === tab && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00D4AA]"></div>
+                )}
               </button>
             ))}
           </div>
@@ -274,14 +277,39 @@ export default function FinancePage() {
         <div className="p-4">
           <div className="space-y-4">
             {financeProducts.map((product) => (
-              <div key={product.id} className={`${cardStyle} rounded-lg p-4`}>
-                {/* Daily Rate */}
-                <div className="mb-3">
-                  <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"} mb-1`}>
-                    {product.dailyRate}
+              <div key={product.id} className={`${cardStyle} rounded-lg p-4 relative`}>
+                {/* 质押币种和质押期限 - 右上角 */}
+                <div className="absolute top-4 right-4 text-right">
+                  <div className="flex items-center space-x-1 justify-end mb-1">
+                    {product.tokens.map((token, index) => (
+                      <div key={index} className="flex items-center">
+                        {token === "USDT" && (
+                          <div className="w-5 h-5 rounded-full bg-[#00D4AA] flex items-center justify-center text-white text-xs font-bold">
+                            T
+                          </div>
+                        )}
+                        {token === "USDC" && (
+                          <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
+                            C
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                    日利率
+                  <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                    {product.duration}
+                  </div>
+                </div>
+
+                {/* 日利率 - 左上角 */}
+                <div className="mb-3 pr-20">
+                  <div className="flex items-baseline space-x-2">
+                    <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                      日利率
+                    </span>
+                    <span className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                      {product.dailyRate}
+                    </span>
                   </div>
                 </div>
 
@@ -292,24 +320,8 @@ export default function FinancePage() {
                   </div>
                 </div>
 
-                {/* Token Icons and Tags */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    {product.tokens.map((token, index) => (
-                      <div key={index} className="flex items-center">
-                        {token === "USDT" && (
-                          <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center text-white text-xs font-bold">
-                            T
-                          </div>
-                        )}
-                        {token === "USDC" && (
-                          <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
-                            C
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                {/* 稳定收益标签 - 左对齐 */}
+                <div className="mb-4">
                   <div className="flex space-x-1">
                     {product.tags.map((tag, index) => (
                       <span 
@@ -323,13 +335,6 @@ export default function FinancePage() {
                         {tag}
                       </span>
                     ))}
-                  </div>
-                </div>
-
-                {/* Duration */}
-                <div className="mb-4">
-                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                    质押期限: {product.duration}
                   </div>
                 </div>
 
