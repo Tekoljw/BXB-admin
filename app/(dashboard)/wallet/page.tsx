@@ -13254,6 +13254,101 @@ export default function WalletPage() {
                           </div>
                         </div>
                       )
+                    case "佣金结算记录":
+                      return (
+                        <div className="mb-4">
+                          {/* 搜索框 */}
+                          <div className="mb-4">
+                            <input
+                              type="text"
+                              placeholder="搜索用户ID或用户名..."
+                              value={commissionSearchTerm}
+                              onChange={(e) => setCommissionSearchTerm(e.target.value)}
+                              className={`w-full px-4 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
+                            />
+                          </div>
+                          
+                          {/* 筛选条件 */}
+                          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div>
+                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                佣金类型
+                              </label>
+                              <select 
+                                value={commissionTypeFilter}
+                                onChange={(e) => setCommissionTypeFilter(e.target.value)}
+                                className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                              >
+                                <option>全部</option>
+                                <option>合约佣金</option>
+                                <option>理财佣金</option>
+                                <option>U卡佣金</option>
+                                <option>担保佣金</option>
+                                <option>支付佣金</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                推荐类型
+                              </label>
+                              <select 
+                                value={commissionReferralFilter}
+                                onChange={(e) => setCommissionReferralFilter(e.target.value)}
+                                className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                              >
+                                <option>全部</option>
+                                <option>直推</option>
+                                <option>间推</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                状态
+                              </label>
+                              <select 
+                                value={commissionStatusFilter}
+                                onChange={(e) => setCommissionStatusFilter(e.target.value)}
+                                className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                              >
+                                <option>全部</option>
+                                <option>已结算</option>
+                                <option>结算中</option>
+                                <option>已完成</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                时间范围
+                              </label>
+                              <select 
+                                value={commissionTimeFilter}
+                                onChange={(e) => setCommissionTimeFilter(e.target.value)}
+                                className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                              >
+                                <option>全部</option>
+                                <option>今日</option>
+                                <option>本周</option>
+                                <option>本月</option>
+                                <option>近三个月</option>
+                              </select>
+                            </div>
+                            <div className="flex items-end gap-2">
+                              <button 
+                                onClick={() => {
+                                  setCommissionSearchTerm("")
+                                  setCommissionTypeFilter("全部")
+                                  setCommissionReferralFilter("全部")
+                                  setCommissionStatusFilter("全部")
+                                  setCommissionTimeFilter("全部")
+                                }}
+                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}
+                              >
+                                重置
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )
                     case "其他记录":
                       return (
                         <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
