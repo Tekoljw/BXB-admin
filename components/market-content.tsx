@@ -275,8 +275,8 @@ export default function MarketContent() {
 
   return (
     <div className="space-y-6">
-      {/* 顶部重点币种 */}
-      <div className="grid grid-cols-2 gap-4">
+      {/* 顶部重点币种 - 手机端隐藏 */}
+      <div className="hidden md:grid grid-cols-2 gap-4">
         {topCoins.map((coin, index) => (
           <div key={index} className={`${cardStyle} rounded-lg p-4`}>
             <div className="flex items-center justify-between mb-2">
@@ -302,8 +302,8 @@ export default function MarketContent() {
         ))}
       </div>
 
-      {/* 涨幅排行和最高交易额 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* 涨幅排行和最高交易额 - 手机端隐藏 */}
+      <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* 涨幅排行 */}
         <div className={`${cardStyle} rounded-lg p-4`}>
           <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
