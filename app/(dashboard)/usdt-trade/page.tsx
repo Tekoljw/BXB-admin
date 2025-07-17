@@ -1622,10 +1622,7 @@ export default function USDTTradePage() {
                         ))}
                       </div>
                       
-                      <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                        最低兑换 100 USDT • 无上限
-                      </div>
-                      <button className={`w-full py-3 border rounded-lg font-medium transition-all ${
+                      <button className={`w-full py-3 border rounded-lg font-medium transition-all mt-4 ${
                         isDark 
                           ? "border-white text-white hover:bg-white hover:text-black" 
                           : "border-black text-black hover:bg-black hover:text-white"
@@ -1737,10 +1734,7 @@ export default function USDTTradePage() {
                         </span>
                       </div>
                       
-                      <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                        最低兑换 100 USDT • 无上限
-                      </div>
-                      <button className={`w-full py-3 border rounded-lg font-medium transition-all ${
+                      <button className={`w-full py-3 border rounded-lg font-medium transition-all mt-4 ${
                         isDark 
                           ? "border-white text-white hover:bg-white hover:text-black" 
                           : "border-black text-black hover:bg-black hover:text-white"
