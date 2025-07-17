@@ -62,8 +62,10 @@ export default function ChatPage() {
   const [favorites, setFavorites] = useState<string[]>(["contact-1", "contact-3"])
   const [showAddMenu, setShowAddMenu] = useState(false)
   const [isMenuAnimating, setIsMenuAnimating] = useState(false)
+  const [showProfileMenu, setShowProfileMenu] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const addMenuRef = useRef<HTMLDivElement>(null)
+  const profileMenuRef = useRef<HTMLDivElement>(null)
 
   // 处理菜单显示
   const handleShowMenu = useCallback(() => {
@@ -323,10 +325,7 @@ export default function ChatPage() {
         }`}>
           {/* Left - Personal Avatar */}
           <button
-            onClick={() => {
-              // TODO: Implement left slide menu for profile
-              console.log("Open profile side menu")
-            }}
+            onClick={() => setShowProfileMenu(true)}
             className="flex items-center space-x-3"
           >
             <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white text-sm font-medium">
@@ -381,6 +380,90 @@ export default function ChatPage() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* Profile Side Menu - Mobile Only */}
+      {isMobile && showProfileMenu && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-50"
+            onClick={() => setShowProfileMenu(false)}
+          />
+          
+          {/* Profile Menu */}
+          <div 
+            ref={profileMenuRef}
+            className={`fixed left-0 top-0 h-full w-80 z-50 transform transition-transform duration-300 ease-in-out ${
+              isDark ? 'bg-gray-800' : 'bg-white'
+            } shadow-xl`}
+          >
+            {/* Profile Header */}
+            <div className={`p-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white text-xl font-medium">
+                  J
+                </div>
+                <div>
+                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    John Doe
+                  </h3>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    ID: 123456789
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Menu Items */}
+            <div className="py-4">
+              {[
+                { label: '个人主页', href: '/profile' },
+                { label: '钱包', href: '/wallet' },
+                { label: '邀请返佣', href: '/profile?tab=邀请返佣' },
+                { label: '费率折扣', href: '/profile?tab=费率折扣' },
+                { label: '安全中心', href: '/profile?tab=安全中心' },
+                { label: '身份认证', href: '/profile?tab=身份认证' },
+                { label: '系统设置', href: '/profile?tab=系统设置' },
+                { label: '通知', href: '/notifications' },
+              ].map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setShowProfileMenu(false)
+                    // TODO: Navigate to the specific page
+                    console.log(`Navigate to ${item.href}`)
+                  }}
+                  className={`w-full px-6 py-3 text-left transition-colors ${
+                    isDark 
+                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Bottom Actions */}
+            <div className={`absolute bottom-0 left-0 right-0 p-4 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <button
+                onClick={() => {
+                  setShowProfileMenu(false)
+                  // TODO: Implement logout
+                  console.log('Logout')
+                }}
+                className={`w-full py-3 px-4 rounded-lg transition-colors ${
+                  isDark 
+                    ? 'bg-red-600 hover:bg-red-700 text-white' 
+                    : 'bg-red-500 hover:bg-red-600 text-white'
+                }`}
+              >
+                退出登录
+              </button>
+            </div>
+          </div>
+        </>
       )}
 
       {/* 主聊天区域 */}
