@@ -1388,11 +1388,10 @@ export default function USDTTradePage() {
                             <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
                               限额：¥{merchant.limit}
                             </div>
-                            <div className={`text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
+                            <div className="text-sm text-blue-600">
                               担保周期：24小时
                             </div>
                           </div>
-                          <div className="text-xs text-blue-600">{merchant.note}</div>
                         </div>
 
                         {/* 支付方式和操作按钮 */}
