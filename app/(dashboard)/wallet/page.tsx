@@ -14929,21 +14929,17 @@ export default function WalletPage() {
 
           {/* 子页签导航 */}
           {topLevelTab === "账户资产" ? (
-            <div className="flex flex-wrap gap-2 p-1 bg-gray-200 dark:bg-[#252842] rounded-lg">
+            <div className="flex space-x-6 overflow-x-auto">
               {walletTabs.map((tab) => {
                 const Icon = tab.icon
                 return (
                   <button
                     key={tab.id}
                     onClick={() => handleTabChange(tab.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
+                    className={`flex items-center space-x-2 pb-2 px-1 border-b-2 text-base transition-colors whitespace-nowrap ${
                       activeTab === tab.id
-                        ? isDark
-                          ? "border-white bg-white text-black shadow-sm"
-                          : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
-                        : isDark
-                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842]"
-                          : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                        ? "border-black text-black font-bold"
+                        : "border-transparent text-black font-medium hover:text-gray-700"
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -14953,21 +14949,17 @@ export default function WalletPage() {
               })}
             </div>
           ) : (
-            <div className="flex flex-wrap gap-2 p-1 bg-gray-200 dark:bg-[#252842] rounded-lg">
+            <div className="flex space-x-6 overflow-x-auto">
               {orderTabs.map((tab) => {
                 const Icon = tab.icon
                 return (
                   <button
                     key={tab.id}
                     onClick={() => handleOrderTabChange(tab.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 border ${
+                    className={`flex items-center space-x-2 pb-2 px-1 border-b-2 text-base transition-colors whitespace-nowrap ${
                       orderTab === tab.id
-                        ? isDark
-                          ? "border-white bg-white text-black shadow-sm"
-                          : "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm"
-                        : isDark
-                          ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842]"
-                          : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                        ? "border-black text-black font-bold"
+                        : "border-transparent text-black font-medium hover:text-gray-700"
                     }`}
                   >
                     <Icon className="h-4 w-4" />
