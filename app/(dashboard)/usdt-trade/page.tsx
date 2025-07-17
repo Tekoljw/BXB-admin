@@ -1554,19 +1554,20 @@ export default function USDTTradePage() {
                           }`}
                         >
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-4 flex-1 min-w-0">
+                            {/* 左侧：服务商图标和名称 */}
+                            <div className="flex items-center space-x-4">
                               <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
                                 isDark ? "bg-[#3a3d4a] text-white" : "bg-gray-100 text-gray-600"
                               }`}>
                                 <span className="text-xl">{provider.icon}</span>
                               </div>
-                              <div className="flex-1 min-w-0">
+                              <div>
                                 <div className="flex items-center space-x-2 mb-2">
-                                  <span className={`text-lg font-semibold truncate ${isDark ? "text-white" : "text-gray-900"}`}>
+                                  <span className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
                                     {provider.name}
                                   </span>
                                   {provider.label && (
-                                    <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                       isDark 
                                         ? "bg-green-900/50 text-green-300" 
                                         : "bg-green-100 text-green-800"
@@ -1575,13 +1576,11 @@ export default function USDTTradePage() {
                                     </span>
                                   )}
                                 </div>
-                                <div className="flex items-center space-x-4 overflow-hidden">
+                                {/* 支付方式图标 */}
+                                <div className="flex items-center space-x-3">
                                   {provider.payments.slice(0, 4).map((payment, payIndex) => (
-                                    <div key={payIndex} className="flex items-center space-x-1 flex-shrink-0">
+                                    <div key={payIndex} className="flex items-center">
                                       {getPaymentIcon(payment)}
-                                      <span className={`text-xs truncate ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                                        {payment}
-                                      </span>
                                     </div>
                                   ))}
                                   {provider.payments.length > 4 && (
@@ -1592,7 +1591,9 @@ export default function USDTTradePage() {
                                 </div>
                               </div>
                             </div>
-                            <div className="text-right flex-shrink-0 ml-4">
+
+                            {/* 右侧：价格信息 */}
+                            <div className="text-right">
                               <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
                                 ¥{provider.price}
                               </div>
@@ -1617,51 +1618,53 @@ export default function USDTTradePage() {
                         key={index} 
                         className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all hover:shadow-md hover:border-custom-green`}
                       >
-                        {/* 头部：图标、名称、标签 */}
-                        <div className="flex items-center space-x-3 mb-3">
-                          <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                            isDark ? "bg-[#3a3d4a] text-white" : "bg-gray-100 text-gray-600"
-                          }`}>
-                            <span className="text-xl">{provider.icon}</span>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center space-x-2 mb-1">
-                              <span className={`text-lg font-semibold truncate ${isDark ? "text-white" : "text-gray-900"}`}>
-                                {provider.name}
-                              </span>
-                              {provider.label && (
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-                                  isDark 
-                                    ? "bg-green-900/50 text-green-300" 
-                                    : "bg-green-100 text-green-800"
-                                }`}>
-                                  {provider.label}
+                        <div className="flex items-center justify-between">
+                          {/* 左侧：服务商图标和名称 */}
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                              isDark ? "bg-[#3a3d4a] text-white" : "bg-gray-100 text-gray-600"
+                            }`}>
+                              <span className="text-lg">{provider.icon}</span>
+                            </div>
+                            <div>
+                              <div className="flex items-center space-x-2">
+                                <span className={`text-base font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
+                                  {provider.name}
                                 </span>
-                              )}
-                            </div>
-                            <div className="text-right">
-                              <div className={`text-xl font-bold text-custom-green`}>
-                                ¥{provider.price}
+                                {provider.label && (
+                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                    isDark 
+                                      ? "bg-green-900/50 text-green-300" 
+                                      : "bg-green-100 text-green-800"
+                                  }`}>
+                                    {provider.label}
+                                  </span>
+                                )}
                               </div>
-                              <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                                折合 ¥{provider.rate}/USDT
+                              {/* 支付方式图标 */}
+                              <div className="flex items-center space-x-2 mt-1">
+                                {provider.payments.slice(0, 3).map((payment, payIndex) => (
+                                  <div key={payIndex} className="flex items-center">
+                                    {getPaymentIcon(payment)}
+                                  </div>
+                                ))}
+                                {provider.payments.length > 3 && (
+                                  <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                                    +{provider.payments.length - 3}
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </div>
-                        </div>
 
-                        {/* 支付方式 */}
-                        <div>
-                          <div className="text-xs text-gray-500 mb-2">支付方式</div>
-                          <div className="flex flex-wrap gap-2">
-                            {provider.payments.map((payment, payIndex) => (
-                              <div key={payIndex} className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
-                                {getPaymentIcon(payment)}
-                                <span className={`text-xs ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                                  {payment}
-                                </span>
-                              </div>
-                            ))}
+                          {/* 右侧：价格信息 */}
+                          <div className="text-right">
+                            <div className={`text-lg font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+                              ¥{provider.price}
+                            </div>
+                            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                              折合 ¥{provider.rate}/USDT
+                            </div>
                           </div>
                         </div>
                       </div>
