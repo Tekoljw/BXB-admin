@@ -89,6 +89,7 @@ export default function USDTTradePage() {
   
   // OTC服务商选择
   const [selectedOtcProvider, setSelectedOtcProvider] = useState<number | null>(null)
+  const [otcPurchaseAmount, setOtcPurchaseAmount] = useState("100")
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -1549,17 +1550,43 @@ export default function USDTTradePage() {
                       <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
                         购买USDT数量
                       </h4>
-                      <div className="mb-4">
+                      <div className="mb-4 relative">
                         <input
                           type="text"
-                          placeholder="123"
-                          className={`w-full px-3 py-3 text-lg text-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                          value={otcPurchaseAmount}
+                          onChange={(e) => setOtcPurchaseAmount(e.target.value)}
+                          className={`w-full px-3 py-3 pr-16 text-lg text-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                             isDark 
                               ? "bg-[#1a1c2e] border-[#3a3d4a] text-white" 
                               : "bg-white border-gray-300 text-gray-900"
                           }`}
                         />
+                        <span className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                          USDT
+                        </span>
                       </div>
+                      
+                      {/* 快捷金额按钮 */}
+                      <div className="grid grid-cols-4 gap-2 mb-4">
+                        {["100", "500", "1000", "5000"].map((amount) => (
+                          <button
+                            key={amount}
+                            onClick={() => setOtcPurchaseAmount(amount)}
+                            className={`py-2 px-3 text-sm border rounded-lg transition-all hover:border-custom-green transform hover:scale-105 ${
+                              otcPurchaseAmount === amount
+                                ? isDark
+                                  ? "border-custom-green bg-custom-green/10 text-custom-green"
+                                  : "border-custom-green bg-custom-green/10 text-custom-green"
+                                : isDark 
+                                  ? "border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42]" 
+                                  : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                            }`}
+                          >
+                            {amount}
+                          </button>
+                        ))}
+                      </div>
+                      
                       <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                         最低兑换 100 USDT • 无上限
                       </div>
@@ -1659,17 +1686,43 @@ export default function USDTTradePage() {
                       <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
                         购买USDT数量
                       </h4>
-                      <div className="mb-4">
+                      <div className="mb-4 relative">
                         <input
                           type="text"
-                          placeholder="123"
-                          className={`w-full px-3 py-3 text-lg text-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                          value={otcPurchaseAmount}
+                          onChange={(e) => setOtcPurchaseAmount(e.target.value)}
+                          className={`w-full px-3 py-3 pr-16 text-lg text-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
                             isDark 
                               ? "bg-[#1a1c2e] border-[#3a3d4a] text-white" 
                               : "bg-white border-gray-300 text-gray-900"
                           }`}
                         />
+                        <span className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                          USDT
+                        </span>
                       </div>
+                      
+                      {/* 快捷金额按钮 */}
+                      <div className="grid grid-cols-4 gap-2 mb-4">
+                        {["100", "500", "1000", "5000"].map((amount) => (
+                          <button
+                            key={amount}
+                            onClick={() => setOtcPurchaseAmount(amount)}
+                            className={`py-2 px-3 text-sm border rounded-lg transition-all hover:border-custom-green transform hover:scale-105 ${
+                              otcPurchaseAmount === amount
+                                ? isDark
+                                  ? "border-custom-green bg-custom-green/10 text-custom-green"
+                                  : "border-custom-green bg-custom-green/10 text-custom-green"
+                                : isDark 
+                                  ? "border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42]" 
+                                  : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                            }`}
+                          >
+                            {amount}
+                          </button>
+                        ))}
+                      </div>
+                      
                       <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                         最低兑换 100 USDT • 无上限
                       </div>
