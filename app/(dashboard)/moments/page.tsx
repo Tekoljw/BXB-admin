@@ -9,7 +9,7 @@ export default function MomentsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [favorites, setFavorites] = useState<string[]>(["post-1", "post-3"])
   const [activeMainTab, setActiveMainTab] = useState("推荐")
-  const [activeSubTab, setActiveSubTab] = useState("全部")
+  const [activeSubTab, setActiveSubTab] = useState("热门话题")
   const [mounted, setMounted] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [startX, setStartX] = useState(0)
@@ -20,8 +20,7 @@ export default function MomentsPage() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [isMobile, setIsMobile] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const isDark = theme === "dark"
-
+  
   // 解决闪烁问题
   useEffect(() => {
     setMounted(true)
@@ -37,18 +36,29 @@ export default function MomentsPage() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // 如果组件未挂载，返回空白内容，避免闪烁
-  if (!mounted) {
-    return <div className="min-h-screen bg-[#f5f8fa] dark:bg-background"></div>
-  }
+  // 当主页签切换时，重置二级页签
+  useEffect(() => {
+    if (activeMainTab === "推荐") {
+      setActiveSubTab("热门话题")
+    } else if (activeMainTab === "圈子") {
+      setActiveSubTab("全部")
+    } else {
+      setActiveSubTab("全部")
+    }
+  }, [activeMainTab])
+
+  const isDark = theme === "dark"
 
   // 一级页签
-  const mainTabs = ["关注", "圈子", "最新"]
+  const mainTabs = ["关注", "圈子", "最新", "推荐"]
 
   // 二级页签 - 根据主页签变化
   const getSubTabs = () => {
     if (activeMainTab === "圈子") {
       return [] // 圈子页签不需要二级页签，会显示圈子列表
+    }
+    if (activeMainTab === "推荐") {
+      return ["热门话题", "热门圈子", "推荐关注", "TOP"]
     }
     return [
       "全部",
@@ -69,6 +79,11 @@ export default function MomentsPage() {
   }
 
   const subTabs = getSubTabs()
+
+  // 如果组件未挂载，返回空白内容，避免闪烁
+  if (!mounted) {
+    return <div className="min-h-screen bg-[#f5f8fa] dark:bg-background"></div>
+  }
 
   // 圈子数据 - 更新为与社交页面一致的格式
   const circleData = [
@@ -611,8 +626,153 @@ export default function MomentsPage() {
               </div>
             )}
 
+            {/* 推荐页签内容 */}
+            {activeMainTab === "推荐" && (
+              <div className="space-y-6">
+                {activeSubTab === "热门话题" && (
+                  <div className="space-y-3">
+                    {trendingTopics.map((topic, index) => (
+                      <div
+                        key={index}
+                        className={`${cardStyle} rounded-lg p-4 hover:shadow-lg transition-shadow`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <span className="text-2xl">#</span>
+                            <div>
+                              <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium text-lg block`}>
+                                {topic.tag}
+                              </span>
+                              <span className="text-gray-400 text-sm">{topic.posts} 条动态</span>
+                            </div>
+                          </div>
+                          <span className="text-[#00D4AA] text-lg font-medium">{topic.change}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeSubTab === "热门圈子" && (
+                  <div className="space-y-3">
+                    {circleData.map((circle) => (
+                      <div
+                        key={circle.id}
+                        className={`${cardStyle} rounded-lg p-4 hover:shadow-lg transition-shadow`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <img
+                              src={circle.avatar}
+                              alt={circle.name}
+                              className="w-16 h-16 rounded-full object-cover"
+                            />
+                            <div>
+                              <h4 className={`font-semibold text-lg ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {circle.name}
+                              </h4>
+                              <p className="text-gray-400 text-sm">{circle.description}</p>
+                              <p className="text-gray-500 text-sm">{circle.members} 成员</p>
+                            </div>
+                          </div>
+                          <button 
+                            className={`px-4 py-2 rounded-lg transition-colors ${
+                              circle.isJoined
+                                ? "bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300"
+                                : "bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black"
+                            }`}
+                          >
+                            {circle.isJoined ? "已加入" : "加入"}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeSubTab === "推荐关注" && (
+                  <div className="space-y-3">
+                    {recommendedUsers.map((user, index) => (
+                      <div
+                        key={index}
+                        className={`${cardStyle} rounded-lg p-4 hover:shadow-lg transition-shadow`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold">
+                              {user.avatar}
+                            </div>
+                            <div>
+                              <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium text-lg block`}>
+                                {user.name}
+                              </span>
+                              <span className="text-gray-400 text-sm">{user.posts} 条动态</span>
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-end">
+                            <span className="text-[#00D4AA] text-lg font-medium mb-2">{user.change}</span>
+                            <button className={`px-4 py-2 rounded-lg transition-colors ${
+                              isDark 
+                                ? "bg-white text-black hover:bg-gray-200" 
+                                : "bg-black text-white hover:bg-gray-800"
+                            }`}>
+                              关注
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeSubTab === "TOP" && (
+                  <div className="space-y-3">
+                    {traderLeaderboard.map((trader) => (
+                      <div
+                        key={trader.rank}
+                        className={`${cardStyle} rounded-lg p-4 hover:shadow-lg transition-shadow`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 flex items-center justify-center">
+                              <span className={`text-lg font-bold ${
+                                trader.rank <= 3 ? "text-yellow-500" : isDark ? "text-gray-400" : "text-gray-500"
+                              }`}>
+                                {trader.rank}
+                              </span>
+                            </div>
+                            <div className={`w-16 h-16 rounded-full ${trader.color} flex items-center justify-center text-white font-bold text-xl`}>
+                              {trader.name.charAt(0)}
+                            </div>
+                            <div>
+                              <div className={`text-lg font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {trader.name}
+                              </div>
+                              <div className="text-sm text-gray-400">
+                                {trader.followers} 关注者　{trader.trades} 笔交易
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-end">
+                            <span className="text-[#00D4AA] text-lg font-bold mb-2">{trader.return}</span>
+                            <button className={`px-4 py-2 rounded-lg transition-colors ${
+                              isDark 
+                                ? "bg-white text-black hover:bg-gray-200" 
+                                : "bg-black text-white hover:bg-gray-800"
+                            }`}>
+                              跟单
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* 动态列表 - 重新设计的卡片布局 */}
-            {(
+            {activeMainTab !== "推荐" && (
               <div className="space-y-6">
                 {filteredPosts.map((post) => {
                   const isFavorite = favorites.includes(post.id)
