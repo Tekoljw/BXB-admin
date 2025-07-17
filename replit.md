@@ -336,6 +336,14 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
 - January 30, 2025. Refined commission expiration warning display:
   - Changed "即将过期金额" to "即将过期" for cleaner text presentation
   - Increased font size from text-xs to text-sm to match activity rate display consistency
+- January 30, 2025. Comprehensive USDT trading page mobile adaptation:
+  - Redesigned mobile layout with clean top navigation: 买入USDT/卖出USDT tabs with CNY currency dropdown on the right
+  - Implemented three-tier mobile structure: primary tabs (buy/sell), secondary tabs (C2C/快捷/OTC), and filter tags section
+  - Added mobile-specific filter tag system with color-coded buttons: green for active filters, red for special options, gray for standard filters
+  - Integrated floating "发布订单" (Publish Order) button positioned at the end of filter tags with blue theme
+  - Hidden desktop-only features on mobile: left sidebar filters, search bar, and advanced filtering options
+  - Maintained full desktop functionality while providing streamlined mobile experience
+  - Applied responsive design patterns with proper spacing, padding, and touch-friendly button sizes
 - January 30, 2025. Completed comprehensive commission system implementation:
   - Successfully implemented all five commission types using contract commission template: 合约佣金, 理财佣金, U卡佣金, 担保佣金, 支付佣金
   - Each commission type features consistent 4-card layout: today's earnings, monthly statistics, cumulative totals, commission rates

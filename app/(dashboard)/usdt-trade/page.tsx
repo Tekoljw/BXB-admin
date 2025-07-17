@@ -524,147 +524,213 @@ export default function USDTTradePage() {
         <div className="max-w-full mx-auto">
           {/* 手机端顶部功能区域 */}
           <div className="md:hidden">
-            <div className={`${cardStyle} p-4 m-4`}>
-              {/* 买入/卖出切换和法币选择 */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex bg-gray-200 dark:bg-[#252842] rounded-md p-1 flex-1 mr-4">
-                  {/* 滑动背景 */}
-                  <div
-                    className={`absolute w-1/2 h-8 rounded-md transition-all duration-300 ease-in-out ${
-                      activeTab === "买入USDT" || activeTab === "买入" ? "bg-custom-green left-1" : "bg-red-500 left-1/2"
-                    }`}
-                    style={{
-                      position: 'absolute',
-                      top: '4px',
-                      bottom: '4px',
-                      width: 'calc(50% - 4px)',
-                      left: activeTab === "买入USDT" || activeTab === "买入" ? '4px' : 'calc(50% + 2px)'
-                    }}
-                  />
+            {/* 顶部买入/卖出切换和法币选择 */}
+            <div className="flex items-center p-4 bg-white dark:bg-[#1a1d29] space-x-3">
+              {/* 买入/卖出切换 */}
+              <div className="relative flex bg-gray-100 dark:bg-[#252842] rounded-md p-1">
+                {/* 滑动背景 */}
+                <div
+                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${
+                    activeTab === "买入USDT" || activeTab === "买入" ? "bg-custom-green left-1 w-[calc(50%-2px)]" : "bg-red-500 left-[calc(50%+2px)] w-[calc(50%-2px)]"
+                  }`}
+                />
 
-                  {/* 买入按钮 */}
-                  <button
-                    onClick={() => setActiveTab("买入USDT")}
-                    className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
-                      activeTab === "买入USDT" || activeTab === "买入"
-                        ? "text-white"
-                        : isDark
-                          ? "text-gray-400 hover:text-white"
-                          : "text-gray-600 hover:text-gray-800"
-                    }`}
-                  >
-                    买入USDT
-                  </button>
+                {/* 买入按钮 */}
+                <button
+                  onClick={() => setActiveTab("买入USDT")}
+                  className={`relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
+                    activeTab === "买入USDT" || activeTab === "买入"
+                      ? "text-white"
+                      : isDark
+                        ? "text-gray-400"
+                        : "text-gray-600"
+                  }`}
+                >
+                  买入USDT
+                </button>
 
-                  {/* 卖出按钮 */}
-                  <button
-                    onClick={() => setActiveTab("卖出USDT")}
-                    className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
-                      activeTab === "卖出USDT" || activeTab === "卖出"
-                        ? "text-white"
-                        : isDark
-                          ? "text-gray-400 hover:text-white"
-                          : "text-gray-600 hover:text-gray-800"
-                    }`}
-                  >
-                    卖出USDT
-                  </button>
-                </div>
-
-                {/* 法币选择下拉框 */}
-                <div className="relative" ref={currencyDropdownRef}>
-                  <button
-                    onClick={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
-                    className={`flex items-center justify-between px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
-                      isDark
-                        ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#2a2d42]"
-                        : "bg-white border-gray-300 text-gray-800 hover:bg-gray-50"
-                    }`}
-                  >
-                    <span className="flex items-center space-x-2">
-                      <span>{currencies.find(c => c.code === selectedCurrency)?.symbol}</span>
-                      <span>{currencies.find(c => c.code === selectedCurrency)?.name}</span>
-                    </span>
-                    <ChevronDown 
-                      className={`w-4 h-4 ml-2 transition-transform duration-200 ${
-                        currencyDropdownOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {/* 下拉菜单 */}
-                  <div 
-                    className={`absolute top-full right-0 mt-1 z-50 rounded-lg border shadow-lg transition-all duration-200 min-w-[120px] ${
-                      currencyDropdownOpen 
-                        ? "opacity-100 visible translate-y-0" 
-                        : "opacity-0 invisible -translate-y-2"
-                    } ${
-                      isDark
-                        ? "bg-[#252842] border-[#3a3d4a]"
-                        : "bg-white border-gray-300"
-                    }`}
-                  >
-                    {currencies.map((currency) => (
-                      <button
-                        key={currency.code}
-                        onClick={() => {
-                          setSelectedCurrency(currency.code)
-                          setCurrencyDropdownOpen(false)
-                        }}
-                        className={`w-full flex items-center space-x-3 px-3 py-2 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg ${
-                          selectedCurrency === currency.code
-                            ? isDark
-                              ? "bg-custom-green/20 text-custom-green"
-                              : "bg-custom-green/10 text-custom-green"
-                            : isDark
-                              ? "text-gray-300 hover:bg-[#2a2d42]"
-                              : "text-gray-700 hover:bg-gray-50"
-                        }`}
-                      >
-                        <span className="font-medium">{currency.symbol}</span>
-                        <span>{currency.name}</span>
-                        <span className="text-xs text-gray-500">({currency.code})</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                {/* 卖出按钮 */}
+                <button
+                  onClick={() => setActiveTab("卖出USDT")}
+                  className={`relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
+                    activeTab === "卖出USDT" || activeTab === "卖出"
+                      ? "text-white"
+                      : isDark
+                        ? "text-gray-400"
+                        : "text-gray-600"
+                  }`}
+                >
+                  卖出USDT
+                </button>
               </div>
 
-              {/* 二级页签：C2C/快捷/OTC */}
-              <div className="flex space-x-2">
+              {/* 法币选择 */}
+              <div className="relative" ref={currencyDropdownRef}>
+                <button
+                  onClick={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
+                  className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                    isDark
+                      ? "bg-[#252842] text-white hover:bg-[#2a2d42]"
+                      : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                  }`}
+                >
+                  <span className="mr-1">{currencies.find(c => c.code === selectedCurrency)?.symbol}</span>
+                  <span className="mr-2">{selectedCurrency}</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${currencyDropdownOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                {/* 下拉菜单 */}
+                <div 
+                  className={`absolute top-full right-0 mt-1 z-50 rounded-lg border shadow-lg transition-all duration-200 min-w-[120px] ${
+                    currencyDropdownOpen 
+                      ? "opacity-100 visible translate-y-0" 
+                      : "opacity-0 invisible -translate-y-2"
+                  } ${
+                    isDark
+                      ? "bg-[#252842] border-[#3a3d4a]"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  {currencies.map((currency) => (
+                    <button
+                      key={currency.code}
+                      onClick={() => {
+                        setSelectedCurrency(currency.code)
+                        setCurrencyDropdownOpen(false)
+                      }}
+                      className={`w-full flex items-center space-x-2 px-3 py-2 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                        selectedCurrency === currency.code
+                          ? isDark
+                            ? "bg-custom-green/20 text-custom-green"
+                            : "bg-custom-green/10 text-custom-green"
+                          : isDark
+                            ? "text-gray-300 hover:bg-[#2a2d42]"
+                            : "text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      <span>{currency.symbol}</span>
+                      <span>{currency.code}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* 二级页签：C2C/快捷/OTC */}
+            <div className="flex bg-white dark:bg-[#1a1d29] px-4 pb-4">
+              <div className="flex w-full space-x-1">
                 {[
-                  { 
-                    mode: "C2C", 
-                    icon: Users
-                  },
-                  { 
-                    mode: "快捷", 
-                    icon: Zap
-                  },
-                  { 
-                    mode: "OTC", 
-                    icon: Building2
-                  }
+                  { mode: "C2C", icon: Users },
+                  { mode: "快捷", icon: Zap },
+                  { mode: "OTC", icon: Building2 }
                 ].map(({ mode, icon: Icon }) => (
                   <button
                     key={mode}
                     onClick={() => setTradeMode(mode)}
-                    className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all cursor-pointer border-2 ${
+                    className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
                       tradeMode === mode
                         ? isDark 
-                          ? "border-custom-green bg-[#1a1c2e]/50 text-white shadow-lg" 
-                          : "border-custom-green bg-custom-green/5 text-gray-900 shadow-lg"
+                          ? "bg-[#2a2d42] text-white border border-[#3a3d4a]" 
+                          : "bg-gray-100 text-gray-900 border border-gray-200"
                         : isDark
-                          ? "border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42] hover:border-custom-green/50"
-                          : "border-gray-200 text-gray-600 hover:border-custom-green hover:bg-gray-50 hover:shadow-md"
+                          ? "text-gray-400 hover:bg-[#2a2d42]"
+                          : "text-gray-600 hover:bg-gray-100"
                     }`}
                   >
-                    <div className="flex flex-col items-center space-y-1">
-                      <Icon className="w-4 h-4" />
-                      <span>{mode}</span>
-                    </div>
+                    {mode}
                   </button>
                 ))}
+              </div>
+            </div>
+
+            {/* 筛选标签 */}
+            <div className="px-4 py-3 bg-white dark:bg-[#1a1d29] border-b border-gray-100 dark:border-[#252842]">
+              <div className="flex flex-wrap gap-2">
+                {/* 广告方 */}
+                <button className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 ${
+                  isDark 
+                    ? "border-custom-green bg-custom-green/10 text-custom-green" 
+                    : "border-custom-green bg-custom-green/10 text-custom-green"
+                }`}>
+                  广告方
+                </button>
+                
+                {/* 充币保障 */}
+                <button className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 ${
+                  isDark 
+                    ? "border-custom-green bg-custom-green/10 text-custom-green" 
+                    : "border-custom-green bg-custom-green/10 text-custom-green"
+                }`}>
+                  充币保障
+                </button>
+
+                {/* 支付宝金额区间 */}
+                <button className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 ${
+                  isDark 
+                    ? "border-custom-green bg-custom-green/10 text-custom-green" 
+                    : "border-custom-green bg-custom-green/10 text-custom-green"
+                }`}>
+                  支付宝金额区间
+                </button>
+
+                {/* 支付方式 */}
+                <button className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 ${
+                  isDark 
+                    ? "border-custom-green bg-custom-green/10 text-custom-green" 
+                    : "border-custom-green bg-custom-green/10 text-custom-green"
+                }`}>
+                  支付方式
+                </button>
+
+                {/* 其他筛选项 - 第二行 */}
+                <button className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 ${
+                  isDark 
+                    ? "border-red-700 bg-red-900/50 text-red-300" 
+                    : "border-red-200 bg-red-50 text-red-800"
+                }`}>
+                  首单商家
+                </button>
+
+                <button className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 ${
+                  isDark 
+                    ? "border-red-700 bg-red-900/50 text-red-300" 
+                    : "border-red-200 bg-red-50 text-red-800"
+                }`}>
+                  免KYC
+                </button>
+
+                <button className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 ${
+                  isDark 
+                    ? "border-gray-600 bg-gray-800 text-gray-300" 
+                    : "border-gray-300 bg-gray-100 text-gray-600"
+                }`}>
+                  人工客服
+                </button>
+
+                <button className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 ${
+                  isDark 
+                    ? "border-gray-600 bg-gray-800 text-gray-300" 
+                    : "border-gray-300 bg-gray-100 text-gray-600"
+                }`}>
+                  现金交易
+                </button>
+
+                <button className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 ${
+                  isDark 
+                    ? "border-gray-600 bg-gray-800 text-gray-300" 
+                    : "border-gray-300 bg-gray-100 text-gray-600"
+                }`}>
+                  线上转账
+                </button>
+
+                {/* 发布订单按钮 */}
+                <button 
+                  onClick={handleOpenPublishModal}
+                  className="ml-auto flex items-center space-x-1 px-3 py-1.5 bg-blue-500 text-white rounded-md text-xs font-medium"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>发布订单</span>
+                </button>
               </div>
             </div>
           </div>
