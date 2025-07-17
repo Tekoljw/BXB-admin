@@ -38,6 +38,7 @@ import MarketPage from "@/app/(dashboard)/market/page"
 import SpotPage from "@/app/(dashboard)/spot/page"
 import FuturesPage from "@/app/(dashboard)/futures/page"
 import FinancePage from "@/app/(dashboard)/finance/page"
+import TradePage from "@/app/(dashboard)/trade/page"
 import TetherIcon from "@/components/tether-icon"
 
 interface InstantNavigationProps {
@@ -111,6 +112,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const navItems = [
     { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
     { path: "/moments", icon: Compass, label: "分享", component: MomentsPage },
+    { path: "/trade", icon: TrendingUp, label: "交易", component: TradePage },
     { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
     { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
     { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
@@ -123,8 +125,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const mobileNavItems = [
     { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
     { path: "/moments", icon: Compass, label: "发现", component: MomentsPage },
+    { path: "/trade", icon: TrendingUp, label: "交易", component: TradePage },
     { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
-    { path: "/futures", icon: BarChart3, label: "交易", component: FuturesPage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
   ]
 
