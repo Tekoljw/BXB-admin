@@ -382,6 +382,11 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - 合约佣金: "直推用户" → "直推合约用户", "间推用户" → "间推合约用户"
   - Fixed React rendering errors in U卡佣金 table with proper TypeScript typing (`record: any`)
   - Cleaned up all unnecessary type casting references for cleaner code
+- January 30, 2025. Replaced mobile market tab with original market page content:
+  - Removed custom market tabs component with self-designed data
+  - Created MarketContent component that displays complete original market page content
+  - Mobile market tab now shows authentic market data from main menu without additional tabs or search functionality
+  - Market content includes top coins, gainers ranking, volume ranking, and complete market data table with price charts
 
 ## User Preferences
 
