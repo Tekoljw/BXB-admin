@@ -420,6 +420,13 @@ export default function USDTTradePage() {
     return (amountNum * priceNum).toFixed(2)
   }
 
+  // 处理交易按钮点击
+  const handleTradeButtonClick = (merchant: any, tradeType: 'buy' | 'sell') => {
+    setSelectedMerchant(merchant)
+    setTradeType(tradeType)
+    setShowTradeModal(true)
+  }
+
 
 
   // 自动检测是否应该向外弹出
@@ -515,18 +522,181 @@ export default function USDTTradePage() {
 
   return (
     <div 
-      className={`min-h-screen p-6 transition-all duration-500 ease-in-out ${isDark ? "bg-background" : "bg-gray-50"}`}
+      className={`min-h-screen transition-all duration-500 ease-in-out ${isDark ? "bg-background" : "bg-gray-50"} ${
+        // 桌面端保持原有的padding和margin
+        'md:p-6'
+      } ${
+        // 移动端无padding，全屏显示
+        'p-0'
+      }`}
       style={{ 
         marginRight: shouldUseOutwardMode && (showTradeModal || showPublishModal) ? '384px' : '0px',
         transition: 'margin-right 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
       }}
     >
         <div className="max-w-full mx-auto">
+          {/* 移动端顶部筛选区域 */}
+          <div className="md:hidden">
+            <div className={`${cardStyle} p-4 rounded-none border-0 border-b`}>
+              
+              {/* 买入/卖出切换 */}
+              <div className="mb-4">
+                <div className="relative">
+                  <div className="flex bg-gray-200 dark:bg-[#252842] rounded-md p-1">
+                    {/* 滑动背景 */}
+                    <div
+                      className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${
+                        activeTab === "买入USDT" || activeTab === "买入" ? "bg-custom-green left-1" : "bg-red-500 left-1/2"
+                      }`}
+                    />
+
+                    {/* 买入按钮 */}
+                    <button
+                      onClick={() => setActiveTab("买入USDT")}
+                      className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
+                        activeTab === "买入USDT" || activeTab === "买入"
+                          ? "text-white"
+                          : isDark
+                            ? "text-gray-400 hover:text-white"
+                            : "text-gray-600 hover:text-gray-800"
+                      }`}
+                    >
+                      买入USDT
+                    </button>
+
+                    {/* 卖出按钮 */}
+                    <button
+                      onClick={() => setActiveTab("卖出USDT")}
+                      className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
+                        activeTab === "卖出USDT" || activeTab === "卖出"
+                          ? "text-white"
+                          : isDark
+                            ? "text-gray-400 hover:text-white"
+                            : "text-gray-600 hover:text-gray-800"
+                      }`}
+                    >
+                      卖出USDT
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* 交易模式切换 */}
+              <div className="mb-4">
+                <div className="flex space-x-2">
+                  {[
+                    { mode: "C2C", icon: Users, advantages: ["点对点", "更安全"], disadvantages: ["可能稍慢"] },
+                    { mode: "快捷支付", icon: Zap, advantages: ["快速到账", "方便"], disadvantages: ["费用稍高"] },
+                    { mode: "OTC", icon: Building2, advantages: ["大额交易", "专业服务"], disadvantages: ["门槛较高"] }
+                  ].map(({ mode, icon: Icon, advantages, disadvantages }) => (
+                    <button
+                      key={mode}
+                      onClick={() => setTradeMode(mode)}
+                      className={`flex-1 p-2 rounded-lg border-2 transition-all ${
+                        tradeMode === mode
+                          ? "border-custom-green bg-custom-green/10"
+                          : isDark
+                            ? "border-[#3a3d4a] bg-[#2a2d42]"
+                            : "border-gray-300 bg-gray-100"
+                      }`}
+                    >
+                      <div className="flex flex-col items-center space-y-1">
+                        <Icon className="w-5 h-5" />
+                        <span className="text-xs font-medium">{mode}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 法币选择 */}
+              <div className="mb-4 relative" ref={currencyDropdownRef}>
+                <button
+                  onClick={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
+                    isDark
+                      ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#2a2d42]"
+                      : "bg-white border-gray-300 text-gray-800 hover:bg-gray-50"
+                  }`}
+                >
+                  <span className="flex items-center space-x-2">
+                    <span>{currencies.find(c => c.code === selectedCurrency)?.symbol}</span>
+                    <span>{currencies.find(c => c.code === selectedCurrency)?.name}</span>
+                  </span>
+                  <ChevronDown 
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      currencyDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* 下拉菜单 */}
+                <div 
+                  className={`absolute top-full left-0 right-0 mt-1 z-50 rounded-lg border shadow-lg transition-all duration-200 ${
+                    currencyDropdownOpen 
+                      ? "opacity-100 visible translate-y-0" 
+                      : "opacity-0 invisible -translate-y-2"
+                  } ${
+                    isDark
+                      ? "bg-[#252842] border-[#3a3d4a]"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  {currencies.map((currency) => (
+                    <button
+                      key={currency.code}
+                      onClick={() => {
+                        setSelectedCurrency(currency.code)
+                        setCurrencyDropdownOpen(false)
+                      }}
+                      className={`w-full flex items-center space-x-3 px-3 py-2 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                        selectedCurrency === currency.code
+                          ? isDark
+                            ? "bg-custom-green/20 text-custom-green"
+                            : "bg-custom-green/10 text-custom-green"
+                          : isDark
+                            ? "text-gray-300 hover:bg-[#2a2d42]"
+                            : "text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      <span className="text-base">{currency.symbol}</span>
+                      <span>{currency.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 筛选按钮 */}
+              <div className="flex space-x-2">
+                <button 
+                  className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg border transition-all ${
+                    isDark ? "border-[#3a3d4a] bg-[#2a2d42] text-white" : "border-gray-300 bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  <Filter className="w-4 h-4" />
+                  <span className="text-sm">筛选</span>
+                </button>
+                <button 
+                  onClick={handleOpenPublishModal}
+                  className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    isDark 
+                      ? "bg-white text-black hover:bg-gray-200" 
+                      : "bg-black text-white hover:bg-gray-800"
+                  }`}
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>发布</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
           {/* 主要布局 */}
-          <div className="grid grid-cols-12 gap-6">
+          <div className="md:grid md:grid-cols-12 md:gap-6">
           
-          {/* 左侧筛选面板 */}
-          <div className="col-span-3">
+          {/* 左侧筛选面板 - 仅桌面端显示 */}
+          <div className="hidden md:block md:col-span-3">
             <div className={`${cardStyle} rounded-lg p-4`}>
               
 
@@ -815,10 +985,10 @@ export default function USDTTradePage() {
           </div>
 
           {/* 主要内容区域 */}
-          <div className="col-span-9">
+          <div className="md:col-span-9">
             
-            {/* 搜索和操作栏 */}
-            <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
+            {/* 搜索和操作栏 - 仅桌面端显示 */}
+            <div className={`hidden md:block ${cardStyle} rounded-lg p-4 mb-6`}>
               <div className="flex items-center space-x-4">
                 <div className="relative flex-1">
                   <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
@@ -873,7 +1043,7 @@ export default function USDTTradePage() {
             </div>
 
             {/* 内容展示区域 */}
-            <div className={`${cardStyle} rounded-lg`}>
+            <div className={`${cardStyle} md:rounded-lg`}>
               
               {/* C2C模式 */}
               {tradeMode === "C2C" && (
@@ -881,8 +1051,9 @@ export default function USDTTradePage() {
                   {/* 商家卡片列表 */}
                   {displayedMerchants.map((merchant, index) => (
                     <div key={index} className="p-4 hover:bg-gray-50 dark:hover:bg-[#252842] transition-all">
-                      {/* 卡片布局 - 对齐设计 */}
-                      <div className="grid grid-cols-12 gap-4 items-center">
+                      
+                      {/* 桌面端布局 */}
+                      <div className="hidden md:grid md:grid-cols-12 gap-4 items-center">
                         {/* 商家信息 */}
                         <div className="col-span-3 flex items-center space-x-3">
                           <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center">
@@ -960,833 +1131,125 @@ export default function USDTTradePage() {
                             className={`border px-2 py-1.5 rounded text-xs transition-all h-8 flex items-center justify-center ${
                               isDark 
                                 ? "bg-white border-white text-black hover:bg-gray-200" 
-                                : isDark ? "bg-transparent border-white text-white hover:bg-white hover:text-black" : "bg-white border-black text-black hover:bg-gray-50"
+                                : "bg-black border-black text-white hover:bg-gray-800"
                             }`}
-                            onClick={() => {
-                              if (merchant.isFriend) {
-                                console.log('开始对话:', merchant.name)
-                              } else {
-                                console.log('添加好友:', merchant.name)
-                              }
-                            }}
                           >
-                            {merchant.isFriend ? <MessageCircle className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+                            <MessageCircle className="w-3 h-3" />
                           </button>
-                          <TradeButton
-                            type={activeTab.includes("买入") ? "buy" : "sell"}
+                          <TradeButton 
+                            type={activeTab === "买入USDT" ? "buy" : "sell"}
+                            onClick={() => handleTradeButtonClick(merchant, activeTab === "买入USDT" ? "buy" : "sell")}
                             size="sm"
-                            onClick={() => handleOpenTradeModal(merchant, activeTab.includes("买入") ? "buy" : "sell")}
+                            className="min-w-12"
                           >
-                            {activeTab.includes("买入") ? "买入" : "卖出"}
+                            {activeTab === "买入USDT" ? "买入" : "卖出"}
                           </TradeButton>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  
-                  {/* 加载更多按钮 */}
-                  {hasMore && (
-                    <div className="p-4 border-t border-gray-200 dark:border-[#3a3d4a] flex justify-center">
-                      <button
-                        onClick={handleLoadMore}
-                        disabled={isLoading}
-                        className={`flex items-center space-x-2 px-6 py-3 rounded-lg text-sm font-medium transition-all ${
-                          isDark
-                            ? "bg-[#252842] border border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42] disabled:opacity-50"
-                            : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-                        }`}
-                      >
-                        {isLoading ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            <span>加载中...</span>
-                          </>
-                        ) : (
-                          <>
-                            <span>加载更多</span>
-                            <ChevronDown className="w-4 h-4" />
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
 
-              {/* 快捷模式 */}
-              {tradeMode === "快捷" && (
-                <div className="p-6">
-                  <div className="space-y-4">
-                    {paymentMethods.map((method, index) => (
-                      <div key={index} className={`${cardStyle} rounded-lg transition-all`}>
-                        {/* 卡片主体 - 横向布局 */}
-                        <div 
-                          className={`p-4 cursor-pointer transition-all hover:border-custom-green hover:shadow-md ${
-                            expandedCard === index ? "border-custom-green" : ""
-                          }`}
-                          onClick={() => setExpandedCard(expandedCard === index ? null : index)}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <span className="text-2xl">{method.icon}</span>
-                              <div>
-                                <div className={`font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
-                                  {method.name}
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                  汇率: ¥{method.rate} • 手续费: {method.fee}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <div className="text-lg font-bold text-custom-green">
-                                ¥{method.limit.split(" - ")[0]} - ¥{method.limit.split(" - ")[1]}
-                              </div>
-                              <div className="text-xs text-gray-400">
-                                {method.status}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* 展开内容 */}
-                        <div 
-                          className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                            expandedCard === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                          }`}
-                        >
-                          <div className={`px-4 pb-4 border-t ${
-                            isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"
-                          }`}>
-                            <div className={`pt-4 transform transition-transform duration-300 ease-in-out ${
-                              expandedCard === index ? "translate-y-0" : "-translate-y-2"
-                            }`}>
-                              <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
-                                购买金额
-                              </h4>
-                              
-                              <div className="mb-4">
-                                <input
-                                  type="text"
-                                  placeholder={`输入金额 (¥${method.limit.split(" - ")[0]} - ¥${method.limit.split(" - ")[1]})`}
-                                  value={purchaseAmount}
-                                  onChange={(e) => setPurchaseAmount(e.target.value)}
-                                  className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green transition-all ${
-                                    isDark 
-                                      ? "bg-[#1a1c2e] border-[#3a3d4a] text-white" 
-                                      : "bg-white border-gray-300 text-gray-900"
-                                  }`}
-                                />
-                              </div>
-
-                              <div className="mb-4">
-                                <div className={`text-sm transition-all ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                                  约合 0 USDT （今日刹余额度1000USDT）
-                                </div>
-                              </div>
-
-                              <div className="grid grid-cols-4 gap-2 mb-4">
-                                {["100", "500", "1000", "3000"].map((amount) => (
-                                  <button
-                                    key={amount}
-                                    onClick={() => setPurchaseAmount(amount)}
-                                    className={`py-2 px-3 text-sm border rounded-lg transition-all hover:border-custom-green transform hover:scale-105 ${
-                                      isDark 
-                                        ? "border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42]" 
-                                        : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                                    }`}
-                                  >
-                                    ¥{amount}
-                                  </button>
-                                ))}
-                              </div>
-
-                              <button className={`w-full py-3 rounded-lg font-medium transition-all transform hover:scale-[1.02] ${
-                                activeTab.includes("买入")
-                                  ? "bg-custom-green text-white hover:bg-custom-green/90"
-                                  : "bg-red-500 text-white hover:bg-red-600"
-                              }`}>
-                                {activeTab.includes("买入") ? "确认购买" : "确认卖出"}
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* OTC模式 */}
-              {tradeMode === "OTC" && (
-                <div className="p-6">
-                  <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-                    请选择服务商
-                  </h3>
-                  
-                  <div className="space-y-3">
-                    {otcProviders.map((provider, index) => (
-                      <div 
-                        key={index} 
-                        className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all hover:shadow-md hover:border-custom-green ${
-                          isDark ? "hover:bg-[#252842]" : "hover:shadow-lg"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                              isDark ? "bg-[#3a3d4a] text-white" : "bg-gray-100 text-gray-600"
-                            }`}>
-                              <span className="text-xl">{provider.icon}</span>
+                      {/* 移动端布局 */}
+                      <div className="md:hidden">
+                        {/* 顶部商家信息行 */}
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-3">
+                            <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center">
+                              <span className="text-sm font-bold text-blue-600 dark:text-blue-300">
+                                {merchant.name.charAt(0)}
+                              </span>
                             </div>
                             <div>
-                              <div className="flex items-center space-x-2 mb-2">
-                                <span className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
-                                  {provider.name}
+                              <div className="flex items-center space-x-1">
+                                <span className={`text-base font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                  {merchant.name}
                                 </span>
-                                {provider.label && (
-                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                    isDark 
-                                      ? "bg-green-900/50 text-green-300" 
-                                      : "bg-green-100 text-green-800"
-                                  }`}>
-                                    {provider.label}
-                                  </span>
+                                {merchant.verified && (
+                                  <Shield className="w-4 h-4 text-blue-500" />
                                 )}
                               </div>
-                              <div className="flex items-center space-x-4">
-                                {provider.payments.slice(0, 4).map((payment, payIndex) => (
-                                  <div key={payIndex} className="flex items-center space-x-1">
-                                    {getPaymentIcon(payment)}
-                                    <span className={`text-xs ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                                      {payment}
-                                    </span>
-                                  </div>
-                                ))}
+                              <div className="flex items-center space-x-2 text-xs text-gray-500">
+                                <div className="flex items-center">
+                                  <Star className="w-3 h-3 text-yellow-400 mr-1" />
+                                  {merchant.rating}
+                                </div>
+                                <span>•</span>
+                                <span>{merchant.orders}单</span>
+                                <span>•</span>
+                                <span>{merchant.completionRate}</span>
                               </div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                              ¥{provider.price}
+                          <button 
+                            className={`p-2 rounded-lg border transition-all ${
+                              isDark 
+                                ? "bg-white border-white text-black hover:bg-gray-200" 
+                                : "bg-black border-black text-white hover:bg-gray-800"
+                            }`}
+                          >
+                            <MessageCircle className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {/* 价格和限额行 */}
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-4">
+                            <div>
+                              <div className="text-xs text-gray-400 mb-1">价格</div>
+                              <div className="text-xl font-bold text-custom-green">¥{merchant.price}</div>
                             </div>
-                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                              折合 ¥{provider.rate}/USDT
+                            <div>
+                              <div className="text-xs text-gray-400 mb-1">限额</div>
+                              <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                ¥{merchant.limit}
+                              </div>
                             </div>
                           </div>
+                          <TradeButton 
+                            type={activeTab === "买入USDT" ? "buy" : "sell"}
+                            onClick={() => handleTradeButtonClick(merchant, activeTab === "买入USDT" ? "buy" : "sell")}
+                            size="md"
+                            className="min-w-20"
+                          >
+                            {activeTab === "买入USDT" ? "买入" : "卖出"}
+                          </TradeButton>
                         </div>
+
+                        {/* 支付方式 */}
+                        <div className="mb-2">
+                          <div className="flex flex-wrap gap-1">
+                            {sortPaymentMethods(merchant.paymentMethods).map((method, index) => {
+                              const isCash = method.includes("现金")
+                              return (
+                                <span 
+                                  key={index}
+                                  className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${
+                                    isCash 
+                                      ? "bg-orange-100 text-orange-800 border border-orange-200 font-medium" 
+                                      : "bg-yellow-100 text-yellow-800"
+                                  }`}
+                                >
+                                  {getPaymentIcon(method)}
+                                  {method}
+                                  {isCash && merchant.cashLocation && (
+                                    <span className="ml-1 text-xs text-orange-600">
+                                      ({merchant.cashLocation.city})
+                                    </span>
+                                  )}
+                                </span>
+                              )
+                            })}
+                          </div>
+                        </div>
+
+                        {/* 备注信息 */}
+                        <div className="text-xs text-blue-600">{merchant.note}</div>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
           </div>
         </div>
       </div>
-
-      {/* 交易弹窗 */}
-      {showTradeModal && selectedMerchant && (
-        <>
-          {/* 点击外部区域关闭弹窗 */}
-          {shouldUseOutwardMode ? (
-            /* 向外弹出模式：覆盖被压缩的内容区域 */
-            <div 
-              className="fixed left-0 top-0 z-40 transition-all duration-500"
-              style={{ 
-                width: 'calc(100% - 384px)',
-                height: '100%'
-              }}
-              onClick={handleCloseTradeModal}
-            />
-          ) : (
-            /* 向内弹出模式：全屏半透明遮罩 */
-            <div 
-              className="fixed inset-0 z-40 bg-black bg-opacity-30 transition-opacity duration-500"
-              onClick={handleCloseTradeModal}
-            />
-          )}
-          
-          <div className="fixed z-50 overflow-hidden right-0 top-0 h-full w-96">
-          <div 
-            className={`h-full w-96 transform transition-all duration-500 ${
-              tradeModalAnimating 
-                ? shouldUseOutwardMode 
-                  ? "translate-x-0"      // 向外模式：显示在正常位置
-                  : "translate-x-0"      // 向内模式：显示在正常位置
-                : shouldUseOutwardMode 
-                  ? "-translate-x-full"  // 向外模式：隐藏在左侧，从左往右滑出
-                  : "translate-x-full"   // 向内模式：隐藏在右侧，从右往左滑入
-            } ${isDark ? "bg-[#1a1d29]" : "bg-white"}`}
-            style={{ 
-              transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-              willChange: 'transform'
-            }}
-          >
-            <div className="p-6 h-full overflow-y-auto">
-              {/* 商家信息 */}
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className={`font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
-                      {selectedMerchant.name}
-                    </span>
-                    {selectedMerchant.verified && (
-                      <Shield className="w-4 h-4 text-blue-500" />
-                    )}
-                  </div>
-                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                    {selectedMerchant.rating}★ • {selectedMerchant.orders}单 • 1分钟响应
-                  </div>
-                </div>
-              </div>
-
-              {/* 交易信息 */}
-              <div className="space-y-4 mb-6">
-                <div className="flex justify-between">
-                  <span className={isDark ? "text-gray-400" : "text-gray-600"}>单价</span>
-                  <span className={`font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                    ¥{selectedMerchant.price}/USDT
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className={isDark ? "text-gray-400" : "text-gray-600"}>限额</span>
-                  <span className={isDark ? "text-white" : "text-gray-900"}>
-                    ¥{selectedMerchant.limit}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className={isDark ? "text-gray-400" : "text-gray-600"}>库存</span>
-                  <span className={isDark ? "text-white" : "text-gray-900"}>
-                    {tradeType === "buy" ? "无限制 USDT" : "48,500 USDT"}
-                  </span>
-                </div>
-              </div>
-
-              {/* 交易数量输入 */}
-              <div className="mb-6">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  {tradeType === "buy" ? "买入数量 (USDT)" : "卖出数量 (USDT)"}
-                </label>
-                <input
-                  type="text"
-                  placeholder={tradeType === "buy" ? "最少 500" : "最少 100"}
-                  value={tradeAmount}
-                  onChange={(e) => {
-                    setTradeAmount(e.target.value)
-                    setTotalPrice(calculateTotal(e.target.value, selectedMerchant.price))
-                  }}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
-                    isDark 
-                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                      : "bg-white border-gray-300 text-gray-900"
-                  }`}
-                />
-                <div className={`text-sm mt-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                  总价: ¥{totalPrice || "0.00"}
-                </div>
-              </div>
-
-              {/* 支付方式 */}
-              <div className="mb-6">
-                <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  选择支付方式
-                </label>
-                <div className="space-y-2">
-                  {selectedMerchant.paymentMethods.slice(0, 3).map((method: string, index: number) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        if (selectedTradePaymentMethods.includes(method)) {
-                          setSelectedTradePaymentMethods(selectedTradePaymentMethods.filter(p => p !== method))
-                        } else {
-                          setSelectedTradePaymentMethods([...selectedTradePaymentMethods, method])
-                        }
-                      }}
-                      className={`w-full p-3 border rounded-lg flex items-center space-x-2 transition-all ${
-                        selectedTradePaymentMethods.includes(method)
-                          ? "border-custom-green bg-custom-green/10 text-custom-green"
-                          : isDark 
-                            ? "border-[#3a3d4a] bg-[#252842] text-white hover:bg-[#2a2d42]" 
-                            : "border-gray-200 bg-gray-50 text-gray-900 hover:bg-gray-100"
-                      }`}
-                    >
-                      {getPaymentIcon(method)}
-                      <span className="flex-1 text-left">{method}</span>
-                      {selectedTradePaymentMethods.includes(method) && (
-                        <div className="w-4 h-4 rounded-full bg-custom-green flex items-center justify-center">
-                          <div className="w-2 h-2 rounded-full bg-white"></div>
-                        </div>
-                      )}
-                    </button>
-                  ))}
-                </div>
-                {selectedTradePaymentMethods.length === 0 && (
-                  <p className={`text-sm mt-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                    请至少选择一种支付方式
-                  </p>
-                )}
-              </div>
-
-              <TradeButton
-                type={tradeType}
-                size="lg"
-                className="w-full"
-                disabled={selectedTradePaymentMethods.length === 0 || !tradeAmount}
-                onClick={() => {
-                  if (selectedTradePaymentMethods.length > 0 && tradeAmount) {
-                    console.log('交易信息:', {
-                      type: tradeType,
-                      amount: tradeAmount,
-                      totalPrice,
-                      paymentMethods: selectedTradePaymentMethods,
-                      merchant: selectedMerchant.name
-                    })
-                    // 这里可以添加跳转到下一步的逻辑
-                  }
-                }}
-              >
-                下一步
-              </TradeButton>
-            </div>
-          </div>
-          </div>
-        </>
-      )}
-
-      {/* 发布订单弹窗 */}
-      {showPublishModal && (
-        <>
-          {/* 点击外部区域关闭弹窗 */}
-          {shouldUseOutwardMode ? (
-            /* 向外弹出模式：覆盖被压缩的内容区域 */
-            <div 
-              className="fixed left-0 top-0 z-40"
-              style={{ 
-                width: 'calc(100% - 384px)',
-                height: '100%',
-                backgroundColor: publishModalAnimating ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
-                transition: 'background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-              onClick={handleClosePublishModal}
-            />
-          ) : (
-            /* 向内弹出模式：全屏半透明遮罩 */
-            <div 
-              className="fixed inset-0 z-40 bg-black"
-              style={{
-                opacity: publishModalAnimating ? 0.4 : 0,
-                transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-              onClick={handleClosePublishModal}
-            />
-          )}
-          
-          <div className="fixed z-[9999] overflow-hidden right-0 top-0 h-full w-96">
-          <div 
-            className={`h-full w-96 ${isDark ? "bg-[#1a1d29]" : "bg-white"} shadow-2xl border-l ${
-              isDark ? "border-[#252842]" : "border-gray-200"
-            }`}
-            style={{
-              transform: publishModalAnimating 
-                ? 'translateX(0) scale(1)' 
-                : shouldUseOutwardMode 
-                  ? 'translateX(-100%) scale(0.98)'
-                  : 'translateX(100%) scale(0.98)',
-              opacity: publishModalAnimating ? 1 : 0,
-              transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-              transformOrigin: shouldUseOutwardMode ? 'left center' : 'right center',
-              willChange: 'transform, opacity',
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden'
-            }}
-          >
-            <div 
-              className="p-6 h-full overflow-y-auto"
-              style={{
-                transform: publishModalAnimating 
-                  ? 'translateX(0)' 
-                  : shouldUseOutwardMode 
-                    ? 'translateX(-30px)' 
-                    : 'translateX(30px)',
-                opacity: publishModalAnimating ? 1 : 0,
-                transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-                transitionDelay: publishModalAnimating ? '0.15s' : '0s'
-              }}
-            >
-              {/* 页签切换 */}
-              <div className="mb-6">
-                <div className="relative">
-                  <div className="flex bg-gray-200 dark:bg-[#252842] rounded-md p-1">
-                    {/* 滑动背景 */}
-                    <div
-                      className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${
-                        publishOrderType === "buy" ? "bg-custom-green left-1" : "bg-red-500 left-1/2"
-                      }`}
-                    />
-
-                    {/* 买入按钮 */}
-                    <button
-                      onClick={() => setPublishOrderType("buy")}
-                      className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
-                        publishOrderType === "buy"
-                          ? "text-white"
-                          : isDark
-                            ? "text-gray-400 hover:text-white"
-                            : "text-gray-600 hover:text-gray-800"
-                      }`}
-                    >
-                      买入
-                    </button>
-
-                    {/* 卖出按钮 */}
-                    <button
-                      onClick={() => setPublishOrderType("sell")}
-                      className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
-                        publishOrderType === "sell"
-                          ? "text-white"
-                          : isDark
-                            ? "text-gray-400 hover:text-white"
-                            : "text-gray-600 hover:text-gray-800"
-                      }`}
-                    >
-                      卖出
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* 法币选择 */}
-              <div className="mb-4">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  法币币种
-                </label>
-                <div className="relative">
-                  <button
-                    onClick={() => setPublishCurrencyDropdownOpen(!publishCurrencyDropdownOpen)}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
-                      isDark
-                        ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#2a2d42]"
-                        : "bg-white border-gray-300 text-gray-800 hover:bg-gray-50"
-                    }`}
-                  >
-                    <span className="flex items-center space-x-2">
-                      <span>{currencies.find(c => c.code === publishCurrency)?.symbol}</span>
-                      <span>{currencies.find(c => c.code === publishCurrency)?.name}</span>
-                    </span>
-                    <ChevronDown 
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        publishCurrencyDropdownOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {/* 下拉菜单 */}
-                  <div 
-                    className={`absolute top-full left-0 right-0 mt-1 z-50 rounded-lg border shadow-lg transition-all duration-200 ${
-                      publishCurrencyDropdownOpen 
-                        ? "opacity-100 visible translate-y-0" 
-                        : "opacity-0 invisible -translate-y-2"
-                    } ${
-                      isDark
-                        ? "bg-[#252842] border-[#3a3d4a]"
-                        : "bg-white border-gray-300"
-                    }`}
-                  >
-                    {currencies.map((currency) => (
-                      <button
-                        key={currency.code}
-                        onClick={() => {
-                          setPublishCurrency(currency.code)
-                          setPublishCurrencyDropdownOpen(false)
-                        }}
-                        className={`w-full flex items-center space-x-3 px-3 py-2 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg ${
-                          publishCurrency === currency.code
-                            ? isDark
-                              ? "bg-custom-green/20 text-custom-green"
-                              : "bg-custom-green/10 text-custom-green"
-                            : isDark
-                              ? "text-gray-300 hover:bg-[#2a2d42]"
-                              : "text-gray-700 hover:bg-gray-50"
-                        }`}
-                      >
-                        <span className="font-medium">{currency.symbol}</span>
-                        <span>{currency.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* 支付方式选择 */}
-              <div className="mb-6">
-                <label className={`block text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  支付方式
-                </label>
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {getCurrentPaymentMethods().map((method) => (
-                    <button
-                      key={method}
-                      onClick={() => {
-                        if (publishPayments.includes(method)) {
-                          setPublishPayments(publishPayments.filter(p => p !== method))
-                        } else {
-                          setPublishPayments([...publishPayments, method])
-                        }
-                      }}
-                      className={`px-3 py-1 rounded-full text-xs flex items-center space-x-1 transition-all ${
-                        publishPayments.includes(method)
-                          ? isDark
-                            ? "bg-green-900/50 text-green-300 border border-green-700"
-                            : "bg-green-100 text-green-800 border border-green-300"
-                          : isDark 
-                            ? "bg-[#252842] text-gray-300 border border-[#3a3d4a] hover:bg-[#2a2d42]"
-                            : "bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200"
-                      }`}
-                    >
-                      {getPaymentIcon(method)}
-                      <span>
-                        {method}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-                
-                {/* 手动添加支付方式 */}
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="手动输入支付方式"
-                    value={customPayment}
-                    onChange={(e) => setCustomPayment(e.target.value)}
-                    className={`flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-custom-green ${
-                      isDark 
-                        ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-500" 
-                        : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
-                    }`}
-                  />
-                  <button
-                    onClick={() => {
-                      if (customPayment.trim() && !publishPayments.includes(customPayment.trim())) {
-                        setPublishPayments([...publishPayments, customPayment.trim()])
-                        setCustomPayment("")
-                      }
-                    }}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      isDark 
-                        ? "bg-[#252842] text-gray-300 border border-[#3a3d4a] hover:bg-[#2a2d42]"
-                        : "bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200"
-                    }`}
-                  >
-                    添加
-                  </button>
-                </div>
-              </div>
-
-              {/* 交易总金额 */}
-              <div className="mb-6">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  交易总金额
-                </label>
-                <input
-                  type="text"
-                  placeholder="输入交易总金额"
-                  value={publishPrice}
-                  onChange={(e) => setPublishPrice(e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
-                    isDark 
-                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                      : "bg-white border-gray-300 text-gray-900"
-                  }`}
-                />
-              </div>
-
-              {/* 要求担保周期 */}
-              <div className="mb-6">
-                <label className={`block text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
-                  要求担保周期
-                </label>
-                <select
-                  value={publishPeriod}
-                  onChange={(e) => setPublishPeriod(e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-green ${
-                    isDark 
-                      ? "bg-[#252842] border-[#3a3d4a] text-white" 
-                      : "bg-white border-gray-300 text-gray-900"
-                  }`}
-                >
-                  <option value="24小时">24小时</option>
-                  <option value="12小时">12小时</option>
-                  <option value="6小时">6小时</option>
-                  <option value="3小时">3小时</option>
-                </select>
-              </div>
-
-              <TradeButton
-                type={publishOrderType}
-                size="lg"
-                className="w-full"
-                onClick={() => {}}
-              >
-                发布订单
-              </TradeButton>
-            </div>
-          </div>
-          </div>
-        </>
-      )}
-
-      {/* 现金上门位置选择模态框 */}
-      {showLocationModal && (
-        <>
-          {/* 背景遮罩 */}
-          <div 
-            className="fixed inset-0 z-[100] bg-black bg-opacity-30 transition-opacity duration-300"
-            onClick={handleCloseLocationModal}
-          />
-          
-          {/* 位置选择模态框 */}
-          <div className="fixed inset-0 z-[101] flex items-center justify-center p-4">
-            <div 
-              className={`w-full max-w-md ${isDark ? "bg-[#1a1c2e]" : "bg-white"} rounded-lg shadow-xl transform transition-all duration-300 ${
-                locationModalAnimating ? "scale-100 opacity-100" : "scale-95 opacity-0"
-              }`}
-            >
-              <div className="p-6">
-                {/* 模态框头部 */}
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
-                    选择现金上门位置
-                  </h3>
-                  <button
-                    onClick={handleCloseLocationModal}
-                    className={`p-2 rounded-full transition-colors ${
-                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
-                    }`}
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-
-                {/* 搜索框 */}
-                <div className="mb-4">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="搜索国家或城市"
-                      value={locationSearchTerm}
-                      onChange={(e) => setLocationSearchTerm(e.target.value)}
-                      className={`w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-custom-green ${
-                        isDark
-                          ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400"
-                          : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                      }`}
-                    />
-                  </div>
-                </div>
-
-                {/* 国家选择 */}
-                <div className="mb-4">
-                  <h4 className={`text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
-                    选择国家
-                  </h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    {countries
-                      .filter(country => 
-                        !locationSearchTerm || 
-                        country.name.toLowerCase().includes(locationSearchTerm.toLowerCase())
-                      )
-                      .map((country) => (
-                      <button
-                        key={country.code}
-                        onClick={() => {
-                          setSelectedCountry(country.name)
-                          setSelectedCity(country.cities[0])
-                        }}
-                        className={`p-2 text-sm rounded-lg border transition-colors ${
-                          selectedCountry === country.name
-                            ? "border-custom-green bg-custom-green/10 text-custom-green"
-                            : isDark
-                              ? "border-[#3a3d4a] bg-[#252842] text-gray-300 hover:bg-[#2a2d42]"
-                              : "border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
-                        }`}
-                      >
-                        {country.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* 城市选择 */}
-                {selectedCountry && (
-                  <div className="mb-6">
-                    <h4 className={`text-sm font-medium mb-2 ${isDark ? "text-white" : "text-gray-800"}`}>
-                      选择城市
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
-                      {countries
-                        .find(c => c.name === selectedCountry)
-                        ?.cities
-                        .filter(city => 
-                          !locationSearchTerm || 
-                          city.toLowerCase().includes(locationSearchTerm.toLowerCase())
-                        )
-                        .map((city) => (
-                        <button
-                          key={city}
-                          onClick={() => setSelectedCity(city)}
-                          className={`p-2 text-sm rounded-lg border transition-colors ${
-                            selectedCity === city
-                              ? "border-custom-green bg-custom-green/10 text-custom-green"
-                              : isDark
-                                ? "border-[#3a3d4a] bg-[#252842] text-gray-300 hover:bg-[#2a2d42]"
-                                : "border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100"
-                          }`}
-                        >
-                          {city}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 确认按钮 */}
-                <div className="flex space-x-3">
-                  <button
-                    onClick={handleCloseLocationModal}
-                    className={`flex-1 py-2 px-4 border rounded-lg text-sm font-medium transition-colors ${
-                      isDark
-                        ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]"
-                        : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                    }`}
-                  >
-                    取消
-                  </button>
-                  <button
-                    onClick={handleCloseLocationModal}
-                    className="flex-1 py-2 px-4 bg-custom-green text-white rounded-lg text-sm font-medium transition-colors hover:bg-custom-green/90"
-                  >
-                    确认选择
-                  </button>
-                </div>
-
-                {/* 当前选择显示 */}
-                {selectedCountry && selectedCity && (
-                  <div className={`mt-4 p-3 rounded-lg border ${
-                    isDark ? "border-[#3a3d4a] bg-[#252842]" : "border-gray-200 bg-gray-50"
-                  }`}>
-                    <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-                      已选择: <span className="font-medium text-custom-green">{selectedCountry} - {selectedCity}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  )
-}
+    );
+  }
