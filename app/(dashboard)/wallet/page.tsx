@@ -143,6 +143,12 @@ export default function WalletPage() {
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
   const [commissionTab, setCommissionTab] = useState("邀请好友") // 佣金页签状态
+  // 佣金结算记录筛选状态
+  const [commissionSearchTerm, setCommissionSearchTerm] = useState("") // 搜索关键词
+  const [commissionTypeFilter, setCommissionTypeFilter] = useState("全部") // 佣金类型筛选
+  const [commissionReferralFilter, setCommissionReferralFilter] = useState("全部") // 推荐类型筛选
+  const [commissionStatusFilter, setCommissionStatusFilter] = useState("全部") // 状态筛选
+  const [commissionTimeFilter, setCommissionTimeFilter] = useState("全部") // 时间筛选
   const [uCardSubTab, setUCardSubTab] = useState("开卡佣金") // U卡佣金子页签: "开卡佣金" | "充值佣金"
   const [showCommissionRuleModal, setShowCommissionRuleModal] = useState(false) // 佣金规则弹窗
   const [showUserListModal, setShowUserListModal] = useState<{type: 'direct' | 'indirect' | 'active', isOpen: boolean}>({type: 'direct', isOpen: false}) // 用户名单弹窗
@@ -1129,6 +1135,51 @@ export default function WalletPage() {
     setSecondaryTab(firstSubTab || "current")
   }
 
+  // 筛选佣金结算记录
+  const filterCommissionRecords = (records: any[]) => {
+    return records.filter(record => {
+      // 搜索筛选 - 用户ID或用户名
+      const searchMatch = commissionSearchTerm === "" || 
+        record.userId.toLowerCase().includes(commissionSearchTerm.toLowerCase()) ||
+        record.userName.toLowerCase().includes(commissionSearchTerm.toLowerCase())
+
+      // 佣金类型筛选
+      const typeMatch = commissionTypeFilter === "全部" || record.type === commissionTypeFilter
+
+      // 推荐类型筛选
+      const referralMatch = commissionReferralFilter === "全部" || record.referralType === commissionReferralFilter
+
+      // 状态筛选
+      const statusMatch = commissionStatusFilter === "全部" || record.status === commissionStatusFilter
+
+      // 时间筛选
+      let timeMatch = true
+      if (commissionTimeFilter !== "全部") {
+        const recordDate = new Date(record.time)
+        const now = new Date()
+        
+        switch (commissionTimeFilter) {
+          case "今日":
+            timeMatch = recordDate.toDateString() === now.toDateString()
+            break
+          case "本周":
+            const weekStart = new Date(now.setDate(now.getDate() - now.getDay()))
+            timeMatch = recordDate >= weekStart
+            break
+          case "本月":
+            timeMatch = recordDate.getMonth() === now.getMonth() && recordDate.getFullYear() === now.getFullYear()
+            break
+          case "近三个月":
+            const threeMonthsAgo = new Date(now.setMonth(now.getMonth() - 3))
+            timeMatch = recordDate >= threeMonthsAgo
+            break
+        }
+      }
+
+      return searchMatch && typeMatch && referralMatch && statusMatch && timeMatch
+    })
+  }
+
 
 
   // 订单记录数据
@@ -1204,6 +1255,260 @@ export default function WalletPage() {
           status: "已完成",
           time: "2024-01-14 19:20:15",
           merchant: "商户B"
+        }
+      ],
+      "佣金结算记录": [
+        {
+          id: "CM001",
+          type: "合约佣金",
+          referralType: "直推",
+          userId: "user123456",
+          userName: "张三",
+          tradingPair: "BTCUSDT",
+          commissionAmount: "125.50",
+          commissionRate: "0.02%",
+          feeAmount: "6,275.00",
+          currency: "USDT",
+          creditAmount: "123.24",
+          creditCurrency: "USDT",
+          status: "已结算",
+          time: "2024-01-20 14:30:22",
+          settledTime: "2024-01-20 14:35:45",
+          remark: "合约交易返佣"
+        },
+        {
+          id: "CM002",
+          type: "合约佣金",
+          referralType: "间推",
+          userId: "user789012",
+          userName: "李四",
+          tradingPair: "ETHUSDT",
+          commissionAmount: "89.20",
+          commissionRate: "0.015%",
+          feeAmount: "5,946.67",
+          currency: "USDT",
+          creditAmount: "87.63",
+          creditCurrency: "USDT",
+          status: "已结算",
+          time: "2024-01-19 16:45:11",
+          settledTime: "2024-01-19 16:50:33",
+          remark: "推荐用户合约交易"
+        },
+        {
+          id: "WM001",
+          type: "理财佣金",
+          referralType: "直推",
+          userId: "user345678",
+          userName: "王五",
+          productName: "USDT活期理财",
+          commissionAmount: "56.80",
+          commissionRate: "0.5%",
+          feeAmount: "11,360.00",
+          currency: "USDT",
+          creditAmount: "55.82",
+          creditCurrency: "USDT",
+          status: "已结算",
+          time: "2024-01-20 16:20:15",
+          settledTime: "2024-01-20 16:25:40",
+          remark: "理财产品佣金"
+        },
+        {
+          id: "WM002",
+          type: "理财佣金",
+          referralType: "间推",
+          userId: "user567890",
+          userName: "赵六",
+          productName: "BTC定期理财",
+          commissionAmount: "34.90",
+          commissionRate: "0.3%",
+          feeAmount: "11,633.33",
+          currency: "USDT",
+          creditAmount: "34.27",
+          creditCurrency: "USDT",
+          status: "已结算",
+          time: "2024-01-19 14:10:30",
+          settledTime: "2024-01-19 14:15:55",
+          remark: "推荐用户理财"
+        },
+        {
+          id: "UC001",
+          type: "U卡佣金",
+          referralType: "直推",
+          userId: "user234567",
+          userName: "孙七",
+          cardType: "虚拟卡",
+          commissionAmount: "25.00",
+          commissionRate: "2.5%",
+          feeAmount: "1,000.00",
+          currency: "USDT",
+          creditAmount: "24.58",
+          creditCurrency: "USDT",
+          status: "已结算",
+          time: "2024-01-20 11:45:30",
+          settledTime: "2024-01-20 11:50:15",
+          remark: "推荐用户开卡"
+        },
+        {
+          id: "UC002",
+          type: "U卡佣金",
+          referralType: "直推",
+          userId: "user456789",
+          userName: "周八",
+          cardType: "充值",
+          commissionAmount: "15.60",
+          commissionRate: "0.8%",
+          feeAmount: "1,950.00",
+          currency: "USDT",
+          creditAmount: "15.32",
+          creditCurrency: "USDT",
+          status: "已结算",
+          time: "2024-01-19 16:20:18",
+          settledTime: "2024-01-19 16:25:42",
+          remark: "用户卡片充值佣金"
+        },
+        {
+          id: "GT001",
+          type: "担保佣金",
+          referralType: "直推",
+          userId: "user678901",
+          userName: "吴九",
+          tradingPair: "BTCUSDT",
+          commissionAmount: "45.30",
+          commissionRate: "0.3%",
+          feeAmount: "15,100.00",
+          currency: "USDT",
+          creditAmount: "44.52",
+          creditCurrency: "USDT",
+          status: "已结算",
+          time: "2024-01-20 13:15:25",
+          settledTime: "2024-01-20 13:20:50",
+          remark: "担保交易佣金"
+        },
+        {
+          id: "GT002",
+          type: "担保佣金",
+          referralType: "间推",
+          userId: "user890123",
+          userName: "郑十",
+          tradingPair: "ETHUSDT",
+          commissionAmount: "78.90",
+          commissionRate: "0.25%",
+          feeAmount: "31,560.00",
+          currency: "USDT",
+          creditAmount: "77.56",
+          creditCurrency: "USDT",
+          status: "已结算",
+          time: "2024-01-19 09:40:55",
+          settledTime: "2024-01-19 09:45:20",
+          remark: "信用担保服务佣金"
+        },
+        {
+          id: "PM001",
+          type: "支付佣金",
+          referralType: "直推",
+          userId: "user012345",
+          userName: "钱一",
+          channel: "支付宝",
+          commissionAmount: "120.00",
+          commissionRate: "0.15%",
+          feeAmount: "80,000.00",
+          currency: "CNY",
+          creditAmount: "117.80",
+          creditCurrency: "CNY",
+          status: "已结算",
+          time: "2024-01-20 15:25:40",
+          settledTime: "2024-01-20 15:30:15",
+          remark: "支付通道佣金"
+        },
+        {
+          id: "PM002",
+          type: "支付佣金",
+          referralType: "间推",
+          userId: "user123450",
+          userName: "孔二",
+          channel: "微信支付",
+          commissionAmount: "85.50",
+          commissionRate: "0.12%",
+          feeAmount: "71,250.00",
+          currency: "CNY",
+          creditAmount: "83.92",
+          creditCurrency: "CNY",
+          status: "已结算",
+          time: "2024-01-19 12:10:33",
+          settledTime: "2024-01-19 12:15:18",
+          remark: "推荐商户佣金"
+        },
+        {
+          id: "CM003",
+          type: "合约佣金",
+          referralType: "直推",
+          userId: "user345612",
+          userName: "冯三",
+          tradingPair: "BNBUSDT",
+          commissionAmount: "67.80",
+          commissionRate: "0.018%",
+          feeAmount: "3,766.67",
+          currency: "USDT",
+          creditAmount: "66.66",
+          creditCurrency: "USDT",
+          status: "待结算",
+          time: "2024-01-21 09:30:15",
+          settledTime: "",
+          remark: "合约交易返佣"
+        },
+        {
+          id: "WM003",
+          type: "理财佣金",
+          referralType: "间推",
+          userId: "user567834",
+          userName: "陈四",
+          productName: "ETH灵活理财",
+          commissionAmount: "43.20",
+          commissionRate: "0.4%",
+          feeAmount: "10,800.00",
+          currency: "USDT",
+          creditAmount: "42.48",
+          creditCurrency: "USDT",
+          status: "待结算",
+          time: "2024-01-21 11:15:22",
+          settledTime: "",
+          remark: "推荐用户理财收益"
+        },
+        {
+          id: "UC003",
+          type: "U卡佣金",
+          referralType: "直推",
+          userId: "user789456",
+          userName: "卫五",
+          cardType: "实体卡",
+          commissionAmount: "30.00",
+          commissionRate: "3.0%",
+          feeAmount: "1,000.00",
+          currency: "USD",
+          creditAmount: "29.45",
+          creditCurrency: "USD",
+          status: "处理中",
+          time: "2024-01-21 14:20:30",
+          settledTime: "",
+          remark: "实体卡开卡佣金"
+        },
+        {
+          id: "GT003",
+          type: "担保佣金",
+          referralType: "直推",
+          userId: "user901567",
+          userName: "蒋六",
+          tradingPair: "SOLUSDT",
+          commissionAmount: "38.90",
+          commissionRate: "0.28%",
+          feeAmount: "13,892.86",
+          currency: "USDT",
+          creditAmount: "38.23",
+          creditCurrency: "USDT",
+          status: "失败",
+          time: "2024-01-21 16:45:18",
+          settledTime: "",
+          remark: "担保交易异常，待重新结算"
         }
       ]
     },
@@ -11965,6 +12270,11 @@ export default function WalletPage() {
           commission: "佣金结算记录",
           other: "其他记录"
         }
+        if (secondaryTab === "commission") {
+          // 对佣金结算记录应用筛选功能
+          const allCommissionRecords = fundsData["佣金结算记录"] || []
+          return filterCommissionRecords(allCommissionRecords)
+        }
         return fundsData[tabNameMap[secondaryTab]] || []
       case "commission":
         // 从新的数据结构中获取对应类型的佣金记录
@@ -13047,6 +13357,102 @@ export default function WalletPage() {
                                   <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
+                                </div>
+                              </div>
+                            )
+                          } else if (secondaryTabKey === 'commission') {
+                            // 佣金结算记录的专门筛选功能
+                            return (
+                              <div className="mb-4">
+                                {/* 搜索框 */}
+                                <div className="mb-4">
+                                  <input
+                                    type="text"
+                                    placeholder="搜索用户ID或用户名..."
+                                    value={commissionSearchTerm}
+                                    onChange={(e) => setCommissionSearchTerm(e.target.value)}
+                                    className={`w-full px-4 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
+                                  />
+                                </div>
+                                
+                                {/* 筛选条件 */}
+                                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      佣金类型
+                                    </label>
+                                    <select 
+                                      value={commissionTypeFilter}
+                                      onChange={(e) => setCommissionTypeFilter(e.target.value)}
+                                      className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                    >
+                                      <option>全部</option>
+                                      <option>合约佣金</option>
+                                      <option>理财佣金</option>
+                                      <option>U卡佣金</option>
+                                      <option>担保佣金</option>
+                                      <option>支付佣金</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      推荐类型
+                                    </label>
+                                    <select 
+                                      value={commissionReferralFilter}
+                                      onChange={(e) => setCommissionReferralFilter(e.target.value)}
+                                      className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                    >
+                                      <option>全部</option>
+                                      <option>直推</option>
+                                      <option>间推</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      状态
+                                    </label>
+                                    <select 
+                                      value={commissionStatusFilter}
+                                      onChange={(e) => setCommissionStatusFilter(e.target.value)}
+                                      className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                    >
+                                      <option>全部</option>
+                                      <option>已结算</option>
+                                      <option>结算中</option>
+                                      <option>已完成</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      时间范围
+                                    </label>
+                                    <select 
+                                      value={commissionTimeFilter}
+                                      onChange={(e) => setCommissionTimeFilter(e.target.value)}
+                                      className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                    >
+                                      <option>全部</option>
+                                      <option>今日</option>
+                                      <option>本周</option>
+                                      <option>本月</option>
+                                      <option>近三个月</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button 
+                                      onClick={() => {
+                                        setCommissionSearchTerm("")
+                                        setCommissionTypeFilter("全部")
+                                        setCommissionReferralFilter("全部")
+                                        setCommissionStatusFilter("全部")
+                                        setCommissionTimeFilter("全部")
+                                      }}
+                                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}
+                                    >
+                                      重置
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             )
