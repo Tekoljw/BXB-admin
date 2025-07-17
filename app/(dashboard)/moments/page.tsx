@@ -280,26 +280,50 @@ const MarketPageContent = () => {
   return (
     <div className="space-y-6">
       <style dangerouslySetInnerHTML={{ __html: scrollbarHideStyle }} />
-      {/* 一级页签 */}
+      
+      {/* 搜索框 - 显示在所有页签上面 */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <input
+          type="text"
+          placeholder="搜索交易对..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+            isDark
+              ? "bg-[#1e2332] border-[#252842] text-white placeholder-gray-400"
+              : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
+          }`}
+        />
+      </div>
+
+      {/* 一级页签 - 绿色改成黑色 */}
       <div className="flex flex-wrap gap-2">
         {mainTabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveMainTab(tab)}
-            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+            className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
               activeMainTab === tab
-                ? "bg-[#00D4AA] text-white shadow-lg hover:bg-[#00C699]"
+                ? isDark
+                  ? "bg-white text-black shadow-lg hover:bg-gray-200"
+                  : "bg-black text-white shadow-lg hover:bg-gray-800"
                 : isDark
                 ? "bg-[#252842] text-gray-300 hover:bg-[#2a2f4a] hover:text-white"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-gray-900"
             }`}
+            style={{
+              transform: activeMainTab === tab ? 'translateY(-2px)' : 'translateY(0)',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              boxShadow: activeMainTab === tab ? '0 4px 8px rgba(0, 0, 0, 0.1)' : 'none'
+            }}
           >
             {tab}
           </button>
         ))}
       </div>
 
-      {/* 二级页签 - 滑动组件样式 */}
+      {/* 二级页签 - 黑色改成白色滑动页签 */}
       <div className={`${isDark ? "bg-[#2a2d3a]" : "bg-gray-100"} rounded-lg p-2`}>
         <div
           ref={scrollContainerRef}
@@ -317,8 +341,8 @@ const MarketPageContent = () => {
               className={`relative whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 pointer-events-auto ${
                 activeSubTab === tab
                   ? isDark
-                    ? "bg-white text-black shadow-sm"
-                    : "bg-black text-white shadow-sm"
+                    ? "bg-black text-white shadow-sm"
+                    : "bg-white text-black shadow-sm"
                   : isDark
                     ? "text-gray-300 hover:text-white hover:bg-[#3a3d4a]"
                     : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
@@ -332,24 +356,6 @@ const MarketPageContent = () => {
               {tab}
             </button>
           ))}
-        </div>
-      </div>
-
-      {/* 移动端搜索框 */}
-      <div className="md:hidden">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="搜索交易对..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
-              isDark
-                ? "bg-[#1e2332] border-[#252842] text-white placeholder-gray-400"
-                : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
-            }`}
-          />
         </div>
       </div>
 
@@ -429,25 +435,9 @@ const MarketPageContent = () => {
       {/* 桌面端市场数据表格 */}
       <div className={`hidden md:block ${cardStyle} rounded-lg`}>
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex justify-between items-center">
-            <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              市场数据
-            </h3>
-            <div className="relative w-80">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="搜索交易对..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className={`w-full pl-10 pr-4 py-2 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
-                  isDark
-                    ? "bg-[#1e2332] border-[#252842] text-white placeholder-gray-400"
-                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
-                }`}
-              />
-            </div>
-          </div>
+          <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            市场数据
+          </h3>
         </div>
         
         <div className="overflow-x-auto">
