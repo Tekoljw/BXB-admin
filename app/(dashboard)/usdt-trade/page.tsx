@@ -1541,6 +1541,30 @@ export default function USDTTradePage() {
                 <div>
                   {/* 桌面端布局 */}
                   <div className="hidden md:block p-6">
+                    {/* 购买金额卡片 */}
+                    <div className={`${cardStyle} p-4 rounded-lg mb-6`}>
+                      <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                        购买USDT数量
+                      </h4>
+                      <div className="mb-4">
+                        <input
+                          type="text"
+                          placeholder="123"
+                          className={`w-full px-3 py-3 text-lg text-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                            isDark 
+                              ? "bg-[#1a1c2e] border-[#3a3d4a] text-white" 
+                              : "bg-white border-gray-300 text-gray-900"
+                          }`}
+                        />
+                      </div>
+                      <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                        最低兑换 100 USDT • 无上限
+                      </div>
+                      <button className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all">
+                        重新查看报价
+                      </button>
+                    </div>
+
                     <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
                       请选择服务商
                     </h3>
@@ -1605,10 +1629,41 @@ export default function USDTTradePage() {
                         </div>
                       ))}
                     </div>
+
+                    {/* 桌面端底部按钮 */}
+                    <div className="mt-6 px-6 pb-6">
+                      <button className="w-full py-3 bg-custom-green text-white rounded-lg font-medium hover:bg-custom-green/90 transition-all">
+                        使用Ramp 购买
+                      </button>
+                    </div>
                   </div>
 
                   {/* 手机端卡片布局 */}
                   <div className="md:hidden space-y-3 p-4">
+                    {/* 购买金额卡片 */}
+                    <div className={`${cardStyle} p-4 rounded-lg mb-4`}>
+                      <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+                        购买USDT数量
+                      </h4>
+                      <div className="mb-4">
+                        <input
+                          type="text"
+                          placeholder="123"
+                          className={`w-full px-3 py-3 text-lg text-center border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                            isDark 
+                              ? "bg-[#1a1c2e] border-[#3a3d4a] text-white" 
+                              : "bg-white border-gray-300 text-gray-900"
+                          }`}
+                        />
+                      </div>
+                      <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                        最低兑换 100 USDT • 无上限
+                      </div>
+                      <button className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all">
+                        重新查看报价
+                      </button>
+                    </div>
+
                     <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
                       请选择服务商
                     </h3>
@@ -1669,6 +1724,13 @@ export default function USDTTradePage() {
                         </div>
                       </div>
                     ))}
+
+                    {/* 手机端底部按钮 */}
+                    <div className="mt-6">
+                      <button className="w-full py-3 bg-custom-green text-white rounded-lg font-medium hover:bg-custom-green/90 transition-all">
+                        使用Ramp 购买
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
