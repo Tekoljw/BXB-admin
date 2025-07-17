@@ -15910,41 +15910,39 @@ export default function WalletPage() {
               )}
 
               {/* 手续费说明 */}
-              {standbyRechargeAmount && (
-                <div className="mb-4">
-                  <div className={`p-3 rounded-lg border ${isDark ? 'bg-[#2a2d42] border-[#3a3d4a]' : 'bg-orange-50 border-orange-200'}`}>
-                    <div className={`text-sm font-medium ${isDark ? 'text-orange-400' : 'text-orange-700'} mb-2`}>
-                      手续费明细
+              <div className="mb-4">
+                <div className={`p-3 rounded-lg border ${isDark ? 'bg-[#2a2d42] border-[#3a3d4a]' : 'bg-orange-50 border-orange-200'}`}>
+                  <div className={`text-sm font-medium ${isDark ? 'text-orange-400' : 'text-orange-700'} mb-2`}>
+                    手续费明细
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                        充值金额
+                      </span>
+                      <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                        {standbyRechargeAmount || "0"} {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
+                      </span>
                     </div>
-                    <div className="space-y-1">
-                      <div className="flex justify-between items-center text-sm">
-                        <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
-                          充值金额
-                        </span>
-                        <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                          {standbyRechargeAmount} {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center text-sm">
-                        <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
-                          平台手续费 (0.5%)
-                        </span>
-                        <span className={isDark ? 'text-orange-400' : 'text-orange-600'}>
-                          -{(parseFloat(standbyRechargeAmount) * 0.005).toFixed(4)} {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
-                        </span>
-                      </div>
-                      <div className={`flex justify-between items-center text-sm font-medium pt-1 border-t ${isDark ? 'border-gray-600' : 'border-orange-200'}`}>
-                        <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                          实际到账
-                        </span>
-                        <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                          {(parseFloat(standbyRechargeAmount) * 0.995).toFixed(4)} {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
-                        </span>
-                      </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                        平台手续费 (0.5%)
+                      </span>
+                      <span className={isDark ? 'text-orange-400' : 'text-orange-600'}>
+                        -{standbyRechargeAmount ? (parseFloat(standbyRechargeAmount) * 0.005).toFixed(4) : "0"} {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
+                      </span>
+                    </div>
+                    <div className={`flex justify-between items-center text-sm font-medium pt-1 border-t ${isDark ? 'border-gray-600' : 'border-orange-200'}`}>
+                      <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                        实际到账
+                      </span>
+                      <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                        {standbyRechargeAmount ? (parseFloat(standbyRechargeAmount) * 0.995).toFixed(4) : "0"} {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
+                      </span>
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
 
               {/* 确认按钮 */}
               <div className="flex gap-3">
