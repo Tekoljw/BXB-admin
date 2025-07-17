@@ -5,68 +5,466 @@ import { Star, Search, Heart, MessageCircle, Share, MoreHorizontal, ImageIcon, V
 import { useTheme } from "@/contexts/theme-context"
 import MarketContent from "@/components/market-content"
 
-// 简洁线性图表组件
-const MiniLineChart = ({ isPositive }: { isPositive: boolean }) => {
-  const generateLineData = () => {
-    const points = []
-    let baseValue = 50
+// 行情页面内容组件 - 复制主菜单行情页面的完整内容
+const MarketPageContent = () => {
+  const { theme } = useTheme()
+  const [searchTerm, setSearchTerm] = useState("")
+  const [favorites, setFavorites] = useState<string[]>(["BTC/USDT", "VGX/USDT"])
+  const [activeMainTab, setActiveMainTab] = useState("热门")
+  const [activeSubTab, setActiveSubTab] = useState("全部")
+  const [mounted, setMounted] = useState(false)
+  const isDark = theme === "dark"
 
-    for (let i = 0; i < 15; i++) {
-      const trend = isPositive ? 0.5 : -0.5
-      const noise = (Math.random() - 0.5) * 8
-      baseValue += trend + noise
-      baseValue = Math.max(20, Math.min(80, baseValue))
-      points.push(baseValue)
+  const [isDragging, setIsDragging] = useState(false)
+  const [startX, setStartX] = useState(0)
+  const [scrollLeft, setScrollLeft] = useState(0)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  // 解决闪烁问题
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // 如果组件未挂载，返回空白内容，避免闪烁
+  if (!mounted) {
+    return <div className="min-h-screen bg-[#f5f8fa] dark:bg-background"></div>
+  }
+
+  // 一级页签
+  const mainTabs = ["自选", "热门", "涨幅榜", "跌幅榜", "新币榜", "成交额榜"]
+
+  // 二级页签
+  const subTabs = [
+    "全部",
+    "现货",
+    "合约",
+    "USDT",
+    "DEX",
+    "Innovation",
+    "SocialFi",
+    "GameFi",
+    "Solana Meme",
+    "公链",
+    "btc",
+    "Layer2",
+    "DeFi1",
+    "Metaverse",
+    "Web3.0",
+    "Gray Scale",
+  ]
+
+  // 市场数据
+  const marketData = [
+    {
+      symbol: "BTC",
+      pair: "USDT",
+      price: "1.5373",
+      change: "-3.46%",
+      high: "1.5373",
+      low: "1.5364",
+      volume: "16,238.89K",
+      turnover: "24,500.97K",
+      isPositive: false,
+      icon: "₿",
+    },
+    {
+      symbol: "VGX",
+      pair: "USDT",
+      price: "1.5373",
+      change: "+3.46%",
+      high: "1.5373",
+      low: "1.5364",
+      volume: "16,238.89K",
+      turnover: "24,500.97K",
+      isPositive: true,
+      icon: "💜",
+    },
+    {
+      symbol: "CAK",
+      pair: "USDT",
+      price: "1.5373",
+      change: "-3.46%",
+      high: "1.5373",
+      low: "1.5364",
+      volume: "16,238.89K",
+      turnover: "24,500.97K",
+      isPositive: false,
+      icon: "🟡",
+    },
+    {
+      symbol: "BON",
+      pair: "USDT",
+      price: "1.5373",
+      change: "+3.46%",
+      high: "1.5373",
+      low: "1.5364",
+      volume: "16,238.89K",
+      turnover: "24,500.97K",
+      isPositive: true,
+      icon: "🟡",
+    },
+    {
+      symbol: "ETH",
+      pair: "USDT",
+      price: "1.5373",
+      change: "+3.46%",
+      high: "1.5373",
+      low: "1.5364",
+      volume: "16,238.89K",
+      turnover: "24,500.97K",
+      isPositive: true,
+      icon: "🔷",
+    },
+    {
+      symbol: "UBC",
+      pair: "USDT",
+      price: "1.5373",
+      change: "-3.46%",
+      high: "1.5373",
+      low: "1.5364",
+      volume: "16,238.89K",
+      turnover: "24,500.97K",
+      isPositive: false,
+      icon: "🔵",
+    },
+  ]
+
+  // 简洁线性图表组件
+  const MiniLineChart = ({ isPositive }: { isPositive: boolean }) => {
+    const generateLineData = () => {
+      const points = []
+      let baseValue = 50
+
+      for (let i = 0; i < 15; i++) {
+        const trend = isPositive ? 0.5 : -0.5
+        const noise = (Math.random() - 0.5) * 8
+        baseValue += trend + noise
+        baseValue = Math.max(20, Math.min(80, baseValue))
+        points.push(baseValue)
+      }
+
+      return points
     }
 
-    return points
+    const data = generateLineData()
+    const width = 112
+    const height = 48
+    const padding = 4
+
+    const createPath = () => {
+      const maxVal = Math.max(...data)
+      const minVal = Math.min(...data)
+      const range = maxVal - minVal || 1
+
+      const pathData = data
+        .map((value, index) => {
+          const x = padding + (index / (data.length - 1)) * (width - padding * 2)
+          const y = padding + ((maxVal - value) / range) * (height - padding * 2)
+          return `${index === 0 ? "M" : "L"} ${x} ${y}`
+        })
+        .join(" ")
+
+      return pathData
+    }
+
+    const lineColor = isPositive ? "#13C2A3" : "#ef4444"
+
+    return (
+      <div className="w-28 h-12">
+        <svg width={width} height={height} className="overflow-visible">
+          <defs>
+            <linearGradient id={`gradient-${isPositive ? "up" : "down"}`} x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor={lineColor} stopOpacity="0.3" />
+              <stop offset="100%" stopColor={lineColor} stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <path
+            d={`${createPath()} L ${width - padding} ${height - padding} L ${padding} ${height - padding} Z`}
+            fill={`url(#gradient-${isPositive ? "up" : "down"})`}
+          />
+          <path
+            d={createPath()}
+            fill="none"
+            stroke={lineColor}
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="drop-shadow-sm"
+            style={{
+              filter: `drop-shadow(0 0 6px ${lineColor}60)`,
+            }}
+          />
+        </svg>
+      </div>
+    )
   }
 
-  const data = generateLineData()
-  const width = 112
-  const height = 48
-  const padding = 4
-
-  const createPath = () => {
-    const maxVal = Math.max(...data)
-    const minVal = Math.min(...data)
-    const range = maxVal - minVal || 1
-
-    const pathData = data
-      .map((value, index) => {
-        const x = padding + (index / (data.length - 1)) * (width - padding * 2)
-        const y = padding + ((maxVal - value) / range) * (height - padding * 2)
-        return `${index === 0 ? "M" : "L"} ${x} ${y}`
-      })
-      .join(" ")
-
-    return pathData
+  // 切换收藏功能
+  const toggleFavorite = (pair: string) => {
+    setFavorites(prev => 
+      prev.includes(pair) ? prev.filter(p => p !== pair) : [...prev, pair]
+    )
   }
 
-  const lineColor = isPositive ? "#13C2A3" : "#ef4444"
+  // 根据页签筛选数据
+  const getFilteredData = () => {
+    let filtered = marketData
+
+    if (activeMainTab === "自选") {
+      filtered = marketData.filter(crypto => 
+        favorites.includes(`${crypto.symbol}/${crypto.pair}`)
+      )
+    } else if (activeMainTab === "热门") {
+      filtered = marketData.slice(0, 6)
+    } else if (activeMainTab === "涨幅榜") {
+      filtered = marketData.filter(crypto => crypto.isPositive).sort((a, b) => 
+        parseFloat(b.change) - parseFloat(a.change)
+      )
+    } else if (activeMainTab === "跌幅榜") {
+      filtered = marketData.filter(crypto => !crypto.isPositive).sort((a, b) => 
+        parseFloat(a.change) - parseFloat(b.change)
+      )
+    } else if (activeMainTab === "新币榜") {
+      filtered = marketData.slice(2, 5)
+    } else if (activeMainTab === "成交额榜") {
+      filtered = marketData.sort((a, b) => 
+        parseFloat(b.volume.replace(/[,K]/g, '')) - parseFloat(a.volume.replace(/[,K]/g, ''))
+      )
+    }
+
+    return filtered
+  }
+
+  // 应用搜索过滤器
+  const filteredData = getFilteredData().filter(crypto =>
+    `${crypto.symbol}/${crypto.pair}`.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const cardStyle = isDark ? "bg-[#1a1f2e] border-[#252842]" : "bg-white border-gray-200"
 
   return (
-    <div className="w-28 h-12">
-      <svg width={width} height={height} className="overflow-visible">
-        <defs>
-          <linearGradient id={`gradient-${isPositive ? "up" : "down"}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor={lineColor} stopOpacity="0.3" />
-            <stop offset="100%" stopColor={lineColor} stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <path
-          d={`${createPath()} L ${width - padding} ${height - padding} L ${padding} ${height - padding} Z`}
-          fill={`url(#gradient-${isPositive ? "up" : "down"})`}
-        />
-        <path
-          d={createPath()}
-          fill="none"
-          stroke={lineColor}
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+    <div className="space-y-6">
+      {/* 一级页签 */}
+      <div className="flex flex-wrap gap-2">
+        {mainTabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveMainTab(tab)}
+            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              activeMainTab === tab
+                ? "bg-[#00D4AA] text-white shadow-lg hover:bg-[#00C699]"
+                : isDark
+                ? "bg-[#252842] text-gray-300 hover:bg-[#2a2f4a] hover:text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* 二级页签 */}
+      <div className="flex flex-wrap gap-2">
+        {subTabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveSubTab(tab)}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
+              activeSubTab === tab
+                ? "bg-[#00D4AA] text-white shadow-md"
+                : isDark
+                ? "bg-[#1e2332] text-gray-400 hover:bg-[#252842] hover:text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* 移动端搜索框 */}
+      <div className="md:hidden">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <input
+            type="text"
+            placeholder="搜索交易对..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+              isDark
+                ? "bg-[#1e2332] border-[#252842] text-white placeholder-gray-400"
+                : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
+            }`}
+          />
+        </div>
+      </div>
+
+      {/* 移动端市场数据标题栏 */}
+      <div className="md:hidden mb-3 px-4">
+        <div className="grid grid-cols-3 gap-4 text-sm font-medium">
+          <div className="text-left">
+            {isDark ? <span className="text-gray-400">交易对/成交量</span> : <span className="text-gray-600">交易对/成交量</span>}
+          </div>
+          <div className="text-center">
+            {isDark ? <span className="text-gray-400">价格</span> : <span className="text-gray-600">价格</span>}
+          </div>
+          <div className="text-right">
+            {isDark ? <span className="text-gray-400">24H涨跌</span> : <span className="text-gray-600">24H涨跌</span>}
+          </div>
+        </div>
+      </div>
+
+      {/* 移动端市场数据列表 */}
+      <div className="md:hidden space-y-1">
+        {filteredData.map((crypto, index) => {
+          const pairName = `${crypto.symbol}/${crypto.pair}`
+          const isFavorite = favorites.includes(pairName)
+
+          return (
+            <div
+              key={index}
+              className={`py-3 border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}
+            >
+              <div className="grid grid-cols-3 gap-4 items-center">
+                {/* 左侧：交易对和成交量 */}
+                <div className="text-left">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className={`font-bold text-base ${isDark ? "text-white" : "text-gray-900"}`}>
+                      {pairName}
+                    </span>
+                    <button
+                      onClick={() => toggleFavorite(pairName)}
+                      className={`p-1 rounded-full transition-colors ${
+                        isFavorite ? 'text-yellow-500' : 'text-gray-400'
+                      }`}
+                    >
+                      <Star className="w-4 h-4" fill={isFavorite ? 'currentColor' : 'none'} />
+                    </button>
+                  </div>
+                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                    {crypto.volume}
+                  </div>
+                </div>
+
+                {/* 中间：价格 */}
+                <div className="text-center">
+                  <div className={`font-bold text-lg ${isDark ? "text-white" : "text-gray-900"}`}>
+                    {crypto.price}
+                  </div>
+                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                    {crypto.high}/{crypto.low}
+                  </div>
+                </div>
+
+                {/* 右侧：24小时涨跌幅 */}
+                <div className="text-right">
+                  <div
+                    className={`inline-block px-3 py-1 rounded-md text-sm font-medium text-white ${
+                      crypto.isPositive ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  >
+                    {crypto.change}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* 桌面端市场数据表格 */}
+      <div className={`hidden md:block ${cardStyle} rounded-lg`}>
+        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex justify-between items-center">
+            <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              市场数据
+            </h3>
+            <div className="relative w-80">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="搜索交易对..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`w-full pl-10 pr-4 py-2 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
+                  isDark
+                    ? "bg-[#1e2332] border-[#252842] text-white placeholder-gray-400"
+                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
+                }`}
+              />
+            </div>
+          </div>
+        </div>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                <th className="text-left py-3 px-4 text-xs font-medium text-gray-500">交易对</th>
+                <th className="text-right py-3 px-4 text-xs font-medium text-gray-500">最新价格</th>
+                <th className="text-right py-3 px-4 text-xs font-medium text-gray-500">24h涨跌</th>
+                <th className="text-center py-3 px-4 text-xs font-medium text-gray-500">24h高低</th>
+                <th className="text-right py-3 px-4 text-xs font-medium text-gray-500">24h成交量</th>
+                <th className="text-center py-3 px-4 text-xs font-medium text-gray-500">走势</th>
+                <th className="text-center py-3 px-4 text-xs font-medium text-gray-500">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((crypto, index) => {
+                const pairName = `${crypto.symbol}/${crypto.pair}`
+                const isFavorite = favorites.includes(pairName)
+
+                return (
+                  <tr key={index} className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'} hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors`}>
+                    <td className="py-3 px-4">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm">{crypto.icon}</span>
+                        <div>
+                          <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            {pairName}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {crypto.price}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className={`font-medium ${crypto.isPositive ? 'text-green-500' : 'text-red-500'}`}>
+                        {crypto.change}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {crypto.high}/{crypto.low}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-right text-sm text-gray-500">
+                      {crypto.volume}
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <MiniLineChart isPositive={crypto.isPositive} />
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <button
+                        onClick={() => toggleFavorite(pairName)}
+                        className={`p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                          isFavorite ? 'text-yellow-500' : 'text-gray-400'
+                        }`}
+                      >
+                        <Star className="w-4 h-4" fill={isFavorite ? 'currentColor' : 'none'} />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   )
 }
@@ -90,10 +488,7 @@ export default function MomentsPage() {
   const [publishContent, setPublishContent] = useState("")
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   
-  // 行情相关状态
-  const [activePrimaryTab, setActivePrimaryTab] = useState("自选")
-  const [activeSecondaryTab, setActiveSecondaryTab] = useState("现货")
-  const [marketFavorites, setMarketFavorites] = useState<string[]>(["BTC/USDT", "ETH/USDT"])
+
 
 
   
@@ -167,123 +562,6 @@ export default function MomentsPage() {
   }
 
   const subTabs = getSubTabs()
-  
-  // 行情相关配置
-  const primaryTabs = ["自选", "热门", "涨幅榜", "跌幅榜", "新币榜", "成交额榜"]
-  const secondaryTabs = ["现货", "合约"]
-  
-  // 行情数据
-  const marketData = [
-    {
-      symbol: "BTC",
-      pair: "USDT",
-      price: "43,250.00",
-      change: "+2.45%",
-      high24h: "44,100.00",
-      low24h: "42,800.00",
-      volume: "1,234,567,890",
-      icon: "₿",
-      isPositive: true
-    },
-    {
-      symbol: "ETH",
-      pair: "USDT",
-      price: "2,680.50",
-      change: "+1.85%",
-      high24h: "2,720.00",
-      low24h: "2,620.00",
-      volume: "987,654,321",
-      icon: "♦",
-      isPositive: true
-    },
-    {
-      symbol: "BNB",
-      pair: "USDT",
-      price: "315.25",
-      change: "-0.75%",
-      high24h: "322.00",
-      low24h: "310.00",
-      volume: "456,789,123",
-      icon: "🔶",
-      isPositive: false
-    },
-    {
-      symbol: "ADA",
-      pair: "USDT",
-      price: "0.4850",
-      change: "+3.25%",
-      high24h: "0.5200",
-      low24h: "0.4600",
-      volume: "234,567,890",
-      icon: "♠",
-      isPositive: true
-    },
-    {
-      symbol: "SOL",
-      pair: "USDT",
-      price: "95.75",
-      change: "-1.45%",
-      high24h: "98.50",
-      low24h: "93.20",
-      volume: "345,678,901",
-      icon: "◉",
-      isPositive: false
-    },
-    {
-      symbol: "DOT",
-      pair: "USDT",
-      price: "7.850",
-      change: "+0.95%",
-      high24h: "8.100",
-      low24h: "7.650",
-      volume: "123,456,789",
-      icon: "●",
-      isPositive: true
-    }
-  ]
-  
-  // 行情收藏功能
-  const toggleMarketFavorite = (pair: string) => {
-    setMarketFavorites(prev => 
-      prev.includes(pair) 
-        ? prev.filter(p => p !== pair)
-        : [...prev, pair]
-    )
-  }
-  
-  // 根据页签筛选行情数据
-  const getFilteredMarketData = () => {
-    let filtered = marketData
-    
-    if (activePrimaryTab === "自选") {
-      filtered = marketData.filter(crypto => 
-        marketFavorites.includes(`${crypto.symbol}/${crypto.pair}`)
-      )
-    } else if (activePrimaryTab === "热门") {
-      filtered = marketData.slice(0, 6)
-    } else if (activePrimaryTab === "涨幅榜") {
-      filtered = marketData.filter(crypto => crypto.isPositive).sort((a, b) => 
-        parseFloat(b.change) - parseFloat(a.change)
-      )
-    } else if (activePrimaryTab === "跌幅榜") {
-      filtered = marketData.filter(crypto => !crypto.isPositive).sort((a, b) => 
-        parseFloat(a.change) - parseFloat(b.change)
-      )
-    } else if (activePrimaryTab === "新币榜") {
-      filtered = marketData.slice(2, 5)
-    } else if (activePrimaryTab === "成交额榜") {
-      filtered = marketData.sort((a, b) => 
-        parseFloat(b.volume.replace(/,/g, '')) - parseFloat(a.volume.replace(/,/g, ''))
-      )
-    }
-    
-    return filtered
-  }
-  
-  // 应用搜索过滤器
-  const filteredMarketData = getFilteredMarketData().filter(crypto =>
-    `${crypto.symbol}/${crypto.pair}`.toLowerCase().includes(searchTerm.toLowerCase())
-  )
 
   // 如果组件未挂载，返回空白内容，避免闪烁
   if (!mounted) {
@@ -995,229 +1273,7 @@ export default function MomentsPage() {
 
             {/* 行情页签内容 */}
             {activeMainTab === "行情" && (
-              <div className="space-y-6">
-                {/* 一级页签 */}
-                <div className="flex flex-wrap gap-2">
-                  {primaryTabs.map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActivePrimaryTab(tab)}
-                      className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                        activePrimaryTab === tab
-                          ? "bg-[#00D4AA] text-white shadow-lg hover:bg-[#00C699]"
-                          : isDark
-                          ? "bg-[#252842] text-gray-300 hover:bg-[#2a2f4a] hover:text-white"
-                          : "bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-gray-900"
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
-                </div>
-
-                {/* 二级页签 */}
-                <div className="flex flex-wrap gap-2">
-                  {secondaryTabs.map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveSecondaryTab(tab)}
-                      className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                        activeSecondaryTab === tab
-                          ? "bg-[#00D4AA] text-white shadow-md"
-                          : isDark
-                          ? "bg-[#1e2332] text-gray-400 hover:bg-[#252842] hover:text-white"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800"
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
-                </div>
-
-                {/* 移动端搜索框 */}
-                <div className="md:hidden">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
-                      type="text"
-                      placeholder="搜索交易对..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className={`w-full pl-10 pr-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
-                        isDark
-                          ? "bg-[#1e2332] border-[#252842] text-white placeholder-gray-400"
-                          : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
-                      }`}
-                    />
-                  </div>
-                </div>
-
-                {/* 移动端市场数据标题栏 */}
-                <div className="md:hidden mb-3 px-4">
-                  <div className="grid grid-cols-3 gap-4 text-sm font-medium">
-                    <div className="text-left">
-                      {isDark ? <span className="text-gray-400">交易对/成交量</span> : <span className="text-gray-600">交易对/成交量</span>}
-                    </div>
-                    <div className="text-center">
-                      {isDark ? <span className="text-gray-400">价格</span> : <span className="text-gray-600">价格</span>}
-                    </div>
-                    <div className="text-right">
-                      {isDark ? <span className="text-gray-400">24H涨跌</span> : <span className="text-gray-600">24H涨跌</span>}
-                    </div>
-                  </div>
-                </div>
-
-                {/* 移动端市场数据列表 */}
-                <div className="md:hidden space-y-1">
-                  {filteredMarketData.map((crypto, index) => {
-                    const pairName = `${crypto.symbol}/${crypto.pair}`
-                    const isFavorite = marketFavorites.includes(pairName)
-
-                    return (
-                      <div
-                        key={index}
-                        className={`py-3 border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}
-                      >
-                        <div className="grid grid-cols-3 gap-4 items-center">
-                          {/* 左侧：交易对和成交量 */}
-                          <div className="text-left">
-                            <div className="flex items-center space-x-2 mb-1">
-                              <span className={`font-bold text-base ${isDark ? "text-white" : "text-gray-900"}`}>
-                                {pairName}
-                              </span>
-                              <button
-                                onClick={() => toggleMarketFavorite(pairName)}
-                                className={`p-1 rounded-full transition-colors ${
-                                  isFavorite ? 'text-yellow-500' : 'text-gray-400'
-                                }`}
-                              >
-                                <Star className="w-4 h-4" fill={isFavorite ? 'currentColor' : 'none'} />
-                              </button>
-                            </div>
-                            <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                              {crypto.volume}
-                            </div>
-                          </div>
-
-                          {/* 中间：价格和24h高低 */}
-                          <div className="text-center">
-                            <div className={`font-bold text-lg ${isDark ? "text-white" : "text-gray-900"}`}>
-                              ${crypto.price}
-                            </div>
-                            <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                              ${crypto.high24h}/${crypto.low24h}
-                            </div>
-                          </div>
-
-                          {/* 右侧：24小时涨跌幅 */}
-                          <div className="text-right">
-                            <div
-                              className={`inline-block px-3 py-1 rounded-md text-sm font-medium text-white ${
-                                crypto.isPositive ? "bg-green-500" : "bg-red-500"
-                              }`}
-                            >
-                              {crypto.change}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-
-                {/* 桌面端市场数据表格 */}
-                <div className={`hidden md:block ${cardStyle} rounded-lg`}>
-                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                    <div className="flex justify-between items-center">
-                      <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                        市场数据
-                      </h3>
-                      <div className="relative w-80">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                        <input
-                          type="text"
-                          placeholder="搜索交易对..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          className={`w-full pl-10 pr-4 py-2 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00D4AA] ${
-                            isDark
-                              ? "bg-[#1e2332] border-[#252842] text-white placeholder-gray-400"
-                              : "bg-white border-gray-200 text-gray-900 placeholder-gray-500"
-                          }`}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-                          <th className="text-left py-3 px-4 text-xs font-medium text-gray-500">交易对</th>
-                          <th className="text-right py-3 px-4 text-xs font-medium text-gray-500">最新价格</th>
-                          <th className="text-right py-3 px-4 text-xs font-medium text-gray-500">24h涨跌</th>
-                          <th className="text-center py-3 px-4 text-xs font-medium text-gray-500">24h高低</th>
-                          <th className="text-right py-3 px-4 text-xs font-medium text-gray-500">24h成交量</th>
-                          <th className="text-center py-3 px-4 text-xs font-medium text-gray-500">走势</th>
-                          <th className="text-center py-3 px-4 text-xs font-medium text-gray-500">操作</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredMarketData.map((crypto, index) => {
-                          const pairName = `${crypto.symbol}/${crypto.pair}`
-                          const isFavorite = marketFavorites.includes(pairName)
-
-                          return (
-                            <tr key={index} className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'} hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors`}>
-                              <td className="py-3 px-4">
-                                <div className="flex items-center space-x-2">
-                                  <span className="text-sm">{crypto.icon}</span>
-                                  <div>
-                                    <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                      {pairName}
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="py-3 px-4 text-right">
-                                <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                                  ${crypto.price}
-                                </div>
-                              </td>
-                              <td className="py-3 px-4 text-right">
-                                <div className={`font-medium ${crypto.isPositive ? 'text-green-500' : 'text-red-500'}`}>
-                                  {crypto.change}
-                                </div>
-                              </td>
-                              <td className="py-3 px-4 text-center">
-                                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                  ${crypto.high24h}/${crypto.low24h}
-                                </div>
-                              </td>
-                              <td className="py-3 px-4 text-right text-sm text-gray-500">
-                                {crypto.volume}
-                              </td>
-                              <td className="py-3 px-4 text-center">
-                                <MiniLineChart isPositive={crypto.isPositive} />
-                              </td>
-                              <td className="py-3 px-4 text-center">
-                                <button
-                                  onClick={() => toggleMarketFavorite(pairName)}
-                                  className={`p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                                    isFavorite ? 'text-yellow-500' : 'text-gray-400'
-                                  }`}
-                                >
-                                  <Star className="w-4 h-4" fill={isFavorite ? 'currentColor' : 'none'} />
-                                </button>
-                              </td>
-                            </tr>
-                          )
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
+              <MarketPageContent />
             )}
 
             {/* 动态列表 - 重新设计的卡片布局 */}
