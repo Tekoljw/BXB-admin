@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, ChevronUp, Wallet, ArrowRightLeft, Zap, Plane, Check, AlertTriangle } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
 // Custom Transfer Icon (Wallet)
@@ -264,6 +264,7 @@ export default function ChatPage() {
   const [showDispute, setShowDispute] = useState<{messageId: string, isOpen: boolean}>({messageId: '', isOpen: false})
   const [disputeReason, setDisputeReason] = useState("")
   const [selectedGuaranteeAction, setSelectedGuaranteeAction] = useState<string>("")
+  const [guaranteeProgressExpanded, setGuaranteeProgressExpanded] = useState(false)
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -2189,6 +2190,262 @@ export default function ChatPage() {
 
               {/* Messages Area */}
               <div className="flex-1 p-4 overflow-y-auto">
+                {/* 担保交易进度组件 */}
+                {selectedContact === 'escrow-1' && (() => {
+                  // 获取当前聊天中的担保交易
+                  const guaranteeTransactions = (messages[selectedContact] || []).filter(msg => msg.type === 'guarantee' && msg.guaranteeData)
+                  if (guaranteeTransactions.length === 0) return null
+
+                  // 获取最新的活跃担保交易
+                  const activeTransaction = guaranteeTransactions.find(msg => 
+                    msg.guaranteeData && !['completed', 'cancelled', 'expired'].includes(msg.guaranteeData.status)
+                  ) || guaranteeTransactions[0]
+
+                  if (!activeTransaction?.guaranteeData) return null
+
+                  const guaranteeData = activeTransaction.guaranteeData
+                  const currentStep = guaranteeData.steps.find(step => step.status === 'current')
+                  const currentStepIndex = guaranteeData.steps.findIndex(step => step.status === 'current')
+                  const nextStep = guaranteeData.steps[currentStepIndex + 1]
+
+                  return (
+                    <div className={`mb-4 rounded-xl border transition-all duration-300 ${
+                      isDark 
+                        ? 'bg-gray-800/50 border-gray-700' 
+                        : 'bg-white border-gray-200'
+                    }`}>
+                      {/* 收起状态 - 只显示当前步骤和操作按钮 */}
+                      {!guaranteeProgressExpanded && (
+                        <div className="p-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                                <Shield className="w-4 h-4 text-white" />
+                              </div>
+                              <div>
+                                <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  担保交易进行中
+                                </h4>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  {guaranteeData.type === 'buy' ? '求购' : '出售'} {guaranteeData.amount} {guaranteeData.currency}
+                                </p>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => setGuaranteeProgressExpanded(true)}
+                              className={`p-2 rounded-lg transition-colors ${
+                                isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+                              }`}
+                            >
+                              <ChevronDown className="w-4 h-4" />
+                            </button>
+                          </div>
+
+                          {/* 当前步骤进度 */}
+                          <div className={`p-3 rounded-lg mb-3 ${
+                            isDark ? 'bg-gray-700/50' : 'bg-gray-50'
+                          }`}>
+                            <div className="flex items-center justify-between mb-2">
+                              <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                当前步骤
+                              </span>
+                              <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
+                                {currentStepIndex + 1}/{guaranteeData.steps.length}
+                              </span>
+                            </div>
+                            <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              {currentStep?.title || '等待开始'}
+                            </div>
+                            <div className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                              {currentStep?.description || '交易准备中...'}
+                            </div>
+                          </div>
+
+                          {/* 快速操作按钮 */}
+                          <div className="flex flex-wrap gap-2">
+                            {/* 支付担保金 */}
+                            {guaranteeData.status === 'accepted' && (
+                              <button
+                                onClick={() => handlePayDeposit(activeTransaction.id)}
+                                className="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-sm rounded-lg transition-colors"
+                              >
+                                支付担保金
+                              </button>
+                            )}
+                            
+                            {/* 确认收货/收款 */}
+                            {guaranteeData.status === 'deposit_paid' && (
+                              <button
+                                onClick={() => handleConfirmReceived(activeTransaction.id)}
+                                className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-lg transition-colors"
+                              >
+                                {guaranteeData.type === 'buy' ? '确认收货' : '确认收款'}
+                              </button>
+                            )}
+                            
+                            {/* 查看详情 */}
+                            <button
+                              onClick={() => setShowGuaranteeDetails({messageId: activeTransaction.id, isOpen: true})}
+                              className={`px-3 py-1.5 text-sm rounded-lg transition-colors border ${
+                                isDark 
+                                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                              }`}
+                            >
+                              查看详情
+                            </button>
+                            
+                            {/* 发起争议 */}
+                            {['accepted', 'deposit_paid', 'funds_received'].includes(guaranteeData.status) && (
+                              <button
+                                onClick={() => setShowDispute({messageId: activeTransaction.id, isOpen: true})}
+                                className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm rounded-lg transition-colors"
+                              >
+                                发起争议
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 展开状态 - 显示完整进度 */}
+                      {guaranteeProgressExpanded && (
+                        <div className="p-4">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                                <Shield className="w-4 h-4 text-white" />
+                              </div>
+                              <div>
+                                <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  担保交易流程
+                                </h4>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  {guaranteeData.type === 'buy' ? '求购' : '出售'} {guaranteeData.amount} {guaranteeData.currency} - {guaranteeData.description.slice(0, 30)}...
+                                </p>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => setGuaranteeProgressExpanded(false)}
+                              className={`p-2 rounded-lg transition-colors ${
+                                isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+                              }`}
+                            >
+                              <ChevronUp className="w-4 h-4" />
+                            </button>
+                          </div>
+
+                          {/* 完整进度步骤（竖版） */}
+                          <div className="space-y-4">
+                            {guaranteeData.steps.map((step, index) => (
+                              <div key={step.id} className="flex items-start space-x-3">
+                                {/* 步骤图标 */}
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                                  step.status === 'completed' 
+                                    ? 'bg-green-500 text-white' 
+                                    : step.status === 'current'
+                                    ? 'bg-blue-500 text-white'
+                                    : step.status === 'dispute'
+                                    ? 'bg-red-500 text-white'
+                                    : isDark ? 'bg-gray-700 text-gray-400' : 'bg-gray-200 text-gray-500'
+                                }`}>
+                                  {step.status === 'completed' ? (
+                                    <Check className="w-4 h-4" />
+                                  ) : step.status === 'dispute' ? (
+                                    <AlertTriangle className="w-4 h-4" />
+                                  ) : (
+                                    <span className="text-xs font-bold">{index + 1}</span>
+                                  )}
+                                </div>
+
+                                {/* 步骤内容 */}
+                                <div className="flex-1 pb-4">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <h5 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                      {step.title}
+                                    </h5>
+                                    {step.timestamp && (
+                                      <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                        {new Date(step.timestamp).toLocaleString('zh-CN', {
+                                          month: 'short',
+                                          day: 'numeric',
+                                          hour: '2-digit',
+                                          minute: '2-digit'
+                                        })}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    {step.description}
+                                  </p>
+
+                                  {/* 当前步骤的操作按钮 */}
+                                  {step.status === 'current' && (
+                                    <div className="mt-2 flex flex-wrap gap-2">
+                                      {step.id === 'step3' && guaranteeData.status === 'accepted' && (
+                                        <button
+                                          onClick={() => handlePayDeposit(activeTransaction.id)}
+                                          className="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-sm rounded-lg transition-colors"
+                                        >
+                                          支付担保金
+                                        </button>
+                                      )}
+                                      
+                                      {step.id === 'step5' && guaranteeData.status === 'deposit_paid' && (
+                                        <button
+                                          onClick={() => handleConfirmReceived(activeTransaction.id)}
+                                          className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-lg transition-colors"
+                                        >
+                                          {guaranteeData.type === 'buy' ? '确认收货' : '确认收款'}
+                                        </button>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* 连接线 */}
+                                {index < guaranteeData.steps.length - 1 && (
+                                  <div 
+                                    className={`absolute left-7 mt-8 w-0.5 h-4 ${
+                                      step.status === 'completed' ? 'bg-green-500' : isDark ? 'bg-gray-700' : 'bg-gray-200'
+                                    }`}
+                                    style={{marginLeft: '-1px'}}
+                                  />
+                                )}
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* 底部操作按钮 */}
+                          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <div className="flex flex-wrap gap-2">
+                              <button
+                                onClick={() => setShowGuaranteeDetails({messageId: activeTransaction.id, isOpen: true})}
+                                className={`px-3 py-1.5 text-sm rounded-lg transition-colors border ${
+                                  isDark 
+                                    ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                                }`}
+                              >
+                                查看合约详情
+                              </button>
+                              
+                              {['accepted', 'deposit_paid', 'funds_received'].includes(guaranteeData.status) && (
+                                <button
+                                  onClick={() => setShowDispute({messageId: activeTransaction.id, isOpen: true})}
+                                  className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm rounded-lg transition-colors"
+                                >
+                                  发起争议
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })()}
+
                 <div className="space-y-4">
                   {(messages[selectedContact] || []).map((msg) => (
                     <div
