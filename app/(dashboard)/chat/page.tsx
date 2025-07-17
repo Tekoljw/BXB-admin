@@ -284,6 +284,65 @@ export default function ChatPage() {
     setSelectedContact(null)
   }, [activeTab])
 
+  // Auto-create guarantee process for guarantee groups
+  useEffect(() => {
+    if (!selectedContact) return
+    
+    // Check if current contact is a guarantee group (groups starting with "guarantee-" or containing "担保" in name)
+    const isGuaranteeGroup = selectedContact.includes("guarantee-") || 
+                            selectedContact.includes("担保") ||
+                            (selectedContact === "group-1") // For demo, group-1 is our guarantee group
+    
+    if (isGuaranteeGroup && !activeGuaranteeProcess) {
+      // Auto-create guarantee process for guarantee groups
+      const now = new Date()
+      const autoProcess = {
+        id: `auto-guarantee-${Date.now()}`,
+        type: 'buy' as const,
+        amount: "1000",
+        currency: "USDT",
+        description: "群内担保交易",
+        duration: "24",
+        deposit: "10",
+        currentStep: 2, // Start at step 2 (waiting for acceptance)
+        steps: [
+          { 
+            id: 'step1', 
+            title: '发起担保交易', 
+            status: 'completed' as const, 
+            timestamp: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+            description: '担保群已创建，交易流程已启动'
+          },
+          { 
+            id: 'step2', 
+            title: '等待对方接受', 
+            status: 'current' as const,
+            description: '等待群内其他成员接受此担保交易'
+          },
+          { 
+            id: 'step3', 
+            title: '双方支付担保金', 
+            status: 'pending' as const,
+            description: '双方需要支付担保金以确保交易安全进行'
+          },
+          { 
+            id: 'step4', 
+            title: '完成交易确认', 
+            status: 'pending' as const,
+            description: '确认商品/服务交付完成，释放担保金'
+          }
+        ],
+        createdAt: now.toISOString(),
+        acceptedBy: undefined
+      }
+      
+      setActiveGuaranteeProcess(autoProcess)
+    } else if (!isGuaranteeGroup) {
+      // Clear guarantee process if not in guarantee group
+      setActiveGuaranteeProcess(null)
+    }
+  }, [selectedContact, activeGuaranteeProcess])
+
   // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -650,9 +709,9 @@ export default function ChatPage() {
   const groupContacts: Contact[] = [
     {
       id: "group-1",
-      name: "BTC交易群",
-      avatar: "₿",
-      lastMessage: "张三: 今天BTC走势如何？",
+      name: "USDT担保交易群",
+      avatar: "🛡️",
+      lastMessage: "李四: 求购1000 USDT，担保交易",
       time: "09:15",
       unread: 5,
       isOnline: true,
@@ -2003,29 +2062,7 @@ export default function ChatPage() {
                             <MoreHorizontal className="w-5 h-5" />
                           </button>
                         )}
-                        {/* Test Button for Guarantee Flow */}
-                        <button 
-                          onClick={() => {
-                            if (!activeGuaranteeProcess) {
-                              setGuaranteeAmount("1000")
-                              setGuaranteeDescription("测试担保交易")
-                              setGuaranteeType("buy")
-                              setGuaranteeDuration("24")
-                              setGuaranteeDeposit("10")
-                              setSelectedCurrency("USDT")
-                              createActiveGuaranteeProcess()
-                            } else {
-                              simulateGuaranteeProgress()
-                            }
-                          }}
-                          className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                            isDark 
-                              ? "bg-indigo-600 hover:bg-indigo-700 text-white" 
-                              : "bg-indigo-500 hover:bg-indigo-600 text-white"
-                          }`}
-                        >
-                          {!activeGuaranteeProcess ? "测试担保" : "下一步"}
-                        </button>
+
                       </div>
                     </>
                   )
@@ -2093,7 +2130,7 @@ export default function ChatPage() {
                           <button 
                             onClick={(e) => {
                               e.stopPropagation()
-                              // Handle next step action
+                              simulateGuaranteeProgress()
                             }}
                             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                               isDark 
