@@ -91,7 +91,6 @@ export default function MarketPage() {
   const [favorites, setFavorites] = useState<string[]>(["BTC/USDT", "VGX/USDT"])
   const [activeMainTab, setActiveMainTab] = useState("热门")
   const [activeSubTab, setActiveSubTab] = useState("全部")
-  const [activeTradingType, setActiveTradingType] = useState("现货")
   const [mounted, setMounted] = useState(false)
   const isDark = theme === "dark"
 
@@ -551,37 +550,8 @@ export default function MarketPage() {
             </div>
           </div>
 
-          {/* 移动端：交易类型页签 */}
+          {/* 移动端：一级页签 */}
           <div className="md:hidden mb-4">
-            <div className="relative flex bg-gray-100 dark:bg-[#252842] rounded-lg p-1 mb-4">
-              {/* 滑动背景 */}
-              <div 
-                className={`absolute bg-white dark:bg-white rounded-md transition-transform duration-300 ease-in-out`}
-                style={{ 
-                  width: 'calc(33.333% - 4px)', 
-                  height: 'calc(100% - 8px)',
-                  top: '4px',
-                  left: '4px',
-                  transform: `translateX(${activeTradingType === "现货" ? "0" : activeTradingType === "合约" ? "100%" : "200%"})` 
-                }}
-              />
-              {["现货", "合约", "理财"].map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setActiveTradingType(type)}
-                  className={`relative z-10 flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-                    activeTradingType === type
-                      ? "text-black"
-                      : isDark
-                        ? "text-gray-400 hover:text-gray-200"
-                        : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
-
             <div className="flex items-center space-x-6 relative mb-3">
               {mainTabs.map((tab) => (
                 <button
