@@ -515,18 +515,165 @@ export default function USDTTradePage() {
 
   return (
     <div 
-      className={`min-h-screen p-6 transition-all duration-500 ease-in-out ${isDark ? "bg-background" : "bg-gray-50"}`}
+      className={`min-h-screen transition-all duration-500 ease-in-out ${isDark ? "bg-background" : "bg-gray-50"} md:p-6`}
       style={{ 
         marginRight: shouldUseOutwardMode && (showTradeModal || showPublishModal) ? '384px' : '0px',
         transition: 'margin-right 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
       }}
     >
         <div className="max-w-full mx-auto">
+          {/* 手机端顶部功能区域 */}
+          <div className="md:hidden">
+            <div className={`${cardStyle} p-4 m-4`}>
+              {/* 买入/卖出切换和法币选择 */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex bg-gray-200 dark:bg-[#252842] rounded-md p-1 flex-1 mr-4">
+                  {/* 滑动背景 */}
+                  <div
+                    className={`absolute w-1/2 h-8 rounded-md transition-all duration-300 ease-in-out ${
+                      activeTab === "买入USDT" || activeTab === "买入" ? "bg-custom-green left-1" : "bg-red-500 left-1/2"
+                    }`}
+                    style={{
+                      position: 'absolute',
+                      top: '4px',
+                      bottom: '4px',
+                      width: 'calc(50% - 4px)',
+                      left: activeTab === "买入USDT" || activeTab === "买入" ? '4px' : 'calc(50% + 2px)'
+                    }}
+                  />
+
+                  {/* 买入按钮 */}
+                  <button
+                    onClick={() => setActiveTab("买入USDT")}
+                    className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
+                      activeTab === "买入USDT" || activeTab === "买入"
+                        ? "text-white"
+                        : isDark
+                          ? "text-gray-400 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    买入USDT
+                  </button>
+
+                  {/* 卖出按钮 */}
+                  <button
+                    onClick={() => setActiveTab("卖出USDT")}
+                    className={`relative z-10 flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 ${
+                      activeTab === "卖出USDT" || activeTab === "卖出"
+                        ? "text-white"
+                        : isDark
+                          ? "text-gray-400 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    卖出USDT
+                  </button>
+                </div>
+
+                {/* 法币选择下拉框 */}
+                <div className="relative" ref={currencyDropdownRef}>
+                  <button
+                    onClick={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
+                    className={`flex items-center justify-between px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
+                      isDark
+                        ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#2a2d42]"
+                        : "bg-white border-gray-300 text-gray-800 hover:bg-gray-50"
+                    }`}
+                  >
+                    <span className="flex items-center space-x-2">
+                      <span>{currencies.find(c => c.code === selectedCurrency)?.symbol}</span>
+                      <span>{currencies.find(c => c.code === selectedCurrency)?.name}</span>
+                    </span>
+                    <ChevronDown 
+                      className={`w-4 h-4 ml-2 transition-transform duration-200 ${
+                        currencyDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {/* 下拉菜单 */}
+                  <div 
+                    className={`absolute top-full right-0 mt-1 z-50 rounded-lg border shadow-lg transition-all duration-200 min-w-[120px] ${
+                      currencyDropdownOpen 
+                        ? "opacity-100 visible translate-y-0" 
+                        : "opacity-0 invisible -translate-y-2"
+                    } ${
+                      isDark
+                        ? "bg-[#252842] border-[#3a3d4a]"
+                        : "bg-white border-gray-300"
+                    }`}
+                  >
+                    {currencies.map((currency) => (
+                      <button
+                        key={currency.code}
+                        onClick={() => {
+                          setSelectedCurrency(currency.code)
+                          setCurrencyDropdownOpen(false)
+                        }}
+                        className={`w-full flex items-center space-x-3 px-3 py-2 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                          selectedCurrency === currency.code
+                            ? isDark
+                              ? "bg-custom-green/20 text-custom-green"
+                              : "bg-custom-green/10 text-custom-green"
+                            : isDark
+                              ? "text-gray-300 hover:bg-[#2a2d42]"
+                              : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        <span className="font-medium">{currency.symbol}</span>
+                        <span>{currency.name}</span>
+                        <span className="text-xs text-gray-500">({currency.code})</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* 二级页签：C2C/快捷/OTC */}
+              <div className="flex space-x-2">
+                {[
+                  { 
+                    mode: "C2C", 
+                    icon: Users
+                  },
+                  { 
+                    mode: "快捷", 
+                    icon: Zap
+                  },
+                  { 
+                    mode: "OTC", 
+                    icon: Building2
+                  }
+                ].map(({ mode, icon: Icon }) => (
+                  <button
+                    key={mode}
+                    onClick={() => setTradeMode(mode)}
+                    className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all cursor-pointer border-2 ${
+                      tradeMode === mode
+                        ? isDark 
+                          ? "border-custom-green bg-[#1a1c2e]/50 text-white shadow-lg" 
+                          : "border-custom-green bg-custom-green/5 text-gray-900 shadow-lg"
+                        : isDark
+                          ? "border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d42] hover:border-custom-green/50"
+                          : "border-gray-200 text-gray-600 hover:border-custom-green hover:bg-gray-50 hover:shadow-md"
+                    }`}
+                  >
+                    <div className="flex flex-col items-center space-y-1">
+                      <Icon className="w-4 h-4" />
+                      <span>{mode}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
           {/* 主要布局 */}
-          <div className="grid grid-cols-12 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           
-          {/* 左侧筛选面板 */}
-          <div className="col-span-3">
+          {/* 桌面端左侧筛选面板 */}
+          <div className="hidden md:block md:col-span-3">
             <div className={`${cardStyle} rounded-lg p-4`}>
               
 
@@ -815,10 +962,10 @@ export default function USDTTradePage() {
           </div>
 
           {/* 主要内容区域 */}
-          <div className="col-span-9">
+          <div className="col-span-1 md:col-span-9">
             
-            {/* 搜索和操作栏 */}
-            <div className={`${cardStyle} rounded-lg p-4 mb-6`}>
+            {/* 搜索和操作栏 - 手机端隐藏 */}
+            <div className={`hidden md:block ${cardStyle} rounded-lg p-4 mb-6`}>
               <div className="flex items-center space-x-4">
                 <div className="relative flex-1">
                   <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
@@ -873,7 +1020,7 @@ export default function USDTTradePage() {
             </div>
 
             {/* 内容展示区域 */}
-            <div className={`${cardStyle} rounded-lg`}>
+            <div className={`${cardStyle} rounded-lg md:rounded-lg rounded-none md:m-0 mx-0`}>
               
               {/* C2C模式 */}
               {tradeMode === "C2C" && (
