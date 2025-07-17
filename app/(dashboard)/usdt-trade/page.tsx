@@ -86,6 +86,9 @@ export default function USDTTradePage() {
   const [selectedCountry, setSelectedCountry] = useState("中国")
   const [selectedCity, setSelectedCity] = useState("北京")
   const [locationSearchTerm, setLocationSearchTerm] = useState("")
+  
+  // OTC服务商选择
+  const [selectedOtcProvider, setSelectedOtcProvider] = useState<number | null>(null)
 
   // 支付方式图标映射
   const getPaymentIcon = (method: string) => {
@@ -1560,20 +1563,25 @@ export default function USDTTradePage() {
                       <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                         最低兑换 100 USDT • 无上限
                       </div>
-                      <button className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all">
+                      <button className={`w-full py-3 border rounded-lg font-medium transition-all ${
+                        isDark 
+                          ? "border-white text-white hover:bg-white hover:text-black" 
+                          : "border-black text-black hover:bg-black hover:text-white"
+                      }`}>
                         重新查看报价
                       </button>
                     </div>
-
-                    <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-                      请选择服务商
-                    </h3>
                     
                     <div className="space-y-3">
                       {otcProviders.map((provider, index) => (
                         <div 
                           key={index} 
-                          className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all hover:shadow-md hover:border-custom-green ${
+                          onClick={() => setSelectedOtcProvider(index)}
+                          className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                            selectedOtcProvider === index 
+                              ? "border-custom-green ring-2 ring-custom-green ring-opacity-20" 
+                              : "hover:border-custom-green"
+                          } ${
                             isDark ? "hover:bg-[#252842]" : "hover:shadow-lg"
                           }`}
                         >
@@ -1632,8 +1640,14 @@ export default function USDTTradePage() {
 
                     {/* 桌面端底部按钮 */}
                     <div className="mt-6 px-6 pb-6">
-                      <button className="w-full py-3 bg-custom-green text-white rounded-lg font-medium hover:bg-custom-green/90 transition-all">
-                        使用Ramp 购买
+                      <button className={`w-full py-3 rounded-lg font-medium transition-all ${
+                        selectedOtcProvider !== null
+                          ? "bg-custom-green text-white hover:bg-custom-green/90"
+                          : isDark
+                            ? "border border-gray-400 text-gray-400 cursor-not-allowed"
+                            : "border border-gray-400 text-gray-400 cursor-not-allowed"
+                      }`}>
+                        {selectedOtcProvider !== null ? "使用Ramp购买" : "先选择服务商以继续"}
                       </button>
                     </div>
                   </div>
@@ -1659,19 +1673,24 @@ export default function USDTTradePage() {
                       <div className={`text-sm text-center mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                         最低兑换 100 USDT • 无上限
                       </div>
-                      <button className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all">
+                      <button className={`w-full py-3 border rounded-lg font-medium transition-all ${
+                        isDark 
+                          ? "border-white text-white hover:bg-white hover:text-black" 
+                          : "border-black text-black hover:bg-black hover:text-white"
+                      }`}>
                         重新查看报价
                       </button>
                     </div>
-
-                    <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-800"}`}>
-                      请选择服务商
-                    </h3>
                     
                     {otcProviders.map((provider, index) => (
                       <div 
                         key={index} 
-                        className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all hover:shadow-md hover:border-custom-green`}
+                        onClick={() => setSelectedOtcProvider(index)}
+                        className={`${cardStyle} p-4 rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                          selectedOtcProvider === index 
+                            ? "border-custom-green ring-2 ring-custom-green ring-opacity-20" 
+                            : "hover:border-custom-green"
+                        }`}
                       >
                         <div className="flex items-center justify-between">
                           {/* 左侧：服务商图标和名称 */}
@@ -1727,8 +1746,14 @@ export default function USDTTradePage() {
 
                     {/* 手机端底部按钮 */}
                     <div className="mt-6">
-                      <button className="w-full py-3 bg-custom-green text-white rounded-lg font-medium hover:bg-custom-green/90 transition-all">
-                        使用Ramp 购买
+                      <button className={`w-full py-3 rounded-lg font-medium transition-all ${
+                        selectedOtcProvider !== null
+                          ? "bg-custom-green text-white hover:bg-custom-green/90"
+                          : isDark
+                            ? "border border-gray-400 text-gray-400 cursor-not-allowed"
+                            : "border border-gray-400 text-gray-400 cursor-not-allowed"
+                      }`}>
+                        {selectedOtcProvider !== null ? "使用Ramp购买" : "先选择服务商以继续"}
                       </button>
                     </div>
                   </div>
