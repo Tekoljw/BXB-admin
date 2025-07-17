@@ -265,41 +265,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
           {/* Settings and Language Section */}
           <div className="relative z-10 mt-auto p-4 backdrop-blur-sm">
-            <div className={`flex ${isExpanded ? 'justify-around' : 'flex-col space-y-2'} w-full`}>
-              {/* Theme Toggle */}
-              <button
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="p-3 rounded-xl transition-all duration-500 group relative hover:bg-gradient-to-r hover:from-yellow-500/10 hover:to-orange-500/10 hover:shadow-md hover:shadow-yellow-500/20 hover:-translate-y-1"
-                title={theme === 'dark' ? '切换到浅色模式' : '切换到深色模式'}
-              >
-                <div className="transition-all duration-500 transform group-hover:text-yellow-400 group-hover:rotate-12 group-hover:scale-125">
-                  {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-                </div>
-              </button>
-
-              {/* Language Toggle */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setShowLanguageDropdown(!showLanguageDropdown)
-                }}
-                className={`p-3 rounded-xl transition-all duration-500 group relative ${
-                  showLanguageDropdown 
-                    ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 shadow-md shadow-blue-500/20 -translate-y-1' 
-                    : 'hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-cyan-500/10 hover:shadow-md hover:shadow-blue-500/20 hover:-translate-y-1'
-                }`}
-                title="语言设置"
-              >
-                <div className={`transition-all duration-500 transform ${
-                  showLanguageDropdown 
-                    ? 'text-blue-400 rotate-12 scale-125' 
-                    : 'group-hover:text-blue-400 group-hover:rotate-12 group-hover:scale-125'
-                }`}>
-                  <Globe2 size={20} />
-                </div>
-              </button>
-
-              {/* Notification Button */}
+            <div className="flex justify-center w-full relative">
               <button 
                 onClick={(e) => {
                   e.stopPropagation()
@@ -407,93 +373,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
               </div>
               <h4 style={{ color: theme === 'dark' ? '#f3f4f6' : '#374151', fontSize: '16px', fontWeight: '500', margin: '0 0 8px 0' }}>暂无新通知</h4>
               <p style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>当有新的交易、系统或社交通知时，会在这里显示</p>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
-
-      {/* Language Dropdown Portal - Desktop only */}
-      {!isMobile && mounted && showLanguageDropdown && createPortal(
-        <div 
-          style={{ 
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 999999,
-            pointerEvents: 'none'
-          }}
-          onClick={() => setShowLanguageDropdown(false)}
-        >
-          <div 
-            style={{ 
-              position: 'absolute',
-              left: isExpanded ? '272px' : '112px',
-              bottom: '140px',
-              width: '200px',
-              backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
-              border: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}`,
-              borderRadius: '8px',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-              pointerEvents: 'auto'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{ padding: '8px 0' }}>
-              <button
-                onClick={() => handleLanguageSelect('zh')}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  textAlign: 'left',
-                  background: language === 'zh' ? (theme === 'dark' ? '#374151' : '#f3f4f6') : 'none',
-                  border: 'none',
-                  color: theme === 'dark' ? '#f3f4f6' : '#111827',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: language === 'zh' ? '500' : '400'
-                }}
-                onMouseEnter={(e) => {
-                  if (language !== 'zh') {
-                    e.currentTarget.style.backgroundColor = theme === 'dark' ? '#374151' : '#f9fafb'
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (language !== 'zh') {
-                    e.currentTarget.style.backgroundColor = 'transparent'
-                  }
-                }}
-              >
-                🇨🇳 中文
-              </button>
-              <button
-                onClick={() => handleLanguageSelect('en')}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  textAlign: 'left',
-                  background: language === 'en' ? (theme === 'dark' ? '#374151' : '#f3f4f6') : 'none',
-                  border: 'none',
-                  color: theme === 'dark' ? '#f3f4f6' : '#111827',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: language === 'en' ? '500' : '400'
-                }}
-                onMouseEnter={(e) => {
-                  if (language !== 'en') {
-                    e.currentTarget.style.backgroundColor = theme === 'dark' ? '#374151' : '#f9fafb'
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (language !== 'en') {
-                    e.currentTarget.style.backgroundColor = 'transparent'
-                  }
-                }}
-              >
-                🇺🇸 English
-              </button>
             </div>
           </div>
         </div>,
