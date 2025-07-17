@@ -38,10 +38,7 @@ import MarketPage from "@/app/(dashboard)/market/page"
 import SpotPage from "@/app/(dashboard)/spot/page"
 import FuturesPage from "@/app/(dashboard)/futures/page"
 import FinancePage from "@/app/(dashboard)/finance/page"
-import DiscoverPage from "@/app/(dashboard)/discover/page"
-import TradingPage from "@/app/(dashboard)/trading/page"
 import TetherIcon from "@/components/tether-icon"
-import MobileBottomNavigation from "@/components/mobile-bottom-navigation"
 
 interface InstantNavigationProps {
   onCloseMobile?: () => void
@@ -53,214 +50,234 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  const { theme, language, setTheme, setLanguage } = useTheme()
-
-  // Check for mobile viewport
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768) // md breakpoint
-    }
-    
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  // Mobile navigation items - only 5 items as specified
-  const mobileNavItems = [
-    { path: "/chat", label: "Chat", icon: MessageCircle },
-    { path: "/discover", label: "Discover", icon: Compass },
-    { path: "/usdt-trade", label: "USDT", icon: TetherIcon },
-    { path: "/trading", label: "Trading", icon: BarChart3 },
-    { path: "/wallet", label: "Wallet", icon: Wallet },
-  ]
-
-  // Desktop navigation items - full set
-  const desktopNavItems = [
-    { path: "/chat", label: "聊天", icon: MessageCircle },
-    { path: "/moments", label: "动态", icon: Compass },
-    { path: "/mall", label: "商城", icon: ShoppingBag },
-    { path: "/usdt-trade", label: "USDT交易", icon: TetherIcon },
-    { path: "/market", label: "行情", icon: LineChart },
-    { path: "/spot", label: "现货交易", icon: ArrowLeftRight },
-    { path: "/futures", label: "合约交易", icon: BarChart3 },
-    { path: "/finance", label: "理财", icon: PiggyBank },
-    { path: "/wallet", label: "钱包", icon: Wallet },
-  ]
-
-  const navItems = isMobile ? mobileNavItems : desktopNavItems
 
   useEffect(() => {
     setMounted(true)
-    
-    const handleClick = () => {
-      setShowLanguageDropdown(false)
-      setShowNotificationDropdown(false)
-    }
+  }, [])
+  const [notificationFilter, setNotificationFilter] = useState<"all" | "system" | "activity" | "important">("all")
+  const { theme, setTheme, language, setLanguage } = useTheme()
 
-    document.addEventListener("click", handleClick)
-    return () => document.removeEventListener("click", handleClick)
+  useEffect(() => {
+    // Initialize current page from URL on mount
+    const path = window.location.pathname
+    setCurrentPage(path || "/chat")
   }, [])
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showLanguageDropdown) {
+        setShowLanguageDropdown(false)
+      }
+      if (showNotificationDropdown) {
+        setShowNotificationDropdown(false)
+      }
+    }
+
+    if (showLanguageDropdown || showNotificationDropdown) {
+      document.addEventListener('click', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showLanguageDropdown, showNotificationDropdown])
+
   const navigate = (path: string) => {
-    console.log("Navigating to:", path)
     setCurrentPage(path)
     onCloseMobile?.()
+    // Update URL without triggering page reload
+    window.history.pushState({}, "", path)
   }
 
-  const isActive = (path: string) => {
-    return currentPage === path
-  }
-
-  const handleLanguageSelect = (newLanguage: "en" | "zh") => {
-    setLanguage(newLanguage)
+  const handleLanguageSelect = (lang: "en" | "zh") => {
+    setLanguage(lang)
     setShowLanguageDropdown(false)
   }
 
+  const isActive = (path: string) => currentPage === path
+
+  const navItems = [
+    { path: "/chat", icon: MessageCircle, label: "聊天", component: ChatPage },
+    { path: "/moments", icon: Compass, label: "分享", component: MomentsPage },
+    { path: "/usdt-trade", icon: DollarSign, label: "USDT", component: USDTTradePage },
+    { path: "/market", icon: LineChart, label: "行情", component: MarketPage },
+    { path: "/spot", icon: ArrowLeftRight, label: "现货", component: SpotPage },
+    { path: "/futures", icon: BarChart3, label: "合约", component: FuturesPage },
+    { path: "/finance", icon: PiggyBank, label: "理财", component: FinancePage },
+    { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
+  ]
+
   const renderCurrentPage = () => {
-    // Mobile pages that combine multiple desktop pages
-    if (isMobile) {
-      if (currentPage === "/discover") {
-        return <DiscoverPage />
-      }
-      if (currentPage === "/trading") {
-        return <TradingPage />
-      }
+    const currentItem = navItems.find(item => item.path === currentPage)
+    if (currentItem) {
+      const Component = currentItem.component
+      return <Component />
     }
 
-    // Handle all pages based on current route
-    const pageMap: { [key: string]: React.ComponentType } = {
-      "/chat": ChatPage,
-      "/moments": MomentsPage,
-      "/mall": MallPage,
-      "/usdt-trade": USDTTradePage,
-      "/market": MarketPage,
-      "/spot": SpotPage,
-      "/futures": FuturesPage,
-      "/finance": FinancePage,
-      "/wallet": WalletPage,
-      "/profile": ProfilePage,
+    // Handle profile page separately
+    if (currentPage === "/profile") {
+      return <ProfilePage />
     }
 
-    const PageComponent = pageMap[currentPage]
-    if (PageComponent) {
-      return <PageComponent />
-    }
-
-    // Default fallback
     return <ChatPage />
   }
 
   return (
     <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
-      {/* Desktop Sidebar - Hidden on Mobile */}
-      {!isMobile && (
-        <div 
-          className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl shadow-black/20 relative overflow-hidden h-full`}
-          style={{
-            width: isExpanded ? '256px' : '96px',
-            transition: 'width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
-            minHeight: '100vh',
-          }}
-        >
-          {/* Background Overlay with Static Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-gray-700/5 opacity-50"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent"></div>
-          
-          {/* Header - Hamburger Menu with Glow Effect */}
-          <div className="relative z-10 h-14 flex items-center justify-center px-3 backdrop-blur-sm">
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative overflow-hidden"
-              title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
-            >
-              <div className="relative transition-all duration-300 group-hover:rotate-180">
-                <Menu size={22} />
-              </div>
-            </button>
-          </div>
+      {/* Sidebar */}
+      <div 
+        className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl shadow-black/20 relative overflow-hidden h-full`}
+        style={{
+          width: isExpanded ? '256px' : '96px',
+          transition: 'width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
+          minHeight: '100vh',
+        }}
+      >
+        {/* Background Overlay with Static Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-gray-700/5 opacity-50"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent"></div>
+        
+        {/* Header - Hamburger Menu with Glow Effect */}
+        <div className="relative z-10 h-14 flex items-center justify-center px-3 backdrop-blur-sm">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative overflow-hidden"
+            title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
+          >
+            <div className="relative transition-all duration-300 group-hover:rotate-180">
+              <Menu size={22} />
+            </div>
+          </button>
+        </div>
 
-          {/* User Section with Account Dropdown */}
-          <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-0 py-4'} backdrop-blur-sm`}>
-            <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'} transition-all duration-500`}>
-              <AccountDropdown onNavigate={navigate} />
-              {isExpanded && (
-                <div 
-                  className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
-                  style={{
-                    width: '140px',
-                    opacity: 1,
-                  }}
-                >
-                  <div className="text-sm font-medium text-white whitespace-nowrap text-center">John Doe</div>
-                  <div className="text-xs text-gray-400 whitespace-nowrap text-center">
-                    demo@example.com
-                  </div>
+        {/* User Section with Account Dropdown */}
+        <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-0 py-4'} backdrop-blur-sm`}>
+          <div className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center w-full'} transition-all duration-500`}>
+            <AccountDropdown onNavigate={navigate} />
+            {isExpanded && (
+              <div 
+                className="ml-3 overflow-hidden transition-all duration-500 ease-in-out"
+                style={{
+                  width: '140px',
+                  opacity: 1,
+                }}
+              >
+                <div className="text-sm font-medium text-white whitespace-nowrap text-center">John Doe</div>
+                <div className="text-xs text-gray-400 whitespace-nowrap text-center">
+                  demo@example.com
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
+        </div>
 
-          {/* Navigation with Enhanced Animations */}
-          <div className={`relative z-10 flex-1 ${isExpanded ? 'p-2' : 'p-1'} flex flex-col justify-start min-h-0 overflow-hidden`}>
-            <div className="flex flex-col justify-start pt-4" style={{gap: 'clamp(0.25rem, 2vh, 0.75rem)'}}>
-              {navItems.map((item, index) => {
-                const Icon = item.icon
-                const active = isActive(item.path)
-                return (
-                  <div key={item.path} className="relative group">
-                    <button
-                      onClick={() => navigate(item.path)}
-                      className={`${isExpanded ? 'w-full px-4' : 'w-12 h-12 mx-auto'} flex items-center justify-center rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
-                        active 
-                          ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
-                          : "hover:scale-105 hover:bg-gray-700/20"
-                      }`}
-                      style={{ 
-                        padding: isExpanded ? 'clamp(0.5rem, 1.5vh, 1rem) 1rem' : '0',
-                        animationDelay: `${index * 50}ms`,
-                        animation: 'slideInLeft 0.6s ease-out forwards'
-                      }}
-                      title={!isExpanded ? item.label : undefined}
-                    >
-                      {/* Active Item Background Glow */}
-                      {active && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl"></div>
-                      )}
-                      
-                      <div className={`relative flex items-center transition-all duration-500 ${
-                        active ? 'text-custom-green' : 'text-gray-300 group-hover:text-white'
-                      }`}>
-                        <div className={`transition-all duration-500 ${active ? 'scale-110' : 'group-hover:scale-110'}`}>
-                          {item.icon === TetherIcon ? (
-                            <TetherIcon size={20} />
-                          ) : (
-                            <Icon size={20} />
-                          )}
-                        </div>
-                        {isExpanded && (
-                          <span 
-                            className="ml-3 font-medium whitespace-nowrap transition-all duration-500 ease-in-out"
-                            style={{
-                              opacity: 1,
-                              transform: 'translateX(0)',
-                            }}
-                          >
-                            {item.label}
-                          </span>
-                        )}
+        {/* Navigation with Enhanced Animations */}
+        <div className={`relative z-10 flex-1 ${isExpanded ? 'p-2' : 'p-1'} flex flex-col justify-start min-h-0 overflow-hidden`}>
+          <div className="flex flex-col justify-start pt-4" style={{gap: 'clamp(0.25rem, 2vh, 0.75rem)'}}>
+          {navItems.map((item, index) => {
+            const Icon = item.icon
+            const active = isActive(item.path)
+            return (
+              <div key={item.path} className="relative group">
+                <button
+                  onClick={() => navigate(item.path)}
+                  className={`${isExpanded ? 'w-full px-4' : 'w-12 h-12 mx-auto'} flex items-center justify-center rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
+                    active 
+                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
+                      : "hover:scale-105 hover:bg-gray-700/20"
+                  }`}
+                  style={{ 
+                    padding: isExpanded ? 'clamp(0.5rem, 1.5vh, 1rem) 1rem' : '0',
+                    animationDelay: `${index * 50}ms`,
+                    animation: 'slideInLeft 0.6s ease-out forwards'
+                  }}
+                  title={!isExpanded ? item.label : undefined}
+                >
+                  {/* Active Item Background Glow */}
+                  {active && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl"></div>
+                  )}
+                  
+                  {/* Hover Border Effect - Only for non-active items */}
+                  {!active && (
+                    <div className={`absolute inset-1 border border-custom-green/0 group-hover:border-custom-green/30 transition-all duration-400 ease-in-out ${isExpanded ? 'rounded-lg' : 'rounded-lg'}`}></div>
+                  )}
+                  
+                  {/* Icon with Simple Animation */}
+                  <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
+                    {item.path === '/usdt-trade' ? (
+                      <div className={`transition-all duration-300 ${active ? 'text-custom-green' : 'text-gray-300'}`}>
+                        <TetherIcon className="w-[26px] h-[26px]" />
                       </div>
-                    </button>
+                    ) : (
+                      <Icon size={26} />
+                    )}
                   </div>
-                )
-              })}
-            </div>
+                  
+                  {/* Label with Smooth Slide Animation */}
+                  <div 
+                    className={`${isExpanded ? 'ml-4' : 'ml-0'} overflow-hidden transition-all duration-500 ease-in-out`}
+                    style={{
+                      width: isExpanded ? '120px' : '0px',
+                      opacity: isExpanded ? 1 : 0,
+                    }}
+                  >
+                    <span className={`text-base font-medium whitespace-nowrap transition-all duration-300 ${
+                      active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
+                    }`}>
+                      {item.label}
+                    </span>
+                  </div>
+                  
+                  {/* Active Indicator - Only show when expanded */}
+                  {active && isExpanded && (
+                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full"></div>
+                  )}
+                </button>
+                
+                {/* Tooltip for Collapsed State */}
+                {!isExpanded && (
+                  <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50 whitespace-nowrap shadow-xl border border-gray-600">
+                    {item.label}
+                    <div className="absolute left-0 top-1/2 transform -translate-x-1 -translate-y-1/2 w-2 h-2 bg-gray-800 rotate-45 border-l border-b border-gray-600"></div>
+                  </div>
+                )}
+              </div>
+            )
+          })}
           </div>
+        </div>
 
-          {/* Settings and Language Section */}
-          <div className="relative z-10 mt-auto p-4 backdrop-blur-sm">
+        {/* Footer with Enhanced Controls */}
+        <div className="relative z-10 backdrop-blur-sm">
+          <div className={`${isExpanded ? 'h-20 flex items-center justify-center gap-6' : 'py-4 flex flex-col items-center gap-3'} transition-all duration-500`}>
+            <div className="relative flex justify-center w-full">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setShowLanguageDropdown(!showLanguageDropdown)
+                }}
+                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
+                title="语言选择"
+              >
+                <div className="transition-all duration-300 group-hover:rotate-12 group-hover:text-blue-400">
+                  <Globe2 size={20} />
+                </div>
+              </button>
+
+
+            </div>
+            <div className="flex justify-center w-full">
+              <button 
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group"
+                title={theme === "dark" ? "切换到亮色模式" : "切换到暗色模式"}
+              >
+                <div className="transition-all duration-300 group-hover:rotate-180 group-hover:text-yellow-400">
+                  {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+                </div>
+              </button>
+            </div>
             <div className="flex justify-center w-full relative">
               <button 
                 onClick={(e) => {
@@ -288,23 +305,188 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
                   5
                 </span>
               </button>
+
+
+
+              {/* Real Notification Dropdown */}
+              {false && (
+                <div 
+                  className="fixed bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-600"
+                  style={{ 
+                    position: 'fixed',
+                    zIndex: 999999,
+                    left: isExpanded ? '272px' : '112px',
+                    bottom: '80px',
+                    width: '320px'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Header */}
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-medium text-gray-900 dark:text-white">通知</h3>
+                      <button 
+                        onClick={() => window.location.href = "/notifications"}
+                        className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
+                      >
+                        查看全部
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Filter Tabs */}
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex space-x-1">
+                      {[
+                        { id: 'all', label: '全部' },
+                        { id: 'trading', label: '交易' },
+                        { id: 'system', label: '系统' },
+                        { id: 'social', label: '社交' }
+                      ].map((filter) => (
+                        <button
+                          key={filter.id}
+                          className={`px-3 py-1.5 text-xs rounded-md transition-colors ${
+                            filter.id === 'all'
+                              ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                          }`}
+                        >
+                          {filter.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 text-center">
+                    <div className="mb-4">
+                      <div className="w-16 h-16 mx-auto mb-3 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                        <div className="w-10 h-12 bg-gray-200 dark:bg-gray-600 rounded-sm relative">
+                          <div className="absolute top-2 left-1 w-2 h-2 bg-gray-300 dark:bg-gray-500 rounded-full"></div>
+                          <div className="absolute top-2 right-1 w-2 h-2 bg-gray-300 dark:bg-gray-500 rounded-full"></div>
+                          <div className="absolute bottom-2 left-1 right-1 h-1 bg-gray-300 dark:bg-gray-500 rounded"></div>
+                          <div className="absolute top-1 right-0 w-3 h-3 bg-gray-100 dark:bg-gray-700 transform rotate-45 origin-bottom-left"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">没有新通知</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Original Dropdown */}
+              {false && (
+                <div 
+                  className="fixed w-80 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-600"
+                  style={{ 
+                    position: 'fixed',
+                    zIndex: 999999,
+                    left: isExpanded ? '272px' : '112px',
+                    bottom: '80px',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                    display: 'none'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Header */}
+                  <div className="p-4 border-b border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-medium text-white">通知</h3>
+                      <button 
+                        onClick={() => navigate("/notifications")}
+                        className="text-sm text-blue-400 hover:text-blue-300"
+                      >
+                        查看全部
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Filter Tabs */}
+                  <div className="p-3 border-b border-gray-700">
+                    <div className="flex space-x-1">
+                      {[
+                        { key: "all", label: "全部" },
+                        { key: "system", label: "系统通知" },
+                        { key: "activity", label: "最新活动" },
+                        { key: "important", label: "重要通知" }
+                      ].map((filter) => (
+                        <button
+                          key={filter.key}
+                          onClick={() => setNotificationFilter(filter.key as any)}
+                          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                            notificationFilter === filter.key
+                              ? "bg-blue-600 text-white"
+                              : "text-gray-300 hover:text-white hover:bg-gray-700"
+                          }`}
+                        >
+                          {filter.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 text-center">
+                    <div className="mb-4">
+                      <div className="w-16 h-16 mx-auto mb-3 bg-gray-700 rounded-lg flex items-center justify-center">
+                        <div className="w-10 h-12 bg-gray-600 rounded-sm relative">
+                          <div className="absolute top-2 left-1 w-2 h-2 bg-gray-500 rounded-full"></div>
+                          <div className="absolute top-2 right-1 w-2 h-2 bg-gray-500 rounded-full"></div>
+                          <div className="absolute bottom-2 left-1 right-1 h-1 bg-gray-500 rounded"></div>
+                          <div className="absolute top-1 right-0 w-3 h-3 bg-gray-700 transform rotate-45 origin-bottom-left"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-gray-400 text-sm">没有新通知</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Language Dropdown - Positioned outside navigation */}
+      {showLanguageDropdown && (
+        <div 
+          className="fixed left-20 bottom-20 bg-gray-800 border border-gray-600 rounded-lg shadow-xl py-2 min-w-[120px] z-[9999] animate-in fade-in-0 zoom-in-95 duration-200"
+          onClick={(e) => e.stopPropagation()}
+          style={{ 
+            zIndex: 9999,
+            left: isExpanded ? '272px' : '112px',
+            transition: 'left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)'
+          }}
+        >
+          <button
+            onClick={() => handleLanguageSelect("zh")}
+            className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors duration-200 flex items-center ${
+              language === "zh" ? "text-custom-green" : "text-white"
+            }`}
+          >
+            <span className="mr-2">🇨🇳</span>
+            中文
+            {language === "zh" && <span className="ml-auto text-custom-green">✓</span>}
+          </button>
+          <button
+            onClick={() => handleLanguageSelect("en")}
+            className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors duration-200 flex items-center ${
+              language === "en" ? "text-custom-green" : "text-white"
+            }`}
+          >
+            <span className="mr-2">🇺🇸</span>
+            English
+            {language === "en" && <span className="ml-auto text-custom-green">✓</span>}
+          </button>
+        </div>
       )}
 
-      {/* Main Content */}
-      <div className={`flex-1 overflow-auto ${isMobile ? 'pb-16' : ''}`}>
+      {/* Main Content - Render component directly */}
+      <div className="flex-1 overflow-auto">
         {renderCurrentPage()}
       </div>
 
-      {/* Mobile Bottom Navigation */}
-      {isMobile && (
-        <MobileBottomNavigation currentPage={currentPage} onNavigate={navigate} />
-      )}
-
-      {/* Notification Dropdown Portal - Desktop only */}
-      {!isMobile && mounted && showNotificationDropdown && createPortal(
+      {/* Portal-based Notification Dropdown */}
+      {mounted && showNotificationDropdown && createPortal(
         <div 
           style={{ 
             position: 'fixed',
@@ -331,33 +513,66 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
             }}
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Header */}
             <div style={{ padding: '20px', borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}` }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h3 style={{ color: theme === 'dark' ? '#f3f4f6' : '#111827', fontSize: '18px', fontWeight: '600', margin: 0 }}>
-                  通知
-                </h3>
+                <h3 style={{ fontWeight: '600', fontSize: '16px', color: theme === 'dark' ? '#f9fafb' : '#111827', margin: 0 }}>通知中心</h3>
                 <button 
-                  onClick={() => navigate("/notifications")}
-                  style={{
-                    color: '#3b82f6',
-                    fontSize: '14px',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontWeight: '500'
-                  }}
+                  onClick={() => window.location.href = "/notifications"}
+                  style={{ fontSize: '14px', color: '#2563eb', border: 'none', background: 'none', cursor: 'pointer', fontWeight: '500' }}
                 >
                   查看全部
                 </button>
               </div>
             </div>
 
+            {/* Filter Tabs */}
+            <div style={{ borderBottom: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}` }}>
+              <div style={{ display: 'flex', paddingLeft: '20px', paddingRight: '20px' }}>
+                {[
+                  { id: 'all', label: '全部' },
+                  { id: 'trading', label: '交易通知' },
+                  { id: 'system', label: '系统通知' },
+                  { id: 'social', label: '社交通知' }
+                ].map((filter) => (
+                  <button
+                    key={filter.id}
+                    style={{ 
+                      padding: '12px 0px',
+                      marginRight: '32px',
+                      fontSize: '16px', 
+                      border: 'none',
+                      background: 'transparent',
+                      cursor: 'pointer',
+                      fontWeight: '500',
+                      color: filter.id === 'all' ? (theme === 'dark' ? '#ffffff' : '#000000') : (theme === 'dark' ? '#9ca3af' : '#6b7280'),
+                      borderBottom: filter.id === 'all' ? `2px solid ${theme === 'dark' ? '#ffffff' : '#000000'}` : '2px solid transparent',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (filter.id !== 'all') {
+                        e.currentTarget.style.color = theme === 'dark' ? '#d1d5db' : '#374151'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filter.id !== 'all') {
+                        e.currentTarget.style.color = theme === 'dark' ? '#9ca3af' : '#6b7280'
+                      }
+                    }}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Content */}
             <div style={{ padding: '40px 30px', textAlign: 'center', minHeight: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <div style={{ marginBottom: '20px' }}>
                 <div style={{ 
                   width: '80px', 
                   height: '80px', 
-                  margin: '0 auto 20px auto', 
+                  margin: '0 auto 16px', 
                   backgroundColor: theme === 'dark' ? '#374151' : '#f3f4f6', 
                   borderRadius: '12px', 
                   display: 'flex', 
