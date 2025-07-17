@@ -12464,6 +12464,7 @@ export default function WalletPage() {
           amount: "3.0"
         }
       ],
+      "佣金结算记录": orderRecordsData["资金记录"]["佣金结算记录"] || [],
       "USDT买卖记录": [
         {
           id: "OTC001",
