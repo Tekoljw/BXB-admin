@@ -400,6 +400,9 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Mobile view displays trading pair with volume below, price with high/low range, and color-coded change percentage
   - Implemented responsive design hiding complex desktop columns on mobile devices
   - Added proper border styling and spacing for mobile table rows
+  - Mobile search box moved to independent row below primary tabs for better UX
+  - Replaced card-style mobile headers with simple text display for cleaner interface
+  - Mobile table headers use smaller text and muted colors for better hierarchy
 
 ## User Preferences
 

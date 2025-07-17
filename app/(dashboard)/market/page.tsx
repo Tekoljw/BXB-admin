@@ -503,8 +503,8 @@ export default function MarketPage() {
 
         {/* 两级页签导航和搜索框 */}
         <div className="mb-6">
-          {/* 一级页签和搜索框 */}
-          <div className="flex items-center justify-between mb-4">
+          {/* 桌面端：一级页签和搜索框 */}
+          <div className="hidden md:flex items-center justify-between mb-4">
             <div className="flex items-center space-x-8 relative">
               {mainTabs.map((tab) => (
                 <button
@@ -542,6 +542,53 @@ export default function MarketPage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className={`pl-10 pr-4 py-2 w-64 rounded-lg border text-sm transition-colors ${
+                  isDark
+                    ? "bg-[#1a1d29] border-[#252842] text-white placeholder-gray-400 focus:border-blue-500"
+                    : "bg-white border-gray-200 text-gray-800 placeholder-gray-500 focus:border-blue-500"
+                } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+              />
+            </div>
+          </div>
+
+          {/* 移动端：一级页签 */}
+          <div className="md:hidden mb-4">
+            <div className="flex items-center space-x-6 relative mb-3">
+              {mainTabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveMainTab(tab)}
+                  className={`text-sm transition-all duration-300 relative pb-2 ${
+                    activeMainTab === tab
+                      ? "font-black text-black dark:text-white"
+                      : isDark
+                        ? "font-medium text-gray-400 hover:text-gray-300"
+                        : "font-medium text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  {tab}
+                  {/* 下划线动画 */}
+                  <div
+                    className={`absolute bottom-0 left-0 h-0.5 bg-blue-500 transition-all duration-300 ease-out ${
+                      activeMainTab === tab ? "w-full opacity-100" : "w-0 opacity-0"
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+
+            {/* 移动端搜索框 - 独立一行 */}
+            <div className="relative">
+              <Search
+                className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
+                  isDark ? "text-gray-400" : "text-gray-500"
+                }`}
+              />
+              <input
+                type="text"
+                placeholder="搜索币种"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm transition-colors ${
                   isDark
                     ? "bg-[#1a1d29] border-[#252842] text-white placeholder-gray-400 focus:border-blue-500"
                     : "bg-white border-gray-200 text-gray-800 placeholder-gray-500 focus:border-blue-500"
@@ -618,16 +665,16 @@ export default function MarketPage() {
         </div>
 
         {/* 移动端市场数据标题栏 */}
-        <div className={`md:hidden ${cardStyle} rounded-lg mb-3 border-2 ${isDark ? "border-[#252842]" : "border-gray-300"}`}>
-          <div className="grid grid-cols-3 gap-4 p-4 text-base font-bold">
+        <div className="md:hidden mb-3 px-4">
+          <div className="grid grid-cols-3 gap-4 text-sm font-medium">
             <div className="text-left">
-              {isDark ? <span className="text-white">交易对/成交量</span> : <span className="text-gray-800">交易对/成交量</span>}
+              {isDark ? <span className="text-gray-400">交易对/成交量</span> : <span className="text-gray-600">交易对/成交量</span>}
             </div>
             <div className="text-center">
-              {isDark ? <span className="text-white">价格</span> : <span className="text-gray-800">价格</span>}
+              {isDark ? <span className="text-gray-400">价格</span> : <span className="text-gray-600">价格</span>}
             </div>
             <div className="text-right">
-              {isDark ? <span className="text-white">24H涨跌</span> : <span className="text-gray-800">24H涨跌</span>}
+              {isDark ? <span className="text-gray-400">24H涨跌</span> : <span className="text-gray-600">24H涨跌</span>}
             </div>
           </div>
         </div>
