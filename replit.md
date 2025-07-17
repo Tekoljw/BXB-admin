@@ -389,6 +389,8 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Market content includes top coins, gainers ranking, volume ranking, and complete market data table with price charts
   - Added mobile-specific responsive design: hidden top 6 cards (top coins, gainers ranking, volume ranking) on mobile devices (< 768px)
   - Mobile displays only the market data table for better user experience on small screens
+  - Applied same mobile responsive design to main menu market page: hidden top 6 cards (4 top coins + 2 ranking cards) on mobile devices
+  - Both mobile market tab and main market page now show only market data table with navigation tabs on mobile
 
 ## User Preferences
 

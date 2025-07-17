@@ -389,8 +389,8 @@ export default function MarketPage() {
     <>
       <style dangerouslySetInnerHTML={{ __html: scrollbarHideStyle }} />
       <div className={`p-6 min-h-screen ${isDark ? "bg-background" : "bg-[#f5f8fa]"}`}>
-        {/* 顶部重点币种卡片 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {/* 顶部重点币种卡片 - 手机端隐藏 */}
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {topCoins.map((coin, index) => (
             <div key={index} className={`${cardStyle} rounded-lg p-6 ${isDark ? "text-white" : "text-gray-800"}`}>
               <div className="flex items-center justify-between mb-4">
@@ -417,8 +417,8 @@ export default function MarketPage() {
           ))}
         </div>
 
-        {/* 涨幅排行和最高交易额 - 两个独立卡片 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+        {/* 涨幅排行和最高交易额 - 两个独立卡片 - 手机端隐藏 */}
+        <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
           {/* 涨幅排行卡片 */}
           <div className={`${cardStyle} rounded-lg p-6`}>
             <h3 className={`${isDark ? "text-white" : "text-gray-800"} text-lg font-bold mb-4`}>涨幅排行</h3>
