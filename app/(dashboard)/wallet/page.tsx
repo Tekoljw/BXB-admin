@@ -2954,37 +2954,7 @@ export default function WalletPage() {
                 )
               })}
               
-              {/* 记录按钮 - 垂直布局 */}
-              <Button
-                onClick={() => {
-                  setTopLevelTab("订单记录")
-                  setOrderTab("资金记录")
-                  setSecondaryTab("deposit")
-                }}
-                onMouseDown={() => setClickedAction("fund-records")}
-                onMouseUp={() => setClickedAction("")}
-                onMouseLeave={() => setClickedAction("")}
-                className={`h-16 px-2 transition-all duration-200 text-xs font-bold flex-1 flex-col ${
-                  clickedAction === "fund-records"
-                    ? "bg-[#00D4AA] text-white border-[#00D4AA]"
-                    : selectedAction === "fund-records"
-                      ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
-                      : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                }`}
-                variant="outline"
-                title="资金记录"
-              >
-                <FileText 
-                  className={`h-6 w-6 mb-1 transition-colors ${
-                    clickedAction === "fund-records"
-                      ? "text-white"
-                      : selectedAction === "fund-records" 
-                        ? "text-[#00D4AA]"
-                        : "text-black dark:text-white"
-                  }`} 
-                />
-                <span>记录</span>
-              </Button>
+
             </div>
 
             {/* 详细内容区域 */}
