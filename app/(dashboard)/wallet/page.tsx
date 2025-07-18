@@ -3141,7 +3141,7 @@ export default function WalletPage() {
             {/* 六个卡片布局 - 移动端和桌面端都是三列 */}
             <div className="grid grid-cols-3 gap-2 md:gap-4">
               {/* 第一排 */}
-              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4`}>
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xs md:text-sm font-medium">总资产</h3>
                   <button
@@ -3174,14 +3174,14 @@ export default function WalletPage() {
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4`}>
                 <h3 className="text-xs md:text-sm font-medium mb-2">净资产</h3>
                 <div className="text-lg md:text-2xl font-bold text-[#00D4AA] transition-all duration-500">
                   {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4`}>
                 <h3 className="text-xs md:text-sm font-medium mb-2">未实现盈亏</h3>
                 <div className="text-lg md:text-2xl font-bold text-green-500 transition-all duration-500">
                   {balanceVisible ? contractData.unrealizedPnL : "****"}
@@ -3189,7 +3189,7 @@ export default function WalletPage() {
               </div>
               
               {/* 第二排 */}
-              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4`}>
                 <h3 className="text-xs md:text-sm font-medium mb-2">已实现盈亏</h3>
                 <div className="space-y-1">
                   <div className="flex justify-between items-center">
@@ -3203,14 +3203,14 @@ export default function WalletPage() {
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4`}>
                 <h3 className="text-xs md:text-sm font-medium mb-2">已用保证金</h3>
                 <div className="text-lg md:text-2xl font-bold transition-all duration-500">
                   {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4`}>
                 <h3 className="text-xs md:text-sm font-medium mb-2">可用保证金</h3>
                 <div className="text-lg md:text-2xl font-bold transition-all duration-500">
                   {balanceVisible ? convertBalance(contractData.marginAvailable, "USDT", selectedDisplayCurrency) : "****"}
