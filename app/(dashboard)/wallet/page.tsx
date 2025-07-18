@@ -3365,11 +3365,11 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 移动端：操作按钮在上，标签页在下 */}
-            <div className="md:hidden space-y-4">
-              {/* 第一行：操作按钮 */}
+            {/* 移动端：操作按钮 */}
+            <div className="md:hidden">
+              {/* 操作按钮行 */}
               <div className="flex gap-2 justify-center">
-                {/* 划转和交易按钮 */}
+                {/* 划转和交易按钮 - 垂直布局 */}
                 {[
                   { id: "transfer", label: "划转", icon: ArrowLeftRight },
                   { id: "trade", label: "交易", icon: TrendingUp }
@@ -3385,7 +3385,7 @@ export default function WalletPage() {
                       onMouseDown={() => setClickedAction(button.id)}
                       onMouseUp={() => setClickedAction("")}
                       onMouseLeave={() => setClickedAction("")}
-                      className={`h-10 px-3 transition-all duration-200 text-sm font-bold ${
+                      className={`h-16 flex flex-col items-center justify-center px-3 transition-all duration-200 text-xs font-bold ${
                         isClicked
                           ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                           : isSelected 
@@ -3394,13 +3394,13 @@ export default function WalletPage() {
                       }`}
                       variant="outline"
                     >
-                      <Icon className="h-4 w-4 mr-1" />
+                      <Icon className="h-6 w-6 mb-1" />
                       {button.label}
                     </Button>
                   )
                 })}
                 
-                {/* 图标按钮区域 */}
+                {/* 资金记录按钮 - 垂直布局 */}
                 <Button
                   onClick={() => {
                     setTopLevelTab("订单记录")
@@ -3410,18 +3410,17 @@ export default function WalletPage() {
                   onMouseDown={() => setClickedAction("contract-fund-records")}
                   onMouseUp={() => setClickedAction("")}
                   onMouseLeave={() => setClickedAction("")}
-                  className={`h-10 w-10 transition-all duration-200 ${
+                  className={`h-16 flex flex-col items-center justify-center px-3 transition-all duration-200 text-xs font-bold ${
                     clickedAction === "contract-fund-records"
-                      ? "bg-[#00D4AA] border-[#00D4AA]"
+                      ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                       : selectedAction === "contract-fund-records"
-                        ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                        ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                   }`}
                   variant="outline"
-                  title="资金记录"
                 >
                   <FileText 
-                    className={`h-4 w-4 transition-colors ${
+                    className={`h-6 w-6 mb-1 transition-colors ${
                       clickedAction === "contract-fund-records"
                         ? "text-white"
                         : selectedAction === "contract-fund-records" 
@@ -3429,8 +3428,10 @@ export default function WalletPage() {
                           : "text-black dark:text-white"
                     }`} 
                   />
+                  资金记录
                 </Button>
 
+                {/* 交易记录按钮 - 垂直布局 */}
                 <Button
                   onClick={() => {
                     setTopLevelTab("订单记录")
@@ -3440,18 +3441,17 @@ export default function WalletPage() {
                   onMouseDown={() => setClickedAction("contract-trade-records")}
                   onMouseUp={() => setClickedAction("")}
                   onMouseLeave={() => setClickedAction("")}
-                  className={`h-10 w-10 transition-all duration-200 ${
+                  className={`h-16 flex flex-col items-center justify-center px-3 transition-all duration-200 text-xs font-bold ${
                     clickedAction === "contract-trade-records"
-                      ? "bg-[#00D4AA] border-[#00D4AA]"
+                      ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                       : selectedAction === "contract-trade-records"
-                        ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                        ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                   }`}
                   variant="outline"
-                  title="交易记录"
                 >
                   <BarChart2 
-                    className={`h-4 w-4 transition-colors ${
+                    className={`h-6 w-6 mb-1 transition-colors ${
                       clickedAction === "contract-trade-records"
                         ? "text-white"
                         : selectedAction === "contract-trade-records" 
@@ -3459,15 +3459,7 @@ export default function WalletPage() {
                           : "text-black dark:text-white"
                     }`} 
                   />
-                </Button>
-
-                <Button
-                  onClick={() => setShowPositionModal(true)}
-                  className={`h-10 w-10 transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800`}
-                  variant="outline"
-                  title="仓位分布"
-                >
-                  <PieChart className="h-4 w-4 text-black dark:text-white" />
+                  交易记录
                 </Button>
               </div>
 
@@ -3476,8 +3468,9 @@ export default function WalletPage() {
             
             {/* 内容区域 - 根据选中的按钮显示不同内容 */}
             <div className={`${cardStyle} rounded-lg p-6`}>
-              {/* 移动端：在内容卡片内显示标签页 */}
-              <div className="md:hidden mb-4 flex justify-center">
+              {/* 移动端：在内容卡片内显示标签页和仓位分布按钮 */}
+              <div className="md:hidden mb-4 flex justify-between items-center">
+                {/* 左侧：标签页 */}
                 <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                   {/* 滑动背景 */}
                   <div
@@ -3513,12 +3506,23 @@ export default function WalletPage() {
                     </button>
                   ))}
                 </div>
+                
+                {/* 右侧：仓位分布按钮 */}
+                <Button
+                  onClick={() => setShowPositionModal(true)}
+                  className={`h-10 w-10 transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800`}
+                  variant="outline"
+                  title="仓位分布"
+                >
+                  <PieChart className="h-4 w-4 text-black dark:text-white" />
+                </Button>
               </div>
 
               {selectedAction === "account-balance" ? (
                 /* 账户余额界面 */
                 <div className="space-y-4">
-                  <div className="overflow-x-auto">
+                  {/* 桌面端：表格布局 */}
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
@@ -3596,6 +3600,93 @@ export default function WalletPage() {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* 移动端：卡片布局 */}
+                  <div className="md:hidden space-y-3">
+                    {[
+                      {
+                        symbol: "USDT",
+                        name: "Tether USD",
+                        accountBalance: "8,567.89",
+                        unrealizedPnL: "+234.56",
+                        netAssets: "8,802.45",
+                        marginBalance: "2,500.00"
+                      },
+                      {
+                        symbol: "BTC",
+                        name: "Bitcoin",
+                        accountBalance: "0.15234",
+                        unrealizedPnL: "-45.67",
+                        netAssets: "6,789.23",
+                        marginBalance: "1,200.00"
+                      },
+                      {
+                        symbol: "ETH",
+                        name: "Ethereum",
+                        accountBalance: "2.5678",
+                        unrealizedPnL: "+123.45",
+                        netAssets: "8,456.78",
+                        marginBalance: "800.00"
+                      },
+                      {
+                        symbol: "BNB",
+                        name: "BNB",
+                        accountBalance: "12.4567",
+                        unrealizedPnL: "+67.89",
+                        netAssets: "3,234.56",
+                        marginBalance: "500.00"
+                      }
+                    ].map((currency, index) => (
+                      <div key={currency.symbol} className={`p-4 rounded-lg border transition-all hover:shadow-md ${
+                        isDark 
+                          ? 'border-[#3a3d4a] bg-[#1a1d29] hover:bg-[#252842]' 
+                          : 'border-gray-200 bg-white hover:bg-gray-50'
+                      }`}>
+                        {/* 顶部：币种信息 */}
+                        <div className="flex items-center space-x-3 mb-3">
+                          <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                            <span className="text-[#00D4AA] font-bold text-sm">{currency.symbol.charAt(0)}</span>
+                          </div>
+                          <div>
+                            <div className="font-medium text-lg">{currency.symbol}</div>
+                            <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {currency.name}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* 底部：四个数据项 */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>账户余额</div>
+                            <div className="font-semibold text-sm">
+                              {balanceVisible ? currency.accountBalance : "****"}
+                            </div>
+                          </div>
+                          <div>
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>未实现盈亏</div>
+                            <div className={`font-semibold text-sm ${
+                              currency.unrealizedPnL.startsWith('+') ? 'text-green-500' : 'text-red-500'
+                            }`}>
+                              {balanceVisible ? currency.unrealizedPnL : "****"}
+                            </div>
+                          </div>
+                          <div>
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>净资产余额</div>
+                            <div className="font-semibold text-sm text-[#00D4AA]">
+                              {balanceVisible ? currency.netAssets : "****"}
+                            </div>
+                          </div>
+                          <div>
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>保证金余额</div>
+                            <div className="font-semibold text-sm">
+                              {balanceVisible ? currency.marginBalance : "****"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ) : (
