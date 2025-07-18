@@ -15054,10 +15054,10 @@ export default function WalletPage() {
 
             {/* 右侧顶级页签导航 - 移动端适中大小居右 */}
             <div className="relative">
-              <div className={`flex rounded-lg p-1 bg-white/20 md:bg-[#252842] md:dark:bg-[#252842] border border-white/30 md:border-none`}>
+              <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                 {/* 滑动背景 */}
                 <div
-                  className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out bg-white md:bg-white md:dark:bg-white ${
+                  className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'} ${
                     topLevelTab === "账户资产" ? "left-1" : "left-1/2"
                   }`}
                 />
@@ -15067,8 +15067,10 @@ export default function WalletPage() {
                     key={tab}
                     className={`relative z-10 px-4 py-1.5 text-sm font-medium transition-all duration-300 ${
                       topLevelTab === tab
-                        ? "text-black md:text-black md:dark:text-black"
-                        : "text-white/70 hover:text-white md:text-gray-300 md:hover:text-white md:dark:text-gray-300 md:dark:hover:text-white"
+                        ? isDark ? "text-black" : "text-white"
+                        : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-700 hover:text-gray-900"
                     }`}
                     onClick={() => setTopLevelTab(tab)}
                   >
