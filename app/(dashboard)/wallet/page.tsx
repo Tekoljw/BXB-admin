@@ -2991,7 +2991,9 @@ export default function WalletPage() {
                               : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
                           }`}
                         >
-                          按余额排序 {sortBy === "value" && (sortOrder === "desc" ? <ArrowDown className="inline h-3 w-3 ml-1" /> : <ArrowUp className="inline h-3 w-3 ml-1" />)}
+                          <span className="hidden md:inline">按余额排序</span>
+                          <span className="md:hidden">余额</span>
+                          {sortBy === "value" && (sortOrder === "desc" ? <ArrowDown className="inline h-3 w-3 ml-1" /> : <ArrowUp className="inline h-3 w-3 ml-1" />)}
                         </button>
                         <button
                           onClick={() => {
@@ -3004,7 +3006,9 @@ export default function WalletPage() {
                               : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
                           }`}
                         >
-                          按市值排序 {sortBy === "marketCap" && (sortOrder === "desc" ? <ArrowDown className="inline h-3 w-3 ml-1" /> : <ArrowUp className="inline h-3 w-3 ml-1" />)}
+                          <span className="hidden md:inline">按市值排序</span>
+                          <span className="md:hidden">市值</span>
+                          {sortBy === "marketCap" && (sortOrder === "desc" ? <ArrowDown className="inline h-3 w-3 ml-1" /> : <ArrowUp className="inline h-3 w-3 ml-1" />)}
                         </button>
                       </div>
                     </div>
