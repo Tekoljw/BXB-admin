@@ -523,6 +523,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Hidden mobile record button from operation buttons row, displaying only 4 main action buttons (入金, 提币, 交易, 划转)
   - Updated mobile tab layout: left side shows "现金账户/总资产" tabs, right side shows 3 functional icon buttons
   - Enhanced space utilization with justified layout between tabs and icons on mobile devices
+- January 30, 2025. Optimized contract account mobile button layout:
+  - Modified contract account mobile operation buttons to uniform size distribution across full screen width
+  - Applied flex-1 class to all four buttons (划转, 交易, 资金记录, 交易记录) for equal width allocation
+  - Reduced horizontal padding from px-3 to px-2 to accommodate equal distribution
+  - Removed justify-center from button container to allow natural flex distribution
+  - Enhanced mobile user experience with consistent button sizing and full-width utilization
 
 ## User Preferences
 

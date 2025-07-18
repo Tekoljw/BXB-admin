@@ -3380,8 +3380,8 @@ export default function WalletPage() {
 
             {/* 移动端：操作按钮 */}
             <div className="md:hidden">
-              {/* 操作按钮行 */}
-              <div className="flex gap-2 justify-center">
+              {/* 操作按钮行 - 四个按钮均匀分布 */}
+              <div className="flex gap-2">
                 {/* 划转和交易按钮 - 垂直布局 */}
                 {[
                   { id: "transfer", label: "划转", icon: ArrowLeftRight },
@@ -3398,7 +3398,7 @@ export default function WalletPage() {
                       onMouseDown={() => setClickedAction(button.id)}
                       onMouseUp={() => setClickedAction("")}
                       onMouseLeave={() => setClickedAction("")}
-                      className={`h-16 flex flex-col items-center justify-center px-3 transition-all duration-200 text-xs font-bold ${
+                      className={`h-16 flex flex-col items-center justify-center px-2 transition-all duration-200 text-xs font-bold flex-1 ${
                         isClicked
                           ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                           : isSelected 
@@ -3423,7 +3423,7 @@ export default function WalletPage() {
                   onMouseDown={() => setClickedAction("contract-fund-records")}
                   onMouseUp={() => setClickedAction("")}
                   onMouseLeave={() => setClickedAction("")}
-                  className={`h-16 flex flex-col items-center justify-center px-3 transition-all duration-200 text-xs font-bold ${
+                  className={`h-16 flex flex-col items-center justify-center px-2 transition-all duration-200 text-xs font-bold flex-1 ${
                     clickedAction === "contract-fund-records"
                       ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                       : selectedAction === "contract-fund-records"
@@ -3454,7 +3454,7 @@ export default function WalletPage() {
                   onMouseDown={() => setClickedAction("contract-trade-records")}
                   onMouseUp={() => setClickedAction("")}
                   onMouseLeave={() => setClickedAction("")}
-                  className={`h-16 flex flex-col items-center justify-center px-3 transition-all duration-200 text-xs font-bold ${
+                  className={`h-16 flex flex-col items-center justify-center px-2 transition-all duration-200 text-xs font-bold flex-1 ${
                     clickedAction === "contract-trade-records"
                       ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                       : selectedAction === "contract-trade-records"
@@ -3475,8 +3475,6 @@ export default function WalletPage() {
                   交易记录
                 </Button>
               </div>
-
-
             </div>
             
             {/* 内容区域 - 根据选中的按钮显示不同内容 */}
