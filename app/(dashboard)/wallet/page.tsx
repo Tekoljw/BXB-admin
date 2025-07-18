@@ -2620,13 +2620,15 @@ export default function WalletPage() {
             </div>
 
             {/* 主要卡片选择 - 移动端适配 */}
-            <div className="grid grid-cols-2 gap-3 md:gap-6">
-              {/* 现金账户卡片 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
+              {/* 现金账户卡片 - 移动端根据页签决定是否显示 */}
               <div 
                 className={`${cardStyle} rounded-lg p-3 md:p-6 transition-all duration-300 ease-out ${
                   overviewMode === "现金账户" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
                     : ""
+                } ${
+                  overviewTab === "现金账户" ? "block" : "hidden md:block"
                 }`}
               >
                 <>
@@ -2681,12 +2683,14 @@ export default function WalletPage() {
                 </>
               </div>
 
-              {/* 总资产卡片 */}
+              {/* 总资产卡片 - 移动端根据页签决定是否显示 */}
               <div 
                 className={`${cardStyle} rounded-lg p-3 md:p-6 transition-all duration-300 ease-out ${
                   overviewMode === "总资产" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
                     : ""
+                } ${
+                  overviewTab === "总资产" ? "block" : "hidden md:block"
                 }`}
               >
                 <>
