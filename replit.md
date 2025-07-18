@@ -502,6 +502,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Reduced gap between cards on mobile (gap-2) while maintaining desktop spacing (md:gap-4)
   - Six contract cards now arranged in 2 rows × 3 columns on both mobile and desktop
   - Enhanced mobile user experience with appropriately sized text and spacing
+- January 30, 2025. Redesigned contract account mobile navigation layout:
+  - Separated desktop and mobile layouts: desktop maintains horizontal layout with tabs and buttons on same row
+  - Mobile layout: operation buttons (划转, 交易, 记录按钮) appear in first row, centered with gap-2 spacing
+  - Mobile layout: tabs (当前持仓, 账户余额) appear in second row below buttons, centered with sliding background
+  - Applied responsive design with hidden md:flex for desktop and md:hidden for mobile sections
+  - Enhanced mobile UX with two-row vertical stacking for better touch accessibility
 
 ## User Preferences
 
