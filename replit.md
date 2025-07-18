@@ -443,6 +443,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Applied PC-style selection styling (border-[#00D4AA] with scale-105 effect) to mobile sidebar menu items
   - Created proper animation states with opacity transitions for overlay background
   - Enhanced mobile user experience with intuitive gesture-based navigation
+- January 30, 2025. Optimized wallet overview mobile layout with single card display:
+  - Added mobile-specific account type tabs (现金账户/总资产) above cards with full-width centered layout
+  - Implemented conditional card rendering: single card display on mobile based on selected tab
+  - Hidden desktop account type tabs and operation buttons section on mobile for cleaner interface
+  - Created separate mobile operation buttons section with horizontal scrolling and flex-shrink-0 styling
+  - Enhanced mobile UX with proper tab animations and responsive button layout
+  - Maintained all functionality while providing streamlined mobile interface
 
 ## User Preferences
 

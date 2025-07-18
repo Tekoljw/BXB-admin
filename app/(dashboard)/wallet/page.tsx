@@ -2582,22 +2582,22 @@ export default function WalletPage() {
       case "钱包总览":
         return (
           <div className="space-y-6">
-            {/* 移动端账户类型选择 - 仅在移动端显示 */}
-            <div className="md:hidden">
-              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+            {/* 移动端账户类型选择 - 仅在移动端显示，全屏宽度居中 */}
+            <div className="md:hidden flex justify-center">
+              <div className={`relative flex rounded-lg p-1 w-full max-w-xs ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                 {/* 滑动背景 */}
                 <div
                   className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
                   style={{
-                    width: overviewTab === "现金账户" ? '96px' : '80px',
-                    left: overviewTab === "现金账户" ? '4px' : '100px'
+                    width: '50%',
+                    left: overviewTab === "现金账户" ? '4px' : '50%'
                   }}
                 />
                 {/* 按钮 */}
                 {["现金账户", "总资产"].map((tab, index) => (
                   <button
                     key={tab}
-                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 flex-1 ${
                       overviewTab === tab
                         ? isDark ? "text-black" : "text-white"
                         : isDark
@@ -2605,8 +2605,7 @@ export default function WalletPage() {
                         : "text-gray-700 hover:text-gray-900"
                     }`}
                     style={{
-                      width: tab === "现金账户" ? '96px' : '80px',
-                      height: '32px'
+                      height: '36px'
                     }}
                     onClick={() => {
                       setOverviewTab(tab)
@@ -2714,8 +2713,8 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 钱包总览标签页和操作按钮 */}
-            <div className="flex justify-between items-center">
+            {/* 钱包总览标签页和操作按钮 - 桌面端显示 */}
+            <div className="hidden md:flex justify-between items-center">
               {/* 左侧：标签页 */}
               <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                 {/* 滑动背景 */}
@@ -2877,6 +2876,127 @@ export default function WalletPage() {
                     />
                   </Button>
                 </div>
+            </div>
+
+            {/* 移动端操作按钮 - 仅在移动端显示 */}
+            <div className="md:hidden flex gap-2 overflow-x-auto pb-2">
+              {/* 主要操作按钮 */}
+              {actionButtons.map((button) => {
+                const Icon = button.icon
+                const isSelected = selectedAction === button.id
+                const isClicked = clickedAction === button.id
+                const isDeposit = button.id === "入金"
+                
+                return (
+                  <Button 
+                    key={button.id}
+                    onClick={() => handleActionClick(button.id)}
+                    onMouseDown={() => setClickedAction(button.id)}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-10 px-3 transition-all duration-200 text-sm font-bold flex-shrink-0 ${
+                      isClicked
+                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                        : isSelected 
+                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                          : isDeposit
+                            ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90"
+                            : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant={isSelected ? "outline" : isDeposit ? "default" : "outline"}
+                  >
+                    <Icon className="h-4 w-4 mr-1" />
+                    {button.label}
+                  </Button>
+                )
+              })}
+              
+              {/* 图标按钮 */}
+              <Button
+                onClick={() => {
+                  setTopLevelTab("订单记录")
+                  setOrderTab("资金记录")
+                  setSecondaryTab("deposit")
+                }}
+                onMouseDown={() => setClickedAction("fund-records")}
+                onMouseUp={() => setClickedAction("")}
+                onMouseLeave={() => setClickedAction("")}
+                className={`h-10 w-10 transition-all duration-200 flex-shrink-0 ${
+                  clickedAction === "fund-records"
+                    ? "bg-[#00D4AA] border-[#00D4AA]"
+                    : selectedAction === "fund-records"
+                      ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                }`}
+                variant="outline"
+                title="资金记录"
+              >
+                <FileText 
+                  className={`h-4 w-4 transition-colors ${
+                    clickedAction === "fund-records"
+                      ? "text-white"
+                      : selectedAction === "fund-records" 
+                        ? "text-[#00D4AA]"
+                        : "text-black dark:text-white"
+                  }`} 
+                />
+              </Button>
+
+              <Button
+                onClick={() => {
+                  setTopLevelTab("订单记录")
+                  setOrderTab("现货订单")
+                  setSecondaryTab("current")
+                }}
+                onMouseDown={() => setClickedAction("order-records")}
+                onMouseUp={() => setClickedAction("")}
+                onMouseLeave={() => setClickedAction("")}
+                className={`h-10 w-10 transition-all duration-200 flex-shrink-0 ${
+                  clickedAction === "order-records"
+                    ? "bg-[#00D4AA] border-[#00D4AA]"
+                    : selectedAction === "order-records"
+                      ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                }`}
+                variant="outline"
+                title="订单记录"
+              >
+                <BarChart2 
+                  className={`h-4 w-4 transition-colors ${
+                    clickedAction === "order-records"
+                      ? "text-white"
+                      : selectedAction === "order-records" 
+                        ? "text-[#00D4AA]"
+                        : "text-black dark:text-white"
+                  }`} 
+                />
+              </Button>
+
+              <Button
+                onClick={handlePositionModalClick}
+                onMouseDown={() => setClickedAction("position-distribution")}
+                onMouseUp={() => setClickedAction("")}
+                onMouseLeave={() => setClickedAction("")}
+                className={`h-10 w-10 transition-all duration-200 flex-shrink-0 ${
+                  clickedAction === "position-distribution"
+                    ? "bg-[#00D4AA] border-[#00D4AA]"
+                    : selectedAction === "position-distribution"
+                      ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                }`}
+                variant="outline"
+                title="仓位分布"
+              >
+                <PieChart 
+                  className={`h-4 w-4 transition-colors ${
+                    clickedAction === "position-distribution"
+                      ? "text-white"
+                      : selectedAction === "position-distribution" 
+                        ? "text-[#00D4AA]"
+                        : "text-black dark:text-white"
+                  }`} 
+                />
+              </Button>
             </div>
 
             {/* 详细内容区域 */}
