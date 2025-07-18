@@ -15145,32 +15145,31 @@ export default function WalletPage() {
               </h1>
             </div>
 
-            {/* 右侧顶级页签导航 - 移动端适中大小居右 */}
-            <div className="relative">
-              <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
-                {/* 滑动背景 */}
-                <div
-                  className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'} ${
-                    topLevelTab === "账户资产" ? "left-1" : "left-1/2"
+            {/* 右侧顶级页签导航 - 移动端文字+下划线样式 */}
+            <div className="flex items-center space-x-6">
+              {["账户资产", "订单记录"].map((tab) => (
+                <button
+                  key={tab}
+                  className={`relative pb-1 text-sm font-medium transition-all duration-300 ${
+                    topLevelTab === tab
+                      ? isDark ? "text-white" : "text-gray-900"
+                      : isDark
+                      ? "text-gray-400 hover:text-gray-200"
+                      : "text-gray-600 hover:text-gray-800"
                   }`}
-                />
-                {/* 按钮 */}
-                {["账户资产", "订单记录"].map((tab) => (
-                  <button
-                    key={tab}
-                    className={`relative z-10 px-4 py-1.5 text-sm font-medium transition-all duration-300 ${
+                  onClick={() => setTopLevelTab(tab)}
+                >
+                  {tab}
+                  {/* 下划线 */}
+                  <div
+                    className={`absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-300 ${
                       topLevelTab === tab
-                        ? isDark ? "text-black" : "text-white"
-                        : isDark
-                        ? "text-gray-300 hover:text-white"
-                        : "text-gray-700 hover:text-gray-900"
+                        ? isDark ? "bg-white" : "bg-gray-900"
+                        : "bg-transparent"
                     }`}
-                    onClick={() => setTopLevelTab(tab)}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
+                  />
+                </button>
+              ))}
             </div>
           </div>
 
