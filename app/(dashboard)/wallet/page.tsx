@@ -2921,7 +2921,7 @@ export default function WalletPage() {
                 onMouseDown={() => setClickedAction("fund-records")}
                 onMouseUp={() => setClickedAction("")}
                 onMouseLeave={() => setClickedAction("")}
-                className={`h-16 px-2 transition-all duration-200 text-xs font-bold flex-shrink-0 flex-col ${
+                className={`h-16 px-2 transition-all duration-200 text-xs font-bold flex-1 flex-col ${
                   clickedAction === "fund-records"
                     ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                     : selectedAction === "fund-records"

@@ -471,6 +471,7 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Added flex-col class and proper spacing (mb-1) between icon and text
   - Updated text size to text-xs for compact mobile display
   - Applied vertical layout to all 5 buttons: 入金, 提币, 交易, 划转, 记录
+  - Made all buttons equal width using flex-1 class for consistent sizing
   - Enhanced mobile user experience with touch-friendly larger icons and cleaner visual hierarchy
 
 ## User Preferences
