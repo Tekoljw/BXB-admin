@@ -15152,7 +15152,7 @@ export default function WalletPage() {
                   key={tab}
                   className={`relative pb-1 transition-all duration-300 ${
                     topLevelTab === tab
-                      ? "text-base font-bold text-[#00D4AA]"
+                      ? isDark ? "text-base font-bold text-white" : "text-base font-bold text-gray-900"
                       : isDark
                       ? "text-sm font-medium text-gray-400 hover:text-gray-200"
                       : "text-sm font-medium text-gray-600 hover:text-gray-800"
@@ -15164,7 +15164,7 @@ export default function WalletPage() {
                   <div
                     className={`absolute bottom-0 left-0 right-0 transition-all duration-300 ${
                       topLevelTab === tab
-                        ? "h-1 bg-[#00D4AA]"
+                        ? isDark ? "h-1 bg-white" : "h-1 bg-gray-900"
                         : "h-0 bg-transparent"
                     }`}
                   />
