@@ -15307,7 +15307,7 @@ export default function WalletPage() {
         </div>
       )}
 
-      {/* 币种选择弹窗 - 从右侧滑出 */}
+      {/* 币种选择弹窗 - PC从右侧滑出，移动端从底部滑出 */}
       {showCurrencyModal && (
         <div className="fixed inset-0 z-50">
           {/* 背景遮罩 */}
@@ -15317,10 +15317,14 @@ export default function WalletPage() {
             }`}
             onClick={closeCurrencyModal}
           />
-          {/* 侧边栏 */}
-          <div className={`absolute right-0 top-0 h-full w-80 max-w-[90vw] ${cardStyle} transition-duration-300 ease-out ${
-            currencyModalAnimating ? 'translate-x-0' : 'translate-x-full'
-          }`}>
+          {/* 弹窗容器 - 响应式定位 */}
+          <div className={`absolute ${cardStyle} transition-all duration-300 ease-out 
+            md:right-0 md:top-0 md:h-full md:w-80 md:max-w-[90vw] ${
+              currencyModalAnimating ? 'md:translate-x-0' : 'md:translate-x-full'
+            }
+            max-md:bottom-0 max-md:left-0 max-md:right-0 max-md:max-h-[80vh] max-md:rounded-t-2xl ${
+              currencyModalAnimating ? 'max-md:translate-y-0' : 'max-md:translate-y-full'
+            }`}>
             <div className="p-6 h-full overflow-y-auto">
               {/* 币种类型切换 */}
               <div className="flex justify-center mb-6">
@@ -15496,7 +15500,7 @@ export default function WalletPage() {
         </div>
       )}
 
-      {/* 添加资产弹窗 - 从右侧滑出 */}
+      {/* 添加资产弹窗 - PC从右侧滑出，移动端从底部滑出 */}
       {showAddAssetModal && (
         <div className="fixed inset-0 z-50">
           {/* 背景遮罩 */}
@@ -15506,10 +15510,14 @@ export default function WalletPage() {
             }`}
             onClick={closeAddAssetModal}
           />
-          {/* 侧边栏 */}
-          <div className={`absolute right-0 top-0 h-full w-96 max-w-[90vw] ${cardStyle} transition-duration-300 ease-out ${
-            addAssetModalAnimating ? 'translate-x-0' : 'translate-x-full'
-          }`}>
+          {/* 弹窗容器 - 响应式定位 */}
+          <div className={`absolute ${cardStyle} transition-all duration-300 ease-out 
+            md:right-0 md:top-0 md:h-full md:w-96 md:max-w-[90vw] ${
+              addAssetModalAnimating ? 'md:translate-x-0' : 'md:translate-x-full'
+            }
+            max-md:bottom-0 max-md:left-0 max-md:right-0 max-md:max-h-[80vh] max-md:rounded-t-2xl ${
+              addAssetModalAnimating ? 'max-md:translate-y-0' : 'max-md:translate-y-full'
+            }`}>
             <div className="p-6 h-full flex flex-col">
               
               {/* 搜索框 */}

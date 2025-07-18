@@ -480,6 +480,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Mobile interface simplified without sorting controls for cleaner layout
   - Improved mobile user experience by removing complexity and saving screen space
   - Sorting functionality remains available on desktop where screen space permits
+- January 30, 2025. Implemented responsive modal slide directions:
+  - Currency selection modal: slides from right on desktop, bottom on mobile
+  - Asset management modal: slides from right on desktop, bottom on mobile
+  - Applied responsive positioning with md: breakpoints for desktop behavior
+  - Mobile modals use max-md: classes for bottom positioning with rounded top corners
+  - Added max-h-[80vh] constraint on mobile for better screen utilization
+  - Enhanced user experience with platform-appropriate interaction patterns
 
 ## User Preferences
 
