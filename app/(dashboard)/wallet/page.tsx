@@ -2614,11 +2614,12 @@ export default function WalletPage() {
                       <span>{selectedDisplayCurrency}</span>
                       <ChevronDown className="h-3 w-3" />
                     </button>
-                    {/* 移动端下拉箭头 */}
+                    {/* 移动端货币单位和下拉箭头 */}
                     <button
                       onClick={handleCurrencyModalClick}
-                      className="md:hidden p-1"
+                      className="md:hidden flex items-center space-x-1 p-1"
                     >
+                      <span className="text-xs text-[#00D4AA] font-medium">{selectedDisplayCurrency}</span>
                       <ChevronDown className="h-3 w-3 text-gray-500" />
                     </button>
                   </div>
@@ -2627,7 +2628,7 @@ export default function WalletPage() {
                       <div className={`text-lg md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         {balanceVisible ? convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency) : "****"}
                       </div>
-                      <div className="text-xs md:text-sm text-[#00D4AA] font-medium mt-0.5">
+                      <div className="hidden md:block text-xs md:text-sm text-[#00D4AA] font-medium mt-0.5">
                         {selectedDisplayCurrency}
                       </div>
                     </div>
@@ -2673,11 +2674,12 @@ export default function WalletPage() {
                       <span>{selectedDisplayCurrency}</span>
                       <ChevronDown className="h-3 w-3" />
                     </button>
-                    {/* 移动端下拉箭头 */}
+                    {/* 移动端货币单位和下拉箭头 */}
                     <button
                       onClick={handleCurrencyModalClick}
-                      className="md:hidden p-1"
+                      className="md:hidden flex items-center space-x-1 p-1"
                     >
+                      <span className="text-xs text-[#00D4AA] font-medium">{selectedDisplayCurrency}</span>
                       <ChevronDown className="h-3 w-3 text-gray-500" />
                     </button>
                   </div>
@@ -2686,7 +2688,7 @@ export default function WalletPage() {
                       <div className={`text-lg md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         {balanceVisible ? convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency) : "****"}
                       </div>
-                      <div className="text-xs md:text-sm text-[#00D4AA] font-medium mt-0.5">
+                      <div className="hidden md:block text-xs md:text-sm text-[#00D4AA] font-medium mt-0.5">
                         {selectedDisplayCurrency}
                       </div>
                     </div>
