@@ -2879,7 +2879,7 @@ export default function WalletPage() {
             </div>
 
             {/* 移动端操作按钮 - 仅在移动端显示 */}
-            <div className="md:hidden flex gap-2 overflow-x-auto pb-2">
+            <div className="md:hidden flex gap-2">
               {/* 主要操作按钮 */}
               {actionButtons.map((button) => {
                 const Icon = button.icon
@@ -2894,7 +2894,7 @@ export default function WalletPage() {
                     onMouseDown={() => setClickedAction(button.id)}
                     onMouseUp={() => setClickedAction("")}
                     onMouseLeave={() => setClickedAction("")}
-                    className={`h-10 px-3 transition-all duration-200 text-sm font-bold flex-shrink-0 ${
+                    className={`h-10 px-3 transition-all duration-200 text-sm font-bold flex-1 ${
                       isClicked
                         ? "bg-[#00D4AA] text-white border-[#00D4AA]"
                         : isSelected 
@@ -2936,62 +2936,6 @@ export default function WalletPage() {
                     clickedAction === "fund-records"
                       ? "text-white"
                       : selectedAction === "fund-records" 
-                        ? "text-[#00D4AA]"
-                        : "text-black dark:text-white"
-                  }`} 
-                />
-              </Button>
-
-              <Button
-                onClick={() => {
-                  setTopLevelTab("订单记录")
-                  setOrderTab("现货订单")
-                  setSecondaryTab("current")
-                }}
-                onMouseDown={() => setClickedAction("order-records")}
-                onMouseUp={() => setClickedAction("")}
-                onMouseLeave={() => setClickedAction("")}
-                className={`h-10 w-10 transition-all duration-200 flex-shrink-0 ${
-                  clickedAction === "order-records"
-                    ? "bg-[#00D4AA] border-[#00D4AA]"
-                    : selectedAction === "order-records"
-                      ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                }`}
-                variant="outline"
-                title="订单记录"
-              >
-                <BarChart2 
-                  className={`h-4 w-4 transition-colors ${
-                    clickedAction === "order-records"
-                      ? "text-white"
-                      : selectedAction === "order-records" 
-                        ? "text-[#00D4AA]"
-                        : "text-black dark:text-white"
-                  }`} 
-                />
-              </Button>
-
-              <Button
-                onClick={handlePositionModalClick}
-                onMouseDown={() => setClickedAction("position-distribution")}
-                onMouseUp={() => setClickedAction("")}
-                onMouseLeave={() => setClickedAction("")}
-                className={`h-10 w-10 transition-all duration-200 flex-shrink-0 ${
-                  clickedAction === "position-distribution"
-                    ? "bg-[#00D4AA] border-[#00D4AA]"
-                    : selectedAction === "position-distribution"
-                      ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                }`}
-                variant="outline"
-                title="仓位分布"
-              >
-                <PieChart 
-                  className={`h-4 w-4 transition-colors ${
-                    clickedAction === "position-distribution"
-                      ? "text-white"
-                      : selectedAction === "position-distribution" 
                         ? "text-[#00D4AA]"
                         : "text-black dark:text-white"
                   }`} 

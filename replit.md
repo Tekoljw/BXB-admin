@@ -458,6 +458,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Active text: white for dark theme, dark gray for light theme
   - Active underline: thick bar (h-1) matching text color for consistent visual emphasis
   - Maintained smooth transitions while providing cleaner mobile interface design
+- January 30, 2025. Optimized mobile operation buttons layout:
+  - Hidden "现货交易记录" (spot trading records) button on mobile for cleaner interface
+  - Removed bottom drag bar (overflow-x-auto pb-2) to eliminate horizontal scrolling
+  - Changed button layout from flex-shrink-0 to flex-1 for main action buttons to auto-fit 5 buttons across screen width
+  - Maintained single icon button (资金记录) as flex-shrink-0 for consistent sizing
+  - Enhanced mobile UX with properly distributed button layout without scrolling
 
 ## User Preferences
 
