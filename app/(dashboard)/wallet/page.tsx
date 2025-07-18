@@ -3070,7 +3070,8 @@ export default function WalletPage() {
                             </div>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <div className="flex flex-col items-end space-y-2">
+                            {/* 桌面端：显示百分比和进度条 */}
+                            <div className="hidden md:flex flex-col items-end space-y-2">
                               <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                                 {account.percentage}
                               </span>
@@ -3081,7 +3082,8 @@ export default function WalletPage() {
                                 />
                               </div>
                             </div>
-                            <div className="flex space-x-2">
+                            {/* 桌面端：显示三个按钮 */}
+                            <div className="hidden md:flex space-x-2">
                               <Button 
                                 variant="outline" 
                                 size="sm"
@@ -3102,6 +3104,23 @@ export default function WalletPage() {
                                 onClick={() => setActiveTab(account.name)}
                               >
                                 查看
+                              </Button>
+                            </div>
+                            {/* 移动端：只显示两个按钮，隐藏查看按钮和进度条 */}
+                            <div className="md:hidden flex space-x-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="h-9 px-3 text-sm font-medium border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA]/10"
+                              >
+                                记录
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="h-9 px-3 text-sm font-medium border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA]/10"
+                              >
+                                划转
                               </Button>
                             </div>
                           </div>
