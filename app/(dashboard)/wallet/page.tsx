@@ -2979,7 +2979,7 @@ export default function WalletPage() {
                           <Minus className="h-3 w-3 -mt-1" />
                         </div>
                       </button>
-                      <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
+                      <div className={`hidden md:flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
                         <button
                           onClick={() => {
                             handleSortChange("value")

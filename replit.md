@@ -473,13 +473,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Applied vertical layout to all 5 buttons: 入金, 提币, 交易, 划转, 记录
   - Made all buttons equal width using flex-1 class for consistent sizing
   - Enhanced mobile user experience with touch-friendly larger icons and cleaner visual hierarchy
-- January 30, 2025. Optimized mobile sorting button text display:
-  - Implemented responsive text display for wallet sorting buttons
-  - Desktop displays full text: "按余额排序" and "按市值排序"
-  - Mobile displays abbreviated text: "余额" and "市值"
-  - Added responsive spans with hidden/md:inline and md:hidden classes
-  - Maintained sorting arrows and functionality across all screen sizes
-  - Improved mobile layout efficiency while preserving desktop clarity
+- January 30, 2025. Hidden sorting functionality on mobile devices:
+  - Completely hidden balance and market cap sorting buttons on mobile
+  - Changed container from "flex" to "hidden md:flex" to hide entire sorting section
+  - Desktop maintains full sorting functionality with "按余额排序" and "按市值排序"
+  - Mobile interface simplified without sorting controls for cleaner layout
+  - Improved mobile user experience by removing complexity and saving screen space
+  - Sorting functionality remains available on desktop where screen space permits
 
 ## User Preferences
 
