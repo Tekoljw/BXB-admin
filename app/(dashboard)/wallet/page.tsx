@@ -3106,21 +3106,21 @@ export default function WalletPage() {
                                 查看
                               </Button>
                             </div>
-                            {/* 移动端：只显示两个按钮，隐藏查看按钮和进度条 */}
+                            {/* 移动端：显示划转和查看按钮，隐藏记录按钮和进度条 */}
                             <div className="md:hidden flex space-x-2">
                               <Button 
                                 variant="outline" 
                                 size="sm"
                                 className="h-9 px-3 text-sm font-medium border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA]/10"
                               >
-                                记录
+                                划转
                               </Button>
                               <Button 
-                                variant="outline" 
                                 size="sm"
-                                className="h-9 px-3 text-sm font-medium border-[#00D4AA] text-[#00D4AA] hover:bg-[#00D4AA]/10"
+                                className="h-9 px-3 text-sm font-medium bg-black text-white hover:bg-gray-800"
+                                onClick={() => setActiveTab(account.name)}
                               >
-                                划转
+                                查看
                               </Button>
                             </div>
                           </div>
