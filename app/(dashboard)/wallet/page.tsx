@@ -3138,8 +3138,8 @@ export default function WalletPage() {
         const contractData = walletData["合约账户"]
         return (
           <div className="space-y-6">
-            {/* 六个卡片布局 - 两排三列，增强动画效果 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* 六个卡片布局 - 移动端两列，桌面端三列 */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {/* 第一排 */}
               <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
                 <div className="flex items-center justify-between mb-2">
