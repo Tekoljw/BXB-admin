@@ -3138,15 +3138,15 @@ export default function WalletPage() {
         const contractData = walletData["合约账户"]
         return (
           <div className="space-y-6">
-            {/* 六个卡片布局 - 移动端两列，桌面端三列 */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {/* 六个卡片布局 - 移动端和桌面端都是三列 */}
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
               {/* 第一排 */}
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-medium">总资产</h3>
+                  <h3 className="text-xs md:text-sm font-medium">总资产</h3>
                   <button
                     onClick={handleCurrencyModalClick}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
+                    className={`flex items-center space-x-1 px-1 md:px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
                       isDark 
                         ? "bg-transparent text-white hover:bg-gray-800" 
                         : "bg-white text-black hover:bg-gray-50"
@@ -3157,54 +3157,54 @@ export default function WalletPage() {
                     }`}>
                       <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
                     </div>
-                    <span>{selectedDisplayCurrency}</span>
+                    <span className="hidden md:inline">{selectedDisplayCurrency}</span>
                     <ChevronDown className="h-2 w-2" />
                   </button>
                 </div>
-                <div className="text-2xl font-bold transition-all duration-500">
+                <div className="text-lg md:text-2xl font-bold transition-all duration-500">
                   {balanceVisible ? convertBalance(contractData.totalBalance, "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">净资产</h3>
-                <div className="text-2xl font-bold text-[#00D4AA] transition-all duration-500">
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+                <h3 className="text-xs md:text-sm font-medium mb-2">净资产</h3>
+                <div className="text-lg md:text-2xl font-bold text-[#00D4AA] transition-all duration-500">
                   {balanceVisible ? convertBalance("8,734.56", "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">未实现盈亏</h3>
-                <div className="text-2xl font-bold text-green-500 transition-all duration-500">
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+                <h3 className="text-xs md:text-sm font-medium mb-2">未实现盈亏</h3>
+                <div className="text-lg md:text-2xl font-bold text-green-500 transition-all duration-500">
                   {balanceVisible ? contractData.unrealizedPnL : "****"}
                 </div>
               </div>
               
               {/* 第二排 */}
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">已实现盈亏</h3>
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+                <h3 className="text-xs md:text-sm font-medium mb-2">已实现盈亏</h3>
                 <div className="space-y-1">
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-500">今日</span>
-                    <span className="text-sm font-bold text-green-500 transition-all duration-300">+123.45</span>
+                    <span className="text-xs md:text-sm font-bold text-green-500 transition-all duration-300">+123.45</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-500">本月</span>
-                    <span className="text-sm font-bold text-red-500 transition-all duration-300">-234.56</span>
+                    <span className="text-xs md:text-sm font-bold text-red-500 transition-all duration-300">-234.56</span>
                   </div>
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">已用保证金</h3>
-                <div className="text-2xl font-bold transition-all duration-500">
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+                <h3 className="text-xs md:text-sm font-medium mb-2">已用保证金</h3>
+                <div className="text-lg md:text-2xl font-bold transition-all duration-500">
                   {balanceVisible ? convertBalance(contractData.marginUsed, "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
               
-              <div className={`${cardStyle} rounded-lg p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
-                <h3 className="text-sm font-medium mb-2">可用保证金</h3>
-                <div className="text-2xl font-bold transition-all duration-500">
+              <div className={`${cardStyle} rounded-lg p-2 md:p-4 transition-all duration-300 ease-out  hover:shadow-xl`}>
+                <h3 className="text-xs md:text-sm font-medium mb-2">可用保证金</h3>
+                <div className="text-lg md:text-2xl font-bold transition-all duration-500">
                   {balanceVisible ? convertBalance(contractData.marginAvailable, "USDT", selectedDisplayCurrency) : "****"}
                 </div>
               </div>
