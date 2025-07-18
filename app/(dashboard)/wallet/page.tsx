@@ -125,6 +125,7 @@ export default function WalletPage() {
   const [isMobile, setIsMobile] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [showMobileSidebar, setShowMobileSidebar] = useState(false) // 移动端侧边栏状态
+  const [mobileSidebarAnimating, setMobileSidebarAnimating] = useState(false) // 移动端侧边栏动画状态
   // 移除加载动画状态
   const [showPositionModal, setShowPositionModal] = useState(false) // 仓位分布弹窗
   const [positionModalAnimating, setPositionModalAnimating] = useState(false) // 仓位弹窗动画状态
@@ -953,6 +954,17 @@ export default function WalletPage() {
   }
   // 移除页面加载状态
   const isDark = theme === "dark"
+
+  // 移动端侧边栏动画函数
+  const openMobileSidebar = () => {
+    setShowMobileSidebar(true)
+    setTimeout(() => setMobileSidebarAnimating(true), 10)
+  }
+
+  const closeMobileSidebar = () => {
+    setMobileSidebarAnimating(false)
+    setTimeout(() => setShowMobileSidebar(false), 300)
+  }
 
   // 趋势图数据
   const generateTrendData = (isPositive = true) => {
@@ -14954,17 +14966,17 @@ export default function WalletPage() {
           <div className="flex items-center justify-between p-4">
             {/* 左侧汉堡菜单按钮 */}
             <button
-              onClick={() => setShowMobileSidebar(true)}
-              className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+              onClick={openMobileSidebar}
+              className={`w-10 h-10 flex items-center justify-center transition-all duration-200 hover:scale-110 ${
                 isDark 
-                  ? 'bg-[#252842] text-white hover:bg-[#2a2d3a]' 
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'text-white hover:text-gray-300' 
+                  : 'text-gray-700 hover:text-gray-900'
               }`}
             >
               <Menu className="h-5 w-5" />
             </button>
 
-            {/* 右侧顶级页签导航 - 移动端缩小居右 */}
+            {/* 右侧顶级页签导航 - 移动端适中大小居右 */}
             <div className="relative">
               <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                 {/* 滑动背景 */}
@@ -14977,7 +14989,7 @@ export default function WalletPage() {
                 {["账户资产", "订单记录"].map((tab) => (
                   <button
                     key={tab}
-                    className={`relative z-10 px-3 py-2 text-xs font-medium transition-all duration-300 ${
+                    className={`relative z-10 px-4 py-2.5 text-sm font-medium transition-all duration-300 ${
                       topLevelTab === tab
                         ? isDark ? "text-black" : "text-white"
                         : isDark
@@ -14996,29 +15008,20 @@ export default function WalletPage() {
           {/* Mobile Sidebar Overlay */}
           {showMobileSidebar && (
             <div className="fixed inset-0 z-50 lg:hidden">
-              <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setShowMobileSidebar(false)} />
-              <div className={`fixed top-0 left-0 h-full w-80 ${isDark ? 'bg-[#1a1d29]' : 'bg-white'} shadow-xl`}>
-                {/* Sidebar Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                  <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>钱包菜单</h2>
-                  <button
-                    onClick={() => setShowMobileSidebar(false)}
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                      isDark 
-                        ? 'text-gray-400 hover:text-white hover:bg-[#252842]' 
-                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-
-                {/* Sidebar Content */}
-                <div className="p-4">
+              <div 
+                className={`fixed inset-0 bg-black transition-opacity duration-300 ${
+                  mobileSidebarAnimating ? 'bg-opacity-50' : 'bg-opacity-0'
+                }`}
+                onClick={closeMobileSidebar} 
+              />
+              <div className={`fixed top-0 left-0 h-full w-80 ${isDark ? 'bg-[#1a1d29]' : 'bg-white'} shadow-xl transform transition-transform duration-300 ease-out ${
+                mobileSidebarAnimating ? 'translate-x-0' : '-translate-x-full'
+              }`}>
+                {/* Sidebar Content - 直接内容无标题 */}
+                <div className="p-4 pt-6">
                   {/* 账户资产菜单 */}
                   {topLevelTab === "账户资产" && (
-                    <div className="space-y-2">
-                      <div className={`text-sm font-medium mb-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>账户类型</div>
+                    <div className="space-y-1">
                       {walletTabs.map((tab) => {
                         const Icon = tab.icon
                         return (
@@ -15026,20 +15029,18 @@ export default function WalletPage() {
                             key={tab.id}
                             onClick={() => {
                               handleTabChange(tab.id)
-                              setShowMobileSidebar(false)
+                              closeMobileSidebar()
                             }}
-                            className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left transition-all duration-200 ${
+                            className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 border ${
                               activeTab === tab.id
-                                ? isDark
-                                  ? "bg-white text-black"
-                                  : "bg-[#00D4AA] text-white"
+                                ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
                                 : isDark
-                                  ? "text-gray-300 hover:text-white hover:bg-[#252842]"
-                                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                                  ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842]"
+                                  : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                             }`}
                           >
                             <Icon className="h-5 w-5" />
-                            <span className="font-medium">{tab.label}</span>
+                            <span>{tab.label}</span>
                           </button>
                         )
                       })}
@@ -15048,8 +15049,7 @@ export default function WalletPage() {
 
                   {/* 订单记录菜单 */}
                   {topLevelTab === "订单记录" && (
-                    <div className="space-y-2">
-                      <div className={`text-sm font-medium mb-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>订单类型</div>
+                    <div className="space-y-1">
                       {orderTabs.map((tab) => {
                         const Icon = tab.icon
                         return (
@@ -15057,20 +15057,18 @@ export default function WalletPage() {
                             key={tab.id}
                             onClick={() => {
                               handleOrderTabChange(tab.id)
-                              setShowMobileSidebar(false)
+                              closeMobileSidebar()
                             }}
-                            className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left transition-all duration-200 ${
+                            className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-300 border ${
                               orderTab === tab.id
-                                ? isDark
-                                  ? "bg-white text-black"
-                                  : "bg-[#00D4AA] text-white"
+                                ? "border-[#00D4AA] text-[#00D4AA] bg-[#00D4AA]/5 shadow-sm scale-105"
                                 : isDark
-                                  ? "text-gray-300 hover:text-white hover:bg-[#252842]"
-                                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                                  ? "border-transparent text-gray-300 hover:text-white hover:bg-[#252842]"
+                                  : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                             }`}
                           >
                             <Icon className="h-5 w-5" />
-                            <span className="font-medium">{tab.label}</span>
+                            <span>{tab.label}</span>
                           </button>
                         )
                       })}
