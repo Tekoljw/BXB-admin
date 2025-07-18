@@ -15001,7 +15001,7 @@ export default function WalletPage() {
                 {["账户资产", "订单记录"].map((tab) => (
                   <button
                     key={tab}
-                    className={`relative z-10 px-4 py-2.5 text-sm font-medium transition-all duration-300 ${
+                    className={`relative z-10 px-4 py-1.5 text-sm font-medium transition-all duration-300 ${
                       topLevelTab === tab
                         ? isDark ? "text-black" : "text-white"
                         : isDark
