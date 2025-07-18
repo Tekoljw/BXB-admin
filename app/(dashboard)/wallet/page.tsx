@@ -2582,6 +2582,43 @@ export default function WalletPage() {
       case "钱包总览":
         return (
           <div className="space-y-6">
+            {/* 钱包总览标签页 - 移动端在卡片上面，桌面端在下面 */}
+            <div className="w-full flex justify-center md:hidden">
+              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'} w-full max-w-md`}>
+                {/* 滑动背景 */}
+                <div
+                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
+                  style={{
+                    width: '50%',
+                    left: overviewTab === "现金账户" ? '4px' : '50%',
+                    transform: overviewTab === "现金账户" ? 'translateX(0)' : 'translateX(-4px)'
+                  }}
+                />
+                {/* 按钮 */}
+                {["现金账户", "总资产"].map((tab, index) => (
+                  <button
+                    key={tab}
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 flex-1 ${
+                      overviewTab === tab
+                        ? isDark ? "text-black" : "text-white"
+                        : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-700 hover:text-gray-900"
+                    }`}
+                    style={{
+                      height: '36px'
+                    }}
+                    onClick={() => {
+                      setOverviewTab(tab)
+                      setOverviewMode(tab)
+                    }}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* 主要卡片选择 - 移动端适配 */}
             <div className="grid grid-cols-2 gap-3 md:gap-6">
               {/* 现金账户卡片 */}
@@ -2705,8 +2742,8 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 钱包总览标签页 - 独立一行全屏宽度 */}
-            <div className="w-full flex justify-center">
+            {/* 钱包总览标签页 - 桌面端独立一行全屏宽度 */}
+            <div className="w-full justify-center hidden md:flex">
               <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'} w-full max-w-md`}>
                 {/* 滑动背景 */}
                 <div
@@ -15017,10 +15054,10 @@ export default function WalletPage() {
 
             {/* 右侧顶级页签导航 - 移动端适中大小居右 */}
             <div className="relative">
-              <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+              <div className={`flex rounded-lg p-1 bg-white/20 md:bg-[#252842] md:dark:bg-[#252842] border border-white/30 md:border-none`}>
                 {/* 滑动背景 */}
                 <div
-                  className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'} ${
+                  className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out bg-white md:bg-white md:dark:bg-white ${
                     topLevelTab === "账户资产" ? "left-1" : "left-1/2"
                   }`}
                 />
@@ -15030,10 +15067,8 @@ export default function WalletPage() {
                     key={tab}
                     className={`relative z-10 px-4 py-1.5 text-sm font-medium transition-all duration-300 ${
                       topLevelTab === tab
-                        ? isDark ? "text-black" : "text-white"
-                        : isDark
-                        ? "text-gray-300 hover:text-white"
-                        : "text-gray-700 hover:text-gray-900"
+                        ? "text-black md:text-black md:dark:text-black"
+                        : "text-white/70 hover:text-white md:text-gray-300 md:hover:text-white md:dark:text-gray-300 md:dark:hover:text-white"
                     }`}
                     onClick={() => setTopLevelTab(tab)}
                   >
