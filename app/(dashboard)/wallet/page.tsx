@@ -2582,25 +2582,25 @@ export default function WalletPage() {
       case "钱包总览":
         return (
           <div className="space-y-6">
-            {/* 主要卡片选择 - 移除点击功能 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* 主要卡片选择 - 移动端适配 */}
+            <div className="grid grid-cols-2 gap-3 md:gap-6">
               {/* 现金账户卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out ${
+                className={`${cardStyle} rounded-lg p-3 md:p-6 transition-all duration-300 ease-out ${
                   overviewMode === "现金账户" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
                     : ""
                 }`}
               >
                 <>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-2">
-                      <CreditCard className="h-6 w-6 text-[#00D4AA]" />
-                      <h3 className="text-lg font-semibold">现金账户</h3>
+                  <div className="flex items-center justify-between mb-2 md:mb-4">
+                    <div className="flex items-center space-x-1 md:space-x-2">
+                      <CreditCard className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
+                      <h3 className="text-sm md:text-lg font-semibold">现金账户</h3>
                     </div>
                     <button
                       onClick={handleCurrencyModalClick}
-                      className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
+                      className={`hidden md:flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
                         isDark 
                           ? "bg-transparent text-white hover:bg-gray-800" 
                           : "bg-white text-black hover:bg-gray-50"
@@ -2614,16 +2614,36 @@ export default function WalletPage() {
                       <span>{selectedDisplayCurrency}</span>
                       <ChevronDown className="h-3 w-3" />
                     </button>
+                    {/* 移动端下拉箭头 */}
+                    <button
+                      onClick={handleCurrencyModalClick}
+                      className="md:hidden p-1"
+                    >
+                      <ChevronDown className="h-3 w-3 text-gray-500" />
+                    </button>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {balanceVisible ? `${convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
+                  <div className="flex items-center gap-2 md:gap-4">
+                    <div className="flex-1">
+                      <div className={`text-lg md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {balanceVisible ? convertBalance(accountsData.现金账户.balance, "USDT", selectedDisplayCurrency) : "****"}
+                      </div>
+                      <div className="text-xs md:text-sm text-[#00D4AA] font-medium mt-0.5">
+                        {selectedDisplayCurrency}
+                      </div>
                     </div>
                     <div className="flex-shrink-0">
                       <TrendChart 
                         data={generateTrendData(true)} 
                         isPositive={true}
+                        height={24}
+                        width={40}
+                        className="md:hidden"
+                      />
+                      <TrendChart 
+                        data={generateTrendData(true)} 
+                        isPositive={true}
                         height={32}
+                        className="hidden md:block"
                       />
                     </div>
                   </div>
@@ -2632,21 +2652,21 @@ export default function WalletPage() {
 
               {/* 总资产卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out ${
+                className={`${cardStyle} rounded-lg p-3 md:p-6 transition-all duration-300 ease-out ${
                   overviewMode === "总资产" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
                     : ""
                 }`}
               >
                 <>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-2">
-                      <Wallet className="h-6 w-6 text-[#00D4AA]" />
-                      <h3 className="text-lg font-semibold">总资产</h3>
+                  <div className="flex items-center justify-between mb-2 md:mb-4">
+                    <div className="flex items-center space-x-1 md:space-x-2">
+                      <Wallet className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
+                      <h3 className="text-sm md:text-lg font-semibold">总资产</h3>
                     </div>
                     <button
                       onClick={handleCurrencyModalClick}
-                      className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
+                      className={`hidden md:flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium border-2 border-black transition-all ${
                         isDark 
                           ? "bg-transparent text-white hover:bg-gray-800" 
                           : "bg-white text-black hover:bg-gray-50"
@@ -2660,16 +2680,36 @@ export default function WalletPage() {
                       <span>{selectedDisplayCurrency}</span>
                       <ChevronDown className="h-3 w-3" />
                     </button>
+                    {/* 移动端下拉箭头 */}
+                    <button
+                      onClick={handleCurrencyModalClick}
+                      className="md:hidden p-1"
+                    >
+                      <ChevronDown className="h-3 w-3 text-gray-500" />
+                    </button>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {balanceVisible ? `${convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency)} ${selectedDisplayCurrency}` : "****"}
+                  <div className="flex items-center gap-2 md:gap-4">
+                    <div className="flex-1">
+                      <div className={`text-lg md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {balanceVisible ? convertBalance(accountsData.总资产.total, "USDT", selectedDisplayCurrency) : "****"}
+                      </div>
+                      <div className="text-xs md:text-sm text-[#00D4AA] font-medium mt-0.5">
+                        {selectedDisplayCurrency}
+                      </div>
                     </div>
                     <div className="flex-shrink-0">
                       <TrendChart 
                         data={generateTrendData(true)} 
                         isPositive={true}
+                        height={24}
+                        width={40}
+                        className="md:hidden"
+                      />
+                      <TrendChart 
+                        data={generateTrendData(true)} 
+                        isPositive={true}
                         height={32}
+                        className="hidden md:block"
                       />
                     </div>
                   </div>
