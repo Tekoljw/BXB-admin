@@ -454,6 +454,8 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Changed mobile top-level tabs (账户资产/订单记录) from sliding background style to text+underline style
   - Implemented clean text-based tabs with animated underlines for active state
   - Applied proper color schemes for both light and dark themes with hover effects
+  - Enhanced active state: larger bold text (text-base font-bold) with green color (#00D4AA)
+  - Active underline: thick green bar (h-1) instead of thin line for better visual emphasis
   - Maintained smooth transitions while providing cleaner mobile interface design
 
 ## User Preferences

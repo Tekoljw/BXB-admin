@@ -15150,22 +15150,22 @@ export default function WalletPage() {
               {["账户资产", "订单记录"].map((tab) => (
                 <button
                   key={tab}
-                  className={`relative pb-1 text-sm font-medium transition-all duration-300 ${
+                  className={`relative pb-1 transition-all duration-300 ${
                     topLevelTab === tab
-                      ? isDark ? "text-white" : "text-gray-900"
+                      ? "text-base font-bold text-[#00D4AA]"
                       : isDark
-                      ? "text-gray-400 hover:text-gray-200"
-                      : "text-gray-600 hover:text-gray-800"
+                      ? "text-sm font-medium text-gray-400 hover:text-gray-200"
+                      : "text-sm font-medium text-gray-600 hover:text-gray-800"
                   }`}
                   onClick={() => setTopLevelTab(tab)}
                 >
                   {tab}
                   {/* 下划线 */}
                   <div
-                    className={`absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-300 ${
+                    className={`absolute bottom-0 left-0 right-0 transition-all duration-300 ${
                       topLevelTab === tab
-                        ? isDark ? "bg-white" : "bg-gray-900"
-                        : "bg-transparent"
+                        ? "h-1 bg-[#00D4AA]"
+                        : "h-0 bg-transparent"
                     }`}
                   />
                 </button>
