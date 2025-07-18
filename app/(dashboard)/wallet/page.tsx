@@ -14964,17 +14964,29 @@ export default function WalletPage() {
         <div className="relative">{/* Mobile Layout - Top Header with Hamburger Menu */}
           {/* Mobile Header */}
           <div className="flex items-center justify-between p-4">
-            {/* 左侧汉堡菜单按钮 */}
-            <button
-              onClick={openMobileSidebar}
-              className={`w-10 h-10 flex items-center justify-center transition-all duration-200 hover:scale-110 group ${
-                isDark 
-                  ? 'text-white hover:text-gray-300' 
-                  : 'text-gray-700 hover:text-gray-900'
-              }`}
-            >
-              <Menu className="h-5 w-5 transition-transform duration-200 group-hover:rotate-90" />
-            </button>
+            {/* 左侧汉堡菜单按钮和标题 */}
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={openMobileSidebar}
+                className={`w-10 h-10 flex items-center justify-center transition-all duration-200 hover:scale-110 group ${
+                  isDark 
+                    ? 'text-white hover:text-gray-300' 
+                    : 'text-gray-700 hover:text-gray-900'
+                }`}
+              >
+                <Menu className="h-5 w-5 transition-transform duration-200 group-hover:rotate-90" />
+              </button>
+              
+              {/* 当前页面标题 */}
+              <h1 className={`text-lg font-semibold ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>
+                {topLevelTab === "账户资产" 
+                  ? walletTabs.find(tab => tab.id === activeTab)?.label || "钱包总览"
+                  : orderTabs.find(tab => tab.id === orderTab)?.label || "资金记录"
+                }
+              </h1>
+            </div>
 
             {/* 右侧顶级页签导航 - 移动端适中大小居右 */}
             <div className="relative">

@@ -435,7 +435,8 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Created mobile-optimized finance product cards with condensed layout and responsive spacing
   - Maintained desktop sidebar navigation while providing streamlined mobile experience
 - January 30, 2025. Enhanced wallet page mobile adaptation with hamburger menu system:
-  - Added hamburger menu button on left side with hover scale animation (no background)
+  - Added hamburger menu button with 90-degree rotation animation on hover
+  - Implemented current page title display next to hamburger menu for user orientation
   - Enlarged and repositioned top-level tabs (账户资产/订单记录) to be right-aligned with better sizing
   - Implemented sliding sidebar overlay with smooth slide-in/slide-out animations
   - Removed sidebar header and close button for cleaner mobile interface
