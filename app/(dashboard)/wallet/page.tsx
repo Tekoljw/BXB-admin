@@ -2582,7 +2582,44 @@ export default function WalletPage() {
       case "钱包总览":
         return (
           <div className="space-y-6">
-            {/* 主要卡片选择 - 移除点击功能 */}
+            {/* 移动端账户类型选择 - 仅在移动端显示 */}
+            <div className="md:hidden">
+              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+                {/* 滑动背景 */}
+                <div
+                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
+                  style={{
+                    width: overviewTab === "现金账户" ? '96px' : '80px',
+                    left: overviewTab === "现金账户" ? '4px' : '100px'
+                  }}
+                />
+                {/* 按钮 */}
+                {["现金账户", "总资产"].map((tab, index) => (
+                  <button
+                    key={tab}
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                      overviewTab === tab
+                        ? isDark ? "text-black" : "text-white"
+                        : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-700 hover:text-gray-900"
+                    }`}
+                    style={{
+                      width: tab === "现金账户" ? '96px' : '80px',
+                      height: '32px'
+                    }}
+                    onClick={() => {
+                      setOverviewTab(tab)
+                      setOverviewMode(tab)
+                    }}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 主要卡片选择 - 桌面端显示全部，移动端只显示选中的 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 现金账户卡片 */}
               <div 
@@ -2590,7 +2627,7 @@ export default function WalletPage() {
                   overviewMode === "现金账户" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
                     : ""
-                }`}
+                } ${overviewTab !== "现金账户" ? "hidden md:block" : ""}`}
               >
                 <>
                   <div className="flex items-center justify-between mb-4">
@@ -2636,7 +2673,7 @@ export default function WalletPage() {
                   overviewMode === "总资产" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
                     : ""
-                }`}
+                } ${overviewTab !== "总资产" ? "hidden md:block" : ""}`}
               >
                 <>
                   <div className="flex items-center justify-between mb-4">
