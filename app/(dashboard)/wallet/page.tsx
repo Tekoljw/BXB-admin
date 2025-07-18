@@ -3471,8 +3471,13 @@ export default function WalletPage() {
                 </Button>
               </div>
 
-              {/* 第二行：标签页 */}
-              <div className="flex justify-center">
+
+            </div>
+            
+            {/* 内容区域 - 根据选中的按钮显示不同内容 */}
+            <div className={`${cardStyle} rounded-lg p-6`}>
+              {/* 移动端：在内容卡片内显示标签页 */}
+              <div className="md:hidden mb-4 flex justify-center">
                 <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                   {/* 滑动背景 */}
                   <div
@@ -3509,10 +3514,7 @@ export default function WalletPage() {
                   ))}
                 </div>
               </div>
-            </div>
-            
-            {/* 内容区域 - 根据选中的按钮显示不同内容 */}
-            <div className={`${cardStyle} rounded-lg p-6`}>
+
               {selectedAction === "account-balance" ? (
                 /* 账户余额界面 */
                 <div className="space-y-4">
