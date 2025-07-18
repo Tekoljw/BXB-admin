@@ -14931,41 +14931,37 @@ export default function WalletPage() {
 
           {/* 子页签导航 */}
           {topLevelTab === "账户资产" ? (
-            <div className="flex space-x-6 overflow-x-auto">
+            <div className="flex space-x-6 overflow-x-auto scrollbar-hide">
               {walletTabs.map((tab) => {
-                const Icon = tab.icon
                 return (
                   <button
                     key={tab.id}
                     onClick={() => handleTabChange(tab.id)}
-                    className={`flex items-center space-x-2 pb-2 px-1 border-b-2 text-base transition-colors whitespace-nowrap ${
+                    className={`pb-2 px-1 border-b-2 text-base transition-colors whitespace-nowrap ${
                       activeTab === tab.id
                         ? "border-black text-black font-bold"
                         : "border-transparent text-black font-medium hover:text-gray-700"
                     }`}
                   >
-                    <Icon className="h-4 w-4" />
-                    <span>{tab.label}</span>
+                    {tab.label}
                   </button>
                 )
               })}
             </div>
           ) : (
-            <div className="flex space-x-6 overflow-x-auto">
+            <div className="flex space-x-6 overflow-x-auto scrollbar-hide">
               {orderTabs.map((tab) => {
-                const Icon = tab.icon
                 return (
                   <button
                     key={tab.id}
                     onClick={() => handleOrderTabChange(tab.id)}
-                    className={`flex items-center space-x-2 pb-2 px-1 border-b-2 text-base transition-colors whitespace-nowrap ${
+                    className={`pb-2 px-1 border-b-2 text-base transition-colors whitespace-nowrap ${
                       orderTab === tab.id
                         ? "border-black text-black font-bold"
                         : "border-transparent text-black font-medium hover:text-gray-700"
                     }`}
                   >
-                    <Icon className="h-4 w-4" />
-                    <span>{tab.label}</span>
+                    {tab.label}
                   </button>
                 )
               })}
