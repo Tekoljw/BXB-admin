@@ -497,7 +497,8 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Changed mobile grid layout to three columns (grid-cols-3) to match desktop layout
   - Reduced mobile card padding from p-4 to p-2 for better space utilization
   - Scaled down mobile font sizes: titles from text-sm to text-xs, amounts from text-2xl to text-lg
-  - Hidden currency symbol text on mobile in total assets card button for space saving
+  - Simplified mobile currency button: removed border, icon, and background - now shows only "USDT" text with down arrow
+  - Desktop maintains full currency button styling with border, icon, and background
   - Reduced gap between cards on mobile (gap-2) while maintaining desktop spacing (md:gap-4)
   - Six contract cards now arranged in 2 rows × 3 columns on both mobile and desktop
   - Enhanced mobile user experience with appropriately sized text and spacing

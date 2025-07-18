@@ -3146,19 +3146,27 @@ export default function WalletPage() {
                   <h3 className="text-xs md:text-sm font-medium">总资产</h3>
                   <button
                     onClick={handleCurrencyModalClick}
-                    className={`flex items-center space-x-1 px-1 md:px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
+                    className={`flex items-center space-x-1 text-xs font-medium transition-all duration-300  ${
                       isDark 
-                        ? "bg-transparent text-white hover:bg-gray-800" 
-                        : "bg-white text-black hover:bg-gray-50"
+                        ? "text-white hover:text-gray-300" 
+                        : "text-black hover:text-gray-600"
                     }`}
                   >
-                    <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
-                      availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
-                    }`}>
-                      <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
+                    {/* 桌面端：显示完整的按钮样式 */}
+                    <div className="hidden md:flex items-center space-x-1 px-2 py-1 rounded-full border border-black">
+                      <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                        availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
+                      }`}>
+                        <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
+                      </div>
+                      <span>{selectedDisplayCurrency}</span>
+                      <ChevronDown className="h-2 w-2" />
                     </div>
-                    <span className="hidden md:inline">{selectedDisplayCurrency}</span>
-                    <ChevronDown className="h-2 w-2" />
+                    {/* 移动端：只显示文字和箭头 */}
+                    <div className="md:hidden flex items-center space-x-1">
+                      <span>{selectedDisplayCurrency}</span>
+                      <ChevronDown className="h-3 w-3" />
+                    </div>
                   </button>
                 </div>
                 <div className="text-lg md:text-2xl font-bold transition-all duration-500">
