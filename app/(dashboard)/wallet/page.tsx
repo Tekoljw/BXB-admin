@@ -2637,13 +2637,6 @@ export default function WalletPage() {
                         isPositive={true}
                         height={24}
                         width={40}
-                        className="md:hidden"
-                      />
-                      <TrendChart 
-                        data={generateTrendData(true)} 
-                        isPositive={true}
-                        height={32}
-                        className="hidden md:block"
                       />
                     </div>
                   </div>
@@ -2703,13 +2696,6 @@ export default function WalletPage() {
                         isPositive={true}
                         height={24}
                         width={40}
-                        className="md:hidden"
-                      />
-                      <TrendChart 
-                        data={generateTrendData(true)} 
-                        isPositive={true}
-                        height={32}
-                        className="hidden md:block"
                       />
                     </div>
                   </div>
