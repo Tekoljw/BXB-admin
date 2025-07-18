@@ -14900,24 +14900,15 @@ export default function WalletPage() {
         /* Mobile Layout - Top Tabs */
         <div className="container mx-auto p-4 space-y-6">
           {/* 顶级页签导航 - 移动端 */}
-          <div className="relative mb-2">
-            <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
-              {/* 滑动背景 */}
-              <div
-                className={`absolute top-1 bottom-1 w-1/2 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'} ${
-                  topLevelTab === "账户资产" ? "left-1" : "left-1/2"
-                }`}
-              />
-              {/* 按钮 */}
+          <div className="flex justify-center mb-4">
+            <div className="flex space-x-8">
               {["账户资产", "订单记录"].map((tab) => (
                 <button
                   key={tab}
-                  className={`relative z-10 flex-1 px-4 py-3 text-sm font-medium transition-all duration-300 ${
+                  className={`pb-2 px-1 border-b-2 text-base transition-colors ${
                     topLevelTab === tab
-                      ? isDark ? "text-black" : "text-white"
-                      : isDark
-                      ? "text-gray-300 hover:text-white"
-                      : "text-gray-700 hover:text-gray-900"
+                      ? "border-black text-black font-bold"
+                      : "border-transparent text-black font-medium hover:text-gray-700"
                   }`}
                   onClick={() => setTopLevelTab(tab)}
                 >
