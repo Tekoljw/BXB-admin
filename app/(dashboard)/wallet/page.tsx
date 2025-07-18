@@ -3613,8 +3613,8 @@ export default function WalletPage() {
                     </table>
                   </div>
 
-                  {/* 移动端：卡片布局 */}
-                  <div className="md:hidden space-y-3">
+                  {/* 移动端：重新设计的卡片布局 */}
+                  <div className="md:hidden space-y-4">
                     {[
                       {
                         symbol: "USDT",
@@ -3649,48 +3649,50 @@ export default function WalletPage() {
                         marginBalance: "500.00"
                       }
                     ].map((currency, index) => (
-                      <div key={currency.symbol} className={`p-4 rounded-lg border transition-all hover:shadow-md ${
+                      <div key={currency.symbol} className={`p-4 rounded-lg border ${
                         isDark 
-                          ? 'border-[#3a3d4a] bg-[#1a1d29] hover:bg-[#252842]' 
-                          : 'border-gray-200 bg-white hover:bg-gray-50'
+                          ? 'border-[#3a3d4a] bg-[#1a1d29]' 
+                          : 'border-gray-200 bg-white'
                       }`}>
-                        {/* 顶部：币种信息 */}
-                        <div className="flex items-center space-x-3 mb-3">
-                          <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
-                            <span className="text-[#00D4AA] font-bold text-sm">{currency.symbol.charAt(0)}</span>
+                        {/* 顶部：币种信息和账户余额 */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-12 h-12 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                              <span className="text-[#00D4AA] font-bold text-lg">{currency.symbol.charAt(0)}</span>
+                            </div>
+                            <div>
+                              <div className="font-semibold text-lg">{currency.symbol}</div>
+                              <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                {currency.name}
+                              </div>
+                            </div>
                           </div>
-                          <div>
-                            <div className="font-medium text-lg">{currency.symbol}</div>
-                            <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                              {currency.name}
+                          <div className="text-right">
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>账户余额</div>
+                            <div className="font-bold text-lg">
+                              {balanceVisible ? currency.accountBalance : "****"}
                             </div>
                           </div>
                         </div>
 
-                        {/* 底部：四个数据项 */}
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>账户余额</div>
-                            <div className="font-semibold text-sm">
-                              {balanceVisible ? currency.accountBalance : "****"}
-                            </div>
-                          </div>
-                          <div>
-                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>未实现盈亏</div>
+                        {/* 底部：三个数据项横向排列 */}
+                        <div className="grid grid-cols-3 gap-4 pt-3 border-t border-gray-200 dark:border-[#3a3d4a]">
+                          <div className="text-center">
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>未实现盈亏</div>
                             <div className={`font-semibold text-sm ${
                               currency.unrealizedPnL.startsWith('+') ? 'text-green-500' : 'text-red-500'
                             }`}>
                               {balanceVisible ? currency.unrealizedPnL : "****"}
                             </div>
                           </div>
-                          <div>
-                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>净资产余额</div>
+                          <div className="text-center">
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>净资产余额</div>
                             <div className="font-semibold text-sm text-[#00D4AA]">
                               {balanceVisible ? currency.netAssets : "****"}
                             </div>
                           </div>
-                          <div>
-                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>保证金余额</div>
+                          <div className="text-center">
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>保证金余额</div>
                             <div className="font-semibold text-sm">
                               {balanceVisible ? currency.marginBalance : "****"}
                             </div>
