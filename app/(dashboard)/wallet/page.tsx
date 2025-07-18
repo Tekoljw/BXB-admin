@@ -2716,17 +2716,30 @@ export default function WalletPage() {
             {/* 钱包总览标签页和操作按钮 - 桌面端显示 */}
             <div className="hidden md:flex justify-between items-center">
               {/* 左侧：标签页 */}
-              <div className="flex items-center gap-8">
-                {["现金账户", "总资产"].map((tab) => (
+              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+                {/* 滑动背景 */}
+                <div
+                  className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
+                  style={{
+                    width: overviewTab === "现金账户" ? '96px' : '80px',
+                    left: overviewTab === "现金账户" ? '4px' : '100px'
+                  }}
+                />
+                {/* 按钮 */}
+                {["现金账户", "总资产"].map((tab, index) => (
                   <button
                     key={tab}
-                    className={`text-base font-medium transition-all duration-300 pb-2 border-b-2 ${
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
                       overviewTab === tab
-                        ? "text-[#00D4AA] border-[#00D4AA]"
+                        ? isDark ? "text-black" : "text-white"
                         : isDark
-                        ? "text-gray-300 border-transparent hover:text-white"
-                        : "text-gray-700 border-transparent hover:text-gray-900"
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-700 hover:text-gray-900"
                     }`}
+                    style={{
+                      width: tab === "现金账户" ? '96px' : '80px',
+                      height: '32px'
+                    }}
                     onClick={() => {
                       setOverviewTab(tab)
                       setOverviewMode(tab)
@@ -2737,8 +2750,43 @@ export default function WalletPage() {
                 ))}
               </div>
 
-              {/* 右侧：记录按钮图标 */}
+              {/* 右侧：操作按钮 */}
               <div className="flex gap-2">
+                  {/* 主要操作按钮 */}
+                  {actionButtons.map((button) => {
+                    const Icon = button.icon
+                    const isSelected = selectedAction === button.id
+                    const isClicked = clickedAction === button.id
+                    const isDeposit = button.id === "入金"
+                    
+                    return (
+                      <Button 
+                        key={button.id}
+                        onClick={() => handleActionClick(button.id)}
+                        onMouseDown={() => setClickedAction(button.id)}
+                        onMouseUp={() => setClickedAction("")}
+                        onMouseLeave={() => setClickedAction("")}
+                        className={`h-10 px-3 transition-all duration-200 text-sm font-bold ${
+                          isClicked
+                            ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                            : isSelected 
+                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                              : isDeposit
+                                ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90"
+                                : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                        }`}
+                        variant={isSelected ? "outline" : isDeposit ? "default" : "outline"}
+                      >
+                        <Icon className="h-4 w-4 mr-1" />
+                        {button.label}
+                      </Button>
+                    )
+                  })}
+                  
+                  {/* 分隔线 */}
+                  <div className={`w-px h-10 ${isDark ? 'bg-gray-600' : 'bg-gray-300'}`} />
+                  
+                  {/* 图标按钮区域 */}
                   {/* 资金记录按钮 */}
                   <Button
                     onClick={() => {
