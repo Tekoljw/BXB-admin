@@ -14967,13 +14967,13 @@ export default function WalletPage() {
             {/* 左侧汉堡菜单按钮 */}
             <button
               onClick={openMobileSidebar}
-              className={`w-10 h-10 flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+              className={`w-10 h-10 flex items-center justify-center transition-all duration-200 hover:scale-110 group ${
                 isDark 
                   ? 'text-white hover:text-gray-300' 
                   : 'text-gray-700 hover:text-gray-900'
               }`}
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5 transition-transform duration-200 group-hover:rotate-90" />
             </button>
 
             {/* 右侧顶级页签导航 - 移动端适中大小居右 */}
