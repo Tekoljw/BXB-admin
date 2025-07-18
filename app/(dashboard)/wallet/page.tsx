@@ -2705,23 +2705,23 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 钱包总览标签页和操作按钮 */}
-            <div className="flex justify-between items-center">
-              {/* 左侧：标签页 */}
-              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+            {/* 钱包总览标签页 - 独立一行全屏宽度 */}
+            <div className="w-full flex justify-center">
+              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'} w-full max-w-md`}>
                 {/* 滑动背景 */}
                 <div
                   className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
                   style={{
-                    width: overviewTab === "现金账户" ? '96px' : '80px',
-                    left: overviewTab === "现金账户" ? '4px' : '100px'
+                    width: '50%',
+                    left: overviewTab === "现金账户" ? '4px' : '50%',
+                    transform: overviewTab === "现金账户" ? 'translateX(0)' : 'translateX(-4px)'
                   }}
                 />
                 {/* 按钮 */}
                 {["现金账户", "总资产"].map((tab, index) => (
                   <button
                     key={tab}
-                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 flex-1 ${
                       overviewTab === tab
                         ? isDark ? "text-black" : "text-white"
                         : isDark
@@ -2729,8 +2729,7 @@ export default function WalletPage() {
                         : "text-gray-700 hover:text-gray-900"
                     }`}
                     style={{
-                      width: tab === "现金账户" ? '96px' : '80px',
-                      height: '32px'
+                      height: '36px'
                     }}
                     onClick={() => {
                       setOverviewTab(tab)
@@ -2741,133 +2740,133 @@ export default function WalletPage() {
                   </button>
                 ))}
               </div>
+            </div>
 
-              {/* 右侧：操作按钮 */}
-              <div className="flex gap-2">
-                  {/* 主要操作按钮 */}
-                  {actionButtons.map((button) => {
-                    const Icon = button.icon
-                    const isSelected = selectedAction === button.id
-                    const isClicked = clickedAction === button.id
-                    const isDeposit = button.id === "入金"
-                    
-                    return (
-                      <Button 
-                        key={button.id}
-                        onClick={() => handleActionClick(button.id)}
-                        onMouseDown={() => setClickedAction(button.id)}
-                        onMouseUp={() => setClickedAction("")}
-                        onMouseLeave={() => setClickedAction("")}
-                        className={`h-10 px-3 transition-all duration-200 text-sm font-bold ${
-                          isClicked
-                            ? "bg-[#00D4AA] text-white border-[#00D4AA]"
-                            : isSelected 
-                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
-                              : isDeposit
-                                ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90"
-                                : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                        }`}
-                        variant={isSelected ? "outline" : isDeposit ? "default" : "outline"}
-                      >
-                        <Icon className="h-4 w-4 mr-1" />
-                        {button.label}
-                      </Button>
-                    )
-                  })}
-                  
-                  {/* 分隔线 */}
-                  <div className={`w-px h-10 ${isDark ? 'bg-gray-600' : 'bg-gray-300'}`} />
-                  
-                  {/* 图标按钮区域 */}
-                  {/* 资金记录按钮 */}
-                  <Button
-                    onClick={() => {
-                      setTopLevelTab("订单记录")
-                      setOrderTab("资金记录")
-                      setSecondaryTab("deposit")
-                    }}
-                    onMouseDown={() => setClickedAction("fund-records")}
+            {/* 操作按钮 - 独立一行 */}
+            <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+              {/* 主要操作按钮 */}
+              {actionButtons.map((button) => {
+                const Icon = button.icon
+                const isSelected = selectedAction === button.id
+                const isClicked = clickedAction === button.id
+                const isDeposit = button.id === "入金"
+                
+                return (
+                  <Button 
+                    key={button.id}
+                    onClick={() => handleActionClick(button.id)}
+                    onMouseDown={() => setClickedAction(button.id)}
                     onMouseUp={() => setClickedAction("")}
                     onMouseLeave={() => setClickedAction("")}
-                    className={`h-10 w-10 transition-all duration-200 ${
-                      clickedAction === "fund-records"
-                        ? "bg-[#00D4AA] border-[#00D4AA]"
-                        : selectedAction === "fund-records"
-                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                    className={`h-10 px-3 transition-all duration-200 text-sm font-bold ${
+                      isClicked
+                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                        : isSelected 
+                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                          : isDeposit
+                            ? "bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90"
+                            : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                     }`}
-                    variant="outline"
-                    title="资金记录"
+                    variant={isSelected ? "outline" : isDeposit ? "default" : "outline"}
                   >
-                    <FileText 
-                      className={`h-4 w-4 transition-colors ${
-                        clickedAction === "fund-records"
-                          ? "text-white"
-                          : selectedAction === "fund-records" 
-                            ? "text-[#00D4AA]"
-                            : "text-black dark:text-white"
-                      }`} 
-                    />
+                    <Icon className="h-4 w-4 mr-1" />
+                    {button.label}
                   </Button>
+                )
+              })}
+              
+              {/* 分隔线 */}
+              <div className={`w-px h-10 ${isDark ? 'bg-gray-600' : 'bg-gray-300'}`} />
+              
+              {/* 图标按钮区域 */}
+              {/* 资金记录按钮 */}
+              <Button
+                onClick={() => {
+                  setTopLevelTab("订单记录")
+                  setOrderTab("资金记录")
+                  setSecondaryTab("deposit")
+                }}
+                onMouseDown={() => setClickedAction("fund-records")}
+                onMouseUp={() => setClickedAction("")}
+                onMouseLeave={() => setClickedAction("")}
+                className={`h-10 w-10 transition-all duration-200 ${
+                  clickedAction === "fund-records"
+                    ? "bg-[#00D4AA] border-[#00D4AA]"
+                    : selectedAction === "fund-records"
+                      ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                }`}
+                variant="outline"
+                title="资金记录"
+              >
+                <FileText 
+                  className={`h-4 w-4 transition-colors ${
+                    clickedAction === "fund-records"
+                      ? "text-white"
+                      : selectedAction === "fund-records" 
+                        ? "text-[#00D4AA]"
+                        : "text-black dark:text-white"
+                  }`} 
+                />
+              </Button>
 
-                  {/* 订单记录按钮 */}
-                  <Button
-                    onClick={() => {
-                      setTopLevelTab("订单记录")
-                      setOrderTab("现货订单")
-                      setSecondaryTab("current")
-                    }}
-                    onMouseDown={() => setClickedAction("order-records")}
-                    onMouseUp={() => setClickedAction("")}
-                    onMouseLeave={() => setClickedAction("")}
-                    className={`h-10 w-10 transition-all duration-200 ${
-                      clickedAction === "order-records"
-                        ? "bg-[#00D4AA] border-[#00D4AA]"
-                        : selectedAction === "order-records"
-                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                    title="订单记录"
-                  >
-                    <BarChart2 
-                      className={`h-4 w-4 transition-colors ${
-                        clickedAction === "order-records"
-                          ? "text-white"
-                          : selectedAction === "order-records" 
-                            ? "text-[#00D4AA]"
-                            : "text-black dark:text-white"
-                      }`} 
-                    />
-                  </Button>
+              {/* 订单记录按钮 */}
+              <Button
+                onClick={() => {
+                  setTopLevelTab("订单记录")
+                  setOrderTab("现货订单")
+                  setSecondaryTab("current")
+                }}
+                onMouseDown={() => setClickedAction("order-records")}
+                onMouseUp={() => setClickedAction("")}
+                onMouseLeave={() => setClickedAction("")}
+                className={`h-10 w-10 transition-all duration-200 ${
+                  clickedAction === "order-records"
+                    ? "bg-[#00D4AA] border-[#00D4AA]"
+                    : selectedAction === "order-records"
+                      ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                }`}
+                variant="outline"
+                title="订单记录"
+              >
+                <BarChart2 
+                  className={`h-4 w-4 transition-colors ${
+                    clickedAction === "order-records"
+                      ? "text-white"
+                      : selectedAction === "order-records" 
+                        ? "text-[#00D4AA]"
+                        : "text-black dark:text-white"
+                  }`} 
+                />
+              </Button>
 
-                  {/* 仓位分布按钮 */}
-                  <Button
-                    onClick={handlePositionModalClick}
-                    onMouseDown={() => setClickedAction("position-distribution")}
-                    onMouseUp={() => setClickedAction("")}
-                    onMouseLeave={() => setClickedAction("")}
-                    className={`h-10 w-10 transition-all duration-200 ${
-                      clickedAction === "position-distribution"
-                        ? "bg-[#00D4AA] border-[#00D4AA]"
-                        : selectedAction === "position-distribution"
-                          ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                          : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                    }`}
-                    variant="outline"
-                    title="仓位分布"
-                  >
-                    <PieChart 
-                      className={`h-4 w-4 transition-colors ${
-                        clickedAction === "position-distribution"
-                          ? "text-white"
-                          : selectedAction === "position-distribution" 
-                            ? "text-[#00D4AA]"
-                            : "text-black dark:text-white"
-                      }`} 
-                    />
-                  </Button>
-                </div>
+              {/* 仓位分布按钮 */}
+              <Button
+                onClick={handlePositionModalClick}
+                onMouseDown={() => setClickedAction("position-distribution")}
+                onMouseUp={() => setClickedAction("")}
+                onMouseLeave={() => setClickedAction("")}
+                className={`h-10 w-10 transition-all duration-200 ${
+                  clickedAction === "position-distribution"
+                    ? "bg-[#00D4AA] border-[#00D4AA]"
+                    : selectedAction === "position-distribution"
+                      ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                }`}
+                variant="outline"
+                title="仓位分布"
+              >
+                <PieChart 
+                  className={`h-4 w-4 transition-colors ${
+                    clickedAction === "position-distribution"
+                      ? "text-white"
+                      : selectedAction === "position-distribution" 
+                        ? "text-[#00D4AA]"
+                        : "text-black dark:text-white"
+                  }`} 
+                />
+              </Button>
             </div>
 
             {/* 详细内容区域 */}
