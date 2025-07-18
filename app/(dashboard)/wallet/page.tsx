@@ -2582,22 +2582,23 @@ export default function WalletPage() {
       case "钱包总览":
         return (
           <div className="space-y-6">
-            {/* 移动端账户类型选择 - 仅在移动端显示，全屏宽度居中 */}
-            <div className="md:hidden flex justify-center">
-              <div className={`relative flex rounded-lg p-1 w-full max-w-xs ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+            {/* 移动端账户类型选择和图标按钮 - 仅在移动端显示 */}
+            <div className="md:hidden flex justify-between items-center">
+              {/* 左侧：页签居左对齐 */}
+              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
                 {/* 滑动背景 */}
                 <div
                   className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
                   style={{
-                    width: '50%',
-                    left: overviewTab === "现金账户" ? '4px' : '50%'
+                    width: overviewTab === "现金账户" ? '80px' : '64px',
+                    left: overviewTab === "现金账户" ? '4px' : '84px'
                   }}
                 />
                 {/* 按钮 */}
                 {["现金账户", "总资产"].map((tab, index) => (
                   <button
                     key={tab}
-                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 flex-1 ${
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
                       overviewTab === tab
                         ? isDark ? "text-black" : "text-white"
                         : isDark
@@ -2605,6 +2606,7 @@ export default function WalletPage() {
                         : "text-gray-700 hover:text-gray-900"
                     }`}
                     style={{
+                      width: tab === "现金账户" ? '80px' : '64px',
                       height: '36px'
                     }}
                     onClick={() => {
@@ -2615,6 +2617,47 @@ export default function WalletPage() {
                     {tab}
                   </button>
                 ))}
+              </div>
+
+              {/* 右侧：图标按钮区域 */}
+              <div className="flex items-center gap-2">
+                {/* 资金记录图标 */}
+                <Button
+                  onClick={() => {
+                    setTopLevelTab("订单记录")
+                    setOrderTab("资金记录")
+                    setSecondaryTab("deposit")
+                  }}
+                  className={`h-9 w-9 transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800`}
+                  variant="outline"
+                  title="资金记录"
+                >
+                  <FileText className="h-4 w-4 text-black dark:text-white" />
+                </Button>
+
+                {/* 交易记录图标 */}
+                <Button
+                  onClick={() => {
+                    setTopLevelTab("订单记录")
+                    setOrderTab("现货订单")
+                    setSecondaryTab("current")
+                  }}
+                  className={`h-9 w-9 transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800`}
+                  variant="outline"
+                  title="交易记录"
+                >
+                  <BarChart2 className="h-4 w-4 text-black dark:text-white" />
+                </Button>
+
+                {/* 仓位分布图标 */}
+                <Button
+                  onClick={handlePositionModalClick}
+                  className={`h-9 w-9 transition-all duration-200 bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800`}
+                  variant="outline"
+                  title="仓位分布"
+                >
+                  <PieChart className="h-4 w-4 text-black dark:text-white" />
+                </Button>
               </div>
             </div>
 
