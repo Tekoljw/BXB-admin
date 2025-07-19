@@ -4428,7 +4428,7 @@ export default function WalletPage() {
                 className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200"
               >
                 <CardHeader className="pb-1 md:pb-2">
-                  <CardTitle className={`text-[10px] md:text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center`}>
+                  <CardTitle className={`text-[10px] md:text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} md:flex md:items-center text-left`}>
                     <ArrowLeftRight className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2 text-[#00D4AA] hidden md:block" />
                     交易担保金额
                   </CardTitle>
@@ -4468,20 +4468,20 @@ export default function WalletPage() {
                 className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200"
               >
                 <CardHeader className="pb-1 md:pb-2">
-                  <CardTitle className={`text-[10px] md:text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center`}>
+                  <CardTitle className={`text-[10px] md:text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} md:flex md:items-center text-left`}>
                     <Shield className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2 text-blue-400 dark:text-blue-500 hidden md:block" />
                     信誉担保金额
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-0 p-2 md:p-6">
-                  <div className="flex items-baseline space-x-1 mb-2 md:mb-4">
+                  <div className="flex items-baseline space-x-1 mb-1 md:mb-4">
                     <span className={`text-sm md:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       5,000.00
                     </span>
                     <span className="text-[8px] md:text-sm text-[#00D4AA] font-medium hidden md:inline">USDT</span>
                   </div>
-                  <div className="hidden md:block">
-                    <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                  <div className="block">
+                    <span className="text-[8px] md:text-sm text-blue-600 dark:text-blue-400 font-medium">
                       担保解冻时间：00天00小时00分钟00秒
                     </span>
                   </div>
@@ -4491,7 +4491,7 @@ export default function WalletPage() {
               {/* 可用余额 */}
               <Card className="bg-white dark:bg-[#1a1d29] border border-gray-200 dark:border-[#252842] rounded-xl shadow-sm hover:shadow-lg transition-all duration-200">
                 <CardHeader className="pb-1 md:pb-2">
-                  <CardTitle className={`text-[10px] md:text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center`}>
+                  <CardTitle className={`text-[10px] md:text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} md:flex md:items-center text-left`}>
                     <DollarSign className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2 text-[#00D4AA] hidden md:block" />
                     可用余额
                   </CardTitle>
@@ -4503,8 +4503,8 @@ export default function WalletPage() {
                     </span>
                     <span className="text-[8px] md:text-sm text-[#00D4AA] font-medium hidden md:inline">USDT</span>
                   </div>
-                  <div className="hidden md:block">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                  <div className="block">
+                    <span className="text-[8px] md:text-sm text-gray-500 dark:text-gray-400">
                       可划转至现金账户
                     </span>
                   </div>
