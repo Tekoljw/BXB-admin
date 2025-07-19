@@ -3760,8 +3760,8 @@ export default function WalletPage() {
               >
                 <div className="flex items-center justify-between mb-2 md:mb-4">
                   <div className="flex items-center space-x-1 md:space-x-2">
-                    <PiggyBank className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
-                    <h3 className="text-xs md:text-lg font-semibold">理财收益</h3>
+                    <PiggyBank className="hidden md:block h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-[10px] md:text-lg font-semibold">理财收益</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -3821,8 +3821,8 @@ export default function WalletPage() {
               >
                 <div className="flex items-center justify-between mb-2 md:mb-4">
                   <div className="flex items-center space-x-1 md:space-x-2">
-                    <BarChart3 className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
-                    <h3 className="text-xs md:text-lg font-semibold">理财持仓</h3>
+                    <BarChart3 className="hidden md:block h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-[10px] md:text-lg font-semibold">理财持仓</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -3873,8 +3873,8 @@ export default function WalletPage() {
               >
                 <div className="flex items-center justify-between mb-2 md:mb-4">
                   <div className="flex items-center space-x-1 md:space-x-2">
-                    <CreditCard className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
-                    <h3 className="text-xs md:text-lg font-semibold">账户余额</h3>
+                    <CreditCard className="hidden md:block h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-[10px] md:text-lg font-semibold">账户余额</h3>
                   </div>
                   <button
                     onClick={(e) => {

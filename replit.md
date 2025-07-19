@@ -549,6 +549,11 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Simplified mobile currency buttons: removed border, background, and icon - showing only currency symbol
   - Desktop maintains full currency button styling with border, icon, and dropdown indicator
   - Mobile currency buttons positioned as simple text without visual containers for cleaner appearance
+- January 30, 2025. Refined finance account mobile card titles and icons:
+  - Reduced mobile title font size from text-xs to text-[10px] for better space utilization
+  - Hidden all card icons (PiggyBank, BarChart3, CreditCard) on mobile devices using hidden md:block
+  - Desktop maintains full icons with h-6 w-6 sizing and text-lg title font
+  - Mobile cards now show only minimal text titles without visual clutter
 
 ## User Preferences
 
