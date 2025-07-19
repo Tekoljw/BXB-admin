@@ -4798,7 +4798,8 @@ export default function WalletPage() {
 
             {/* 移动端：支付API卡片两个一行 */}
             <div className="md:hidden mb-6">
-              <div className="grid grid-cols-2 gap-3">
+              <div className={`rounded-lg p-3 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+                <div className="grid grid-cols-2 gap-3">
                 {/* 商户法币资产卡片 */}
                 <div 
                   onClick={() => setSelectedPaymentCard("fiat")}
@@ -4814,8 +4815,8 @@ export default function WalletPage() {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-1">
-                      <Banknote className="h-4 w-4 text-[#00D4AA]" />
-                      <h3 className="text-xs font-semibold">法币支付API</h3>
+                      <Banknote className={`h-4 w-4 ${selectedPaymentCard === "fiat" ? "text-gray-400" : "text-[#00D4AA]"}`} />
+                      <h3 className={`text-xs font-semibold ${selectedPaymentCard === "fiat" ? "text-gray-400" : ""}`}>法币支付API</h3>
                     </div>
                     <button
                       onClick={(e) => {
@@ -4854,8 +4855,8 @@ export default function WalletPage() {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-1">
-                      <Coins className="h-4 w-4 text-[#3B82F6]" />
-                      <h3 className="text-xs font-semibold">加密货币支付API</h3>
+                      <Coins className={`h-4 w-4 ${selectedPaymentCard === "crypto" ? "text-gray-400" : "text-[#3B82F6]"}`} />
+                      <h3 className={`text-xs font-semibold ${selectedPaymentCard === "crypto" ? "text-gray-400" : ""}`}>加密货币支付API</h3>
                     </div>
                     <button
                       onClick={(e) => {
@@ -4878,6 +4879,7 @@ export default function WalletPage() {
                     其他币种：28.95 ETH + 1.26 BTC
                   </div>
                 </div>
+              </div>
               </div>
             </div>
 
