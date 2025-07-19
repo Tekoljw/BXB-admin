@@ -626,6 +626,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Made countdown text and description text visible on mobile devices
   - Simplified countdown format from "担保解冻时间：00天00小时00分钟00秒" to "解冻：00:00:00:00"
   - Enhanced mobile user experience with proper text display and alignment across all three guarantee account cards
+- January 30, 2025. Completed mobile responsive progress bar optimization for guarantee account cards:
+  - Implemented separate desktop and mobile layouts for all guarantee transaction cards (收款担保 and 付款担保)
+  - Desktop layout maintains progress bars on the right side with horizontal flex layout
+  - Mobile layout moves progress bars to a new row below the content for better touch interface usability
+  - Applied responsive design to 4 guarantee cards total: 2 in 收款担保 tab, 2 in 付款担保 tab
+  - Enhanced mobile user experience with proper spacing and readability for transaction progress tracking
 
 ## User Preferences
 
