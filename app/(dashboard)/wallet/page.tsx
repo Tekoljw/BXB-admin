@@ -3768,25 +3768,33 @@ export default function WalletPage() {
                       e.stopPropagation()
                       handleCurrencyModalClick()
                     }}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
+                    className={`transition-all duration-300 text-xs ${
                       isDark 
-                        ? "bg-transparent text-white hover:bg-gray-800" 
-                        : "bg-white text-black hover:bg-gray-50"
+                        ? "text-white hover:text-gray-300" 
+                        : "text-black hover:text-gray-600"
+                    } md:flex md:items-center md:space-x-1 md:px-2 md:py-1 md:rounded-full md:font-medium md:border md:border-black ${
+                      isDark 
+                        ? "md:bg-transparent md:hover:bg-gray-800" 
+                        : "md:bg-white md:hover:bg-gray-50"
                     }`}
                   >
-                    <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                    {/* 移动端：仅显示货币符号 */}
+                    <span className="md:hidden">{selectedDisplayCurrency}</span>
+                    
+                    {/* 桌面端：完整样式 */}
+                    <div className={`hidden md:flex w-3 h-3 rounded-full items-center justify-center text-xs font-bold ${
                       availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
                     }`}>
                       <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
                     </div>
-                    <span>{selectedDisplayCurrency}</span>
-                    <ChevronDown className="h-2 w-2" />
+                    <span className="hidden md:inline">{selectedDisplayCurrency}</span>
+                    <ChevronDown className="hidden md:block h-2 w-2" />
                   </button>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4">
-                  <div className={`text-lg md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <div className={`text-sm md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {balanceVisible ? convertBalance(financeData.totalAssets, "USDT", selectedDisplayCurrency) : "****"}
-                    <span className={`text-xs md:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 md:ml-2`}>
+                    <span className={`hidden md:inline text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                       {selectedDisplayCurrency}
                     </span>
                   </div>
@@ -3798,7 +3806,7 @@ export default function WalletPage() {
                     />
                   </div>
                 </div>
-                <div className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 md:mt-2`}>
+                <div className={`hidden md:block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                   总收益 {balanceVisible ? convertBalance(financeData.totalEarnings, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
                 </div>
               </div>
@@ -3821,28 +3829,36 @@ export default function WalletPage() {
                       e.stopPropagation()
                       handleCurrencyModalClick()
                     }}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
+                    className={`transition-all duration-300 text-xs ${
                       isDark 
-                        ? "bg-transparent text-white hover:bg-gray-800" 
-                        : "bg-white text-black hover:bg-gray-50"
+                        ? "text-white hover:text-gray-300" 
+                        : "text-black hover:text-gray-600"
+                    } md:flex md:items-center md:space-x-1 md:px-2 md:py-1 md:rounded-full md:font-medium md:border md:border-black ${
+                      isDark 
+                        ? "md:bg-transparent md:hover:bg-gray-800" 
+                        : "md:bg-white md:hover:bg-gray-50"
                     }`}
                   >
-                    <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                    {/* 移动端：仅显示货币符号 */}
+                    <span className="md:hidden">{selectedDisplayCurrency}</span>
+                    
+                    {/* 桌面端：完整样式 */}
+                    <div className={`hidden md:flex w-3 h-3 rounded-full items-center justify-center text-xs font-bold ${
                       availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
                     }`}>
                       <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
                     </div>
-                    <span>{selectedDisplayCurrency}</span>
-                    <ChevronDown className="h-2 w-2" />
+                    <span className="hidden md:inline">{selectedDisplayCurrency}</span>
+                    <ChevronDown className="hidden md:block h-2 w-2" />
                   </button>
                 </div>
-                <div className={`text-lg md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <div className={`text-sm md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? convertBalance("8,456.78", "USDT", selectedDisplayCurrency) : "****"}
-                  <span className={`text-xs md:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 md:ml-2`}>
+                  <span className={`hidden md:inline text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                     {selectedDisplayCurrency}
                   </span>
                 </div>
-                <div className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 md:mt-2`}>
+                <div className={`hidden md:block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                   持仓资产金额
                 </div>
               </div>
@@ -3865,29 +3881,37 @@ export default function WalletPage() {
                       e.stopPropagation()
                       handleCurrencyModalClick()
                     }}
-                    className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border border-black transition-all duration-300  ${
+                    className={`transition-all duration-300 text-xs ${
                       isDark 
-                        ? "bg-transparent text-white hover:bg-gray-800" 
-                        : "bg-white text-black hover:bg-gray-50"
+                        ? "text-white hover:text-gray-300" 
+                        : "text-black hover:text-gray-600"
+                    } md:flex md:items-center md:space-x-1 md:px-2 md:py-1 md:rounded-full md:font-medium md:border md:border-black ${
+                      isDark 
+                        ? "md:bg-transparent md:hover:bg-gray-800" 
+                        : "md:bg-white md:hover:bg-gray-50"
                     }`}
                   >
-                    <div className={`w-3 h-3 rounded-full flex items-center justify-center text-xs font-bold ${
+                    {/* 移动端：仅显示货币符号 */}
+                    <span className="md:hidden">{selectedDisplayCurrency}</span>
+                    
+                    {/* 桌面端：完整样式 */}
+                    <div className={`hidden md:flex w-3 h-3 rounded-full items-center justify-center text-xs font-bold ${
                       availableCurrencies.find(c => c.symbol === selectedDisplayCurrency)?.color || 'bg-gray-500'
                     }`}>
                       <span className="text-white text-[10px]">{selectedDisplayCurrency.charAt(0)}</span>
                     </div>
-                    <span>{selectedDisplayCurrency}</span>
-                    <ChevronDown className="h-2 w-2" />
+                    <span className="hidden md:inline">{selectedDisplayCurrency}</span>
+                    <ChevronDown className="hidden md:block h-2 w-2" />
                   </button>
                 </div>
-                <div className={`text-lg md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <div className={`text-sm md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? convertBalance("2,345.67", "USDT", selectedDisplayCurrency) : "****"}
-                  <span className={`text-xs md:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 md:ml-2`}>
+                  <span className={`hidden md:inline text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                     {selectedDisplayCurrency}
                   </span>
                 </div>
-                <div className="flex items-center justify-between mt-1 md:mt-2">
-                  <div className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                <div className="hidden md:flex items-center justify-between mt-2">
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                     可用于理财投资
                   </div>
                   <Button 
