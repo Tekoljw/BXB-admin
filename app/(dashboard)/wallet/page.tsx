@@ -4482,7 +4482,7 @@ export default function WalletPage() {
                   </div>
                   <div className="block">
                     <span className="text-[8px] md:text-sm text-blue-600 dark:text-blue-400 font-medium">
-                      担保解冻时间：00天00小时00分钟00秒
+                      解冻：00:00:00:00
                     </span>
                   </div>
                 </CardContent>

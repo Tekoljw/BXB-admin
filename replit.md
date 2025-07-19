@@ -621,6 +621,11 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Removed third pie chart icon button from both desktop and mobile views
   - Desktop maintains horizontal button layout while mobile uses optimized vertical icon+text pattern
   - Enhanced mobile user experience with touch-friendly button layout and proper visual hierarchy
+- January 30, 2025. Optimized guarantee account mobile card layout and text formatting:
+  - Adjusted card titles to left alignment for mobile display consistency
+  - Made countdown text and description text visible on mobile devices
+  - Simplified countdown format from "担保解冻时间：00天00小时00分钟00秒" to "解冻：00:00:00:00"
+  - Enhanced mobile user experience with proper text display and alignment across all three guarantee account cards
 
 ## User Preferences
 
