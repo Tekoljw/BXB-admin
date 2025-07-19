@@ -4512,6 +4512,50 @@ export default function WalletPage() {
               </Card>
             </div>
 
+            {/* 移动端操作按钮 */}
+            <div className="md:hidden">
+              <div className="grid grid-cols-4 gap-2 mb-4">
+                {[
+                  { id: "add-credit", label: "增加信誉担保", icon: Shield },
+                  { id: "extend-time", label: "延长信誉担保", icon: Clock },
+                  { id: "transfer", label: "划转", icon: ArrowLeftRight },
+                  { id: "应收担保交易", label: "应收担保交易", icon: TrendingUp }
+                ].map((button) => {
+                  const Icon = button.icon
+                  const isSelected = selectedAction === button.id
+                  const isClicked = clickedAction === button.id
+                  
+                  return (
+                    <button
+                      key={button.id}
+                      onClick={() => {
+                        if (button.id === "add-credit") {
+                          setShowAddCreditModal(true)
+                        } else if (button.id === "extend-time") {
+                          setShowExtendTimeModal(true)
+                        } else if (button.id === "transfer") {
+                          handleTransferClick()
+                        }
+                      }}
+                      onMouseDown={() => setClickedAction(button.id)}
+                      onMouseUp={() => setClickedAction("")}
+                      onMouseLeave={() => setClickedAction("")}
+                      className={`h-16 flex flex-col items-center justify-center gap-1 transition-all duration-200 text-xs font-medium rounded-lg ${
+                        isClicked
+                          ? "bg-[#00D4AA] text-white"
+                          : isSelected 
+                            ? "bg-[#00D4AA]/10 text-[#00D4AA]" 
+                            : "bg-transparent border border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      <Icon className="h-6 w-6" />
+                      {button.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
             {/* 担保账户标签页和操作按钮 */}
             <div className="flex justify-between items-center">
               {/* 左侧：标签页 */}
@@ -4551,52 +4595,54 @@ export default function WalletPage() {
                 ))}
               </div>
 
-              {/* 右侧：操作按钮 */}
+              {/* 右侧：操作按钮和记录按钮 */}
               <div className="flex gap-2">
-                {/* 主要操作按钮 */}
-                {[
-                  { id: "add-credit", label: "增加信誉担保金", icon: Shield },
-                  { id: "extend-time", label: "延长信誉担保时间", icon: Clock },
-                  { id: "transfer", label: "划转", icon: ArrowLeftRight }
-                ].map((button) => {
-                  const Icon = button.icon
-                  const isSelected = selectedAction === button.id
-                  const isClicked = clickedAction === button.id
+                {/* 桌面端主要操作按钮 */}
+                <div className="hidden md:flex gap-2">
+                  {[
+                    { id: "add-credit", label: "增加信誉担保", icon: Shield },
+                    { id: "extend-time", label: "延长信誉担保", icon: Clock },
+                    { id: "transfer", label: "划转", icon: ArrowLeftRight }
+                  ].map((button) => {
+                    const Icon = button.icon
+                    const isSelected = selectedAction === button.id
+                    const isClicked = clickedAction === button.id
+                    
+                    return (
+                      <Button 
+                        key={button.id}
+                        onClick={() => {
+                          if (button.id === "add-credit") {
+                            setShowAddCreditModal(true)
+                          } else if (button.id === "extend-time") {
+                            setShowExtendTimeModal(true)
+                          } else if (button.id === "transfer") {
+                            handleTransferClick()
+                          }
+                        }}
+                        onMouseDown={() => setClickedAction(button.id)}
+                        onMouseUp={() => setClickedAction("")}
+                        onMouseLeave={() => setClickedAction("")}
+                        className={`h-10 px-3 transition-all duration-200 text-sm font-bold ${
+                          isClicked
+                            ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                            : isSelected 
+                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                        }`}
+                        variant="outline"
+                      >
+                        <Icon className="h-4 w-4 mr-1" />
+                        {button.label}
+                      </Button>
+                    )
+                  })}
                   
-                  return (
-                    <Button 
-                      key={button.id}
-                      onClick={() => {
-                        if (button.id === "add-credit") {
-                          setShowAddCreditModal(true)
-                        } else if (button.id === "extend-time") {
-                          setShowExtendTimeModal(true)
-                        } else if (button.id === "transfer") {
-                          handleTransferClick()
-                        }
-                      }}
-                      onMouseDown={() => setClickedAction(button.id)}
-                      onMouseUp={() => setClickedAction("")}
-                      onMouseLeave={() => setClickedAction("")}
-                      className={`h-10 px-3 transition-all duration-200 text-sm font-bold ${
-                        isClicked
-                          ? "bg-[#00D4AA] text-white border-[#00D4AA]"
-                          : isSelected 
-                            ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
-                            : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                      }`}
-                      variant="outline"
-                    >
-                      <Icon className="h-4 w-4 mr-1" />
-                      {button.label}
-                    </Button>
-                  )
-                })}
+                  {/* 分隔线 */}
+                  <div className={`w-px h-10 ${isDark ? 'bg-gray-600' : 'bg-gray-300'}`} />
+                </div>
                 
-                {/* 分隔线 */}
-                <div className={`w-px h-10 ${isDark ? 'bg-gray-600' : 'bg-gray-300'}`} />
-                
-                {/* 图标按钮区域 */}
+                {/* 图标按钮区域 - 只保留资金记录和担保记录，删除最后一个 */}
                 {/* 信誉担保资金记录按钮 */}
                 <Button
                   onClick={() => handleActionClick("guarantee-fund-records")}
@@ -4611,26 +4657,6 @@ export default function WalletPage() {
                   <FileText 
                     className={`h-4 w-4 transition-colors ${
                       selectedGuaranteeTab === "资金记录"
-                        ? "text-white"
-                        : "text-black dark:text-white"
-                    }`} 
-                  />
-                </Button>
-
-                {/* 担保记录按钮 */}
-                <Button
-                  onClick={() => handleActionClick("guarantee-trade-records")}
-                  className={`h-10 w-10 transition-all duration-200 ${
-                    selectedGuaranteeTab === "交易记录"
-                      ? "bg-[#00D4AA] border-[#00D4AA] text-white"
-                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                  title="担保记录"
-                >
-                  <BarChart3 
-                    className={`h-4 w-4 transition-colors ${
-                      selectedGuaranteeTab === "交易记录"
                         ? "text-white"
                         : "text-black dark:text-white"
                     }`} 

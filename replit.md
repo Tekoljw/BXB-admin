@@ -612,6 +612,15 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Hidden USDT currency units and description text on mobile for cleaner compact interface
   - Applied mobile optimization to all 3 guarantee account cards: 交易担保金额, 信誉担保金额, 可用余额
   - Desktop maintains full functionality with icons, larger text, and complete information display
+- January 30, 2025. Enhanced guarantee account mobile interface with comprehensive button reorganization:
+  - Shortened button text: "增加信誉担保资金" → "增加信誉担保", "延长信誉担保时间" → "延长信誉担保"
+  - Added mobile-specific operation buttons above tabs with vertical icon+text layout (4 buttons in grid-cols-4)
+  - Mobile buttons: 增加信誉担保, 延长信誉担保, 划转, 应收担保交易 with h-16 height and 6x6 icons
+  - Repositioned tabs (收款担保/付款担保) to left alignment on same row as record buttons
+  - Right-aligned record buttons: 资金记录 (FileText icon) and 担保记录 (History icon)
+  - Removed third pie chart icon button from both desktop and mobile views
+  - Desktop maintains horizontal button layout while mobile uses optimized vertical icon+text pattern
+  - Enhanced mobile user experience with touch-friendly button layout and proper visual hierarchy
 
 ## User Preferences
 
