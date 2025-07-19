@@ -638,6 +638,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Changed mobile layout from vertical stacking to horizontal flex with justify-between alignment
   - Enhanced mobile touch interface with appropriately sized buttons in accessible top-right corner position
   - Updated all 4 guarantee cards (2 收款担保, 2 付款担保) with consistent mobile button placement
+- January 30, 2025. Implemented BePAY account mobile adaptation with merchant ID card priority:
+  - Placed merchant ID card at the very top on mobile devices (MP2025001234 + BeDAO科技有限公司)
+  - Applied compact mobile styling to merchant card: smaller icons (h-6 w-6 → h-3 w-3), reduced padding and text sizes
+  - Restructured payment API cards to display two per row on mobile (grid-cols-2) with condensed content
+  - Mobile payment cards feature smaller text (text-xs), compact buttons, and reduced padding (p-3)
+  - Maintained desktop three-column layout while providing streamlined mobile two-row structure
+  - Enhanced mobile user experience with properly sized touch targets and clear visual hierarchy
 
 ## User Preferences
 
