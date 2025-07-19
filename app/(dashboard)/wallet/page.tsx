@@ -4128,6 +4128,12 @@ export default function WalletPage() {
             <div className={`${cardStyle} rounded-lg p-6`}>
               {financeMode === "收益计算" && (
                 <div>
+                  {/* 红色提示 */}
+                  <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                    <p className="text-red-600 dark:text-red-400 text-sm font-medium">
+                      以下内容请无视原型，直接使用UBX
+                    </p>
+                  </div>
                   
                   {/* UBX收益概览 */}
                   <div className="mb-8">
@@ -4258,6 +4264,13 @@ export default function WalletPage() {
 
               {financeMode === "当前持仓" && (
                 <div>
+                  {/* 红色提示 */}
+                  <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                    <p className="text-red-600 dark:text-red-400 text-sm font-medium">
+                      以下内容请无视原型，直接使用UBX
+                    </p>
+                  </div>
+                  
                   <div className="space-y-4">
                     {financeData.products.map((product, index) => (
                       <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-[#3a3d4a] hover:shadow-md transition-all">
