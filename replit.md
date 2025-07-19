@@ -632,6 +632,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Mobile layout moves progress bars to a new row below the content for better touch interface usability
   - Applied responsive design to 4 guarantee cards total: 2 in 收款担保 tab, 2 in 付款担保 tab
   - Enhanced mobile user experience with proper spacing and readability for transaction progress tracking
+- January 30, 2025. Moved guarantee account buttons and contact icons to top-right corner on mobile:
+  - Repositioned "查看合同" button and contact icon to right-aligned position on mobile layouts
+  - Applied compact button styling: smaller padding (px-2 py-1), reduced text size (text-xs), smaller icons (h-4 w-4)
+  - Changed mobile layout from vertical stacking to horizontal flex with justify-between alignment
+  - Enhanced mobile touch interface with appropriately sized buttons in accessible top-right corner position
+  - Updated all 4 guarantee cards (2 收款担保, 2 付款担保) with consistent mobile button placement
 
 ## User Preferences
 
