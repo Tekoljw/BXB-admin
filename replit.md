@@ -565,6 +565,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Updated sliding background to use percentage-based positioning (33.333% width)
   - Added truncate text and responsive font sizes (text-xs on mobile, text-sm on desktop)
   - Tabs now automatically adjust to available screen space without overflow
+- January 30, 2025. Converted finance account balance from table to mobile card layout:
+  - Added responsive design: desktop maintains table view (hidden md:block), mobile shows cards (md:hidden)
+  - Mobile cards feature: coin icon+name+available balance at top, frozen amount+action buttons at bottom
+  - Enhanced mobile card styling with larger icons (w-10 h-10), proper spacing, and 4-data-point layout
+  - Preserved all functionality including balance visibility toggle and action buttons (划转, 闪兑)
+  - Desktop table view unchanged for optimal data presentation on larger screens
 
 ## User Preferences
 

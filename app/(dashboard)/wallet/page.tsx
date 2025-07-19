@@ -4287,7 +4287,8 @@ export default function WalletPage() {
               {financeMode === "账户余额" && (
                 <div>
                   <div className="space-y-4">
-                    <div className="overflow-x-auto">
+                    {/* 桌面端表格视图 */}
+                    <div className="hidden md:block overflow-x-auto">
                       <table className="w-full">
                         <thead>
                           <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
@@ -4345,6 +4346,68 @@ export default function WalletPage() {
                           ))}
                         </tbody>
                       </table>
+                    </div>
+
+                    {/* 移动端卡片视图 */}
+                    <div className="md:hidden space-y-3">
+                      {[
+                        { symbol: "USDT", name: "Tether USD", available: "2,345.67", frozen: "0.00" },
+                        { symbol: "BTC", name: "Bitcoin", available: "0.05234", frozen: "0.00" },
+                        { symbol: "ETH", name: "Ethereum", available: "1.2345", frozen: "0.00" },
+                        { symbol: "UBX", name: "UBX Token", available: "1,000.00", frozen: "50.00" },
+                        { symbol: "UBC", name: "UBC Token", available: "500.00", frozen: "25.00" }
+                      ].map((currency, index) => (
+                        <div key={currency.symbol} className={`${cardStyle} rounded-lg p-4`}>
+                          {/* 顶部：币种信息和可用余额 */}
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+                                <span className="text-[#00D4AA] font-bold text-base">{currency.symbol.charAt(0)}</span>
+                              </div>
+                              <div>
+                                <div className="font-bold text-base">{currency.symbol}</div>
+                                <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                  {currency.name}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-base font-bold">
+                                {balanceVisible ? currency.available : "****"}
+                              </div>
+                              <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                可用余额
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 底部：冻结金额和操作按钮 */}
+                          <div className="flex items-center justify-between">
+                            <div className="text-left">
+                              <div className="text-sm font-medium text-gray-500">
+                                {balanceVisible ? currency.frozen : "****"}
+                              </div>
+                              <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                冻结金额
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Button 
+                                size="sm"
+                                className="h-8 px-3 text-xs font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                              >
+                                划转
+                              </Button>
+                              <Button 
+                                size="sm"
+                                className="h-8 px-3 text-xs font-medium bg-transparent border border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                              >
+                                闪兑
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
