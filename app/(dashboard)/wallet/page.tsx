@@ -3760,8 +3760,8 @@ export default function WalletPage() {
               >
                 <div className="flex items-center justify-between mb-2 md:mb-4">
                   <div className="flex items-center space-x-1 md:space-x-2">
-                    <PiggyBank className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
-                    <h3 className="text-xs md:text-lg font-semibold">理财收益</h3>
+                    <PiggyBank className="hidden md:block h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-[10px] md:text-lg font-semibold">理财收益</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -3821,8 +3821,8 @@ export default function WalletPage() {
               >
                 <div className="flex items-center justify-between mb-2 md:mb-4">
                   <div className="flex items-center space-x-1 md:space-x-2">
-                    <BarChart3 className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
-                    <h3 className="text-xs md:text-lg font-semibold">理财持仓</h3>
+                    <BarChart3 className="hidden md:block h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-[10px] md:text-lg font-semibold">理财持仓</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -3873,8 +3873,8 @@ export default function WalletPage() {
               >
                 <div className="flex items-center justify-between mb-2 md:mb-4">
                   <div className="flex items-center space-x-1 md:space-x-2">
-                    <CreditCard className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
-                    <h3 className="text-xs md:text-lg font-semibold">账户余额</h3>
+                    <CreditCard className="hidden md:block h-6 w-6 text-[#00D4AA]" />
+                    <h3 className="text-[10px] md:text-lg font-semibold">账户余额</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -3929,19 +3929,52 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 理财账户标签页和操作按钮 */}
+            {/* 移动端：操作按钮在上方 */}
+            <div className="md:hidden flex justify-center gap-2 mb-4">
+              {[
+                { id: "finance-transfer", label: "划转", icon: ArrowLeftRight },
+                { id: "finance-exchange", label: "闪兑", icon: RefreshCw }
+              ].map((button) => {
+                const Icon = button.icon
+                const isSelected = selectedAction === button.id
+                const isClicked = clickedAction === button.id
+                
+                return (
+                  <Button 
+                    key={button.id}
+                    onClick={() => handleActionClick(button.id)}
+                    onMouseDown={() => setClickedAction(button.id)}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-10 px-3 transition-all duration-200 text-sm font-bold ${
+                      isClicked
+                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                        : isSelected 
+                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <Icon className="h-4 w-4 mr-1" />
+                    {button.label}
+                  </Button>
+                )
+              })}
+            </div>
+
+            {/* 理财账户标签页和资产分布按钮 */}
             <div className="flex justify-between items-center">
               {/* 左侧：标签页 */}
               <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
-                {/* 滑动背景 */}
+                {/* 滑动背景 - 移动端只有两个标签 */}
                 <div
                   className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
                   style={{
                     width: '96px',
-                    left: financeMode === "收益计算" ? '4px' : financeMode === "当前持仓" ? '100px' : '196px'
+                    left: financeMode === "收益计算" ? '4px' : financeMode === "当前持仓" ? '100px' : financeMode === "账户余额" ? '196px' : '4px'
                   }}
                 />
-                {/* 按钮 */}
+                {/* 按钮 - 移动端显示收益计算和当前持仓，桌面端显示全部三个 */}
                 {[
                   { id: "收益计算", label: "收益计算" },
                   { id: "当前持仓", label: "当前持仓" },
@@ -3950,6 +3983,8 @@ export default function WalletPage() {
                   <button
                     key={tab.id}
                     className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                      tab.id === "账户余额" ? "hidden md:flex" : ""
+                    } ${
                       financeMode === tab.id
                         ? isDark ? "text-black" : "text-white"
                         : isDark
@@ -3969,8 +4004,37 @@ export default function WalletPage() {
                 ))}
               </div>
 
-              {/* 右侧：操作按钮 */}
+              {/* 右侧：资产分布按钮 (移动端) 和完整操作按钮 (桌面端) */}
               <div className="flex gap-2">
+                {/* 移动端：仅显示资产分布按钮 */}
+                <Button
+                  onClick={() => handleActionClick("finance-position-distribution")}
+                  onMouseDown={() => setClickedAction("finance-position-distribution")}
+                  onMouseUp={() => setClickedAction("")}
+                  onMouseLeave={() => setClickedAction("")}
+                  className={`md:hidden h-10 w-10 transition-all duration-200 ${
+                    clickedAction === "finance-position-distribution"
+                      ? "bg-[#00D4AA] border-[#00D4AA]"
+                      : selectedAction === "finance-position-distribution"
+                        ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                  title="资产分布"
+                >
+                  <BarChart3 
+                    className={`h-4 w-4 transition-colors ${
+                      clickedAction === "finance-position-distribution"
+                        ? "text-white"
+                        : selectedAction === "finance-position-distribution" 
+                          ? "text-[#00D4AA]"
+                          : "text-black dark:text-white"
+                    }`} 
+                  />
+                </Button>
+
+                {/* 桌面端：完整操作按钮 */}
+                <div className="hidden md:flex gap-2">
                 {/* 主要操作按钮 */}
                 {[
                   { id: "finance-transfer", label: "划转", icon: ArrowLeftRight },
@@ -4086,6 +4150,7 @@ export default function WalletPage() {
                     }`} 
                   />
                 </Button>
+                </div>
               </div>
             </div>
 
