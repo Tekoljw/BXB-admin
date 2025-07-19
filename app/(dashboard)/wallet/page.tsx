@@ -3752,11 +3752,7 @@ export default function WalletPage() {
             <div className="grid grid-cols-3 gap-2 md:gap-6">
               {/* 理财收益卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-2 md:p-6 transition-all duration-300 ease-out ${
-                  financeMode === "收益计算" 
-                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
-                    : ""
-                }`}
+                className={`${cardStyle} rounded-lg p-2 md:p-6`}
               >
                 <div className="flex items-center justify-between mb-2 md:mb-4">
                   <div className="flex items-center space-x-1 md:space-x-2">
@@ -3813,11 +3809,7 @@ export default function WalletPage() {
 
               {/* 理财持仓卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-2 md:p-6 transition-all duration-300 ease-out ${
-                  financeMode === "当前持仓" 
-                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
-                    : ""
-                }`}
+                className={`${cardStyle} rounded-lg p-2 md:p-6`}
               >
                 <div className="flex items-center justify-between mb-2 md:mb-4">
                   <div className="flex items-center space-x-1 md:space-x-2">
@@ -3865,11 +3857,7 @@ export default function WalletPage() {
 
               {/* 账户余额卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-2 md:p-6 transition-all duration-300 ease-out ${
-                  financeMode === "账户余额" 
-                    ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
-                    : ""
-                }`}
+                className={`${cardStyle} rounded-lg p-2 md:p-6`}
               >
                 <div className="flex items-center justify-between mb-2 md:mb-4">
                   <div className="flex items-center space-x-1 md:space-x-2">

@@ -576,6 +576,10 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Warning message: "以下内容请无视原型，直接使用UBX" in red text with red background and border
   - Styled with bg-red-50/dark:bg-red-900/20 background and red-200/dark:red-800 borders for visibility
   - Applied to both sections to inform users about prototype content override with UBX usage
+- January 30, 2025. Removed selection state effects from finance account top cards:
+  - Eliminated ring-2, border highlight, and shadow effects from all three finance cards
+  - Removed transition animations and hover states for static card design
+  - Cards now maintain consistent appearance without selection state visual feedback
 
 ## User Preferences
 
