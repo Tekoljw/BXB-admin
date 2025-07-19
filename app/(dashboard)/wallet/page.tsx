@@ -4815,8 +4815,8 @@ export default function WalletPage() {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-1">
-                      <Banknote className={`h-4 w-4 ${selectedPaymentCard === "fiat" ? "text-gray-400" : "text-[#00D4AA]"}`} />
-                      <h3 className={`text-xs font-semibold ${selectedPaymentCard === "fiat" ? "text-gray-400" : ""}`}>法币支付API</h3>
+                      <Banknote className={`h-4 w-4 ${selectedPaymentCard !== "fiat" ? "text-gray-400" : "text-[#00D4AA]"}`} />
+                      <h3 className={`text-xs font-semibold ${selectedPaymentCard !== "fiat" ? "text-gray-400" : ""}`}>法币支付API</h3>
                     </div>
                     <button
                       onClick={(e) => {
@@ -4832,10 +4832,10 @@ export default function WalletPage() {
                       <ChevronDown className="h-2 w-2" />
                     </button>
                   </div>
-                  <div className={`text-lg font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <div className={`text-lg font-bold mb-1 ${selectedPaymentCard !== "fiat" ? "text-gray-400" : isDark ? 'text-white' : 'text-gray-900'}`}>
                     {balanceVisible ? "$125,860" : "****"}
                   </div>
-                  <div className="text-gray-500 text-xs">
+                  <div className={`text-xs ${selectedPaymentCard !== "fiat" ? "text-gray-400" : "text-gray-500"}`}>
                     代付备用金：$38,520
                   </div>
                 </div>
@@ -4855,8 +4855,8 @@ export default function WalletPage() {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-1">
-                      <Coins className={`h-4 w-4 ${selectedPaymentCard === "crypto" ? "text-gray-400" : "text-[#3B82F6]"}`} />
-                      <h3 className={`text-xs font-semibold ${selectedPaymentCard === "crypto" ? "text-gray-400" : ""}`}>加密货币支付API</h3>
+                      <Coins className={`h-4 w-4 ${selectedPaymentCard !== "crypto" ? "text-gray-400" : "text-[#3B82F6]"}`} />
+                      <h3 className={`text-xs font-semibold ${selectedPaymentCard !== "crypto" ? "text-gray-400" : ""}`}>加密货币支付API</h3>
                     </div>
                     <button
                       onClick={(e) => {
@@ -4872,10 +4872,10 @@ export default function WalletPage() {
                       <ChevronDown className="h-2 w-2" />
                     </button>
                   </div>
-                  <div className={`text-lg font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <div className={`text-lg font-bold mb-1 ${selectedPaymentCard !== "crypto" ? "text-gray-400" : isDark ? 'text-white' : 'text-gray-900'}`}>
                     {balanceVisible ? "45,230.50" : "****"}
                   </div>
-                  <div className="text-gray-500 text-xs">
+                  <div className={`text-xs ${selectedPaymentCard !== "crypto" ? "text-gray-400" : "text-gray-500"}`}>
                     其他币种：28.95 ETH + 1.26 BTC
                   </div>
                 </div>
