@@ -587,6 +587,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Hidden icons on mobile devices using hidden md:block for cleaner compact interface
   - Hidden trend charts and additional info on mobile to maximize space utilization
   - Desktop maintains full functionality with icons, charts, and larger text sizes
+- January 30, 2025. Enhanced U卡账户 mobile layout with comprehensive button reorganization:
+  - Moved USDT unit to top-right corner on mobile cards using absolute positioning
+  - Added mobile operation buttons row above tabs with vertical icon+text layout (h-16 height, flex-1 width)
+  - Included 5 main functions: 充值, 申请新卡, 激活卡片, 划款, 个人信息 with proper onClick handlers
+  - Repositioned tabs to left alignment and added 3 right-aligned icon buttons: 充值记录, 消费记录, 资金分布
+  - Desktop maintains original horizontal button layout while mobile uses optimized vertical icon+text pattern
+  - Mobile buttons use gap-2 spacing with proper touch targets and responsive design
 
 ## User Preferences
 

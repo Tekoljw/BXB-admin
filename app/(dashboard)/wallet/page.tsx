@@ -8807,11 +8807,11 @@ export default function WalletPage() {
                         卡内余额
                       </h3>
                     </div>
-                    <div className="flex items-center">
-                      <span className={`text-lg md:text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className="flex items-center md:flex-row flex-col md:items-center items-start relative">
+                      <span className={`text-lg md:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         {balanceVisible ? "2,222.22" : "****"}
                       </span>
-                      <span className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
+                      <span className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'} md:ml-2 md:static absolute top-0 right-0`}>USDT</span>
                     </div>
                   </div>
                   <div className="hidden md:flex flex-shrink-0 ml-4 flex-col items-center">
@@ -8841,11 +8841,11 @@ export default function WalletPage() {
                         账户余额
                       </h3>
                     </div>
-                    <div className="flex items-center">
-                      <span className={`text-lg md:text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className="flex items-center md:flex-row flex-col md:items-center items-start relative">
+                      <span className={`text-lg md:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         {balanceVisible ? "3,456.78" : "****"}
                       </span>
-                      <span className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
+                      <span className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'} md:ml-2 md:static absolute top-0 right-0`}>USDT</span>
                     </div>
                   </div>
                   <div className="hidden md:flex flex-shrink-0 ml-4 flex-col items-center">
@@ -8865,6 +8865,46 @@ export default function WalletPage() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* 手机端操作按钮 */}
+            <div className="md:hidden">
+              <div className="flex gap-2 justify-center mb-4">
+                {[
+                  { id: "recharge", label: "充值", icon: Plus },
+                  { id: "apply-card", label: "申请新卡", icon: CreditCard },
+                  { id: "activate-card", label: "激活卡片", icon: Power },
+                  { id: "transfer", label: "划款", icon: ArrowLeftRight },
+                  { id: "personal-info", label: "个人信息", icon: User }
+                ].map((button) => {
+                  const Icon = button.icon
+                  return (
+                    <Button 
+                      key={button.id}
+                      onClick={() => {
+                        if (button.id === "recharge") {
+                          setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
+                          setShowRechargeModal(true)
+                        } else if (button.id === "apply-card") {
+                          setShowNewCardModal(true)
+                        } else if (button.id === "activate-card") {
+                          setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
+                          setShowActivateModal(true)
+                        } else if (button.id === "transfer") {
+                          handleTransferClick()
+                        } else if (button.id === "personal-info") {
+                          setShowPersonalInfoModal(true)
+                        }
+                      }}
+                      className="h-16 flex-1 bg-transparent border-2 border-black hover:bg-gray-50 text-black dark:border-white dark:text-white dark:hover:bg-gray-800 flex-col px-2"
+                      variant="outline"
+                    >
+                      <Icon className="h-6 w-6 mb-1" />
+                      <span className="text-xs">{button.label}</span>
+                    </Button>
+                  )
+                })}
               </div>
             </div>
 
@@ -8903,8 +8943,39 @@ export default function WalletPage() {
                 ))}
               </div>
 
-              {/* 功能按钮 */}
-              <div className="flex space-x-2">
+              {/* 桌面端功能按钮 */}
+              <div className="hidden md:flex space-x-2">
+                {/* 手机端右侧功能按钮 */}
+              </div>
+              <div className="md:hidden flex gap-2">
+                <Button 
+                  onClick={() => handleActionClick("ucard-fund-records")} 
+                  className="h-8 w-8 bg-transparent border-2 border-black hover:bg-gray-50 text-black dark:border-white dark:text-white dark:hover:bg-gray-800 p-0" 
+                  variant="outline" 
+                  title="充值记录"
+                >
+                  <FileText className="h-4 w-4" />
+                </Button>
+                <Button 
+                  onClick={() => handleActionClick("ucard-order-records")} 
+                  className="h-8 w-8 bg-transparent border-2 border-black hover:bg-gray-50 text-black dark:border-white dark:text-white dark:hover:bg-gray-800 p-0" 
+                  variant="outline" 
+                  title="消费记录"
+                >
+                  <BarChart3 className="h-4 w-4" />
+                </Button>
+                <Button 
+                  onClick={() => console.log('资金分布')} 
+                  className="h-8 w-8 bg-transparent border-2 border-black hover:bg-gray-50 text-black dark:border-white dark:text-white dark:hover:bg-gray-800 p-0" 
+                  variant="outline" 
+                  title="资金分布"
+                >
+                  <PieChart className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              {/* 桌面端按钮组 */}
+              <div className="hidden md:flex space-x-2">
                 <Button
                   variant="outline"
                   onClick={() => {
