@@ -580,6 +580,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Eliminated ring-2, border highlight, and shadow effects from all three finance cards
   - Removed transition animations and hover states for static card design
   - Cards now maintain consistent appearance without selection state visual feedback
+- January 30, 2025. Adapted U卡账户 top cards for mobile two-column layout:
+  - Changed grid from grid-cols-1 md:grid-cols-2 to grid-cols-2 for mobile two-column display
+  - Reduced mobile padding from p-6 to p-2, maintained md:p-6 for desktop
+  - Scaled down mobile text sizes: titles from text-lg to text-xs, amounts from text-2xl to text-lg
+  - Hidden icons on mobile devices using hidden md:block for cleaner compact interface
+  - Hidden trend charts and additional info on mobile to maximize space utilization
+  - Desktop maintains full functionality with icons, charts, and larger text sizes
 
 ## User Preferences
 

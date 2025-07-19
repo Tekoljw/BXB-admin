@@ -8796,25 +8796,25 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             {/* 两个顶部卡片 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-2 md:gap-6">
               {/* 卡内余额 */}
-              <div className={`rounded-lg p-6 ${cardStyle}`}>
+              <div className={`rounded-lg p-2 md:p-6 ${cardStyle}`}>
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center mb-4">
-                      <CreditCard className={`h-6 w-6 mr-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                      <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className="flex items-center mb-2 md:mb-4">
+                      <CreditCard className={`hidden md:block h-6 w-6 mr-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <h3 className={`text-xs md:text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         卡内余额
                       </h3>
                     </div>
                     <div className="flex items-center">
-                      <span className={`text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      <span className={`text-lg md:text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         {balanceVisible ? "2,222.22" : "****"}
                       </span>
-                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
+                      <span className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 ml-4 flex flex-col items-center">
+                  <div className="hidden md:flex flex-shrink-0 ml-4 flex-col items-center">
                     <TrendChart 
                       data={generateTrendData(false)} 
                       isPositive={false}
@@ -8832,23 +8832,23 @@ export default function WalletPage() {
               </div>
 
               {/* 账户余额 */}
-              <div className={`rounded-lg p-6 ${cardStyle}`}>
+              <div className={`rounded-lg p-2 md:p-6 ${cardStyle}`}>
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center mb-4">
-                      <Wallet className={`h-6 w-6 mr-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-                      <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className="flex items-center mb-2 md:mb-4">
+                      <Wallet className={`hidden md:block h-6 w-6 mr-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <h3 className={`text-xs md:text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         账户余额
                       </h3>
                     </div>
                     <div className="flex items-center">
-                      <span className={`text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      <span className={`text-lg md:text-2xl font-bold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         {balanceVisible ? "3,456.78" : "****"}
                       </span>
-                      <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
+                      <span className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 ml-4 flex flex-col items-center">
+                  <div className="hidden md:flex flex-shrink-0 ml-4 flex-col items-center">
                     <TrendChart 
                       data={generateTrendData(true)} 
                       isPositive={true}
