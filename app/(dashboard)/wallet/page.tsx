@@ -3968,13 +3968,13 @@ export default function WalletPage() {
             {/* 理财账户标签页和持仓分布按钮 */}
             <div className="flex justify-between items-center">
               {/* 左侧：标签页 */}
-              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+              <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'} flex-1 max-w-xs`}>
                 {/* 滑动背景 */}
                 <div
                   className={`absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out ${isDark ? 'bg-white' : 'bg-black'}`}
                   style={{
-                    width: '96px',
-                    left: financeMode === "收益计算" ? '4px' : financeMode === "当前持仓" ? '100px' : '196px'
+                    width: 'calc(33.333% - 8px)',
+                    left: financeMode === "收益计算" ? '4px' : financeMode === "当前持仓" ? '33.333%' : '66.666%'
                   }}
                 />
                 {/* 按钮 */}
@@ -3985,7 +3985,7 @@ export default function WalletPage() {
                 ].map((tab, index) => (
                   <button
                     key={tab.id}
-                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                    className={`relative z-10 flex items-center justify-center text-sm font-medium transition-all duration-300 flex-1 ${
                       financeMode === tab.id
                         ? isDark ? "text-black" : "text-white"
                         : isDark
@@ -3993,14 +3993,13 @@ export default function WalletPage() {
                         : "text-gray-700 hover:text-gray-900"
                     }`}
                     style={{
-                      width: '96px',
                       height: '32px'
                     }}
                     onClick={() => {
                       setFinanceMode(tab.id)
                     }}
                   >
-                    {tab.label}
+                    <span className="px-1 truncate text-xs md:text-sm">{tab.label}</span>
                   </button>
                 ))}
               </div>

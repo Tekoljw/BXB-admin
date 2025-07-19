@@ -560,6 +560,11 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Kept only position distribution button (持仓分布) alongside tabs, right-aligned
   - Tabs (收益计算, 当前持仓, 账户余额) remain left-aligned on same row as position distribution button
   - Desktop maintains original layout with all buttons on same row as tabs
+- January 30, 2025. Fixed finance account tab width to auto-adapt within screen bounds:
+  - Changed tabs from fixed 96px width to responsive flex-1 layout with max-width constraint
+  - Updated sliding background to use percentage-based positioning (33.333% width)
+  - Added truncate text and responsive font sizes (text-xs on mobile, text-sm on desktop)
+  - Tabs now automatically adjust to available screen space without overflow
 
 ## User Preferences
 
