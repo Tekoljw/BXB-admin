@@ -659,11 +659,6 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Maintained mobile compact layout at top position with vertical button arrangement
   - Merchant ID card now appears first in both mobile and desktop BePAY account sections
   - Enhanced visual hierarchy with merchant information taking priority over payment API cards
-- January 30, 2025. Updated crypto payment API card styling and layout:
-  - Changed USDT unit text to smaller font size (text-xs for mobile, text-sm for desktop)
-  - Removed right-side merchant ID card from desktop layout for cleaner interface
-  - Restructured payment API cards to full-width layout without third column
-  - Fixed BePAY case syntax structure with proper return statement closure
 
 ## User Preferences
 
