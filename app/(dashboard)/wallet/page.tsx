@@ -9721,59 +9721,60 @@ export default function WalletPage() {
               )}
 
               {selectedUCardView === "physical" && (
-                <div className="grid gap-6" style={{
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-                  maxWidth: '100%'
-                }}>
+                <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                   {/* 实体卡1 - 白金卡 */}
-                  <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
+                  <div className="w-full">
+                    <div className={`relative rounded-2xl p-3 md:p-4 lg:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'
                     } shadow-lg transition-all hover:shadow-xl`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
-                      <div className="flex justify-between items-start mb-6">
-                        <div className={`text-sm font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>BeDAO</div>
+                      <div className="flex justify-between items-start mb-3 md:mb-6">
+                        <div className={`text-xs md:text-sm font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>BXB</div>
                         <div className="flex items-center">
-                          <div className="w-3 h-3 rounded-full bg-blue-500 -mr-0.5"></div>
-                          <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                          <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-blue-500 -mr-0.5"></div>
+                          <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-red-500"></div>
                         </div>
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
-                        <div className={`w-8 h-6 rounded border-2 ${
+                      <div className="absolute top-1/2 right-3 md:right-6 transform -translate-y-1/2">
+                        <div className={`w-6 h-4 md:w-8 md:h-6 rounded border-2 ${
                           isDark ? 'border-gray-400 bg-gray-300' : 'border-gray-600 bg-gray-400'
                         } flex items-center justify-center`}>
-                          <div className={`w-4 h-3 rounded-sm ${
+                          <div className={`w-3 h-2 md:w-4 md:h-3 rounded-sm ${
                             isDark ? 'bg-gray-500' : 'bg-gray-600'
                           }`}></div>
                         </div>
                       </div>
 
                       {/* 卡号区域 */}
-                      <div className={`mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                      <div className={`mb-2 md:mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                         <div className="flex items-center">
-                          <span className="text-sm font-mono tracking-wider font-bold">5234 5234 5234 1234</span>
+                          <span className="text-xs md:text-sm font-mono tracking-wider font-bold">5234 5234 5234 1234</span>
                           <button 
-                            className="ml-2 opacity-70 hover:opacity-100"
+                            className="ml-1 md:ml-2 opacity-70 hover:opacity-100"
                             onClick={() => navigator.clipboard.writeText("5234523452341234")}
                           >
-                            <Copy className="h-3 w-3" />
+                            <Copy className="h-2 w-2 md:h-3 md:w-3" />
                           </button>
                         </div>
-                        <div className={`text-xs opacity-75 mt-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>有效期: 12/28</div>
+                        <div className={`text-[10px] md:text-xs opacity-75 mt-1 md:mt-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>有效期: 12/28</div>
                       </div>
 
                       {/* 卡片余额 */}
-                      <div className="absolute bottom-4 left-6">
-                        <div className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>卡片余额</div>
-                        <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>2,345.67 USDT</div>
+                      <div className="absolute bottom-2 md:bottom-4 left-3 md:left-6">
+                        <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>卡片余额</div>
+                        <div className={`text-xs md:text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>2,345.67 
+                          <span className={`ml-1 text-[10px] md:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>USDT</span>
+                        </div>
                       </div>
                     </div>
 
                     {/* 实体卡1操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
-                      <div className="grid grid-cols-4 gap-2">
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-4 py-2 md:py-3 z-0 shadow-md ${
+                      isDark ? 'bg-gray-700/50' : 'bg-white/90'
+                    }`}>
+                      <div className="grid grid-cols-4 gap-1 md:gap-2">
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
@@ -9836,38 +9837,38 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡2 - 钻石卡 */}
-                  <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
+                  <div className="w-full">
+                    <div className={`relative rounded-2xl p-3 md:p-4 lg:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-purple-800 to-purple-900' : 'bg-gradient-to-br from-purple-500 to-purple-600'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="text-sm font-bold">BeDAO</div>
+                      <div className="flex justify-between items-start mb-3 md:mb-6">
+                        <div className="text-xs md:text-sm font-bold">BXB</div>
                         <div className="flex items-center">
-                          <div className="w-3 h-3 rounded-full bg-yellow-400 -mr-0.5"></div>
-                          <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                          <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-yellow-400 -mr-0.5"></div>
+                          <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-orange-500"></div>
                         </div>
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
-                        <div className="w-8 h-6 rounded border-2 border-yellow-300 bg-yellow-200 flex items-center justify-center">
-                          <div className="w-4 h-3 rounded-sm bg-yellow-400"></div>
+                      <div className="absolute top-1/2 right-3 md:right-6 transform -translate-y-1/2">
+                        <div className="w-6 h-4 md:w-8 md:h-6 rounded border-2 border-yellow-300 bg-yellow-200 flex items-center justify-center">
+                          <div className="w-3 h-2 md:w-4 md:h-3 rounded-sm bg-yellow-400"></div>
                         </div>
                       </div>
 
                       {/* 卡号区域 */}
-                      <div className="mb-4">
+                      <div className="mb-2 md:mb-4">
                         <div className="flex items-center">
-                          <span className="text-sm font-mono tracking-wider font-bold">4456 4456 4456 7890</span>
+                          <span className="text-xs md:text-sm font-mono tracking-wider font-bold">4456 4456 4456 7890</span>
                           <button 
-                            className="ml-2 opacity-70 hover:opacity-100"
+                            className="ml-1 md:ml-2 opacity-70 hover:opacity-100"
                             onClick={() => navigator.clipboard.writeText("4456445644567890")}
                           >
-                            <Copy className="h-3 w-3" />
+                            <Copy className="h-2 w-2 md:h-3 md:w-3" />
                           </button>
                         </div>
-                        <div className="text-xs opacity-75 mt-2">有效期: 08/29</div>
+                        <div className="text-[10px] md:text-xs opacity-75 mt-1 md:mt-2">有效期: 08/29</div>
                       </div>
 
                       {/* 卡片余额 */}
@@ -9878,8 +9879,10 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡2操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
-                      <div className="grid grid-cols-4 gap-2">
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-4 py-2 md:py-3 z-0 shadow-md ${
+                      isDark ? 'bg-gray-700/50' : 'bg-white/90'
+                    }`}>
+                      <div className="grid grid-cols-4 gap-1 md:gap-2">
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
@@ -10075,9 +10078,11 @@ export default function WalletPage() {
                       </div>
 
                       {/* 卡片余额 */}
-                      <div className="absolute bottom-4 left-6">
-                        <div className="text-xs opacity-75">卡片余额</div>
-                        <div className="text-sm font-medium">8,901.23 USDT</div>
+                      <div className="absolute bottom-2 md:bottom-4 left-3 md:left-6">
+                        <div className="text-[10px] md:text-xs opacity-75">卡片余额</div>
+                        <div className="text-xs md:text-sm font-medium">8,901.23 
+                          <span className="ml-1 text-[10px] md:text-xs opacity-75">USDT</span>
+                        </div>
                       </div>
                     </div>
 

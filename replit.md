@@ -594,6 +594,14 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Repositioned tabs to left alignment and added 3 right-aligned icon buttons: 充值记录, 消费记录, 资金分布
   - Desktop maintains original horizontal button layout while mobile uses optimized vertical icon+text pattern
   - Mobile buttons use gap-2 spacing with proper touch targets and responsive design
+- January 30, 2025. Optimized U卡账户 physical card layout for mobile devices:
+  - Changed grid layout from fixed minmax(350px, 1fr) to responsive grid-cols-1 md:grid-cols-2 lg:grid-cols-3
+  - Reduced mobile padding for cards: p-3 on mobile, p-4 on medium, p-6 on large screens
+  - Scaled down mobile text sizes: logo (text-xs), card numbers (text-xs), expiry dates (text-[10px])
+  - Resized mobile icons and elements: chip icon (w-6 h-4), copy buttons (h-2 w-2), payment logos (w-2 h-2)
+  - Updated card balance positioning and styling for mobile compatibility with proper USDT unit spacing
+  - Enhanced mobile button layout with smaller gaps (gap-1) and responsive background styling for operation buttons
+  - Updated branding from "BeDAO" to "BXB" across all physical card designs
 
 ## User Preferences
 
