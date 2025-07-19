@@ -3748,20 +3748,20 @@ export default function WalletPage() {
         
         return (
           <div className="space-y-6">
-            {/* 三个卡片选择 - 增强动画效果 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* 三个卡片选择 - 移动端也显示三列 */}
+            <div className="grid grid-cols-3 gap-2 md:gap-6">
               {/* 理财收益卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out ${
+                className={`${cardStyle} rounded-lg p-2 md:p-6 transition-all duration-300 ease-out ${
                   financeMode === "收益计算" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
                     : ""
                 }`}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <PiggyBank className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">理财收益</h3>
+                <div className="flex items-center justify-between mb-2 md:mb-4">
+                  <div className="flex items-center space-x-1 md:space-x-2">
+                    <PiggyBank className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
+                    <h3 className="text-xs md:text-lg font-semibold">理财收益</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -3783,14 +3783,14 @@ export default function WalletPage() {
                     <ChevronDown className="h-2 w-2" />
                   </button>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <div className="flex items-center gap-2 md:gap-4">
+                  <div className={`text-lg md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {balanceVisible ? convertBalance(financeData.totalAssets, "USDT", selectedDisplayCurrency) : "****"}
-                    <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                    <span className={`text-xs md:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 md:ml-2`}>
                       {selectedDisplayCurrency}
                     </span>
                   </div>
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0 hidden md:block">
                     <TrendChart 
                       data={generateTrendData(true)} 
                       isPositive={true}
@@ -3798,23 +3798,23 @@ export default function WalletPage() {
                     />
                   </div>
                 </div>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                <div className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 md:mt-2`}>
                   总收益 {balanceVisible ? convertBalance(financeData.totalEarnings, "USDT", selectedDisplayCurrency) : "****"} {selectedDisplayCurrency}
                 </div>
               </div>
 
               {/* 理财持仓卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out ${
+                className={`${cardStyle} rounded-lg p-2 md:p-6 transition-all duration-300 ease-out ${
                   financeMode === "当前持仓" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
                     : ""
                 }`}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <BarChart3 className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">理财持仓</h3>
+                <div className="flex items-center justify-between mb-2 md:mb-4">
+                  <div className="flex items-center space-x-1 md:space-x-2">
+                    <BarChart3 className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
+                    <h3 className="text-xs md:text-lg font-semibold">理财持仓</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -3836,29 +3836,29 @@ export default function WalletPage() {
                     <ChevronDown className="h-2 w-2" />
                   </button>
                 </div>
-                <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <div className={`text-lg md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? convertBalance("8,456.78", "USDT", selectedDisplayCurrency) : "****"}
-                  <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                  <span className={`text-xs md:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 md:ml-2`}>
                     {selectedDisplayCurrency}
                   </span>
                 </div>
-                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                <div className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 md:mt-2`}>
                   持仓资产金额
                 </div>
               </div>
 
               {/* 账户余额卡片 */}
               <div 
-                className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out ${
+                className={`${cardStyle} rounded-lg p-2 md:p-6 transition-all duration-300 ease-out ${
                   financeMode === "账户余额" 
                     ? "ring-2 ring-[#00D4AA] border-[#00D4AA]/50 shadow-lg" 
                     : ""
                 }`}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <CreditCard className="h-6 w-6 text-[#00D4AA]" />
-                    <h3 className="text-lg font-semibold">账户余额</h3>
+                <div className="flex items-center justify-between mb-2 md:mb-4">
+                  <div className="flex items-center space-x-1 md:space-x-2">
+                    <CreditCard className="h-4 w-4 md:h-6 md:w-6 text-[#00D4AA]" />
+                    <h3 className="text-xs md:text-lg font-semibold">账户余额</h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -3880,19 +3880,19 @@ export default function WalletPage() {
                     <ChevronDown className="h-2 w-2" />
                   </button>
                 </div>
-                <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <div className={`text-lg md:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {balanceVisible ? convertBalance("2,345.67", "USDT", selectedDisplayCurrency) : "****"}
-                  <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                  <span className={`text-xs md:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 md:ml-2`}>
                     {selectedDisplayCurrency}
                   </span>
                 </div>
-                <div className="flex items-center justify-between mt-2">
-                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                <div className="flex items-center justify-between mt-1 md:mt-2">
+                  <div className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                     可用于理财投资
                   </div>
                   <Button 
                     size="sm"
-                    className="h-8 px-3 text-xs font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                    className="hidden md:flex h-8 px-3 text-xs font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
                     onClick={(e) => {
                       e.stopPropagation()
                       // 划转功能
