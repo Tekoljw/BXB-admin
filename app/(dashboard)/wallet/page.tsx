@@ -3929,7 +3929,43 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 理财账户标签页和操作按钮 */}
+            {/* 移动端操作按钮行 */}
+            <div className="md:hidden flex gap-2 justify-center">
+              {/* 主要操作按钮 */}
+              {[
+                { id: "finance-transfer", label: "划转", icon: ArrowLeftRight },
+                { id: "finance-exchange", label: "闪兑", icon: RefreshCw },
+                { id: "finance-fund-records", label: "资金记录", icon: FileText },
+                { id: "finance-investment-records", label: "投资记录", icon: Target }
+              ].map((button) => {
+                const Icon = button.icon
+                const isSelected = selectedAction === button.id
+                const isClicked = clickedAction === button.id
+                
+                return (
+                  <Button 
+                    key={button.id}
+                    onClick={() => handleActionClick(button.id)}
+                    onMouseDown={() => setClickedAction(button.id)}
+                    onMouseUp={() => setClickedAction("")}
+                    onMouseLeave={() => setClickedAction("")}
+                    className={`h-16 px-2 flex-col transition-all duration-200 text-xs font-bold flex-1 ${
+                      isClicked
+                        ? "bg-[#00D4AA] text-white border-[#00D4AA]"
+                        : isSelected 
+                          ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
+                          : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                    }`}
+                    variant="outline"
+                  >
+                    <Icon className="h-6 w-6 mb-1" />
+                    {button.label}
+                  </Button>
+                )
+              })}
+            </div>
+
+            {/* 理财账户标签页和持仓分布按钮 */}
             <div className="flex justify-between items-center">
               {/* 左侧：标签页 */}
               <div className={`relative flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
@@ -3969,8 +4005,8 @@ export default function WalletPage() {
                 ))}
               </div>
 
-              {/* 右侧：操作按钮 */}
-              <div className="flex gap-2">
+              {/* 右侧：桌面端操作按钮 */}
+              <div className="hidden md:flex gap-2">
                 {/* 主要操作按钮 */}
                 {[
                   { id: "finance-transfer", label: "划转", icon: ArrowLeftRight },
@@ -4059,34 +4095,34 @@ export default function WalletPage() {
                     }`} 
                   />
                 </Button>
-
-                {/* 持仓分布按钮 */}
-                <Button
-                  onClick={() => handleActionClick("finance-position-distribution")}
-                  onMouseDown={() => setClickedAction("finance-position-distribution")}
-                  onMouseUp={() => setClickedAction("")}
-                  onMouseLeave={() => setClickedAction("")}
-                  className={`h-10 w-10 transition-all duration-200 ${
-                    clickedAction === "finance-position-distribution"
-                      ? "bg-[#00D4AA] border-[#00D4AA]"
-                      : selectedAction === "finance-position-distribution"
-                        ? "bg-[#00D4AA]/10 border-[#00D4AA]"
-                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
-                  }`}
-                  variant="outline"
-                  title="持仓分布"
-                >
-                  <PieChart 
-                    className={`h-4 w-4 transition-colors ${
-                      clickedAction === "finance-position-distribution"
-                        ? "text-white"
-                        : selectedAction === "finance-position-distribution" 
-                          ? "text-[#00D4AA]"
-                          : "text-black dark:text-white"
-                    }`} 
-                  />
-                </Button>
               </div>
+
+              {/* 右侧：持仓分布按钮（移动端和桌面端都显示） */}
+              <Button
+                onClick={() => handleActionClick("finance-position-distribution")}
+                onMouseDown={() => setClickedAction("finance-position-distribution")}
+                onMouseUp={() => setClickedAction("")}
+                onMouseLeave={() => setClickedAction("")}
+                className={`h-10 w-10 transition-all duration-200 ${
+                  clickedAction === "finance-position-distribution"
+                    ? "bg-[#00D4AA] border-[#00D4AA]"
+                    : selectedAction === "finance-position-distribution"
+                      ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                      : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                }`}
+                variant="outline"
+                title="持仓分布"
+              >
+                <PieChart 
+                  className={`h-4 w-4 transition-colors ${
+                    clickedAction === "finance-position-distribution"
+                      ? "text-white"
+                      : selectedAction === "finance-position-distribution" 
+                        ? "text-[#00D4AA]"
+                        : "text-black dark:text-white"
+                  }`} 
+                />
+              </Button>
             </div>
 
             {/* 动态内容区域 */}

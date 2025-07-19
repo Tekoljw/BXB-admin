@@ -554,6 +554,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Hidden all card icons (PiggyBank, BarChart3, CreditCard) on mobile devices using hidden md:block
   - Desktop maintains full icons with h-6 w-6 sizing and text-lg title font
   - Mobile cards now show only minimal text titles without visual clutter
+- January 30, 2025. Reorganized finance account mobile operation button layout:
+  - Moved four operation buttons (划转, 闪兑, 资金记录, 投资记录) to separate row above tabs on mobile
+  - Used vertical icon+text layout with h-16 height and flex-1 width distribution across screen
+  - Kept only position distribution button (持仓分布) alongside tabs, right-aligned
+  - Tabs (收益计算, 当前持仓, 账户余额) remain left-aligned on same row as position distribution button
+  - Desktop maintains original layout with all buttons on same row as tabs
 
 ## User Preferences
 
