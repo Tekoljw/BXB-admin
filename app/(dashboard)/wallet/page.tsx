@@ -4876,7 +4876,7 @@ export default function WalletPage() {
                     {balanceVisible ? "45,230.50" : "****"}
                   </div>
                   <div className={`text-xs ${selectedPaymentCard !== "crypto" ? "text-gray-400" : "text-gray-500"}`}>
-                    其他币种：28.95 ETH + 1.26 BTC
+                    当前地址数：12312u
                   </div>
                 </div>
               </div>
@@ -4971,7 +4971,7 @@ export default function WalletPage() {
                         {balanceVisible ? "45,230.50 USDT" : "****"}
                       </div>
                       <div className="text-gray-500 text-sm">
-                        其他币种：28.95 ETH + 1.26 BTC
+                        当前地址数：12312u
                       </div>
                     </div>
                   </div>
