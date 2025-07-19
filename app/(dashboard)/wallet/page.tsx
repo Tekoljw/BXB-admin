@@ -5042,20 +5042,6 @@ export default function WalletPage() {
                 </div>
               </div>
             </div>
-            
-            {/* Content will be rendered based on selected tabs */}
-            <div className="mt-6">
-              {/* Tab content will be implemented here */}
-            </div>
-            
-            {/* Modals and other components */}
-            {showExchangeModal && (
-              <div>Exchange Modal Content</div>
-            )}
-            
-            {showStandbyRechargeModal && (
-              <div>Standby Recharge Modal Content</div>
-            )}
           </div>
         )
 
