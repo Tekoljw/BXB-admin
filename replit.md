@@ -604,6 +604,14 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Applied mobile optimizations to all 5 physical cards: 白金卡, 钻石卡, 黑金卡, 商务卡, 学生卡
   - Updated branding from "BeDAO" to "BXB" across all physical card designs
   - Added proper responsive padding and typography scaling for optimal mobile viewing experience
+- January 30, 2025. Optimized guarantee account (担保账户) mobile layout with 3-column card display:
+  - Changed top cards grid from grid-cols-1 md:grid-cols-3 to grid-cols-3 for consistent mobile 3-column layout
+  - Reduced mobile card padding from default to p-2 and adjusted gaps from gap-6 to gap-2 on mobile
+  - Scaled down mobile text sizes: titles from text-lg to text-[10px], amounts from text-2xl to text-sm
+  - Hidden icons on mobile devices and reduced icon sizes for visible elements
+  - Hidden USDT currency units and description text on mobile for cleaner compact interface
+  - Applied mobile optimization to all 3 guarantee account cards: 交易担保金额, 信誉担保金额, 可用余额
+  - Desktop maintains full functionality with icons, larger text, and complete information display
 
 ## User Preferences
 
