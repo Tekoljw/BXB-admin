@@ -651,6 +651,14 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Applied gray styling to titles, amounts, and descriptions for unselected payment cards
   - Selected card maintains normal colors while unselected card uses text-gray-400 styling
   - Enhanced user interface clarity with proper visual hierarchy and selection indication
+- January 30, 2025. Updated crypto payment card description text:
+  - Changed "其他币种：28.95 ETH + 1.26 BTC" to "当前地址数：12312u"
+  - Applied to both mobile and desktop layouts while maintaining selection state color logic
+- January 30, 2025. Repositioned merchant ID card to first position in BePAY account layout:
+  - Added merchant ID card to desktop layout with full horizontal layout (company info, certification status, API buttons)
+  - Maintained mobile compact layout at top position with vertical button arrangement
+  - Merchant ID card now appears first in both mobile and desktop BePAY account sections
+  - Enhanced visual hierarchy with merchant information taking priority over payment API cards
 
 ## User Preferences
 
