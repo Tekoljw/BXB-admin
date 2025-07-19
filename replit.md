@@ -604,16 +604,14 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Applied mobile optimizations to all 5 physical cards: 白金卡, 钻石卡, 黑金卡, 商务卡, 学生卡
   - Updated branding from "BeDAO" to "BXB" across all physical card designs
   - Added proper responsive padding and typography scaling for optimal mobile viewing experience
-- January 30, 2025. Optimized guarantee account (担保账户) mobile layout with enhanced 3-column card display:
+- January 30, 2025. Optimized guarantee account (担保账户) mobile layout with 3-column card display:
   - Changed top cards grid from grid-cols-1 md:grid-cols-3 to grid-cols-3 for consistent mobile 3-column layout
-  - Improved mobile card spacing: increased gap from gap-2 to gap-3, enhanced padding from p-2 to p-3
-  - Enhanced mobile text hierarchy: titles from text-[10px] to text-xs, amounts scaled to text-lg for better readability
-  - Implemented adaptive text display: shortened titles on mobile ("交易担保" vs "交易担保金额")
-  - Redesigned mobile layout structure: centered content alignment with vertical stacking for amounts and currency units
-  - Enhanced USDT currency display: visible on mobile with proper text sizing (text-xs)
-  - Improved card styling: changed from rounded-xl to rounded-lg, better visual balance
-  - Applied comprehensive mobile optimization to all 3 guarantee account cards with improved visual hierarchy
-  - Desktop maintains full functionality while mobile provides optimized touch-friendly interface
+  - Reduced mobile card padding from default to p-2 and adjusted gaps from gap-6 to gap-2 on mobile
+  - Scaled down mobile text sizes: titles from text-lg to text-[10px], amounts from text-2xl to text-sm
+  - Hidden icons on mobile devices and reduced icon sizes for visible elements
+  - Hidden USDT currency units and description text on mobile for cleaner compact interface
+  - Applied mobile optimization to all 3 guarantee account cards: 交易担保金额, 信誉担保金额, 可用余额
+  - Desktop maintains full functionality with icons, larger text, and complete information display
 
 ## User Preferences
 
