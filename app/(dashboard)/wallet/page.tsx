@@ -9941,50 +9941,54 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡3 - 黑金卡 */}
-                  <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
+                  <div className="w-full">
+                    <div className={`relative rounded-2xl p-3 md:p-4 lg:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-gray-900 to-black' : 'bg-gradient-to-br from-gray-800 to-gray-900'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="text-sm font-bold">BeDAO</div>
+                      <div className="flex justify-between items-start mb-3 md:mb-6">
+                        <div className="text-xs md:text-sm font-bold">BXB</div>
                         <div className="flex items-center">
-                          <div className="w-3 h-3 rounded-full bg-gold -mr-0.5" style={{backgroundColor: '#FFD700'}}></div>
-                          <div className="w-3 h-3 rounded-full bg-silver" style={{backgroundColor: '#C0C0C0'}}></div>
+                          <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-gold -mr-0.5" style={{backgroundColor: '#FFD700'}}></div>
+                          <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-silver" style={{backgroundColor: '#C0C0C0'}}></div>
                         </div>
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
-                        <div className="w-8 h-6 rounded border-2 border-gray-400 bg-gray-300 flex items-center justify-center">
-                          <div className="w-4 h-3 rounded-sm bg-gray-500"></div>
+                      <div className="absolute top-1/2 right-3 md:right-6 transform -translate-y-1/2">
+                        <div className="w-6 h-4 md:w-8 md:h-6 rounded border-2 border-gray-400 bg-gray-300 flex items-center justify-center">
+                          <div className="w-3 h-2 md:w-4 md:h-3 rounded-sm bg-gray-500"></div>
                         </div>
                       </div>
 
                       {/* 卡号区域 */}
-                      <div className="mb-4">
+                      <div className="mb-2 md:mb-4">
                         <div className="flex items-center">
-                          <span className="text-sm font-mono tracking-wider font-bold">6789 6789 6789 0123</span>
+                          <span className="text-xs md:text-sm font-mono tracking-wider font-bold">6789 6789 6789 0123</span>
                           <button 
-                            className="ml-2 opacity-70 hover:opacity-100"
+                            className="ml-1 md:ml-2 opacity-70 hover:opacity-100"
                             onClick={() => navigator.clipboard.writeText("6789678967890123")}
                           >
-                            <Copy className="h-3 w-3" />
+                            <Copy className="h-2 w-2 md:h-3 md:w-3" />
                           </button>
                         </div>
-                        <div className="text-xs opacity-75 mt-2">有效期: 05/30</div>
+                        <div className="text-[10px] md:text-xs opacity-75 mt-1 md:mt-2">有效期: 05/30</div>
                       </div>
 
                       {/* 卡片余额 */}
-                      <div className="absolute bottom-4 left-6">
-                        <div className="text-xs opacity-75">卡片余额</div>
-                        <div className="text-sm font-medium">12,345.12 USDT</div>
+                      <div className="absolute bottom-2 md:bottom-4 left-3 md:left-6">
+                        <div className="text-[10px] md:text-xs opacity-75">卡片余额</div>
+                        <div className="text-xs md:text-sm font-medium">12,345.12 
+                          <span className="ml-1 text-[10px] md:text-xs opacity-75">USDT</span>
+                        </div>
                       </div>
                     </div>
 
                     {/* 实体卡3操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
-                      <div className="grid grid-cols-4 gap-2">
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-4 py-2 md:py-3 z-0 shadow-md ${
+                      isDark ? 'bg-gray-700/50' : 'bg-white/90'
+                    }`}>
+                      <div className="grid grid-cols-4 gap-1 md:gap-2">
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
@@ -10043,38 +10047,38 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡4 - 商务卡 */}
-                  <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
+                  <div className="w-full">
+                    <div className={`relative rounded-2xl p-3 md:p-4 lg:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-green-800 to-green-900' : 'bg-gradient-to-br from-green-600 to-green-700'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="text-sm font-bold">BeDAO</div>
+                      <div className="flex justify-between items-start mb-3 md:mb-6">
+                        <div className="text-xs md:text-sm font-bold">BXB</div>
                         <div className="flex items-center">
-                          <div className="w-3 h-3 rounded-full bg-blue-400 -mr-0.5"></div>
-                          <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                          <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-blue-400 -mr-0.5"></div>
+                          <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-green-400"></div>
                         </div>
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
-                        <div className="w-8 h-6 rounded border-2 border-green-300 bg-green-200 flex items-center justify-center">
-                          <div className="w-4 h-3 rounded-sm bg-green-400"></div>
+                      <div className="absolute top-1/2 right-3 md:right-6 transform -translate-y-1/2">
+                        <div className="w-6 h-4 md:w-8 md:h-6 rounded border-2 border-green-300 bg-green-200 flex items-center justify-center">
+                          <div className="w-3 h-2 md:w-4 md:h-3 rounded-sm bg-green-400"></div>
                         </div>
                       </div>
 
                       {/* 卡号区域 */}
-                      <div className="mb-4">
+                      <div className="mb-2 md:mb-4">
                         <div className="flex items-center">
-                          <span className="text-sm font-mono tracking-wider font-bold">7890 7890 7890 4567</span>
+                          <span className="text-xs md:text-sm font-mono tracking-wider font-bold">7890 7890 7890 4567</span>
                           <button 
-                            className="ml-2 opacity-70 hover:opacity-100"
+                            className="ml-1 md:ml-2 opacity-70 hover:opacity-100"
                             onClick={() => navigator.clipboard.writeText("7890789078904567")}
                           >
-                            <Copy className="h-3 w-3" />
+                            <Copy className="h-2 w-2 md:h-3 md:w-3" />
                           </button>
                         </div>
-                        <div className="text-xs opacity-75 mt-2">有效期: 03/31</div>
+                        <div className="text-[10px] md:text-xs opacity-75 mt-1 md:mt-2">有效期: 03/31</div>
                       </div>
 
                       {/* 卡片余额 */}
@@ -10087,8 +10091,10 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡4操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
-                      <div className="grid grid-cols-4 gap-2">
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-4 py-2 md:py-3 z-0 shadow-md ${
+                      isDark ? 'bg-gray-700/50' : 'bg-white/90'
+                    }`}>
+                      <div className="grid grid-cols-4 gap-1 md:gap-2">
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
@@ -10147,50 +10153,54 @@ export default function WalletPage() {
                   </div>
 
                   {/* 实体卡5 - 学生卡 */}
-                  <div className="w-full min-w-[350px] max-w-[450px]">
-                    <div className={`relative rounded-2xl p-4 sm:p-6 w-full z-10 ${
+                  <div className="w-full">
+                    <div className={`relative rounded-2xl p-3 md:p-4 lg:p-6 w-full z-10 ${
                       isDark ? 'bg-gradient-to-br from-blue-800 to-blue-900' : 'bg-gradient-to-br from-blue-500 to-blue-600'
                     } shadow-lg transition-all hover:shadow-xl text-white`} style={{aspectRatio: '16/9'}}>
                       {/* 顶部logo区域 */}
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="text-sm font-bold">BeDAO</div>
+                      <div className="flex justify-between items-start mb-3 md:mb-6">
+                        <div className="text-xs md:text-sm font-bold">BXB</div>
                         <div className="flex items-center">
-                          <div className="w-3 h-3 rounded-full bg-cyan-400 -mr-0.5"></div>
-                          <div className="w-3 h-3 rounded-full bg-blue-400"></div>
+                          <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-cyan-400 -mr-0.5"></div>
+                          <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-blue-400"></div>
                         </div>
                       </div>
 
                       {/* 芯片图标 */}
-                      <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
-                        <div className="w-8 h-6 rounded border-2 border-blue-300 bg-blue-200 flex items-center justify-center">
-                          <div className="w-4 h-3 rounded-sm bg-blue-400"></div>
+                      <div className="absolute top-1/2 right-3 md:right-6 transform -translate-y-1/2">
+                        <div className="w-6 h-4 md:w-8 md:h-6 rounded border-2 border-blue-300 bg-blue-200 flex items-center justify-center">
+                          <div className="w-3 h-2 md:w-4 md:h-3 rounded-sm bg-blue-400"></div>
                         </div>
                       </div>
 
                       {/* 卡号区域 */}
-                      <div className="mb-4">
+                      <div className="mb-2 md:mb-4">
                         <div className="flex items-center">
-                          <span className="text-sm font-mono tracking-wider font-bold">1234 1234 1234 5678</span>
+                          <span className="text-xs md:text-sm font-mono tracking-wider font-bold">1234 1234 1234 5678</span>
                           <button 
-                            className="ml-2 opacity-70 hover:opacity-100"
+                            className="ml-1 md:ml-2 opacity-70 hover:opacity-100"
                             onClick={() => navigator.clipboard.writeText("1234123412345678")}
                           >
-                            <Copy className="h-3 w-3" />
+                            <Copy className="h-2 w-2 md:h-3 md:w-3" />
                           </button>
                         </div>
-                        <div className="text-xs opacity-75 mt-2">有效期: 01/32</div>
+                        <div className="text-[10px] md:text-xs opacity-75 mt-1 md:mt-2">有效期: 01/32</div>
                       </div>
 
                       {/* 卡片余额 */}
-                      <div className="absolute bottom-4 left-6">
-                        <div className="text-xs opacity-75">卡片余额</div>
-                        <div className="text-sm font-medium">1,567.45 USDT</div>
+                      <div className="absolute bottom-2 md:bottom-4 left-3 md:left-6">
+                        <div className="text-[10px] md:text-xs opacity-75">卡片余额</div>
+                        <div className="text-xs md:text-sm font-medium">1,567.45 
+                          <span className="ml-1 text-[10px] md:text-xs opacity-75">USDT</span>
+                        </div>
                       </div>
                     </div>
 
                     {/* 实体卡5操作按钮 - 小舌头设计 */}
-                    <div className="relative -mt-1 mx-auto w-[90%] rounded-b-lg px-4 py-3 z-0 shadow-md">
-                      <div className="grid grid-cols-4 gap-2">
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-4 py-2 md:py-3 z-0 shadow-md ${
+                      isDark ? 'bg-gray-700/50' : 'bg-white/90'
+                    }`}>
+                      <div className="grid grid-cols-4 gap-1 md:gap-2">
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
