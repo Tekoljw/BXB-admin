@@ -4119,7 +4119,7 @@ export default function WalletPage() {
                   {/* 红色提示 */}
                   <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
                     <p className="text-red-600 dark:text-red-400 text-sm font-medium">
-                      以下内容请无视原型，直接使用UBX
+                      以下内容不需要改成跟原型一样，使用ubx原有页面，排版和手机端适配需要根据原型适当优化即可。
                     </p>
                   </div>
                   
@@ -4255,7 +4255,7 @@ export default function WalletPage() {
                   {/* 红色提示 */}
                   <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
                     <p className="text-red-600 dark:text-red-400 text-sm font-medium">
-                      以下内容请无视原型，直接使用UBX
+                      以下内容不需要改成跟原型一样，使用ubx原有页面，排版和手机端适配需要根据原型适当优化即可。
                     </p>
                   </div>
                   
