@@ -12730,5 +12730,3 @@ export default function WalletPage() {
     </div>
   );
 }
-
-export default WalletPage;
