@@ -15,6 +15,7 @@ import {
   Eye,
   EyeOff,
   Plus,
+  PlusCircle,
   Minus,
   BarChart3,
   Shield,
@@ -4706,30 +4707,30 @@ export default function WalletPage() {
           { id: "通道配置", label: "通道配置", icon: Network },
           { id: "法币下发", label: "法币下发", icon: Repeat },
           { id: "代付金充值", label: "代付金充值", icon: Plus }
-        ]
+        ];
         const fiatIconTabs = [
           { id: "资金记录", icon: Banknote },
           { id: "订单记录", icon: BarChart2 },
           { id: "资产分布", icon: PieChart }
-        ]
+        ];
         
         const cryptoTabs = [
           { id: "商户资产", label: "商户资产", icon: Landmark },
           { id: "地址管理", label: "地址管理", icon: Link },
           { id: "OTC供应商", label: "OTC供应商", icon: Network },
           { id: "划转", label: "划转", icon: ArrowLeftRight }
-        ]
+        ];
         const cryptoIconTabs = [
           { id: "划转记录", icon: Coins },
           { id: "订单记录", icon: BarChart2 },
           { id: "资产分布", icon: PieChart }
-        ]
+        ];
         
         return (
           <div className="space-y-6">
             {/* 移动端：商户信息卡片置顶 */}
             <div className="md:hidden mb-6">
-              <div className={`${cardStyle} rounded-lg p-4 flex flex-col justify-between`}>
+              <div className={`${isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"} rounded-lg p-4 flex flex-col justify-between`}>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
@@ -4946,6 +4947,91 @@ export default function WalletPage() {
                     <span>生成密钥</span>
                   </button>
                 </div>
+              </div>
+            </div>
+
+            {/* 移动端：功能按钮区域 */}
+            <div className="md:hidden mb-6">
+              <div className="grid grid-cols-4 gap-2">
+                <button
+                  onClick={() => {
+                    console.log("BePAY充值")
+                  }}
+                  className="flex flex-col items-center justify-center h-16 px-2 py-1 rounded-lg text-xs font-medium transition-all border-2 bg-white border-black text-black hover:bg-gray-50"
+                >
+                  <PlusCircle className="h-6 w-6 mb-1" />
+                  <span>充值</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    console.log("申请新卡")
+                  }}
+                  className="flex flex-col items-center justify-center h-16 px-2 py-1 rounded-lg text-xs font-medium transition-all border-2 bg-white border-black text-black hover:bg-gray-50"
+                >
+                  <CreditCard className="h-6 w-6 mb-1" />
+                  <span>申请新卡</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    console.log("激活卡片")
+                  }}
+                  className="flex flex-col items-center justify-center h-16 px-2 py-1 rounded-lg text-xs font-medium transition-all border-2 bg-white border-black text-black hover:bg-gray-50"
+                >
+                  <Unlock className="h-6 w-6 mb-1" />
+                  <span>激活卡片</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    console.log("划款")
+                  }}
+                  className="flex flex-col items-center justify-center h-16 px-2 py-1 rounded-lg text-xs font-medium transition-all border-2 bg-white border-black text-black hover:bg-gray-50"
+                >
+                  <ArrowLeftRight className="h-6 w-6 mb-1" />
+                  <span>划款</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    console.log("个人信息")
+                  }}
+                  className="flex flex-col items-center justify-center h-16 px-2 py-1 rounded-lg text-xs font-medium transition-all border-2 bg-white border-black text-black hover:bg-gray-50"
+                >
+                  <User className="h-6 w-6 mb-1" />
+                  <span>个人信息</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    console.log("充值记录")
+                  }}
+                  className="flex flex-col items-center justify-center h-16 px-2 py-1 rounded-lg text-xs font-medium transition-all border-2 bg-white border-black text-black hover:bg-gray-50"
+                >
+                  <FileText className="h-6 w-6 mb-1" />
+                  <span>充值记录</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    console.log("消费记录")
+                  }}
+                  className="flex flex-col items-center justify-center h-16 px-2 py-1 rounded-lg text-xs font-medium transition-all border-2 bg-white border-black text-black hover:bg-gray-50"
+                >
+                  <Receipt className="h-6 w-6 mb-1" />
+                  <span>消费记录</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    console.log("资金分布")
+                  }}
+                  className="flex flex-col items-center justify-center h-16 px-2 py-1 rounded-lg text-xs font-medium transition-all border-2 bg-white border-black text-black hover:bg-gray-50"
+                >
+                  <PieChart className="h-6 w-6 mb-1" />
+                  <span>资金分布</span>
+                </button>
               </div>
             </div>
 
