@@ -4916,7 +4916,7 @@ export default function WalletPage() {
 
             {/* 桌面端：商户信息卡片 */}
             <div className="hidden md:block">
-              <div className={`${cardStyle} rounded-lg p-6 flex items-center justify-between`}>
+              <div className={`${bePayCardStyle} rounded-lg p-6 flex items-center justify-between`}>
                 <div className="flex items-center space-x-4">
                   <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
                     <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
