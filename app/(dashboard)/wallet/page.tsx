@@ -15,7 +15,6 @@ import {
   Eye,
   EyeOff,
   Plus,
-  PlusCircle,
   Minus,
   BarChart3,
   Shield,
@@ -4701,9 +4700,348 @@ export default function WalletPage() {
         )
 
       case "BePAY账户":
+        // 定义法币和加密货币页签
+        const fiatTabs = [
+          { id: "商户资产", label: "商户资产", icon: Landmark },
+          { id: "通道配置", label: "通道配置", icon: Network },
+          { id: "法币下发", label: "法币下发", icon: Repeat },
+          { id: "代付金充值", label: "代付金充值", icon: Plus }
+        ]
+        const fiatIconTabs = [
+          { id: "资金记录", icon: Banknote },
+          { id: "订单记录", icon: BarChart2 },
+          { id: "资产分布", icon: PieChart }
+        ]
+        
+        const cryptoTabs = [
+          { id: "商户资产", label: "商户资产", icon: Landmark },
+          { id: "地址管理", label: "地址管理", icon: Link },
+          { id: "OTC供应商", label: "OTC供应商", icon: Network },
+          { id: "划转", label: "划转", icon: ArrowLeftRight }
+        ]
+        const cryptoIconTabs = [
+          { id: "划转记录", icon: Coins },
+          { id: "订单记录", icon: BarChart2 },
+          { id: "资产分布", icon: PieChart }
+        ]
+        
         return (
-          <div className="p-4">
-            <div className="text-center">BePAY账户页面</div>
+          <div className="space-y-6">
+            {/* 移动端：商户信息卡片置顶 */}
+            <div className="md:hidden mb-6">
+              <div className={`${cardStyle} rounded-lg p-4 flex flex-col justify-between`}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <div className={`text-sm font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          MP2025001234
+                        </div>
+                        <button
+                          onClick={() => navigator.clipboard.writeText("MP2025001234")}
+                          className={`p-1 rounded transition-colors ${
+                            isDark 
+                              ? 'hover:bg-gray-700 text-gray-400 hover:text-white' 
+                              : 'hover:bg-gray-100 text-gray-500 hover:text-gray-700'
+                          }`}
+                          title="复制商户ID"
+                        >
+                          <Copy className="h-3 w-3" />
+                        </button>
+                      </div>
+                      <div className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        BeDAO科技有限公司
+                      </div>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full dark:bg-green-900 dark:text-green-200">
+                    已认证
+                  </span>
+                </div>
+
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setShowApiDocsModal(true)}
+                    className={`flex-1 inline-flex items-center justify-center space-x-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all border-2 ${
+                      isDark 
+                        ? 'bg-transparent border-white text-white hover:bg-gray-800' 
+                        : 'bg-white border-black text-black hover:bg-gray-50'
+                    }`}
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>API文档</span>
+                  </button>
+
+                  <button
+                    onClick={() => setShowGenerateKeyModal(true)}
+                    className={`flex-1 inline-flex items-center justify-center space-x-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all ${
+                      isDark 
+                        ? 'bg-white text-black hover:bg-gray-100' 
+                        : 'bg-black text-white hover:bg-gray-800'
+                    }`}
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z" />
+                    </svg>
+                    <span>生成密钥</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 移动端：支付API卡片两个一行 */}
+            <div className="md:hidden mb-6">
+              <div className={`rounded-lg p-3 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+                <div className="grid grid-cols-2 gap-3">
+                {/* 商户法币资产卡片 */}
+                <div 
+                  onClick={() => setSelectedPaymentCard("fiat")}
+                  className={`cursor-pointer transition-all duration-300 ${
+                    selectedPaymentCard === "fiat" 
+                      ? isDark 
+                        ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
+                        : "bg-white ring-2 ring-[#00D4AA] ring-opacity-50"
+                      : isDark 
+                        ? "bg-gray-700/50 hover:bg-gray-700" 
+                        : "bg-white/50 hover:bg-white"
+                  } rounded-lg p-3 shadow-sm`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-1">
+                      <Banknote className={`h-4 w-4 ${selectedPaymentCard !== "fiat" ? "text-gray-400" : "text-[#00D4AA]"}`} />
+                      <h3 className={`text-xs font-semibold ${selectedPaymentCard !== "fiat" ? "text-gray-400" : ""}`}>法币支付API</h3>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                      className={`flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-xs font-medium border border-black transition-all ${
+                        isDark 
+                          ? "bg-transparent text-white hover:bg-gray-800" 
+                          : "bg-white text-black hover:bg-gray-50"
+                      }`}
+                    >
+                      <span className="text-[10px]">USD</span>
+                      <ChevronDown className="h-2 w-2" />
+                    </button>
+                  </div>
+                  <div className={`text-lg font-bold mb-1 ${selectedPaymentCard !== "fiat" ? "text-gray-400" : isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {balanceVisible ? "$125,860" : "****"}
+                  </div>
+                  <div className={`text-xs ${selectedPaymentCard !== "fiat" ? "text-gray-400" : "text-gray-500"}`}>
+                    代付备用金：$38,520
+                  </div>
+                </div>
+
+                {/* 商户加密货币资产卡片 */}
+                <div 
+                  onClick={() => setSelectedPaymentCard("crypto")}
+                  className={`cursor-pointer transition-all duration-300 ${
+                    selectedPaymentCard === "crypto" 
+                      ? isDark 
+                        ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
+                        : "bg-white ring-2 ring-[#00D4AA] ring-opacity-50"
+                      : isDark 
+                        ? "bg-gray-700/50 hover:bg-gray-700" 
+                        : "bg-white/50 hover:bg-white"
+                  } rounded-lg p-3 shadow-sm`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-1">
+                      <Coins className={`h-4 w-4 ${selectedPaymentCard !== "crypto" ? "text-gray-400" : "text-[#3B82F6]"}`} />
+                      <h3 className={`text-xs font-semibold ${selectedPaymentCard !== "crypto" ? "text-gray-400" : ""}`}>加密货币支付API</h3>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                      className={`flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-xs font-medium border border-black transition-all ${
+                        isDark 
+                          ? "bg-transparent text-white hover:bg-gray-800" 
+                          : "bg-white text-black hover:bg-gray-50"
+                      }`}
+                    >
+                      <span className="text-[10px]">USDT</span>
+                      <ChevronDown className="h-2 w-2" />
+                    </button>
+                  </div>
+                  <div className={`text-lg font-bold mb-1 ${selectedPaymentCard !== "crypto" ? "text-gray-400" : isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {balanceVisible ? "45,230.50" : "****"}
+                  </div>
+                  <div className={`text-xs ${selectedPaymentCard !== "crypto" ? "text-gray-400" : "text-gray-500"}`}>
+                    当前地址数：12312u
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+
+            {/* 桌面端：商户信息卡片 */}
+            <div className="hidden md:block">
+              <div className={`${cardStyle} rounded-lg p-6 flex items-center justify-between`}>
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <div className={`text-lg font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        MP2025001234
+                      </div>
+                      <button
+                        onClick={() => navigator.clipboard.writeText("MP2025001234")}
+                        className={`p-1 rounded transition-colors ${
+                          isDark 
+                            ? 'hover:bg-gray-700 text-gray-400 hover:text-white' 
+                            : 'hover:bg-gray-100 text-gray-500 hover:text-gray-700'
+                        }`}
+                        title="复制商户ID"
+                      >
+                        <Copy className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      BeDAO科技有限公司
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full dark:bg-green-900 dark:text-green-200">
+                    已认证
+                  </span>
+                  <button
+                    onClick={() => setShowApiDocsModal(true)}
+                    className={`inline-flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all border-2 ${
+                      isDark 
+                        ? 'bg-transparent border-white text-white hover:bg-gray-800' 
+                        : 'bg-white border-black text-black hover:bg-gray-50'
+                    }`}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>API文档</span>
+                  </button>
+
+                  <button
+                    onClick={() => setShowGenerateKeyModal(true)}
+                    className={`inline-flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      isDark 
+                        ? 'bg-white text-black hover:bg-gray-100' 
+                        : 'bg-black text-white hover:bg-gray-800'
+                    }`}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z" />
+                    </svg>
+                    <span>生成密钥</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 桌面端：支付API卡片布局 - 全屏宽度 */}
+            <div className="hidden md:block">
+              <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+                <div className="grid grid-cols-2 gap-4">
+                    {/* 商户法币资产卡片 */}
+                    <div 
+                      onClick={() => setSelectedPaymentCard("fiat")}
+                      className={`cursor-pointer transition-all duration-300 ${
+                        selectedPaymentCard === "fiat" 
+                          ? isDark 
+                            ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
+                            : "bg-white ring-2 ring-[#00D4AA] ring-opacity-50"
+                          : isDark 
+                            ? "bg-gray-700/50 hover:bg-gray-700" 
+                            : "bg-white/50 hover:bg-white"
+                      } rounded-lg p-6 shadow-sm`}
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Banknote className={`h-6 w-6 ${selectedPaymentCard !== "fiat" ? "text-gray-400" : "text-[#00D4AA]"}`} />
+                          <h3 className={`text-lg font-semibold ${selectedPaymentCard !== "fiat" ? "text-gray-400" : ""}`}>法币支付API</h3>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                          }}
+                          className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
+                            isDark 
+                              ? "bg-transparent text-white hover:bg-gray-800" 
+                              : "bg-white text-black hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="w-3 h-3 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold">
+                            <span className="text-white text-[8px]">$</span>
+                          </div>
+                          <span>USD</span>
+                          <ChevronDown className="h-2 w-2" />
+                        </button>
+                      </div>
+                      <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {balanceVisible ? "$125,860.00" : "****"}
+                      </div>
+                      <div className="text-gray-500 text-sm">
+                        代付备用金：$38,520.00
+                      </div>
+                    </div>
+
+                    {/* 商户加密货币资产卡片 */}
+                    <div 
+                      onClick={() => setSelectedPaymentCard("crypto")}
+                      className={`cursor-pointer transition-all duration-300 ${
+                        selectedPaymentCard === "crypto" 
+                          ? isDark 
+                            ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
+                            : "bg-white ring-2 ring-[#00D4AA] ring-opacity-50"
+                          : isDark 
+                            ? "bg-gray-700/50 hover:bg-gray-700" 
+                            : "bg-white/50 hover:bg-white"
+                      } rounded-lg p-6 shadow-sm`}
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Coins className={`h-6 w-6 ${selectedPaymentCard !== "crypto" ? "text-gray-400" : "text-[#3B82F6]"}`} />
+                          <h3 className={`text-lg font-semibold ${selectedPaymentCard !== "crypto" ? "text-gray-400" : ""}`}>加密货币支付API</h3>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                          }}
+                          className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border-2 border-black transition-all ${
+                            isDark 
+                              ? "bg-transparent text-white hover:bg-gray-800" 
+                              : "bg-white text-black hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="w-3 h-3 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold">
+                            <span className="text-white text-[8px]">₮</span>
+                          </div>
+                          <span>USDT</span>
+                          <ChevronDown className="h-2 w-2" />
+                        </button>
+                      </div>
+                      <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {balanceVisible ? "45,230.50 USDT" : "****"}
+                      </div>
+                      <div className="text-gray-500 text-sm">
+                        当前地址数：12312u
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )
 
