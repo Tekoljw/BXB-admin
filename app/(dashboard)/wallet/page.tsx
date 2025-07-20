@@ -5050,34 +5050,8 @@ export default function WalletPage() {
             {/* 操作按钮区域 */}
             <div className="transition-all duration-300 ease-out">
               <div className="flex flex-col md:flex-row gap-4">
-                {/* 移动端：crypto按钮使用4列垂直布局，fiat保持原样 */}
-                {selectedPaymentCard === "crypto" ? (
-                  <div className="md:hidden grid grid-cols-4 gap-2 mb-4">
-                    {cryptoTabs.map((tab) => {
-                      const Icon = tab.icon
-                      const isSelected = cryptoTab === tab.id
-                      
-                      return (
-                        <Button 
-                          key={tab.id}
-                          onClick={() => setCryptoTab(tab.id)}
-                          className={`h-16 transition-all duration-200 text-xs font-medium flex flex-col items-center justify-center gap-1 px-1 ${
-                            isSelected
-                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
-                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                          }`}
-                          variant="outline"
-                        >
-                          <Icon className="h-5 w-5" />
-                          <span className="leading-tight">{tab.label}</span>
-                        </Button>
-                      )
-                    })}
-                  </div>
-                ) : null}
-                
-                {/* 桌面端：保持原有布局 */}
-                <div className="flex-1 hidden md:grid grid-cols-4 gap-3">
+                {/* 主要操作按钮 - 自动适配屏幕宽度 */}
+                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
                   {selectedPaymentCard === "fiat" ? (
                     fiatTabs.map((tab) => {
                       const Icon = tab.icon
@@ -5134,46 +5108,7 @@ export default function WalletPage() {
                   )}
                 </div>
                 
-                {/* 移动端：fiat按钮保持原有的2列布局 */}
-                {selectedPaymentCard === "fiat" && (
-                  <div className="md:hidden grid grid-cols-2 gap-3">
-                    {fiatTabs.map((tab) => {
-                      const Icon = tab.icon
-                      const isSelected = fiatTab === tab.id
-                      
-                      return (
-                        <Button 
-                          key={tab.id}
-                          onClick={() => {
-                            if (tab.id === "法币下发") {
-                              setSelectedFiatCurrency("USD")
-                              setShowExchangeModal(true)
-                            } else if (tab.id === "代付金充值") {
-                              setStandbyRechargeCurrency("USD")
-                              setShowStandbyRechargeModal(true)
-                              setTimeout(() => setStandbyRechargeAnimating(true), 50)
-                            } else {
-                              setFiatTab(tab.id)
-                            }
-                          }}
-                          className={`h-12 transition-all duration-200 text-base font-bold ${
-                            isSelected
-                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
-                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
-                          }`}
-                          variant="outline"
-                        >
-                          <Icon className="h-4 w-4 mr-2" />
-                          {tab.label}
-                        </Button>
-                      )
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
-                
-            {/* 图标按钮区域 - 桌面端：右对齐图标按钮，移动端：文字+下划线页签 */}
+                {/* 图标按钮区域 - 桌面端：右对齐图标按钮，移动端：文字+下划线页签 */}
                 <div>
                   {/* 桌面端图标按钮 */}
                   <div className="hidden md:flex justify-center gap-3">
