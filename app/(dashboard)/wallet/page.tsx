@@ -4725,11 +4725,14 @@ export default function WalletPage() {
           { id: "资产分布", icon: PieChart }
         ]
         
+        // 定义卡片样式
+        const bePayCardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
+        
         return (
           <div className="space-y-6">
             {/* 移动端：商户信息卡片置顶 */}
             <div className="md:hidden mb-6">
-              <div className={`${cardStyle} rounded-lg p-4 flex flex-col justify-between`}>
+              <div className={`${bePayCardStyle} rounded-lg p-4 flex flex-col justify-between`}>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
@@ -4880,6 +4883,34 @@ export default function WalletPage() {
                   </div>
                 </div>
               </div>
+              </div>
+            </div>
+
+            {/* 移动端：操作按钮 - 4个按钮一行 */}
+            <div className="md:hidden mb-6">
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { id: "recharge", label: "充值", icon: Plus },
+                  { id: "newCard", label: "申请新卡", icon: CreditCard },
+                  { id: "activate", label: "激活卡片", icon: CheckCircle },
+                  { id: "transfer", label: "划转", icon: ArrowLeftRight }
+                ].map((button) => {
+                  const Icon = button.icon
+                  return (
+                    <button
+                      key={button.id}
+                      onClick={() => handleActionClick(button.id)}
+                      className={`h-16 flex flex-col items-center justify-center px-2 transition-all duration-200 text-xs font-medium rounded-lg ${
+                        isDark
+                          ? 'bg-[#1a1d29] border border-[#252842] text-white hover:bg-gray-800'
+                          : 'bg-white border border-gray-200 text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      <Icon className="h-6 w-6 mb-1" />
+                      <span>{button.label}</span>
+                    </button>
+                  )
+                })}
               </div>
             </div>
 
