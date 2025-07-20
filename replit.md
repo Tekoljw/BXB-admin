@@ -645,12 +645,6 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Mobile payment cards feature smaller text (text-xs), compact buttons, and reduced padding (p-3)
   - Maintained desktop three-column layout while providing streamlined mobile two-row structure
   - Enhanced mobile user experience with properly sized touch targets and clear visual hierarchy
-- January 30, 2025. Enhanced BePAY account mobile operation buttons layout:
-  - Added mobile-specific operation buttons section with 4 buttons per row (grid-cols-4)
-  - Implemented mobile operation buttons: 充值, 申请新卡, 激活卡片, 划转
-  - Applied vertical icon+text layout with h-16 button height for touch-friendly interaction
-  - Used consistent styling with other account types: proper spacing (gap-2), theme support, hover effects
-  - Fixed cardStyle variable reference issue by using bePayCardStyle within BePAY case scope
 - January 30, 2025. Enhanced BePAY account payment API cards with shared background and selection states:
   - Added shared gray background container around both payment API cards on mobile
   - Implemented selection state visual feedback: unselected cards show grayed text and icons
@@ -665,6 +659,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Maintained mobile compact layout at top position with vertical button arrangement
   - Merchant ID card now appears first in both mobile and desktop BePAY account sections
   - Enhanced visual hierarchy with merchant information taking priority over payment API cards
+- January 30, 2025. Implemented mobile-specific vertical button layout for BePAY crypto account:
+  - Created dedicated mobile layout with 4-column grid (grid-cols-4) for crypto operation buttons
+  - Changed button layout from horizontal icon+text to vertical icon+text (flex-col) with icon above text
+  - Applied h-16 height, h-5 w-5 icon size, and text-xs font size for optimal mobile touch interface
+  - Four buttons (商户资产, 地址管理, OTC供应商, 划转) now display in single row on mobile
+  - Maintained separate desktop layout with original horizontal button styling
+  - Fiat buttons continue using original 2-column mobile layout for consistency
 
 ## User Preferences
 
