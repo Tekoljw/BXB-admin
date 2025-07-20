@@ -4700,6 +4700,9 @@ export default function WalletPage() {
         )
 
       case "BePAY账户":
+        // 定义卡片样式
+        const cardStyle = isDark ? "bg-[#1a1d29] border border-[#252842] shadow" : "bg-white border border-gray-200 shadow"
+        
         // 定义法币和加密货币页签
         const fiatTabs = [
           { id: "商户资产", label: "商户资产", icon: Landmark },
@@ -5134,9 +5137,9 @@ export default function WalletPage() {
                   )}
                 </div>
                 
-                {/* 移动端：fiat按钮保持原有的2列布局 */}
+                {/* 移动端：fiat按钮改为4列布局 */}
                 {selectedPaymentCard === "fiat" && (
-                  <div className="md:hidden grid grid-cols-2 gap-3">
+                  <div className="md:hidden grid grid-cols-4 gap-2">
                     {fiatTabs.map((tab) => {
                       const Icon = tab.icon
                       const isSelected = fiatTab === tab.id
@@ -5156,15 +5159,15 @@ export default function WalletPage() {
                               setFiatTab(tab.id)
                             }
                           }}
-                          className={`h-12 transition-all duration-200 text-base font-bold ${
+                          className={`h-16 transition-all duration-200 text-xs font-medium flex flex-col items-center justify-center gap-1 px-1 ${
                             isSelected
                               ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                           }`}
                           variant="outline"
                         >
-                          <Icon className="h-4 w-4 mr-2" />
-                          {tab.label}
+                          <Icon className="h-5 w-5" />
+                          <span className="leading-tight">{tab.label}</span>
                         </Button>
                       )
                     })}
