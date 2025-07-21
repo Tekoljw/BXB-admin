@@ -663,8 +663,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Updated mobile buttons to display icons above text (h-16 height on mobile, h-12 on desktop)
   - Applied to all BePAY operation buttons: 商户资产, 通道配置, 法币下发, 代付金充值, 地址管理, OTC供应商, 划转
   - Icons sized h-6 w-6 on mobile, h-4 w-4 on desktop with proper spacing (mb-1 on mobile, mr-2 on desktop)
-  - Text sized text-xs on mobile, text-base on desktop for optimal readability
+  - Text sized text-[10px] on mobile, text-base on desktop for optimal readability
   - Maintained responsive flex layout (flex-col on mobile, flex-row on desktop)
+- January 30, 2025. Optimized BePAY mobile button layout for 4-column display:
+  - Changed mobile grid from grid-cols-2 to grid-cols-4 for displaying 4 buttons per row
+  - Reduced gap spacing from gap-3 to gap-2 on mobile for better fit
+  - Updated text size from text-xs to text-[10px] on mobile to accommodate narrower button width
+  - Enhanced mobile space utilization while maintaining button functionality and readability
 
 ## User Preferences
 

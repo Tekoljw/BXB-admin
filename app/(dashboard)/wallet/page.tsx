@@ -5051,7 +5051,7 @@ export default function WalletPage() {
             <div className="transition-all duration-300 ease-out">
               <div className="flex flex-col md:flex-row gap-4">
                 {/* 主要操作按钮 - 自动适配屏幕宽度 */}
-                <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="flex-1 grid grid-cols-4 gap-2 md:gap-3">
                   {selectedPaymentCard === "fiat" ? (
                     fiatTabs.map((tab) => {
                       const Icon = tab.icon
@@ -5080,7 +5080,7 @@ export default function WalletPage() {
                           variant="outline"
                         >
                           <Icon className="h-6 w-6 md:h-4 md:w-4 mb-1 md:mb-0 md:mr-2" />
-                          <span className="text-xs md:text-base">{tab.label}</span>
+                          <span className="text-[10px] md:text-base">{tab.label}</span>
                         </Button>
                       )
                     })
@@ -5101,7 +5101,7 @@ export default function WalletPage() {
                           variant="outline"
                         >
                           <Icon className="h-6 w-6 md:h-4 md:w-4 mb-1 md:mb-0 md:mr-2" />
-                          <span className="text-xs md:text-base">{tab.label}</span>
+                          <span className="text-[10px] md:text-base">{tab.label}</span>
                         </Button>
                       )
                     })
