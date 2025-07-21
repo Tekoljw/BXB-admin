@@ -670,6 +670,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Reduced gap spacing from gap-3 to gap-2 on mobile for better fit
   - Updated text size from text-xs to text-[10px] on mobile to accommodate narrower button width
   - Enhanced mobile space utilization while maintaining button functionality and readability
+- January 30, 2025. Redesigned BePAY mobile record tabs and asset distribution layout:
+  - Separated mobile layout into left-aligned sliding tabs and right-aligned icon button
+  - Left side: record tabs (划转记录, 订单记录) with black sliding tab styling and dark mode support
+  - Right side: asset distribution (资产分布) as icon-only button with PieChart icon
+  - Filtered out asset distribution from sliding tabs to display separately as dedicated icon button
+  - Enhanced mobile navigation with proper spacing and visual hierarchy between tabs and action button
 
 ## User Preferences
 

@@ -5181,44 +5181,41 @@ export default function WalletPage() {
                     )}
                   </div>
 
-                  {/* 移动端文字+下划线页签 */}
-                  <div className="md:hidden">
+                  {/* 移动端：左侧滑动页签 + 右侧图标按钮 */}
+                  <div className="md:hidden flex justify-between items-center">
+                    {/* 左侧：滑动页签 */}
                     <div className="flex space-x-6">
                       {selectedPaymentCard === "fiat" ? (
-                        fiatIconTabs.map((tab) => (
+                        fiatIconTabs.filter(tab => tab.id !== "资产分布").map((tab) => (
                           <button
                             key={tab.id}
                             onClick={
-                              tab.id === "资产分布" 
-                                ? handlePositionModalClick 
-                                : tab.id === "资金记录"
-                                  ? () => handleActionClick("bepay-fiat-orders")
-                                  : () => setFiatTab(tab.id)
+                              tab.id === "资金记录"
+                                ? () => handleActionClick("bepay-fiat-orders")
+                                : () => setFiatTab(tab.id)
                             }
                             className={`pb-2 px-1 border-b-2 text-base transition-colors ${
                               fiatTab === tab.id
-                                ? "border-black text-black font-bold"
-                                : "border-transparent text-black font-medium hover:text-gray-700"
+                                ? "border-black text-black font-bold dark:border-white dark:text-white"
+                                : "border-transparent text-black font-medium hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
                             }`}
                           >
                             {tab.id}
                           </button>
                         ))
                       ) : (
-                        cryptoIconTabs.map((tab) => (
+                        cryptoIconTabs.filter(tab => tab.id !== "资产分布").map((tab) => (
                           <button
                             key={tab.id}
                             onClick={
-                              tab.id === "资产分布" 
-                                ? handlePositionModalClick 
-                                : tab.id === "划转记录"
-                                  ? () => handleActionClick("bepay-crypto-orders")
-                                  : () => setCryptoTab(tab.id)
+                              tab.id === "划转记录"
+                                ? () => handleActionClick("bepay-crypto-orders")
+                                : () => setCryptoTab(tab.id)
                             }
                             className={`pb-2 px-1 border-b-2 text-base transition-colors ${
                               cryptoTab === tab.id
-                                ? "border-black text-black font-bold"
-                                : "border-transparent text-black font-medium hover:text-gray-700"
+                                ? "border-black text-black font-bold dark:border-white dark:text-white"
+                                : "border-transparent text-black font-medium hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
                             }`}
                           >
                             {tab.id}
@@ -5226,6 +5223,15 @@ export default function WalletPage() {
                         ))
                       )}
                     </div>
+                    
+                    {/* 右侧：资产分布图标按钮 */}
+                    <button
+                      onClick={handlePositionModalClick}
+                      className={`h-10 w-10 rounded-lg transition-all duration-200 border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800 flex items-center justify-center`}
+                      title="资产分布"
+                    >
+                      <PieChart className="h-5 w-5 text-black dark:text-white" />
+                    </button>
                   </div>
                 </div>
               </div>
