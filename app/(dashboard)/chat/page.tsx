@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 
 // Custom Transfer Icon (Wallet)
@@ -125,6 +125,7 @@ export default function ChatPage() {
   const [guaranteeType, setGuaranteeType] = useState("buy") // buy or sell
   const [guaranteeDuration, setGuaranteeDuration] = useState("24") // hours
   const [guaranteeDeposit, setGuaranteeDeposit] = useState("5") // percentage
+  const [showMobileChat, setShowMobileChat] = useState(false) // Mobile chat view state
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -988,7 +989,7 @@ export default function ChatPage() {
                     onClick={() => {
                       setSelectedContact(contact.id)
                       if (isMobile) {
-                        // Mobile navigation logic would go here
+                        setShowMobileChat(true)
                       }
                     }}
                     className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer mb-2 ${
@@ -1036,7 +1037,7 @@ export default function ChatPage() {
                   onClick={() => {
                     setSelectedContact(contact.id)
                     if (isMobile) {
-                      // Mobile navigation logic would go here
+                      setShowMobileChat(true)
                     }
                   }}
                   className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer ${
@@ -3250,6 +3251,105 @@ export default function ChatPage() {
                 发起担保
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Chat Interface */}
+      {isMobile && showMobileChat && selectedContact && (
+        <div className="fixed inset-0 bg-[#f5f8fa] dark:bg-background z-50 flex flex-col">
+          {/* Mobile Chat Header */}
+          <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center space-x-3`}>
+            <button
+              onClick={() => setShowMobileChat(false)}
+              className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}
+            >
+              <ArrowLeft className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-800"}`} />
+            </button>
+            <div className="flex items-center space-x-3 flex-1">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                {(() => {
+                  const contact = [...friendContacts, ...groupContacts, ...escrowContacts, ...addressBookContacts].find(c => c.id === selectedContact)
+                  return contact?.avatar || "?"
+                })()}
+              </div>
+              <div>
+                <h2 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                  {(() => {
+                    const contact = [...friendContacts, ...groupContacts, ...escrowContacts, ...addressBookContacts].find(c => c.id === selectedContact)
+                    return contact?.name || "Unknown"
+                  })()}
+                </h2>
+                <p className="text-xs text-gray-400">
+                  {(() => {
+                    const contact = [...friendContacts, ...groupContacts, ...escrowContacts, ...addressBookContacts].find(c => c.id === selectedContact)
+                    return contact?.isOnline ? "在线" : "离线"
+                  })()}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {(messages[selectedContact] || []).map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex ${msg.senderId === "user" ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={`max-w-[80%] rounded-lg p-3 ${
+                    msg.senderId === "user"
+                      ? isDark
+                        ? "bg-white text-black"
+                        : "bg-black text-white"
+                      : isDark
+                        ? "bg-[#252842] text-white"
+                        : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  <p className="text-sm">{msg.text}</p>
+                  <p className="text-xs opacity-70 mt-1">{msg.time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile Input */}
+          <div className={`p-4 border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
+            <form onSubmit={handleSendMessage} className="flex space-x-2">
+              <textarea
+                ref={textareaRef}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="输入消息..."
+                className={`flex-1 p-3 border rounded-lg resize-none ${
+                  isDark
+                    ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400"
+                    : "bg-gray-100 border-gray-200 text-gray-800 placeholder-gray-500"
+                } focus:outline-none focus:border-[#00D4AA]`}
+                rows={1}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    handleSendMessage()
+                  }
+                }}
+              />
+              <button
+                type="submit"
+                disabled={!message.trim()}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  message.trim()
+                    ? isDark
+                      ? "bg-white text-black hover:bg-gray-200"
+                      : "bg-black text-white hover:bg-gray-800"
+                    : "bg-gray-400 text-gray-600 cursor-not-allowed"
+                }`}
+              >
+                发送
+              </button>
+            </form>
           </div>
         </div>
       )}
