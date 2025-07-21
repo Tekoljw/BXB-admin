@@ -5072,15 +5072,15 @@ export default function WalletPage() {
                               setFiatTab(tab.id)
                             }
                           }}
-                          className={`h-12 transition-all duration-200 text-base font-bold ${
+                          className={`h-16 md:h-12 transition-all duration-200 text-base font-bold flex-col md:flex-row ${
                             isSelected
                               ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                           }`}
                           variant="outline"
                         >
-                          <Icon className="h-4 w-4 mr-2" />
-                          {tab.label}
+                          <Icon className="h-6 w-6 md:h-4 md:w-4 mb-1 md:mb-0 md:mr-2" />
+                          <span className="text-xs md:text-base">{tab.label}</span>
                         </Button>
                       )
                     })
@@ -5093,15 +5093,15 @@ export default function WalletPage() {
                         <Button 
                           key={tab.id}
                           onClick={() => setCryptoTab(tab.id)}
-                          className={`h-12 transition-all duration-200 text-base font-bold ${
+                          className={`h-16 md:h-12 transition-all duration-200 text-base font-bold flex-col md:flex-row ${
                             isSelected
                               ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                           }`}
                           variant="outline"
                         >
-                          <Icon className="h-4 w-4 mr-2" />
-                          {tab.label}
+                          <Icon className="h-6 w-6 md:h-4 md:w-4 mb-1 md:mb-0 md:mr-2" />
+                          <span className="text-xs md:text-base">{tab.label}</span>
                         </Button>
                       )
                     })
