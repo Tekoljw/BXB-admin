@@ -265,6 +265,19 @@ export default function ChatPage() {
     setSelectedContact(null)
   }, [activeTab])
 
+  // Prevent body scroll when mobile chat is open
+  useEffect(() => {
+    if (isMobile && showMobileChat) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isMobile, showMobileChat])
+
   // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -3257,7 +3270,7 @@ export default function ChatPage() {
 
       {/* Mobile Chat Interface */}
       {isMobile && showMobileChat && selectedContact && (
-        <div className="fixed inset-0 bg-[#f5f8fa] dark:bg-background z-50 flex flex-col">
+        <div className="fixed inset-0 bg-[#f5f8fa] dark:bg-background z-[100] flex flex-col">
           {/* Mobile Chat Header */}
           <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center space-x-3`}>
             <button
