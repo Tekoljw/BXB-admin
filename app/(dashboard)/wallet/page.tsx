@@ -4799,11 +4799,11 @@ export default function WalletPage() {
             {/* 移动端：支付API卡片两个一行 */}
             <div className="md:hidden mb-1">
               <div className={`rounded-lg p-3 ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="flex gap-3">
                 {/* 商户法币资产卡片 */}
                 <div 
                   onClick={() => setSelectedPaymentCard("fiat")}
-                  className={`cursor-pointer transition-all duration-300 ${
+                  className={`flex-1 cursor-pointer transition-all duration-300 ${
                     selectedPaymentCard === "fiat" 
                       ? isDark 
                         ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
@@ -4843,7 +4843,7 @@ export default function WalletPage() {
                 {/* 商户加密货币资产卡片 */}
                 <div 
                   onClick={() => setSelectedPaymentCard("crypto")}
-                  className={`cursor-pointer transition-all duration-300 ${
+                  className={`flex-1 cursor-pointer transition-all duration-300 ${
                     selectedPaymentCard === "crypto" 
                       ? isDark 
                         ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
@@ -4954,11 +4954,11 @@ export default function WalletPage() {
               {/* 支付API区域 - 共同背景 */}
               <div className="lg:col-span-2">
                 <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
                     {/* 商户法币资产卡片 */}
                     <div 
                       onClick={() => setSelectedPaymentCard("fiat")}
-                      className={`cursor-pointer transition-all duration-300 ${
+                      className={`flex-1 cursor-pointer transition-all duration-300 ${
                         selectedPaymentCard === "fiat" 
                           ? isDark 
                             ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
@@ -5001,7 +5001,7 @@ export default function WalletPage() {
                     {/* 商户加密货币资产卡片 */}
                     <div 
                       onClick={() => setSelectedPaymentCard("crypto")}
-                      className={`cursor-pointer transition-all duration-300 ${
+                      className={`flex-1 cursor-pointer transition-all duration-300 ${
                         selectedPaymentCard === "crypto" 
                           ? isDark 
                             ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
