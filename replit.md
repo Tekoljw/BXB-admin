@@ -687,6 +687,11 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Added body scroll prevention when mobile chat is open to prevent background scrolling
   - Mobile chat interface now properly hides bottom navigation to prevent input box obstruction
   - Contact list and address book views maintain bottom navigation visibility
+- January 30, 2025. Restructured BePay mobile interface with proper tab and button organization:
+  - Reorganized mobile layout to display main functionality as sliding tabs: 资产管理/通道配置 for fiat, 资产管理/地址管理/OTC供应商 for crypto
+  - Separated record functions as independent buttons: 划转记录, 订单记录 positioned on right side
+  - Filtered out action buttons (法币下发, 代付金充值, 划转) from sliding tabs to focus on management functions
+  - Enhanced mobile navigation with proper separation between main functions and record keeping features
 
 ## User Preferences
 

@@ -5181,57 +5181,60 @@ export default function WalletPage() {
                     )}
                   </div>
 
-                  {/* 移动端：左侧滑动页签 + 右侧图标按钮 */}
+                  {/* 移动端：功能页签 + 记录按钮 */}
                   <div className="md:hidden flex justify-between items-center">
-                    {/* 左侧：滑动页签 */}
+                    {/* 左侧：主要功能滑动页签 */}
                     <div className="flex space-x-6">
                       {selectedPaymentCard === "fiat" ? (
-                        fiatIconTabs.filter(tab => tab.id !== "资产分布").map((tab) => (
+                        // 法币：资产管理, 通道配置
+                        fiatTabs.filter(tab => !["法币下发", "代付金充值"].includes(tab.id)).map((tab) => (
                           <button
                             key={tab.id}
-                            onClick={
-                              tab.id === "资金记录"
-                                ? () => handleActionClick("bepay-fiat-orders")
-                                : () => setFiatTab(tab.id)
-                            }
+                            onClick={() => setFiatTab(tab.id)}
                             className={`pb-2 px-1 border-b-2 text-base transition-colors ${
                               fiatTab === tab.id
                                 ? "border-black text-black font-bold dark:border-white dark:text-white"
                                 : "border-transparent text-black font-medium hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
                             }`}
                           >
-                            {tab.id}
+                            {tab.label}
                           </button>
                         ))
                       ) : (
-                        cryptoIconTabs.filter(tab => tab.id !== "资产分布").map((tab) => (
+                        // 加密货币：资产管理, 地址管理, OTC供应商
+                        cryptoTabs.filter(tab => tab.id !== "划转").map((tab) => (
                           <button
                             key={tab.id}
-                            onClick={
-                              tab.id === "划转记录"
-                                ? () => handleActionClick("bepay-crypto-orders")
-                                : () => setCryptoTab(tab.id)
-                            }
+                            onClick={() => setCryptoTab(tab.id)}
                             className={`pb-2 px-1 border-b-2 text-base transition-colors ${
                               cryptoTab === tab.id
                                 ? "border-black text-black font-bold dark:border-white dark:text-white"
                                 : "border-transparent text-black font-medium hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
                             }`}
                           >
-                            {tab.id}
+                            {tab.label}
                           </button>
                         ))
                       )}
                     </div>
                     
-                    {/* 右侧：资产分布图标按钮 */}
-                    <button
-                      onClick={handlePositionModalClick}
-                      className={`h-10 w-10 rounded-lg transition-all duration-200 border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800 flex items-center justify-center`}
-                      title="资产分布"
-                    >
-                      <PieChart className="h-5 w-5 text-black dark:text-white" />
-                    </button>
+                    {/* 右侧：记录按钮 */}
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleActionClick(selectedPaymentCard === "fiat" ? "bepay-fiat-orders" : "bepay-crypto-orders")}
+                        className={`h-10 w-10 rounded-lg transition-all duration-200 border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800 flex items-center justify-center`}
+                        title={selectedPaymentCard === "fiat" ? "法币订单" : "加密货币订单"}
+                      >
+                        <FileText className="h-5 w-5 text-black dark:text-white" />
+                      </button>
+                      <button
+                        onClick={handlePositionModalClick}
+                        className={`h-10 w-10 rounded-lg transition-all duration-200 border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800 flex items-center justify-center`}
+                        title="资产分布"
+                      >
+                        <PieChart className="h-5 w-5 text-black dark:text-white" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
