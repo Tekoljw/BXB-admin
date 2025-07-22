@@ -4797,21 +4797,15 @@ export default function WalletPage() {
             </div>
 
             {/* 移动端：支付API卡片两个一行 */}
-            <div className="md:hidden mb-1">
-              <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                <div className="flex gap-3">
-                {/* 商户法币资产卡片 */}
-                <div 
-                  onClick={() => setSelectedPaymentCard("fiat")}
-                  className={`flex-1 cursor-pointer transition-all duration-300 ${
-                    selectedPaymentCard === "fiat" 
-                      ? isDark 
-                        ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
-                        : "bg-white ring-2 ring-[#00D4AA] ring-opacity-50"
-                      : isDark 
-                        ? "bg-gray-700/50 hover:bg-gray-700" 
-                        : "bg-white/50 hover:bg-white"
-                  } rounded-lg p-3 shadow-sm`}
+            <div className="md:hidden mb-1 flex gap-3">
+              {/* 商户法币资产卡片 */}
+              <div 
+                onClick={() => setSelectedPaymentCard("fiat")}
+                className={`flex-1 cursor-pointer transition-all duration-300 ${cardStyle} ${
+                  selectedPaymentCard === "fiat" 
+                    ? "ring-2 ring-[#00D4AA] ring-opacity-50" 
+                    : ""
+                } rounded-lg p-4 shadow-sm`}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-1">
@@ -4840,18 +4834,14 @@ export default function WalletPage() {
                   </div>
                 </div>
 
-                {/* 商户加密货币资产卡片 */}
-                <div 
-                  onClick={() => setSelectedPaymentCard("crypto")}
-                  className={`flex-1 cursor-pointer transition-all duration-300 ${
-                    selectedPaymentCard === "crypto" 
-                      ? isDark 
-                        ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
-                        : "bg-white ring-2 ring-[#00D4AA] ring-opacity-50"
-                      : isDark 
-                        ? "bg-gray-700/50 hover:bg-gray-700" 
-                        : "bg-white/50 hover:bg-white"
-                  } rounded-lg p-3 shadow-sm`}
+              {/* 商户加密货币资产卡片 */}
+              <div 
+                onClick={() => setSelectedPaymentCard("crypto")}
+                className={`flex-1 cursor-pointer transition-all duration-300 ${cardStyle} ${
+                  selectedPaymentCard === "crypto" 
+                    ? "ring-2 ring-[#00D4AA] ring-opacity-50" 
+                    : ""
+                } rounded-lg p-4 shadow-sm`}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-1">
@@ -4879,8 +4869,6 @@ export default function WalletPage() {
                     当前地址数：12312u
                   </div>
                 </div>
-              </div>
-              </div>
             </div>
 
             {/* 桌面端：商户信息卡片 */}
@@ -4950,23 +4938,15 @@ export default function WalletPage() {
             </div>
 
             {/* 桌面端：支付API卡片布局 */}
-            <div className="hidden md:block">
-              {/* 支付API区域 - 共同背景 */}
-              <div>
-                <div className={`rounded-lg p-6 ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    {/* 商户法币资产卡片 */}
-                    <div 
-                      onClick={() => setSelectedPaymentCard("fiat")}
-                      className={`flex-1 cursor-pointer transition-all duration-300 ${
-                        selectedPaymentCard === "fiat" 
-                          ? isDark 
-                            ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
-                            : "bg-white ring-2 ring-[#00D4AA] ring-opacity-50"
-                          : isDark 
-                            ? "bg-gray-700/50 hover:bg-gray-700" 
-                            : "bg-white/50 hover:bg-white"
-                      } rounded-lg p-6 shadow-sm`}
+            <div className="hidden md:flex gap-4">
+              {/* 商户法币资产卡片 */}
+              <div 
+                onClick={() => setSelectedPaymentCard("fiat")}
+                className={`flex-1 cursor-pointer transition-all duration-300 ${cardStyle} ${
+                  selectedPaymentCard === "fiat" 
+                    ? "ring-2 ring-[#00D4AA] ring-opacity-50" 
+                    : ""
+                } rounded-lg p-6 shadow-sm`}
                     >
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center space-x-2">
@@ -4998,18 +4978,14 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    {/* 商户加密货币资产卡片 */}
-                    <div 
-                      onClick={() => setSelectedPaymentCard("crypto")}
-                      className={`flex-1 cursor-pointer transition-all duration-300 ${
-                        selectedPaymentCard === "crypto" 
-                          ? isDark 
-                            ? "bg-gray-700 ring-2 ring-[#00D4AA] ring-opacity-50" 
-                            : "bg-white ring-2 ring-[#00D4AA] ring-opacity-50"
-                          : isDark 
-                            ? "bg-gray-700/50 hover:bg-gray-700" 
-                            : "bg-white/50 hover:bg-white"
-                      } rounded-lg p-6 shadow-sm`}
+              {/* 商户加密货币资产卡片 */}
+              <div 
+                onClick={() => setSelectedPaymentCard("crypto")}
+                className={`flex-1 cursor-pointer transition-all duration-300 ${cardStyle} ${
+                  selectedPaymentCard === "crypto" 
+                    ? "ring-2 ring-[#00D4AA] ring-opacity-50" 
+                    : ""
+                } rounded-lg p-6 shadow-sm`}
                     >
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center space-x-2">
@@ -5040,11 +5016,6 @@ export default function WalletPage() {
                         当前地址数：12312u
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              
-
             </div>
 
             {/* 操作按钮区域 */}
