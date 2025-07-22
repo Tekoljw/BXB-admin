@@ -5038,8 +5038,6 @@ export default function WalletPage() {
               <div className="md:hidden mb-4 flex justify-between items-center gap-4">
                 {/* 左侧：滑动页签 */}
                 <div className="flex-1">
-                  {/* Debug info - remove this later */}
-                  <div className="text-xs text-red-500 mb-1">Debug: selectedPaymentCard = {selectedPaymentCard}</div>
                   {selectedPaymentCard === "fiat" ? (
                     <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
                       {/* 滑动背景 */}
@@ -5129,66 +5127,113 @@ export default function WalletPage() {
                 </div>
               </div>
 
-              {/* 桌面端：页签按钮 */}
+              {/* 桌面端：滑动页签 + 功能按钮 */}
               <div className="hidden md:flex flex-col md:flex-row gap-4">
-                {/* 主要操作按钮 - 自动适配屏幕宽度 */}
-                <div className="flex-1 grid grid-cols-4 gap-2 md:gap-3">
+                {/* 左侧：滑动页签区域 */}
+                <div className="flex-1">
                   {selectedPaymentCard === "fiat" ? (
-                    fiatTabs.map((tab) => {
-                      const Icon = tab.icon
-                      const isSelected = fiatTab === tab.id
-                      
-                      return (
-                        <Button 
+                    <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
+                      {/* 滑动背景 */}
+                      <div 
+                        className={`absolute top-1 bottom-1 bg-black dark:bg-white rounded-md transition-all duration-300 ease-out`}
+                        style={{
+                          left: fiatTab === "商户资产" ? '4px' : 'calc(50% + 2px)',
+                          width: 'calc(50% - 4px)'
+                        }}
+                      />
+                      {/* 法币：商户资产, 通道配置 */}
+                      {fiatTabs.filter(tab => !["法币下发", "代付金充值"].includes(tab.id)).map((tab, index) => (
+                        <button
                           key={tab.id}
-                          onClick={() => {
-                            if (tab.id === "法币下发") {
-                              setSelectedFiatCurrency("USD")
-                              setShowExchangeModal(true)
-                            } else if (tab.id === "代付金充值") {
-                              setStandbyRechargeCurrency("USD")
-                              setShowStandbyRechargeModal(true)
-                              setTimeout(() => setStandbyRechargeAnimating(true), 50)
-                            } else {
-                              setFiatTab(tab.id)
-                            }
-                          }}
-                          className={`h-12 transition-all duration-200 text-base font-bold flex-row ${
-                            isSelected
-                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
-                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                          onClick={() => setFiatTab(tab.id)}
+                          className={`relative flex-1 py-3 text-base font-medium rounded-md transition-colors duration-300 z-10 ${
+                            fiatTab === tab.id
+                              ? "text-white dark:text-black"
+                              : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
                           }`}
-                          variant="outline"
                         >
-                          <Icon className="h-4 w-4 mr-2" />
-                          <span className="text-base">{tab.label}</span>
-                        </Button>
-                      )
-                    })
+                          {tab.label}
+                        </button>
+                      ))}
+                    </div>
                   ) : (
-                    cryptoTabs.map((tab) => {
-                      const Icon = tab.icon
-                      const isSelected = cryptoTab === tab.id
-                      
-                      return (
-                        <Button 
+                    <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
+                      {/* 滑动背景 */}
+                      <div 
+                        className={`absolute top-1 bottom-1 bg-black dark:bg-white rounded-md transition-all duration-300 ease-out`}
+                        style={{
+                          left: cryptoTab === "商户资产" ? '4px' : cryptoTab === "地址管理" ? 'calc(33.333% + 1px)' : 'calc(66.666% + 2px)',
+                          width: 'calc(33.333% - 3px)'
+                        }}
+                      />
+                      {/* 加密货币：商户资产, 地址管理, OTC供应商 */}
+                      {cryptoTabs.filter(tab => tab.id !== "划转").map((tab, index) => (
+                        <button
                           key={tab.id}
                           onClick={() => setCryptoTab(tab.id)}
-                          className={`h-12 transition-all duration-200 text-base font-bold flex-row ${
-                            isSelected
-                              ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
-                              : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                          className={`relative flex-1 py-3 text-base font-medium rounded-md transition-colors duration-300 z-10 ${
+                            cryptoTab === tab.id
+                              ? "text-white dark:text-black"
+                              : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
                           }`}
-                          variant="outline"
                         >
-                          <Icon className="h-4 w-4 mr-2" />
-                          <span className="text-base">{tab.label}</span>
-                        </Button>
-                      )
-                    })
+                          {tab.label}
+                        </button>
+                      ))}
+                    </div>
                   )}
                 </div>
                 
+                {/* 右侧：桌面端功能按钮 */}
+                <div className="flex gap-3">
+                  {(selectedPaymentCard === "fiat" ? 
+                    [
+                      { id: "法币下发", label: "法币下发", icon: Repeat },
+                      { id: "代付金充值", label: "代付金充值", icon: Plus },
+                      { id: "法币订单", label: "法币订单", icon: BarChart2 },
+                      { id: "资产分布", label: "资产分布", icon: PieChart }
+                    ] : 
+                    [
+                      { id: "划转", label: "划转", icon: ArrowLeftRight },
+                      { id: "加密货币订单", label: "加密货币订单", icon: Coins },
+                      { id: "资产分布", label: "资产分布", icon: PieChart }
+                    ]
+                  ).map((button) => {
+                    const Icon = button.icon
+                    return (
+                      <Button 
+                        key={button.id}
+                        onClick={() => {
+                          if (button.id === "法币下发") {
+                            setSelectedFiatCurrency("USD")
+                            setShowExchangeModal(true)
+                          } else if (button.id === "代付金充值") {
+                            setStandbyRechargeCurrency("USD")
+                            setShowStandbyRechargeModal(true)
+                            setTimeout(() => setStandbyRechargeAnimating(true), 50)
+                          } else if (button.id === "划转") {
+                            // 处理划转逻辑
+                            console.log("划转")
+                          } else if (button.id === "法币订单" || button.id === "加密货币订单") {
+                            setSelectedTab("订单记录")
+                            setSelectedOrderTab("支付订单")
+                          } else if (button.id === "资产分布") {
+                            handlePositionModalClick()
+                          }
+                        }}
+                        className="h-12 px-4 bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                        variant="outline"
+                      >
+                        <Icon className="h-4 w-4 mr-2" />
+                        <span>{button.label}</span>
+                      </Button>
+                    )
+                  })}
+                </div>
+              </div>
+              
+              {/* 旧版图标按钮区域保持不变 */}
+              <div style={{display: 'none'}}>
                 {/* 图标按钮区域 - 桌面端：右对齐图标按钮，移动端：文字+下划线页签 */}
                 <div>
                   {/* 桌面端图标按钮 */}
