@@ -4798,7 +4798,7 @@ export default function WalletPage() {
 
             {/* 移动端：支付API卡片两个一行 */}
             <div className="md:hidden mb-6">
-              <div className={`rounded-lg p-3 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+              <div className={`rounded-lg p-3 ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
                 <div className="grid grid-cols-2 gap-3">
                 {/* 商户法币资产卡片 */}
                 <div 
@@ -4953,7 +4953,7 @@ export default function WalletPage() {
             <div className="hidden md:grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* 支付API区域 - 共同背景 */}
               <div className="lg:col-span-2">
-                <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+                <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* 商户法币资产卡片 */}
                     <div 

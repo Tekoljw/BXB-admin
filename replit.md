@@ -697,6 +697,10 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Added smooth 300ms transition animations for tab switching with proper positioning calculations
   - Enhanced visual hierarchy with contrasting text colors: active tabs show white/black text, inactive tabs show gray
   - Separate styling for fiat (2 tabs with 46% width) and crypto (3 tabs with 30% width) configurations
+- January 30, 2025. Removed outer borders from fiat and crypto payment cards:
+  - Eliminated border styling from both mobile and desktop payment card containers
+  - Kept background colors but removed border-gray-700/border-gray-200 classes
+  - Maintained visual hierarchy with background colors while creating cleaner card appearance
 
 ## User Preferences
 
