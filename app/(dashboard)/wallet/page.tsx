@@ -5038,6 +5038,8 @@ export default function WalletPage() {
               <div className="md:hidden mb-4 flex justify-between items-center gap-4">
                 {/* 左侧：滑动页签 */}
                 <div className="flex-1">
+                  {/* Debug info - remove this later */}
+                  <div className="text-xs text-red-500 mb-1">Debug: selectedPaymentCard = {selectedPaymentCard}</div>
                   {selectedPaymentCard === "fiat" ? (
                     <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
                       {/* 滑动背景 */}
