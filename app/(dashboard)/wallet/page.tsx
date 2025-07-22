@@ -4082,15 +4082,42 @@ export default function WalletPage() {
                     }`} 
                   />
                 </Button>
+
+                {/* 持仓分布按钮 */}
+                <Button
+                  onClick={() => handleActionClick("finance-position-distribution")}
+                  onMouseDown={() => setClickedAction("finance-position-distribution")}
+                  onMouseUp={() => setClickedAction("")}
+                  onMouseLeave={() => setClickedAction("")}
+                  className={`h-10 w-10 transition-all duration-200 ${
+                    clickedAction === "finance-position-distribution"
+                      ? "bg-[#00D4AA] border-[#00D4AA]"
+                      : selectedAction === "finance-position-distribution"
+                        ? "bg-[#00D4AA]/10 border-[#00D4AA]"
+                        : "bg-transparent border-2 border-black hover:bg-gray-50 dark:border-white dark:hover:bg-gray-800"
+                  }`}
+                  variant="outline"
+                  title="持仓分布"
+                >
+                  <PieChart 
+                    className={`h-4 w-4 transition-colors ${
+                      clickedAction === "finance-position-distribution"
+                        ? "text-white"
+                        : selectedAction === "finance-position-distribution" 
+                          ? "text-[#00D4AA]"
+                          : "text-black dark:text-white"
+                    }`} 
+                  />
+                </Button>
               </div>
 
-              {/* 右侧：持仓分布按钮（移动端和桌面端都显示） */}
+              {/* 移动端单独的持仓分布按钮 */}
               <Button
                 onClick={() => handleActionClick("finance-position-distribution")}
                 onMouseDown={() => setClickedAction("finance-position-distribution")}
                 onMouseUp={() => setClickedAction("")}
                 onMouseLeave={() => setClickedAction("")}
-                className={`h-10 w-10 transition-all duration-200 ${
+                className={`h-10 w-10 transition-all duration-200 md:hidden ${
                   clickedAction === "finance-position-distribution"
                     ? "bg-[#00D4AA] border-[#00D4AA]"
                     : selectedAction === "finance-position-distribution"

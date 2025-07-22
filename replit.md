@@ -712,6 +712,15 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Reduced mobile merchant info card bottom margin from mb-6 to mb-1
   - Reduced mobile payment API cards bottom margin from mb-6 to mb-1
   - Reduced desktop grid gap from gap-6 to gap-1 for maximum compact card positioning
+- January 30, 2025. Fixed BePAY account card spacing issue:
+  - Removed space-y-1 from main container to only reduce top edge spacing
+  - Restored proper spacing between cards (mb-4 for mobile, mb-6 for desktop sections)
+  - Enhanced section separation while maintaining compact top layout
+- January 30, 2025. Fixed finance account desktop function buttons alignment:
+  - Moved positioning distribution button (持仓分布) inside the right-aligned button group container
+  - All desktop function buttons now properly right-aligned in same container
+  - Added separate mobile-only positioning distribution button to maintain mobile functionality
+  - Enhanced desktop layout consistency with other account types
 
 ## User Preferences
 
