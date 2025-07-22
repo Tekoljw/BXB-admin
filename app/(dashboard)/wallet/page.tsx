@@ -5519,9 +5519,10 @@ export default function WalletPage() {
                   
                   {fiatTab === "通道配置" && (
                     <div className="space-y-6">
-                      {/* 页签导航 - 币种和代收/代付在同一行 */}
+                      {/* 页签导航 */}
                         <div className="mb-6">
-                          <div className="flex items-center justify-between">
+                          {/* 桌面端 - 币种和代收/代付在同一行 */}
+                          <div className="hidden md:flex items-center justify-between">
                             {/* 左侧 - 币种页签 */}
                             <div className="flex items-center space-x-2">
                               {selectedCurrencies.map((currency, index) => (
@@ -5573,67 +5574,190 @@ export default function WalletPage() {
                               ))}
                             </div>
                           </div>
+
+                          {/* 移动端 - 垂直布局 */}
+                          <div className="md:hidden space-y-4">
+                            {/* 代收/代付页签 */}
+                            <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
+                              {getPaymentMethods(currencyTab).map((method, index) => (
+                                <button
+                                  key={method}
+                                  onClick={() => setPaymentMethodTab(method)}
+                                  className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                                    paymentMethodTab === method
+                                      ? isDark ? "bg-white text-black" : "bg-black text-white"
+                                      : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
+                                  }`}
+                                >
+                                  {method}
+                                </button>
+                              ))}
+                            </div>
+
+                            {/* 币种页签 - 水平滚动 */}
+                            <div className="flex items-center space-x-2 overflow-x-auto pb-2">
+                              {selectedCurrencies.map((currency, index) => (
+                                <button
+                                  key={currency}
+                                  onClick={() => {
+                                    setCurrencyTab(currency);
+                                  }}
+                                  className={`px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
+                                    currencyTab === currency
+                                      ? isDark 
+                                        ? "bg-white text-black"
+                                        : "bg-black text-white"
+                                      : isDark
+                                        ? "text-gray-300 hover:text-white border border-gray-600"
+                                        : "text-gray-700 hover:text-gray-900 border border-gray-300"
+                                  }`}
+                                >
+                                  {currency}
+                                </button>
+                              ))}
+                              <button
+                                onClick={() => setShowMoreCurrencies(true)}
+                                className={`w-8 h-8 rounded-lg transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
+                                  isDark
+                                    ? "text-gray-300 hover:text-white border border-gray-600"
+                                    : "text-gray-700 hover:text-gray-900 border border-gray-300"
+                                }`}
+                              >
+                                <Plus className="h-3 w-3" />
+                              </button>
+                            </div>
+                          </div>
                         </div>
                         
                         <div className="space-y-4">
                           {getChannelsByCategory(currencyTab, paymentMethodTab).map((channel, index) => (
-                            <div key={index} className="flex items-center justify-between p-4 border border-gray-200 dark:border-[#3a3d4a] rounded-lg hover:shadow-md transition-all">
-                              <div className="flex items-center space-x-4">
-                                <div className={`w-3 h-3 rounded-full ${
-                                  channel.color === 'green' ? 'bg-green-500' :
-                                  channel.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'
-                                }`}></div>
-                                <div>
-                                  <div className="font-semibold">{channel.name}</div>
-                                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                                    {channel.type} • 成功率 {channel.successRate}
+                            <div key={index}>
+                              {/* 桌面端：水平布局 */}
+                              <div className="hidden md:flex items-center justify-between p-4 border border-gray-200 dark:border-[#3a3d4a] rounded-lg hover:shadow-md transition-all">
+                                <div className="flex items-center space-x-4">
+                                  <div className={`w-3 h-3 rounded-full ${
+                                    channel.color === 'green' ? 'bg-green-500' :
+                                    channel.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'
+                                  }`}></div>
+                                  <div>
+                                    <div className="font-semibold">{channel.name}</div>
+                                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                      {channel.type} • 成功率 {channel.successRate}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="flex items-center space-x-6 text-sm">
+                                  <div className="text-center">
+                                    <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>日限额</div>
+                                    <div className="font-semibold">{channel.dailyLimit}</div>
+                                  </div>
+                                  <div className="text-center">
+                                    <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>单笔限额</div>
+                                    <div className="font-semibold">{channel.minLimit}~{channel.maxLimit}</div>
+                                  </div>
+                                  <div className="text-center">
+                                    <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>手续费</div>
+                                    <div className="font-semibold">{channel.fee}</div>
+                                  </div>
+                                  <div className="flex items-center space-x-3">
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm"
+                                      className="h-8 px-3 text-xs"
+                                      onClick={() => {
+                                        // 打开收银台测试页面
+                                        window.open('/test-cashier?channel=' + encodeURIComponent(channel.name), '_blank');
+                                      }}
+                                    >
+                                      测试
+                                    </Button>
+                                    <div className="flex items-center">
+                                      <button
+                                        onClick={() => {
+                                          // 切换通道开关状态的逻辑
+                                          console.log(`切换 ${channel.name} 状态:`, !channel.enabled);
+                                        }}
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                                          channel.enabled 
+                                            ? 'bg-[#00D4AA]' 
+                                            : isDark ? 'bg-gray-600' : 'bg-gray-300'
+                                        }`}
+                                      >
+                                        <span
+                                          className={`inline-block h-4 w-4 rounded-full bg-white transition-${
+                                            channel.enabled ? 'translate-x-6' : 'translate-x-1'
+                                          }`}
+                                        />
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              <div className="flex items-center space-x-6 text-sm">
-                                <div className="text-center">
-                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>日限额</div>
-                                  <div className="font-semibold">{channel.dailyLimit}</div>
+
+                              {/* 移动端：垂直布局 */}
+                              <div className={`md:hidden p-4 border border-gray-200 dark:border-[#3a3d4a] rounded-lg ${cardStyle}`}>
+                                {/* 顶部：通道名称和状态指示器 */}
+                                <div className="flex items-center justify-between mb-3">
+                                  <div className="flex items-center space-x-3">
+                                    <div className={`w-3 h-3 rounded-full ${
+                                      channel.color === 'green' ? 'bg-green-500' :
+                                      channel.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'
+                                    }`}></div>
+                                    <div>
+                                      <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{channel.name}</div>
+                                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                        {channel.type} • 成功率 {channel.successRate}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <button
+                                    onClick={() => {
+                                      // 切换通道开关状态的逻辑
+                                      console.log(`切换 ${channel.name} 状态:`, !channel.enabled);
+                                    }}
+                                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
+                                      channel.enabled 
+                                        ? 'bg-[#00D4AA]' 
+                                        : isDark ? 'bg-gray-600' : 'bg-gray-300'
+                                    }`}
+                                  >
+                                    <span
+                                      className={`inline-block h-3 w-3 rounded-full bg-white transition-${
+                                        channel.enabled ? 'translate-x-5' : 'translate-x-1'
+                                      }`}
+                                    />
+                                  </button>
                                 </div>
-                                <div className="text-center">
-                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>单笔限额</div>
-                                  <div className="font-semibold">{channel.minLimit}~{channel.maxLimit}</div>
+
+                                {/* 中部：数据信息网格 */}
+                                <div className="grid grid-cols-3 gap-3 mb-3 text-xs">
+                                  <div className="text-center">
+                                    <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>日限额</div>
+                                    <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{channel.dailyLimit}</div>
+                                  </div>
+                                  <div className="text-center">
+                                    <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>单笔限额</div>
+                                    <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{channel.minLimit}~{channel.maxLimit}</div>
+                                  </div>
+                                  <div className="text-center">
+                                    <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>手续费</div>
+                                    <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{channel.fee}</div>
+                                  </div>
                                 </div>
-                                <div className="text-center">
-                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>手续费</div>
-                                  <div className="font-semibold">{channel.fee}</div>
-                                </div>
-                                <div className="flex items-center space-x-3">
+
+                                {/* 底部：测试按钮 */}
+                                <div className="flex justify-center">
                                   <Button 
                                     variant="outline" 
                                     size="sm"
-                                    className="h-8 px-3 text-xs"
+                                    className="h-8 px-6 text-xs bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                                     onClick={() => {
                                       // 打开收银台测试页面
                                       window.open('/test-cashier?channel=' + encodeURIComponent(channel.name), '_blank');
                                     }}
                                   >
-                                    测试
+                                    测试通道
                                   </Button>
-                                  <div className="flex items-center">
-                                    <button
-                                      onClick={() => {
-                                        // 切换通道开关状态的逻辑
-                                        console.log(`切换 ${channel.name} 状态:`, !channel.enabled);
-                                      }}
-                                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                                        channel.enabled 
-                                          ? 'bg-[#00D4AA]' 
-                                          : isDark ? 'bg-gray-600' : 'bg-gray-300'
-                                      }`}
-                                    >
-                                      <span
-                                        className={`inline-block h-4 w-4 rounded-full bg-white transition-${
-                                          channel.enabled ? 'translate-x-6' : 'translate-x-1'
-                                        }`}
-                                      />
-                                    </button>
-                                  </div>
                                 </div>
                               </div>
                             </div>
