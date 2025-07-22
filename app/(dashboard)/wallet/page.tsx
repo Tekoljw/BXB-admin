@@ -4949,12 +4949,10 @@ export default function WalletPage() {
               </div>
             </div>
 
-            {/* 桌面端：支付API卡片布局 */}
-            <div className="hidden md:grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* 支付API区域 - 共同背景 */}
-              <div className="lg:col-span-2">
-                <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* 桌面端：支付API卡片布局 - 全屏宽度适配 */}
+            <div className="hidden md:block">
+              <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* 商户法币资产卡片 */}
                     <div 
                       onClick={() => setSelectedPaymentCard("fiat")}
@@ -5043,10 +5041,13 @@ export default function WalletPage() {
                   </div>
                 </div>
               </div>
-              
-
             </div>
+          </div>
+        )
 
+      case "TempCase":
+        return (
+          <div className="space-y-6">
             {/* 操作按钮区域 */}
             <div className="transition-all duration-300 ease-out">
               <div className="flex flex-col md:flex-row gap-4">
