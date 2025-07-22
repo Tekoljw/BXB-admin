@@ -692,6 +692,11 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Separated record functions as independent buttons: 划转记录, 订单记录 positioned on right side
   - Filtered out action buttons (法币下发, 代付金充值, 划转) from sliding tabs to focus on management functions
   - Enhanced mobile navigation with proper separation between main functions and record keeping features
+- January 30, 2025. Updated merchant assets and channel configuration tabs to block-style tabs with sliding background animation:
+  - Implemented block-style sliding tabs with gray background container and animated black/white sliding indicator
+  - Added smooth 300ms transition animations for tab switching with proper positioning calculations
+  - Enhanced visual hierarchy with contrasting text colors: active tabs show white/black text, inactive tabs show gray
+  - Separate styling for fiat (2 tabs with 46% width) and crypto (3 tabs with 30% width) configurations
 
 ## User Preferences
 

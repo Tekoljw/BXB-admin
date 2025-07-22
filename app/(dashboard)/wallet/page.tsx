@@ -5183,38 +5183,58 @@ export default function WalletPage() {
 
                   {/* 移动端：功能页签 + 记录按钮 */}
                   <div className="md:hidden flex justify-between items-center">
-                    {/* 左侧：主要功能滑动页签 */}
-                    <div className="flex space-x-6">
+                    {/* 左侧：块状滑动页签 */}
+                    <div className="relative">
                       {selectedPaymentCard === "fiat" ? (
-                        // 法币：资产管理, 通道配置
-                        fiatTabs.filter(tab => !["法币下发", "代付金充值"].includes(tab.id)).map((tab) => (
-                          <button
-                            key={tab.id}
-                            onClick={() => setFiatTab(tab.id)}
-                            className={`pb-2 px-1 border-b-2 text-base transition-colors ${
-                              fiatTab === tab.id
-                                ? "border-black text-black font-bold dark:border-white dark:text-white"
-                                : "border-transparent text-black font-medium hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
-                            }`}
-                          >
-                            {tab.label}
-                          </button>
-                        ))
+                        <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
+                          {/* 滑动背景 */}
+                          <div 
+                            className={`absolute top-1 bottom-1 bg-black dark:bg-white rounded-md transition-all duration-300 ease-out`}
+                            style={{
+                              left: `${4 + (fiatTabs.filter(tab => !["法币下发", "代付金充值"].includes(tab.id)).findIndex(tab => tab.id === fiatTab) * 50)}%`,
+                              width: '46%'
+                            }}
+                          />
+                          {/* 法币：资产管理, 通道配置 */}
+                          {fiatTabs.filter(tab => !["法币下发", "代付金充值"].includes(tab.id)).map((tab, index) => (
+                            <button
+                              key={tab.id}
+                              onClick={() => setFiatTab(tab.id)}
+                              className={`relative px-4 py-2 text-sm font-medium rounded-md transition-colors duration-300 z-10 ${
+                                fiatTab === tab.id
+                                  ? "text-white dark:text-black"
+                                  : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
+                              }`}
+                            >
+                              {tab.label}
+                            </button>
+                          ))}
+                        </div>
                       ) : (
-                        // 加密货币：资产管理, 地址管理, OTC供应商
-                        cryptoTabs.filter(tab => tab.id !== "划转").map((tab) => (
-                          <button
-                            key={tab.id}
-                            onClick={() => setCryptoTab(tab.id)}
-                            className={`pb-2 px-1 border-b-2 text-base transition-colors ${
-                              cryptoTab === tab.id
-                                ? "border-black text-black font-bold dark:border-white dark:text-white"
-                                : "border-transparent text-black font-medium hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
-                            }`}
-                          >
-                            {tab.label}
-                          </button>
-                        ))
+                        <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
+                          {/* 滑动背景 */}
+                          <div 
+                            className={`absolute top-1 bottom-1 bg-black dark:bg-white rounded-md transition-all duration-300 ease-out`}
+                            style={{
+                              left: `${2 + (cryptoTabs.filter(tab => tab.id !== "划转").findIndex(tab => tab.id === cryptoTab) * 32)}%`,
+                              width: '30%'
+                            }}
+                          />
+                          {/* 加密货币：资产管理, 地址管理, OTC供应商 */}
+                          {cryptoTabs.filter(tab => tab.id !== "划转").map((tab, index) => (
+                            <button
+                              key={tab.id}
+                              onClick={() => setCryptoTab(tab.id)}
+                              className={`relative px-3 py-2 text-sm font-medium rounded-md transition-colors duration-300 z-10 ${
+                                cryptoTab === tab.id
+                                  ? "text-white dark:text-black"
+                                  : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
+                              }`}
+                            >
+                              {tab.label}
+                            </button>
+                          ))}
+                        </div>
                       )}
                     </div>
                     
