@@ -5039,13 +5039,13 @@ export default function WalletPage() {
                 {/* 左侧：滑动页签 */}
                 <div className="flex-1">
                   {selectedPaymentCard === "fiat" ? (
-                    <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
+                    <div className="inline-flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
                       {/* 滑动背景 */}
                       <div 
                         className={`absolute top-1 bottom-1 bg-black dark:bg-white rounded-md transition-all duration-300 ease-out`}
                         style={{
-                          left: fiatTab === "商户资产" ? '4px' : 'calc(50% + 2px)',
-                          width: 'calc(50% - 4px)'
+                          left: fiatTab === "商户资产" ? '4px' : '74px',
+                          width: fiatTab === "商户资产" ? '66px' : '66px'
                         }}
                       />
                       {/* 法币：商户资产, 通道配置 */}
@@ -5053,7 +5053,7 @@ export default function WalletPage() {
                         <button
                           key={tab.id}
                           onClick={() => setFiatTab(tab.id)}
-                          className={`relative flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 z-10 ${
+                          className={`relative px-3 py-2 text-sm font-medium rounded-md transition-colors duration-300 z-10 whitespace-nowrap ${
                             fiatTab === tab.id
                               ? "text-white dark:text-black"
                               : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
@@ -5064,13 +5064,13 @@ export default function WalletPage() {
                       ))}
                     </div>
                   ) : (
-                    <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
+                    <div className="inline-flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
                       {/* 滑动背景 */}
                       <div 
                         className={`absolute top-1 bottom-1 bg-black dark:bg-white rounded-md transition-all duration-300 ease-out`}
                         style={{
-                          left: cryptoTab === "商户资产" ? '4px' : cryptoTab === "地址管理" ? 'calc(33.333% + 1px)' : 'calc(66.666% + 2px)',
-                          width: 'calc(33.333% - 3px)'
+                          left: cryptoTab === "商户资产" ? '4px' : cryptoTab === "地址管理" ? '74px' : '138px',
+                          width: cryptoTab === "商户资产" ? '66px' : cryptoTab === "地址管理" ? '60px' : '90px'
                         }}
                       />
                       {/* 加密货币：商户资产, 地址管理, OTC供应商 */}
@@ -5078,7 +5078,7 @@ export default function WalletPage() {
                         <button
                           key={tab.id}
                           onClick={() => setCryptoTab(tab.id)}
-                          className={`relative flex-1 py-2 text-sm font-medium rounded-md transition-colors duration-300 z-10 ${
+                          className={`relative px-3 py-2 text-sm font-medium rounded-md transition-colors duration-300 z-10 whitespace-nowrap ${
                             cryptoTab === tab.id
                               ? "text-white dark:text-black"
                               : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
@@ -5132,13 +5132,13 @@ export default function WalletPage() {
                 {/* 左侧：滑动页签区域 */}
                 <div className="flex-1">
                   {selectedPaymentCard === "fiat" ? (
-                    <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
+                    <div className="inline-flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
                       {/* 滑动背景 */}
                       <div 
                         className={`absolute top-1 bottom-1 bg-black dark:bg-white rounded-md transition-all duration-300 ease-out`}
                         style={{
-                          left: fiatTab === "商户资产" ? '4px' : 'calc(50% + 2px)',
-                          width: 'calc(50% - 4px)'
+                          left: fiatTab === "商户资产" ? '4px' : '90px',
+                          width: fiatTab === "商户资产" ? '82px' : '82px'
                         }}
                       />
                       {/* 法币：商户资产, 通道配置 */}
@@ -5146,7 +5146,7 @@ export default function WalletPage() {
                         <button
                           key={tab.id}
                           onClick={() => setFiatTab(tab.id)}
-                          className={`relative flex-1 py-3 text-base font-medium rounded-md transition-colors duration-300 z-10 ${
+                          className={`relative px-4 py-3 text-base font-medium rounded-md transition-colors duration-300 z-10 whitespace-nowrap ${
                             fiatTab === tab.id
                               ? "text-white dark:text-black"
                               : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
@@ -5157,13 +5157,13 @@ export default function WalletPage() {
                       ))}
                     </div>
                   ) : (
-                    <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
+                    <div className="inline-flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 relative">
                       {/* 滑动背景 */}
                       <div 
                         className={`absolute top-1 bottom-1 bg-black dark:bg-white rounded-md transition-all duration-300 ease-out`}
                         style={{
-                          left: cryptoTab === "商户资产" ? '4px' : cryptoTab === "地址管理" ? 'calc(33.333% + 1px)' : 'calc(66.666% + 2px)',
-                          width: 'calc(33.333% - 3px)'
+                          left: cryptoTab === "商户资产" ? '4px' : cryptoTab === "地址管理" ? '90px' : '174px',
+                          width: cryptoTab === "商户资产" ? '82px' : cryptoTab === "地址管理" ? '80px' : '110px'
                         }}
                       />
                       {/* 加密货币：商户资产, 地址管理, OTC供应商 */}
@@ -5171,7 +5171,7 @@ export default function WalletPage() {
                         <button
                           key={tab.id}
                           onClick={() => setCryptoTab(tab.id)}
-                          className={`relative flex-1 py-3 text-base font-medium rounded-md transition-colors duration-300 z-10 ${
+                          className={`relative px-4 py-3 text-base font-medium rounded-md transition-colors duration-300 z-10 whitespace-nowrap ${
                             cryptoTab === tab.id
                               ? "text-white dark:text-black"
                               : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
@@ -5188,15 +5188,15 @@ export default function WalletPage() {
                 <div className="flex gap-3">
                   {(selectedPaymentCard === "fiat" ? 
                     [
-                      { id: "法币下发", label: "法币下发", icon: Repeat },
-                      { id: "代付金充值", label: "代付金充值", icon: Plus },
-                      { id: "法币订单", label: "法币订单", icon: BarChart2 },
-                      { id: "资产分布", label: "资产分布", icon: PieChart }
+                      { id: "法币下发", label: "法币下发", icon: Repeat, showText: true },
+                      { id: "代付金充值", label: "代付金充值", icon: Plus, showText: true },
+                      { id: "法币订单", label: "法币订单", icon: BarChart2, showText: false },
+                      { id: "资产分布", label: "资产分布", icon: PieChart, showText: false }
                     ] : 
                     [
-                      { id: "划转", label: "划转", icon: ArrowLeftRight },
-                      { id: "加密货币订单", label: "加密货币订单", icon: Coins },
-                      { id: "资产分布", label: "资产分布", icon: PieChart }
+                      { id: "划转", label: "划转", icon: ArrowLeftRight, showText: true },
+                      { id: "加密货币订单", label: "加密货币订单", icon: Coins, showText: false },
+                      { id: "资产分布", label: "资产分布", icon: PieChart, showText: false }
                     ]
                   ).map((button) => {
                     const Icon = button.icon
@@ -5221,11 +5221,12 @@ export default function WalletPage() {
                             handlePositionModalClick()
                           }
                         }}
-                        className="h-12 px-4 bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
+                        className={`${button.showText ? 'h-12 px-4' : 'h-12 w-12'} bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800`}
                         variant="outline"
+                        title={button.label}
                       >
-                        <Icon className="h-4 w-4 mr-2" />
-                        <span>{button.label}</span>
+                        <Icon className={`h-4 w-4 ${button.showText ? 'mr-2' : ''}`} />
+                        {button.showText && <span>{button.label}</span>}
                       </Button>
                     )
                   })}
