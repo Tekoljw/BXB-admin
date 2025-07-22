@@ -721,6 +721,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - All desktop function buttons now properly right-aligned in same container
   - Added separate mobile-only positioning distribution button to maintain mobile functionality
   - Enhanced desktop layout consistency with other account types
+- January 30, 2025. Enhanced BePAY account mobile fiat payment layout with merged currency cards:
+  - Combined same currency merchant assets and standby funds into single cards on mobile
+  - Mobile cards display currency header with both merchant assets and standby funds in vertical layout
+  - Added border separator between merchant assets and standby funds sections within each card
+  - Desktop maintains separate card layout for merchant assets and standby funds
+  - Reduced button sizes and icons for compact mobile display
+  - Enhanced mobile user experience with consolidated currency management interface
 
 ## User Preferences
 

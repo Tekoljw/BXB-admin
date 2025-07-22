@@ -5385,66 +5385,120 @@ export default function WalletPage() {
                           { currency: "GBP", merchantBalance: "8,950.75", standbyBalance: "3,950.75", symbol: "£" },
                           { currency: "JPY", merchantBalance: "2,580,000", standbyBalance: "890,000", symbol: "¥" }
                         ].map((asset) => (
-                          <div key={asset.currency} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* 商户资产卡片 */}
-                            <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}
-                                 onClick={() => {
-                                   setSelectedFiatCurrency(asset.currency)
-                                   setShowExchangeModal(true)
-                                 }}>
-                              <div className="flex items-center space-x-3">
+                          <div key={asset.currency}>
+                            {/* 移动端：合并显示商户资产和代付备用金 */}
+                            <div className={`md:hidden flex flex-col space-y-4 p-4 rounded-lg ${cardStyle}`}>
+                              {/* 币种标题 */}
+                              <div className="flex items-center space-x-3 mb-3">
                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
                                   {asset.symbol}
                                 </div>
                                 <div className="flex-1">
-                                  <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
-                                  <div className="text-sm text-gray-500">商户资产</div>
+                                  <div className={`font-semibold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
                                 </div>
                               </div>
-                              <div className="flex items-center space-x-6">
-                                <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.merchantBalance}</div>
+                              
+                              {/* 商户资产 */}
+                              <div className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                                <div className="flex-1">
+                                  <div className="text-sm text-gray-500">商户资产</div>
+                                  <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.merchantBalance}</div>
+                                </div>
                                 <Button 
                                   size="sm" 
-                                  className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 w-10 h-10 p-0"
+                                  className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 w-8 h-8 p-0"
                                   variant="outline"
-                                  onClick={(e) => {
-                                    e.stopPropagation()
+                                  onClick={() => {
                                     setSelectedFiatCurrency(asset.currency)
                                     setShowExchangeModal(true)
                                   }}
                                 >
-                                  <ArrowUpRight className="h-4 w-4" />
+                                  <ArrowUpRight className="h-3 w-3" />
+                                </Button>
+                              </div>
+                              
+                              {/* 代付备用金 */}
+                              <div className="flex items-center justify-between py-2">
+                                <div className="flex-1">
+                                  <div className="text-sm text-gray-500">代付备用金</div>
+                                  <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.standbyBalance}</div>
+                                </div>
+                                <Button 
+                                  size="sm" 
+                                  className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-8 h-8 p-0"
+                                  variant="outline"
+                                  onClick={(e) => {
+                                    setStandbyRechargeCurrency(asset.currency)
+                                    handleStandbyRechargeClick(e)
+                                  }}
+                                >
+                                  <ArrowDownLeft className="h-3 w-3" />
                                 </Button>
                               </div>
                             </div>
-
-                            {/* 代付备用金卡片 */}
-                            <div 
-                              className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}
-                              onClick={(e) => {
-                                setStandbyRechargeCurrency(asset.currency)
-                                handleStandbyRechargeClick(e)
-                              }}
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
-                                  {asset.symbol}
+                            
+                            {/* 桌面端：分别显示商户资产和代付备用金 */}
+                            <div className="hidden md:grid grid-cols-2 gap-4">
+                              {/* 商户资产卡片 */}
+                              <div className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}
+                                   onClick={() => {
+                                     setSelectedFiatCurrency(asset.currency)
+                                     setShowExchangeModal(true)
+                                   }}>
+                                <div className="flex items-center space-x-3">
+                                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                                    {asset.symbol}
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
+                                    <div className="text-sm text-gray-500">商户资产</div>
+                                  </div>
                                 </div>
-                                <div className="flex-1">
-                                  <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
-                                  <div className="text-sm text-gray-500">代付备用金</div>
+                                <div className="flex items-center space-x-6">
+                                  <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.merchantBalance}</div>
+                                  <Button 
+                                    size="sm" 
+                                    className="bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 w-10 h-10 p-0"
+                                    variant="outline"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      setSelectedFiatCurrency(asset.currency)
+                                      setShowExchangeModal(true)
+                                    }}
+                                  >
+                                    <ArrowUpRight className="h-4 w-4" />
+                                  </Button>
                                 </div>
                               </div>
-                              <div className="flex items-center space-x-6">
-                                <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.standbyBalance}</div>
-                                <Button 
-                                  size="sm" 
-                                  className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-10 h-10 p-0"
-                                  variant="outline"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <ArrowDownLeft className="h-4 w-4" />
-                                </Button>
+
+                              {/* 代付备用金卡片 */}
+                              <div 
+                                className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}
+                                onClick={(e) => {
+                                  setStandbyRechargeCurrency(asset.currency)
+                                  handleStandbyRechargeClick(e)
+                                }}
+                              >
+                                <div className="flex items-center space-x-3">
+                                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-[#00D4AA]`}>
+                                    {asset.symbol}
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.currency}</div>
+                                    <div className="text-sm text-gray-500">代付备用金</div>
+                                  </div>
+                                </div>
+                                <div className="flex items-center space-x-6">
+                                  <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.standbyBalance}</div>
+                                  <Button 
+                                    size="sm" 
+                                    className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-10 h-10 p-0"
+                                    variant="outline"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <ArrowDownLeft className="h-4 w-4" />
+                                  </Button>
+                                </div>
                               </div>
                             </div>
                           </div>
