@@ -4740,9 +4740,9 @@ export default function WalletPage() {
         ]
         
         return (
-          <div className="space-y-4">
+          <div className="space-y-1">
             {/* 移动端：商户信息卡片置顶 */}
-            <div className="md:hidden mb-4">
+            <div className="md:hidden mb-1">
               <div className={`${cardStyle} rounded-lg p-4 flex flex-col justify-between`}>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
@@ -4811,7 +4811,7 @@ export default function WalletPage() {
             </div>
 
             {/* 移动端：支付API卡片两个一行 */}
-            <div className="md:hidden mb-4 flex gap-3">
+            <div className="md:hidden mb-1 flex gap-3">
               {/* 商户法币资产卡片 */}
               <div 
                 onClick={() => setSelectedPaymentCard("fiat")}
