@@ -4950,9 +4950,9 @@ export default function WalletPage() {
             </div>
 
             {/* 桌面端：支付API卡片布局 */}
-            <div className="hidden md:grid grid-cols-1 lg:grid-cols-3 gap-1">
+            <div className="hidden md:block">
               {/* 支付API区域 - 共同背景 */}
-              <div className="lg:col-span-2">
+              <div>
                 <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
                   <div className="flex flex-col sm:flex-row gap-4">
                     {/* 商户法币资产卡片 */}
