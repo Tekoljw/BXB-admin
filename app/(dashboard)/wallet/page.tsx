@@ -4700,7 +4700,7 @@ export default function WalletPage() {
         )
 
       case "BePAY账户":
-        // 定义法币和加密货币页签
+        // 定义桌面端页签
         const fiatTabs = [
           { id: "商户资产", label: "商户资产", icon: Landmark },
           { id: "通道配置", label: "通道配置", icon: Network },
@@ -4723,6 +4723,14 @@ export default function WalletPage() {
           { id: "划转记录", icon: Coins },
           { id: "订单记录", icon: BarChart2 },
           { id: "资产分布", icon: PieChart }
+        ]
+
+        // 定义移动端功能按钮
+        const mobileFunctionButtons = [
+          { id: "法币下发", label: "法币下发", icon: Repeat },
+          { id: "加密货币下发", label: "加密货币下发", icon: Coins },
+          { id: "订单记录", label: "订单记录", icon: BarChart2 },
+          { id: "资金记录", label: "资金记录", icon: Banknote }
         ]
         
         return (
@@ -5020,7 +5028,40 @@ export default function WalletPage() {
 
             {/* 操作按钮区域 */}
             <div className="transition-all duration-300 ease-out">
-              <div className="flex flex-col md:flex-row gap-4">
+              {/* 移动端：功能操作按钮 */}
+              <div className="md:hidden mb-4 grid grid-cols-4 gap-2">
+                {mobileFunctionButtons.map((button) => {
+                  const Icon = button.icon
+                  return (
+                    <Button 
+                      key={button.id}
+                      onClick={() => {
+                        if (button.id === "法币下发") {
+                          setSelectedFiatCurrency("USD")
+                          setShowExchangeModal(true)
+                        } else if (button.id === "加密货币下发") {
+                          // 处理加密货币下发逻辑
+                          console.log("加密货币下发")
+                        } else if (button.id === "订单记录") {
+                          setSelectedTab("订单记录")
+                          setSelectedOrderTab("支付订单")
+                        } else if (button.id === "资金记录") {
+                          setSelectedTab("订单记录")
+                          setSelectedOrderTab("资金记录")
+                        }
+                      }}
+                      className="h-16 bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800 flex-col"
+                      variant="outline"
+                    >
+                      <Icon className="h-6 w-6 mb-1" />
+                      <span className="text-[10px]">{button.label}</span>
+                    </Button>
+                  )
+                })}
+              </div>
+
+              {/* 桌面端：页签按钮 */}
+              <div className="hidden md:flex flex-col md:flex-row gap-4">
                 {/* 主要操作按钮 - 自动适配屏幕宽度 */}
                 <div className="flex-1 grid grid-cols-4 gap-2 md:gap-3">
                   {selectedPaymentCard === "fiat" ? (
@@ -5043,15 +5084,15 @@ export default function WalletPage() {
                               setFiatTab(tab.id)
                             }
                           }}
-                          className={`h-16 md:h-12 transition-all duration-200 text-base font-bold flex-col md:flex-row ${
+                          className={`h-12 transition-all duration-200 text-base font-bold flex-row ${
                             isSelected
                               ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                           }`}
                           variant="outline"
                         >
-                          <Icon className="h-6 w-6 md:h-4 md:w-4 mb-1 md:mb-0 md:mr-2" />
-                          <span className="text-[10px] md:text-base">{tab.label}</span>
+                          <Icon className="h-4 w-4 mr-2" />
+                          <span className="text-base">{tab.label}</span>
                         </Button>
                       )
                     })
@@ -5064,15 +5105,15 @@ export default function WalletPage() {
                         <Button 
                           key={tab.id}
                           onClick={() => setCryptoTab(tab.id)}
-                          className={`h-16 md:h-12 transition-all duration-200 text-base font-bold flex-col md:flex-row ${
+                          className={`h-12 transition-all duration-200 text-base font-bold flex-row ${
                             isSelected
                               ? "bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]" 
                               : "bg-transparent border-2 border-black text-black hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-800"
                           }`}
                           variant="outline"
                         >
-                          <Icon className="h-6 w-6 md:h-4 md:w-4 mb-1 md:mb-0 md:mr-2" />
-                          <span className="text-[10px] md:text-base">{tab.label}</span>
+                          <Icon className="h-4 w-4 mr-2" />
+                          <span className="text-base">{tab.label}</span>
                         </Button>
                       )
                     })
