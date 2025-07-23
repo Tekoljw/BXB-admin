@@ -730,9 +730,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Enhanced mobile user experience with consolidated currency management interface
 - January 30, 2025. Optimized BePAY account channel configuration mobile interface:
   - Created separate desktop and mobile layouts for channel configuration cards
-  - Mobile cards feature vertical layout: channel name/status at top, data grid in middle, test button at bottom
-  - Implemented 3-column data grid for daily limit, single limit, and fees on mobile
-  - Added compact toggle switches and smaller test buttons for mobile interface
+  - Mobile cards feature optimized vertical layout: compact header with channel info and toggle switch
+  - Redesigned mobile data layout: 2x2 grid for daily limit/fees in first row, single limit spanning full width below
+  - Enhanced mobile text hierarchy: larger channel names, separated channel type and success rate
+  - Reduced mobile padding and spacing for better screen utilization
+  - Added text truncation for long channel names to prevent overflow
+  - Simplified test button styling with smaller size and standard border
   - Enhanced mobile navigation: currency tabs at top with horizontal scrolling, payment method tabs below left-aligned
   - Repositioned payment method tabs (代收/代付) to display below currency selection and left-aligned (not full-screen)
   - Desktop maintains original horizontal layout while mobile provides touch-friendly vertical interface
