@@ -5578,15 +5578,15 @@ export default function WalletPage() {
                           {/* 移动端 - 垂直布局 */}
                           <div className="md:hidden space-y-4">
                             {/* 代收/代付页签 */}
-                            <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
+                            <div className="flex gap-2">
                               {getPaymentMethods(currencyTab).map((method, index) => (
                                 <button
                                   key={method}
                                   onClick={() => setPaymentMethodTab(method)}
-                                  className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                                  className={`flex-1 px-3 py-2 text-sm font-medium rounded-md border-2 transition-all duration-200 ${
                                     paymentMethodTab === method
-                                      ? isDark ? "bg-white text-black" : "bg-black text-white"
-                                      : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
+                                      ? "bg-white text-black border-black dark:bg-white dark:text-black dark:border-white"
+                                      : "bg-transparent text-black border-black hover:bg-gray-50 dark:text-white dark:border-white dark:hover:bg-gray-800"
                                   }`}
                                 >
                                   {method}
