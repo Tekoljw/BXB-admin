@@ -5577,23 +5577,6 @@ export default function WalletPage() {
 
                           {/* 移动端 - 垂直布局 */}
                           <div className="md:hidden space-y-4">
-                            {/* 代收/代付页签 */}
-                            <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
-                              {getPaymentMethods(currencyTab).map((method, index) => (
-                                <button
-                                  key={method}
-                                  onClick={() => setPaymentMethodTab(method)}
-                                  className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-                                    paymentMethodTab === method
-                                      ? isDark ? "bg-white text-black" : "bg-black text-white"
-                                      : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
-                                  }`}
-                                >
-                                  {method}
-                                </button>
-                              ))}
-                            </div>
-
                             {/* 币种页签 - 水平滚动 */}
                             <div className="flex items-center space-x-2 overflow-x-auto pb-2">
                               {selectedCurrencies.map((currency, index) => (
@@ -5625,6 +5608,25 @@ export default function WalletPage() {
                               >
                                 <Plus className="h-3 w-3" />
                               </button>
+                            </div>
+
+                            {/* 代收/代付页签 - 居左对齐，不全屏 */}
+                            <div className="flex justify-start">
+                              <div className={`flex rounded-lg p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
+                                {getPaymentMethods(currencyTab).map((method, index) => (
+                                  <button
+                                    key={method}
+                                    onClick={() => setPaymentMethodTab(method)}
+                                    className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                                      paymentMethodTab === method
+                                        ? isDark ? "bg-white text-black" : "bg-black text-white"
+                                        : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
+                                    }`}
+                                  >
+                                    {method}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
                           </div>
                         </div>

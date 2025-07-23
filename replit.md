@@ -733,7 +733,8 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Mobile cards feature vertical layout: channel name/status at top, data grid in middle, test button at bottom
   - Implemented 3-column data grid for daily limit, single limit, and fees on mobile
   - Added compact toggle switches and smaller test buttons for mobile interface
-  - Enhanced mobile navigation with payment method tabs at top and horizontal scrolling currency tabs
+  - Enhanced mobile navigation: currency tabs at top with horizontal scrolling, payment method tabs below left-aligned
+  - Repositioned payment method tabs (代收/代付) to display below currency selection and left-aligned (not full-screen)
   - Desktop maintains original horizontal layout while mobile provides touch-friendly vertical interface
 
 ## User Preferences
