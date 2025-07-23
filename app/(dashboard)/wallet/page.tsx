@@ -5699,7 +5699,7 @@ export default function WalletPage() {
                               {/* 移动端：优化垂直布局 */}
                               <div className={`md:hidden p-3 border border-gray-200 dark:border-[#3a3d4a] rounded-lg ${cardStyle}`}>
                                 {/* 顶部：通道名称和右上角控制区 */}
-                                <div className="flex items-start justify-between mb-3">
+                                <div className="flex items-start justify-between mb-2">
                                   <div className="flex items-start space-x-2 flex-1">
                                     <div className={`w-3 h-3 rounded-full mt-1 ${
                                       channel.color === 'green' ? 'bg-green-500' :
@@ -5707,6 +5707,9 @@ export default function WalletPage() {
                                     }`}></div>
                                     <div className="flex-1 min-w-0">
                                       <div className={`font-semibold text-sm ${isDark ? 'text-white' : 'text-gray-900'} truncate`}>{channel.name}</div>
+                                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mt-0.5`}>
+                                        {channel.type}
+                                      </div>
                                     </div>
                                   </div>
                                   
@@ -5743,18 +5746,12 @@ export default function WalletPage() {
                                   </div>
                                 </div>
 
-                                {/* 支付方式和成功率同一行 */}
-                                <div className="flex items-center justify-between mb-3 text-xs">
-                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                                    {channel.type}
+                                {/* 成功率与限额信息同一行 */}
+                                <div className="grid grid-cols-4 gap-2 text-xs">
+                                  <div className="text-center">
+                                    <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>成功率</div>
+                                    <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{channel.successRate}</div>
                                   </div>
-                                  <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                                    成功率 {channel.successRate}
-                                  </div>
-                                </div>
-
-                                {/* 限额信息同一行 */}
-                                <div className="grid grid-cols-3 gap-2 text-xs">
                                   <div className="text-center">
                                     <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>日限额</div>
                                     <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{channel.dailyLimit}</div>
