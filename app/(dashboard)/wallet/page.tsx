@@ -3001,7 +3001,7 @@ export default function WalletPage() {
                             handleSortChange("value")
                             setSortOrder(sortOrder === "desc" ? "asc" : "desc")
                           }}
-                          className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                          className={`px-2 py-1 lg:px-4 lg:py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                             sortBy === "value"
                               ? isDark ? "bg-white text-black" : "bg-black text-white"
                               : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
@@ -3016,7 +3016,7 @@ export default function WalletPage() {
                             handleSortChange("marketCap")
                             setSortOrder(sortOrder === "desc" ? "asc" : "desc")
                           }}
-                          className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                          className={`px-2 py-1 lg:px-4 lg:py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                             sortBy === "marketCap"
                               ? isDark ? "bg-white text-black" : "bg-black text-white"
                               : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
@@ -4811,7 +4811,7 @@ export default function WalletPage() {
                 <div className="flex space-x-2">
                   <button
                     onClick={() => setShowApiDocsModal(true)}
-                    className={`flex-1 inline-flex items-center justify-center space-x-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all border-2 ${
+                    className={`flex-1 inline-flex items-center justify-center space-x-1 px-2 py-1.5 rounded-md text-xs lg:text-sm font-medium transition-all border-2 ${
                       isDark 
                         ? 'bg-transparent border-white text-white hover:bg-gray-800' 
                         : 'bg-white border-black text-black hover:bg-gray-50'
@@ -4952,7 +4952,7 @@ export default function WalletPage() {
                   </span>
                   <button
                     onClick={() => setShowApiDocsModal(true)}
-                    className={`inline-flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all border-2 ${
+                    className={`inline-flex items-center space-x-2 px-2 py-1 lg:px-4 lg:py-2 rounded-md text-xs lg:text-sm font-medium transition-all border-2 ${
                       isDark 
                         ? 'bg-transparent border-white text-white hover:bg-gray-800' 
                         : 'bg-white border-black text-black hover:bg-gray-50'
@@ -4966,7 +4966,7 @@ export default function WalletPage() {
 
                   <button
                     onClick={() => setShowGenerateKeyModal(true)}
-                    className={`inline-flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                    className={`inline-flex items-center space-x-2 px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-all ${
                       isDark 
                         ? 'bg-white text-black hover:bg-gray-100' 
                         : 'bg-black text-white hover:bg-gray-800'
@@ -5535,7 +5535,7 @@ export default function WalletPage() {
                                     setCurrencyTab(currency);
                                     setPaymentMethodTab("代收");
                                   }}
-                                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                  className={`px-2 py-1 lg:px-4 lg:py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                                     currencyTab === currency
                                       ? isDark 
                                         ? "bg-white text-black"
@@ -5566,7 +5566,7 @@ export default function WalletPage() {
                                 <button
                                   key={method}
                                   onClick={() => setPaymentMethodTab(method)}
-                                  className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                                  className={`px-2 py-1 lg:px-4 lg:py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                                     paymentMethodTab === method
                                       ? isDark ? "bg-white text-black" : "bg-black text-white"
                                       : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
@@ -5620,7 +5620,7 @@ export default function WalletPage() {
                                   <button
                                     key={method}
                                     onClick={() => setPaymentMethodTab(method)}
-                                    className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                                    className={`px-2 py-1 lg:px-4 lg:py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                                       paymentMethodTab === method
                                         ? isDark ? "bg-white text-black" : "bg-black text-white"
                                         : isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-800"
@@ -5864,7 +5864,7 @@ export default function WalletPage() {
                           <button
                             key={network}
                             onClick={() => setSelectedNetwork(network)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+                            className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                               selectedNetwork === network
                                 ? isDark 
                                   ? "bg-white text-black border-white"
@@ -6185,7 +6185,7 @@ export default function WalletPage() {
                             <div className="flex items-center space-x-3 mt-6">
                               <button
                                 onClick={() => setShowAddAddressModal(false)}
-                                className={`flex-1 px-4 py-2 rounded-lg border text-sm font-medium transition-all ${
+                                className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-lg border text-sm font-medium transition-all ${
                                   isDark 
                                     ? "border-[#3a3d4a] text-gray-300 hover:bg-[#3a3d4a]" 
                                     : "border-gray-300 text-gray-600 hover:bg-gray-50"
@@ -6195,7 +6195,7 @@ export default function WalletPage() {
                               </button>
                               <button
                                 onClick={handleAddAddress}
-                                className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                                className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-sm font-medium transition-all ${
                                   isDark 
                                     ? "bg-[#00D4AA] text-black hover:bg-[#00B894]" 
                                     : "bg-[#00D4AA] text-white hover:bg-[#00B894]"
@@ -6223,7 +6223,7 @@ export default function WalletPage() {
                           <button
                             key={supplier.name}
                             onClick={() => setSelectedSupplier(supplier.name)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                            className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
                               selectedSupplier === supplier.name
                                 ? isDark 
                                   ? "bg-transparent border border-white text-white"
@@ -6784,10 +6784,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：89人
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({ type: 'direct', isOpen: true })}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -6815,10 +6815,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：234人
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({ type: 'indirect', isOpen: true })}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -6846,10 +6846,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       活跃率：78.2%
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({ type: 'active', isOpen: true })}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -6877,10 +6877,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm text-red-500 mt-2`}>
                       即将过期：45.30 USDT
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -7231,10 +7231,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：45 人
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7262,10 +7262,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       产品收益率：7.2%
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7293,10 +7293,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       投资活跃率：85.6%
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({type: 'active', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7324,10 +7324,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm text-red-500 mt-2`}>
                       即将过期：23.45 USDT
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -7379,7 +7379,7 @@ export default function WalletPage() {
                       <input
                         type="text"
                         placeholder="搜索用户ID或产品名称..."
-                        className={`w-full px-4 py-2 rounded-lg border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
@@ -7387,7 +7387,7 @@ export default function WalletPage() {
                       />
                     </div>
                     <div className="flex gap-2">
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -7396,7 +7396,7 @@ export default function WalletPage() {
                         <option value="direct">直推</option>
                         <option value="indirect">间推</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -7406,7 +7406,7 @@ export default function WalletPage() {
                         <option value="flexible">活期产品</option>
                         <option value="high-yield">高收益产品</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -7486,7 +7486,7 @@ export default function WalletPage() {
 
                   {/* 加载更多按钮 */}
                   <div className="flex justify-center mt-6">
-                    <button className={`px-6 py-2 rounded-lg font-medium transition-all border ${
+                    <button className={`px-6 py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                       isDark 
                         ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
                         : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
@@ -7611,10 +7611,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：23 人
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7642,10 +7642,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：12 人
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7673,10 +7673,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月开卡：45 张
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({type: 'active', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7704,10 +7704,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm text-red-500 mt-2`}>
                       即将过期：12.34 USDT
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -7759,7 +7759,7 @@ export default function WalletPage() {
                       <input
                         type="text"
                         placeholder="搜索用户ID或产品名称..."
-                        className={`w-full px-4 py-2 rounded-lg border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
@@ -7767,7 +7767,7 @@ export default function WalletPage() {
                       />
                     </div>
                     <div className="flex gap-2">
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -7776,7 +7776,7 @@ export default function WalletPage() {
                         <option value="direct">直推</option>
                         <option value="indirect">间推</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -7785,7 +7785,7 @@ export default function WalletPage() {
                         <option value="card">开卡</option>
                         <option value="recharge">充值</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -7797,7 +7797,7 @@ export default function WalletPage() {
                         <option value="BTC">BTC</option>
                         <option value="ETH">ETH</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -7887,7 +7887,7 @@ export default function WalletPage() {
 
                   {/* 加载更多按钮 */}
                   <div className="flex justify-center mt-6">
-                    <button className={`px-6 py-2 rounded-lg font-medium transition-all border ${
+                    <button className={`px-6 py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                       isDark 
                         ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
                         : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
@@ -8007,10 +8007,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：67 人
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -8038,10 +8038,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：34 人
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -8069,9 +8069,9 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月交易：189 笔
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -8099,10 +8099,10 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm text-red-500 mt-2`}>
                       即将过期：45.67 USDT
                     </div>
-                    <div className="mt-3 "
+                    <div className="mt-3 >
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -8154,7 +8154,7 @@ export default function WalletPage() {
                       <input
                         type="text"
                         placeholder="搜索用户ID或交易订单..."
-                        className={`w-full px-4 py-2 rounded-lg border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
@@ -8162,7 +8162,7 @@ export default function WalletPage() {
                       />
                     </div>
                     <div className="flex gap-2">
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -8171,7 +8171,7 @@ export default function WalletPage() {
                         <option value="direct">直推</option>
                         <option value="indirect">间推</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -8180,7 +8180,7 @@ export default function WalletPage() {
                         <option value="guarantee">担保交易</option>
                         <option value="escrow">第三方托管</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -8191,7 +8191,7 @@ export default function WalletPage() {
                         <option value="ETH">ETH交易</option>
                         <option value="NFT">NFT交易</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -8284,7 +8284,7 @@ export default function WalletPage() {
 
                   {/* 加载更多按钮 */}
                   <div className="flex justify-center mt-6">
-                    <button className={`px-6 py-2 rounded-lg font-medium transition-all border ${
+                    <button className={`px-6 py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                       isDark 
                         ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
                         : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
@@ -8376,10 +8376,10 @@ export default function WalletPage() {
                         高级支付代理
                       </span>
                     </div>
-                    <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 hidden lg:block`}>
+                    <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
                       <button
                         onClick={() => setShowCommissionRuleModal(true)}
-                        className={`text-[#14C2A3] hover:underline`}
+                        className={`text-[#14C2A3] hover:underline text-xs lg:text-sm`}
                       >
                         查看佣金规则
                       </button>
@@ -8406,7 +8406,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -8437,7 +8437,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -8467,7 +8467,7 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -8498,7 +8498,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -8550,7 +8550,7 @@ export default function WalletPage() {
                       <input
                         type="text"
                         placeholder="搜索商户ID或订单号..."
-                        className={`w-full px-4 py-2 rounded-lg border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
@@ -8558,7 +8558,7 @@ export default function WalletPage() {
                       />
                     </div>
                     <div className="flex gap-2">
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -8567,7 +8567,7 @@ export default function WalletPage() {
                         <option value="direct">直推</option>
                         <option value="indirect">间推</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -8578,7 +8578,7 @@ export default function WalletPage() {
                         <option value="unionpay">银联支付</option>
                         <option value="bank">银行转账</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -8591,7 +8591,7 @@ export default function WalletPage() {
                         <option value="建设银行">建设银行</option>
                         <option value="工商银行">工商银行</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -8601,7 +8601,7 @@ export default function WalletPage() {
                         <option value="代付">代付业务</option>
                         <option value="退款">退款业务</option>
                       </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
+                      <select className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border ${
                         isDark 
                           ? "bg-gray-800 border-gray-700 text-white" 
                           : "bg-white border-gray-300 text-gray-900"
@@ -8696,7 +8696,7 @@ export default function WalletPage() {
 
                   {/* 加载更多按钮 */}
                   <div className="flex justify-center mt-6">
-                    <button className={`px-6 py-2 rounded-lg font-medium transition-all border ${
+                    <button className={`px-6 py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                       isDark 
                         ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
                         : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
@@ -10177,7 +10177,7 @@ export default function WalletPage() {
                     setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
                     setShowRechargeModal(true)
                   }}
-                  className="px-4 py-2 bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90 transition-all duration-200"
+                  className="px-2 py-1 lg:px-4 lg:py-2 bg-[#00D4AA] text-white border-[#00D4AA] hover:bg-[#00D4AA]/90 transition-all duration-200"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   卡片充值
@@ -10188,7 +10188,7 @@ export default function WalletPage() {
                     console.log("顶部申请新卡按钮被点击")
                     setShowNewCardModal(true)
                   }}
-                  className={`px-4 py-2 border transition-colors ${
+                  className={`px-2 py-1 lg:px-4 lg:py-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
@@ -10204,7 +10204,7 @@ export default function WalletPage() {
                     setSelectedCardInfo({ name: 'U卡账户', number: '**** **** **** 0000', type: 'virtual' })
                     setShowActivateModal(true)
                   }}
-                  className={`px-4 py-2 border transition-colors ${
+                  className={`px-2 py-1 lg:px-4 lg:py-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
@@ -10216,7 +10216,7 @@ export default function WalletPage() {
                 <Button
                   variant="outline"
                   onClick={handleTransferClick}
-                  className={`px-4 py-2 border transition-colors ${
+                  className={`px-2 py-1 lg:px-4 lg:py-2 border transition-colors ${
                     isDark
                       ? "border-white text-white hover:bg-white hover:text-black"
                       : "border-black text-black hover:bg-black hover:text-white"
@@ -10361,7 +10361,7 @@ export default function WalletPage() {
                       </div>
                       
                       {/* 卡名和余额信息 */}
-                      <div className="flex justify-between items-center px-4 py-2">
+                      <div className="flex justify-between items-center px-2 py-1 lg:px-4 lg:py-2">
                         <div className="flex items-center">
                           <span className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>工薪卡专用</span>
                           <div className={`h-2 w-2 ml-2 rounded-full ${isDark ? 'bg-red-400' : 'bg-red-500'}`}></div>
@@ -10477,7 +10477,7 @@ export default function WalletPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-between items-center px-4 py-2">
+                      <div className="flex justify-between items-center px-2 py-1 lg:px-4 lg:py-2">
                         <div className="flex items-center">
                           <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>购物专用卡</span>
                           <div className={`h-2 w-2 ml-2 rounded-full ${isDark ? 'bg-purple-400' : 'bg-purple-500'}`}></div>
@@ -10588,7 +10588,7 @@ export default function WalletPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-between items-center px-4 py-2">
+                      <div className="flex justify-between items-center px-2 py-1 lg:px-4 lg:py-2">
                         <div className="flex items-center">
                           <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>旅行消费卡</span>
                           <div className={`h-2 w-2 ml-2 rounded-full ${isDark ? 'bg-blue-400' : 'bg-blue-500'}`}></div>
@@ -10699,7 +10699,7 @@ export default function WalletPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-between items-center px-4 py-2">
+                      <div className="flex justify-between items-center px-2 py-1 lg:px-4 lg:py-2">
                         <div className="flex items-center">
                           <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>娱乐专用卡</span>
                           <div className={`h-2 w-2 ml-2 rounded-full ${isDark ? 'bg-orange-400' : 'bg-orange-500'}`}></div>
@@ -10810,7 +10810,7 @@ export default function WalletPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-between items-center px-4 py-2">
+                      <div className="flex justify-between items-center px-2 py-1 lg:px-4 lg:py-2">
                         <div className="flex items-center">
                           <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>投资理财卡</span>
                           <div className={`h-2 w-2 ml-2 rounded-full ${isDark ? 'bg-indigo-400' : 'bg-indigo-500'}`}></div>
@@ -10965,7 +10965,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡1操作按钮 - 小舌头设计 */}
-                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-4 py-2 md:py-3 z-0 shadow-md ${
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-2 py-1 lg:px-4 lg:py-2 md:py-3 z-0 shadow-md ${
                       isDark ? 'bg-gray-700/50' : 'bg-white/90'
                     }`}>
                       <div className="grid grid-cols-4 gap-1 md:gap-2">
@@ -11073,7 +11073,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡2操作按钮 - 小舌头设计 */}
-                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-4 py-2 md:py-3 z-0 shadow-md ${
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-2 py-1 lg:px-4 lg:py-2 md:py-3 z-0 shadow-md ${
                       isDark ? 'bg-gray-700/50' : 'bg-white/90'
                     }`}>
                       <div className="grid grid-cols-4 gap-1 md:gap-2">
@@ -11179,7 +11179,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡3操作按钮 - 小舌头设计 */}
-                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-4 py-2 md:py-3 z-0 shadow-md ${
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-2 py-1 lg:px-4 lg:py-2 md:py-3 z-0 shadow-md ${
                       isDark ? 'bg-gray-700/50' : 'bg-white/90'
                     }`}>
                       <div className="grid grid-cols-4 gap-1 md:gap-2">
@@ -11285,7 +11285,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡4操作按钮 - 小舌头设计 */}
-                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-4 py-2 md:py-3 z-0 shadow-md ${
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-2 py-1 lg:px-4 lg:py-2 md:py-3 z-0 shadow-md ${
                       isDark ? 'bg-gray-700/50' : 'bg-white/90'
                     }`}>
                       <div className="grid grid-cols-4 gap-1 md:gap-2">
@@ -11391,7 +11391,7 @@ export default function WalletPage() {
                     </div>
 
                     {/* 实体卡5操作按钮 - 小舌头设计 */}
-                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-4 py-2 md:py-3 z-0 shadow-md ${
+                    <div className={`relative -mt-1 mx-auto w-[90%] rounded-b-lg px-2 md:px-2 py-1 lg:px-4 lg:py-2 md:py-3 z-0 shadow-md ${
                       isDark ? 'bg-gray-700/50' : 'bg-white/90'
                     }`}>
                       <div className="grid grid-cols-4 gap-1 md:gap-2">
@@ -11706,7 +11706,11 @@ export default function WalletPage() {
               )}
             </div>
           </div>
-        );
+        )
+      case "佣金账户":
+        return (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 虚拟卡 */}
               <div 
                 className="relative cursor-pointer"
@@ -12996,7 +13000,7 @@ export default function WalletPage() {
           <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
             <button
               onClick={() => setShowContractModal(false)}
-              className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
+              className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${
                 isDark 
                   ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -13009,7 +13013,7 @@ export default function WalletPage() {
                 console.log('下载合同:', selectedContract);
                 // 这里可以添加下载合同的逻辑
               }}
-              className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+              className="flex-1 px-2 py-1 lg:px-4 lg:py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
             >
               下载合同
             </button>
@@ -13085,7 +13089,7 @@ export default function WalletPage() {
           <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
             <button
               onClick={() => setShowAddCreditModal(false)}
-              className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
+              className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${
                 isDark 
                   ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -13096,7 +13100,7 @@ export default function WalletPage() {
             <button
               onClick={handleAddCredit}
               disabled={!creditAmount || parseFloat(creditAmount) <= 0}
-              className="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+              className="flex-1 px-2 py-1 lg:px-4 lg:py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
             >
               确认增加
             </button>
@@ -13169,7 +13173,7 @@ export default function WalletPage() {
           <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
             <button
               onClick={() => setShowExtendTimeModal(false)}
-              className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
+              className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${
                 isDark 
                   ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -13179,7 +13183,7 @@ export default function WalletPage() {
             </button>
             <button
               onClick={handleExtendTime}
-              className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+              className="flex-1 px-2 py-1 lg:px-4 lg:py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
             >
               确认延长
             </button>
@@ -13608,13 +13612,13 @@ export default function WalletPage() {
                       </div>
                       
                       <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                        <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           查看详情
                         </button>
-                        <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+                        <button className="px-2 py-1 lg:px-4 lg:py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
                           查看仲裁
                         </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                        <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           提交证据
                         </button>
                       </div>
@@ -13799,13 +13803,13 @@ export default function WalletPage() {
                       </div>
                       
                       <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                        <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           查看详情
                         </button>
-                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                        <button className="px-2 py-1 lg:px-4 lg:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                           催促对方
                         </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                        <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           申请仲裁
                         </button>
                       </div>
@@ -13980,13 +13984,13 @@ export default function WalletPage() {
                       </div>
                       
                       <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                        <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           查看详情
                         </button>
-                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                        <button className="px-2 py-1 lg:px-4 lg:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                           评价交易
                         </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                        <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           下载凭证
                         </button>
                       </div>
@@ -14110,7 +14114,7 @@ export default function WalletPage() {
                         });
                         setShowConfirmDialog(true);
                       }}
-                      className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm hover:shadow-md active:scale-[0.98]"
+                      className="px-2 py-1 lg:px-4 lg:py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm hover:shadow-md active:scale-[0.98]"
                     >
                       立即确认
                     </button>
@@ -14129,13 +14133,13 @@ export default function WalletPage() {
                       </div>
                       
                       <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                        <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           查看详情
                         </button>
-                        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                        <button className="px-2 py-1 lg:px-4 lg:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                           确认收款
                         </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                        <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           申请仲裁
                         </button>
                       </div>
@@ -14242,7 +14246,7 @@ export default function WalletPage() {
                   <div className="flex-shrink-0">
                     <button
                       disabled
-                      className="px-4 py-2 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed opacity-50"
+                      className="px-2 py-1 lg:px-4 lg:py-2 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed opacity-50"
                     >
                       争议中
                     </button>
@@ -14261,13 +14265,13 @@ export default function WalletPage() {
                       </div>
                       
                       <div className="flex flex-wrap gap-3">
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                        <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           查看详情
                         </button>
-                        <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                        <button className="px-2 py-1 lg:px-4 lg:py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
                           查看仲裁
                         </button>
-                        <button className={`px-4 py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                        <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                           补充证据
                         </button>
                       </div>
@@ -14289,7 +14293,7 @@ export default function WalletPage() {
                     <button
                       key={key}
                       onClick={() => setSecondaryTab(key)}
-                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
+                      className={`px-2 py-1 lg:px-4 lg:py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
                         secondaryTab === key
                           ? isDark 
                             ? "bg-white text-black border-white" 
@@ -15319,7 +15323,7 @@ export default function WalletPage() {
                 <button
                   key={key}
                   onClick={() => setSecondaryTab(key)}
-                  className={`relative z-10 flex-1 px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                  className={`relative z-10 flex-1 px-2 py-1 lg:px-4 lg:py-2 text-sm font-medium transition-all duration-300 ${
                     secondaryTab === key
                       ? "text-black"
                       : isDark
@@ -15394,10 +15398,10 @@ export default function WalletPage() {
                               </select>
                             </div>
                             <div className="flex items-end gap-2">
-                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                              <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                 重置
                               </button>
-                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                              <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                 筛选
                               </button>
                             </div>
@@ -15414,7 +15418,7 @@ export default function WalletPage() {
                               placeholder="搜索用户ID或用户名..."
                               value={commissionSearchTerm}
                               onChange={(e) => setCommissionSearchTerm(e.target.value)}
-                              className={`w-full px-4 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
+                              className={`w-full px-2 py-1 lg:px-4 lg:py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
                             />
                           </div>
                           
@@ -15491,7 +15495,7 @@ export default function WalletPage() {
                                   setCommissionStatusFilter("全部")
                                   setCommissionTimeFilter("全部")
                                 }}
-                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}
+                                className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}
                               >
                                 重置
                               </button>
@@ -15543,10 +15547,10 @@ export default function WalletPage() {
                               </select>
                             </div>
                             <div className="flex items-end gap-2">
-                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                              <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                 重置
                               </button>
-                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                              <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                 筛选
                               </button>
                             </div>
@@ -15604,10 +15608,10 @@ export default function WalletPage() {
                               </select>
                             </div>
                             <div className="flex items-end gap-2">
-                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                              <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                 重置
                               </button>
-                              <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                              <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                 筛选
                               </button>
                             </div>
@@ -15674,10 +15678,10 @@ export default function WalletPage() {
                             </select>
                           </div>
                           <div className="flex items-end gap-2">
-                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                            <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                               重置
                             </button>
-                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                            <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                               筛选
                             </button>
                           </div>
@@ -15742,10 +15746,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -15790,10 +15794,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -15839,10 +15843,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -15886,10 +15890,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -15906,7 +15910,7 @@ export default function WalletPage() {
                                     placeholder="搜索用户ID或用户名..."
                                     value={commissionSearchTerm}
                                     onChange={(e) => setCommissionSearchTerm(e.target.value)}
-                                    className={`w-full px-4 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
+                                    className={`w-full px-2 py-1 lg:px-4 lg:py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
                                   />
                                 </div>
                                 
@@ -15983,7 +15987,7 @@ export default function WalletPage() {
                                         setCommissionStatusFilter("全部")
                                         setCommissionTimeFilter("全部")
                                       }}
-                                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}
+                                      className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}
                                     >
                                       重置
                                     </button>
@@ -16032,10 +16036,10 @@ export default function WalletPage() {
                                 </select>
                               </div>
                               <div className="flex items-end gap-2">
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                   重置
                                 </button>
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                   筛选
                                 </button>
                               </div>
@@ -16083,10 +16087,10 @@ export default function WalletPage() {
                             </select>
                           </div>
                           <div className="flex items-end gap-2">
-                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                            <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                               重置
                             </button>
-                            <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                            <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                               筛选
                             </button>
                           </div>
@@ -16137,10 +16141,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -16184,10 +16188,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -16244,10 +16248,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -16291,10 +16295,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -16342,10 +16346,10 @@ export default function WalletPage() {
                                 </select>
                               </div>
                               <div className="flex items-end gap-2">
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                   重置
                                 </button>
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                   筛选
                                 </button>
                               </div>
@@ -16400,10 +16404,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -16447,10 +16451,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -16496,10 +16500,10 @@ export default function WalletPage() {
                                 </select>
                               </div>
                               <div className="flex items-end gap-2">
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                   重置
                                 </button>
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                   筛选
                                 </button>
                               </div>
@@ -16555,10 +16559,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -16606,10 +16610,10 @@ export default function WalletPage() {
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
                                   </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                  <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                     筛选
                                   </button>
                                 </div>
@@ -16656,10 +16660,10 @@ export default function WalletPage() {
                                 </select>
                               </div>
                               <div className="flex items-end gap-2">
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                   重置
                                 </button>
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                <button className={`px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                                   筛选
                                 </button>
                               </div>
@@ -17311,7 +17315,7 @@ export default function WalletPage() {
                 <div className={`flex rounded-full p-1 ${isDark ? 'bg-[#252842]' : 'bg-gray-100'}`}>
                   <button
                     onClick={() => handleCurrencyTypeChange("crypto")}
-                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                    className={`px-2 py-1 lg:px-4 lg:py-2 text-sm font-medium rounded-full transition-all duration-300 ${
                       currencyType === "crypto"
                         ? isDark ? "bg-white text-black scale-105" : "bg-black text-white scale-105"
                         : isDark ? "text-gray-400 hover:text-white " : "text-gray-600 hover:text-black "
@@ -17321,7 +17325,7 @@ export default function WalletPage() {
                   </button>
                   <button
                     onClick={() => handleCurrencyTypeChange("fiat")}
-                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                    className={`px-2 py-1 lg:px-4 lg:py-2 text-sm font-medium rounded-full transition-all duration-300 ${
                       currencyType === "fiat"
                         ? isDark ? "bg-white text-black scale-105" : "bg-black text-white scale-105"
                         : isDark ? "text-gray-400 hover:text-white " : "text-gray-600 hover:text-black "
@@ -18052,7 +18056,7 @@ export default function WalletPage() {
                     <button
                       key={tab}
                       onClick={() => setStandbyRechargeTab(tab)}
-                      className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-all ${
                         standbyRechargeTab === tab
                           ? 'bg-white dark:bg-[#1a1d29] text-[#00D4AA] shadow-sm'
                           : isDark ? 'text-gray-300 hover:text-white hover:bg-[#2a2d3a]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -18259,7 +18263,7 @@ export default function WalletPage() {
             <div className="mt-6 flex justify-end space-x-3">
               <button
                 onClick={() => setShowMoreCurrencies(false)}
-                className={`px-4 py-2 rounded-lg border transition-all ${
+                className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-all ${
                   isDark 
                     ? "border-[#3a3d4a] text-gray-300 hover:bg-[#252842]" 
                     : "border-gray-300 text-gray-600 hover:bg-gray-50"
@@ -18269,7 +18273,7 @@ export default function WalletPage() {
               </button>
               <button
                 onClick={() => setShowMoreCurrencies(false)}
-                className="px-4 py-2 rounded-lg bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90 transition-all"
+                className="px-2 py-1 lg:px-4 lg:py-2 rounded-lg bg-[#00D4AA] text-white hover:bg-[#00D4AA]/90 transition-all"
               >
                 确认
               </button>
@@ -18557,7 +18561,7 @@ export default function WalletPage() {
             <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3">
               <button
                 onClick={() => setShowConfirmDialog(false)}
-                className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
+                className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-lg border transition-colors ${
                   isDark 
                     ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
                     : 'border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -18572,7 +18576,7 @@ export default function WalletPage() {
                   setShowConfirmDialog(false);
                   // 这里可以添加成功提示和更新交易状态
                 }}
-                className="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+                className="flex-1 px-2 py-1 lg:px-4 lg:py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
               >
                 确认
               </button>
@@ -22011,7 +22015,7 @@ export default function WalletPage() {
               <div className="flex space-x-3 mt-6">
                 <button
                   onClick={() => setShowSettlementModal(false)}
-                  className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all border ${
+                  className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                     isDark 
                       ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300" 
                       : "border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700"
@@ -22025,7 +22029,7 @@ export default function WalletPage() {
                     alert('结算成功！资金已转入现货账户')
                     setShowSettlementModal(false)
                   }}
-                  className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-lg font-medium transition-all ${
                     isDark 
                       ? "bg-[#14C2A3] hover:bg-[#0ea888] text-white" 
                       : "bg-[#14C2A3] hover:bg-[#0ea888] text-white"
