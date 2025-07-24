@@ -6784,7 +6784,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：89人
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({ type: 'direct', isOpen: true })}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -6815,7 +6815,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：234人
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({ type: 'indirect', isOpen: true })}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -6846,7 +6846,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       活跃率：78.2%
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({ type: 'active', isOpen: true })}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -6877,7 +6877,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm text-red-500 mt-2`}>
                       即将过期：45.30 USDT
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowSettlementModal(true)}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
@@ -7231,7 +7231,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：45 人
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -7262,7 +7262,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       产品收益率：7.2%
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -7293,7 +7293,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       投资活跃率：85.6%
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({type: 'active', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -7324,7 +7324,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm text-red-500 mt-2`}>
                       即将过期：23.45 USDT
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowSettlementModal(true)}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
@@ -7611,7 +7611,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：23 人
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -7642,7 +7642,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：12 人
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -7673,7 +7673,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月开卡：45 张
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({type: 'active', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -7704,7 +7704,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm text-red-500 mt-2`}>
                       即将过期：12.34 USDT
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowSettlementModal(true)}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
@@ -8007,7 +8007,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：67 人
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -8038,7 +8038,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：34 人
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -8069,7 +8069,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月交易：189 笔
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
@@ -8099,7 +8099,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm text-red-500 mt-2`}>
                       即将过期：45.67 USDT
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3 "
                       <button
                         onClick={() => setShowSettlementModal(true)}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
@@ -8403,7 +8403,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：123 人
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -8434,7 +8434,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月新增：56 人
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
@@ -8465,7 +8465,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       本月交易：1,234,567 CNY
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3">
                       <button
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
                           isDark 
@@ -8495,7 +8495,7 @@ export default function WalletPage() {
                     <div className={`text-xs lg:text-sm text-red-500 mt-2`}>
                       即将过期：23.45 CNY
                     </div>
-                    <div className="mt-3 hidden lg:block">
+                    <div className="mt-3">
                       <button
                         onClick={() => setShowSettlementModal(true)}
                         className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
@@ -11706,11 +11706,7 @@ export default function WalletPage() {
               )}
             </div>
           </div>
-        )
-      case "佣金账户":
-        return (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        );
               {/* 虚拟卡 */}
               <div 
                 className="relative cursor-pointer"
