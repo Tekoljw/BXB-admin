@@ -204,6 +204,9 @@ export default function WalletPage() {
   // OTC供应商选择状态
   const [selectedSupplier, setSelectedSupplier] = useState("MoonPay")
   
+  // 推广方式页签状态
+  const [promotionTab, setPromotionTab] = useState("推广方式1")
+  
   // 卡片操作弹窗状态
   const [showRechargeModal, setShowRechargeModal] = useState(false)
   const [showNewCardModal, setShowNewCardModal] = useState(false)
@@ -8783,8 +8786,452 @@ export default function WalletPage() {
                   </div>
                 </div>
 
-                {/* 推广方式1和推广方式2并列展示 */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* 推广方式滑动页签（移动端）和并列展示（桌面端） */}
+                {/* 移动端滑动页签 */}
+                <div className="lg:hidden mb-6">
+                  <div className={`relative rounded-lg p-1 ${isDark ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                    <div className="flex">
+                      {["推广方式1", "推广方式2"].map((tab) => (
+                        <button
+                          key={tab}
+                          onClick={() => setPromotionTab(tab)}
+                          className={`flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-300 ${
+                            promotionTab === tab 
+                              ? isDark 
+                                ? "bg-white text-black" 
+                                : "bg-black text-white"
+                              : isDark 
+                                ? "text-gray-400 hover:text-gray-200" 
+                                : "text-gray-600 hover:text-gray-800"
+                          }`}
+                        >
+                          {tab}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 移动端页签内容 */}
+                <div className="lg:hidden">
+                  {promotionTab === "推广方式1" ? (
+                    <div className="space-y-4">
+                      {/* 标题和副标题在卡片外面 */}
+                      <div className="space-y-3">
+                        <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          推广方式1
+                        </h3>
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.13-.31-1.09-.65.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                              </svg>
+                            </div>
+                            <h4 className={`text-2xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              Telegram拉群推广
+                            </h4>
+                          </div>
+                          <span className="px-3 py-1 bg-red-500 text-white text-sm rounded-full">
+                            推荐
+                          </span>
+                        </div>
+                        
+                        {/* 特色标签 */}
+                        <div className="flex flex-wrap gap-1 xs:gap-2 sm:gap-3 mt-3">
+                          <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-medium rounded-full border ${
+                            isDark 
+                              ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
+                              : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
+                          }`}>
+                            无需维护客户
+                          </span>
+                          <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-medium rounded-full border ${
+                            isDark 
+                              ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
+                              : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
+                          }`}>
+                            无需讨论价格
+                          </span>
+                          <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-medium rounded-full border ${
+                            isDark 
+                              ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
+                              : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
+                          }`}>
+                            永久绑定关系
+                          </span>
+                          <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-medium rounded-full border ${
+                            isDark 
+                              ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
+                              : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
+                          }`}>
+                            无限自动裂变
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* 推广方式1的完整内容 */}
+                      {/* 卡片内容 */}
+                      <div className={`rounded-lg p-6 ${cardStyle}`}>
+                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6`}>
+                          拉朋友进入Telegram群组，获得永久无限佣金
+                        </p>
+                        <div className="space-y-8">
+                          {/* 步骤1 */}
+                          <div className="space-y-4">
+                            <div className="space-y-4">
+                              <div className="flex-shrink-0">
+                                <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm font-semibold rounded-full">
+                                  第一步
+                                </span>
+                              </div>
+                              <div>
+                                <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  获取专属邀请码
+                                </h5>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  在个人中心获取专属邀请码：BXB2025
+                                </p>
+                              </div>
+                              <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 步骤2 */}
+                          <div className="space-y-4">
+                            <div className="space-y-4">
+                              <div className="flex-shrink-0">
+                                <span className="px-3 py-1 bg-blue-500 text-white text-sm font-semibold rounded-full">
+                                  第二步
+                                </span>
+                              </div>
+                              <div>
+                                <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  邀请好友加入BXB官方频道
+                                </h5>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  邀请好友加入BXB官方Telegram频道/群组，获取最新信息和交流
+                                </p>
+                              </div>
+                              <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h2m5-3V3a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 步骤3 */}
+                          <div className="space-y-4">
+                            <div className="space-y-4">
+                              <div className="flex-shrink-0">
+                                <span className="px-3 py-1 bg-purple-500 text-white text-sm font-semibold rounded-full">
+                                  第三步
+                                </span>
+                              </div>
+                              <div>
+                                <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  推荐好友注册使用
+                                </h5>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  推荐好友注册BXB账户并使用平台服务
+                                </p>
+                              </div>
+                              <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 步骤4 */}
+                          <div className="space-y-4">
+                            <div className="space-y-4">
+                              <div className="flex-shrink-0">
+                                <span className="px-3 py-1 bg-orange-500 text-white text-sm font-semibold rounded-full">
+                                  第四步
+                                </span>
+                              </div>
+                              <div>
+                                <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  好友开始交易
+                                </h5>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  好友开始在平台进行交易，你获得交易佣金
+                                </p>
+                              </div>
+                              <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 步骤5 */}
+                          <div className="space-y-4">
+                            <div className="space-y-4">
+                              <div className="flex-shrink-0">
+                                <span className="px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full">
+                                  第五步
+                                </span>
+                              </div>
+                              <div>
+                                <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  无限层级佣金
+                                </h5>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  好友的好友也成为你的永久推荐人，享受无限层级佣金收益
+                                </p>
+                                <div className="flex flex-wrap gap-1 xs:gap-2 sm:gap-3 mt-3">
+                                  <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-bold rounded border ${
+                                    isDark 
+                                      ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
+                                      : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
+                                  }`}>
+                                    永久收益
+                                  </span>
+                                  <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-bold rounded border ${
+                                    isDark 
+                                      ? 'border-purple-400 text-purple-400 bg-purple-400/10' 
+                                      : 'border-purple-500 text-purple-500 bg-purple-500/10'
+                                  }`}>
+                                    无限层级
+                                  </span>
+                                  <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-bold rounded border ${
+                                    isDark 
+                                      ? 'border-orange-400 text-orange-400 bg-orange-400/10' 
+                                      : 'border-orange-500 text-orange-500 bg-orange-500/10'
+                                  }`}>
+                                    自动分佣
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {/* 推广方式2的内容 */}
+                      <div className="space-y-3">
+                        <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          推广方式2
+                        </h3>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
+                            </svg>
+                          </div>
+                          <h4 className={`text-2xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            分享邀请码/邀请连接
+                          </h4>
+                        </div>
+                        
+                        {/* 社交媒体logo */}
+                        <div className="flex flex-wrap gap-1 xs:gap-2 sm:gap-3 mt-3">
+                          {/* WhatsApp */}
+                          <div className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-full border border-green-500 bg-green-500/10">
+                            <svg className="w-3 h-3 xs:w-4 xs:h-4 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
+                            </svg>
+                            <span className="text-xs xs:text-sm font-medium text-green-600">WhatsApp</span>
+                          </div>
+                          
+                          {/* 微信 */}
+                          <div className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-full border border-green-500 bg-green-500/10">
+                            <svg className="w-3 h-3 xs:w-4 xs:h-4 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.18 4.203 3.043 5.551L2.639 17.59c-.121.342.075.721.427.721.137 0 .275-.048.381-.144l2.706-2.276c.655.187 1.351.279 2.067.279.218 0 .434-.008.645-.023-.07-.221-.106-.455-.106-.695 0-3.551 3.295-6.431 7.36-6.431.379 0 .752.024 1.115.068-.664-3.588-4.593-6.361-9.638-6.361zm-2.39 4.146c.662 0 1.2.538 1.2 1.2s-.538 1.2-1.2 1.2-1.2-.538-1.2-1.2.538-1.2 1.2-1.2zm4.795 0c.662 0 1.2.538 1.2 1.2s-.538 1.2-1.2 1.2-1.2-.538-1.2-1.2.538-1.2 1.2-1.2zm7.604 2.858c-3.297 0-5.97 2.242-5.97 5.004 0 2.762 2.673 5.004 5.97 5.004.617 0 1.212-.085 1.764-.238l2.16 1.818c.084.076.197.114.31.114.265 0 .438-.245.343-.546l-.317-1.623c1.49-1.08 2.47-2.688 2.47-4.529 0-2.762-2.674-5.004-5.97-5.004zm-2.995 3.347c.414 0 .75.336.75.75s-.336.75-.75.75-.75-.336-.75-.75.336-.75.75-.75zm5.99 0c.414 0 .75.336.75.75s-.336.75-.75.75-.75-.336-.75-.75.336-.75.75-.75z"/>
+                            </svg>
+                            <span className="text-xs xs:text-sm font-medium text-green-600">微信</span>
+                          </div>
+                          
+                          {/* Telegram */}
+                          <div className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-full border border-blue-500 bg-blue-500/10">
+                            <svg className="w-3 h-3 xs:w-4 xs:h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                            <span className="text-xs xs:text-sm font-medium text-blue-600">Telegram</span>
+                          </div>
+                          
+                          {/* Instagram */}
+                          <div className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-full border border-pink-500 bg-pink-500/10">
+                            <svg className="w-3 h-3 xs:w-4 xs:h-4 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            <span className="text-xs xs:text-sm font-medium text-pink-600">Instagram</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* 邀请码和邀请链接卡片 */}
+                      <div className={`rounded-lg p-6 ${cardStyle}`}>
+                        <div className="space-y-4">
+                          {/* 邀请码 */}
+                          <div className="space-y-3">
+                            <h5 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              我的邀请码
+                            </h5>
+                            <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
+                              <div className="flex items-center justify-between">
+                                <span className={`text-md font-mono font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  BXB2025
+                                </span>
+                                <button className={`px-2 py-1 text-xs rounded border transition-all ${
+                                  isDark 
+                                    ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
+                                    : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
+                                }`}>
+                                  复制
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 邀请链接 */}
+                          <div className="space-y-3">
+                            <h5 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                              邀请链接
+                            </h5>
+                            <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
+                              <div className="flex items-center justify-between">
+                                <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'} truncate mr-2`}>
+                                  https://bxb.com/invite/BXB2025
+                                </span>
+                                <button className={`px-2 py-1 text-xs rounded border transition-all flex-shrink-0 ${
+                                  isDark 
+                                    ? 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white' 
+                                    : 'border-[#14C2A3] text-[#14C2A3] hover:bg-[#14C2A3] hover:text-white'
+                                }`}>
+                                  复制链接
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 推广步骤卡片 */}
+                      <div className={`rounded-lg p-6 ${cardStyle}`}>
+                        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-6`}>
+                          分享推广码或者推广链接给好友去注册
+                        </p>
+                        <div className="space-y-8">
+                          {/* 步骤1 */}
+                          <div className="space-y-4">
+                            <div className="space-y-4">
+                              <div className="flex-shrink-0">
+                                <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm font-semibold rounded-full">
+                                  第一步
+                                </span>
+                              </div>
+                              <div>
+                                <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  复制分享内容
+                                </h5>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  复制上方的邀请码或邀请链接，准备分享给好友
+                                </p>
+                              </div>
+                              <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 步骤2 */}
+                          <div className="space-y-4">
+                            <div className="space-y-4">
+                              <div className="flex-shrink-0">
+                                <span className="px-3 py-1 bg-blue-500 text-white text-sm font-semibold rounded-full">
+                                  第二步
+                                </span>
+                              </div>
+                              <div>
+                                <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  通过社交软件分享邀请码/邀请链接
+                                </h5>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  将邀请码/链接通过WhatsApp、微信等社交软件发送给好友
+                                </p>
+                              </div>
+                              <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 步骤3 */}
+                          <div className="space-y-4">
+                            <div className="space-y-4">
+                              <div className="flex-shrink-0">
+                                <span className="px-3 py-1 bg-purple-500 text-white text-sm font-semibold rounded-full">
+                                  第三步
+                                </span>
+                              </div>
+                              <div>
+                                <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  好友使用邀请码注册
+                                </h5>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  好友使用你的邀请码成功注册BXB账户
+                                </p>
+                              </div>
+                              <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 步骤4 */}
+                          <div className="space-y-4">
+                            <div className="space-y-4">
+                              <div className="flex-shrink-0">
+                                <span className="px-3 py-1 bg-orange-500 text-white text-sm font-semibold rounded-full">
+                                  第四步
+                                </span>
+                              </div>
+                              <div>
+                                <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                  获得推广佣金
+                                </h5>
+                                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  好友进行交易后，你即可获得相应的推广佣金收益
+                                </p>
+                              </div>
+                              <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* 桌面端并列展示 */}
+                <div className="hidden lg:grid lg:grid-cols-2 gap-8">
                   {/* 推广方式1（推荐） */}
                   <div className="space-y-4">
                     {/* 标题和副标题在卡片外面 */}
