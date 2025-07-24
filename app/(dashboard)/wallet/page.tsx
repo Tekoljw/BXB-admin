@@ -8809,29 +8809,29 @@ export default function WalletPage() {
                       </div>
                       
                       {/* 特色标签 */}
-                      <div className="flex flex-wrap gap-3 mt-3">
-                        <span className={`px-4 py-2 text-sm font-medium rounded-full border ${
+                      <div className="flex flex-wrap gap-1 xs:gap-2 sm:gap-3 mt-3">
+                        <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-medium rounded-full border ${
                           isDark 
                             ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
                             : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
                         }`}>
                           无需维护客户
                         </span>
-                        <span className={`px-4 py-2 text-sm font-medium rounded-full border ${
+                        <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-medium rounded-full border ${
                           isDark 
                             ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
                             : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
                         }`}>
                           无需讨论价格
                         </span>
-                        <span className={`px-4 py-2 text-sm font-medium rounded-full border ${
+                        <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-medium rounded-full border ${
                           isDark 
                             ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
                             : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
                         }`}>
                           永久绑定关系
                         </span>
-                        <span className={`px-4 py-2 text-sm font-medium rounded-full border ${
+                        <span className={`px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 text-xs xs:text-sm font-medium rounded-full border ${
                           isDark 
                             ? 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10' 
                             : 'border-[#14C2A3] text-[#14C2A3] bg-[#14C2A3]/10'
