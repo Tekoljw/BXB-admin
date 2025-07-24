@@ -749,6 +749,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Enhanced mobile navigation: currency tabs at top with horizontal scrolling, payment method tabs below left-aligned
   - Repositioned payment method tabs (代收/代付) to display below currency selection and left-aligned (not full-screen)
   - Desktop maintains original horizontal layout while mobile provides touch-friendly vertical interface
+- January 30, 2025. Fixed step alignment and updated commission user labels:
+  - Fixed all step alignment issues: removed gap structures from both 推广方式1 (5 steps) and 推广方式2 (4 steps)
+  - All step labels (第一步, 第二步, 第三步, 第四步, 第五步) now perfectly left-aligned with their content
+  - Renamed user labels in 邀请好友 section: "直推合约用户" → "直推用户", "间推合约用户" → "间推用户"
+  - Renamed user labels in 合约佣金 section: "直推人数" → "直推合约用户", "间推人数" → "间推合约用户"
+  - Maintained consistent responsive typography and layout across all commission account sections
 
 ## User Preferences
 

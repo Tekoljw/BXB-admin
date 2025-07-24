@@ -6769,7 +6769,7 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-2 lg:mb-4">
                       <div className="flex items-center space-x-1 lg:space-x-2">
                         <Users className="h-4 w-4 lg:h-6 lg:w-6 text-blue-500 hidden lg:block" />
-                        <h3 className="text-[8px] xs:text-[10px] sm:text-xs md:text-sm lg:text-lg font-semibold">直推人数</h3>
+                        <h3 className="text-[8px] xs:text-[10px] sm:text-xs md:text-sm lg:text-lg font-semibold">直推合约用户</h3>
                       </div>
                     </div>
                     <div className={`text-sm sm:text-base md:text-lg lg:text-3xl font-bold text-blue-500`}>
@@ -6800,7 +6800,7 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-2 lg:mb-4">
                       <div className="flex items-center space-x-1 lg:space-x-2">
                         <UserPlus className="h-4 w-4 lg:h-6 lg:w-6 text-purple-500 hidden lg:block" />
-                        <h3 className="text-[8px] xs:text-[10px] sm:text-xs md:text-sm lg:text-lg font-semibold">间推人数</h3>
+                        <h3 className="text-[8px] xs:text-[10px] sm:text-xs md:text-sm lg:text-lg font-semibold">间推合约用户</h3>
                       </div>
                     </div>
                     <div className={`text-sm sm:text-base md:text-lg lg:text-3xl font-bold text-purple-500`}>
@@ -8711,7 +8711,7 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <Users className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">直推合约用户</h3>
+                        <h3 className="text-lg font-semibold">直推用户</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-[#14C2A3]`}>
@@ -8730,7 +8730,7 @@ export default function WalletPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-2">
                         <UserPlus className="h-6 w-6 text-blue-500" />
-                        <h3 className="text-lg font-semibold">间推合约用户</h3>
+                        <h3 className="text-lg font-semibold">间推用户</h3>
                       </div>
                     </div>
                     <div className={`text-3xl font-bold text-blue-500`}>
