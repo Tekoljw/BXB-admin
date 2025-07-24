@@ -6675,86 +6675,86 @@ export default function WalletPage() {
             {/* 根据选中的页签渲染内容 */}
             {commissionTab === "合约佣金" && (
               <div className="space-y-6">
-                {/* 佣金快报 - 手机端4卡片一行 */}
-                <div className="grid grid-cols-4 gap-1 lg:gap-6">
+                {/* 佣金快报 - 手机端一行两个 */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
                   {/* 今日佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-1 lg:p-6`}>
-                    <div className="flex items-center justify-between mb-1 lg:mb-4">
-                      <div className="flex items-center space-x-1 lg:space-x-2">
-                        <Calendar className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
-                        <h3 className="text-[8px] lg:text-lg font-semibold">今日佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-3 lg:p-6`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="h-5 w-5 lg:h-6 lg:w-6 text-[#14C2A3]" />
+                        <h3 className="text-sm lg:text-lg font-semibold">今日佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-xs lg:text-3xl font-bold text-[#14C2A3]`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-[#14C2A3]`}>
                       2,456.78
-                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
+                      <span className={`text-sm lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
+                    <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       昨日佣金：1,234.56 USDT
                     </div>
                   </div>
 
                   {/* 本月佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-1 lg:p-6`}>
-                    <div className="flex items-center justify-between mb-1 lg:mb-4">
-                      <div className="flex items-center space-x-1 lg:space-x-2">
-                        <TrendingUp className="h-4 w-4 lg:h-6 lg:w-6 text-blue-500 hidden lg:block" />
-                        <h3 className="text-[8px] lg:text-lg font-semibold">本月佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-3 lg:p-6`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-2">
+                        <TrendingUp className="h-5 w-5 lg:h-6 lg:w-6 text-blue-500" />
+                        <h3 className="text-sm lg:text-lg font-semibold">本月佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-xs lg:text-3xl font-bold text-blue-500`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-blue-500`}>
                       58,943.22
-                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
+                      <span className={`text-sm lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
+                    <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       上月佣金：48,567.89 USDT
                     </div>
                   </div>
 
                   {/* 累计佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-1 lg:p-6`}>
-                    <div className="flex items-center justify-between mb-1 lg:mb-4">
-                      <div className="flex items-center space-x-1 lg:space-x-2">
-                        <DollarSign className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
-                        <h3 className="text-[8px] lg:text-lg font-semibold">累计佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-3 lg:p-6`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-2">
+                        <DollarSign className="h-5 w-5 lg:h-6 lg:w-6 text-[#14C2A3]" />
+                        <h3 className="text-sm lg:text-lg font-semibold">累计佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-xs lg:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className={`text-lg lg:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       425,678.90
-                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
+                      <span className={`text-sm lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
+                    <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       今年累计：234,567.89 USDT
                     </div>
                   </div>
 
                   {/* 佣金比例 */}
-                  <div className={`${cardStyle} rounded-lg p-1 lg:p-6`}>
-                    <div className="flex items-center justify-between mb-1 lg:mb-4">
-                      <div className="flex items-center space-x-1 lg:space-x-2">
-                        <Target className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
-                        <h3 className="text-[8px] lg:text-lg font-semibold">佣金比例</h3>
+                  <div className={`${cardStyle} rounded-lg p-3 lg:p-6`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-2">
+                        <Target className="h-5 w-5 lg:h-6 lg:w-6 text-[#14C2A3]" />
+                        <h3 className="text-sm lg:text-lg font-semibold">佣金比例</h3>
                       </div>
                     </div>
-                    <div className={`text-xs lg:text-3xl font-bold text-[#14C2A3]`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-[#14C2A3]`}>
                       12.5
-                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 lg:inline`}>
+                      <span className={`text-sm lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
                         %
                       </span>
                     </div>
-                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
+                    <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                       当前等级：
                       <span className="text-[#14C2A3] font-semibold ml-1">
                         超级合约代理
                       </span>
                     </div>
-                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 hidden lg:block`}>
+                    <div className={`text-xs lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 hidden lg:block`}>
                       <button
                         onClick={() => setShowCommissionRuleModal(true)}
                         className={`${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
