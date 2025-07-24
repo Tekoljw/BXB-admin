@@ -8710,80 +8710,80 @@ export default function WalletPage() {
             {/* 邀请好友页面 */}
             {commissionTab === "邀请好友" && (
               <div className="space-y-8">
-                {/* 顶部统计卡片 - 使用理财账户样式 */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* 顶部统计卡片 - 手机端4卡片一行 */}
+                <div className="grid grid-cols-4 gap-1 lg:gap-6">
                   {/* 直推用户 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Users className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">直推用户</h3>
+                  <div className={`${cardStyle} rounded-lg p-1 lg:p-6`}>
+                    <div className="flex items-center justify-between mb-1 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Users className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[8px] lg:text-lg font-semibold">直推用户</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                    <div className={`text-xs lg:text-3xl font-bold text-[#14C2A3]`}>
                       1,256
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         人
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       本月直推人数：156人
                     </div>
                   </div>
 
                   {/* 间推用户 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <UserPlus className="h-6 w-6 text-blue-500" />
-                        <h3 className="text-lg font-semibold">间推用户</h3>
+                  <div className={`${cardStyle} rounded-lg p-1 lg:p-6`}>
+                    <div className="flex items-center justify-between mb-1 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <UserPlus className="h-4 w-4 lg:h-6 lg:w-6 text-blue-500 hidden lg:block" />
+                        <h3 className="text-[8px] lg:text-lg font-semibold">间推用户</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-blue-500`}>
+                    <div className={`text-xs lg:text-3xl font-bold text-blue-500`}>
                       432
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         人
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       本月间推人数：89人
                     </div>
                   </div>
 
                   {/* 总佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <DollarSign className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">总佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-1 lg:p-6`}>
+                    <div className="flex items-center justify-between mb-1 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <DollarSign className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[8px] lg:text-lg font-semibold">总佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className={`text-xs lg:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       89,456.78
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       本月总佣金：12,345.67 USDT
                     </div>
                   </div>
 
                   {/* 未结算佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Clock className="h-6 w-6 text-orange-500" />
-                        <h3 className="text-lg font-semibold">未结算佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-1 lg:p-6`}>
+                    <div className="flex items-center justify-between mb-1 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Clock className="h-4 w-4 lg:h-6 lg:w-6 text-orange-500 hidden lg:block" />
+                        <h3 className="text-[8px] lg:text-lg font-semibold">未结算佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-orange-500`}>
+                    <div className={`text-xs lg:text-3xl font-bold text-orange-500`}>
                       1,234.56
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       即将到期佣金：567.89 USDT
                     </div>
                   </div>
