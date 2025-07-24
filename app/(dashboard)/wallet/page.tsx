@@ -5856,12 +5856,12 @@ export default function WalletPage() {
                   {cryptoTab === "地址管理" && (
                     <div className="space-y-6">
                       {/* 网络筛选 */}
-                      <div className="flex items-center space-x-2 mb-6 overflow-x-auto pb-2">
+                      <div className="flex flex-wrap items-center gap-2 mb-6">
                         {["TRC20", "ERC20", "BTC", "BSC", "XRP", "Solana", "Matrix"].map((network) => (
                           <button
                             key={network}
                             onClick={() => setSelectedNetwork(network)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all border ${
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
                               selectedNetwork === network
                                 ? isDark 
                                   ? "bg-white text-black border-white"
@@ -6210,7 +6210,7 @@ export default function WalletPage() {
                   {cryptoTab === "OTC供应商" && (
                     <div className="space-y-6">
                       {/* 供应商选择标签 */}
-                      <div className="flex items-center space-x-2 overflow-x-auto">
+                      <div className="flex flex-wrap items-center gap-2">
                         {[
                           { name: "MoonPay", status: "启用" },
                           { name: "Simplex", status: "启用" },
@@ -6220,7 +6220,7 @@ export default function WalletPage() {
                           <button
                             key={supplier.name}
                             onClick={() => setSelectedSupplier(supplier.name)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 ${
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
                               selectedSupplier === supplier.name
                                 ? isDark 
                                   ? "bg-transparent border border-white text-white"
