@@ -6649,7 +6649,7 @@ export default function WalletPage() {
         return (
           <div className="space-y-6">
             {/* 佣金类型页签 */}
-            <div className="flex space-x-8 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex flex-wrap md:space-x-8 gap-2 md:gap-0 border-b border-gray-200 dark:border-gray-700">
               {["邀请好友", "合约佣金", "理财佣金", "U卡佣金", "担保佣金", "支付佣金"].map((tab, index) => (
                 <div
                   key={tab}
@@ -6660,7 +6660,7 @@ export default function WalletPage() {
                       : "border-b-2 border-transparent hover:border-gray-300"
                   }`}
                 >
-                  <span className={`text-lg font-bold ${
+                  <span className={`text-sm md:text-lg font-bold ${
                     isDark ? 'text-white' : 'text-gray-900'
                   }`}>
                     {tab}
@@ -6673,85 +6673,85 @@ export default function WalletPage() {
             {commissionTab === "合约佣金" && (
               <div className="space-y-6">
                 {/* 佣金快报 - 使用理财账户样式 */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-6">
                   {/* 今日佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">今日佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Calendar className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">今日佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-[#14C2A3]`}>
                       2,456.78
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       昨日佣金：1,234.56 USDT
                     </div>
                   </div>
 
                   {/* 本月佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <TrendingUp className="h-6 w-6 text-blue-500" />
-                        <h3 className="text-lg font-semibold">本月佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <TrendingUp className="h-4 w-4 lg:h-6 lg:w-6 text-blue-500 hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">本月佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-blue-500`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-blue-500`}>
                       58,943.22
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       上月佣金：48,567.89 USDT
                     </div>
                   </div>
 
                   {/* 累计佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <DollarSign className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">累计佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <DollarSign className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">累计佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className={`text-lg lg:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       425,678.90
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       今年累计：234,567.89 USDT
                     </div>
                   </div>
 
                   {/* 佣金比例 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Target className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">佣金比例</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Target className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">佣金比例</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-[#14C2A3]`}>
                       12.5
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2`}>
                         %
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       当前等级：
                       <span className="text-[#14C2A3] font-semibold ml-1">
                         超级合约代理
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 hidden lg:block`}>
                       <button
                         onClick={() => setShowCommissionRuleModal(true)}
                         className={`${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
@@ -6763,28 +6763,28 @@ export default function WalletPage() {
                 </div>
 
                 {/* 佣金和推广数据 - 拆分成单独卡片 */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-6">
                   {/* 直推人数 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Users className="h-6 w-6 text-blue-500" />
-                        <h3 className="text-lg font-semibold">直推人数</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Users className="h-4 w-4 lg:h-6 lg:w-6 text-blue-500 hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">直推人数</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-blue-500`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-blue-500`}>
                       1,256
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         人
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       本月新增：89人
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-2 lg:mt-3">
                       <button
                         onClick={() => setShowUserListModal({ type: 'direct', isOpen: true })}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 lg:px-4 py-1 lg:py-2 rounded-lg font-medium transition-all border text-[10px] lg:text-base ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -6796,26 +6796,26 @@ export default function WalletPage() {
                   </div>
 
                   {/* 间推人数 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <UserPlus className="h-6 w-6 text-purple-500" />
-                        <h3 className="text-lg font-semibold">间推人数</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <UserPlus className="h-4 w-4 lg:h-6 lg:w-6 text-purple-500 hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">间推人数</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-purple-500`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-purple-500`}>
                       3,847
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         人
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       本月新增：234人
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-2 lg:mt-3">
                       <button
                         onClick={() => setShowUserListModal({ type: 'indirect', isOpen: true })}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 lg:px-4 py-1 lg:py-2 rounded-lg font-medium transition-all border text-[10px] lg:text-base ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -6827,26 +6827,26 @@ export default function WalletPage() {
                   </div>
 
                   {/* 活跃用户 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Activity className="h-6 w-6 text-orange-500" />
-                        <h3 className="text-lg font-semibold">活跃用户</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Activity className="h-4 w-4 lg:h-6 lg:w-6 text-orange-500 hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">活跃用户</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-orange-500`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-orange-500`}>
                       982
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         人
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       活跃率：78.2%
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-2 lg:mt-3">
                       <button
                         onClick={() => setShowUserListModal({ type: 'active', isOpen: true })}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 lg:px-4 py-1 lg:py-2 rounded-lg font-medium transition-all border text-[10px] lg:text-base ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -6858,26 +6858,26 @@ export default function WalletPage() {
                   </div>
 
                   {/* 未结算佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Wallet className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">未结算佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Wallet className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">未结算佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-[#14C2A3]`}>
                       1,234.56
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm text-red-500 mt-2`}>
+                    <div className={`text-[10px] lg:text-sm text-red-500 mt-1 lg:mt-2 hidden lg:block`}>
                       即将过期：45.30 USDT
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-2 lg:mt-3">
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 lg:px-4 py-1 lg:py-2 rounded-lg font-medium transition-all text-[10px] lg:text-base ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -6958,7 +6958,8 @@ export default function WalletPage() {
                     </select>
                   </div>
                   
-                  <div className="overflow-x-auto">
+                  {/* 桌面端表格 */}
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -7044,6 +7045,60 @@ export default function WalletPage() {
                       </tbody>
                     </table>
                   </div>
+
+                  {/* 移动端卡片布局 */}
+                  <div className="md:hidden space-y-3">
+                    {[
+                      { time: "14:23:45", userId: "U12345678", type: "直推", pair: "BTC/USDT", volume: "50,000.00", feeRate: "0.25%", feeAmount: "125.00", commission: "31.25", status: "已发放" },
+                      { time: "13:56:12", userId: "U87654321", type: "间推", pair: "ETH/USDT", volume: "25,000.00", feeRate: "0.25%", feeAmount: "62.50", commission: "15.63", status: "已发放" },
+                      { time: "12:34:56", userId: "U11223344", type: "直推", pair: "BNB/USDT", volume: "15,000.00", feeRate: "0.30%", feeAmount: "45.00", commission: "11.25", status: "处理中" },
+                      { time: "11:12:33", userId: "U99887766", type: "间推", pair: "SOL/USDT", volume: "8,000.00", feeRate: "0.20%", feeAmount: "16.00", commission: "4.00", status: "已发放" },
+                      { time: "10:45:21", userId: "U55443322", type: "直推", pair: "ADA/USDT", volume: "12,000.00", feeRate: "0.25%", feeAmount: "30.00", commission: "7.50", status: "已发放" }
+                    ].map((record, index) => (
+                      <div key={index} className={`border rounded-lg p-3 ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.time}
+                            </span>
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              record.type === "直推" 
+                                ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                : "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                            }`}>
+                              {record.type}
+                            </span>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            record.status === "已发放" 
+                              ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
+                              : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                          }`}>
+                            {record.status}
+                          </span>
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <div className="flex justify-between">
+                            <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>用户ID</span>
+                            <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.userId}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>交易对</span>
+                            <span className={`text-xs font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.pair}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>交易量</span>
+                            <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.volume} USDT</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>佣金</span>
+                            <span className={`text-xs font-medium text-[#14C2A3]`}>{record.commission} USDT</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                   
                   {/* 加载更多按钮 */}
                   <div className="mt-6 text-center">
@@ -7065,85 +7120,85 @@ export default function WalletPage() {
             {commissionTab === "理财佣金" && (
               <div className="space-y-6">
                 {/* 理财佣金快报 - 使用理财账户样式 */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-6">
                   {/* 今日佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">今日佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Calendar className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">今日佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-[#14C2A3]`}>
                       1,234.56
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       昨日佣金：987.34 USDT
                     </div>
                   </div>
 
                   {/* 本月佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <TrendingUp className="h-6 w-6 text-blue-500" />
-                        <h3 className="text-lg font-semibold">本月佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <TrendingUp className="h-4 w-4 lg:h-6 lg:w-6 text-blue-500 hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">本月佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-blue-500`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-blue-500`}>
                       35,678.90
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       上月佣金：28,567.89 USDT
                     </div>
                   </div>
 
                   {/* 累计佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <DollarSign className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">累计佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <DollarSign className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">累计佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    <div className={`text-lg lg:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       256,789.12
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       今年累计：145,678.90 USDT
                     </div>
                   </div>
 
                   {/* 佣金比例 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Target className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">佣金比例</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Target className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">佣金比例</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-[#14C2A3]`}>
                       8.5
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2`}>
                         %
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       当前等级：
                       <span className="text-[#14C2A3] font-semibold ml-1">
                         金牌团队
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 hidden lg:block`}>
                       <button
                         onClick={() => setShowCommissionRuleModal(true)}
                         className={`${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} underline cursor-pointer`}
@@ -7155,28 +7210,28 @@ export default function WalletPage() {
                 </div>
 
                 {/* 佣金和推广数据 - 拆分成单独卡片 */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-6">
                   {/* 理财客户数 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Users className="h-6 w-6 text-blue-500" />
-                        <h3 className="text-lg font-semibold">直推理财用户</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Users className="h-4 w-4 lg:h-6 lg:w-6 text-blue-500 hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">直推理财用户</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-blue-500`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-blue-500`}>
                       456
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         人
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       本月新增：45 人
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-2 lg:mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 lg:px-4 py-1 lg:py-2 rounded-lg font-medium transition-all border text-[10px] lg:text-base ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7188,26 +7243,26 @@ export default function WalletPage() {
                   </div>
 
                   {/* 活跃产品数 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <PiggyBank className="h-6 w-6 text-purple-500" />
-                        <h3 className="text-lg font-semibold">间推理财用户</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <PiggyBank className="h-4 w-4 lg:h-6 lg:w-6 text-purple-500 hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">间推理财用户</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-purple-500`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-purple-500`}>
                       12
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         个
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       产品收益率：7.2%
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-2 lg:mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 lg:px-4 py-1 lg:py-2 rounded-lg font-medium transition-all border text-[10px] lg:text-base ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7219,26 +7274,26 @@ export default function WalletPage() {
                   </div>
 
                   {/* 投资总额 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <TrendingUp className="h-6 w-6 text-orange-500" />
-                        <h3 className="text-lg font-semibold">投资总额</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <TrendingUp className="h-4 w-4 lg:h-6 lg:w-6 text-orange-500 hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">投资总额</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-orange-500`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-orange-500`}>
                       3.2M
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
+                    <div className={`text-[10px] lg:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-1 lg:mt-2 hidden lg:block`}>
                       投资活跃率：85.6%
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-2 lg:mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'active', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 lg:px-4 py-1 lg:py-2 rounded-lg font-medium transition-all border text-[10px] lg:text-base ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7250,26 +7305,26 @@ export default function WalletPage() {
                   </div>
 
                   {/* 未结算佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Wallet className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">未结算佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Wallet className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[10px] lg:text-lg font-semibold">未结算佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                    <div className={`text-lg lg:text-3xl font-bold text-[#14C2A3]`}>
                       567.89
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         USDT
                       </span>
                     </div>
-                    <div className={`text-sm text-red-500 mt-2`}>
+                    <div className={`text-[10px] lg:text-sm text-red-500 mt-1 lg:mt-2 hidden lg:block`}>
                       即将过期：23.45 USDT
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-2 lg:mt-3">
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 lg:px-4 py-1 lg:py-2 rounded-lg font-medium transition-all text-[10px] lg:text-base ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
