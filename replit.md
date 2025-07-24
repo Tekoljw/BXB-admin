@@ -352,6 +352,7 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Completed comprehensive commission account top cards responsive optimization: applied multi-breakpoint font scaling to all commission types (合约佣金, 理财佣金, U卡佣金, 担保佣金, 支付佣金) with text-[8px] xs:text-[10px] sm:text-xs md:text-sm lg:text-lg for titles and text-sm sm:text-base md:text-lg lg:text-3xl for amounts
   - Tags automatically adjust size and font instead of text wrapping within fixed-height containers on narrow screens
   - Fixed promotion method step content alignment: step images, text, and tags now align with step labels instead of being indented in both 推广方式1 (5 steps) and 推广方式2 (4 steps)
+  - Reduced commission account card font sizes by half: titles from text-[8px]-lg to text-[4px]-[9px], amounts from text-sm-3xl to text-[6px]-lg
 - January 30, 2025. Implemented complete guarantee transaction workflow in chat interface:
   - Added guarantee transaction message type with comprehensive data structure including amount, currency, description, type (buy/sell), duration, deposit percentage, and 4-step progress tracking
   - Created guarantee transaction modal with transaction type selection (求购/出售), currency selection, amount input, description textarea, duration options (1-72 hours), and deposit percentage options (5-30%)
