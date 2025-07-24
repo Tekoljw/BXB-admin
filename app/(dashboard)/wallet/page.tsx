@@ -5877,69 +5877,69 @@ export default function WalletPage() {
                       </div>
 
                       {/* 合并统计卡片 */}
-                      <div className="grid grid-cols-6 gap-4">
+                      <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-4">
                         {/* 卡片1: TRC20地址总数 */}
-                        <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className={`${cardStyle} rounded-lg p-2 md:p-4 text-center`}>
                           <div className="flex items-center justify-center">
-                            <span className="text-2xl font-bold">4</span>
-                            <span className="text-lg font-medium mx-1">/</span>
-                            <span className="text-blue-500 text-sm font-medium">18</span>
+                            <span className="text-lg md:text-2xl font-bold">4</span>
+                            <span className="text-sm md:text-lg font-medium mx-1">/</span>
+                            <span className="text-blue-500 text-xs md:text-sm font-medium">18</span>
                           </div>
-                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>TRC20地址总数</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>总地址数</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>TRC20地址总数</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} hidden md:block`}>总地址数</div>
                         </div>
                         
                         {/* 卡片2: 已分配TRC20地址数 */}
-                        <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className={`${cardStyle} rounded-lg p-2 md:p-4 text-center`}>
                           <div className="flex items-center justify-center">
-                            <span className="text-2xl font-bold text-green-500">3</span>
-                            <span className="text-lg font-medium mx-1">/</span>
-                            <span className="text-red-500 text-sm font-medium">1</span>
+                            <span className="text-lg md:text-2xl font-bold text-green-500">3</span>
+                            <span className="text-sm md:text-lg font-medium mx-1">/</span>
+                            <span className="text-red-500 text-xs md:text-sm font-medium">1</span>
                           </div>
-                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>已分配TRC20地址数</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>未分配TRC20地址数</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>已分配TRC20地址数</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} hidden md:block`}>未分配TRC20地址数</div>
                         </div>
                         
                         {/* 卡片3: 已分配总地址数 */}
-                        <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className={`${cardStyle} rounded-lg p-2 md:p-4 text-center`}>
                           <div className="flex items-center justify-center">
-                            <span className="text-2xl font-bold text-green-500">16</span>
-                            <span className="text-lg font-medium mx-1">/</span>
-                            <span className="text-red-500 text-sm font-medium">2</span>
+                            <span className="text-lg md:text-2xl font-bold text-green-500">16</span>
+                            <span className="text-sm md:text-lg font-medium mx-1">/</span>
+                            <span className="text-red-500 text-xs md:text-sm font-medium">2</span>
                           </div>
-                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>已分配总地址数</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>未分配总地址数</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>已分配总地址数</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} hidden md:block`}>未分配总地址数</div>
                         </div>
                         
                         {/* 卡片4: 本月地址费用 */}
-                        <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className={`${cardStyle} rounded-lg p-2 md:p-4 text-center`}>
                           <div className="flex items-center justify-center">
-                            <span className="text-2xl font-bold text-orange-500">7</span>
-                            <span className="text-lg font-medium mx-1">/</span>
-                            <span className="text-purple-500 text-sm font-medium">6</span>
-                            <span className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} ml-1`}>U</span>
+                            <span className="text-lg md:text-2xl font-bold text-orange-500">7</span>
+                            <span className="text-sm md:text-lg font-medium mx-1">/</span>
+                            <span className="text-purple-500 text-xs md:text-sm font-medium">6</span>
+                            <span className={`text-[10px] md:text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} ml-1`}>U</span>
                           </div>
-                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>本月地址费用</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>上月地址费用</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>本月地址费用</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} hidden md:block`}>上月地址费用</div>
                         </div>
                         
                         {/* 卡片5: 本月TRC20地址费用 */}
-                        <div className={`${cardStyle} rounded-lg p-4 text-center`}>
+                        <div className={`${cardStyle} rounded-lg p-2 md:p-4 text-center`}>
                           <div className="flex items-center justify-center">
-                            <span className="text-2xl font-bold text-orange-500">1</span>
-                            <span className="text-lg font-medium mx-1">/</span>
-                            <span className="text-purple-500 text-sm font-medium">0.8</span>
-                            <span className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} ml-1`}>U</span>
+                            <span className="text-lg md:text-2xl font-bold text-orange-500">1</span>
+                            <span className="text-sm md:text-lg font-medium mx-1">/</span>
+                            <span className="text-purple-500 text-xs md:text-sm font-medium">0.8</span>
+                            <span className={`text-[10px] md:text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} ml-1`}>U</span>
                           </div>
-                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>本月TRC20地址费用</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>上月TRC20费用</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>本月TRC20地址费用</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} hidden md:block`}>上月TRC20费用</div>
                         </div>
                         
                         {/* 卡片6: TRC20地址价格 */}
-                        <div className={`${cardStyle} rounded-lg p-4 text-center`}>
-                          <div className="text-2xl font-bold text-blue-500">100 <span className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>U</span></div>
-                          <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>TRC20地址价格</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>计费单位：<span className="text-green-500">1000</span>地址</div>
+                        <div className={`${cardStyle} rounded-lg p-2 md:p-4 text-center`}>
+                          <div className="text-lg md:text-2xl font-bold text-blue-500">100 <span className={`text-xs md:text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>U</span></div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-1`}>TRC20地址价格</div>
+                          <div className={`text-[10px] md:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} hidden md:block`}>计费单位：<span className="text-green-500">1000</span>地址</div>
                         </div>
                       </div>
 
@@ -5973,7 +5973,8 @@ export default function WalletPage() {
 
                       {/* 地址表格 */}
                       <div className={`${cardStyle} rounded-lg overflow-hidden`}>
-                        <div className="overflow-x-auto">
+                        {/* 桌面端表格 */}
+                        <div className="hidden md:block overflow-x-auto">
                           <table className="w-full">
                             <thead>
                               <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
@@ -6031,6 +6032,59 @@ export default function WalletPage() {
                               ))}
                             </tbody>
                           </table>
+                        </div>
+
+                        {/* 移动端卡片布局 */}
+                        <div className="md:hidden space-y-3 p-3">
+                          {filteredAddressList.map((address, index) => (
+                            <div key={index} className={`border rounded-lg p-3 ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                              {/* 顶部：网络和状态/操作 */}
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center space-x-2">
+                                  <span className="text-lg">{getNetworkLogo(address.network)}</span>
+                                  <span className="text-sm font-medium">{address.network}</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <div className={`w-6 h-3 rounded-full transition-all ${address.isActive ? 'bg-green-500' : 'bg-gray-300'} relative`}>
+                                    <div className={`w-2 h-2 bg-white rounded-full absolute top-0.5 transition-all ${address.isActive ? 'left-3.5' : 'left-0.5'}`}></div>
+                                  </div>
+                                  <button
+                                    onClick={() => handleReleaseAddress(address)}
+                                    className={`px-2 py-1 rounded text-xs flex items-center gap-1 transition-colors ${
+                                      isDark 
+                                        ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' 
+                                        : 'bg-red-50 text-red-600 hover:bg-red-100'
+                                    }`}
+                                    title="释放地址"
+                                  >
+                                    <Unlink className="w-3 h-3" />
+                                    释放
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* 中部：地址和用户ID */}
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>地址</span>
+                                  <div className="flex items-center space-x-2">
+                                    <span className="text-xs font-mono">{address.shortAddress}</span>
+                                    <button
+                                      onClick={() => copyToClipboard(address.fullAddress)}
+                                      className="text-gray-400 hover:text-gray-600 transition-all"
+                                      title="复制地址"
+                                    >
+                                      <Copy className="h-3 w-3" />
+                                    </button>
+                                  </div>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>用户ID</span>
+                                  <span className="text-xs">{address.userId}</span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
 
@@ -6203,7 +6257,6 @@ export default function WalletPage() {
                               <span className="text-sm text-gray-500">接入费/月：1000 USDT</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <button className="px-3 py-1 rounded text-sm bg-green-500 text-white">启用</button>
                               <label className="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" className="sr-only peer" defaultChecked />
                                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
@@ -6212,7 +6265,8 @@ export default function WalletPage() {
                           </div>
 
                           {/* 支付方式表格 */}
-                          <div className="overflow-x-auto">
+                          {/* 桌面端表格 */}
+                          <div className="hidden md:block overflow-x-auto">
                             <table className="w-full">
                               <thead>
                                 <tr className={`border-b ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
@@ -6409,6 +6463,165 @@ export default function WalletPage() {
                                 </tr>
                               </tbody>
                             </table>
+                          </div>
+
+                          {/* 移动端卡片布局 */}
+                          <div className="md:hidden space-y-3">
+                            {/* USD 美元卡片 */}
+                            <div className={`border rounded-lg p-3 ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-sm">
+                                    $
+                                  </div>
+                                  <span className="text-sm font-medium">USD</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded">1.02</span>
+                                  <span className="text-xs font-medium text-green-600">买/卖</span>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <div>
+                                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} block mb-1`}>支付方式</span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {["信用卡", "银行转账", "Apple Pay", "Google Pay"].map((method) => (
+                                      <span key={method} className="px-2 py-1 rounded text-xs bg-blue-100 text-blue-700">
+                                        {method}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div>
+                                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} block mb-1`}>可购买加密货币</span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {["BTC", "ETH", "USDT", "BNB", "SOL", "MATIC", "AVAX"].map((crypto) => (
+                                      <span key={crypto} className="px-2 py-1 rounded text-xs bg-green-100 text-green-700">
+                                        {crypto}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* EUR 欧元卡片 */}
+                            <div className={`border rounded-lg p-3 ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">
+                                    €
+                                  </div>
+                                  <span className="text-sm font-medium">EUR</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded">1.10</span>
+                                  <span className="text-xs font-medium text-green-600">买/卖</span>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <div>
+                                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} block mb-1`}>支付方式</span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {["信用卡", "SEPA转账", "Apple Pay", "iDEAL"].map((method) => (
+                                      <span key={method} className="px-2 py-1 rounded text-xs bg-blue-100 text-blue-700">
+                                        {method}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div>
+                                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} block mb-1`}>可购买加密货币</span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {["BTC", "ETH", "USDT", "SOL", "AVAX", "DOT"].map((crypto) => (
+                                      <span key={crypto} className="px-2 py-1 rounded text-xs bg-green-100 text-green-700">
+                                        {crypto}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* GBP 英镑卡片 */}
+                            <div className={`border rounded-lg p-3 ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm">
+                                    £
+                                  </div>
+                                  <span className="text-sm font-medium">GBP</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded">0.85</span>
+                                  <span className="text-xs font-medium text-green-600">买/卖</span>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <div>
+                                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} block mb-1`}>支付方式</span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {["信用卡", "银行转账", "Faster Payments"].map((method) => (
+                                      <span key={method} className="px-2 py-1 rounded text-xs bg-blue-100 text-blue-700">
+                                        {method}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div>
+                                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} block mb-1`}>可购买加密货币</span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {["BTC", "ETH", "USDT", "ADA"].map((crypto) => (
+                                      <span key={crypto} className="px-2 py-1 rounded text-xs bg-green-100 text-green-700">
+                                        {crypto}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* JPY 日元卡片 */}
+                            <div className={`border rounded-lg p-3 ${isDark ? 'border-[#3a3d4a]' : 'border-gray-200'}`}>
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-white font-bold text-sm">
+                                    ¥
+                                  </div>
+                                  <span className="text-sm font-medium">JPY</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded">0.0070</span>
+                                  <span className="text-xs font-medium text-gray-400">买/卖</span>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <div>
+                                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} block mb-1`}>支付方式</span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {["信用卡", "银行转账"].map((method) => (
+                                      <span key={method} className="px-2 py-1 rounded text-xs bg-blue-100 text-blue-700">
+                                        {method}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div>
+                                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} block mb-1`}>可购买加密货币</span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {["BTC", "ETH", "USDT", "SOL"].map((crypto) => (
+                                      <span key={crypto} className="px-2 py-1 rounded text-xs bg-green-100 text-green-700">
+                                        {crypto}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       )}
