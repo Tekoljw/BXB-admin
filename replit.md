@@ -755,14 +755,14 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Renamed user labels in 邀请好友 section: "直推合约用户" → "直推用户", "间推合约用户" → "间推用户"
   - Renamed user labels in 合约佣金 section: "直推人数" → "直推合约用户", "间推人数" → "间推合约用户"
   - Maintained consistent responsive typography and layout across all commission account sections
-- January 30, 2025. Completed mobile optimization for 邀请好友 and U卡佣金 commission account sections:
-  - Updated 邀请好友 top cards layout from grid-cols-2 lg:grid-cols-4 to grid-cols-4 for consistent mobile 4-card-per-row display
-  - Applied comprehensive mobile optimizations to all 4 邀请好友 cards: 直推用户, 间推用户, 总佣金, 未结算佣金
-  - Completed U卡佣金 8-card layout optimization with proper two-row structure (4 cards per row on mobile)
-  - Applied consistent mobile styling: p-1 lg:p-6 padding, text-[8px] lg:text-lg titles, text-xs lg:text-3xl amounts
-  - Hidden small text and buttons on mobile: description text and action buttons only visible on desktop (hidden lg:block)
-  - Hidden icons on mobile devices and reduced spacing for compact display
-  - Fixed grid container structure to properly separate first and second rows in U卡佣金 section
+- January 30, 2025. Redesigned commission account mobile layout to one-row-two-cards format:
+  - Changed all commission top cards from grid-cols-4 to grid-cols-2 lg:grid-cols-4 for mobile two-column display
+  - Enhanced mobile card styling: increased padding (p-3 lg:p-6), larger fonts (text-sm lg:text-lg titles, text-lg lg:text-3xl amounts)
+  - Made description text always visible on mobile: removed hidden lg:block classes from small text
+  - Increased icon sizes on mobile: h-5 w-5 lg:h-6 lg:w-6 with proper spacing (space-x-2)
+  - Applied consistent mobile optimizations across all commission sections: 合约佣金, 理财佣金, U卡佣金, 邀请好友
+  - Improved readability with larger gaps (gap-3 lg:gap-6) and better visual hierarchy
+  - Enhanced mobile user experience with visible unit labels (USDT, 人, %) and complete information display
 
 ## User Preferences
 
