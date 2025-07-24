@@ -8846,13 +8846,13 @@ export default function WalletPage() {
                       <div className="space-y-8">
                         {/* 步骤1 */}
                         <div className="space-y-4">
-                          <div className="flex items-start gap-4">
+                          <div className="space-y-4">
                             <div className="flex-shrink-0">
                               <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm font-semibold rounded-full">
                                 第一步
                               </span>
                             </div>
-                            <div className="flex-1">
+                            <div>
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 注册BXB钱包
                               </h5>
@@ -8860,12 +8860,7 @@ export default function WalletPage() {
                                 申请成为代理，获得推广资格
                               </p>
                             </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-[52px]">
-                              {/* 空白占位，与步骤标签对齐 */}
-                            </div>
-                            <div className="flex-1 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
@@ -8875,13 +8870,13 @@ export default function WalletPage() {
 
                         {/* 步骤2 */}
                         <div className="space-y-4">
-                          <div className="flex items-start gap-4">
+                          <div className="space-y-4">
                             <div className="flex-shrink-0">
                               <span className="px-3 py-1 bg-blue-500 text-white text-sm font-semibold rounded-full">
                                 第二步
                               </span>
                             </div>
-                            <div className="flex-1">
+                            <div>
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 邀请好友加入BXB官方频道
                               </h5>
@@ -8911,12 +8906,7 @@ export default function WalletPage() {
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-[52px]">
-                              {/* 空白占位，与步骤标签对齐 */}
-                            </div>
-                            <div className="flex-1 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
@@ -8926,13 +8916,13 @@ export default function WalletPage() {
 
                         {/* 步骤3 */}
                         <div className="space-y-4">
-                          <div className="flex items-start gap-4">
+                          <div className="space-y-4">
                             <div className="flex-shrink-0">
                               <span className="px-3 py-1 bg-purple-500 text-white text-sm font-semibold rounded-full">
                                 第三步
                               </span>
                             </div>
-                            <div className="flex-1">
+                            <div>
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 好友使用BXB的服务
                               </h5>
@@ -8977,12 +8967,7 @@ export default function WalletPage() {
                                 </span>
                               </div>
                             </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-[52px]">
-                              {/* 空白占位，与步骤标签对齐 */}
-                            </div>
-                            <div className="flex-1 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
@@ -8992,13 +8977,13 @@ export default function WalletPage() {
 
                         {/* 步骤4 */}
                         <div className="space-y-4">
-                          <div className="flex items-start gap-4">
+                          <div className="space-y-4">
                             <div className="flex-shrink-0">
                               <span className="px-3 py-1 bg-orange-500 text-white text-sm font-semibold rounded-full">
                                 第四步
                               </span>
                             </div>
-                            <div className="flex-1">
+                            <div>
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 好友成为代理
                               </h5>
@@ -9006,12 +8991,7 @@ export default function WalletPage() {
                                 好友升级为代理，全面提升收益（无手续费）
                               </p>
                             </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-[52px]">
-                              {/* 空白占位，与步骤标签对齐 */}
-                            </div>
-                            <div className="flex-1 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
@@ -9021,13 +9001,13 @@ export default function WalletPage() {
 
                         {/* 步骤5 */}
                         <div className="space-y-4">
-                          <div className="flex items-start gap-4">
+                          <div className="space-y-4">
                             <div className="flex-shrink-0">
                               <span className="px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full">
                                 第五步
                               </span>
                             </div>
-                            <div className="flex-1">
+                            <div>
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 无限层级佣金
                               </h5>
@@ -9058,12 +9038,7 @@ export default function WalletPage() {
                                 </span>
                               </div>
                             </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-[52px]">
-                              {/* 空白占位，与步骤标签对齐 */}
-                            </div>
-                            <div className="flex-1 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                               </svg>
@@ -9183,13 +9158,13 @@ export default function WalletPage() {
                       <div className="space-y-8">
                         {/* 步骤1 */}
                         <div className="space-y-4">
-                          <div className="flex items-start gap-4">
+                          <div className="space-y-4">
                             <div className="flex-shrink-0">
                               <span className="px-3 py-1 bg-[#14C2A3] text-white text-sm font-semibold rounded-full">
                                 第一步
                               </span>
                             </div>
-                            <div className="flex-1">
+                            <div>
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 复制分享内容
                               </h5>
@@ -9197,12 +9172,7 @@ export default function WalletPage() {
                                 复制上方的邀请码或邀请链接，准备分享给好友
                               </p>
                             </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-[52px]">
-                              {/* 空白占位，与步骤标签对齐 */}
-                            </div>
-                            <div className="flex-1 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                               </svg>
@@ -9212,13 +9182,13 @@ export default function WalletPage() {
 
                         {/* 步骤2 */}
                         <div className="space-y-4">
-                          <div className="flex items-start gap-4">
+                          <div className="space-y-4">
                             <div className="flex-shrink-0">
                               <span className="px-3 py-1 bg-blue-500 text-white text-sm font-semibold rounded-full">
                                 第二步
                               </span>
                             </div>
-                            <div className="flex-1">
+                            <div>
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 通过社交软件分享邀请码/邀请链接
                               </h5>
@@ -9226,12 +9196,7 @@ export default function WalletPage() {
                                 将邀请码/链接通过WhatsApp、微信等社交软件发送给好友
                               </p>
                             </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-[52px]">
-                              {/* 空白占位，与步骤标签对齐 */}
-                            </div>
-                            <div className="flex-1 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                               </svg>
@@ -9241,13 +9206,13 @@ export default function WalletPage() {
 
                         {/* 步骤3 */}
                         <div className="space-y-4">
-                          <div className="flex items-start gap-4">
+                          <div className="space-y-4">
                             <div className="flex-shrink-0">
                               <span className="px-3 py-1 bg-purple-500 text-white text-sm font-semibold rounded-full">
                                 第三步
                               </span>
                             </div>
-                            <div className="flex-1">
+                            <div>
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 好友注册使用
                               </h5>
@@ -9255,12 +9220,7 @@ export default function WalletPage() {
                                 好友使用邀请码注册BXB账户并开始交易
                               </p>
                             </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-[52px]">
-                              {/* 空白占位，与步骤标签对齐 */}
-                            </div>
-                            <div className="flex-1 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                               </svg>
@@ -9270,13 +9230,13 @@ export default function WalletPage() {
 
                         {/* 步骤4 */}
                         <div className="space-y-4">
-                          <div className="flex items-start gap-4">
+                          <div className="space-y-4">
                             <div className="flex-shrink-0">
                               <span className="px-3 py-1 bg-orange-500 text-white text-sm font-semibold rounded-full">
                                 第四步
                               </span>
                             </div>
-                            <div className="flex-1">
+                            <div>
                               <h5 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 获得推广收益
                               </h5>
@@ -9284,12 +9244,7 @@ export default function WalletPage() {
                                 好友每笔交易自动获得佣金分成，持续收益
                               </p>
                             </div>
-                          </div>
-                          <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-[52px]">
-                              {/* 空白占位，与步骤标签对齐 */}
-                            </div>
-                            <div className="flex-1 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="h-32 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                               </svg>
