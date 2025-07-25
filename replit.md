@@ -774,6 +774,14 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Standardized 担保佣金 cards to match exact formatting of 合约佣金 cards: consistent font sizes (text-sm lg:text-lg for titles, text-lg lg:text-3xl for amounts), unified padding (p-3 lg:p-6), proper icon sizing (h-5 w-5 lg:h-6 lg:w-6)
   - Hidden all card buttons on mobile (查看名单, 查看明细, 立即结算) using hidden lg:block for cleaner mobile interface
   - Updated button styling to black border transparent theme for consistency across all commission card actions
+- January 30, 2025. Completed comprehensive mobile commission table and search optimizations:
+  - Added complete desktop tables and mobile card layouts for 担保佣金 (guarantee commission) with detailed transaction tracking including referral types, transaction types, guarantee types, and commission data
+  - Implemented comprehensive mobile card layouts for 支付佣金 (payment commission) with merchant information, payment methods, channels, business types, and commission details
+  - Updated all commission search functions to use single-row layout: flex-1 search input with flex-shrink-0 dropdown selectors for optimal mobile space utilization
+  - Standardized search placeholder text to "搜索用户ID" and "搜索商户ID" for consistency across all commission types
+  - Applied responsive design patterns with desktop table (hidden md:block) and mobile cards (md:hidden) for all commission detail sections
+  - Enhanced mobile user experience with properly structured card layouts displaying comprehensive transaction information, status badges, and proper data hierarchy
+  - Completed mobile adaptation for all commission types: 合约佣金, 理财佣金, U卡佣金, 担保佣金, 支付佣金 with consistent responsive design patterns
 
 ## User Preferences
 

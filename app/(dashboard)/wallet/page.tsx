@@ -7812,11 +7812,11 @@ export default function WalletPage() {
                   </div>
 
                   {/* 搜索和筛选 */}
-                  <div className="flex flex-col md:flex-row gap-4 mb-6">
+                  <div className="flex gap-2 mb-6">
                     <div className="flex-1">
                       <input
                         type="text"
-                        placeholder="搜索用户ID或产品名称..."
+                        placeholder="搜索用户ID"
                         className={`w-full px-4 py-2 rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
@@ -7824,51 +7824,38 @@ export default function WalletPage() {
                         } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
                       />
                     </div>
-                    <div className="flex gap-2">
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">推荐类型</option>
-                        <option value="direct">直推</option>
-                        <option value="indirect">间推</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">交易类型</option>
-                        <option value="card">开卡</option>
-                        <option value="recharge">充值</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">产品类型</option>
-                        <option value="virtual">虚拟卡</option>
-                        <option value="physical">实体卡</option>
-                        <option value="USDT">USDT</option>
-                        <option value="BTC">BTC</option>
-                        <option value="ETH">ETH</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">状态</option>
-                        <option value="paid">已发放</option>
-                        <option value="pending">处理中</option>
-                        <option value="expired">已过期</option>
-                      </select>
-                    </div>
+                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                      <option value="">推荐类型</option>
+                      <option value="direct">直推</option>
+                      <option value="indirect">间推</option>
+                    </select>
+                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                      <option value="">交易类型</option>
+                      <option value="card">开卡</option>
+                      <option value="recharge">充值</option>
+                    </select>
+                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                      <option value="">状态</option>
+                      <option value="paid">已发放</option>
+                      <option value="pending">处理中</option>
+                      <option value="expired">已过期</option>
+                    </select>
                   </div>
                   
-                  <div className="overflow-x-auto">
+                  {/* 桌面端表格 */}
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -7941,6 +7928,75 @@ export default function WalletPage() {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* 手机端卡片 */}
+                  <div className="md:hidden space-y-3">
+                    {[
+                      { time: "14:23:45", userId: "U12345678", type: "直推", transactionType: "开卡", productType: "Visa虚拟卡", amount: "15.00", feeRate: "25%", commission: "3.75", status: "已发放" },
+                      { time: "13:56:12", userId: "U87654321", type: "间推", transactionType: "开卡", productType: "Mastercard实体卡", amount: "25.00", feeRate: "25%", commission: "6.25", status: "已发放" },
+                      { time: "12:34:56", userId: "U11223344", type: "直推", transactionType: "充值", productType: "USDT", amount: "500.00", feeRate: "2.5%", commission: "12.50", status: "处理中" },
+                      { time: "11:23:44", userId: "U99887766", type: "间推", transactionType: "开卡", productType: "Visa虚拟卡", amount: "15.00", feeRate: "20%", commission: "3.00", status: "已发放" },
+                      { time: "10:12:33", userId: "U55443322", type: "直推", transactionType: "充值", productType: "BTC", amount: "0.05", feeRate: "2.0%", commission: "15.00", status: "已发放" }
+                    ].map((record, index) => (
+                      <div key={index} className={`p-4 rounded-lg border ${cardStyle}`}>
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              record.type === "直推" 
+                                ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                : "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                            }`}>
+                              {record.type}
+                            </span>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              record.transactionType === "开卡" 
+                                ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"  
+                                : "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300"
+                            }`}>
+                              {record.transactionType}
+                            </span>
+                            <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {record.time}
+                            </span>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            record.status === "已发放" 
+                              ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
+                              : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                          }`}>
+                            {record.status}
+                          </span>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户ID</span>
+                            <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.userId}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>产品类型</span>
+                            <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.productType}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>交易金额</span>
+                            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.transactionType === "充值" ? `${record.amount} ${record.productType}` : `${record.amount} USD`}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金比例</span>
+                            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.feeRate}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金金额</span>
+                            <span className={`text-sm font-medium text-[#14C2A3]`}>
+                              {record.commission} {record.transactionType === "充值" ? "USDT" : "USD"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
                   {/* 加载更多按钮 */}
@@ -8207,11 +8263,11 @@ export default function WalletPage() {
                   </div>
 
                   {/* 搜索和筛选 */}
-                  <div className="flex flex-col md:flex-row gap-4 mb-6">
+                  <div className="flex gap-2 mb-6">
                     <div className="flex-1">
                       <input
                         type="text"
-                        placeholder="搜索用户ID或交易订单..."
+                        placeholder="搜索用户ID"
                         className={`w-full px-4 py-2 rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
@@ -8219,50 +8275,38 @@ export default function WalletPage() {
                         } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
                       />
                     </div>
-                    <div className="flex gap-2">
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">推荐类型</option>
-                        <option value="direct">直推</option>
-                        <option value="indirect">间推</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">交易类型</option>
-                        <option value="guarantee">担保交易</option>
-                        <option value="escrow">第三方托管</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">担保类型</option>
-                        <option value="USDT">USDT交易</option>
-                        <option value="BTC">BTC交易</option>
-                        <option value="ETH">ETH交易</option>
-                        <option value="NFT">NFT交易</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">状态</option>
-                        <option value="paid">已发放</option>
-                        <option value="pending">处理中</option>
-                        <option value="expired">已过期</option>
-                      </select>
-                    </div>
+                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                      <option value="">推荐类型</option>
+                      <option value="direct">直推</option>
+                      <option value="indirect">间推</option>
+                    </select>
+                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                      <option value="">交易类型</option>
+                      <option value="guarantee">担保交易</option>
+                      <option value="escrow">第三方托管</option>
+                    </select>
+                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                      <option value="">状态</option>
+                      <option value="paid">已发放</option>
+                      <option value="pending">处理中</option>
+                      <option value="expired">已过期</option>
+                    </select>
                   </div>
-                  
-                  <div className="overflow-x-auto">
+
+                  {/* 桌面端表格 */}
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -8338,6 +8382,76 @@ export default function WalletPage() {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* 手机端卡片 */}
+                  <div className="md:hidden space-y-3">
+                    {[
+                      { time: "14:23:45", userId: "U12345678", type: "直推", transactionType: "担保交易", guaranteeType: "USDT交易", amount: "10,000.00", feeRate: "1.5%", commission: "150.00", status: "已发放" },
+                      { time: "13:56:12", userId: "U87654321", type: "间推", transactionType: "第三方托管", guaranteeType: "BTC交易", amount: "0.50", feeRate: "1.0%", commission: "75.00", status: "已发放" },
+                      { time: "12:34:56", userId: "U11223344", type: "直推", transactionType: "担保交易", guaranteeType: "ETH交易", amount: "5.00", feeRate: "1.5%", commission: "120.00", status: "处理中" },
+                      { time: "11:23:44", userId: "U99887766", type: "间推", transactionType: "担保交易", guaranteeType: "USDT交易", amount: "25,000.00", feeRate: "1.0%", commission: "250.00", status: "已发放" },
+                      { time: "10:12:33", userId: "U55443322", type: "直推", transactionType: "第三方托管", guaranteeType: "NFT交易", amount: "2.5", feeRate: "2.0%", commission: "200.00", status: "已发放" }
+                    ].map((record, index) => (
+                      <div key={index} className={`p-4 rounded-lg border ${cardStyle}`}>
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              record.type === "直推" 
+                                ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                : "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                            }`}>
+                              {record.type}
+                            </span>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              record.transactionType === "担保交易" 
+                                ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                                : "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300"
+                            }`}>
+                              {record.transactionType}
+                            </span>
+                            <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {record.time}
+                            </span>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            record.status === "已发放" 
+                              ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
+                              : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                          }`}>
+                            {record.status}
+                          </span>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户ID</span>
+                            <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.userId}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>担保类型</span>
+                            <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.guaranteeType}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>交易金额</span>
+                            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {record.guaranteeType === "USDT交易" ? `${record.amount} USDT` : 
+                               record.guaranteeType === "BTC交易" ? `${record.amount} BTC` :
+                               record.guaranteeType === "ETH交易" ? `${record.amount} ETH` :
+                               `${record.amount} ETH`}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金比例</span>
+                            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.feeRate}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金金额</span>
+                            <span className={`text-sm font-medium text-[#14C2A3]`}>{record.commission} USDT</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
                   {/* 加载更多按钮 */}
@@ -8603,11 +8717,11 @@ export default function WalletPage() {
                   </div>
 
                   {/* 搜索和筛选 */}
-                  <div className="flex flex-col md:flex-row gap-4 mb-6">
+                  <div className="flex gap-2 mb-6">
                     <div className="flex-1">
                       <input
                         type="text"
-                        placeholder="搜索商户ID或订单号..."
+                        placeholder="搜索商户ID"
                         className={`w-full px-4 py-2 rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
@@ -8615,64 +8729,40 @@ export default function WalletPage() {
                         } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
                       />
                     </div>
-                    <div className="flex gap-2">
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">推荐类型</option>
-                        <option value="direct">直推</option>
-                        <option value="indirect">间推</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">支付方式</option>
-                        <option value="alipay">支付宝</option>
-                        <option value="wechat">微信支付</option>
-                        <option value="unionpay">银联支付</option>
-                        <option value="bank">银行转账</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">支付通道</option>
-                        <option value="支付宝直连">支付宝直连</option>
-                        <option value="微信商户号">微信商户号</option>
-                        <option value="银联在线">银联在线</option>
-                        <option value="招商银行">招商银行</option>
-                        <option value="建设银行">建设银行</option>
-                        <option value="工商银行">工商银行</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">业务类型</option>
-                        <option value="收款">收款业务</option>
-                        <option value="代付">代付业务</option>
-                        <option value="退款">退款业务</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">状态</option>
-                        <option value="paid">已结算</option>
-                        <option value="pending">处理中</option>
-                        <option value="expired">已过期</option>
-                      </select>
-                    </div>
+                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                      <option value="">推荐类型</option>
+                      <option value="direct">直推</option>
+                      <option value="indirect">间推</option>
+                    </select>
+                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                      <option value="">支付方式</option>
+                      <option value="alipay">支付宝</option>
+                      <option value="wechat">微信支付</option>
+                      <option value="unionpay">银联支付</option>
+                      <option value="bank">银行转账</option>
+                    </select>
+                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                      <option value="">状态</option>
+                      <option value="paid">已结算</option>
+                      <option value="pending">处理中</option>
+                      <option value="expired">已过期</option>
+                    </select>
                   </div>
                   
-                  <div className="overflow-x-auto">
+                  {/* 桌面端表格 */}
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -8750,6 +8840,76 @@ export default function WalletPage() {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* 手机端卡片 */}
+                  <div className="md:hidden space-y-3">
+                    {[
+                      { time: "14:23:45", merchantId: "M12345678", type: "直推", paymentMethod: "支付宝", paymentChannel: "支付宝直连", businessType: "收款业务", amount: "15,000.00", feeRate: "0.8%", commission: "120.00", status: "已结算" },
+                      { time: "13:56:12", merchantId: "M87654321", type: "间推", paymentMethod: "微信支付", paymentChannel: "微信商户号", businessType: "代付业务", amount: "8,500.00", feeRate: "0.6%", commission: "51.00", status: "已结算" },
+                      { time: "12:34:56", merchantId: "M11223344", type: "直推", paymentMethod: "银联支付", paymentChannel: "银联在线", businessType: "收款业务", amount: "25,000.00", feeRate: "0.8%", commission: "200.00", status: "处理中" },
+                      { time: "11:23:44", merchantId: "M99887766", type: "间推", paymentMethod: "银行转账", paymentChannel: "招商银行", businessType: "退款业务", amount: "3,200.00", feeRate: "0.5%", commission: "16.00", status: "已结算" },
+                      { time: "10:12:33", merchantId: "M55443322", type: "直推", paymentMethod: "支付宝", paymentChannel: "支付宝代扣", businessType: "收款业务", amount: "12,800.00", feeRate: "0.8%", commission: "102.40", status: "已结算" }
+                    ].map((record, index) => (
+                      <div key={index} className={`p-4 rounded-lg border ${cardStyle}`}>
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              record.type === "直推" 
+                                ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                : "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                            }`}>
+                              {record.type}
+                            </span>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              record.paymentMethod === "支付宝" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300" :
+                              record.paymentMethod === "微信支付" ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300" :
+                              record.paymentMethod === "银联支付" ? "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300" :
+                              "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300"
+                            }`}>
+                              {record.paymentMethod}
+                            </span>
+                            <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {record.time}
+                            </span>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            record.status === "已结算" 
+                              ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
+                              : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                          }`}>
+                            {record.status}
+                          </span>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>商户ID</span>
+                            <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.merchantId}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>支付通道</span>
+                            <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.paymentChannel}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>业务类型</span>
+                            <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.businessType}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>交易金额</span>
+                            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.amount} CNY</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金比例</span>
+                            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.feeRate}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金金额</span>
+                            <span className={`text-sm font-medium text-[#14C2A3]`}>{record.commission} CNY</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
                   {/* 加载更多按钮 */}
