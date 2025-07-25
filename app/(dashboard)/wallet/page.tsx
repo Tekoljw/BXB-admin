@@ -6927,20 +6927,20 @@ export default function WalletPage() {
                   </div>
 
                   {/* 筛选检索功能 */}
-                  <div className="mb-4 flex flex-wrap gap-3">
-                    <div className="flex items-center space-x-2">
-                      <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                  <div className="mb-4 flex items-center gap-2 lg:gap-3">
+                    <div className="flex items-center space-x-1 lg:space-x-2 flex-1 min-w-0">
+                      <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'} flex-shrink-0`} />
                       <input
                         type="text"
-                        placeholder="搜索用户ID或交易对"
-                        className={`px-3 py-2 text-sm rounded-lg border ${
+                        placeholder="搜索用户ID"
+                        className={`flex-1 px-2 py-2 lg:px-3 text-sm rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                         } focus:outline-none focus:border-[#14C2A3]`}
                       />
                     </div>
-                    <select className={`px-3 py-2 text-sm rounded-lg border ${
+                    <select className={`px-2 py-2 lg:px-3 text-sm rounded-lg border flex-shrink-0 ${
                       isDark 
                         ? "bg-gray-800 border-gray-700 text-white" 
                         : "bg-white border-gray-300 text-gray-900"
@@ -6949,7 +6949,7 @@ export default function WalletPage() {
                       <option value="direct">直推</option>
                       <option value="indirect">间推</option>
                     </select>
-                    <select className={`px-3 py-2 text-sm rounded-lg border ${
+                    <select className={`px-2 py-2 lg:px-3 text-sm rounded-lg border flex-shrink-0 ${
                       isDark 
                         ? "bg-gray-800 border-gray-700 text-white" 
                         : "bg-white border-gray-300 text-gray-900"
