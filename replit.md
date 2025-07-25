@@ -755,6 +755,12 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Renamed user labels in 邀请好友 section: "直推合约用户" → "直推用户", "间推合约用户" → "间推用户"
   - Renamed user labels in 合约佣金 section: "直推人数" → "直推合约用户", "间推人数" → "间推合约用户"
   - Maintained consistent responsive typography and layout across all commission account sections
+- January 30, 2025. Fixed commission account mobile button display and sizing issues:
+  - Removed all "hidden lg:block" restrictions from commission card buttons across all tabs (合约佣金, 理财佣金, U卡佣金, 担保佣金, 支付佣金)
+  - Optimized button sizing for mobile: px-2 py-1 (mobile) vs lg:px-4 lg:py-2 (desktop)
+  - Reduced button text size: text-xs (mobile) vs lg:text-sm (desktop)
+  - Standardized 支付佣金 tab card styling to match other commission tabs with responsive typography and icon scaling
+  - Applied consistent mobile adaptations: p-2 lg:p-6 padding, responsive text sizes, hidden icons on mobile
 - January 30, 2025. Redesigned commission account mobile layout to one-row-two-cards format:
   - Changed all commission top cards from grid-cols-4 to grid-cols-2 lg:grid-cols-4 for mobile two-column display
   - Enhanced mobile card styling: increased padding (p-3 lg:p-6), larger fonts (text-sm lg:text-lg titles, text-lg lg:text-3xl amounts)

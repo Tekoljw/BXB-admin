@@ -8418,16 +8418,16 @@ export default function WalletPage() {
                   </div>
 
                   {/* 间推支付用户 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <UserPlus className="h-6 w-6 text-purple-500" />
-                        <h3 className="text-lg font-semibold">间推支付商户</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <UserPlus className="h-4 w-4 lg:h-6 lg:w-6 text-purple-500 hidden lg:block" />
+                        <h3 className="text-[8px] xs:text-[10px] sm:text-xs md:text-sm lg:text-lg font-semibold">间推支付商户</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-purple-500`}>
+                    <div className={`text-sm sm:text-base md:text-lg lg:text-3xl font-bold text-purple-500`}>
                       345
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs sm:text-sm md:text-base lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         人
                       </span>
                     </div>
@@ -8449,16 +8449,16 @@ export default function WalletPage() {
                   </div>
 
                   {/* 支付订单数 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Receipt className="h-6 w-6 text-orange-500" />
-                        <h3 className="text-lg font-semibold">交易总金额</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Receipt className="h-4 w-4 lg:h-6 lg:w-6 text-orange-500 hidden lg:block" />
+                        <h3 className="text-[8px] xs:text-[10px] sm:text-xs md:text-sm lg:text-lg font-semibold">交易总金额</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-orange-500`}>
+                    <div className={`text-sm sm:text-base md:text-lg lg:text-3xl font-bold text-orange-500`}>
                       2,345,678
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs sm:text-sm md:text-base lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         CNY
                       </span>
                     </div>
@@ -8479,16 +8479,16 @@ export default function WalletPage() {
                   </div>
 
                   {/* 未结算佣金 */}
-                  <div className={`${cardStyle} rounded-lg p-6 transition-all duration-300 ease-out`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Wallet className="h-6 w-6 text-[#14C2A3]" />
-                        <h3 className="text-lg font-semibold">未结算佣金</h3>
+                  <div className={`${cardStyle} rounded-lg p-2 lg:p-6 transition-all duration-300 ease-out`}>
+                    <div className="flex items-center justify-between mb-2 lg:mb-4">
+                      <div className="flex items-center space-x-1 lg:space-x-2">
+                        <Wallet className="h-4 w-4 lg:h-6 lg:w-6 text-[#14C2A3] hidden lg:block" />
+                        <h3 className="text-[8px] xs:text-[10px] sm:text-xs md:text-sm lg:text-lg font-semibold">未结算佣金</h3>
                       </div>
                     </div>
-                    <div className={`text-3xl font-bold text-[#14C2A3]`}>
+                    <div className={`text-sm sm:text-base md:text-lg lg:text-3xl font-bold text-[#14C2A3]`}>
                       678.90
-                      <span className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-2`}>
+                      <span className={`text-xs sm:text-sm md:text-base lg:text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1 lg:ml-2 hidden lg:inline`}>
                         CNY
                       </span>
                     </div>
