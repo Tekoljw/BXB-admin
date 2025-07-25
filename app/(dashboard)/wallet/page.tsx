@@ -7374,52 +7374,52 @@ export default function WalletPage() {
                   </div>
 
                   {/* 搜索和筛选 */}
-                  <div className="flex flex-col md:flex-row gap-4 mb-6">
-                    <div className="flex-1">
+                  <div className="mb-4 flex items-center gap-2 lg:gap-3">
+                    <div className="flex items-center space-x-1 lg:space-x-2 flex-1 min-w-0">
+                      <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'} flex-shrink-0`} />
                       <input
                         type="text"
-                        placeholder="搜索用户ID或产品名称..."
-                        className={`w-full px-4 py-2 rounded-lg border ${
+                        placeholder="搜索用户ID"
+                        className={`flex-1 px-2 py-2 lg:px-3 text-sm rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
+                        } focus:outline-none focus:border-[#14C2A3]`}
                       />
                     </div>
-                    <div className="flex gap-2">
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">推荐类型</option>
-                        <option value="direct">直推</option>
-                        <option value="indirect">间推</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">产品类型</option>
-                        <option value="fixed">定期产品</option>
-                        <option value="flexible">活期产品</option>
-                        <option value="high-yield">高收益产品</option>
-                      </select>
-                      <select className={`px-4 py-2 rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">状态</option>
-                        <option value="paid">已发放</option>
-                        <option value="pending">处理中</option>
-                        <option value="expired">已过期</option>
-                      </select>
-                    </div>
+                    <select className={`px-2 py-2 lg:px-3 text-sm rounded-lg border flex-shrink-0 ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:border-[#14C2A3]`}>
+                      <option value="">推荐类型</option>
+                      <option value="direct">直推</option>
+                      <option value="indirect">间推</option>
+                    </select>
+                    <select className={`px-2 py-2 lg:px-3 text-sm rounded-lg border flex-shrink-0 ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:border-[#14C2A3]`}>
+                      <option value="">产品类型</option>
+                      <option value="fixed">定期</option>
+                      <option value="flexible">活期</option>
+                      <option value="high-yield">高收益</option>
+                    </select>
+                    <select className={`px-2 py-2 lg:px-3 text-sm rounded-lg border flex-shrink-0 ${
+                      isDark 
+                        ? "bg-gray-800 border-gray-700 text-white" 
+                        : "bg-white border-gray-300 text-gray-900"
+                    } focus:outline-none focus:border-[#14C2A3]`}>
+                      <option value="">状态</option>
+                      <option value="paid">已发放</option>
+                      <option value="pending">处理中</option>
+                      <option value="expired">已过期</option>
+                    </select>
                   </div>
                   
-                  <div className="overflow-x-auto">
+                  {/* 桌面端表格 */}
+                  <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -7482,6 +7482,64 @@ export default function WalletPage() {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* 手机端卡片 */}
+                  <div className="md:hidden space-y-3">
+                    {[
+                      { time: "14:23:45", userId: "U12345678", type: "直推", product: "USDT定期宝", amount: "10,000.00", feeRate: "0.85%", commission: "85.00", status: "已发放" },
+                      { time: "13:56:12", userId: "U87654321", type: "间推", product: "BTC增益宝", amount: "5,000.00", feeRate: "0.85%", commission: "42.50", status: "已发放" },
+                      { time: "12:34:56", userId: "U11223344", type: "直推", product: "ETH流动宝", amount: "8,000.00", feeRate: "0.85%", commission: "68.00", status: "处理中" },
+                      { time: "11:12:33", userId: "U99887766", type: "间推", product: "SOL理财宝", amount: "3,000.00", feeRate: "0.70%", commission: "21.00", status: "已发放" },
+                      { time: "10:45:21", userId: "U55443322", type: "直推", product: "ADA增益宝", amount: "6,000.00", feeRate: "0.85%", commission: "51.00", status: "已发放" }
+                    ].map((record, index) => (
+                      <div key={index} className={`p-4 rounded-lg border ${cardStyle}`}>
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              record.type === "直推" 
+                                ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                                : "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                            }`}>
+                              {record.type}
+                            </span>
+                            <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {record.time}
+                            </span>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            record.status === "已发放" 
+                              ? "bg-green-100 text-[#14C2A3] dark:bg-green-900 dark:text-[#14C2A3]"
+                              : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                          }`}>
+                            {record.status}
+                          </span>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>用户ID</span>
+                            <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.userId}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>产品名称</span>
+                            <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{record.product}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>投资金额</span>
+                            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.amount} USDT</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金比例</span>
+                            <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{record.feeRate}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>佣金金额</span>
+                            <span className={`text-sm font-medium text-[#14C2A3]`}>{record.commission} USDT</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
                   {/* 加载更多按钮 */}
