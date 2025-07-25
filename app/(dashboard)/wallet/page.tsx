@@ -6787,7 +6787,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({ type: 'direct', isOpen: true })}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -6818,7 +6818,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({ type: 'indirect', isOpen: true })}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -6849,7 +6849,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({ type: 'active', isOpen: true })}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -6880,7 +6880,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -7234,7 +7234,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7265,7 +7265,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7296,7 +7296,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'active', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7327,7 +7327,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -7614,7 +7614,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7645,7 +7645,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7676,7 +7676,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'active', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -7707,7 +7707,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -8010,7 +8010,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -8041,7 +8041,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -8071,7 +8071,7 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-black bg-transparent hover:bg-black text-black hover:text-white" 
                             : "border-black bg-transparent hover:bg-black text-black hover:text-white"
@@ -8102,7 +8102,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -8406,7 +8406,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'direct', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
                             : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
@@ -8437,7 +8437,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowUserListModal({type: 'indirect', isOpen: true})}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
                             : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
@@ -8467,7 +8467,7 @@ export default function WalletPage() {
                     </div>
                     <div className="mt-3">
                       <button
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all border ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                           isDark 
                             ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white" 
                             : "border-gray-300 bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900"
@@ -8498,7 +8498,7 @@ export default function WalletPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setShowSettlementModal(true)}
-                        className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`w-full px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all ${
                           isDark 
                             ? "bg-black hover:bg-gray-800 text-white" 
                             : "bg-black hover:bg-gray-800 text-white"
@@ -22015,7 +22015,7 @@ export default function WalletPage() {
               <div className="flex space-x-3 mt-6">
                 <button
                   onClick={() => setShowSettlementModal(false)}
-                  className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all border ${
+                  className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
                     isDark 
                       ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300" 
                       : "border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700"
@@ -22029,7 +22029,7 @@ export default function WalletPage() {
                     alert('结算成功！资金已转入现货账户')
                     setShowSettlementModal(false)
                   }}
-                  className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`flex-1 px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all ${
                     isDark 
                       ? "bg-[#14C2A3] hover:bg-[#0ea888] text-white" 
                       : "bg-[#14C2A3] hover:bg-[#0ea888] text-white"
