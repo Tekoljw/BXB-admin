@@ -6927,38 +6927,78 @@ export default function WalletPage() {
                   </div>
 
                   {/* 筛选检索功能 */}
-                  <div className="mb-4 flex items-center gap-2 lg:gap-3">
-                    <div className="flex items-center space-x-1 lg:space-x-2 flex-1 min-w-0">
-                      <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'} flex-shrink-0`} />
-                      <input
-                        type="text"
-                        placeholder="搜索用户ID"
-                        className={`flex-1 px-2 py-2 lg:px-3 text-sm rounded-lg border ${
+                  <div className="mb-4">
+                    {/* 手机端 - 垂直布局 */}
+                    <div className="md:hidden space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                        <input
+                          type="text"
+                          placeholder="搜索用户ID"
+                          className={`flex-1 px-3 py-2 text-sm rounded-lg border ${
+                            isDark 
+                              ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:border-[#14C2A3]`}
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
                           isDark 
-                            ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
-                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                        } focus:outline-none focus:border-[#14C2A3]`}
-                      />
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:border-[#14C2A3]`}>
+                          <option value="">全部类型</option>
+                          <option value="direct">直推</option>
+                          <option value="indirect">间推</option>
+                        </select>
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:border-[#14C2A3]`}>
+                          <option value="">全部状态</option>
+                          <option value="paid">已发放</option>
+                          <option value="processing">处理中</option>
+                          <option value="pending">待发放</option>
+                        </select>
+                      </div>
                     </div>
-                    <select className={`px-2 py-2 lg:px-3 text-sm rounded-lg border flex-shrink-0 ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:border-[#14C2A3]`}>
-                      <option value="">全部类型</option>
-                      <option value="direct">直推</option>
-                      <option value="indirect">间推</option>
-                    </select>
-                    <select className={`px-2 py-2 lg:px-3 text-sm rounded-lg border flex-shrink-0 ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:border-[#14C2A3]`}>
-                      <option value="">全部状态</option>
-                      <option value="paid">已发放</option>
-                      <option value="processing">处理中</option>
-                      <option value="pending">待发放</option>
-                    </select>
+                    
+                    {/* 桌面端 - 水平布局 */}
+                    <div className="hidden md:flex items-center gap-3">
+                      <div className="flex items-center space-x-2 flex-1 min-w-0">
+                        <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'} flex-shrink-0`} />
+                        <input
+                          type="text"
+                          placeholder="搜索用户ID"
+                          className={`flex-1 px-3 py-2 text-sm rounded-lg border ${
+                            isDark 
+                              ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:border-[#14C2A3]`}
+                        />
+                      </div>
+                      <select className={`px-3 py-2 text-sm rounded-lg border flex-shrink-0 ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:border-[#14C2A3]`}>
+                        <option value="">全部类型</option>
+                        <option value="direct">直推</option>
+                        <option value="indirect">间推</option>
+                      </select>
+                      <select className={`px-3 py-2 text-sm rounded-lg border flex-shrink-0 ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:border-[#14C2A3]`}>
+                        <option value="">全部状态</option>
+                        <option value="paid">已发放</option>
+                        <option value="processing">处理中</option>
+                        <option value="pending">待发放</option>
+                      </select>
+                    </div>
                   </div>
                   
                   {/* 桌面端表格 */}
@@ -7374,48 +7414,98 @@ export default function WalletPage() {
                   </div>
 
                   {/* 搜索和筛选 */}
-                  <div className="mb-4 flex items-center gap-2 lg:gap-3">
-                    <div className="flex items-center space-x-1 lg:space-x-2 flex-1 min-w-0">
-                      <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'} flex-shrink-0`} />
-                      <input
-                        type="text"
-                        placeholder="搜索用户ID"
-                        className={`flex-1 px-2 py-2 lg:px-3 text-sm rounded-lg border ${
+                  <div className="mb-4">
+                    {/* 手机端 - 垂直布局 */}
+                    <div className="md:hidden space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                        <input
+                          type="text"
+                          placeholder="搜索用户ID"
+                          className={`flex-1 px-3 py-2 text-sm rounded-lg border ${
+                            isDark 
+                              ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:border-[#14C2A3]`}
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
                           isDark 
-                            ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
-                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                        } focus:outline-none focus:border-[#14C2A3]`}
-                      />
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:border-[#14C2A3]`}>
+                          <option value="">推荐类型</option>
+                          <option value="direct">直推</option>
+                          <option value="indirect">间推</option>
+                        </select>
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:border-[#14C2A3]`}>
+                          <option value="">产品类型</option>
+                          <option value="fixed">定期</option>
+                          <option value="flexible">活期</option>
+                          <option value="high-yield">高收益</option>
+                        </select>
+                      </div>
+                      <select className={`w-full px-3 py-2 text-sm rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:border-[#14C2A3]`}>
+                        <option value="">状态</option>
+                        <option value="paid">已发放</option>
+                        <option value="pending">处理中</option>
+                        <option value="expired">已过期</option>
+                      </select>
                     </div>
-                    <select className={`px-2 py-2 lg:px-3 text-sm rounded-lg border flex-shrink-0 ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:border-[#14C2A3]`}>
-                      <option value="">推荐类型</option>
-                      <option value="direct">直推</option>
-                      <option value="indirect">间推</option>
-                    </select>
-                    <select className={`px-2 py-2 lg:px-3 text-sm rounded-lg border flex-shrink-0 ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:border-[#14C2A3]`}>
-                      <option value="">产品类型</option>
-                      <option value="fixed">定期</option>
-                      <option value="flexible">活期</option>
-                      <option value="high-yield">高收益</option>
-                    </select>
-                    <select className={`px-2 py-2 lg:px-3 text-sm rounded-lg border flex-shrink-0 ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:border-[#14C2A3]`}>
-                      <option value="">状态</option>
-                      <option value="paid">已发放</option>
-                      <option value="pending">处理中</option>
-                      <option value="expired">已过期</option>
-                    </select>
+                    
+                    {/* 桌面端 - 水平布局 */}
+                    <div className="hidden md:flex items-center gap-3">
+                      <div className="flex items-center space-x-2 flex-1 min-w-0">
+                        <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'} flex-shrink-0`} />
+                        <input
+                          type="text"
+                          placeholder="搜索用户ID"
+                          className={`flex-1 px-3 py-2 text-sm rounded-lg border ${
+                            isDark 
+                              ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:border-[#14C2A3]`}
+                        />
+                      </div>
+                      <select className={`px-3 py-2 text-sm rounded-lg border flex-shrink-0 ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:border-[#14C2A3]`}>
+                        <option value="">推荐类型</option>
+                        <option value="direct">直推</option>
+                        <option value="indirect">间推</option>
+                      </select>
+                      <select className={`px-3 py-2 text-sm rounded-lg border flex-shrink-0 ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:border-[#14C2A3]`}>
+                        <option value="">产品类型</option>
+                        <option value="fixed">定期</option>
+                        <option value="flexible">活期</option>
+                        <option value="high-yield">高收益</option>
+                      </select>
+                      <select className={`px-3 py-2 text-sm rounded-lg border flex-shrink-0 ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:border-[#14C2A3]`}>
+                        <option value="">状态</option>
+                        <option value="paid">已发放</option>
+                        <option value="pending">处理中</option>
+                        <option value="expired">已过期</option>
+                      </select>
+                    </div>
                   </div>
                   
                   {/* 桌面端表格 */}
@@ -7812,46 +7902,92 @@ export default function WalletPage() {
                   </div>
 
                   {/* 搜索和筛选 */}
-                  <div className="flex gap-2 mb-6">
-                    <div className="flex-1">
+                  <div className="mb-6">
+                    {/* 手机端 - 垂直布局 */}
+                    <div className="md:hidden space-y-3">
                       <input
                         type="text"
                         placeholder="搜索用户ID"
-                        className={`w-full px-4 py-2 rounded-lg border ${
+                        className={`w-full px-3 py-2 text-sm rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                         } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
                       />
+                      <div className="grid grid-cols-2 gap-2">
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                          <option value="">推荐类型</option>
+                          <option value="direct">直推</option>
+                          <option value="indirect">间推</option>
+                        </select>
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                          <option value="">交易类型</option>
+                          <option value="card">开卡</option>
+                          <option value="recharge">充值</option>
+                        </select>
+                      </div>
+                      <select className={`w-full px-3 py-2 text-sm rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">状态</option>
+                        <option value="paid">已发放</option>
+                        <option value="pending">处理中</option>
+                        <option value="expired">已过期</option>
+                      </select>
                     </div>
-                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                      <option value="">推荐类型</option>
-                      <option value="direct">直推</option>
-                      <option value="indirect">间推</option>
-                    </select>
-                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                      <option value="">交易类型</option>
-                      <option value="card">开卡</option>
-                      <option value="recharge">充值</option>
-                    </select>
-                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                      <option value="">状态</option>
-                      <option value="paid">已发放</option>
-                      <option value="pending">处理中</option>
-                      <option value="expired">已过期</option>
-                    </select>
+                    
+                    {/* 桌面端 - 水平布局 */}
+                    <div className="hidden md:flex gap-3">
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          placeholder="搜索用户ID"
+                          className={`w-full px-4 py-2 rounded-lg border ${
+                            isDark 
+                              ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
+                        />
+                      </div>
+                      <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">推荐类型</option>
+                        <option value="direct">直推</option>
+                        <option value="indirect">间推</option>
+                      </select>
+                      <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">交易类型</option>
+                        <option value="card">开卡</option>
+                        <option value="recharge">充值</option>
+                      </select>
+                      <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">状态</option>
+                        <option value="paid">已发放</option>
+                        <option value="pending">处理中</option>
+                        <option value="expired">已过期</option>
+                      </select>
+                    </div>
                   </div>
                   
                   {/* 桌面端表格 */}
@@ -8263,46 +8399,92 @@ export default function WalletPage() {
                   </div>
 
                   {/* 搜索和筛选 */}
-                  <div className="flex gap-2 mb-6">
-                    <div className="flex-1">
+                  <div className="mb-6">
+                    {/* 手机端 - 垂直布局 */}
+                    <div className="md:hidden space-y-3">
                       <input
                         type="text"
                         placeholder="搜索用户ID"
-                        className={`w-full px-4 py-2 rounded-lg border ${
+                        className={`w-full px-3 py-2 text-sm rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                         } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
                       />
+                      <div className="grid grid-cols-2 gap-2">
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                          <option value="">推荐类型</option>
+                          <option value="direct">直推</option>
+                          <option value="indirect">间推</option>
+                        </select>
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                          <option value="">交易类型</option>
+                          <option value="guarantee">担保交易</option>
+                          <option value="escrow">第三方托管</option>
+                        </select>
+                      </div>
+                      <select className={`w-full px-3 py-2 text-sm rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">状态</option>
+                        <option value="paid">已发放</option>
+                        <option value="pending">处理中</option>
+                        <option value="expired">已过期</option>
+                      </select>
                     </div>
-                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                      <option value="">推荐类型</option>
-                      <option value="direct">直推</option>
-                      <option value="indirect">间推</option>
-                    </select>
-                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                      <option value="">交易类型</option>
-                      <option value="guarantee">担保交易</option>
-                      <option value="escrow">第三方托管</option>
-                    </select>
-                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                      <option value="">状态</option>
-                      <option value="paid">已发放</option>
-                      <option value="pending">处理中</option>
-                      <option value="expired">已过期</option>
-                    </select>
+                    
+                    {/* 桌面端 - 水平布局 */}
+                    <div className="hidden md:flex gap-3">
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          placeholder="搜索用户ID"
+                          className={`w-full px-4 py-2 rounded-lg border ${
+                            isDark 
+                              ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
+                        />
+                      </div>
+                      <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">推荐类型</option>
+                        <option value="direct">直推</option>
+                        <option value="indirect">间推</option>
+                      </select>
+                      <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">交易类型</option>
+                        <option value="guarantee">担保交易</option>
+                        <option value="escrow">第三方托管</option>
+                      </select>
+                      <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">状态</option>
+                        <option value="paid">已发放</option>
+                        <option value="pending">处理中</option>
+                        <option value="expired">已过期</option>
+                      </select>
+                    </div>
                   </div>
 
                   {/* 桌面端表格 */}
@@ -8717,48 +8899,96 @@ export default function WalletPage() {
                   </div>
 
                   {/* 搜索和筛选 */}
-                  <div className="flex gap-2 mb-6">
-                    <div className="flex-1">
+                  <div className="mb-6">
+                    {/* 手机端 - 垂直布局 */}
+                    <div className="md:hidden space-y-3">
                       <input
                         type="text"
                         placeholder="搜索商户ID"
-                        className={`w-full px-4 py-2 rounded-lg border ${
+                        className={`w-full px-3 py-2 text-sm rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                         } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
                       />
+                      <div className="grid grid-cols-2 gap-2">
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                          <option value="">推荐类型</option>
+                          <option value="direct">直推</option>
+                          <option value="indirect">间推</option>
+                        </select>
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                          <option value="">支付方式</option>
+                          <option value="alipay">支付宝</option>
+                          <option value="wechat">微信支付</option>
+                          <option value="unionpay">银联支付</option>
+                          <option value="bank">银行转账</option>
+                        </select>
+                      </div>
+                      <select className={`w-full px-3 py-2 text-sm rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">状态</option>
+                        <option value="paid">已结算</option>
+                        <option value="pending">处理中</option>
+                        <option value="expired">已过期</option>
+                      </select>
                     </div>
-                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                      <option value="">推荐类型</option>
-                      <option value="direct">直推</option>
-                      <option value="indirect">间推</option>
-                    </select>
-                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                      <option value="">支付方式</option>
-                      <option value="alipay">支付宝</option>
-                      <option value="wechat">微信支付</option>
-                      <option value="unionpay">银联支付</option>
-                      <option value="bank">银行转账</option>
-                    </select>
-                    <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
-                      isDark 
-                        ? "bg-gray-800 border-gray-700 text-white" 
-                        : "bg-white border-gray-300 text-gray-900"
-                    } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                      <option value="">状态</option>
-                      <option value="paid">已结算</option>
-                      <option value="pending">处理中</option>
-                      <option value="expired">已过期</option>
-                    </select>
+                    
+                    {/* 桌面端 - 水平布局 */}
+                    <div className="hidden md:flex gap-3">
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          placeholder="搜索商户ID"
+                          className={`w-full px-4 py-2 rounded-lg border ${
+                            isDark 
+                              ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
+                        />
+                      </div>
+                      <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">推荐类型</option>
+                        <option value="direct">直推</option>
+                        <option value="indirect">间推</option>
+                      </select>
+                      <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">支付方式</option>
+                        <option value="alipay">支付宝</option>
+                        <option value="wechat">微信支付</option>
+                        <option value="unionpay">银联支付</option>
+                        <option value="bank">银行转账</option>
+                      </select>
+                      <select className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                        <option value="">状态</option>
+                        <option value="paid">已结算</option>
+                        <option value="pending">处理中</option>
+                        <option value="expired">已过期</option>
+                      </select>
+                    </div>
                   </div>
                   
                   {/* 桌面端表格 */}
