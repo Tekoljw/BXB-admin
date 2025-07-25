@@ -6930,8 +6930,7 @@ export default function WalletPage() {
                   <div className="mb-4">
                     {/* 手机端 - 垂直布局 */}
                     <div className="md:hidden space-y-3">
-                      <div className="flex items-center space-x-2">
-                        <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <div className="flex gap-2">
                         <input
                           type="text"
                           placeholder="搜索用户ID"
@@ -6941,17 +6940,6 @@ export default function WalletPage() {
                               : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                           } focus:outline-none focus:border-[#14C2A3]`}
                         />
-                      </div>
-                      <div className="grid grid-cols-2 gap-2">
-                        <select className={`px-3 py-2 text-sm rounded-lg border ${
-                          isDark 
-                            ? "bg-gray-800 border-gray-700 text-white" 
-                            : "bg-white border-gray-300 text-gray-900"
-                        } focus:outline-none focus:border-[#14C2A3]`}>
-                          <option value="">全部类型</option>
-                          <option value="direct">直推</option>
-                          <option value="indirect">间推</option>
-                        </select>
                         <select className={`px-3 py-2 text-sm rounded-lg border ${
                           isDark 
                             ? "bg-gray-800 border-gray-700 text-white" 
@@ -6963,6 +6951,15 @@ export default function WalletPage() {
                           <option value="pending">待发放</option>
                         </select>
                       </div>
+                      <select className={`w-full px-3 py-2 text-sm rounded-lg border ${
+                        isDark 
+                          ? "bg-gray-800 border-gray-700 text-white" 
+                          : "bg-white border-gray-300 text-gray-900"
+                      } focus:outline-none focus:border-[#14C2A3]`}>
+                        <option value="">全部类型</option>
+                        <option value="direct">直推</option>
+                        <option value="indirect">间推</option>
+                      </select>
                     </div>
                     
                     {/* 桌面端 - 水平布局 */}
@@ -7417,8 +7414,7 @@ export default function WalletPage() {
                   <div className="mb-4">
                     {/* 手机端 - 垂直布局 */}
                     <div className="md:hidden space-y-3">
-                      <div className="flex items-center space-x-2">
-                        <Search className={`h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                      <div className="flex gap-2">
                         <input
                           type="text"
                           placeholder="搜索用户ID"
@@ -7428,6 +7424,16 @@ export default function WalletPage() {
                               : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                           } focus:outline-none focus:border-[#14C2A3]`}
                         />
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
+                          isDark 
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:border-[#14C2A3]`}>
+                          <option value="">状态</option>
+                          <option value="paid">已发放</option>
+                          <option value="pending">处理中</option>
+                          <option value="expired">已过期</option>
+                        </select>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <select className={`px-3 py-2 text-sm rounded-lg border ${
@@ -7450,16 +7456,6 @@ export default function WalletPage() {
                           <option value="high-yield">高收益</option>
                         </select>
                       </div>
-                      <select className={`w-full px-3 py-2 text-sm rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:border-[#14C2A3]`}>
-                        <option value="">状态</option>
-                        <option value="paid">已发放</option>
-                        <option value="pending">处理中</option>
-                        <option value="expired">已过期</option>
-                      </select>
                     </div>
                     
                     {/* 桌面端 - 水平布局 */}
@@ -7905,15 +7901,27 @@ export default function WalletPage() {
                   <div className="mb-6">
                     {/* 手机端 - 垂直布局 */}
                     <div className="md:hidden space-y-3">
-                      <input
-                        type="text"
-                        placeholder="搜索用户ID"
-                        className={`w-full px-3 py-2 text-sm rounded-lg border ${
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="搜索用户ID"
+                          className={`flex-1 px-3 py-2 text-sm rounded-lg border ${
+                            isDark 
+                              ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
+                        />
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
                           isDark 
-                            ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
-                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
-                      />
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                          <option value="">状态</option>
+                          <option value="paid">已发放</option>
+                          <option value="pending">处理中</option>
+                          <option value="expired">已过期</option>
+                        </select>
+                      </div>
                       <div className="grid grid-cols-2 gap-2">
                         <select className={`px-3 py-2 text-sm rounded-lg border ${
                           isDark 
@@ -7934,16 +7942,6 @@ export default function WalletPage() {
                           <option value="recharge">充值</option>
                         </select>
                       </div>
-                      <select className={`w-full px-3 py-2 text-sm rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">状态</option>
-                        <option value="paid">已发放</option>
-                        <option value="pending">处理中</option>
-                        <option value="expired">已过期</option>
-                      </select>
                     </div>
                     
                     {/* 桌面端 - 水平布局 */}
@@ -8402,15 +8400,27 @@ export default function WalletPage() {
                   <div className="mb-6">
                     {/* 手机端 - 垂直布局 */}
                     <div className="md:hidden space-y-3">
-                      <input
-                        type="text"
-                        placeholder="搜索用户ID"
-                        className={`w-full px-3 py-2 text-sm rounded-lg border ${
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="搜索用户ID"
+                          className={`flex-1 px-3 py-2 text-sm rounded-lg border ${
+                            isDark 
+                              ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
+                        />
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
                           isDark 
-                            ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
-                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
-                      />
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                          <option value="">状态</option>
+                          <option value="paid">已发放</option>
+                          <option value="pending">处理中</option>
+                          <option value="expired">已过期</option>
+                        </select>
+                      </div>
                       <div className="grid grid-cols-2 gap-2">
                         <select className={`px-3 py-2 text-sm rounded-lg border ${
                           isDark 
@@ -8431,16 +8441,6 @@ export default function WalletPage() {
                           <option value="escrow">第三方托管</option>
                         </select>
                       </div>
-                      <select className={`w-full px-3 py-2 text-sm rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">状态</option>
-                        <option value="paid">已发放</option>
-                        <option value="pending">处理中</option>
-                        <option value="expired">已过期</option>
-                      </select>
                     </div>
                     
                     {/* 桌面端 - 水平布局 */}
@@ -8902,15 +8902,27 @@ export default function WalletPage() {
                   <div className="mb-6">
                     {/* 手机端 - 垂直布局 */}
                     <div className="md:hidden space-y-3">
-                      <input
-                        type="text"
-                        placeholder="搜索商户ID"
-                        className={`w-full px-3 py-2 text-sm rounded-lg border ${
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="搜索商户ID"
+                          className={`flex-1 px-3 py-2 text-sm rounded-lg border ${
+                            isDark 
+                              ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
+                              : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                          } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
+                        />
+                        <select className={`px-3 py-2 text-sm rounded-lg border ${
                           isDark 
-                            ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400" 
-                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3] focus:border-transparent`}
-                      />
+                            ? "bg-gray-800 border-gray-700 text-white" 
+                            : "bg-white border-gray-300 text-gray-900"
+                        } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
+                          <option value="">状态</option>
+                          <option value="paid">已结算</option>
+                          <option value="pending">处理中</option>
+                          <option value="expired">已过期</option>
+                        </select>
+                      </div>
                       <div className="grid grid-cols-2 gap-2">
                         <select className={`px-3 py-2 text-sm rounded-lg border ${
                           isDark 
@@ -8933,16 +8945,6 @@ export default function WalletPage() {
                           <option value="bank">银行转账</option>
                         </select>
                       </div>
-                      <select className={`w-full px-3 py-2 text-sm rounded-lg border ${
-                        isDark 
-                          ? "bg-gray-800 border-gray-700 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
-                      } focus:outline-none focus:ring-2 focus:ring-[#14C2A3]`}>
-                        <option value="">状态</option>
-                        <option value="paid">已结算</option>
-                        <option value="pending">处理中</option>
-                        <option value="expired">已过期</option>
-                      </select>
                     </div>
                     
                     {/* 桌面端 - 水平布局 */}
