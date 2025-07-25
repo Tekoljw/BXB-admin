@@ -4811,7 +4811,7 @@ export default function WalletPage() {
                 <div className="flex space-x-2">
                   <button
                     onClick={() => setShowApiDocsModal(true)}
-                    className={`flex-1 inline-flex items-center justify-center space-x-1 px-2 py-1.5 rounded-md text-xs lg:text-sm font-medium transition-all border-2 ${
+                    className={`flex-1 inline-flex items-center justify-center space-x-1 px-2 py-1.5 rounded-md text-xs text-xs lg:text-sm font-medium transition-all border-2 ${
                       isDark 
                         ? 'bg-transparent border-white text-white hover:bg-gray-800' 
                         : 'bg-white border-black text-black hover:bg-gray-50'
@@ -4952,7 +4952,7 @@ export default function WalletPage() {
                   </span>
                   <button
                     onClick={() => setShowApiDocsModal(true)}
-                    className={`inline-flex items-center space-x-2 px-2 py-1 lg:px-4 lg:py-2 rounded-md text-xs lg:text-sm font-medium transition-all border-2 ${
+                    className={`inline-flex items-center space-x-2 px-2 py-1 lg:px-4 lg:py-2 rounded-md text-sm text-xs lg:text-sm font-medium transition-all border-2 ${
                       isDark 
                         ? 'bg-transparent border-white text-white hover:bg-gray-800' 
                         : 'bg-white border-black text-black hover:bg-gray-50'
@@ -5864,7 +5864,7 @@ export default function WalletPage() {
                           <button
                             key={network}
                             onClick={() => setSelectedNetwork(network)}
-                            className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all border ${
+                            className={`px-2 py-1 lg:px-4 lg:py-2 rounded-lg text-sm text-xs lg:text-sm font-medium transition-all border ${
                               selectedNetwork === network
                                 ? isDark 
                                   ? "bg-white text-black border-white"
