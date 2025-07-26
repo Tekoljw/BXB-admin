@@ -148,16 +148,16 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   // 移动端布局
   if (isMobile) {
     return (
-      <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900" style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
         {/* 主要内容区域 */}
-        <div className="flex-1 overflow-auto pb-20">
+        <div className="flex-1 overflow-auto pb-20" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
           {renderCurrentPage()}
         </div>
         
         {/* 底部导航栏 */}
         {/* 隐藏底部菜单当手机聊天界面打开时 */}
         {!showMobileChat && (
-          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50">
+          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50" style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
             <div className="flex items-center justify-around py-2">
               {mobileNavItems.map((item) => {
                 const Icon = item.icon

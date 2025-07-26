@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="font-apple overflow-x-hidden">
+    <html lang="en" suppressHydrationWarning className="overflow-x-hidden">
+      <body className="font-apple overflow-x-hidden" style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
         <ThemeProvider>
           <ChatProvider>
             {children}
