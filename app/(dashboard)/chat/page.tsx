@@ -1988,7 +1988,19 @@ export default function ChatPage() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        {isGroupChat ? (
+                        {/* Voice Call Button */}
+                        <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                          isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                        }`}>
+                          <Phone className="w-5 h-5" />
+                        </button>
+                        {/* Video Call Button */}
+                        <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                          isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                        }`}>
+                          <Video className="w-5 h-5" />
+                        </button>
+                        {isGroupChat && (
                           <button 
                             onClick={handleOpenGroupInfo}
                             className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
@@ -1997,21 +2009,6 @@ export default function ChatPage() {
                           >
                             <MoreHorizontal className="w-5 h-5" />
                           </button>
-                        ) : (
-                          <>
-                            {/* Voice Call Button */}
-                            <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-                            }`}>
-                              <Phone className="w-5 h-5" />
-                            </button>
-                            {/* Video Call Button */}
-                            <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-                            }`}>
-                              <Video className="w-5 h-5" />
-                            </button>
-                          </>
                         )}
                       </div>
                     </>
@@ -3502,36 +3499,25 @@ export default function ChatPage() {
             
             {/* Voice and Video Call Buttons for Mobile */}
             <div className="flex items-center space-x-2">
-              {(() => {
-                const isGroupChat = selectedContact?.startsWith("group-")
-                
-                if (isGroupChat) {
-                  return (
-                    <button className={`p-2 rounded-lg transition-colors ${
-                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
-                    }`}>
-                      <MoreHorizontal className="w-5 h-5" />
-                    </button>
-                  )
-                } else {
-                  return (
-                    <>
-                      {/* Voice Call Button */}
-                      <button className={`p-2 rounded-lg transition-colors ${
-                        isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
-                      }`}>
-                        <Phone className="w-5 h-5" />
-                      </button>
-                      {/* Video Call Button */}
-                      <button className={`p-2 rounded-lg transition-colors ${
-                        isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
-                      }`}>
-                        <Video className="w-5 h-5" />
-                      </button>
-                    </>
-                  )
-                }
-              })()}
+              {/* Voice Call Button */}
+              <button className={`p-2 rounded-lg transition-colors ${
+                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+              }`}>
+                <Phone className="w-5 h-5" />
+              </button>
+              {/* Video Call Button */}
+              <button className={`p-2 rounded-lg transition-colors ${
+                isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+              }`}>
+                <Video className="w-5 h-5" />
+              </button>
+              {selectedContact?.startsWith("group-") && (
+                <button className={`p-2 rounded-lg transition-colors ${
+                  isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                }`}>
+                  <MoreHorizontal className="w-5 h-5" />
+                </button>
+              )}
             </div>
           </div>
 
