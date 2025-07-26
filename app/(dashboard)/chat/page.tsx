@@ -132,6 +132,10 @@ export default function ChatPage() {
   
   // Mobile profile menu state
   const [showMobileProfileMenu, setShowMobileProfileMenu] = useState(false)
+  
+  // Mobile notification state
+  const [showMobileNotificationDropdown, setShowMobileNotificationDropdown] = useState(false)
+  const [notificationFilter, setNotificationFilter] = useState<"all" | "trading" | "system" | "social">("all")
 
   // Theme and language toggle handlers
   const handleToggleTheme = () => {
@@ -853,7 +857,10 @@ export default function ChatPage() {
               </button>
               
               {/* Notifications */}
-              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"} relative`}>
+              <button 
+                onClick={() => setShowMobileNotificationDropdown(true)}
+                className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"} relative`}
+              >
                 <Bell className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-700"}`} />
                 {/* Notification badge */}
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
@@ -3543,6 +3550,156 @@ export default function ChatPage() {
                 发送
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Notification Dropdown - Full screen overlay */}
+      {showMobileNotificationDropdown && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-[120] flex items-center justify-center p-4"
+          onClick={() => setShowMobileNotificationDropdown(false)}
+        >
+          <div 
+            className={`w-full max-w-md max-h-[80vh] rounded-lg shadow-xl overflow-hidden ${
+              isDark ? "bg-[#1a1d29] border border-[#252842]" : "bg-white border border-gray-200"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className={`p-4 border-b ${isDark ? "border-[#252842]" : "border-gray-200"}`}>
+              <div className="flex items-center justify-between">
+                <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                  通知中心
+                </h3>
+                <div className="flex items-center space-x-2">
+                  <button 
+                    onClick={() => router.push('/notifications')}
+                    className="text-sm text-blue-500 hover:text-blue-600"
+                  >
+                    查看全部
+                  </button>
+                  <button 
+                    onClick={() => setShowMobileNotificationDropdown(false)}
+                    className={`p-1 rounded-lg ${
+                      isDark ? "hover:bg-[#252842] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                    }`}
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+              
+              {/* Filter Tabs */}
+              <div className="flex mt-3 space-x-1">
+                {[
+                  { id: 'all', label: '全部' },
+                  { id: 'trading', label: '交易' },
+                  { id: 'system', label: '系统' },
+                  { id: 'social', label: '社交' }
+                ].map((filter) => (
+                  <button
+                    key={filter.id}
+                    onClick={() => setNotificationFilter(filter.id as any)}
+                    className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                      notificationFilter === filter.id
+                        ? isDark
+                          ? "bg-white text-black"
+                          : "bg-black text-white"
+                        : isDark
+                        ? "text-gray-400 hover:text-white hover:bg-[#252842]"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Notifications List */}
+            <div className="overflow-y-auto max-h-96">
+              {/* Price Alert */}
+              <div className={`p-4 border-b ${isDark ? "border-[#252842]" : "border-gray-100"} hover:bg-opacity-50 ${
+                isDark ? "hover:bg-[#252842]" : "hover:bg-gray-50"
+              }`}>
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Bell className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                      价格提醒
+                    </p>
+                    <p className={`text-sm mt-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                      BTC 已达到您设置的目标价格 $67,500
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">2分钟前</p>
+                  </div>
+                  <div className="w-2 h-2 bg-red-500 rounded-full flex-shrink-0 mt-2"></div>
+                </div>
+              </div>
+
+              {/* Trading Update */}
+              <div className={`p-4 border-b ${isDark ? "border-[#252842]" : "border-gray-100"} hover:bg-opacity-50 ${
+                isDark ? "hover:bg-[#252842]" : "hover:bg-gray-50"
+              }`}>
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <ArrowRightLeft className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                      交易完成
+                    </p>
+                    <p className={`text-sm mt-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                      您的 ETH/USDT 订单已成功执行
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">5分钟前</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* System Notice */}
+              <div className={`p-4 border-b ${isDark ? "border-[#252842]" : "border-gray-100"} hover:bg-opacity-50 ${
+                isDark ? "hover:bg-[#252842]" : "hover:bg-gray-50"
+              }`}>
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Settings className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                      系统更新
+                    </p>
+                    <p className={`text-sm mt-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                      平台将于今晚 2:00-4:00 进行系统维护
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">1小时前</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Social Activity */}
+              <div className={`p-4 hover:bg-opacity-50 ${
+                isDark ? "hover:bg-[#252842]" : "hover:bg-gray-50"
+              }`}>
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Users className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                      新的关注者
+                    </p>
+                    <p className={`text-sm mt-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                      用户 @trader123 开始关注您
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">3小时前</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
