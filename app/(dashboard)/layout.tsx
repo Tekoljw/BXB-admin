@@ -9,5 +9,5 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     document.cookie = "isLoggedIn=true; path=/"
   }, [])
 
-  return <InstantNavigation>{children}</InstantNavigation>
+  return <InstantNavigation />
 }

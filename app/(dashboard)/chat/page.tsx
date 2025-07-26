@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { useChat } from "@/contexts/chat-context"
@@ -85,7 +84,6 @@ interface Message {
 export default function ChatPage() {
   const { theme } = useTheme()
   const { showMobileChat, setShowMobileChat } = useChat()
-  const router = useRouter()
   const isDark = theme === "dark"
 
   // All state hooks in consistent order
@@ -252,9 +250,7 @@ export default function ChatPage() {
     setMounted(true)
     
     const checkMobile = () => {
-      const isMobileDevice = window.innerWidth < 768
-      console.log("检测屏幕宽度:", window.innerWidth, "是否为手机:", isMobileDevice)
-      setIsMobile(isMobileDevice)
+      setIsMobile(window.innerWidth < 768)
     }
     
     checkMobile()
@@ -905,13 +901,9 @@ export default function ChatPage() {
                   <div
                     key={contact.id}
                     onClick={() => {
-                      console.log("点击新好友请求:", contact.name, "isMobile:", isMobile)
+                      setSelectedContact(contact.id)
                       if (isMobile) {
-                        // 跳转到好友请求页面而不是聊天页面
-                        console.log("跳转到好友请求页面")
-                        router.push("/friend-requests")
-                      } else {
-                        setSelectedContact(contact.id)
+                        setShowMobileChat(true)
                       }
                     }}
                     className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer mb-2 ${
