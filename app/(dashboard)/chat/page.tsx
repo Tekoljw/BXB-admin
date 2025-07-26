@@ -1988,21 +1988,7 @@ export default function ChatPage() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        {!isGroupChat && (
-                          <>
-                            <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-                            }`}>
-                              <Phone className="w-5 h-5" />
-                            </button>
-                            <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-                            }`}>
-                              <Video className="w-5 h-5" />
-                            </button>
-                          </>
-                        )}
-                        {isGroupChat && (
+                        {isGroupChat ? (
                           <button 
                             onClick={handleOpenGroupInfo}
                             className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
@@ -2011,6 +1997,21 @@ export default function ChatPage() {
                           >
                             <MoreHorizontal className="w-5 h-5" />
                           </button>
+                        ) : (
+                          <>
+                            {/* Voice Call Button */}
+                            <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                            }`}>
+                              <Phone className="w-5 h-5" />
+                            </button>
+                            {/* Video Call Button */}
+                            <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                            }`}>
+                              <Video className="w-5 h-5" />
+                            </button>
+                          </>
                         )}
                       </div>
                     </>
