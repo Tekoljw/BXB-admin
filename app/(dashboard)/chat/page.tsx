@@ -835,8 +835,8 @@ export default function ChatPage() {
 
             {/* Right: Function Icons */}
             <div className="flex items-center space-x-3">
-              {/* Customer Service */}
-              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}>
+              {/* Customer Service - Hidden on Mobile */}
+              <button className={`hidden p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}>
                 <Phone className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-700"}`} />
               </button>
               
