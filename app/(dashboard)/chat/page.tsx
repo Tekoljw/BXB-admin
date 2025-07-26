@@ -252,7 +252,9 @@ export default function ChatPage() {
     setMounted(true)
     
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+      const isMobileDevice = window.innerWidth < 768
+      console.log("检测屏幕宽度:", window.innerWidth, "是否为手机:", isMobileDevice)
+      setIsMobile(isMobileDevice)
     }
     
     checkMobile()
@@ -903,8 +905,10 @@ export default function ChatPage() {
                   <div
                     key={contact.id}
                     onClick={() => {
+                      console.log("点击新好友请求:", contact.name, "isMobile:", isMobile)
                       if (isMobile) {
                         // 跳转到好友请求页面而不是聊天页面
+                        console.log("跳转到好友请求页面")
                         router.push("/friend-requests")
                       } else {
                         setSelectedContact(contact.id)
