@@ -136,6 +136,9 @@ export default function ChatPage() {
   // Mobile notification state
   const [showMobileNotificationDropdown, setShowMobileNotificationDropdown] = useState(false)
   const [notificationFilter, setNotificationFilter] = useState<"all" | "trading" | "system" | "social">("all")
+  
+  // Mobile language dropdown state
+  const [showMobileLanguageDropdown, setShowMobileLanguageDropdown] = useState(false)
 
   // Theme and language toggle handlers
   const handleToggleTheme = () => {
@@ -143,10 +146,14 @@ export default function ChatPage() {
   }
 
   const handleToggleLanguage = () => {
-    const newLanguage = language === "zh" ? "en" : "zh"
+    setShowMobileLanguageDropdown(true)
+  }
+  
+  const handleLanguageSelect = (selectedLanguage: "zh" | "en") => {
     console.log('Current language:', language)
-    console.log('Switching to:', newLanguage)
-    setLanguage(newLanguage)
+    console.log('Switching to:', selectedLanguage)
+    setLanguage(selectedLanguage)
+    setShowMobileLanguageDropdown(false)
   }
   
   // All refs
@@ -3702,6 +3709,83 @@ export default function ChatPage() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Language Dropdown */}
+      {showMobileLanguageDropdown && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-[120] flex items-center justify-center p-4"
+          onClick={() => setShowMobileLanguageDropdown(false)}
+        >
+          <div 
+            className={`w-full max-w-xs rounded-lg shadow-xl overflow-hidden ${
+              isDark ? "bg-[#1a1d29] border border-[#252842]" : "bg-white border border-gray-200"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className={`p-4 border-b ${isDark ? "border-[#252842]" : "border-gray-200"}`}>
+              <div className="flex items-center justify-between">
+                <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                  选择语言
+                </h3>
+                <button 
+                  onClick={() => setShowMobileLanguageDropdown(false)}
+                  className={`p-1 rounded-lg ${
+                    isDark ? "hover:bg-[#252842] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                  }`}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Language Options */}
+            <div className="p-2">
+              <button
+                onClick={() => handleLanguageSelect("zh")}
+                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
+                  language === "zh"
+                    ? isDark
+                      ? "bg-white text-black"
+                      : "bg-black text-white"
+                    : isDark
+                    ? "text-white hover:bg-[#252842]"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <span className="text-lg">🇨🇳</span>
+                  <span>中文</span>
+                </div>
+                {language === "zh" && (
+                  <Check className="h-4 w-4" />
+                )}
+              </button>
+              
+              <button
+                onClick={() => handleLanguageSelect("en")}
+                className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
+                  language === "en"
+                    ? isDark
+                      ? "bg-white text-black"
+                      : "bg-black text-white"
+                    : isDark
+                    ? "text-white hover:bg-[#252842]"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <span className="text-lg">🇺🇸</span>
+                  <span>English</span>
+                </div>
+                {language === "en" && (
+                  <Check className="h-4 w-4" />
+                )}
+              </button>
             </div>
           </div>
         </div>
