@@ -139,6 +139,9 @@ export default function ChatPage() {
   
   // Mobile language dropdown state
   const [showMobileLanguageDropdown, setShowMobileLanguageDropdown] = useState(false)
+  
+  // Contact info modal state
+  const [showContactInfo, setShowContactInfo] = useState(false)
 
   // Theme and language toggle handlers
   const handleToggleTheme = () => {
@@ -2000,6 +2003,18 @@ export default function ChatPage() {
                         }`}>
                           <Video className="w-5 h-5" />
                         </button>
+                        {/* Contact Info Button - Only for private chats */}
+                        {!isGroupChat && (
+                          <button 
+                            onClick={() => setShowContactInfo(true)}
+                            className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                            }`}
+                          >
+                            <MoreHorizontal className="w-5 h-5" />
+                          </button>
+                        )}
+                        {/* Group Info Button - Only for group chats */}
                         {isGroupChat && (
                           <button 
                             onClick={handleOpenGroupInfo}
@@ -3521,6 +3536,19 @@ export default function ChatPage() {
               }`}>
                 <Video className="w-5 h-5" />
               </button>
+              {/* Contact Info Button - Only for private chats */}
+              {!selectedContact?.startsWith("group-") && (
+                <button 
+                  onClick={() => setShowContactInfo(true)}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                  }`}
+                >
+                  <MoreHorizontal className="w-5 h-5" />
+                </button>
+              )}
+              
+              {/* Group Info Button - Only for group chats */}
               {selectedContact?.startsWith("group-") && (
                 <button className={`p-2 rounded-lg transition-colors ${
                   isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
@@ -3750,6 +3778,125 @@ export default function ChatPage() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Contact Info Modal */}
+      {showContactInfo && (
+        <div className="fixed inset-0 bg-black/50 z-[90] flex items-center justify-center p-4">
+          <div 
+            className={`w-full max-w-md max-h-[90vh] overflow-y-auto rounded-lg shadow-xl ${
+              isDark ? "bg-[#1a1d29]" : "bg-white"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className={`p-4 border-b ${isDark ? "border-[#252842]" : "border-gray-200"} flex items-center justify-between`}>
+              <button 
+                onClick={() => setShowContactInfo(false)}
+                className={`p-2 rounded-lg ${
+                  isDark ? "hover:bg-[#252842] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                }`}
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+              <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                聊天详情
+              </h3>
+              <div></div>
+            </div>
+
+            {/* Contact Avatar and Name */}
+            <div className="p-6 text-center">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                {(() => {
+                  const currentContact = friendContacts.find(c => c.id === selectedContact) || escrowContacts.find(c => c.id === selectedContact)
+                  return currentContact?.avatar || "🤖"
+                })()}
+              </div>
+              <h2 className={`text-xl font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                {(() => {
+                  const currentContact = friendContacts.find(c => c.id === selectedContact) || escrowContacts.find(c => c.id === selectedContact)
+                  return currentContact?.name || "交易助手"
+                })()}
+              </h2>
+              <button className={`mt-2 w-12 h-12 rounded border-2 border-dashed ${
+                isDark ? "border-gray-600 text-gray-400 hover:border-gray-500" : "border-gray-300 text-gray-500 hover:border-gray-400"
+              } flex items-center justify-center text-2xl transition-colors`}>
+                +
+              </button>
+            </div>
+
+            {/* Settings Options */}
+            <div className="px-4 pb-4 space-y-1">
+              {/* Search Chat Content */}
+              <button className={`w-full flex items-center justify-between p-4 rounded-lg transition-colors ${
+                isDark ? "hover:bg-[#252842] text-white" : "hover:bg-gray-50 text-gray-800"
+              }`}>
+                <span>查找聊天内容</span>
+                <ChevronRight className="w-5 h-5 text-gray-400" />
+              </button>
+
+              {/* Message Not Disturb */}
+              <div className={`flex items-center justify-between p-4 rounded-lg ${
+                isDark ? "text-white" : "text-gray-800"
+              }`}>
+                <span>消息免打扰</span>
+                <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  isDark ? "bg-[#252842]" : "bg-gray-200"
+                } focus:outline-none`}>
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1`} />
+                </button>
+              </div>
+
+              {/* Pin Chat */}
+              <div className={`flex items-center justify-between p-4 rounded-lg ${
+                isDark ? "text-white" : "text-gray-800"
+              }`}>
+                <span>置顶聊天</span>
+                <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  isDark ? "bg-[#252842]" : "bg-gray-200"
+                } focus:outline-none`}>
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1`} />
+                </button>
+              </div>
+
+              {/* Reminder */}
+              <div className={`flex items-center justify-between p-4 rounded-lg ${
+                isDark ? "text-white" : "text-gray-800"
+              }`}>
+                <span>提醒</span>
+                <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  isDark ? "bg-[#252842]" : "bg-gray-200"
+                } focus:outline-none`}>
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1`} />
+                </button>
+              </div>
+
+              {/* Set Chat Background */}
+              <button className={`w-full flex items-center justify-between p-4 rounded-lg transition-colors ${
+                isDark ? "hover:bg-[#252842] text-white" : "hover:bg-gray-50 text-gray-800"
+              }`}>
+                <span>设置当前聊天背景</span>
+                <ChevronRight className="w-5 h-5 text-gray-400" />
+              </button>
+
+              {/* Clear Chat Records */}
+              <button className={`w-full flex items-center justify-between p-4 rounded-lg transition-colors ${
+                isDark ? "hover:bg-[#252842] text-white" : "hover:bg-gray-50 text-gray-800"
+              }`}>
+                <span>清空聊天记录</span>
+              </button>
+
+              {/* Report */}
+              <button className={`w-full flex items-center justify-between p-4 rounded-lg transition-colors ${
+                isDark ? "hover:bg-[#252842] text-white" : "hover:bg-gray-50 text-gray-800"
+              }`}>
+                <span>投诉</span>
+                <ChevronRight className="w-5 h-5 text-gray-400" />
+              </button>
             </div>
           </div>
         </div>
