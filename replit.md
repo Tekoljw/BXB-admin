@@ -804,6 +804,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Enhanced mobile user experience by eliminating text wrapping issues on narrow screens
   - Added mouse drag functionality for horizontal scrolling with grab cursor and smooth dragging behavior
   - Implemented touch-friendly scrolling with proper event handling for mousedown, mousemove, and mouseup events
+- January 30, 2025. Optimized order records mobile search functionality:
+  - Hidden reset and filter buttons on mobile for all record types (资金记录, 佣金结算记录, 其他记录, 划转记录, USDT买卖记录)
+  - Redesigned mobile search layouts with narrowed filter boxes in single/double row configurations
+  - Applied responsive design patterns: desktop maintains full functionality, mobile provides streamlined interface
+  - Used grid layouts with reduced padding (px-2 py-2) and smaller font sizes (text-xs) for mobile optimization
+  - Separated desktop (hidden md:grid) and mobile (md:hidden) layouts for optimal user experience
+  - Enhanced mobile search with compact spacing and proper responsive breakpoints
 
 ## User Preferences
 

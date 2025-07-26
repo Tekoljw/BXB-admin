@@ -15889,7 +15889,8 @@ export default function WalletPage() {
                     case "内转记录":
                       return (
                         <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
-                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                          {/* 桌面端布局 */}
+                          <div className="hidden md:grid md:grid-cols-4 gap-4">
                             <div>
                               <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                                 币种
@@ -15934,99 +15935,188 @@ export default function WalletPage() {
                               </button>
                             </div>
                           </div>
+
+                          {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                          <div className="md:hidden flex gap-2">
+                            <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>币种</option>
+                              <option>USDT</option>
+                              <option>BTC</option>
+                              <option>ETH</option>
+                              <option>BNB</option>
+                            </select>
+                            <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>状态</option>
+                              <option>已完成</option>
+                              <option>处理中</option>
+                              <option>失败</option>
+                            </select>
+                            <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>时间</option>
+                              <option>今天</option>
+                              <option>最近7天</option>
+                              <option>最近30天</option>
+                              <option>最近90天</option>
+                            </select>
+                          </div>
                         </div>
                       )
                     case "佣金结算记录":
                       return (
                         <div className="mb-4">
-                          {/* 搜索框 */}
-                          <div className="mb-4">
+                          {/* 桌面端布局 */}
+                          <div className="hidden md:block">
+                            {/* 搜索框 */}
+                            <div className="mb-4">
+                              <input
+                                type="text"
+                                placeholder="搜索用户ID或用户名..."
+                                value={commissionSearchTerm}
+                                onChange={(e) => setCommissionSearchTerm(e.target.value)}
+                                className={`w-full px-4 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
+                              />
+                            </div>
+                            
+                            {/* 筛选条件 */}
+                            <div className="grid grid-cols-5 gap-4">
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  佣金类型
+                                </label>
+                                <select 
+                                  value={commissionTypeFilter}
+                                  onChange={(e) => setCommissionTypeFilter(e.target.value)}
+                                  className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                >
+                                  <option>全部</option>
+                                  <option>合约佣金</option>
+                                  <option>理财佣金</option>
+                                  <option>U卡佣金</option>
+                                  <option>担保佣金</option>
+                                  <option>支付佣金</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  推荐类型
+                                </label>
+                                <select 
+                                  value={commissionReferralFilter}
+                                  onChange={(e) => setCommissionReferralFilter(e.target.value)}
+                                  className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                >
+                                  <option>全部</option>
+                                  <option>直推</option>
+                                  <option>间推</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  状态
+                                </label>
+                                <select 
+                                  value={commissionStatusFilter}
+                                  onChange={(e) => setCommissionStatusFilter(e.target.value)}
+                                  className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                >
+                                  <option>全部</option>
+                                  <option>已结算</option>
+                                  <option>结算中</option>
+                                  <option>已完成</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  时间范围
+                                </label>
+                                <select 
+                                  value={commissionTimeFilter}
+                                  onChange={(e) => setCommissionTimeFilter(e.target.value)}
+                                  className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                >
+                                  <option>全部</option>
+                                  <option>今日</option>
+                                  <option>本周</option>
+                                  <option>本月</option>
+                                  <option>近三个月</option>
+                                </select>
+                              </div>
+                              <div className="flex items-end gap-2">
+                                <button 
+                                  onClick={() => {
+                                    setCommissionSearchTerm("")
+                                    setCommissionTypeFilter("全部")
+                                    setCommissionReferralFilter("全部")
+                                    setCommissionStatusFilter("全部")
+                                    setCommissionTimeFilter("全部")
+                                  }}
+                                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}
+                                >
+                                  重置
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 手机端布局 - 紧凑单行显示 */}
+                          <div className="md:hidden space-y-3">
+                            {/* 搜索框 */}
                             <input
                               type="text"
-                              placeholder="搜索用户ID或用户名..."
+                              placeholder="搜索用户ID..."
                               value={commissionSearchTerm}
                               onChange={(e) => setCommissionSearchTerm(e.target.value)}
-                              className={`w-full px-4 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
+                              className={`w-full px-3 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
                             />
-                          </div>
-                          
-                          {/* 筛选条件 */}
-                          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                            <div>
-                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                佣金类型
-                              </label>
+                            
+                            {/* 筛选器单行 */}
+                            <div className="grid grid-cols-2 gap-2">
                               <select 
                                 value={commissionTypeFilter}
                                 onChange={(e) => setCommissionTypeFilter(e.target.value)}
-                                className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
                               >
-                                <option>全部</option>
+                                <option>佣金类型</option>
                                 <option>合约佣金</option>
                                 <option>理财佣金</option>
                                 <option>U卡佣金</option>
                                 <option>担保佣金</option>
                                 <option>支付佣金</option>
                               </select>
-                            </div>
-                            <div>
-                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                推荐类型
-                              </label>
-                              <select 
-                                value={commissionReferralFilter}
-                                onChange={(e) => setCommissionReferralFilter(e.target.value)}
-                                className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
-                              >
-                                <option>全部</option>
-                                <option>直推</option>
-                                <option>间推</option>
-                              </select>
-                            </div>
-                            <div>
-                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                状态
-                              </label>
                               <select 
                                 value={commissionStatusFilter}
                                 onChange={(e) => setCommissionStatusFilter(e.target.value)}
-                                className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
                               >
-                                <option>全部</option>
+                                <option>状态</option>
                                 <option>已结算</option>
                                 <option>结算中</option>
                                 <option>已完成</option>
                               </select>
                             </div>
-                            <div>
-                              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                时间范围
-                              </label>
+                            
+                            {/* 第二行筛选器 */}
+                            <div className="grid grid-cols-2 gap-2">
+                              <select 
+                                value={commissionReferralFilter}
+                                onChange={(e) => setCommissionReferralFilter(e.target.value)}
+                                className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                              >
+                                <option>推荐类型</option>
+                                <option>直推</option>
+                                <option>间推</option>
+                              </select>
                               <select 
                                 value={commissionTimeFilter}
                                 onChange={(e) => setCommissionTimeFilter(e.target.value)}
-                                className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
                               >
-                                <option>全部</option>
+                                <option>时间范围</option>
                                 <option>今日</option>
                                 <option>本周</option>
                                 <option>本月</option>
                                 <option>近三个月</option>
                               </select>
-                            </div>
-                            <div className="flex items-end gap-2">
-                              <button 
-                                onClick={() => {
-                                  setCommissionSearchTerm("")
-                                  setCommissionTypeFilter("全部")
-                                  setCommissionReferralFilter("全部")
-                                  setCommissionStatusFilter("全部")
-                                  setCommissionTimeFilter("全部")
-                                }}
-                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}
-                              >
-                                重置
-                              </button>
                             </div>
                           </div>
                         </div>
@@ -16034,7 +16124,8 @@ export default function WalletPage() {
                     case "其他记录":
                       return (
                         <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
-                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                          {/* 桌面端布局 */}
+                          <div className="hidden md:grid md:grid-cols-4 gap-4">
                             <div>
                               <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                                 币种
@@ -16083,12 +16174,41 @@ export default function WalletPage() {
                               </button>
                             </div>
                           </div>
+
+                          {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                          <div className="md:hidden flex gap-2">
+                            <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>币种</option>
+                              <option>USDT</option>
+                              <option>BTC</option>
+                              <option>ETH</option>
+                              <option>BNB</option>
+                              <option>ADA</option>
+                              <option>SOL</option>
+                            </select>
+                            <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>类型</option>
+                              <option>抵扣金</option>
+                              <option>系统发放</option>
+                              <option>系统减扣</option>
+                              <option>期权交易</option>
+                              <option>手续费</option>
+                            </select>
+                            <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>时间</option>
+                              <option>今天</option>
+                              <option>最近7天</option>
+                              <option>最近30天</option>
+                              <option>最近90天</option>
+                            </select>
+                          </div>
                         </div>
                       )
                     case "划转记录":
                       return (
                         <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
-                          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                          {/* 桌面端布局 */}
+                          <div className="hidden md:grid md:grid-cols-5 gap-4">
                             <div>
                               <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                                 币种
@@ -16144,6 +16264,40 @@ export default function WalletPage() {
                               </button>
                             </div>
                           </div>
+
+                          {/* 手机端布局 - 分两行显示，隐藏按钮 */}
+                          <div className="md:hidden space-y-2">
+                            <div className="grid grid-cols-2 gap-2">
+                              <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                <option>币种</option>
+                                <option>USDT</option>
+                                <option>BTC</option>
+                                <option>ETH</option>
+                                <option>BNB</option>
+                              </select>
+                              <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                <option>时间</option>
+                                <option>今天</option>
+                                <option>最近7天</option>
+                                <option>最近30天</option>
+                                <option>最近90天</option>
+                              </select>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                <option>划出账户</option>
+                                <option>现货账户</option>
+                                <option>合约账户</option>
+                                <option>理财账户</option>
+                              </select>
+                              <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                <option>划入账户</option>
+                                <option>现货账户</option>
+                                <option>合约账户</option>
+                                <option>理财账户</option>
+                              </select>
+                            </div>
+                          </div>
                         </div>
                       )
                     default:
@@ -16156,7 +16310,8 @@ export default function WalletPage() {
                   case "USDT买卖记录":
                     return (
                       <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        {/* 桌面端布局 */}
+                        <div className="hidden md:grid md:grid-cols-5 gap-4">
                           <div>
                             <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                               类型
@@ -16212,6 +16367,42 @@ export default function WalletPage() {
                             <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                               筛选
                             </button>
+                          </div>
+                        </div>
+
+                        {/* 手机端布局 - 分两行显示，隐藏按钮 */}
+                        <div className="md:hidden space-y-2">
+                          <div className="grid grid-cols-2 gap-2">
+                            <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>类型</option>
+                              <option>买入</option>
+                              <option>卖出</option>
+                            </select>
+                            <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>状态</option>
+                              <option>已完成</option>
+                              <option>处理中</option>
+                              <option>已取消</option>
+                            </select>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>法币币种</option>
+                              <option>CNY</option>
+                              <option>USD</option>
+                              <option>EUR</option>
+                              <option>GBP</option>
+                              <option>JPY</option>
+                              <option>KRW</option>
+                              <option>HKD</option>
+                            </select>
+                            <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                              <option>时间</option>
+                              <option>今天</option>
+                              <option>最近7天</option>
+                              <option>最近30天</option>
+                              <option>最近90天</option>
+                            </select>
                           </div>
                         </div>
                       </div>
