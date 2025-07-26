@@ -83,7 +83,7 @@ interface Message {
 }
 
 export default function ChatPage() {
-  const { theme } = useTheme()
+  const { theme, setTheme, language, setLanguage } = useTheme()
   const { showMobileChat, setShowMobileChat } = useChat()
   const router = useRouter()
   const isDark = theme === "dark"
@@ -132,6 +132,15 @@ export default function ChatPage() {
   
   // Mobile profile menu state
   const [showMobileProfileMenu, setShowMobileProfileMenu] = useState(false)
+
+  // Theme and language toggle handlers
+  const handleToggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark")
+  }
+
+  const handleToggleLanguage = () => {
+    setLanguage(language === "zh" ? "en" : "zh")
+  }
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -818,14 +827,20 @@ export default function ChatPage() {
               </button>
               
               {/* Language Switch */}
-              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}>
+              <button 
+                onClick={handleToggleLanguage}
+                className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}
+              >
                 <svg className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-700"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
                 </svg>
               </button>
               
               {/* Theme Switch */}
-              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}>
+              <button 
+                onClick={handleToggleTheme}
+                className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}
+              >
                 {isDark ? (
                   <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
