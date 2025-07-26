@@ -3499,6 +3499,40 @@ export default function ChatPage() {
                 </p>
               </div>
             </div>
+            
+            {/* Voice and Video Call Buttons for Mobile */}
+            <div className="flex items-center space-x-2">
+              {(() => {
+                const isGroupChat = selectedContact?.startsWith("group-")
+                
+                if (isGroupChat) {
+                  return (
+                    <button className={`p-2 rounded-lg transition-colors ${
+                      isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                    }`}>
+                      <MoreHorizontal className="w-5 h-5" />
+                    </button>
+                  )
+                } else {
+                  return (
+                    <>
+                      {/* Voice Call Button */}
+                      <button className={`p-2 rounded-lg transition-colors ${
+                        isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                      }`}>
+                        <Phone className="w-5 h-5" />
+                      </button>
+                      {/* Video Call Button */}
+                      <button className={`p-2 rounded-lg transition-colors ${
+                        isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                      }`}>
+                        <Video className="w-5 h-5" />
+                      </button>
+                    </>
+                  )
+                }
+              })()}
+            </div>
           </div>
 
           {/* Mobile Messages */}
