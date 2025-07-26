@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { useChat } from "@/contexts/chat-context"
@@ -84,6 +85,7 @@ interface Message {
 export default function ChatPage() {
   const { theme } = useTheme()
   const { showMobileChat, setShowMobileChat } = useChat()
+  const router = useRouter()
   const isDark = theme === "dark"
 
   // All state hooks in consistent order
@@ -250,7 +252,9 @@ export default function ChatPage() {
     setMounted(true)
     
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+      const isMobileDevice = window.innerWidth < 768
+      console.log("检测屏幕宽度:", window.innerWidth, "是否为手机:", isMobileDevice)
+      setIsMobile(isMobileDevice)
     }
     
     checkMobile()
@@ -902,13 +906,12 @@ export default function ChatPage() {
                     key={contact.id}
                     onClick={() => {
                       console.log("点击新好友请求:", contact.name, "isMobile:", isMobile)
-                      setSelectedContact(contact.id)
-                      if (isMobile && contact.id === "friend-request-1") {
-                        // 新好友请求不进入聊天界面，而是显示好友请求记录页面
+                      if (isMobile) {
+                        // 跳转到好友请求页面而不是聊天页面
                         console.log("跳转到好友请求页面")
-                        // 这里暂时不设置 setShowMobileChat(true)，让它显示好友请求记录
-                      } else if (isMobile) {
-                        setShowMobileChat(true)
+                        router.push("/friend-requests")
+                      } else {
+                        setSelectedContact(contact.id)
                       }
                     }}
                     className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer mb-2 ${
@@ -3309,61 +3312,13 @@ export default function ChatPage() {
             </div>
           </div>
 
-          {/* Mobile Content */}
-          <div className="flex-1 overflow-y-auto">
-            {selectedContact === "friend-request-1" ? (
-              // Friend Request Records for Mobile
-              <div className="p-4">
-                <div className="space-y-4">
-                  {friendRequests.map((request) => (
-                    <div
-                      key={request.id}
-                      className={`p-4 rounded-lg border ${
-                        isDark ? "bg-[#252842] border-[#3a3d4a]" : "bg-white border-gray-200"
-                      }`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                          {request.name.charAt(0)}
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                              {request.name}
-                            </h3>
-                            <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                              {request.time}
-                            </span>
-                          </div>
-                          <p className={`text-sm mt-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                            {request.message}
-                          </p>
-                          <div className="flex space-x-2 mt-3">
-                            <button className="px-4 py-2 bg-[#00D4AA] text-white text-sm rounded-lg hover:bg-[#00B894] transition-colors">
-                              接受
-                            </button>
-                            <button className={`px-4 py-2 text-sm rounded-lg border transition-colors ${
-                              isDark 
-                                ? "border-[#3a3d4a] text-gray-400 hover:bg-[#3a3d4a]" 
-                                : "border-gray-300 text-gray-600 hover:bg-gray-50"
-                            }`}>
-                              拒绝
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              // Normal Chat Messages
-              <div className="p-4 space-y-4">
-                {(messages[selectedContact] || []).map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`flex ${msg.senderId === "user" ? "justify-end" : "justify-start"}`}
-                  >
+          {/* Mobile Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {(messages[selectedContact] || []).map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex ${msg.senderId === "user" ? "justify-end" : "justify-start"}`}
+              >
                 <div
                   className={`max-w-[80%] rounded-lg p-3 ${
                     msg.senderId === "user"
@@ -3378,10 +3333,9 @@ export default function ChatPage() {
                   <p className="text-sm">{msg.text}</p>
                   <p className="text-xs opacity-70 mt-1">{msg.time}</p>
                 </div>
-                  </div>
-                ))}
               </div>
-            )}
+            ))}
+          </div>
 
           {/* Mobile Input */}
           <div className={`p-4 border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
