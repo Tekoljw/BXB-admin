@@ -70,3 +70,45 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* Hide vertical scrollbars on mobile devices */
+@media (max-width: 768px) {
+  /* Hide scrollbar for webkit browsers (Chrome, Safari, etc.) */
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for body and html on mobile */
+  body::-webkit-scrollbar,
+  html::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for all elements on mobile */
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  /* Ensure body and html maintain scroll functionality */
+  body, html {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  /* Hide scrollbars for any scrollable containers */
+  .overflow-auto::-webkit-scrollbar,
+  .overflow-y-auto::-webkit-scrollbar,
+  .overflow-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .overflow-auto,
+  .overflow-y-auto,
+  .overflow-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
