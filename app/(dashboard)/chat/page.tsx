@@ -253,7 +253,6 @@ export default function ChatPage() {
     
     const checkMobile = () => {
       const isMobileDevice = window.innerWidth < 768
-      console.log("检测屏幕宽度:", window.innerWidth, "是否为手机:", isMobileDevice)
       setIsMobile(isMobileDevice)
     }
     
@@ -790,69 +789,119 @@ export default function ChatPage() {
         className={`${cardStyle} flex flex-col`}
         style={isMobile ? { width: '100vw', minWidth: '100vw', maxWidth: '100vw' } : { minWidth: '416px', maxWidth: '500px', width: 'clamp(416px, 30vw, 500px)' }}
       >
-        {/* Search and Add Button */}
-        <div className="flex items-center gap-2 p-4">
-          <div className="relative flex-1">
-            <Search
-              className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
-                isDark ? "text-gray-400" : "text-gray-500"
-              }`}
-            />
-            <input
-              type="text"
-              placeholder="搜索联系人"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm transition-colors ${
-                isDark
-                  ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400 focus:border-[#00D4AA]"
-                  : "bg-gray-100 border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
-              } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
-            />
-          </div>
-
-          {/* Add Button Menu */}
-          <div className="relative" ref={addMenuRef}>
-            <button
-              onClick={showAddMenu ? handleCloseMenu : handleShowMenu}
-              className={`p-2 rounded-lg border transition-all duration-200 ${
-                isDark
-                  ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#3a3d4a] hover:scale-105"
-                  : "bg-gray-100 border-gray-200 text-gray-800 hover:bg-gray-200 hover:scale-105"
-              } ${showAddMenu ? "scale-105" : ""}`}
-            >
-              <Plus className={`h-4 w-4 transition-transform duration-200 ${showAddMenu ? "rotate-45" : ""}`} />
-            </button>
-
-            {showAddMenu && (
-              <div
-                className={`absolute top-full right-0 mt-2 w-56 ${cardStyle} rounded-lg shadow-lg z-50 transition-all duration-150 origin-top-right ${
-                  isMenuAnimating ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                }`}
-              >
-                <div className="py-2">
-                  {addMenuItems.map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        item.action()
-                        handleCloseMenu()
-                      }}
-                      className={`w-full flex items-center space-x-3 px-4 py-3 text-left transition-colors ${
-                        isDark
-                          ? "hover:bg-[#252842] text-gray-300"
-                          : "hover:bg-gray-50 text-gray-700"
-                      }`}
-                    >
-                      <item.icon className="w-4 h-4" />
-                      <span className="text-sm">{item.label}</span>
-                    </button>
-                  ))}
-                </div>
+        {/* Search and Add Button - Desktop / Mobile Header */}
+        {isMobile ? (
+          /* Mobile Header with Avatar and Function Icons */
+          <div className="flex items-center justify-between p-4">
+            {/* Left: Personal Avatar */}
+            <div className="flex items-center">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold cursor-pointer">
+                👤
               </div>
-            )}
+            </div>
+
+            {/* Right: Function Icons */}
+            <div className="flex items-center space-x-3">
+              {/* Customer Service */}
+              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}>
+                <MessageCircle className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-700"}`} />
+              </button>
+              
+              {/* Language Switch */}
+              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}>
+                <svg className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-700"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                </svg>
+              </button>
+              
+              {/* Theme Switch */}
+              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}>
+                {isDark ? (
+                  <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : (
+                  <svg className="h-5 w-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+              </button>
+              
+              {/* Notifications */}
+              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"} relative`}>
+                <Bell className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-700"}`} />
+                {/* Notification badge */}
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-[8px] text-white font-bold">3</span>
+                </div>
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Desktop Search and Add Button */
+          <div className="flex items-center gap-2 p-4">
+            <div className="relative flex-1">
+              <Search
+                className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
+                  isDark ? "text-gray-400" : "text-gray-500"
+                }`}
+              />
+              <input
+                type="text"
+                placeholder="搜索联系人"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`pl-10 pr-4 py-2 w-full rounded-lg border text-sm transition-colors ${
+                  isDark
+                    ? "bg-[#252842] border-[#3a3d4a] text-white placeholder-gray-400 focus:border-[#00D4AA]"
+                    : "bg-gray-100 border-gray-200 text-gray-800 placeholder-gray-500 focus:border-[#00D4AA]"
+                } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+              />
+            </div>
+
+            {/* Add Button Menu */}
+            <div className="relative" ref={addMenuRef}>
+              <button
+                onClick={showAddMenu ? handleCloseMenu : handleShowMenu}
+                className={`p-2 rounded-lg border transition-all duration-200 ${
+                  isDark
+                    ? "bg-[#252842] border-[#3a3d4a] text-white hover:bg-[#3a3d4a] hover:scale-105"
+                    : "bg-gray-100 border-gray-200 text-gray-800 hover:bg-gray-200 hover:scale-105"
+                } ${showAddMenu ? "scale-105" : ""}`}
+              >
+                <Plus className={`h-4 w-4 transition-transform duration-200 ${showAddMenu ? "rotate-45" : ""}`} />
+              </button>
+
+              {showAddMenu && (
+                <div
+                  className={`absolute top-full right-0 mt-2 w-56 ${cardStyle} rounded-lg shadow-lg z-50 transition-all duration-150 origin-top-right ${
+                    isMenuAnimating ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                  }`}
+                >
+                  <div className="py-2">
+                    {addMenuItems.map((item, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          item.action()
+                          handleCloseMenu()
+                        }}
+                        className={`w-full flex items-center space-x-3 px-4 py-3 text-left transition-colors ${
+                          isDark
+                            ? "hover:bg-[#252842] text-gray-300"
+                            : "hover:bg-gray-50 text-gray-700"
+                        }`}
+                      >
+                        <item.icon className="w-4 h-4" />
+                        <span className="text-sm">{item.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Tab Navigation */}
         <div className="mx-4 mb-4">
@@ -905,10 +954,8 @@ export default function ChatPage() {
                   <div
                     key={contact.id}
                     onClick={() => {
-                      console.log("点击新好友请求:", contact.name, "isMobile:", isMobile)
                       if (isMobile) {
                         // 跳转到好友请求页面而不是聊天页面
-                        console.log("跳转到好友请求页面")
                         router.push("/friend-requests")
                       } else {
                         setSelectedContact(contact.id)
