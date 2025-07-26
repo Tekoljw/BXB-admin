@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import "../styles/globals.css"
 import { ThemeProvider } from "@/contexts/theme-context"
+import { ChatProvider } from "@/contexts/chat-context"
 
 export const metadata: Metadata = {
   title: "BXB - Global Cryptocurrency Guaranteed Trading Exchange", 
@@ -18,7 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-apple">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <ChatProvider>
+            {children}
+          </ChatProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

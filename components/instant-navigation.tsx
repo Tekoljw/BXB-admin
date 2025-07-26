@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react"
 
 import { useTheme } from "@/contexts/theme-context"
+import { useChat } from "@/contexts/chat-context"
 import AccountDropdown from "@/components/account-dropdown"
 import {
   MessageCircle,
@@ -68,6 +69,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   
   const [notificationFilter, setNotificationFilter] = useState<"all" | "system" | "activity" | "important">("all")
   const { theme, setTheme, language, setLanguage } = useTheme()
+  const { showMobileChat } = useChat()
 
   useEffect(() => {
     // Initialize current page from URL on mount
@@ -153,34 +155,37 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
         </div>
         
         {/* 底部导航栏 */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50">
-          <div className="flex items-center justify-around py-2">
-            {mobileNavItems.map((item) => {
-              const Icon = item.icon
-              const active = isActive(item.path)
-              return (
-                <button
-                  key={item.path}
-                  onClick={() => navigate(item.path)}
-                  className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-all duration-200 ${
-                    active 
-                      ? "text-custom-green" 
-                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                  }`}
-                >
-                  {item.path === '/usdt-trade' ? (
-                    <TetherIcon className={`w-6 h-6 ${active ? 'text-custom-green' : 'text-gray-500 dark:text-gray-400'}`} />
-                  ) : (
-                    <Icon size={24} />
-                  )}
-                  <span className={`text-xs mt-1 ${active ? 'font-medium' : 'font-normal'}`}>
-                    {item.label}
-                  </span>
-                </button>
-              )
-            })}
+        {/* 隐藏底部菜单当手机聊天界面打开时 */}
+        {!showMobileChat && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50">
+            <div className="flex items-center justify-around py-2">
+              {mobileNavItems.map((item) => {
+                const Icon = item.icon
+                const active = isActive(item.path)
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => navigate(item.path)}
+                    className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-all duration-200 ${
+                      active 
+                        ? "text-custom-green" 
+                        : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                    }`}
+                  >
+                    {item.path === '/usdt-trade' ? (
+                      <TetherIcon className={`w-6 h-6 ${active ? 'text-custom-green' : 'text-gray-500 dark:text-gray-400'}`} />
+                    ) : (
+                      <Icon size={24} />
+                    )}
+                    <span className={`text-xs mt-1 ${active ? 'font-medium' : 'font-normal'}`}>
+                      {item.label}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     )
   }

@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
+import { useChat } from "@/contexts/chat-context"
 
 // Custom Transfer Icon (Wallet)
 const TransferIcon = ({ className }: { className?: string }) => (
@@ -82,6 +83,7 @@ interface Message {
 
 export default function ChatPage() {
   const { theme } = useTheme()
+  const { showMobileChat, setShowMobileChat } = useChat()
   const isDark = theme === "dark"
 
   // All state hooks in consistent order
@@ -125,7 +127,6 @@ export default function ChatPage() {
   const [guaranteeType, setGuaranteeType] = useState("buy") // buy or sell
   const [guaranteeDuration, setGuaranteeDuration] = useState("24") // hours
   const [guaranteeDeposit, setGuaranteeDeposit] = useState("5") // percentage
-  const [showMobileChat, setShowMobileChat] = useState(false) // Mobile chat view state
   
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -902,7 +903,7 @@ export default function ChatPage() {
                     onClick={() => {
                       setSelectedContact(contact.id)
                       if (isMobile) {
-                        // Mobile navigation logic would go here
+                        setShowMobileChat(true)
                       }
                     }}
                     className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer mb-2 ${
@@ -952,7 +953,7 @@ export default function ChatPage() {
                     onClick={() => {
                       setSelectedContact(contact.id)
                       if (isMobile) {
-                        // Mobile navigation logic would go here
+                        setShowMobileChat(true)
                       }
                     }}
                     className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer mb-2 ${
