@@ -43,9 +43,10 @@ import TetherIcon from "@/components/tether-icon"
 
 interface InstantNavigationProps {
   onCloseMobile?: () => void
+  children?: React.ReactNode
 }
 
-export default function InstantNavigation({ onCloseMobile }: InstantNavigationProps) {
+export default function InstantNavigation({ onCloseMobile, children }: InstantNavigationProps) {
   const [currentPage, setCurrentPage] = useState("/chat")
   const [isExpanded, setIsExpanded] = useState(false)
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
@@ -131,6 +132,11 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   ]
 
   const renderCurrentPage = () => {
+    // If children are provided, render them instead of internal routing
+    if (children) {
+      return children
+    }
+
     const currentItem = navItems.find(item => item.path === currentPage)
     if (currentItem) {
       const Component = currentItem.component
