@@ -17393,8 +17393,89 @@ export default function WalletPage() {
               </div>
             </div>
 
-
-
+                {/* 移动端卡片视图 */}
+                <div className="md:hidden space-y-3">
+                  {records.map((record, index) => (
+                    <div key={record.id || index} className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
+                      <div className="grid grid-cols-2 gap-3 text-sm">
+                        {Object.entries(record).map(([key, value]) => (
+                          <div key={key}>
+                            <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
+                              {key === 'id' ? 'ID' : 
+                               key === 'type' ? '类型' :
+                               key === 'amount' ? '金额' :
+                               key === 'status' ? '状态' :
+                               key === 'time' ? '时间' :
+                               key === 'currency' ? '币种' :
+                               key === 'address' ? '地址/收款账号' :
+                               key === 'txHash' ? '交易哈希' :
+                               key === 'network' ? '提币网络' :
+                               key === 'direction' ? '转入/转出' :
+                               key === 'fromAccount' ? '划出账户' :
+                               key === 'toAccount' ? '划入账户' :
+                               key === 'source' ? '来源' :
+                               key === 'rate' ? '费率' :
+                               key === 'price' ? '价格' :
+                               key === 'total' ? '总金额' :
+                               key === 'method' ? '支付方式' :
+                               key === 'merchant' ? '商户' :
+                               key === 'counterparty' ? '交易对象' :
+                               key === 'fee' ? '手续费' :
+                               key === 'provider' ? '供应商' :
+                               key === 'fiatCurrency' ? '法币币种' :
+                               key === 'source' ? '来源' :
+                               key === 'description' ? '描述' :
+                               key === 'remark' ? '备注' :
+                               key === 'product' ? '理财产品' :
+                               key === 'apy' ? '年化收益' :
+                               key === 'earnings' ? '当前收益' :
+                               key === 'fromAmount' ? '兑换金额' :
+                               key === 'toAmount' ? '兑换数量' :
+                               key === 'rate' ? '兑换汇率' :
+                               key === 'cardNumber' ? '卡号' :
+                               key === 'cardType' ? '卡片类型' :
+                               key === 'category' ? '类别' :
+                               key === 'region' ? '地区' :
+                               key === 'location' ? '消费地区' :
+                               key === 'reason' ? '退款原因' :
+                               key === 'originalOrderId' ? '原订单号' :
+                               key === 'creditAmount' ? '到账金额' :
+                               key === 'creditCurrency' ? '到账币种' :
+                               key === 'toAccount' ? '目标账户' :
+                               key === 'exchangeRate' ? '汇率' :
+                               key === 'tradePartner' ? '交易对象' :
+                               key === 'guaranteeAmount' ? '担保金额' :
+                               key === 'guaranteeCurrency' ? '担保币种' :
+                               key === 'tradeType' ? '交易类型' :
+                               key === 'progress' ? '进度' :
+                               key === 'creditLimit' ? '信用额度' :
+                               key === 'usedCredit' ? '已用额度' :
+                               key === 'availableCredit' ? '可用额度' :
+                               key === 'purpose' ? '用途' :
+                               key === 'customerName' ? '客户姓名' :
+                               key === 'recipientName' ? '收款人' :
+                               key === 'recipientWallet' ? '收款钱包' :
+                               key === 'customerWallet' ? '客户钱包' :
+                               key === 'channel' ? '支付渠道' :
+                               key === 'bankAccount' ? '银行账户' :
+                               key === 'settlement' ? '结算状态' :
+                               key === 'txHash' ? '交易哈希' :
+                               key === 'confirmations' ? '确认数' :
+                               key === 'orderNo' ? '订单号' : key}
+                            </div>
+                            <div className={`${isDark ? 'text-white' : 'text-gray-900'} font-medium break-all`}>
+                              {typeof value === 'object' ? JSON.stringify(value) : (value || '-')}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+            
+            {/* 支付订单页面底部红色提示 */}
             {orderTab === "支付订单" && (
               <div className="mt-6 p-4 rounded-lg border-l-4 border-red-500 bg-red-50/80 dark:bg-red-900/20">
                 <div className="flex items-center">
