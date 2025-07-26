@@ -5,10 +5,6 @@ import { useRouter } from "next/navigation"
 import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { useChat } from "@/contexts/chat-context"
-import ThemeToggle from "@/components/theme-toggle"
-import LanguageToggle from "@/components/language-toggle"
-import AccountDropdown from "@/components/account-dropdown"
-import MobileNotificationButton from "@/components/mobile-notification-button"
 
 // Custom Transfer Icon (Wallet)
 const TransferIcon = ({ className }: { className?: string }) => (
@@ -87,7 +83,7 @@ interface Message {
 }
 
 export default function ChatPage() {
-  const { theme, language } = useTheme()
+  const { theme } = useTheme()
   const { showMobileChat, setShowMobileChat } = useChat()
   const router = useRouter()
   const isDark = theme === "dark"
@@ -799,33 +795,46 @@ export default function ChatPage() {
           <div className="flex items-center justify-between p-4">
             {/* Left: Personal Avatar */}
             <div className="flex items-center">
-              <AccountDropdown onNavigate={router.push} />
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold cursor-pointer">
+                👤
+              </div>
             </div>
 
             {/* Right: Function Icons */}
             <div className="flex items-center space-x-3">
               {/* Customer Service */}
-              <button 
-                onClick={() => {
-                  // 添加客服功能 - 可以后续实现
-                }}
-                className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"} transition-colors`}
-              >
+              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}>
                 <MessageCircle className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-700"}`} />
               </button>
               
               {/* Language Switch */}
-              <div className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"} transition-colors`}>
-                <LanguageToggle />
-              </div>
+              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}>
+                <svg className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-700"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                </svg>
+              </button>
               
               {/* Theme Switch */}
-              <div className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"} transition-colors`}>
-                <ThemeToggle />
-              </div>
+              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}>
+                {isDark ? (
+                  <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : (
+                  <svg className="h-5 w-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+              </button>
               
               {/* Notifications */}
-              <MobileNotificationButton onNavigate={router.push} />
+              <button className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"} relative`}>
+                <Bell className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-700"}`} />
+                {/* Notification badge */}
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-[8px] text-white font-bold">3</span>
+                </div>
+              </button>
             </div>
           </div>
         ) : (
