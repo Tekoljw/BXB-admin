@@ -192,7 +192,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
   // 桌面端布局（原有的侧边栏布局）
   return (
-    <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
+    <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`} style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
       {/* Sidebar */}
       <div 
         className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl shadow-black/20 relative overflow-hidden h-full`}
@@ -410,7 +410,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       )}
 
       {/* Main Content - Render component directly */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
         {renderCurrentPage()}
       </div>
 

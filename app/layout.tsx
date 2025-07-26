@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-apple">
+      <body className="font-apple overflow-x-hidden">
         <ThemeProvider>
           <ChatProvider>
             {children}

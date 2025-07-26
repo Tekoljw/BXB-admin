@@ -53,8 +53,15 @@
   * {
     @apply border-border;
   }
+  
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
   body {
     @apply bg-background text-foreground;
+    position: relative;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -69,4 +76,18 @@
 .overflow-x-auto {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+}
+
+/* Prevent horizontal scrolling on mobile */
+@media (max-width: 768px) {
+  * {
+    box-sizing: border-box;
+    max-width: 100vw !important;
+  }
+  
+  body, html, #__next, [data-overlay-container] {
+    overflow-x: hidden !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
 }

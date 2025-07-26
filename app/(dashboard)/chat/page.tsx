@@ -781,13 +781,15 @@ export default function ChatPage() {
           ? 'translateX(-384px)' 
           : 'translateX(0)',
         transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        willChange: 'transform'
+        willChange: 'transform',
+        maxWidth: '100vw',
+        overflowX: 'hidden'
       }}
     >
       {/* Contact List Sidebar */}
       <div 
-        className={`${cardStyle} flex flex-col`}
-        style={isMobile ? { width: '100vw', minWidth: '100vw', maxWidth: '100vw' } : { minWidth: '416px', maxWidth: '500px', width: 'clamp(416px, 30vw, 500px)' }}
+        className={`${cardStyle} flex flex-col overflow-x-hidden`}
+        style={isMobile ? { width: '100%', minWidth: '100%', maxWidth: '100%' } : { minWidth: '416px', maxWidth: '500px', width: 'clamp(416px, 30vw, 500px)' }}
       >
         {/* Search and Add Button - Desktop / Mobile Header */}
         {isMobile ? (
