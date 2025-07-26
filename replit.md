@@ -802,6 +802,8 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Added overflow-x-auto with hidden scrollbar styling for smooth mobile scrolling experience
   - Applied whitespace-nowrap and flex-shrink-0 to prevent tab text compression and ensure proper spacing
   - Enhanced mobile user experience by eliminating text wrapping issues on narrow screens
+  - Added mouse drag functionality for horizontal scrolling with grab cursor and smooth dragging behavior
+  - Implemented touch-friendly scrolling with proper event handling for mousedown, mousemove, and mouseup events
 
 ## User Preferences
 

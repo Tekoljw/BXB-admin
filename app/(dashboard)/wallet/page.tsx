@@ -15792,7 +15792,51 @@ export default function WalletPage() {
             {/* 手机端 - 水平滚动布局 */}
             <div className="md:hidden">
               <div 
-                className="overflow-x-auto"
+                ref={(el) => {
+                  if (el) {
+                    let isDown = false;
+                    let startX: number;
+                    let scrollLeft: number;
+
+                    const handleMouseDown = (e: MouseEvent) => {
+                      isDown = true;
+                      el.style.cursor = 'grabbing';
+                      startX = e.pageX - el.offsetLeft;
+                      scrollLeft = el.scrollLeft;
+                    };
+
+                    const handleMouseLeave = () => {
+                      isDown = false;
+                      el.style.cursor = 'grab';
+                    };
+
+                    const handleMouseUp = () => {
+                      isDown = false;
+                      el.style.cursor = 'grab';
+                    };
+
+                    const handleMouseMove = (e: MouseEvent) => {
+                      if (!isDown) return;
+                      e.preventDefault();
+                      const x = e.pageX - el.offsetLeft;
+                      const walk = (x - startX) * 2;
+                      el.scrollLeft = scrollLeft - walk;
+                    };
+
+                    el.addEventListener('mousedown', handleMouseDown);
+                    el.addEventListener('mouseleave', handleMouseLeave);
+                    el.addEventListener('mouseup', handleMouseUp);
+                    el.addEventListener('mousemove', handleMouseMove);
+
+                    return () => {
+                      el.removeEventListener('mousedown', handleMouseDown);
+                      el.removeEventListener('mouseleave', handleMouseLeave);
+                      el.removeEventListener('mouseup', handleMouseUp);
+                      el.removeEventListener('mousemove', handleMouseMove);
+                    };
+                  }
+                }}
+                className="overflow-x-auto cursor-grab"
                 style={{
                   scrollbarWidth: 'none', /* Firefox */
                   msOverflowStyle: 'none'  /* Internet Explorer 10+ */
