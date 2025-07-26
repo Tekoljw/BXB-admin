@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft, Home, Percent, FileCheck, Key, Settings, UserX, LogOut } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft, Home, Percent, FileCheck, Key, Settings, UserX, LogOut, Check } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { useChat } from "@/contexts/chat-context"
 
