@@ -16414,209 +16414,330 @@ export default function WalletPage() {
                           // 根据不同页签显示不同的搜索选项
                           if (secondaryTabKey === 'invest') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    产品
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
-                                    <option>USDT理财</option>
-                                    <option>BTC定期</option>
-                                    <option>ETH流动性</option>
-                                    <option>DeFi挖矿</option>
-                                    <option>双币投资</option>
-                                  </select>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-5 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      产品
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USDT理财</option>
+                                      <option>BTC定期</option>
+                                      <option>ETH流动性</option>
+                                      <option>DeFi挖矿</option>
+                                      <option>双币投资</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      币种
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USDT</option>
+                                      <option>BTC</option>
+                                      <option>ETH</option>
+                                      <option>BNB</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      状态
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>投资中</option>
+                                      <option>已到期</option>
+                                      <option>已赎回</option>
+                                      <option>已取消</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      日期
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>今天</option>
+                                      <option>最近7天</option>
+                                      <option>最近30天</option>
+                                      <option>最近90天</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
                                 </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    币种
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
-                                    <option>USDT</option>
-                                    <option>BTC</option>
-                                    <option>ETH</option>
-                                    <option>BNB</option>
-                                  </select>
+
+                                {/* 手机端布局 - 分两行显示，隐藏按钮 */}
+                                <div className="md:hidden space-y-2">
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>产品</option>
+                                      <option>USDT理财</option>
+                                      <option>BTC定期</option>
+                                      <option>ETH流动性</option>
+                                      <option>DeFi挖矿</option>
+                                      <option>双币投资</option>
+                                    </select>
+                                    <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>币种</option>
+                                      <option>USDT</option>
+                                      <option>BTC</option>
+                                      <option>ETH</option>
+                                      <option>BNB</option>
+                                    </select>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>状态</option>
+                                      <option>投资中</option>
+                                      <option>已到期</option>
+                                      <option>已赎回</option>
+                                      <option>已取消</option>
+                                    </select>
+                                    <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>日期</option>
+                                      <option>今天</option>
+                                      <option>最近7天</option>
+                                      <option>最近30天</option>
+                                      <option>最近90天</option>
+                                    </select>
+                                  </div>
                                 </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    状态
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
-                                    <option>投资中</option>
-                                    <option>已到期</option>
-                                    <option>已赎回</option>
-                                    <option>已取消</option>
-                                  </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    日期
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
-                                    <option>今天</option>
-                                    <option>最近7天</option>
-                                    <option>最近30天</option>
-                                    <option>最近90天</option>
-                                  </select>
-                                </div>
-                                <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                    重置
-                                  </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                    筛选
-                                  </button>
-                                </div>
-                              </div>
+                              </>
                             )
                           } else if (secondaryTabKey === 'exchange') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    兑换类型
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      兑换类型
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USDT转BTC</option>
+                                      <option>BTC转USDT</option>
+                                      <option>ETH转USDT</option>
+                                      <option>法币兑换</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      币种
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USDT</option>
+                                      <option>BTC</option>
+                                      <option>ETH</option>
+                                      <option>BNB</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      状态
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>兑换成功</option>
+                                      <option>兑换中</option>
+                                      <option>兑换失败</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                                <div className="md:hidden flex gap-2">
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>兑换类型</option>
                                     <option>USDT转BTC</option>
                                     <option>BTC转USDT</option>
                                     <option>ETH转USDT</option>
                                     <option>法币兑换</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    币种
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>币种</option>
                                     <option>USDT</option>
                                     <option>BTC</option>
                                     <option>ETH</option>
                                     <option>BNB</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    状态
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>状态</option>
                                     <option>兑换成功</option>
                                     <option>兑换中</option>
                                     <option>兑换失败</option>
                                   </select>
                                 </div>
-                                <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                    重置
-                                  </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                    筛选
-                                  </button>
-                                </div>
-                              </div>
+                              </>
                             )
                           } else if (secondaryTabKey === 'earnings') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    币种
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      币种
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USDT</option>
+                                      <option>BTC</option>
+                                      <option>ETH</option>
+                                      <option>BNB</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      收益类型
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>日收益</option>
+                                      <option>周收益</option>
+                                      <option>月收益</option>
+                                      <option>到期收益</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      日期
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>今天</option>
+                                      <option>最近7天</option>
+                                      <option>最近30天</option>
+                                      <option>最近90天</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                                <div className="md:hidden flex gap-2">
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>币种</option>
                                     <option>USDT</option>
                                     <option>BTC</option>
                                     <option>ETH</option>
                                     <option>BNB</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    收益类型
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>收益类型</option>
                                     <option>日收益</option>
                                     <option>周收益</option>
                                     <option>月收益</option>
                                     <option>到期收益</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    日期
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>日期</option>
                                     <option>今天</option>
                                     <option>最近7天</option>
                                     <option>最近30天</option>
                                     <option>最近90天</option>
                                   </select>
                                 </div>
-                                <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                    重置
-                                  </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                    筛选
-                                  </button>
-                                </div>
-                              </div>
+                              </>
                             )
                           } else if (secondaryTabKey === 'account') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    操作类型
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      操作类型
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>转入</option>
+                                      <option>转出</option>
+                                      <option>收益发放</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      币种
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USDT</option>
+                                      <option>BTC</option>
+                                      <option>ETH</option>
+                                      <option>BNB</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      相关账户
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>现货账户</option>
+                                      <option>合约账户</option>
+                                      <option>资金账户</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                                <div className="md:hidden flex gap-2">
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>操作类型</option>
                                     <option>转入</option>
                                     <option>转出</option>
                                     <option>收益发放</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    币种
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>币种</option>
                                     <option>USDT</option>
                                     <option>BTC</option>
                                     <option>ETH</option>
                                     <option>BNB</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    相关账户
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>相关账户</option>
                                     <option>现货账户</option>
                                     <option>合约账户</option>
                                     <option>资金账户</option>
                                   </select>
                                 </div>
-                                <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                    重置
-                                  </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                    筛选
-                                  </button>
-                                </div>
-                              </div>
+                              </>
                             )
                           } else if (secondaryTabKey === 'commission') {
                             // 佣金结算记录的专门筛选功能
@@ -16823,205 +16944,322 @@ export default function WalletPage() {
                           // 根据不同页签显示不同的搜索选项
                           if (secondaryTabKey === 'open') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    卡片类型
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      卡片类型
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>Visa虚拟卡</option>
+                                      <option>Mastercard虚拟卡</option>
+                                      <option>Visa实体卡</option>
+                                      <option>Mastercard实体卡</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      地区
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>欧洲</option>
+                                      <option>美国</option>
+                                      <option>香港</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      状态
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>激活成功</option>
+                                      <option>制卡中</option>
+                                      <option>已寄出</option>
+                                      <option>申请失败</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                                <div className="md:hidden flex gap-2">
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>卡片类型</option>
                                     <option>Visa虚拟卡</option>
                                     <option>Mastercard虚拟卡</option>
                                     <option>Visa实体卡</option>
                                     <option>Mastercard实体卡</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    地区
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>地区</option>
                                     <option>欧洲</option>
                                     <option>美国</option>
                                     <option>香港</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    状态
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>状态</option>
                                     <option>激活成功</option>
                                     <option>制卡中</option>
                                     <option>已寄出</option>
                                     <option>申请失败</option>
                                   </select>
                                 </div>
-                                <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                    重置
-                                  </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                    筛选
-                                  </button>
-                                </div>
-                              </div>
+                              </>
                             )
                           } else if (secondaryTabKey === 'recharge') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    币种
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      币种
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USDT</option>
+                                      <option>BTC</option>
+                                      <option>ETH</option>
+                                      <option>BNB</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      卡号
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部卡片</option>
+                                      <option>****1234</option>
+                                      <option>****5678</option>
+                                      <option>****9012</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      状态
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>已完成</option>
+                                      <option>处理中</option>
+                                      <option>失败</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                                <div className="md:hidden flex gap-2">
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>币种</option>
                                     <option>USDT</option>
                                     <option>BTC</option>
                                     <option>ETH</option>
                                     <option>BNB</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    卡号
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部卡片</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>卡号</option>
                                     <option>****1234</option>
                                     <option>****5678</option>
                                     <option>****9012</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    状态
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>状态</option>
                                     <option>已完成</option>
                                     <option>处理中</option>
                                     <option>失败</option>
                                   </select>
                                 </div>
-                                <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                    重置
-                                  </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                    筛选
-                                  </button>
-                                </div>
-                              </div>
+                              </>
                             )
                           } else if (secondaryTabKey === 'consume') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    商户
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
-                                    <option>Amazon</option>
-                                    <option>Netflix</option>
-                                    <option>Apple Store</option>
-                                    <option>Google Play</option>
-                                    <option>AWS</option>
-                                  </select>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-5 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      商户
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>Amazon</option>
+                                      <option>Netflix</option>
+                                      <option>Apple Store</option>
+                                      <option>Google Play</option>
+                                      <option>AWS</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      消费类别
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>购物</option>
+                                      <option>娱乐</option>
+                                      <option>云服务</option>
+                                      <option>应用服务</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      消费地区
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>美国</option>
+                                      <option>欧洲</option>
+                                      <option>亚洲</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      状态
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>已完成</option>
+                                      <option>处理中</option>
+                                      <option>失败</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
                                 </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    消费类别
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
-                                    <option>购物</option>
-                                    <option>娱乐</option>
-                                    <option>云服务</option>
-                                    <option>应用服务</option>
-                                  </select>
+
+                                {/* 手机端布局 - 分两行显示，隐藏按钮 */}
+                                <div className="md:hidden space-y-2">
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>商户</option>
+                                      <option>Amazon</option>
+                                      <option>Netflix</option>
+                                      <option>Apple Store</option>
+                                      <option>Google Play</option>
+                                      <option>AWS</option>
+                                    </select>
+                                    <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>消费类别</option>
+                                      <option>购物</option>
+                                      <option>娱乐</option>
+                                      <option>云服务</option>
+                                      <option>应用服务</option>
+                                    </select>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>消费地区</option>
+                                      <option>美国</option>
+                                      <option>欧洲</option>
+                                      <option>亚洲</option>
+                                    </select>
+                                    <select className={`px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>状态</option>
+                                      <option>已完成</option>
+                                      <option>处理中</option>
+                                      <option>失败</option>
+                                    </select>
+                                  </div>
                                 </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    消费地区
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
-                                    <option>美国</option>
-                                    <option>欧洲</option>
-                                    <option>亚洲</option>
-                                  </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    状态
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
-                                    <option>已完成</option>
-                                    <option>处理中</option>
-                                    <option>失败</option>
-                                  </select>
-                                </div>
-                                <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                    重置
-                                  </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                    筛选
-                                  </button>
-                                </div>
-                              </div>
+                              </>
                             )
                           } else if (secondaryTabKey === 'refund') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    提取币种
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      提取币种
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USD</option>
+                                      <option>EUR</option>
+                                      <option>GBP</option>
+                                      <option>JPY</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      目标账户
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>现货账户</option>
+                                      <option>理财账户</option>
+                                      <option>合约账户</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      状态
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>已完成</option>
+                                      <option>处理中</option>
+                                      <option>失败</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                                <div className="md:hidden flex gap-2">
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>提取币种</option>
                                     <option>USD</option>
                                     <option>EUR</option>
                                     <option>GBP</option>
                                     <option>JPY</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    目标账户
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>目标账户</option>
                                     <option>现货账户</option>
                                     <option>理财账户</option>
                                     <option>合约账户</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    状态
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>状态</option>
                                     <option>已完成</option>
                                     <option>处理中</option>
                                     <option>失败</option>
                                   </select>
                                 </div>
-                                <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                    重置
-                                  </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                    筛选
-                                  </button>
-                                </div>
-                              </div>
+                              </>
                             )
                           }
                           
@@ -17084,29 +17322,171 @@ export default function WalletPage() {
                           // 根据不同页签显示不同的搜索选项
                           if (secondaryTabKey === 'receive' || secondaryTabKey === 'payment') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    交易类型
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      交易类型
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>数字货币交易</option>
+                                      <option>NFT交易</option>
+                                      <option>商品交易</option>
+                                      <option>服务交易</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      币种
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USDT</option>
+                                      <option>BTC</option>
+                                      <option>ETH</option>
+                                      <option>BNB</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      状态
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>进行中</option>
+                                      <option>等待确认</option>
+                                      <option>已完成</option>
+                                      <option>争议中</option>
+                                      <option>已取消</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                                <div className="md:hidden flex gap-2">
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>交易类型</option>
                                     <option>数字货币交易</option>
                                     <option>NFT交易</option>
                                     <option>商品交易</option>
                                     <option>服务交易</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    币种
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>币种</option>
                                     <option>USDT</option>
                                     <option>BTC</option>
                                     <option>ETH</option>
                                     <option>BNB</option>
+                                  </select>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>状态</option>
+                                    <option>进行中</option>
+                                    <option>等待确认</option>
+                                    <option>已完成</option>
+                                    <option>争议中</option>
+                                    <option>已取消</option>
+                                  </select>
+                                </div>
+                              </>
+                            )
+                          } else if (secondaryTabKey === 'credit') {
+                            return (
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      操作类型
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>信用担保充值</option>
+                                      <option>信用担保使用</option>
+                                      <option>信用担保释放</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      币种
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USDT</option>
+                                      <option>BTC</option>
+                                      <option>ETH</option>
+                                      <option>BNB</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      状态
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>已完成</option>
+                                      <option>处理中</option>
+                                      <option>失败</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                                <div className="md:hidden flex gap-2">
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>操作类型</option>
+                                    <option>信用担保充值</option>
+                                    <option>信用担保使用</option>
+                                    <option>信用担保释放</option>
+                                  </select>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>币种</option>
+                                    <option>USDT</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>BNB</option>
+                                  </select>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>状态</option>
+                                    <option>已完成</option>
+                                    <option>处理中</option>
+                                    <option>失败</option>
+                                  </select>
+                                </div>
+                              </>
+                            )
+                          }
+                          
+                          // 默认搜索选项
+                          return (
+                            <>
+                              {/* 桌面端布局 */}
+                              <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    类型
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>担保交易</option>
+                                    <option>信用担保</option>
                                   </select>
                                 </div>
                                 <div>
@@ -17116,57 +17496,21 @@ export default function WalletPage() {
                                   <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                                     <option>全部</option>
                                     <option>进行中</option>
-                                    <option>等待确认</option>
                                     <option>已完成</option>
                                     <option>争议中</option>
                                     <option>已取消</option>
                                   </select>
                                 </div>
-                                <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                    重置
-                                  </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                    筛选
-                                  </button>
-                                </div>
-                              </div>
-                            )
-                          } else if (secondaryTabKey === 'credit') {
-                            return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div>
                                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    操作类型
+                                    时间
                                   </label>
                                   <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                                     <option>全部</option>
-                                    <option>信用担保充值</option>
-                                    <option>信用担保使用</option>
-                                    <option>信用担保释放</option>
-                                  </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    币种
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
-                                    <option>USDT</option>
-                                    <option>BTC</option>
-                                    <option>ETH</option>
-                                    <option>BNB</option>
-                                  </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    状态
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
-                                    <option>已完成</option>
-                                    <option>处理中</option>
-                                    <option>失败</option>
+                                    <option>今天</option>
+                                    <option>最近7天</option>
+                                    <option>最近30天</option>
+                                    <option>最近90天</option>
                                   </select>
                                 </div>
                                 <div className="flex items-end gap-2">
@@ -17178,55 +17522,30 @@ export default function WalletPage() {
                                   </button>
                                 </div>
                               </div>
-                            )
-                          }
-                          
-                          // 默认搜索选项
-                          return (
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                              <div>
-                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                  类型
-                                </label>
-                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                  <option>全部</option>
+
+                              {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                              <div className="md:hidden flex gap-2">
+                                <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>类型</option>
                                   <option>担保交易</option>
                                   <option>信用担保</option>
                                 </select>
-                              </div>
-                              <div>
-                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                  状态
-                                </label>
-                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                  <option>全部</option>
+                                <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>状态</option>
                                   <option>进行中</option>
                                   <option>已完成</option>
                                   <option>争议中</option>
                                   <option>已取消</option>
                                 </select>
-                              </div>
-                              <div>
-                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                  时间
-                                </label>
-                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                  <option>全部</option>
+                                <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>时间</option>
                                   <option>今天</option>
                                   <option>最近7天</option>
                                   <option>最近30天</option>
                                   <option>最近90天</option>
                                 </select>
                               </div>
-                              <div className="flex items-end gap-2">
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                  重置
-                                </button>
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                  筛选
-                                </button>
-                              </div>
-                            </div>
+                            </>
                           )
                         })()}
                       </div>
@@ -17238,89 +17557,157 @@ export default function WalletPage() {
                           // 根据不同页签显示不同的搜索选项
                           if (secondaryTabKey === 'fiatReceive' || secondaryTabKey === 'fiatPay') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    商户
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      商户
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>电商平台A</option>
+                                      <option>游戏平台B</option>
+                                      <option>在线教育C</option>
+                                      <option>供应商A</option>
+                                      <option>服务商B</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      币种
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>CNY</option>
+                                      <option>USD</option>
+                                      <option>EUR</option>
+                                      <option>GBP</option>
+                                      <option>JPY</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      支付渠道
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>支付宝</option>
+                                      <option>微信支付</option>
+                                      <option>银行转账</option>
+                                      <option>信用卡</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                                <div className="md:hidden flex gap-2">
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>商户</option>
                                     <option>电商平台A</option>
                                     <option>游戏平台B</option>
                                     <option>在线教育C</option>
                                     <option>供应商A</option>
                                     <option>服务商B</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    币种
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>币种</option>
                                     <option>CNY</option>
                                     <option>USD</option>
                                     <option>EUR</option>
                                     <option>GBP</option>
                                     <option>JPY</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    支付渠道
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>支付渠道</option>
                                     <option>支付宝</option>
                                     <option>微信支付</option>
                                     <option>银行转账</option>
                                     <option>信用卡</option>
                                   </select>
                                 </div>
-                                <div className="flex items-end gap-2">
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                    重置
-                                  </button>
-                                  <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                    筛选
-                                  </button>
-                                </div>
-                              </div>
+                              </>
                             )
                           } else if (secondaryTabKey === 'cryptoReceive' || secondaryTabKey === 'cryptoPay') {
                             return (
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    商户
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                              <>
+                                {/* 桌面端布局 */}
+                                <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      商户
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>NFT市场A</option>
+                                      <option>DeFi平台B</option>
+                                      <option>交易所C</option>
+                                      <option>矿池A</option>
+                                      <option>游戏公会B</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      币种
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>USDT</option>
+                                      <option>BTC</option>
+                                      <option>ETH</option>
+                                      <option>BNB</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                      网络
+                                    </label>
+                                    <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                      <option>全部</option>
+                                      <option>TRC20</option>
+                                      <option>ERC20</option>
+                                      <option>Bitcoin</option>
+                                      <option>Ethereum</option>
+                                      <option>BSC</option>
+                                    </select>
+                                  </div>
+                                  <div className="flex items-end gap-2">
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
+                                      重置
+                                    </button>
+                                    <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
+                                      筛选
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                                <div className="md:hidden flex gap-2">
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>商户</option>
                                     <option>NFT市场A</option>
                                     <option>DeFi平台B</option>
                                     <option>交易所C</option>
                                     <option>矿池A</option>
                                     <option>游戏公会B</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    币种
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>币种</option>
                                     <option>USDT</option>
                                     <option>BTC</option>
                                     <option>ETH</option>
                                     <option>BNB</option>
                                   </select>
-                                </div>
-                                <div>
-                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    网络
-                                  </label>
-                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                    <option>全部</option>
+                                  <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>网络</option>
                                     <option>TRC20</option>
                                     <option>ERC20</option>
                                     <option>Bitcoin</option>
@@ -17328,6 +17715,50 @@ export default function WalletPage() {
                                     <option>BSC</option>
                                   </select>
                                 </div>
+                              </>
+                            )
+                          }
+                          
+                          // 默认搜索选项
+                          return (
+                            <>
+                              {/* 桌面端布局 */}
+                              <div className="hidden md:grid md:grid-cols-4 gap-4">
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    类型
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>法币支付</option>
+                                    <option>加密货币支付</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    状态
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>已完成</option>
+                                    <option>处理中</option>
+                                    <option>已确认</option>
+                                    <option>确认中</option>
+                                    <option>已发送</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    时间
+                                  </label>
+                                  <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                    <option>全部</option>
+                                    <option>今天</option>
+                                    <option>最近7天</option>
+                                    <option>最近30天</option>
+                                    <option>最近90天</option>
+                                  </select>
+                                </div>
                                 <div className="flex items-end gap-2">
                                   <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
                                     重置
@@ -17337,56 +17768,31 @@ export default function WalletPage() {
                                   </button>
                                 </div>
                               </div>
-                            )
-                          }
-                          
-                          // 默认搜索选项
-                          return (
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                              <div>
-                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                  类型
-                                </label>
-                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                  <option>全部</option>
+
+                              {/* 手机端布局 - 单行显示，隐藏按钮 */}
+                              <div className="md:hidden flex gap-2">
+                                <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>类型</option>
                                   <option>法币支付</option>
                                   <option>加密货币支付</option>
                                 </select>
-                              </div>
-                              <div>
-                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                  状态
-                                </label>
-                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                  <option>全部</option>
+                                <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>状态</option>
                                   <option>已完成</option>
                                   <option>处理中</option>
                                   <option>已确认</option>
                                   <option>确认中</option>
                                   <option>已发送</option>
                                 </select>
-                              </div>
-                              <div>
-                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                  时间
-                                </label>
-                                <select className={`w-full px-3 py-2 border rounded-md text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                                  <option>全部</option>
+                                <select className={`flex-1 px-2 py-2 border rounded-md text-xs ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                                  <option>时间</option>
                                   <option>今天</option>
                                   <option>最近7天</option>
                                   <option>最近30天</option>
                                   <option>最近90天</option>
                                 </select>
                               </div>
-                              <div className="flex items-end gap-2">
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border-2 ${isDark ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' : 'bg-white text-black border-black hover:bg-gray-50'}`}>
-                                  重置
-                                </button>
-                                <button className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isDark ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
-                                  筛选
-                                </button>
-                              </div>
-                            </div>
+                            </>
                           )
                         })()}
                       </div>
