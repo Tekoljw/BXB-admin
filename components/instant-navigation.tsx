@@ -148,16 +148,16 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   // 移动端布局
   if (isMobile) {
     return (
-      <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900" style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+      <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
         {/* 主要内容区域 */}
-        <div className="flex-1 overflow-auto pb-20" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
+        <div className="flex-1 overflow-auto pb-20">
           {renderCurrentPage()}
         </div>
         
         {/* 底部导航栏 */}
         {/* 隐藏底部菜单当手机聊天界面打开时 */}
         {!showMobileChat && (
-          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50" style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50">
             <div className="flex items-center justify-around py-2">
               {mobileNavItems.map((item) => {
                 const Icon = item.icon
@@ -192,7 +192,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
 
   // 桌面端布局（原有的侧边栏布局）
   return (
-    <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`} style={{ maxWidth: '100vw', overflowX: 'hidden' }}>
+    <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
       {/* Sidebar */}
       <div 
         className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl shadow-black/20 relative overflow-hidden h-full`}
@@ -410,7 +410,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       )}
 
       {/* Main Content - Render component directly */}
-      <div className="flex-1 overflow-auto" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
+      <div className="flex-1 overflow-auto">
         {renderCurrentPage()}
       </div>
 
