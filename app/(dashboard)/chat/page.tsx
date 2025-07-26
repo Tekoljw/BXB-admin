@@ -143,7 +143,10 @@ export default function ChatPage() {
   }
 
   const handleToggleLanguage = () => {
-    setLanguage(language === "zh" ? "en" : "zh")
+    const newLanguage = language === "zh" ? "en" : "zh"
+    console.log('Current language:', language)
+    console.log('Switching to:', newLanguage)
+    setLanguage(newLanguage)
   }
   
   // All refs
