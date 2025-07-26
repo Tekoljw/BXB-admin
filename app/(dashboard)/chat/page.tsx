@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft, Home, Percent, FileCheck, Key, Settings, UserX, LogOut, Check } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft, Home, Percent, FileCheck, Key, Settings, UserX, LogOut, Check, Mic } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { useChat } from "@/contexts/chat-context"
 
@@ -2425,6 +2425,16 @@ export default function ChatPage() {
                       
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
+                          {/* Voice Input Toggle Button */}
+                          <button
+                            type="button"
+                            className={`p-2 rounded-lg transition-colors ${
+                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                            }`}
+                            title="切换语音输入"
+                          >
+                            <Mic className="w-5 h-5" />
+                          </button>
                           <button
                             type="button"
                             className={`p-2 rounded-lg transition-colors ${
@@ -3549,6 +3559,16 @@ export default function ChatPage() {
           {/* Mobile Input */}
           <div className={`p-4 border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
             <form onSubmit={handleSendMessage} className="flex space-x-2">
+              {/* Voice Input Toggle Button for Mobile */}
+              <button
+                type="button"
+                className={`p-3 rounded-lg transition-colors ${
+                  isDark ? "hover:bg-[#2a2d42] text-gray-400" : "hover:bg-gray-100 text-gray-500"
+                }`}
+                title="切换语音输入"
+              >
+                <Mic className="w-5 h-5" />
+              </button>
               <textarea
                 ref={textareaRef}
                 value={message}
