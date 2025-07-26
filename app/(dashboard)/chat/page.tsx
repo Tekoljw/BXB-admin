@@ -3270,7 +3270,7 @@ export default function ChatPage() {
 
       {/* Mobile Chat Interface */}
       {isMobile && showMobileChat && selectedContact && (
-        <div className="fixed inset-0 bg-[#f5f8fa] dark:bg-[#1a1c2e] z-[100] flex flex-col">
+        <div className="fixed inset-0 bg-[#f5f8fa] dark:bg-background z-[100] flex flex-col">
           {/* Mobile Chat Header */}
           <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center space-x-3`}>
             <button
