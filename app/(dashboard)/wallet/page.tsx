@@ -15749,7 +15749,8 @@ export default function WalletPage() {
         {/* 二级页签导航 - 滑动页签组件 */}
         {currentCategory && Object.keys(currentCategory.tabs).length > 1 && (
           <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div className={`relative flex rounded-lg p-1 overflow-hidden ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
+            {/* 桌面端 - 固定宽度布局 */}
+            <div className={`hidden md:block relative rounded-lg p-1 overflow-hidden ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
               {/* 滑动背景 */}
               {(() => {
                 const tabKeys = Object.keys(currentCategory.tabs)
@@ -15769,21 +15770,54 @@ export default function WalletPage() {
               })()}
               
               {/* 页签按钮 */}
-              {Object.entries(currentCategory.tabs).map(([key, label]) => (
-                <button
-                  key={key}
-                  onClick={() => setSecondaryTab(key)}
-                  className={`relative z-10 flex-1 px-4 py-2 text-sm font-medium transition-all duration-300 ${
-                    secondaryTab === key
-                      ? "text-black"
-                      : isDark
-                      ? "text-gray-300 hover:text-white"
-                      : "text-gray-700 hover:text-gray-900"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
+              <div className="flex">
+                {Object.entries(currentCategory.tabs).map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSecondaryTab(key)}
+                    className={`relative z-10 flex-1 px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                      secondaryTab === key
+                        ? "text-black"
+                        : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-700 hover:text-gray-900"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 手机端 - 水平滚动布局 */}
+            <div className="md:hidden">
+              <div 
+                className="overflow-x-auto"
+                style={{
+                  scrollbarWidth: 'none', /* Firefox */
+                  msOverflowStyle: 'none'  /* Internet Explorer 10+ */
+                }}
+              >
+                <div className="flex space-x-2 min-w-max pb-1">
+                  {Object.entries(currentCategory.tabs).map(([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => setSecondaryTab(key)}
+                      className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 flex-shrink-0 ${
+                        secondaryTab === key
+                          ? isDark
+                            ? "bg-white text-black"
+                            : "bg-black text-white"
+                          : isDark
+                          ? "bg-[#252842] text-gray-300 hover:text-white"
+                          : "bg-gray-200 text-gray-700 hover:text-gray-900"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}

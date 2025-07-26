@@ -795,6 +795,13 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Moved other filter selectors to second row in 2-column grid layout for optimal space utilization
   - Applied consistent layout pattern across all 5 commission types: 合约佣金, 理财佣金, U卡佣金, 担保佣金, 支付佣金
   - Enhanced mobile interface clarity by prioritizing search and status filtering in primary row
+- January 30, 2025. Implemented horizontal scrolling for order records page secondary tabs on mobile:
+  - Redesigned order records secondary tab navigation with separate desktop and mobile layouts
+  - Desktop maintains original sliding background tab design with flex-1 width distribution
+  - Mobile uses horizontal scrolling layout with individual pill-style buttons to prevent text wrapping
+  - Added overflow-x-auto with hidden scrollbar styling for smooth mobile scrolling experience
+  - Applied whitespace-nowrap and flex-shrink-0 to prevent tab text compression and ensure proper spacing
+  - Enhanced mobile user experience by eliminating text wrapping issues on narrow screens
 
 ## User Preferences
 
