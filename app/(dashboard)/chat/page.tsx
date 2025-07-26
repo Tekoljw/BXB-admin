@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { useChat } from "@/contexts/chat-context"
@@ -84,6 +85,7 @@ interface Message {
 export default function ChatPage() {
   const { theme } = useTheme()
   const { showMobileChat, setShowMobileChat } = useChat()
+  const router = useRouter()
   const isDark = theme === "dark"
 
   // All state hooks in consistent order
@@ -901,9 +903,11 @@ export default function ChatPage() {
                   <div
                     key={contact.id}
                     onClick={() => {
-                      setSelectedContact(contact.id)
                       if (isMobile) {
-                        setShowMobileChat(true)
+                        // 跳转到好友请求页面而不是聊天页面
+                        router.push("/friend-requests")
+                      } else {
+                        setSelectedContact(contact.id)
                       }
                     }}
                     className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer mb-2 ${
