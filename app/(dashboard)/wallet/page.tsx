@@ -14735,46 +14735,27 @@ export default function WalletPage() {
       default:
         return (
           <div className={`${cardStyle} rounded-lg overflow-hidden`}>
-            {/* 二级页签导航 - 滑动页签组件 */}
+            {/* 二级页签导航 */}
             {currentCategory && Object.keys(currentCategory.tabs).length > 1 && (
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                <div className="overflow-x-auto">
-                  <div className={`relative flex rounded-lg p-1 min-w-max ${isDark ? 'bg-[#252842]' : 'bg-gray-200'}`}>
-                    {/* 滑动背景 */}
-                    {(() => {
-                      const tabKeys = Object.keys(currentCategory.tabs)
-                      const currentIndex = tabKeys.findIndex(key => key === secondaryTab)
-                      const tabWidth = 100 / tabKeys.length
-                      const leftPosition = currentIndex >= 0 ? currentIndex * tabWidth : 0
-                      
-                      return (
-                        <div
-                          className="absolute top-1 bottom-1 rounded-md transition-all duration-300 ease-in-out bg-white"
-                          style={{
-                            width: `${tabWidth}%`,
-                            left: `${leftPosition}%`
-                          }}
-                        />
-                      )
-                    })()}
-                    
-                    {/* 页签按钮 */}
-                    {Object.entries(currentCategory.tabs).map(([key, label]) => (
-                      <button
-                        key={key}
-                        onClick={() => setSecondaryTab(key)}
-                        className={`relative z-10 flex-1 px-4 py-2 text-sm font-medium transition-all duration-300 whitespace-nowrap ${
-                          secondaryTab === key
-                            ? "text-black"
-                            : isDark
-                            ? "text-gray-300 hover:text-white"
-                            : "text-gray-700 hover:text-gray-900"
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(currentCategory.tabs).map(([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => setSecondaryTab(key)}
+                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border-2 ${
+                        secondaryTab === key
+                          ? isDark 
+                            ? "bg-white text-black border-white" 
+                            : "bg-black text-white border-black"
+                          : isDark
+                            ? "bg-transparent text-white border-white hover:bg-white hover:text-black"
+                            : "bg-transparent text-black border-black hover:bg-black hover:text-white"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
