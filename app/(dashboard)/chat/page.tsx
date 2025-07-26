@@ -130,6 +130,9 @@ export default function ChatPage() {
   const [guaranteeDuration, setGuaranteeDuration] = useState("24") // hours
   const [guaranteeDeposit, setGuaranteeDeposit] = useState("5") // percentage
   
+  // Mobile profile menu state
+  const [showMobileProfileMenu, setShowMobileProfileMenu] = useState(false)
+  
   // All refs
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -795,9 +798,16 @@ export default function ChatPage() {
           <div className="flex items-center justify-between p-4">
             {/* Left: Personal Avatar */}
             <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-bold cursor-pointer">
-                👤
-              </div>
+              <button
+                onClick={() => setShowMobileProfileMenu(true)}
+                className={`w-10 h-10 rounded-full flex items-center justify-center ring-2 transition-all ${
+                  isDark 
+                    ? "bg-white/20 ring-white/30 hover:bg-white/30 text-white" 
+                    : "bg-gray-800/80 ring-gray-600/50 hover:bg-gray-700 text-white"
+                }`}
+              >
+                <User className="h-5 w-5" />
+              </button>
             </div>
 
             {/* Right: Function Icons */}
@@ -3319,6 +3329,105 @@ export default function ChatPage() {
               >
                 发起担保
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Profile Menu */}
+      {isMobile && showMobileProfileMenu && (
+        <div className="fixed inset-0 z-[110] flex">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowMobileProfileMenu(false)}
+          />
+          
+          {/* Profile Menu Panel */}
+          <div className={`relative w-80 h-full ${isDark ? "bg-[#1a1c2e]" : "bg-white"} shadow-xl transform transition-transform duration-300 ease-out`}>
+            {/* Header */}
+            <div className={`p-6 border-b ${isDark ? "border-[#3a3d4a]" : "border-gray-200"}`}>
+              <div className="flex items-center justify-between">
+                <h2 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>
+                  个人中心
+                </h2>
+                <button
+                  onClick={() => setShowMobileProfileMenu(false)}
+                  className={`p-2 rounded-lg ${isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"}`}
+                >
+                  <X className={`h-5 w-5 ${isDark ? "text-white" : "text-gray-600"}`} />
+                </button>
+              </div>
+              
+              {/* User Info */}
+              <div className="mt-4 flex items-center space-x-3">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ring-2 ${
+                  isDark 
+                    ? "bg-white/20 ring-white/30 text-white" 
+                    : "bg-gray-800/80 ring-gray-600/50 text-white"
+                }`}>
+                  <User className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                    交易达人
+                  </h3>
+                  <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                    ID: BXB123456
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Menu Items */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="py-2">
+                {[
+                  { icon: Home, label: "个人主页", onClick: () => router.push("/profile") },
+                  { icon: Gift, label: "邀请返佣", onClick: () => {} },
+                  { icon: Percent, label: "费率折扣", onClick: () => {} },
+                  { icon: Shield, label: "安全中心", onClick: () => {} },
+                  { icon: FileCheck, label: "身份认证", onClick: () => {} },
+                  { icon: Key, label: "API管理", onClick: () => {} },
+                  { icon: Settings, label: "系统设置", onClick: () => {} },
+                  { icon: UserX, label: "切换账号", onClick: () => {} },
+                ].map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      item.onClick()
+                      setShowMobileProfileMenu(false)
+                    }}
+                    className={`w-full flex items-center space-x-3 px-6 py-4 text-left transition-colors ${
+                      isDark
+                        ? "hover:bg-[#252842] text-gray-300"
+                        : "hover:bg-gray-50 text-gray-700"
+                    }`}
+                  >
+                    <item.icon className={`w-5 h-5 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+                    <span className="text-sm">{item.label}</span>
+                    <ChevronRight className={`w-4 h-4 ml-auto ${isDark ? "text-gray-500" : "text-gray-400"}`} />
+                  </button>
+                ))}
+              </div>
+              
+              {/* Logout */}
+              <div className={`py-2 border-t ${isDark ? "border-[#3a3d4a]" : "border-gray-200"}`}>
+                <button
+                  onClick={() => {
+                    // Handle logout
+                    setShowMobileProfileMenu(false)
+                  }}
+                  className={`w-full flex items-center space-x-3 px-6 py-4 text-left transition-colors ${
+                    isDark
+                      ? "hover:bg-[#252842] text-red-400"
+                      : "hover:bg-gray-50 text-red-600"
+                  }`}
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span className="text-sm">退出账号</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
