@@ -2437,66 +2437,79 @@ export default function ChatPage() {
                             {/* Progress Steps */}
                             <div className="space-y-4">
                               {escrowData.steps.map((step, index) => (
-                                <div key={step.id} className="space-y-2">
-                                  <div className="flex items-center space-x-3">
-                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                                <div key={step.id} className="relative">
+                                  {/* Vertical Progress Line - Connect to next step */}
+                                  {index < escrowData.steps.length - 1 && (
+                                    <div className={`absolute left-4 top-8 w-0.5 h-8 ${
                                       step.status === 'completed' 
-                                        ? 'bg-green-500 text-white' 
+                                        ? 'bg-green-500' 
                                         : step.status === 'current'
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-300 text-gray-600'
-                                    }`}>
-                                      {step.status === 'completed' ? '✓' : step.id}
-                                    </div>
-                                    <div className="flex-1">
-                                      <div className={`font-medium ${
-                                        step.status === 'current' 
-                                          ? isDark ? 'text-blue-400' : 'text-blue-600'
-                                          : step.status === 'completed'
-                                          ? isDark ? 'text-green-400' : 'text-green-600'
-                                          : isDark ? 'text-gray-400' : 'text-gray-500'
+                                        ? 'bg-blue-500'
+                                        : isDark ? 'bg-gray-600' : 'bg-gray-300'
+                                    }`} />
+                                  )}
+                                  
+                                  <div className="space-y-2">
+                                    <div className="flex items-center space-x-3">
+                                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold relative z-10 ${
+                                        step.status === 'completed' 
+                                          ? 'bg-green-500 text-white' 
+                                          : step.status === 'current'
+                                          ? 'bg-blue-500 text-white'
+                                          : 'bg-gray-300 text-gray-600'
                                       }`}>
-                                        {step.title}
+                                        {step.status === 'completed' ? '✓' : step.id}
                                       </div>
-                                      {step.timestamp && (
-                                        <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                      <div className="flex-1">
+                                        <div className={`font-medium ${
+                                          step.status === 'current' 
+                                            ? isDark ? 'text-blue-400' : 'text-blue-600'
+                                            : step.status === 'completed'
+                                            ? isDark ? 'text-green-400' : 'text-green-600'
+                                            : isDark ? 'text-gray-400' : 'text-gray-500'
+                                        }`}>
+                                          {step.title}
+                                        </div>
+                                        {step.timestamp && (
+                                          <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                        )}
+                                      </div>
+                                      {step.status === 'current' && (
+                                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                                       )}
                                     </div>
-                                    {step.status === 'current' && (
-                                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                    
+                                    {/* Action Buttons for Current and Completed Steps */}
+                                    {step.actions && (
+                                      <div className="ml-11 flex space-x-2">
+                                        {step.actions.map((action, actionIndex) => (
+                                          <button
+                                            key={actionIndex}
+                                            disabled={step.status === 'pending'}
+                                            onClick={() => console.log(`Action: ${action.label} for step ${step.id}`)}
+                                            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                                              step.status === 'pending'
+                                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                                : action.type === 'primary'
+                                                ? 'text-white hover:opacity-80'
+                                                : action.type === 'success'
+                                                ? 'text-white hover:opacity-80'
+                                                : action.type === 'danger'
+                                                ? 'bg-red-500 text-white hover:bg-red-600'
+                                                : isDark
+                                                ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
+                                                : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                                            }`}
+                                            style={{
+                                              backgroundColor: step.status !== 'pending' && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
+                                            }}
+                                          >
+                                            {action.label}
+                                          </button>
+                                        ))}
+                                      </div>
                                     )}
                                   </div>
-                                  
-                                  {/* Action Buttons for Current and Completed Steps */}
-                                  {step.actions && (
-                                    <div className="ml-11 flex space-x-2">
-                                      {step.actions.map((action, actionIndex) => (
-                                        <button
-                                          key={actionIndex}
-                                          disabled={step.status === 'pending'}
-                                          onClick={() => console.log(`Action: ${action.label} for step ${step.id}`)}
-                                          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                                            step.status === 'pending'
-                                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                              : action.type === 'primary'
-                                              ? 'text-white hover:opacity-80'
-                                              : action.type === 'success'
-                                              ? 'text-white hover:opacity-80'
-                                              : action.type === 'danger'
-                                              ? 'bg-red-500 text-white hover:bg-red-600'
-                                              : isDark
-                                              ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
-                                              : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-                                          }`}
-                                          style={{
-                                            backgroundColor: step.status !== 'pending' && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
-                                          }}
-                                        >
-                                          {action.label}
-                                        </button>
-                                      ))}
-                                    </div>
-                                  )}
                                 </div>
                               ))}
                             </div>
