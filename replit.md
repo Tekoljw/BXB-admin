@@ -830,6 +830,10 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Implemented dual-state business logic for Step 5: allows branching between direct completion (确认收款) or dispute resolution (申请仲裁)
   - Step 6 (争议中，等待仲裁) functions as dispute state accessible only through Step 5 arbitration request
   - Final step (交易完成) requires no user interaction and displays no action buttons
+  - Implemented dynamic step visibility: Step 6 (arbitration) only appears when user clicks "申请仲裁" button
+  - Added arbitration state management with handleArbitrationRequest and handleConfirmPayment functions
+  - Unified color scheme: all completed steps use #20B2AA green for consistency with button colors
+  - Updated step circles, text, and progress lines to match button color theme across desktop and mobile interfaces
 
 ## User Preferences
 

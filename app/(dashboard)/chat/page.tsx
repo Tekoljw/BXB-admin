@@ -2374,9 +2374,10 @@ export default function ChatPage() {
                       return (
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-3">
-                            <div className={`w-2 h-2 rounded-full ${
-                              escrowData.progress === 4 ? 'bg-green-500' : 'bg-yellow-500'
-                            } animate-pulse`} />
+                            <div className={`w-2 h-2 rounded-full animate-pulse`} 
+                            style={{
+                              backgroundColor: escrowData.progress === 4 ? '#20B2AA' : '#eab308'
+                            }} />
                             <div>
                               <div className={`font-medium text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
                                 {escrowData.type} {escrowData.amount} {escrowData.currency}
@@ -2444,10 +2445,11 @@ export default function ChatPage() {
                             <div className="flex items-center space-x-2">
                               <div className="w-12 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                                 <div 
-                                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                                    escrowData.progress === 6 ? 'bg-green-500' : 'bg-blue-500'
-                                  }`}
-                                  style={{ width: `${progressPercent}%` }}
+                                  className={`h-1.5 rounded-full transition-all duration-300`}
+                                  style={{ 
+                                    width: `${progressPercent}%`,
+                                    backgroundColor: escrowData.progress === 6 ? '#20B2AA' : '#3b82f6'
+                                  }}
                                 />
                               </div>
                               <span className="text-xs text-gray-500">
@@ -2528,7 +2530,7 @@ export default function ChatPage() {
                                     <div key={step.id} className="relative">
                                       {/* Completed section of progress line */}
                                       {step.status === 'completed' && index < filteredSteps.length - 1 && (
-                                        <div className="absolute left-4 top-4 w-0.5 h-16 bg-green-500 z-5" />
+                                        <div className="absolute left-4 top-4 w-0.5 h-16 z-5" style={{ backgroundColor: '#20B2AA' }} />
                                       )}
                                       {step.status === 'current' && index < filteredSteps.length - 1 && (
                                         <div className="absolute left-4 top-4 w-0.5 h-16 bg-blue-500 z-5" />
@@ -2538,11 +2540,14 @@ export default function ChatPage() {
                                         <div className="flex items-center space-x-3">
                                           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold relative z-10 ${
                                             step.status === 'completed' 
-                                              ? 'bg-green-500 text-white' 
+                                              ? 'text-white' 
                                               : step.status === 'current'
                                               ? 'bg-blue-500 text-white'
                                               : 'bg-gray-300 text-gray-600'
-                                          }`}>
+                                          }`}
+                                          style={{
+                                            backgroundColor: step.status === 'completed' ? '#20B2AA' : undefined
+                                          }}>
                                             {step.status === 'completed' ? '✓' : step.id}
                                           </div>
                                           <div className="flex-1">
@@ -2550,9 +2555,12 @@ export default function ChatPage() {
                                               step.status === 'current' 
                                                 ? isDark ? 'text-blue-400' : 'text-blue-600'
                                                 : step.status === 'completed'
-                                                ? isDark ? 'text-green-400' : 'text-green-600'
+                                                ? ''
                                                 : isDark ? 'text-gray-400' : 'text-gray-500'
-                                            }`}>
+                                            }`}
+                                            style={{
+                                              color: step.status === 'completed' ? '#20B2AA' : undefined
+                                            }}>
                                               {step.title}
                                             </div>
                                             {step.timestamp && (
@@ -4234,10 +4242,11 @@ export default function ChatPage() {
                         
                         <div className="w-8 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                           <div 
-                            className={`h-1.5 rounded-full transition-all duration-300 ${
-                              escrowData.progress === 6 ? 'bg-green-500' : 'bg-blue-500'
-                            }`}
-                            style={{ width: `${progressPercent}%` }}
+                            className={`h-1.5 rounded-full transition-all duration-300`}
+                            style={{ 
+                              width: `${progressPercent}%`,
+                              backgroundColor: escrowData.progress === 6 ? '#20B2AA' : '#3b82f6'
+                            }}
                           />
                         </div>
                         <span className="text-xs text-gray-500">
@@ -4297,11 +4306,14 @@ export default function ChatPage() {
                                 <div className="flex items-center space-x-3">
                                   <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
                                     step.status === 'completed' 
-                                      ? 'bg-green-500 text-white' 
+                                      ? 'text-white' 
                                       : step.status === 'current'
                                       ? 'bg-blue-500 text-white'
                                       : 'bg-gray-300 text-gray-600'
-                                  }`}>
+                                  }`}
+                                  style={{
+                                    backgroundColor: step.status === 'completed' ? '#20B2AA' : undefined
+                                  }}>
                                     {step.status === 'completed' ? '✓' : step.id}
                                   </div>
                                   <div className="flex-1">
@@ -4309,9 +4321,12 @@ export default function ChatPage() {
                                       step.status === 'current' 
                                         ? isDark ? 'text-blue-400' : 'text-blue-600'
                                         : step.status === 'completed'
-                                        ? isDark ? 'text-green-400' : 'text-green-600'
+                                        ? ''
                                         : isDark ? 'text-gray-400' : 'text-gray-500'
-                                    }`}>
+                                    }`}
+                                    style={{
+                                      color: step.status === 'completed' ? '#20B2AA' : undefined
+                                    }}>
                                       {step.title}
                                     </div>
                                     {step.timestamp && (
