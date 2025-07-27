@@ -2373,7 +2373,7 @@ export default function ChatPage() {
                                     }}
                                     className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
                                       buttonData.action.type === 'primary'
-                                        ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                        ? 'bg-green-500 text-white hover:bg-green-600'
                                         : buttonData.action.type === 'success'
                                         ? 'bg-green-500 text-white hover:bg-green-600'
                                         : buttonData.action.type === 'danger'
@@ -2472,15 +2472,18 @@ export default function ChatPage() {
                                   </div>
                                   
                                   {/* Action Buttons for Current and Completed Steps */}
-                                  {(step.status === 'current' || step.status === 'completed') && step.actions && (
+                                  {step.actions && (
                                     <div className="ml-11 flex space-x-2">
                                       {step.actions.map((action, actionIndex) => (
                                         <button
                                           key={actionIndex}
+                                          disabled={step.status === 'pending'}
                                           onClick={() => console.log(`Action: ${action.label} for step ${step.id}`)}
                                           className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                                            action.type === 'primary'
-                                              ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                            step.status === 'pending'
+                                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                              : action.type === 'primary'
+                                              ? 'bg-green-500 text-white hover:bg-green-600'
                                               : action.type === 'success'
                                               ? 'bg-green-500 text-white hover:bg-green-600'
                                               : action.type === 'danger'
@@ -2499,17 +2502,7 @@ export default function ChatPage() {
                               ))}
                             </div>
 
-                            {/* Action Buttons */}
-                            {escrowData.progress < 4 && (
-                              <div className="flex space-x-2 pt-2">
-                                <button className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors text-sm">
-                                  查看合同
-                                </button>
-                                <button className="flex-1 border border-gray-300 text-gray-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm">
-                                  联系客服
-                                </button>
-                              </div>
-                            )}
+
                           </div>
                         )
                       })()}
@@ -4113,7 +4106,7 @@ export default function ChatPage() {
                                 }}
                                 className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
                                   buttonData.action.type === 'primary'
-                                    ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                    ? 'bg-green-500 text-white hover:bg-green-600'
                                     : buttonData.action.type === 'success'
                                     ? 'bg-green-500 text-white hover:bg-green-600'
                                     : buttonData.action.type === 'danger'
@@ -4209,16 +4202,19 @@ export default function ChatPage() {
                                 )}
                               </div>
                               
-                              {/* Mobile Action Buttons for Current and Completed Steps */}
-                              {(step.status === 'current' || step.status === 'completed') && step.actions && (
+                              {/* Mobile Action Buttons for All Steps */}
+                              {step.actions && (
                                 <div className="ml-9 flex space-x-2">
                                   {step.actions.map((action, actionIndex) => (
                                     <button
                                       key={actionIndex}
+                                      disabled={step.status === 'pending'}
                                       onClick={() => console.log(`Action: ${action.label} for step ${step.id}`)}
                                       className={`px-2 py-1 rounded-lg text-xs font-medium transition-colors ${
-                                        action.type === 'primary'
-                                          ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                        step.status === 'pending'
+                                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                          : action.type === 'primary'
+                                          ? 'bg-green-500 text-white hover:bg-green-600'
                                           : action.type === 'success'
                                           ? 'bg-green-500 text-white hover:bg-green-600'
                                           : action.type === 'danger'
@@ -4237,17 +4233,7 @@ export default function ChatPage() {
                           ))}
                         </div>
 
-                        {/* Mobile Action Buttons */}
-                        {escrowData.progress < 4 && (
-                          <div className="flex space-x-2 pt-2">
-                            <button className="flex-1 bg-blue-500 text-white px-3 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors text-sm">
-                              查看合同
-                            </button>
-                            <button className="flex-1 border border-gray-300 text-gray-600 px-3 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm">
-                              联系客服
-                            </button>
-                          </div>
-                        )}
+
                       </div>
                     )
                   })()}
