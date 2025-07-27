@@ -146,7 +146,7 @@ export default function ChatPage() {
   // Escrow progress bar state
   const [showEscrowProgress, setShowEscrowProgress] = useState(false)
   
-  // Mock escrow transaction data - Updated to 6-step process
+  // Mock escrow transaction data - Updated to 7-step process
   const escrowTransactionData = {
     "escrow-1": {
       transactionId: "TXN001",
@@ -157,12 +157,13 @@ export default function ChatPage() {
       steps: [
         { 
           id: 1, 
-          title: "生成合同", 
+          title: "AI助手起草合同", 
           status: "completed", 
           timestamp: "14:30",
           actions: [
-            { label: "查看合同", type: "primary" },
-            { label: "下载合同", type: "secondary" }
+            { label: "起草合同", type: "primary" },
+            { label: "保存", type: "secondary" },
+            { label: "查看合同", type: "secondary" }
           ]
         },
         { 
@@ -171,8 +172,9 @@ export default function ChatPage() {
           status: "current", 
           timestamp: "",
           actions: [
-            { label: "签名合同", type: "primary" },
-            { label: "设置付款时间", type: "secondary" }
+            { label: "查看合同", type: "primary" },
+            { label: "修改合同", type: "secondary" },
+            { label: "签名合同", type: "success" }
           ]
         },
         { 
@@ -197,20 +199,32 @@ export default function ChatPage() {
         },
         { 
           id: 5, 
-          title: "等待甲方确认释放担保/申请争议仲裁", 
+          title: "等待甲方付款", 
           status: "pending", 
           timestamp: "",
           actions: [
-            { label: "确认释放", type: "primary" },
-            { label: "申请仲裁", type: "danger" }
+            { label: "确认付款", type: "primary" },
+            { label: "催促付款", type: "secondary" }
           ]
         },
         { 
           id: 6, 
-          title: "交易已完成", 
+          title: "争议中，等待仲裁", 
           status: "pending", 
           timestamp: "",
-          actions: []
+          actions: [
+            { label: "申请仲裁", type: "danger" },
+            { label: "查看仲裁", type: "secondary" }
+          ]
+        },
+        { 
+          id: 7, 
+          title: "交易完成", 
+          status: "pending", 
+          timestamp: "",
+          actions: [
+            { label: "查看结果", type: "success" }
+          ]
         }
       ],
       expiresAt: "16:30",
@@ -226,12 +240,13 @@ export default function ChatPage() {
       steps: [
         { 
           id: 1, 
-          title: "生成合同", 
+          title: "AI助手起草合同", 
           status: "completed", 
           timestamp: "10:15",
           actions: [
-            { label: "查看合同", type: "primary" },
-            { label: "下载合同", type: "secondary" }
+            { label: "起草合同", type: "primary" },
+            { label: "保存", type: "secondary" },
+            { label: "查看合同", type: "secondary" }
           ]
         },
         { 
@@ -240,8 +255,9 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "10:30",
           actions: [
-            { label: "查看签名", type: "primary" },
-            { label: "查看时间", type: "secondary" }
+            { label: "查看合同", type: "primary" },
+            { label: "修改合同", type: "secondary" },
+            { label: "签名合同", type: "success" }
           ]
         },
         { 
@@ -266,20 +282,32 @@ export default function ChatPage() {
         },
         { 
           id: 5, 
-          title: "等待甲方确认释放担保/申请争议仲裁", 
+          title: "等待甲方付款", 
           status: "pending", 
           timestamp: "",
           actions: [
-            { label: "确认释放", type: "primary" },
-            { label: "申请仲裁", type: "danger" }
+            { label: "确认付款", type: "primary" },
+            { label: "催促付款", type: "secondary" }
           ]
         },
         { 
           id: 6, 
-          title: "交易已完成", 
+          title: "争议中，等待仲裁", 
           status: "pending", 
           timestamp: "",
-          actions: []
+          actions: [
+            { label: "申请仲裁", type: "danger" },
+            { label: "查看仲裁", type: "secondary" }
+          ]
+        },
+        { 
+          id: 7, 
+          title: "交易完成", 
+          status: "pending", 
+          timestamp: "",
+          actions: [
+            { label: "查看结果", type: "success" }
+          ]
         }
       ],
       expiresAt: "12:15",
@@ -291,16 +319,17 @@ export default function ChatPage() {
       amount: "20,000", 
       currency: "USDT",
       type: "买入",
-      progress: 6,
+      progress: 7,
       steps: [
         { 
           id: 1, 
-          title: "生成合同", 
+          title: "AI助手起草合同", 
           status: "completed", 
           timestamp: "08:00",
           actions: [
-            { label: "查看合同", type: "primary" },
-            { label: "下载合同", type: "secondary" }
+            { label: "起草合同", type: "primary" },
+            { label: "保存", type: "secondary" },
+            { label: "查看合同", type: "secondary" }
           ]
         },
         { 
@@ -309,8 +338,9 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "08:15",
           actions: [
-            { label: "查看签名", type: "primary" },
-            { label: "查看时间", type: "secondary" }
+            { label: "查看合同", type: "primary" },
+            { label: "修改合同", type: "secondary" },
+            { label: "签名合同", type: "success" }
           ]
         },
         { 
@@ -319,8 +349,8 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "08:30",
           actions: [
-            { label: "查看付款", type: "primary" },
-            { label: "付款凭证", type: "secondary" }
+            { label: "确认付款", type: "primary" },
+            { label: "催促付款", type: "secondary" }
           ]
         },
         { 
@@ -329,27 +359,37 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "08:45",
           actions: [
-            { label: "查看交付", type: "primary" },
-            { label: "交付凭证", type: "secondary" }
+            { label: "确认收到", type: "primary" },
+            { label: "联系卖方", type: "secondary" }
           ]
         },
         { 
           id: 5, 
-          title: "等待甲方确认释放担保/申请争议仲裁", 
+          title: "等待甲方付款", 
           status: "completed", 
           timestamp: "09:00",
           actions: [
-            { label: "查看确认", type: "primary" },
-            { label: "释放记录", type: "secondary" }
+            { label: "确认付款", type: "primary" },
+            { label: "催促付款", type: "secondary" }
           ]
         },
         { 
           id: 6, 
-          title: "交易已完成", 
+          title: "争议中，等待仲裁", 
+          status: "completed", 
+          timestamp: "09:10",
+          actions: [
+            { label: "申请仲裁", type: "danger" },
+            { label: "查看仲裁", type: "secondary" }
+          ]
+        },
+        { 
+          id: 7, 
+          title: "交易完成", 
           status: "completed", 
           timestamp: "09:15",
           actions: [
-            { label: "查看仲裁结果", type: "primary" }
+            { label: "查看结果", type: "success" }
           ]
         }
       ],
