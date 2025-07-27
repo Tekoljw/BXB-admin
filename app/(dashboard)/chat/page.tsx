@@ -2373,15 +2373,18 @@ export default function ChatPage() {
                                     }}
                                     className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
                                       buttonData.action.type === 'primary'
-                                        ? 'bg-green-500 text-white hover:bg-green-600'
+                                        ? 'text-white hover:opacity-80'
                                         : buttonData.action.type === 'success'
-                                        ? 'bg-green-500 text-white hover:bg-green-600'
+                                        ? 'text-white hover:opacity-80'
                                         : buttonData.action.type === 'danger'
                                         ? 'bg-red-500 text-white hover:bg-red-600'
                                         : isDark
                                         ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
                                         : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
                                     }`}
+                                    style={{
+                                      backgroundColor: buttonData.action.type === 'primary' || buttonData.action.type === 'success' ? '#20B2AA' : undefined
+                                    }}
                                   >
                                     {buttonData.action.label}
                                   </button>
@@ -2483,15 +2486,18 @@ export default function ChatPage() {
                                             step.status === 'pending'
                                               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                               : action.type === 'primary'
-                                              ? 'bg-green-500 text-white hover:bg-green-600'
+                                              ? 'text-white hover:opacity-80'
                                               : action.type === 'success'
-                                              ? 'bg-green-500 text-white hover:bg-green-600'
+                                              ? 'text-white hover:opacity-80'
                                               : action.type === 'danger'
                                               ? 'bg-red-500 text-white hover:bg-red-600'
                                               : isDark
                                               ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
                                               : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
                                           }`}
+                                          style={{
+                                            backgroundColor: step.status !== 'pending' && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
+                                          }}
                                         >
                                           {action.label}
                                         </button>
@@ -4106,15 +4112,18 @@ export default function ChatPage() {
                                 }}
                                 className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
                                   buttonData.action.type === 'primary'
-                                    ? 'bg-green-500 text-white hover:bg-green-600'
+                                    ? 'text-white hover:opacity-80'
                                     : buttonData.action.type === 'success'
-                                    ? 'bg-green-500 text-white hover:bg-green-600'
+                                    ? 'text-white hover:opacity-80'
                                     : buttonData.action.type === 'danger'
                                     ? 'bg-red-500 text-white hover:bg-red-600'
                                     : isDark
                                     ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
                                     : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
                                 }`}
+                                style={{
+                                  backgroundColor: buttonData.action.type === 'primary' || buttonData.action.type === 'success' ? '#20B2AA' : undefined
+                                }}
                               >
                                 {buttonData.action.label}
                               </button>
@@ -4214,15 +4223,18 @@ export default function ChatPage() {
                                         step.status === 'pending'
                                           ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                           : action.type === 'primary'
-                                          ? 'bg-green-500 text-white hover:bg-green-600'
+                                          ? 'text-white hover:opacity-80'
                                           : action.type === 'success'
-                                          ? 'bg-green-500 text-white hover:bg-green-600'
+                                          ? 'text-white hover:opacity-80'
                                           : action.type === 'danger'
                                           ? 'bg-red-500 text-white hover:bg-red-600'
                                           : isDark
                                           ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
                                           : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
                                       }`}
+                                      style={{
+                                        backgroundColor: step.status !== 'pending' && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
+                                      }}
                                     >
                                       {action.label}
                                     </button>
