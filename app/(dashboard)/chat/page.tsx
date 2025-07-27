@@ -2339,33 +2339,45 @@ export default function ChatPage() {
                             </div>
                           </div>
                           <div className="flex items-center space-x-3">
-                            {/* Current Step Quick Action Buttons */}
-                            {currentStep && currentStep.actions && (
-                              <div className="flex space-x-2">
-                                {currentStep.actions.slice(0, 1).map((action, actionIndex) => (
+                            {/* All Steps Quick Action Buttons */}
+                            <div className="flex space-x-1">
+                              {escrowData.steps.map((step, stepIndex) => {
+                                const isClickable = step.status === 'current' || step.status === 'completed'
+                                const primaryAction = step.actions?.[0]
+                                
+                                if (!primaryAction) return null
+                                
+                                return (
                                   <button
-                                    key={actionIndex}
+                                    key={step.id}
+                                    disabled={!isClickable}
                                     onClick={(e) => {
                                       e.stopPropagation()
-                                      console.log(`Quick Action: ${action.label} for step ${currentStep.id}`)
+                                      if (isClickable) {
+                                        console.log(`Quick Action: ${primaryAction.label} for step ${step.id}`)
+                                      }
                                     }}
-                                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                                      action.type === 'primary'
-                                        ? 'bg-blue-500 text-white hover:bg-blue-600'
-                                        : action.type === 'success'
+                                    className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                                      !isClickable
+                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                        : step.status === 'completed'
                                         ? 'bg-green-500 text-white hover:bg-green-600'
-                                        : action.type === 'danger'
+                                        : primaryAction.type === 'primary'
+                                        ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                        : primaryAction.type === 'success'
+                                        ? 'bg-green-500 text-white hover:bg-green-600'
+                                        : primaryAction.type === 'danger'
                                         ? 'bg-red-500 text-white hover:bg-red-600'
                                         : isDark
                                         ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
                                         : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
                                     }`}
                                   >
-                                    {action.label}
+                                    {step.status === 'completed' ? '✓' : primaryAction.label}
                                   </button>
-                                ))}
-                              </div>
-                            )}
+                                )
+                              })}
+                            </div>
                             
                             <div className="flex items-center space-x-2">
                               <div className="w-12 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
@@ -4057,28 +4069,45 @@ export default function ChatPage() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        {/* Mobile Current Step Quick Action Button */}
-                        {currentStep && currentStep.actions && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log(`Mobile Quick Action: ${currentStep.actions[0].label} for step ${currentStep.id}`)
-                            }}
-                            className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
-                              currentStep.actions[0].type === 'primary'
-                                ? 'bg-blue-500 text-white hover:bg-blue-600'
-                                : currentStep.actions[0].type === 'success'
-                                ? 'bg-green-500 text-white hover:bg-green-600'
-                                : currentStep.actions[0].type === 'danger'
-                                ? 'bg-red-500 text-white hover:bg-red-600'
-                                : isDark
-                                ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
-                                : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-                            }`}
-                          >
-                            {currentStep.actions[0].label}
-                          </button>
-                        )}
+                        {/* Mobile All Steps Quick Action Buttons */}
+                        <div className="flex space-x-1">
+                          {escrowData.steps.map((step, stepIndex) => {
+                            const isClickable = step.status === 'current' || step.status === 'completed'
+                            const primaryAction = step.actions?.[0]
+                            
+                            if (!primaryAction) return null
+                            
+                            return (
+                              <button
+                                key={step.id}
+                                disabled={!isClickable}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  if (isClickable) {
+                                    console.log(`Mobile Quick Action: ${primaryAction.label} for step ${step.id}`)
+                                  }
+                                }}
+                                className={`px-1.5 py-0.5 rounded text-xs font-medium transition-colors ${
+                                  !isClickable
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : step.status === 'completed'
+                                    ? 'bg-green-500 text-white hover:bg-green-600'
+                                    : primaryAction.type === 'primary'
+                                    ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                    : primaryAction.type === 'success'
+                                    ? 'bg-green-500 text-white hover:bg-green-600'
+                                    : primaryAction.type === 'danger'
+                                    ? 'bg-red-500 text-white hover:bg-red-600'
+                                    : isDark
+                                    ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
+                                    : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                                }`}
+                              >
+                                {step.status === 'completed' ? '✓' : primaryAction.label}
+                              </button>
+                            )
+                          })}
+                        </div>
                         
                         <div className="w-8 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                           <div 
