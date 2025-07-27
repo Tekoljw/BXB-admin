@@ -207,13 +207,10 @@ export default function ChatPage() {
         },
         { 
           id: 6, 
-          title: "等待仲裁/确认付款，乙方将收到款项", 
+          title: "交易已完成", 
           status: "pending", 
           timestamp: "",
-          actions: [
-            { label: "查看仲裁", type: "primary" },
-            { label: "确认完成", type: "success" }
-          ]
+          actions: []
         }
       ],
       expiresAt: "16:30",
@@ -279,13 +276,10 @@ export default function ChatPage() {
         },
         { 
           id: 6, 
-          title: "等待仲裁/确认付款，乙方将收到款项", 
+          title: "交易已完成", 
           status: "pending", 
           timestamp: "",
-          actions: [
-            { label: "查看仲裁", type: "primary" },
-            { label: "确认完成", type: "success" }
-          ]
+          actions: []
         }
       ],
       expiresAt: "12:15",
@@ -351,12 +345,11 @@ export default function ChatPage() {
         },
         { 
           id: 6, 
-          title: "等待仲裁/确认付款，乙方将收到款项", 
+          title: "交易已完成", 
           status: "completed", 
           timestamp: "09:15",
           actions: [
-            { label: "交易完成", type: "success" },
-            { label: "查看记录", type: "secondary" }
+            { label: "查看仲裁结果", type: "primary" }
           ]
         }
       ],
