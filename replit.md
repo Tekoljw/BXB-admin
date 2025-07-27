@@ -838,6 +838,8 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Users can now collapse expanded transaction details using dedicated collapse bar for improved UX
   - Removed specific action buttons from transaction steps as requested: "保存" (step 1), "查看合同" (step 1), "签名合同" (step 2), "修改合同" (step 2), "催促付款" (step 3), "联系卖方" (step 4), "催促对方" (step 5)
   - Streamlined transaction workflow by keeping only essential action buttons: core transaction functions like "起草合同", "查看合同", "确认付款", "确认收到", "确认收款" and "申请仲裁" retained
+  - Enhanced floating progress bar with comprehensive current step information: displays current step title, progress percentage, step count, and interactive action buttons
+  - Floating progress bar now shows current step status, action buttons, and uses consistent #20B2AA green color for progress indicator
 
 ## User Preferences
 
