@@ -168,8 +168,7 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "14:30",
           actions: [
-            { label: "起草合同", type: "primary" },
-            { label: "保存", type: "secondary" }
+            { label: "起草合同", type: "primary" }
           ]
         },
         { 
@@ -178,8 +177,7 @@ export default function ChatPage() {
           status: "current", 
           timestamp: "",
           actions: [
-            { label: "查看合同", type: "primary" },
-            { label: "签名合同", type: "success" }
+            { label: "查看合同", type: "primary" }
           ]
         },
         { 
@@ -244,8 +242,7 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "10:15",
           actions: [
-            { label: "起草合同", type: "primary" },
-            { label: "保存", type: "secondary" }
+            { label: "起草合同", type: "primary" }
           ]
         },
         { 
@@ -254,8 +251,7 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "10:30",
           actions: [
-            { label: "查看合同", type: "primary" },
-            { label: "签名合同", type: "success" }
+            { label: "查看合同", type: "primary" }
           ]
         },
         { 
@@ -320,8 +316,7 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "08:00",
           actions: [
-            { label: "起草合同", type: "primary" },
-            { label: "保存", type: "secondary" }
+            { label: "起草合同", type: "primary" }
           ]
         },
         { 
@@ -330,8 +325,7 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "08:15",
           actions: [
-            { label: "查看合同", type: "primary" },
-            { label: "签名合同", type: "success" }
+            { label: "查看合同", type: "primary" }
           ]
         },
         { 
