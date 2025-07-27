@@ -845,6 +845,7 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Added transaction amount display and status labels to floating bar: shows transaction type, amount, currency, and current status (待付款/担保中/已确认/待仲裁/已退款)
   - Implemented color-coded status badges with proper dark/light theme support for transaction status visualization
   - Removed progress bar from floating bar, keeping only text-based progress information for cleaner interface
+  - Enhanced transaction amount display with larger, bold font for amount numbers (text-lg font-bold) for better visual emphasis
 
 ## User Preferences
 

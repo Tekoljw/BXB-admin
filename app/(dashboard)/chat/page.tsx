@@ -2357,7 +2357,7 @@ export default function ChatPage() {
                             {/* Transaction Amount and Status */}
                             <div className="flex items-center space-x-2">
                               <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                                {escrowData.type} {escrowData.amount} {escrowData.currency}
+                                {escrowData.type} <span className="text-lg font-bold">{escrowData.amount}</span> {escrowData.currency}
                               </div>
                               <div className={`px-2 py-0.5 rounded text-xs font-medium ${
                                 escrowData.progress === 1 ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400' :
