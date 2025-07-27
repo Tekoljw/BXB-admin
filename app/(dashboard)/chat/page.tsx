@@ -2377,20 +2377,8 @@ export default function ChatPage() {
                             </div>
                             
                             {/* Current Step and Progress */}
-                            <div className="text-xs text-gray-500 mb-1">
+                            <div className="text-xs text-gray-500">
                               {currentStep ? currentStep.title : '交易已完成'} • 第{Math.max(1, escrowData.steps.findIndex(step => step.status === 'current') + 1)}步 / 共{escrowData.steps.length}步 • {Math.round(progressPercent)}%
-                            </div>
-                            
-                            <div className="flex items-center space-x-2">
-                              <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                                <div 
-                                  className={`h-1.5 rounded-full transition-all duration-300`}
-                                  style={{ 
-                                    width: `${progressPercent}%`,
-                                    backgroundColor: '#20B2AA'
-                                  }}
-                                />
-                              </div>
                             </div>
                           </div>
                           
