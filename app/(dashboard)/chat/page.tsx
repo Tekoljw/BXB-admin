@@ -2338,21 +2338,51 @@ export default function ChatPage() {
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                              <div 
-                                className={`h-1.5 rounded-full transition-all duration-300 ${
-                                  escrowData.progress === 6 ? 'bg-green-500' : 'bg-blue-500'
-                                }`}
-                                style={{ width: `${progressPercent}%` }}
-                              />
+                          <div className="flex items-center space-x-3">
+                            {/* Current Step Quick Action Buttons */}
+                            {currentStep && currentStep.actions && (
+                              <div className="flex space-x-2">
+                                {currentStep.actions.slice(0, 1).map((action, actionIndex) => (
+                                  <button
+                                    key={actionIndex}
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      console.log(`Quick Action: ${action.label} for step ${currentStep.id}`)
+                                    }}
+                                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                                      action.type === 'primary'
+                                        ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                        : action.type === 'success'
+                                        ? 'bg-green-500 text-white hover:bg-green-600'
+                                        : action.type === 'danger'
+                                        ? 'bg-red-500 text-white hover:bg-red-600'
+                                        : isDark
+                                        ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
+                                        : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                                    }`}
+                                  >
+                                    {action.label}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                            
+                            <div className="flex items-center space-x-2">
+                              <div className="w-12 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                <div 
+                                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                                    escrowData.progress === 6 ? 'bg-green-500' : 'bg-blue-500'
+                                  }`}
+                                  style={{ width: `${progressPercent}%` }}
+                                />
+                              </div>
+                              <span className="text-xs text-gray-500">
+                                {completedSteps}/{escrowData.steps.length}
+                              </span>
+                              <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                                showEscrowProgress ? 'rotate-180' : ''
+                              }`} />
                             </div>
-                            <span className="text-xs text-gray-500">
-                              {completedSteps}/{escrowData.steps.length}
-                            </span>
-                            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                              showEscrowProgress ? 'rotate-180' : ''
-                            }`} />
                           </div>
                         </div>
                       )
@@ -4027,10 +4057,33 @@ export default function ChatPage() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <div className="w-12 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                        {/* Mobile Current Step Quick Action Button */}
+                        {currentStep && currentStep.actions && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              console.log(`Mobile Quick Action: ${currentStep.actions[0].label} for step ${currentStep.id}`)
+                            }}
+                            className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                              currentStep.actions[0].type === 'primary'
+                                ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                : currentStep.actions[0].type === 'success'
+                                ? 'bg-green-500 text-white hover:bg-green-600'
+                                : currentStep.actions[0].type === 'danger'
+                                ? 'bg-red-500 text-white hover:bg-red-600'
+                                : isDark
+                                ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
+                                : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                            }`}
+                          >
+                            {currentStep.actions[0].label}
+                          </button>
+                        )}
+                        
+                        <div className="w-8 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                           <div 
                             className={`h-1.5 rounded-full transition-all duration-300 ${
-                              escrowData.progress === 4 ? 'bg-green-500' : 'bg-blue-500'
+                              escrowData.progress === 6 ? 'bg-green-500' : 'bg-blue-500'
                             }`}
                             style={{ width: `${progressPercent}%` }}
                           />
