@@ -146,6 +146,13 @@ export default function ChatPage() {
   // Escrow progress bar state
   const [showEscrowProgress, setShowEscrowProgress] = useState(false)
   
+  // Escrow arbitration state
+  const [escrowArbitrationState, setEscrowArbitrationState] = useState<{[key: string]: boolean}>({
+    "escrow-1": false,
+    "escrow-2": false,
+    "escrow-3": false
+  })
+
   // Mock escrow transaction data - Updated to 7-step process
   const escrowTransactionData = {
     "escrow-1": {
@@ -615,6 +622,21 @@ export default function ChatPage() {
     setShowTransferModal(false)
     setTransferAmount("")
     setTransferNote("")
+  }
+
+  // Handle arbitration request
+  const handleArbitrationRequest = (escrowId: string) => {
+    setEscrowArbitrationState(prev => ({
+      ...prev,
+      [escrowId]: true
+    }))
+    console.log(`申请仲裁: ${escrowId}`)
+  }
+
+  // Handle confirm payment
+  const handleConfirmPayment = (escrowId: string) => {
+    // Logic to complete transaction directly
+    console.log(`确认收款: ${escrowId}`)
   }
 
   const handleRedPacket = () => {
@@ -2470,85 +2492,120 @@ export default function ChatPage() {
 
                             {/* Progress Steps */}
                             <div className="relative">
-                              {/* Full Vertical Progress Line - Connect all steps but stop at last circle */}
-                              <div className={`absolute left-4 top-4 w-0.5 ${
-                                isDark ? 'bg-gray-600' : 'bg-gray-300'
-                              }`} style={{ height: `${(escrowData.steps.length - 1) * 5}rem` }} />
+                              {(() => {
+                                // Calculate filtered steps length for progress line height
+                                const isInArbitration = escrowArbitrationState[selectedContact] || false
+                                const filteredStepsLength = escrowData.steps.filter(step => {
+                                  if (step.id === 6) {
+                                    return isInArbitration
+                                  }
+                                  return true
+                                }).length
+                                
+                                return (
+                                  <>
+                                    {/* Full Vertical Progress Line - Connect all steps but stop at last circle */}
+                                    <div className={`absolute left-4 top-4 w-0.5 ${
+                                      isDark ? 'bg-gray-600' : 'bg-gray-300'
+                                    }`} style={{ height: `${(filteredStepsLength - 1) * 5}rem` }} />
+                                  </>
+                                )
+                              })()}
                               
                               <div className="space-y-4">
-                                {escrowData.steps.map((step, index) => (
-                                  <div key={step.id} className="relative">
-                                    {/* Completed section of progress line */}
-                                    {step.status === 'completed' && index < escrowData.steps.length - 1 && (
-                                      <div className="absolute left-4 top-4 w-0.5 h-16 bg-green-500 z-5" />
-                                    )}
-                                    {step.status === 'current' && index < escrowData.steps.length - 1 && (
-                                      <div className="absolute left-4 top-4 w-0.5 h-16 bg-blue-500 z-5" />
-                                    )}
-                                    
-                                    <div className="space-y-2">
-                                      <div className="flex items-center space-x-3">
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold relative z-10 ${
-                                          step.status === 'completed' 
-                                            ? 'bg-green-500 text-white' 
-                                            : step.status === 'current'
-                                            ? 'bg-blue-500 text-white'
-                                            : 'bg-gray-300 text-gray-600'
-                                        }`}>
-                                          {step.status === 'completed' ? '✓' : step.id}
-                                        </div>
-                                        <div className="flex-1">
-                                          <div className={`font-medium ${
-                                            step.status === 'current' 
-                                              ? isDark ? 'text-blue-400' : 'text-blue-600'
-                                              : step.status === 'completed'
-                                              ? isDark ? 'text-green-400' : 'text-green-600'
-                                              : isDark ? 'text-gray-400' : 'text-gray-500'
+                                {(() => {
+                                  // Filter steps based on arbitration state
+                                  const isInArbitration = escrowArbitrationState[selectedContact] || false
+                                  const filteredSteps = escrowData.steps.filter(step => {
+                                    // Show step 6 (arbitration) only if in arbitration state
+                                    if (step.id === 6) {
+                                      return isInArbitration
+                                    }
+                                    return true
+                                  })
+                                  
+                                  return filteredSteps.map((step, index) => (
+                                    <div key={step.id} className="relative">
+                                      {/* Completed section of progress line */}
+                                      {step.status === 'completed' && index < filteredSteps.length - 1 && (
+                                        <div className="absolute left-4 top-4 w-0.5 h-16 bg-green-500 z-5" />
+                                      )}
+                                      {step.status === 'current' && index < filteredSteps.length - 1 && (
+                                        <div className="absolute left-4 top-4 w-0.5 h-16 bg-blue-500 z-5" />
+                                      )}
+                                      
+                                      <div className="space-y-2">
+                                        <div className="flex items-center space-x-3">
+                                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold relative z-10 ${
+                                            step.status === 'completed' 
+                                              ? 'bg-green-500 text-white' 
+                                              : step.status === 'current'
+                                              ? 'bg-blue-500 text-white'
+                                              : 'bg-gray-300 text-gray-600'
                                           }`}>
-                                            {step.title}
+                                            {step.status === 'completed' ? '✓' : step.id}
                                           </div>
-                                          {step.timestamp && (
-                                            <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                          <div className="flex-1">
+                                            <div className={`font-medium ${
+                                              step.status === 'current' 
+                                                ? isDark ? 'text-blue-400' : 'text-blue-600'
+                                                : step.status === 'completed'
+                                                ? isDark ? 'text-green-400' : 'text-green-600'
+                                                : isDark ? 'text-gray-400' : 'text-gray-500'
+                                            }`}>
+                                              {step.title}
+                                            </div>
+                                            {step.timestamp && (
+                                              <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                            )}
+                                          </div>
+                                          {step.status === 'current' && (
+                                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                                           )}
                                         </div>
-                                        {step.status === 'current' && (
-                                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                        
+                                        {/* Action Buttons for Current and Completed Steps */}
+                                        {step.actions && step.id !== 7 && (
+                                          <div className="ml-11 flex space-x-2">
+                                            {step.actions.map((action, actionIndex) => (
+                                              <button
+                                                key={actionIndex}
+                                                disabled={step.status === 'pending'}
+                                                onClick={() => {
+                                                  if (action.label === '申请仲裁') {
+                                                    handleArbitrationRequest(selectedContact)
+                                                  } else if (action.label === '确认收款') {
+                                                    handleConfirmPayment(selectedContact)
+                                                  } else {
+                                                    console.log(`Action: ${action.label} for step ${step.id}`)
+                                                  }
+                                                }}
+                                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                                                  step.status === 'pending'
+                                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                                    : action.type === 'primary'
+                                                    ? 'text-white hover:opacity-80'
+                                                    : action.type === 'success'
+                                                    ? 'text-white hover:opacity-80'
+                                                    : action.type === 'danger'
+                                                    ? 'bg-red-500 text-white hover:bg-red-600'
+                                                    : isDark
+                                                    ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
+                                                    : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                                                }`}
+                                                style={{
+                                                  backgroundColor: step.status !== 'pending' && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
+                                                }}
+                                              >
+                                                {action.label}
+                                              </button>
+                                            ))}
+                                          </div>
                                         )}
                                       </div>
-                                      
-                                      {/* Action Buttons for Current and Completed Steps */}
-                                      {step.actions && (
-                                        <div className="ml-11 flex space-x-2">
-                                          {step.actions.map((action, actionIndex) => (
-                                            <button
-                                              key={actionIndex}
-                                              disabled={step.status === 'pending'}
-                                              onClick={() => console.log(`Action: ${action.label} for step ${step.id}`)}
-                                              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                                                step.status === 'pending'
-                                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                                  : action.type === 'primary'
-                                                  ? 'text-white hover:opacity-80'
-                                                  : action.type === 'success'
-                                                  ? 'text-white hover:opacity-80'
-                                                  : action.type === 'danger'
-                                                  ? 'bg-red-500 text-white hover:bg-red-600'
-                                                  : isDark
-                                                  ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
-                                                  : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-                                              }`}
-                                              style={{
-                                                backgroundColor: step.status !== 'pending' && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
-                                              }}
-                                            >
-                                              {action.label}
-                                            </button>
-                                          ))}
-                                        </div>
-                                      )}
                                     </div>
-                                  </div>
-                                ))}
+                                  ))
+                                })()}
                               </div>
                             </div>
 
@@ -4224,69 +4281,89 @@ export default function ChatPage() {
 
                         {/* Mobile Progress Steps */}
                         <div className="space-y-4">
-                          {escrowData.steps.map((step, index) => (
-                            <div key={step.id} className="space-y-2">
-                              <div className="flex items-center space-x-3">
-                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                                  step.status === 'completed' 
-                                    ? 'bg-green-500 text-white' 
-                                    : step.status === 'current'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-gray-300 text-gray-600'
-                                }`}>
-                                  {step.status === 'completed' ? '✓' : step.id}
-                                </div>
-                                <div className="flex-1">
-                                  <div className={`font-medium text-sm ${
-                                    step.status === 'current' 
-                                      ? isDark ? 'text-blue-400' : 'text-blue-600'
-                                      : step.status === 'completed'
-                                      ? isDark ? 'text-green-400' : 'text-green-600'
-                                      : isDark ? 'text-gray-400' : 'text-gray-500'
+                          {(() => {
+                            // Filter steps based on arbitration state
+                            const isInArbitration = escrowArbitrationState[selectedContact] || false
+                            const filteredSteps = escrowData.steps.filter(step => {
+                              // Show step 6 (arbitration) only if in arbitration state
+                              if (step.id === 6) {
+                                return isInArbitration
+                              }
+                              return true
+                            })
+                            
+                            return filteredSteps.map((step, index) => (
+                              <div key={step.id} className="space-y-2">
+                                <div className="flex items-center space-x-3">
+                                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                                    step.status === 'completed' 
+                                      ? 'bg-green-500 text-white' 
+                                      : step.status === 'current'
+                                      ? 'bg-blue-500 text-white'
+                                      : 'bg-gray-300 text-gray-600'
                                   }`}>
-                                    {step.title}
+                                    {step.status === 'completed' ? '✓' : step.id}
                                   </div>
-                                  {step.timestamp && (
-                                    <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                  <div className="flex-1">
+                                    <div className={`font-medium text-sm ${
+                                      step.status === 'current' 
+                                        ? isDark ? 'text-blue-400' : 'text-blue-600'
+                                        : step.status === 'completed'
+                                        ? isDark ? 'text-green-400' : 'text-green-600'
+                                        : isDark ? 'text-gray-400' : 'text-gray-500'
+                                    }`}>
+                                      {step.title}
+                                    </div>
+                                    {step.timestamp && (
+                                      <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                    )}
+                                  </div>
+                                  {step.status === 'current' && (
+                                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
                                   )}
                                 </div>
-                                {step.status === 'current' && (
-                                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+                                
+                                {/* Mobile Action Buttons for All Steps */}
+                                {step.actions && step.id !== 7 && (
+                                  <div className="ml-9 flex space-x-2">
+                                    {step.actions.map((action, actionIndex) => (
+                                      <button
+                                        key={actionIndex}
+                                        disabled={step.status === 'pending'}
+                                        onClick={() => {
+                                          if (action.label === '申请仲裁') {
+                                            handleArbitrationRequest(selectedContact)
+                                          } else if (action.label === '确认收款') {
+                                            handleConfirmPayment(selectedContact)
+                                          } else {
+                                            console.log(`Action: ${action.label} for step ${step.id}`)
+                                          }
+                                        }}
+                                        className={`px-2 py-1 rounded-lg text-xs font-medium transition-colors ${
+                                          step.status === 'pending'
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                            : action.type === 'primary'
+                                            ? 'text-white hover:opacity-80'
+                                            : action.type === 'success'
+                                            ? 'text-white hover:opacity-80'
+                                            : action.type === 'danger'
+                                            ? 'bg-red-500 text-white hover:bg-red-600'
+                                            : isDark
+                                            ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
+                                            : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                                        }`}
+                                        style={{
+                                          backgroundColor: step.status !== 'pending' && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
+                                        }}
+                                      >
+                                        {action.label}
+                                      </button>
+                                    ))}
+                                  </div>
                                 )}
                               </div>
-                              
-                              {/* Mobile Action Buttons for All Steps */}
-                              {step.actions && (
-                                <div className="ml-9 flex space-x-2">
-                                  {step.actions.map((action, actionIndex) => (
-                                    <button
-                                      key={actionIndex}
-                                      disabled={step.status === 'pending'}
-                                      onClick={() => console.log(`Action: ${action.label} for step ${step.id}`)}
-                                      className={`px-2 py-1 rounded-lg text-xs font-medium transition-colors ${
-                                        step.status === 'pending'
-                                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                          : action.type === 'primary'
-                                          ? 'text-white hover:opacity-80'
-                                          : action.type === 'success'
-                                          ? 'text-white hover:opacity-80'
-                                          : action.type === 'danger'
-                                          ? 'bg-red-500 text-white hover:bg-red-600'
-                                          : isDark
-                                          ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
-                                          : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-                                      }`}
-                                      style={{
-                                        backgroundColor: step.status !== 'pending' && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
-                                      }}
-                                    >
-                                      {action.label}
-                                    </button>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          ))}
+                            ))
+                          })()}
                         </div>
 
 
