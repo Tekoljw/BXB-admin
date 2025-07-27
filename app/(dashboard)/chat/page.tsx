@@ -2427,7 +2427,7 @@ export default function ChatPage() {
                                   className={`h-1.5 rounded-full transition-all duration-300`}
                                   style={{ 
                                     width: `${progressPercent}%`,
-                                    backgroundColor: escrowData.progress === 6 ? '#20B2AA' : '#3b82f6'
+                                    backgroundColor: '#20B2AA'
                                   }}
                                 />
                               </div>
