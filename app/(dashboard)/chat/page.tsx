@@ -2436,20 +2436,20 @@ export default function ChatPage() {
 
                             {/* Progress Steps */}
                             <div className="relative">
-                              {/* Full Vertical Progress Line - Connect all steps */}
+                              {/* Full Vertical Progress Line - Connect all steps but stop at last circle */}
                               <div className={`absolute left-4 top-4 w-0.5 ${
                                 isDark ? 'bg-gray-600' : 'bg-gray-300'
-                              }`} style={{ height: `${(escrowData.steps.length - 1) * 6.5}rem` }} />
+                              }`} style={{ height: `${(escrowData.steps.length - 1) * 5}rem` }} />
                               
                               <div className="space-y-4">
                                 {escrowData.steps.map((step, index) => (
                                   <div key={step.id} className="relative">
                                     {/* Completed section of progress line */}
                                     {step.status === 'completed' && index < escrowData.steps.length - 1 && (
-                                      <div className="absolute left-4 top-4 w-0.5 h-20 bg-green-500 z-5" />
+                                      <div className="absolute left-4 top-4 w-0.5 h-16 bg-green-500 z-5" />
                                     )}
                                     {step.status === 'current' && index < escrowData.steps.length - 1 && (
-                                      <div className="absolute left-4 top-4 w-0.5 h-20 bg-blue-500 z-5" />
+                                      <div className="absolute left-4 top-4 w-0.5 h-16 bg-blue-500 z-5" />
                                     )}
                                     
                                     <div className="space-y-2">
