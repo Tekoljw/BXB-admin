@@ -2421,48 +2421,45 @@ export default function ChatPage() {
                               })()}
                             </div>
                             
-                            <div className="space-y-2">
-                              {/* Current Step Status */}
-                              <div className="flex items-center justify-between">
-                                <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              {/* Left Side - Current Progress Info */}
+                              <div className="flex-1 space-y-1">
+                                <div className="flex items-center justify-between">
                                   <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
                                     {(() => {
                                       const currentStep = escrowData.steps.find(step => step.status === 'current')
                                       return currentStep ? currentStep.title : '交易已完成'
                                     })()}
                                   </div>
-                                  <div className="text-xs text-gray-500">
-                                    第{Math.max(1, escrowData.steps.findIndex(step => step.status === 'current') + 1)}步 / 共{escrowData.steps.length}步
+                                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                                    showEscrowProgress ? 'rotate-180' : ''
+                                  }`} />
+                                </div>
+                                
+                                <div className="text-xs text-gray-500 mb-1">
+                                  第{Math.max(1, escrowData.steps.findIndex(step => step.status === 'current') + 1)}步 / 共{escrowData.steps.length}步 • {Math.round(progressPercent)}%
+                                </div>
+                                
+                                <div className="flex items-center space-x-2">
+                                  <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                    <div 
+                                      className={`h-1.5 rounded-full transition-all duration-300`}
+                                      style={{ 
+                                        width: `${progressPercent}%`,
+                                        backgroundColor: '#20B2AA'
+                                      }}
+                                    />
                                   </div>
                                 </div>
-                                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                                  showEscrowProgress ? 'rotate-180' : ''
-                                }`} />
                               </div>
                               
-                              {/* Progress Bar */}
-                              <div className="flex items-center space-x-2">
-                                <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                                  <div 
-                                    className={`h-1.5 rounded-full transition-all duration-300`}
-                                    style={{ 
-                                      width: `${progressPercent}%`,
-                                      backgroundColor: '#20B2AA'
-                                    }}
-                                  />
-                                </div>
-                                <span className="text-xs text-gray-500">
-                                  {Math.round(progressPercent)}%
-                                </span>
-                              </div>
-                              
-                              {/* Current Step Action Buttons */}
+                              {/* Right Side - Action Buttons */}
                               {(() => {
                                 const currentStep = escrowData.steps.find(step => step.status === 'current')
                                 if (!currentStep || !currentStep.actions || currentStep.actions.length === 0) return null
                                 
                                 return (
-                                  <div className="flex flex-wrap gap-2">
+                                  <div className="flex gap-2 ml-4">
                                     {currentStep.actions.map((action, index) => (
                                       <button
                                         key={`floating-${currentStep.id}-${index}`}
@@ -2470,7 +2467,7 @@ export default function ChatPage() {
                                           e.stopPropagation()
                                           console.log(`Floating Action: ${action.label} for step ${currentStep.id}`)
                                         }}
-                                        className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                                        className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors whitespace-nowrap ${
                                           action.type === 'primary'
                                             ? 'text-white hover:opacity-80'
                                             : action.type === 'success'
