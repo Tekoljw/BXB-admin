@@ -142,6 +142,61 @@ export default function ChatPage() {
   
   // Contact info modal state
   const [showContactInfo, setShowContactInfo] = useState(false)
+  
+  // Escrow progress bar state
+  const [showEscrowProgress, setShowEscrowProgress] = useState(false)
+  
+  // Mock escrow transaction data
+  const escrowTransactionData = {
+    "escrow-1": {
+      transactionId: "TXN001",
+      amount: "10,000",
+      currency: "USDT",
+      type: "买入",
+      progress: 2,
+      steps: [
+        { id: 1, title: "发起担保交易", status: "completed", timestamp: "14:30" },
+        { id: 2, title: "对方已付担保金", status: "completed", timestamp: "14:45" },
+        { id: 3, title: "等待确认完成交易", status: "current", timestamp: "" },
+        { id: 4, title: "完成收款", status: "pending", timestamp: "" }
+      ],
+      expiresAt: "16:30",
+      buyer: "张三",
+      seller: "您"
+    },
+    "escrow-2": {
+      transactionId: "TXN002", 
+      amount: "5,000",
+      currency: "USDT",
+      type: "卖出",
+      progress: 1,
+      steps: [
+        { id: 1, title: "发起担保交易", status: "completed", timestamp: "10:15" },
+        { id: 2, title: "等待对方付担保金", status: "current", timestamp: "" },
+        { id: 3, title: "双方支付担保金", status: "pending", timestamp: "" },
+        { id: 4, title: "完成交易确认", status: "pending", timestamp: "" }
+      ],
+      expiresAt: "12:15",
+      buyer: "李四",
+      seller: "您"
+    },
+    "escrow-3": {
+      transactionId: "TXN003",
+      amount: "20,000", 
+      currency: "USDT",
+      type: "买入",
+      progress: 4,
+      steps: [
+        { id: 1, title: "发起担保交易", status: "completed", timestamp: "08:00" },
+        { id: 2, title: "对方已付担保金", status: "completed", timestamp: "08:15" },
+        { id: 3, title: "等待确认完成交易", status: "completed", timestamp: "08:30" },
+        { id: 4, title: "完成收款", status: "completed", timestamp: "08:45" }
+      ],
+      expiresAt: "已完成",
+      buyer: "王五",
+      seller: "您"
+    }
+  }
 
   // Theme and language toggle handlers
   const handleToggleTheme = () => {
@@ -1967,6 +2022,140 @@ export default function ChatPage() {
           ) : (
             // Regular Chat View
             <>
+              {/* Escrow Progress Bar for escrow chats */}
+              {selectedContact && selectedContact.startsWith("escrow-") && (
+                <div className={`border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
+                  <div 
+                    className={`p-3 cursor-pointer transition-all duration-300 ${
+                      isDark ? "hover:bg-[#252842]" : "hover:bg-gray-50"
+                    }`}
+                    onClick={() => setShowEscrowProgress(!showEscrowProgress)}
+                  >
+                    {(() => {
+                      const escrowData = escrowTransactionData[selectedContact as keyof typeof escrowTransactionData]
+                      if (!escrowData) return null
+
+                      const currentStep = escrowData.steps.find(step => step.status === 'current')
+                      const completedSteps = escrowData.steps.filter(step => step.status === 'completed').length
+                      const progressPercent = (completedSteps / escrowData.steps.length) * 100
+
+                      return (
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-2 h-2 rounded-full ${
+                              escrowData.progress === 4 ? 'bg-green-500' : 'bg-yellow-500'
+                            } animate-pulse`} />
+                            <div>
+                              <div className={`font-medium text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {escrowData.type} {escrowData.amount} {escrowData.currency}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {currentStep ? currentStep.title : '交易已完成'} 
+                                {escrowData.expiresAt !== '已完成' && ` • 到期时间: ${escrowData.expiresAt}`}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                              <div 
+                                className={`h-1.5 rounded-full transition-all duration-300 ${
+                                  escrowData.progress === 4 ? 'bg-green-500' : 'bg-blue-500'
+                                }`}
+                                style={{ width: `${progressPercent}%` }}
+                              />
+                            </div>
+                            <span className="text-xs text-gray-500">
+                              {completedSteps}/{escrowData.steps.length}
+                            </span>
+                            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                              showEscrowProgress ? 'rotate-180' : ''
+                            }`} />
+                          </div>
+                        </div>
+                      )
+                    })()}
+                  </div>
+                  
+                  {/* Expanded Progress Details */}
+                  {showEscrowProgress && selectedContact && (
+                    <div className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-gray-50"} p-4`}>
+                      {(() => {
+                        const escrowData = escrowTransactionData[selectedContact as keyof typeof escrowTransactionData]
+                        if (!escrowData) return null
+
+                        return (
+                          <div className="space-y-4">
+                            {/* Transaction Info */}
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                  交易详情 #{escrowData.transactionId}
+                                </h3>
+                                <p className="text-sm text-gray-500">
+                                  买方: {escrowData.buyer} | 卖方: {escrowData.seller}
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <div className={`font-bold text-lg ${isDark ? "text-white" : "text-gray-800"}`}>
+                                  {escrowData.amount} {escrowData.currency}
+                                </div>
+                                <div className="text-sm text-gray-500">{escrowData.type}</div>
+                              </div>
+                            </div>
+
+                            {/* Progress Steps */}
+                            <div className="space-y-3">
+                              {escrowData.steps.map((step, index) => (
+                                <div key={step.id} className="flex items-center space-x-3">
+                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                                    step.status === 'completed' 
+                                      ? 'bg-green-500 text-white' 
+                                      : step.status === 'current'
+                                      ? 'bg-blue-500 text-white'
+                                      : 'bg-gray-300 text-gray-600'
+                                  }`}>
+                                    {step.status === 'completed' ? '✓' : step.id}
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className={`font-medium ${
+                                      step.status === 'current' 
+                                        ? isDark ? 'text-blue-400' : 'text-blue-600'
+                                        : step.status === 'completed'
+                                        ? isDark ? 'text-green-400' : 'text-green-600'
+                                        : isDark ? 'text-gray-400' : 'text-gray-500'
+                                    }`}>
+                                      {step.title}
+                                    </div>
+                                    {step.timestamp && (
+                                      <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                    )}
+                                  </div>
+                                  {step.status === 'current' && (
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Action Buttons */}
+                            {escrowData.progress < 4 && (
+                              <div className="flex space-x-2 pt-2">
+                                <button className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors text-sm">
+                                  查看合同
+                                </button>
+                                <button className="flex-1 border border-gray-300 text-gray-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm">
+                                  联系客服
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })()}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Chat Header */}
               <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center justify-between`}>
                 {(() => {
@@ -3558,6 +3747,139 @@ export default function ChatPage() {
               )}
             </div>
           </div>
+
+          {/* Mobile Escrow Progress Bar */}
+          {selectedContact && selectedContact.startsWith("escrow-") && (
+            <div className={`border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
+              <div 
+                className={`p-3 cursor-pointer transition-all duration-300 ${
+                  isDark ? "hover:bg-[#252842]" : "hover:bg-gray-50"
+                }`}
+                onClick={() => setShowEscrowProgress(!showEscrowProgress)}
+              >
+                {(() => {
+                  const escrowData = escrowTransactionData[selectedContact as keyof typeof escrowTransactionData]
+                  if (!escrowData) return null
+
+                  const currentStep = escrowData.steps.find(step => step.status === 'current')
+                  const completedSteps = escrowData.steps.filter(step => step.status === 'completed').length
+                  const progressPercent = (completedSteps / escrowData.steps.length) * 100
+
+                  return (
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-2 h-2 rounded-full ${
+                          escrowData.progress === 4 ? 'bg-green-500' : 'bg-yellow-500'
+                        } animate-pulse`} />
+                        <div>
+                          <div className={`font-medium text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
+                            {escrowData.type} {escrowData.amount} {escrowData.currency}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {currentStep ? currentStep.title : '交易已完成'}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-12 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                          <div 
+                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                              escrowData.progress === 4 ? 'bg-green-500' : 'bg-blue-500'
+                            }`}
+                            style={{ width: `${progressPercent}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-gray-500">
+                          {completedSteps}/{escrowData.steps.length}
+                        </span>
+                        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                          showEscrowProgress ? 'rotate-180' : ''
+                        }`} />
+                      </div>
+                    </div>
+                  )
+                })()}
+              </div>
+              
+              {/* Mobile Expanded Progress Details */}
+              {showEscrowProgress && selectedContact && (
+                <div className={`border-t ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-gray-50"} p-4`}>
+                  {(() => {
+                    const escrowData = escrowTransactionData[selectedContact as keyof typeof escrowTransactionData]
+                    if (!escrowData) return null
+
+                    return (
+                      <div className="space-y-4">
+                        {/* Mobile Transaction Info */}
+                        <div className="space-y-2">
+                          <div>
+                            <h3 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                              交易详情 #{escrowData.transactionId}
+                            </h3>
+                            <p className="text-sm text-gray-500">
+                              买方: {escrowData.buyer} | 卖方: {escrowData.seller}
+                            </p>
+                          </div>
+                          <div>
+                            <div className={`font-bold text-lg ${isDark ? "text-white" : "text-gray-800"}`}>
+                              {escrowData.amount} {escrowData.currency}
+                            </div>
+                            <div className="text-sm text-gray-500">{escrowData.type}</div>
+                          </div>
+                        </div>
+
+                        {/* Mobile Progress Steps */}
+                        <div className="space-y-3">
+                          {escrowData.steps.map((step, index) => (
+                            <div key={step.id} className="flex items-center space-x-3">
+                              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                                step.status === 'completed' 
+                                  ? 'bg-green-500 text-white' 
+                                  : step.status === 'current'
+                                  ? 'bg-blue-500 text-white'
+                                  : 'bg-gray-300 text-gray-600'
+                              }`}>
+                                {step.status === 'completed' ? '✓' : step.id}
+                              </div>
+                              <div className="flex-1">
+                                <div className={`font-medium text-sm ${
+                                  step.status === 'current' 
+                                    ? isDark ? 'text-blue-400' : 'text-blue-600'
+                                    : step.status === 'completed'
+                                    ? isDark ? 'text-green-400' : 'text-green-600'
+                                    : isDark ? 'text-gray-400' : 'text-gray-500'
+                                }`}>
+                                  {step.title}
+                                </div>
+                                {step.timestamp && (
+                                  <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                )}
+                              </div>
+                              {step.status === 'current' && (
+                                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+                              )}
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Mobile Action Buttons */}
+                        {escrowData.progress < 4 && (
+                          <div className="flex space-x-2 pt-2">
+                            <button className="flex-1 bg-blue-500 text-white px-3 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors text-sm">
+                              查看合同
+                            </button>
+                            <button className="flex-1 border border-gray-300 text-gray-600 px-3 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm">
+                              联系客服
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })()}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Mobile Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
