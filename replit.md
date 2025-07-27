@@ -842,6 +842,8 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Floating progress bar now shows current step status, action buttons, and uses consistent #20B2AA green color for progress indicator
   - Fixed duplicate progress information display by removing redundant transaction details and keeping only current step progress on left side
   - Shortened progress bar width to w-32 (128px) for more compact visual presentation while maintaining functionality
+  - Added transaction amount display and status labels to floating bar: shows transaction type, amount, currency, and current status (待付款/担保中/已确认/待仲裁/已退款)
+  - Implemented color-coded status badges with proper dark/light theme support for transaction status visualization
 
 ## User Preferences
 

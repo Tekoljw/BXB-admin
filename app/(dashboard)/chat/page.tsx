@@ -2352,14 +2352,33 @@ export default function ChatPage() {
 
                       return (
                         <div className="flex items-center justify-between">
-                          {/* Left Side - Current Progress Info */}
+                          {/* Left Side - Transaction Info and Progress */}
                           <div className="flex-1 space-y-1">
-                            <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                              {currentStep ? currentStep.title : '交易已完成'}
+                            {/* Transaction Amount and Status */}
+                            <div className="flex items-center space-x-2">
+                              <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {escrowData.type} {escrowData.amount} {escrowData.currency}
+                              </div>
+                              <div className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                escrowData.progress === 1 ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400' :
+                                escrowData.progress === 2 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' :
+                                escrowData.progress === 3 ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :
+                                escrowData.progress === 4 ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' :
+                                escrowData.progress === 5 ? 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400' :
+                                'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+                              }`}>
+                                {escrowData.progress === 1 ? '待付款' :
+                                 escrowData.progress === 2 ? '担保中' :
+                                 escrowData.progress === 3 ? '已确认' :
+                                 escrowData.progress === 4 ? '待仲裁' :
+                                 escrowData.progress === 5 ? '已退款' :
+                                 '已完成'}
+                              </div>
                             </div>
                             
+                            {/* Current Step and Progress */}
                             <div className="text-xs text-gray-500 mb-1">
-                              第{Math.max(1, escrowData.steps.findIndex(step => step.status === 'current') + 1)}步 / 共{escrowData.steps.length}步 • {Math.round(progressPercent)}%
+                              {currentStep ? currentStep.title : '交易已完成'} • 第{Math.max(1, escrowData.steps.findIndex(step => step.status === 'current') + 1)}步 / 共{escrowData.steps.length}步 • {Math.round(progressPercent)}%
                             </div>
                             
                             <div className="flex items-center space-x-2">
