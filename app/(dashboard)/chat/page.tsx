@@ -2367,99 +2367,38 @@ export default function ChatPage() {
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-3">
-                            {/* Current Step Quick Action Buttons (1-2 buttons) */}
-                            <div className="flex space-x-2">
-                              {(() => {
-                                const currentStepIndex = escrowData.steps.findIndex(step => step.status === 'current')
-                                const currentStep = escrowData.steps[currentStepIndex]
-                                const buttonsToShow = []
-                                
-                                // Show current step primary action
-                                if (currentStep && currentStep.actions && currentStep.actions.length > 0) {
-                                  buttonsToShow.push({
-                                    step: currentStep,
-                                    action: currentStep.actions[0],
-                                    isPrimary: true
-                                  })
-                                  
-                                  // Show second action if available for current step
-                                  if (currentStep.actions.length > 1) {
-                                    buttonsToShow.push({
-                                      step: currentStep,
-                                      action: currentStep.actions[1],
-                                      isPrimary: false
-                                    })
-                                  }
-                                }
-                                
-                                return buttonsToShow.map((buttonData, index) => (
-                                  <button
-                                    key={`${buttonData.step.id}-${index}`}
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      console.log(`Quick Action: ${buttonData.action.label} for step ${buttonData.step.id}`)
-                                    }}
-                                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                                      buttonData.action.type === 'primary'
-                                        ? 'text-white hover:opacity-80'
-                                        : buttonData.action.type === 'success'
-                                        ? 'text-white hover:opacity-80'
-                                        : buttonData.action.type === 'danger'
-                                        ? 'bg-red-500 text-white hover:bg-red-600'
-                                        : isDark
-                                        ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
-                                        : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-                                    }`}
-                                    style={{
-                                      backgroundColor: buttonData.action.type === 'primary' || buttonData.action.type === 'success' ? '#20B2AA' : undefined
-                                    }}
-                                  >
-                                    {buttonData.action.label}
-                                  </button>
-                                ))
-                              })()}
-                            </div>
-                            
-                            <div className="flex items-center justify-between">
-                              {/* Left Side - Current Progress Info */}
-                              <div className="flex-1 space-y-1">
-                                <div className="flex items-center justify-between">
-                                  <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                                    {(() => {
-                                      const currentStep = escrowData.steps.find(step => step.status === 'current')
-                                      return currentStep ? currentStep.title : '交易已完成'
-                                    })()}
-                                  </div>
-                                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                                    showEscrowProgress ? 'rotate-180' : ''
-                                  }`} />
-                                </div>
-                                
-                                <div className="text-xs text-gray-500 mb-1">
-                                  第{Math.max(1, escrowData.steps.findIndex(step => step.status === 'current') + 1)}步 / 共{escrowData.steps.length}步 • {Math.round(progressPercent)}%
-                                </div>
-                                
-                                <div className="flex items-center space-x-2">
-                                  <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                                    <div 
-                                      className={`h-1.5 rounded-full transition-all duration-300`}
-                                      style={{ 
-                                        width: `${progressPercent}%`,
-                                        backgroundColor: '#20B2AA'
-                                      }}
-                                    />
-                                  </div>
-                                </div>
+                          <div className="flex items-center justify-between">
+                            {/* Left Side - Current Progress Info */}
+                            <div className="flex-1 space-y-1">
+                              <div className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                                {currentStep ? currentStep.title : '交易已完成'}
                               </div>
                               
-                              {/* Right Side - Action Buttons */}
+                              <div className="text-xs text-gray-500 mb-1">
+                                第{Math.max(1, escrowData.steps.findIndex(step => step.status === 'current') + 1)}步 / 共{escrowData.steps.length}步 • {Math.round(progressPercent)}%
+                              </div>
+                              
+                              <div className="flex items-center space-x-2">
+                                <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                  <div 
+                                    className={`h-1.5 rounded-full transition-all duration-300`}
+                                    style={{ 
+                                      width: `${progressPercent}%`,
+                                      backgroundColor: '#20B2AA'
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* Right Side - Action Buttons and Expand Icon */}
+                            <div className="flex items-center space-x-3 ml-4">
+                              {/* Action Buttons */}
                               {(() => {
-                                const currentStep = escrowData.steps.find(step => step.status === 'current')
                                 if (!currentStep || !currentStep.actions || currentStep.actions.length === 0) return null
                                 
                                 return (
-                                  <div className="flex gap-2 ml-4">
+                                  <div className="flex gap-2">
                                     {currentStep.actions.map((action, index) => (
                                       <button
                                         key={`floating-${currentStep.id}-${index}`}
@@ -2488,6 +2427,11 @@ export default function ChatPage() {
                                   </div>
                                 )
                               })()}
+                              
+                              {/* Expand/Collapse Icon */}
+                              <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                                showEscrowProgress ? 'rotate-180' : ''
+                              }`} />
                             </div>
                           </div>
                         </div>
