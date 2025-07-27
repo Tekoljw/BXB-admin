@@ -222,9 +222,7 @@ export default function ChatPage() {
           title: "交易完成", 
           status: "pending", 
           timestamp: "",
-          actions: [
-            { label: "查看结果", type: "success" }
-          ]
+          actions: []
         }
       ],
       expiresAt: "16:30",
@@ -305,9 +303,7 @@ export default function ChatPage() {
           title: "交易完成", 
           status: "pending", 
           timestamp: "",
-          actions: [
-            { label: "查看结果", type: "success" }
-          ]
+          actions: []
         }
       ],
       expiresAt: "12:15",
@@ -388,9 +384,7 @@ export default function ChatPage() {
           title: "交易完成", 
           status: "completed", 
           timestamp: "09:15",
-          actions: [
-            { label: "查看结果", type: "success" }
-          ]
+          actions: []
         }
       ],
       expiresAt: "已完成",
