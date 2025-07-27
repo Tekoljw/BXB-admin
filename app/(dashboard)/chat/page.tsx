@@ -199,12 +199,13 @@ export default function ChatPage() {
         },
         { 
           id: 5, 
-          title: "等待甲方付款", 
+          title: "等待甲方确认，释放担保金", 
           status: "pending", 
           timestamp: "",
           actions: [
-            { label: "确认付款", type: "primary" },
-            { label: "催促付款", type: "secondary" }
+            { label: "确认收款", type: "success" },
+            { label: "申请仲裁", type: "danger" },
+            { label: "催促对方", type: "secondary" }
           ]
         },
         { 
@@ -213,7 +214,6 @@ export default function ChatPage() {
           status: "pending", 
           timestamp: "",
           actions: [
-            { label: "申请仲裁", type: "danger" },
             { label: "查看仲裁", type: "secondary" }
           ]
         },
@@ -280,12 +280,13 @@ export default function ChatPage() {
         },
         { 
           id: 5, 
-          title: "等待甲方付款", 
+          title: "等待甲方确认，释放担保金", 
           status: "pending", 
           timestamp: "",
           actions: [
-            { label: "确认付款", type: "primary" },
-            { label: "催促付款", type: "secondary" }
+            { label: "确认收款", type: "success" },
+            { label: "申请仲裁", type: "danger" },
+            { label: "催促对方", type: "secondary" }
           ]
         },
         { 
@@ -294,7 +295,6 @@ export default function ChatPage() {
           status: "pending", 
           timestamp: "",
           actions: [
-            { label: "申请仲裁", type: "danger" },
             { label: "查看仲裁", type: "secondary" }
           ]
         },
@@ -361,12 +361,13 @@ export default function ChatPage() {
         },
         { 
           id: 5, 
-          title: "等待甲方付款", 
+          title: "等待甲方确认，释放担保金", 
           status: "completed", 
           timestamp: "09:00",
           actions: [
-            { label: "确认付款", type: "primary" },
-            { label: "催促付款", type: "secondary" }
+            { label: "确认收款", type: "success" },
+            { label: "申请仲裁", type: "danger" },
+            { label: "催促对方", type: "secondary" }
           ]
         },
         { 
@@ -375,7 +376,6 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "09:10",
           actions: [
-            { label: "申请仲裁", type: "danger" },
             { label: "查看仲裁", type: "secondary" }
           ]
         },
