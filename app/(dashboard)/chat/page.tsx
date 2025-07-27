@@ -169,8 +169,7 @@ export default function ChatPage() {
           timestamp: "14:30",
           actions: [
             { label: "起草合同", type: "primary" },
-            { label: "保存", type: "secondary" },
-            { label: "查看合同", type: "secondary" }
+            { label: "保存", type: "secondary" }
           ]
         },
         { 
@@ -180,7 +179,6 @@ export default function ChatPage() {
           timestamp: "",
           actions: [
             { label: "查看合同", type: "primary" },
-            { label: "修改合同", type: "secondary" },
             { label: "签名合同", type: "success" }
           ]
         },
@@ -190,8 +188,7 @@ export default function ChatPage() {
           status: "pending", 
           timestamp: "",
           actions: [
-            { label: "确认付款", type: "primary" },
-            { label: "催促付款", type: "secondary" }
+            { label: "确认付款", type: "primary" }
           ]
         },
         { 
@@ -200,8 +197,7 @@ export default function ChatPage() {
           status: "pending", 
           timestamp: "",
           actions: [
-            { label: "确认收到", type: "primary" },
-            { label: "联系卖方", type: "secondary" }
+            { label: "确认收到", type: "primary" }
           ]
         },
         { 
@@ -211,8 +207,7 @@ export default function ChatPage() {
           timestamp: "",
           actions: [
             { label: "确认收款", type: "success" },
-            { label: "申请仲裁", type: "danger" },
-            { label: "催促对方", type: "secondary" }
+            { label: "申请仲裁", type: "danger" }
           ]
         },
         { 
@@ -250,8 +245,7 @@ export default function ChatPage() {
           timestamp: "10:15",
           actions: [
             { label: "起草合同", type: "primary" },
-            { label: "保存", type: "secondary" },
-            { label: "查看合同", type: "secondary" }
+            { label: "保存", type: "secondary" }
           ]
         },
         { 
@@ -261,7 +255,6 @@ export default function ChatPage() {
           timestamp: "10:30",
           actions: [
             { label: "查看合同", type: "primary" },
-            { label: "修改合同", type: "secondary" },
             { label: "签名合同", type: "success" }
           ]
         },
@@ -271,8 +264,7 @@ export default function ChatPage() {
           status: "current", 
           timestamp: "",
           actions: [
-            { label: "确认付款", type: "primary" },
-            { label: "催促付款", type: "secondary" }
+            { label: "确认付款", type: "primary" }
           ]
         },
         { 
@@ -281,8 +273,7 @@ export default function ChatPage() {
           status: "pending", 
           timestamp: "",
           actions: [
-            { label: "确认收到", type: "primary" },
-            { label: "联系卖方", type: "secondary" }
+            { label: "确认收到", type: "primary" }
           ]
         },
         { 
@@ -292,8 +283,7 @@ export default function ChatPage() {
           timestamp: "",
           actions: [
             { label: "确认收款", type: "success" },
-            { label: "申请仲裁", type: "danger" },
-            { label: "催促对方", type: "secondary" }
+            { label: "申请仲裁", type: "danger" }
           ]
         },
         { 
@@ -331,8 +321,7 @@ export default function ChatPage() {
           timestamp: "08:00",
           actions: [
             { label: "起草合同", type: "primary" },
-            { label: "保存", type: "secondary" },
-            { label: "查看合同", type: "secondary" }
+            { label: "保存", type: "secondary" }
           ]
         },
         { 
@@ -342,7 +331,6 @@ export default function ChatPage() {
           timestamp: "08:15",
           actions: [
             { label: "查看合同", type: "primary" },
-            { label: "修改合同", type: "secondary" },
             { label: "签名合同", type: "success" }
           ]
         },
@@ -352,8 +340,7 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "08:30",
           actions: [
-            { label: "确认付款", type: "primary" },
-            { label: "催促付款", type: "secondary" }
+            { label: "确认付款", type: "primary" }
           ]
         },
         { 
@@ -362,8 +349,7 @@ export default function ChatPage() {
           status: "completed", 
           timestamp: "08:45",
           actions: [
-            { label: "确认收到", type: "primary" },
-            { label: "联系卖方", type: "secondary" }
+            { label: "确认收到", type: "primary" }
           ]
         },
         { 
@@ -373,8 +359,7 @@ export default function ChatPage() {
           timestamp: "09:00",
           actions: [
             { label: "确认收款", type: "success" },
-            { label: "申请仲裁", type: "danger" },
-            { label: "催促对方", type: "secondary" }
+            { label: "申请仲裁", type: "danger" }
           ]
         },
         { 
