@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft, Home, Percent, FileCheck, Key, Settings, UserX, LogOut, Check, Mic } from "lucide-react"
+import { Search, Plus, MessageCircle, Phone, Video, User, Users, Star, Shield, BookOpen, Smile, Paperclip, Scissors, ArrowUp, MoreHorizontal, X, ChevronRight, Bell, Image, Send, Gift, ChevronDown, ChevronUp, Wallet, ArrowRightLeft, Zap, Plane, ArrowLeft, Home, Percent, FileCheck, Key, Settings, UserX, LogOut, Check, Mic } from "lucide-react"
 import { useTheme } from "@/contexts/theme-context"
 import { useChat } from "@/contexts/chat-context"
 
@@ -2617,6 +2617,20 @@ export default function ChatPage() {
                               </div>
                             </div>
 
+                            {/* Collapse Bar */}
+                            <div 
+                              className={`mt-6 pt-4 border-t ${isDark ? "border-[#3a3d4a]" : "border-gray-200"} cursor-pointer transition-all duration-300 ${
+                                isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                              }`}
+                              onClick={() => setShowEscrowProgress(false)}
+                            >
+                              <div className="flex items-center justify-center space-x-2">
+                                <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                                  收起详情
+                                </span>
+                                <ArrowUp className={`w-4 h-4 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+                              </div>
+                            </div>
 
                           </div>
                         )
@@ -4381,6 +4395,20 @@ export default function ChatPage() {
                           })()}
                         </div>
 
+                        {/* Mobile Collapse Bar */}
+                        <div 
+                          className={`mt-6 pt-4 border-t ${isDark ? "border-[#3a3d4a]" : "border-gray-200"} cursor-pointer transition-all duration-300 ${
+                            isDark ? "hover:bg-[#252842]" : "hover:bg-gray-100"
+                          }`}
+                          onClick={() => setShowEscrowProgress(false)}
+                        >
+                          <div className="flex items-center justify-center space-x-2">
+                            <span className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                              收起详情
+                            </span>
+                            <ArrowUp className={`w-4 h-4 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
+                          </div>
+                        </div>
 
                       </div>
                     )

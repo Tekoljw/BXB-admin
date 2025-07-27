@@ -834,6 +834,8 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Added arbitration state management with handleArbitrationRequest and handleConfirmPayment functions
   - Unified color scheme: all completed steps use #20B2AA green for consistency with button colors
   - Updated step circles, text, and progress lines to match button color theme across desktop and mobile interfaces
+  - Added collapse functionality: expansion panel includes bottom collapse bar with "收起详情" text and arrow icon
+  - Users can now collapse expanded transaction details using dedicated collapse bar for improved UX
 
 ## User Preferences
 
