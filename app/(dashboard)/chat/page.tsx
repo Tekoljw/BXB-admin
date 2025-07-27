@@ -146,7 +146,7 @@ export default function ChatPage() {
   // Escrow progress bar state
   const [showEscrowProgress, setShowEscrowProgress] = useState(false)
   
-  // Mock escrow transaction data
+  // Mock escrow transaction data - Updated to 6-step process
   const escrowTransactionData = {
     "escrow-1": {
       transactionId: "TXN001",
@@ -155,10 +155,66 @@ export default function ChatPage() {
       type: "买入",
       progress: 2,
       steps: [
-        { id: 1, title: "发起担保交易", status: "completed", timestamp: "14:30" },
-        { id: 2, title: "对方已付担保金", status: "completed", timestamp: "14:45" },
-        { id: 3, title: "等待确认完成交易", status: "current", timestamp: "" },
-        { id: 4, title: "完成收款", status: "pending", timestamp: "" }
+        { 
+          id: 1, 
+          title: "生成合同", 
+          status: "completed", 
+          timestamp: "14:30",
+          actions: [
+            { label: "查看合同", type: "primary" },
+            { label: "下载合同", type: "secondary" }
+          ]
+        },
+        { 
+          id: 2, 
+          title: "双方签名确定合同以及确定付款时间", 
+          status: "current", 
+          timestamp: "",
+          actions: [
+            { label: "签名合同", type: "primary" },
+            { label: "设置付款时间", type: "secondary" }
+          ]
+        },
+        { 
+          id: 3, 
+          title: "等待甲方付款到担保账户", 
+          status: "pending", 
+          timestamp: "",
+          actions: [
+            { label: "确认付款", type: "primary" },
+            { label: "催促付款", type: "secondary" }
+          ]
+        },
+        { 
+          id: 4, 
+          title: "等待乙方交付", 
+          status: "pending", 
+          timestamp: "",
+          actions: [
+            { label: "确认收到", type: "primary" },
+            { label: "联系卖方", type: "secondary" }
+          ]
+        },
+        { 
+          id: 5, 
+          title: "等待甲方确认释放担保/申请争议仲裁", 
+          status: "pending", 
+          timestamp: "",
+          actions: [
+            { label: "确认释放", type: "primary" },
+            { label: "申请仲裁", type: "danger" }
+          ]
+        },
+        { 
+          id: 6, 
+          title: "等待仲裁/确认付款，乙方将收到款项", 
+          status: "pending", 
+          timestamp: "",
+          actions: [
+            { label: "查看仲裁", type: "primary" },
+            { label: "确认完成", type: "success" }
+          ]
+        }
       ],
       expiresAt: "16:30",
       buyer: "张三",
@@ -169,12 +225,68 @@ export default function ChatPage() {
       amount: "5,000",
       currency: "USDT",
       type: "卖出",
-      progress: 1,
+      progress: 3,
       steps: [
-        { id: 1, title: "发起担保交易", status: "completed", timestamp: "10:15" },
-        { id: 2, title: "等待对方付担保金", status: "current", timestamp: "" },
-        { id: 3, title: "双方支付担保金", status: "pending", timestamp: "" },
-        { id: 4, title: "完成交易确认", status: "pending", timestamp: "" }
+        { 
+          id: 1, 
+          title: "生成合同", 
+          status: "completed", 
+          timestamp: "10:15",
+          actions: [
+            { label: "查看合同", type: "primary" },
+            { label: "下载合同", type: "secondary" }
+          ]
+        },
+        { 
+          id: 2, 
+          title: "双方签名确定合同以及确定付款时间", 
+          status: "completed", 
+          timestamp: "10:30",
+          actions: [
+            { label: "查看签名", type: "primary" },
+            { label: "查看时间", type: "secondary" }
+          ]
+        },
+        { 
+          id: 3, 
+          title: "等待甲方付款到担保账户", 
+          status: "current", 
+          timestamp: "",
+          actions: [
+            { label: "确认付款", type: "primary" },
+            { label: "催促付款", type: "secondary" }
+          ]
+        },
+        { 
+          id: 4, 
+          title: "等待乙方交付", 
+          status: "pending", 
+          timestamp: "",
+          actions: [
+            { label: "确认收到", type: "primary" },
+            { label: "联系卖方", type: "secondary" }
+          ]
+        },
+        { 
+          id: 5, 
+          title: "等待甲方确认释放担保/申请争议仲裁", 
+          status: "pending", 
+          timestamp: "",
+          actions: [
+            { label: "确认释放", type: "primary" },
+            { label: "申请仲裁", type: "danger" }
+          ]
+        },
+        { 
+          id: 6, 
+          title: "等待仲裁/确认付款，乙方将收到款项", 
+          status: "pending", 
+          timestamp: "",
+          actions: [
+            { label: "查看仲裁", type: "primary" },
+            { label: "确认完成", type: "success" }
+          ]
+        }
       ],
       expiresAt: "12:15",
       buyer: "李四",
@@ -185,12 +297,68 @@ export default function ChatPage() {
       amount: "20,000", 
       currency: "USDT",
       type: "买入",
-      progress: 4,
+      progress: 6,
       steps: [
-        { id: 1, title: "发起担保交易", status: "completed", timestamp: "08:00" },
-        { id: 2, title: "对方已付担保金", status: "completed", timestamp: "08:15" },
-        { id: 3, title: "等待确认完成交易", status: "completed", timestamp: "08:30" },
-        { id: 4, title: "完成收款", status: "completed", timestamp: "08:45" }
+        { 
+          id: 1, 
+          title: "生成合同", 
+          status: "completed", 
+          timestamp: "08:00",
+          actions: [
+            { label: "查看合同", type: "primary" },
+            { label: "下载合同", type: "secondary" }
+          ]
+        },
+        { 
+          id: 2, 
+          title: "双方签名确定合同以及确定付款时间", 
+          status: "completed", 
+          timestamp: "08:15",
+          actions: [
+            { label: "查看签名", type: "primary" },
+            { label: "查看时间", type: "secondary" }
+          ]
+        },
+        { 
+          id: 3, 
+          title: "等待甲方付款到担保账户", 
+          status: "completed", 
+          timestamp: "08:30",
+          actions: [
+            { label: "查看付款", type: "primary" },
+            { label: "付款凭证", type: "secondary" }
+          ]
+        },
+        { 
+          id: 4, 
+          title: "等待乙方交付", 
+          status: "completed", 
+          timestamp: "08:45",
+          actions: [
+            { label: "查看交付", type: "primary" },
+            { label: "交付凭证", type: "secondary" }
+          ]
+        },
+        { 
+          id: 5, 
+          title: "等待甲方确认释放担保/申请争议仲裁", 
+          status: "completed", 
+          timestamp: "09:00",
+          actions: [
+            { label: "查看确认", type: "primary" },
+            { label: "释放记录", type: "secondary" }
+          ]
+        },
+        { 
+          id: 6, 
+          title: "等待仲裁/确认付款，乙方将收到款项", 
+          status: "completed", 
+          timestamp: "09:15",
+          actions: [
+            { label: "交易完成", type: "success" },
+            { label: "查看记录", type: "secondary" }
+          ]
+        }
       ],
       expiresAt: "已完成",
       buyer: "王五",
@@ -518,10 +686,61 @@ export default function ChatPage() {
         createdAt: now.toISOString(),
         expiresAt: expires.toISOString(),
         steps: [
-          { id: 'step1', title: '发起担保交易', status: 'completed', timestamp: now.toISOString() },
-          { id: 'step2', title: '等待对方接受', status: 'current' },
-          { id: 'step3', title: '双方支付担保金', status: 'pending' },
-          { id: 'step4', title: '完成交易确认', status: 'pending' }
+          { 
+            id: 'step1', 
+            title: '生成合同', 
+            status: 'completed', 
+            timestamp: now.toISOString(),
+            actions: [
+              { label: "查看合同", type: "primary" },
+              { label: "下载合同", type: "secondary" }
+            ]
+          },
+          { 
+            id: 'step2', 
+            title: '双方签名确定合同以及确定付款时间', 
+            status: 'current',
+            actions: [
+              { label: "签名合同", type: "primary" },
+              { label: "设置付款时间", type: "secondary" }
+            ]
+          },
+          { 
+            id: 'step3', 
+            title: '等待甲方付款到担保账户', 
+            status: 'pending',
+            actions: [
+              { label: "确认付款", type: "primary" },
+              { label: "催促付款", type: "secondary" }
+            ]
+          },
+          { 
+            id: 'step4', 
+            title: '等待乙方交付', 
+            status: 'pending',
+            actions: [
+              { label: "确认收到", type: "primary" },
+              { label: "联系卖方", type: "secondary" }
+            ]
+          },
+          { 
+            id: 'step5', 
+            title: '等待甲方确认释放担保/申请争议仲裁', 
+            status: 'pending',
+            actions: [
+              { label: "确认释放", type: "primary" },
+              { label: "申请仲裁", type: "danger" }
+            ]
+          },
+          { 
+            id: 'step6', 
+            title: '等待仲裁/确认付款，乙方将收到款项', 
+            status: 'pending',
+            actions: [
+              { label: "查看仲裁", type: "primary" },
+              { label: "确认完成", type: "success" }
+            ]
+          }
         ]
       }
     }
@@ -578,7 +797,7 @@ export default function ChatPage() {
               ...msg, 
               guaranteeData: { 
                 ...msg.guaranteeData, 
-                status: stepId === 'step4' ? 'completed' : msg.guaranteeData.status,
+                status: stepId === 'step6' ? 'completed' : msg.guaranteeData.status,
                 steps: msg.guaranteeData.steps.map((step, index) => {
                   if (step.id === stepId) {
                     return { ...step, status: 'completed', timestamp: new Date().toISOString() }
@@ -2123,7 +2342,7 @@ export default function ChatPage() {
                             <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                               <div 
                                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                                  escrowData.progress === 4 ? 'bg-green-500' : 'bg-blue-500'
+                                  escrowData.progress === 6 ? 'bg-green-500' : 'bg-blue-500'
                                 }`}
                                 style={{ width: `${progressPercent}%` }}
                               />
@@ -2168,34 +2387,61 @@ export default function ChatPage() {
                             </div>
 
                             {/* Progress Steps */}
-                            <div className="space-y-3">
+                            <div className="space-y-4">
                               {escrowData.steps.map((step, index) => (
-                                <div key={step.id} className="flex items-center space-x-3">
-                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                                    step.status === 'completed' 
-                                      ? 'bg-green-500 text-white' 
-                                      : step.status === 'current'
-                                      ? 'bg-blue-500 text-white'
-                                      : 'bg-gray-300 text-gray-600'
-                                  }`}>
-                                    {step.status === 'completed' ? '✓' : step.id}
-                                  </div>
-                                  <div className="flex-1">
-                                    <div className={`font-medium ${
-                                      step.status === 'current' 
-                                        ? isDark ? 'text-blue-400' : 'text-blue-600'
-                                        : step.status === 'completed'
-                                        ? isDark ? 'text-green-400' : 'text-green-600'
-                                        : isDark ? 'text-gray-400' : 'text-gray-500'
+                                <div key={step.id} className="space-y-2">
+                                  <div className="flex items-center space-x-3">
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                                      step.status === 'completed' 
+                                        ? 'bg-green-500 text-white' 
+                                        : step.status === 'current'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-gray-300 text-gray-600'
                                     }`}>
-                                      {step.title}
+                                      {step.status === 'completed' ? '✓' : step.id}
                                     </div>
-                                    {step.timestamp && (
-                                      <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                    <div className="flex-1">
+                                      <div className={`font-medium ${
+                                        step.status === 'current' 
+                                          ? isDark ? 'text-blue-400' : 'text-blue-600'
+                                          : step.status === 'completed'
+                                          ? isDark ? 'text-green-400' : 'text-green-600'
+                                          : isDark ? 'text-gray-400' : 'text-gray-500'
+                                      }`}>
+                                        {step.title}
+                                      </div>
+                                      {step.timestamp && (
+                                        <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                      )}
+                                    </div>
+                                    {step.status === 'current' && (
+                                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                                     )}
                                   </div>
-                                  {step.status === 'current' && (
-                                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                  
+                                  {/* Action Buttons for Current and Completed Steps */}
+                                  {(step.status === 'current' || step.status === 'completed') && step.actions && (
+                                    <div className="ml-11 flex space-x-2">
+                                      {step.actions.map((action, actionIndex) => (
+                                        <button
+                                          key={actionIndex}
+                                          onClick={() => console.log(`Action: ${action.label} for step ${step.id}`)}
+                                          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                                            action.type === 'primary'
+                                              ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                              : action.type === 'success'
+                                              ? 'bg-green-500 text-white hover:bg-green-600'
+                                              : action.type === 'danger'
+                                              ? 'bg-red-500 text-white hover:bg-red-600'
+                                              : isDark
+                                              ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
+                                              : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                                          }`}
+                                        >
+                                          {action.label}
+                                        </button>
+                                      ))}
+                                    </div>
                                   )}
                                 </div>
                               ))}
@@ -3769,7 +4015,7 @@ export default function ChatPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <div className={`w-2 h-2 rounded-full ${
-                          escrowData.progress === 4 ? 'bg-green-500' : 'bg-yellow-500'
+                          escrowData.progress === 6 ? 'bg-green-500' : 'bg-yellow-500'
                         } animate-pulse`} />
                         <div>
                           <div className={`font-medium text-sm ${isDark ? "text-white" : "text-gray-800"}`}>
@@ -3829,34 +4075,61 @@ export default function ChatPage() {
                         </div>
 
                         {/* Mobile Progress Steps */}
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                           {escrowData.steps.map((step, index) => (
-                            <div key={step.id} className="flex items-center space-x-3">
-                              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                                step.status === 'completed' 
-                                  ? 'bg-green-500 text-white' 
-                                  : step.status === 'current'
-                                  ? 'bg-blue-500 text-white'
-                                  : 'bg-gray-300 text-gray-600'
-                              }`}>
-                                {step.status === 'completed' ? '✓' : step.id}
-                              </div>
-                              <div className="flex-1">
-                                <div className={`font-medium text-sm ${
-                                  step.status === 'current' 
-                                    ? isDark ? 'text-blue-400' : 'text-blue-600'
-                                    : step.status === 'completed'
-                                    ? isDark ? 'text-green-400' : 'text-green-600'
-                                    : isDark ? 'text-gray-400' : 'text-gray-500'
+                            <div key={step.id} className="space-y-2">
+                              <div className="flex items-center space-x-3">
+                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                                  step.status === 'completed' 
+                                    ? 'bg-green-500 text-white' 
+                                    : step.status === 'current'
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-gray-300 text-gray-600'
                                 }`}>
-                                  {step.title}
+                                  {step.status === 'completed' ? '✓' : step.id}
                                 </div>
-                                {step.timestamp && (
-                                  <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                <div className="flex-1">
+                                  <div className={`font-medium text-sm ${
+                                    step.status === 'current' 
+                                      ? isDark ? 'text-blue-400' : 'text-blue-600'
+                                      : step.status === 'completed'
+                                      ? isDark ? 'text-green-400' : 'text-green-600'
+                                      : isDark ? 'text-gray-400' : 'text-gray-500'
+                                  }`}>
+                                    {step.title}
+                                  </div>
+                                  {step.timestamp && (
+                                    <div className="text-xs text-gray-500">{step.timestamp}</div>
+                                  )}
+                                </div>
+                                {step.status === 'current' && (
+                                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
                                 )}
                               </div>
-                              {step.status === 'current' && (
-                                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+                              
+                              {/* Mobile Action Buttons for Current and Completed Steps */}
+                              {(step.status === 'current' || step.status === 'completed') && step.actions && (
+                                <div className="ml-9 flex space-x-2">
+                                  {step.actions.map((action, actionIndex) => (
+                                    <button
+                                      key={actionIndex}
+                                      onClick={() => console.log(`Action: ${action.label} for step ${step.id}`)}
+                                      className={`px-2 py-1 rounded-lg text-xs font-medium transition-colors ${
+                                        action.type === 'primary'
+                                          ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                          : action.type === 'success'
+                                          ? 'bg-green-500 text-white hover:bg-green-600'
+                                          : action.type === 'danger'
+                                          ? 'bg-red-500 text-white hover:bg-red-600'
+                                          : isDark
+                                          ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
+                                          : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                                      }`}
+                                    >
+                                      {action.label}
+                                    </button>
+                                  ))}
+                                </div>
                               )}
                             </div>
                           ))}
