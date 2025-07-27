@@ -2022,6 +2022,70 @@ export default function ChatPage() {
           ) : (
             // Regular Chat View
             <>
+              {/* Chat Header */}
+              <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center justify-between`}>
+                {(() => {
+                  const isGroupChat = selectedContact?.startsWith("group-")
+                  const currentContact = isGroupChat 
+                    ? groupContacts.find(c => c.id === selectedContact)
+                    : friendContacts.find(c => c.id === selectedContact) || escrowContacts.find(c => c.id === selectedContact)
+                  
+                  return (
+                    <>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                          {currentContact?.avatar || "🤖"}
+                        </div>
+                        <div>
+                          <h2 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
+                            {currentContact?.name || "交易助手"}
+                          </h2>
+                          <p className="text-sm text-green-500">
+                            {isGroupChat ? `${Math.floor(Math.random() * 50) + 10}位成员` : "在线"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        {/* Voice Call Button */}
+                        <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                          isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                        }`}>
+                          <Phone className="w-5 h-5" />
+                        </button>
+                        {/* Video Call Button */}
+                        <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                          isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                        }`}>
+                          <Video className="w-5 h-5" />
+                        </button>
+                        {/* Contact Info Button - Only for private chats */}
+                        {!isGroupChat && (
+                          <button 
+                            onClick={() => setShowContactInfo(true)}
+                            className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                            }`}
+                          >
+                            <MoreHorizontal className="w-5 h-5" />
+                          </button>
+                        )}
+                        {/* Group Info Button - Only for group chats */}
+                        {isGroupChat && (
+                          <button 
+                            onClick={handleOpenGroupInfo}
+                            className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
+                            }`}
+                          >
+                            <MoreHorizontal className="w-5 h-5" />
+                          </button>
+                        )}
+                      </div>
+                    </>
+                  )
+                })()}
+              </div>
+
               {/* Escrow Progress Bar for escrow chats */}
               {selectedContact && selectedContact.startsWith("escrow-") && (
                 <div className={`border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"}`}>
@@ -2155,70 +2219,6 @@ export default function ChatPage() {
                   )}
                 </div>
               )}
-
-              {/* Chat Header */}
-              <div className={`p-4 border-b ${isDark ? "border-[#3a3d4a] bg-[#1a1c2e]" : "border-gray-200 bg-white"} flex items-center justify-between`}>
-                {(() => {
-                  const isGroupChat = selectedContact?.startsWith("group-")
-                  const currentContact = isGroupChat 
-                    ? groupContacts.find(c => c.id === selectedContact)
-                    : friendContacts.find(c => c.id === selectedContact) || escrowContacts.find(c => c.id === selectedContact)
-                  
-                  return (
-                    <>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                          {currentContact?.avatar || "🤖"}
-                        </div>
-                        <div>
-                          <h2 className={`font-medium ${isDark ? "text-white" : "text-gray-800"}`}>
-                            {currentContact?.name || "交易助手"}
-                          </h2>
-                          <p className="text-sm text-green-500">
-                            {isGroupChat ? `${Math.floor(Math.random() * 50) + 10}位成员` : "在线"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        {/* Voice Call Button */}
-                        <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                          isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-                        }`}>
-                          <Phone className="w-5 h-5" />
-                        </button>
-                        {/* Video Call Button */}
-                        <button className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                          isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-                        }`}>
-                          <Video className="w-5 h-5" />
-                        </button>
-                        {/* Contact Info Button - Only for private chats */}
-                        {!isGroupChat && (
-                          <button 
-                            onClick={() => setShowContactInfo(true)}
-                            className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-                            }`}
-                          >
-                            <MoreHorizontal className="w-5 h-5" />
-                          </button>
-                        )}
-                        {/* Group Info Button - Only for group chats */}
-                        {isGroupChat && (
-                          <button 
-                            onClick={handleOpenGroupInfo}
-                            className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
-                              isDark ? "hover:bg-[#2a2d42] text-gray-400" : "text-gray-500"
-                            }`}
-                          >
-                            <MoreHorizontal className="w-5 h-5" />
-                          </button>
-                        )}
-                      </div>
-                    </>
-                  )
-                })()}
-              </div>
 
               {/* Messages Area */}
               <div className="flex-1 p-4 overflow-y-auto">
