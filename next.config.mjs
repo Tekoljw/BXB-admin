@@ -20,9 +20,17 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  // Configure for Replit deployment
+  serverExternalPackages: ['@neondatabase/serverless'],
   experimental: {
     optimizeCss: true,
   },
+  // Fix cross-origin warning for Replit
+  allowedDevOrigins: [
+    '*.replit.dev',
+    'localhost:5000',
+    '127.0.0.1:5000'
+  ],
 
 }
 
