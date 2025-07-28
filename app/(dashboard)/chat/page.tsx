@@ -123,6 +123,7 @@ export default function ChatPage() {
   const [redPacketNote, setRedPacketNote] = useState("")
   const [selectedCurrency, setSelectedCurrency] = useState("USDT")
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false)
+  const [isGeneratingContract, setIsGeneratingContract] = useState(false)
   const [showGuaranteeModal, setShowGuaranteeModal] = useState(false)
   const [guaranteeAmount, setGuaranteeAmount] = useState("")
   const [guaranteeDescription, setGuaranteeDescription] = useState("")
@@ -2024,6 +2025,99 @@ export default function ChatPage() {
     }))
   }
 
+  // Handle AI contract generation
+  const handleGenerateContract = async (escrowId: string) => {
+    if (isGeneratingContract) return
+    
+    setIsGeneratingContract(true)
+    
+    try {
+      // Get escrow transaction data
+      const escrowData = escrowTransactionData[escrowId as keyof typeof escrowTransactionData]
+      if (!escrowData) {
+        console.error('Escrow data not found')
+        setIsGeneratingContract(false)
+        return
+      }
+      
+      // Prepare contract generation data
+      const contractData = {
+        transactionType: escrowData.type === '买入' ? '数字资产买入担保交易' : '数字资产卖出担保交易',
+        amount: escrowData.amount,
+        currency: escrowData.currency,
+        buyer: escrowData.buyer,
+        seller: escrowData.seller,
+        description: `${escrowData.type} ${escrowData.amount} ${escrowData.currency} 的担保交易`,
+        additionalTerms: '本交易受BXB平台担保规则约束，争议将由平台仲裁机制解决。'
+      }
+      
+      // Call AI contract generation API
+      const response = await fetch('/api/generate-contract', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(contractData)
+      })
+      
+      const result = await response.json()
+      
+      if (result.success) {
+        // Create a new message with the contract document
+        const contractMessage: Message = {
+          id: `contract-${Date.now()}`,
+          senderId: "bot",
+          text: result.contract,
+          time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+          isRead: false,
+          type: 'text'
+        }
+        
+        // Add the contract message to chat
+        setMessages(prev => ({
+          ...prev,
+          [escrowId]: [...(prev[escrowId] || []), contractMessage]
+        }))
+        
+        console.log('AI合同生成成功')
+      } else {
+        console.error('合同生成失败:', result.error)
+        // Add error message to chat
+        const errorMessage: Message = {
+          id: `error-${Date.now()}`,
+          senderId: "bot",
+          text: `合同生成失败：${result.error}`,
+          time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+          isRead: false,
+          type: 'text'
+        }
+        
+        setMessages(prev => ({
+          ...prev,
+          [escrowId]: [...(prev[escrowId] || []), errorMessage]
+        }))
+      }
+    } catch (error) {
+      console.error('合同生成错误:', error)
+      // Add error message to chat
+      const errorMessage: Message = {
+        id: `error-${Date.now()}`,
+        senderId: "bot",
+        text: 'AI合同生成服务暂时不可用，请稍后重试。',
+        time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+        isRead: false,
+        type: 'text'
+      }
+      
+      setMessages(prev => ({
+        ...prev,
+        [escrowId]: [...(prev[escrowId] || []), errorMessage]
+      }))
+    } finally {
+      setIsGeneratingContract(false)
+    }
+  }
+
   // Close currency dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -3685,12 +3779,23 @@ export default function ChatPage() {
                                   {currentStep.actions.map((action, index) => (
                                     <button
                                       key={`floating-${currentStep.id}-${index}`}
+                                      disabled={action.label === '起草合同' && isGeneratingContract}
                                       onClick={(e) => {
                                         e.stopPropagation()
-                                        console.log(`Floating Action: ${action.label} for step ${currentStep.id}`)
+                                        if (action.label === '申请仲裁') {
+                                          handleArbitrationRequest(selectedContact)
+                                        } else if (action.label === '确认收款') {
+                                          handleConfirmPayment(selectedContact)
+                                        } else if (action.label === '起草合同') {
+                                          handleGenerateContract(selectedContact)
+                                        } else {
+                                          console.log(`Floating Action: ${action.label} for step ${currentStep.id}`)
+                                        }
                                       }}
-                                      className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors whitespace-nowrap ${
-                                        action.type === 'primary'
+                                      className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
+                                        action.label === '起草合同' && isGeneratingContract
+                                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                          : action.type === 'primary'
                                           ? 'text-white hover:opacity-80'
                                           : action.type === 'success'
                                           ? 'text-white hover:opacity-80'
@@ -3701,10 +3806,13 @@ export default function ChatPage() {
                                           : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
                                       }`}
                                       style={{
-                                        backgroundColor: action.type === 'primary' || action.type === 'success' ? '#20B2AA' : undefined
+                                        backgroundColor: !(action.label === '起草合同' && isGeneratingContract) && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
                                       }}
                                     >
-                                      {action.label}
+                                      {action.label === '起草合同' && isGeneratingContract && (
+                                        <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                      )}
+                                      {action.label === '起草合同' && isGeneratingContract ? 'AI生成中...' : action.label}
                                     </button>
                                   ))}
                                 </div>
@@ -3849,18 +3957,20 @@ export default function ChatPage() {
                                               {actions.map((action, actionIndex) => (
                                               <button
                                                 key={actionIndex}
-                                                disabled={step.status === 'pending'}
+                                                disabled={step.status === 'pending' || (action.label === '起草合同' && isGeneratingContract)}
                                                 onClick={() => {
                                                   if (action.label === '申请仲裁') {
                                                     handleArbitrationRequest(selectedContact)
                                                   } else if (action.label === '确认收款') {
                                                     handleConfirmPayment(selectedContact)
+                                                  } else if (action.label === '起草合同') {
+                                                    handleGenerateContract(selectedContact)
                                                   } else {
                                                     console.log(`Action: ${action.label} for step ${step.id}`)
                                                   }
                                                 }}
-                                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                                                  step.status === 'pending'
+                                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                                                  step.status === 'pending' || (action.label === '起草合同' && isGeneratingContract)
                                                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                                     : action.type === 'primary'
                                                     ? 'text-white hover:opacity-80'
@@ -3873,10 +3983,13 @@ export default function ChatPage() {
                                                     : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
                                                 }`}
                                                 style={{
-                                                  backgroundColor: step.status !== 'pending' && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
+                                                  backgroundColor: step.status !== 'pending' && !(action.label === '起草合同' && isGeneratingContract) && (action.type === 'primary' || action.type === 'success') ? '#20B2AA' : undefined
                                                 }}
                                               >
-                                                {action.label}
+                                                {action.label === '起草合同' && isGeneratingContract && (
+                                                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                )}
+                                                {action.label === '起草合同' && isGeneratingContract ? 'AI生成中...' : action.label}
                                               </button>
                                             ))}
                                             </div>
