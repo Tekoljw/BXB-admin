@@ -3772,11 +3772,20 @@ export default function ChatPage() {
                           <div className="flex items-center space-x-3 ml-4">
                             {/* Action Buttons */}
                             {(() => {
-                              if (!currentStep || !currentStep.actions || currentStep.actions.length === 0) return null
+                              if (!currentStep) return null
+                              
+                              // Get the current step state
+                              const stepStateKey = `step${currentStep.id}State` as keyof typeof escrowData.stepStates
+                              const stepState = escrowData.stepStates[stepStateKey] || 1
+                              
+                              // Get actions using the getActions function
+                              const actions = currentStep.getActions ? currentStep.getActions(stepState) : []
+                              
+                              if (!actions || actions.length === 0) return null
                               
                               return (
                                 <div className="flex gap-2">
-                                  {currentStep.actions.map((action, index) => (
+                                  {actions.map((action, index) => (
                                     <button
                                       key={`floating-${currentStep.id}-${index}`}
                                       disabled={action.label === '起草合同' && isGeneratingContract}
