@@ -104,12 +104,14 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
 - **Hot Reloading**: Automatic code reloading during development
 
 ### Production Deployment
-- **Deployment Type**: Configured for Autoscale deployment (not static)
+- **Deployment Type**: Configured for Autoscale deployment (not static) - **CRITICAL: Must use Autoscale, not Static**
 - **Build Configuration**: Updated next.config.mjs with serverExternalPackages for Neon Database
 - **Docker Support**: Added Dockerfile for containerized deployment
 - **Build Script**: Created deploy.sh for automated build and deployment process
 - **Cross-Origin Fix**: Added allowedDevOrigins configuration for Replit domains
 - **External Packages**: Configured proper handling of @neondatabase/serverless package
+- **CSS Compilation Fix**: Added webpack configuration to handle CSS minification issues
+- **PostCSS Configuration**: Created postcss.config.js to disable problematic CSS plugins
 
 ### Build Optimization
 - **Next.js Production Build**: Optimized production build with static optimization

@@ -9,29 +9,28 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // 关闭严格模式以提高性能
-  reactStrictMode: false,
-  // 预编译所有页面以减少首次访问延迟
-  onDemandEntries: {
-    maxInactiveAge: 60 * 1000,
-    pagesBufferLength: 10,
-  },
-  // 禁用开发工具和调试按钮
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
-  // Configure for Replit deployment
+  
+  // Replit deployment configuration
   serverExternalPackages: ['@neondatabase/serverless'],
-  experimental: {
-    optimizeCss: true,
-  },
-  // Fix cross-origin warning for Replit
+  
+  // Cross-origin configuration for Replit
   allowedDevOrigins: [
     '*.replit.dev',
+    '*.replit.app',
     'localhost:5000',
     '127.0.0.1:5000'
   ],
-
+  
+  // Webpack configuration to handle CSS issues
+  webpack: (config, { dev, isServer }) => {
+    // Fix CSS handling issues
+    if (!dev && !isServer) {
+      config.optimization.minimizer = config.optimization.minimizer.filter(
+        (minimizer) => !minimizer.constructor.name.includes('CssMinimizerPlugin')
+      );
+    }
+    return config;
+  },
 }
 
 export default nextConfig
