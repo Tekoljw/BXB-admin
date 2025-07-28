@@ -148,32 +148,163 @@ export default function ChatPage() {
   
   // Escrow arbitration state
   const [escrowArbitrationState, setEscrowArbitrationState] = useState<{[key: string]: boolean}>({
-    "escrow-1": false,
-    "escrow-2": false,
-    "escrow-3": false
+    "escrow-state-4-3": true, // 状态4-3 争议仲裁
+    "escrow-state-5-3": true  // 状态5-3 仲裁完成
   })
 
-  // Mock escrow transaction data - Updated with main titles, subtitles and different status states
+  // Mock escrow transaction data - 15 different states
   const escrowTransactionData = {
-    "escrow-1": {
-      transactionId: "TXN001",
+    // State 1-1: 合同起草
+    "escrow-state-1-1": {
+      transactionId: "TXN-1-1",
       amount: "10,000",
       currency: "USDT",
       type: "买入",
-      progress: 2,
+      progress: 1,
       stepStates: {
-        step1State: 2, // 1: 输入内容点击起草, 2: 已保存合同初稿
-        step2State: 1, // 1: 双方确认, 2: 卖家已确认等待买家, 3: 买家已确认等待卖家, 4: 合同已生效
-        step3State: 1, // 1: 等待甲方支付, 2: 资金已托管等待交付, 3: 卖家已交付等待确认
-        step4State: 1, // 1: 等待买家确认, 2: 买家已确认, 3: 争议中等待仲裁, 4: 买家申请取消等待卖家确认, 5: 卖家申请取消等待买家确认
-        step5State: 1  // 1: 交易完成卖家收到款项, 2: 交易取消担保金回退, 3: 仲裁结果交易完成, 4: 仲裁结果交易取消
+        step1State: 1,
+        step2State: 1,
+        step3State: 1,
+        step4State: 1,
+        step5State: 1
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "current", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同"
+              case 2: return "已保存合同初稿"
+              default: return "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "起草合同", type: "primary" }]
+              case 2: return [{ label: "查看合同", type: "secondary" }]
+              default: return [{ label: "起草合同", type: "primary" }]
+            }
+          }
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
+              case 2: return "卖家已确认，等待买家确认合同"
+              case 3: return "买家已确认，等待卖家确认合同"
+              case 4: return "合同已生效"
+              default: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认合同", type: "primary" }]
+              case 2: return [{ label: "等待买家", type: "secondary" }]
+              case 3: return [{ label: "等待卖家", type: "secondary" }]
+              case 4: return []
+              default: return [{ label: "确认合同", type: "primary" }]
+            }
+          }
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待甲方支付到担保账户"
+              case 2: return "资金已托管，等待卖家交付"
+              case 3: return "卖家已交付，等待买家确认"
+              default: return "等待甲方支付到担保账户"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认付款", type: "primary" }]
+              case 2: return [{ label: "确认交付", type: "primary" }]
+              case 3: return [{ label: "等待确认", type: "secondary" }]
+              default: return [{ label: "确认付款", type: "primary" }]
+            }
+          }
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待买家确认交付标的，乙方将收到款项"
+              case 2: return "买家已确认"
+              case 3: return "争议中，等待仲裁"
+              case 4: return "买家申请取消交易，等待卖家确认"
+              case 5: return "卖家申请取消交易，等待买家确认"
+              default: return "等待买家确认交付标的，乙方将收到款项"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认收款", type: "success" }, { label: "申请仲裁", type: "danger" }]
+              case 2: return []
+              case 3: return [{ label: "查看仲裁", type: "secondary" }]
+              case 4: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              case 5: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              default: return [{ label: "确认收款", type: "success" }]
+            }
+          }
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "交易已顺利完成，卖家已收到款项"
+              case 2: return "交易已取消，担保金已回退给买家"
+              case 3: return "仲裁结果：交易完成，买家收到款项"
+              case 4: return "仲裁结果：交易取消，已退款给卖家"
+              default: return "交易已顺利完成，卖家已收到款项"
+            }
+          },
+          getActions: (state: number) => {
+            return []
+          }
+        }
+      ],
+      expiresAt: "16:30",
+      buyer: "张三",
+      seller: "您"
+    },
+    
+    // State 1-2: 合同已保存
+    "escrow-state-1-2": {
+      transactionId: "TXN-1-2",
+      amount: "8,000",
+      currency: "USDT",
+      type: "卖出",
+      progress: 1,
+      stepStates: {
+        step1State: 2,
+        step2State: 1,
+        step3State: 1,
+        step4State: 1,
+        step5State: 1
       },
       steps: [
         { 
           id: 1, 
           mainTitle: "拟定合同",
           status: "completed", 
-          timestamp: "14:30",
+          timestamp: "14:25",
           getSubtitle: (state: number) => {
             switch(state) {
               case 1: return "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同"
@@ -185,7 +316,7 @@ export default function ChatPage() {
             switch(state) {
               case 1: return [{ label: "起草合同", type: "primary" }]
               case 2: return [{ label: "查看合同", type: "secondary" }]
-              default: return []
+              default: return [{ label: "查看合同", type: "secondary" }]
             }
           }
         },
@@ -276,17 +407,596 @@ export default function ChatPage() {
             }
           },
           getActions: (state: number) => {
-            return [] // 交易完成步骤无操作按钮
+            return []
           }
         }
       ],
-      expiresAt: "16:30",
-      buyer: "张三",
+      expiresAt: "15:30",
+      buyer: "李四",
       seller: "您"
     },
-    "escrow-2": {
-      transactionId: "TXN002", 
-      amount: "5,000",
+
+    // State 2-1: 双方确认
+    "escrow-state-2-1": {
+      transactionId: "TXN-2-1",
+      amount: "15,000",
+      currency: "USDT", 
+      type: "买入",
+      progress: 2,
+      stepStates: {
+        step1State: 2,
+        step2State: 1,
+        step3State: 1,
+        step4State: 1,
+        step5State: 1
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "14:20",
+          getSubtitle: (state: number) => state === 2 ? "已保存合同初稿" : "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同",
+          getActions: (state: number) => state === 2 ? [{ label: "查看合同", type: "secondary" }] : [{ label: "起草合同", type: "primary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "current", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
+              case 2: return "卖家已确认，等待买家确认合同"
+              case 3: return "买家已确认，等待卖家确认合同"
+              case 4: return "合同已生效"
+              default: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认合同", type: "primary" }]
+              case 2: return [{ label: "等待买家", type: "secondary" }]
+              case 3: return [{ label: "等待卖家", type: "secondary" }]
+              case 4: return []
+              default: return [{ label: "确认合同", type: "primary" }]
+            }
+          }
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待甲方支付到担保账户"
+              case 2: return "资金已托管，等待卖家交付"
+              case 3: return "卖家已交付，等待买家确认"
+              default: return "等待甲方支付到担保账户"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认付款", type: "primary" }]
+              case 2: return [{ label: "确认交付", type: "primary" }]
+              case 3: return [{ label: "等待确认", type: "secondary" }]
+              default: return [{ label: "确认付款", type: "primary" }]
+            }
+          }
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待买家确认交付标的，乙方将收到款项"
+              case 2: return "买家已确认"
+              case 3: return "争议中，等待仲裁"
+              case 4: return "买家申请取消交易，等待卖家确认"
+              case 5: return "卖家申请取消交易，等待买家确认"
+              default: return "等待买家确认交付标的，乙方将收到款项"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认收款", type: "success" }, { label: "申请仲裁", type: "danger" }]
+              case 2: return []
+              case 3: return [{ label: "查看仲裁", type: "secondary" }]
+              case 4: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              case 5: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              default: return [{ label: "确认收款", type: "success" }]
+            }
+          }
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "交易已顺利完成，卖家已收到款项"
+              case 2: return "交易已取消，担保金已回退给买家"
+              case 3: return "仲裁结果：交易完成，买家收到款项"
+              case 4: return "仲裁结果：交易取消，已退款给卖家"
+              default: return "交易已顺利完成，卖家已收到款项"
+            }
+          },
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "16:00",
+      buyer: "王五",
+      seller: "您"
+    },
+
+    // State 2-2: 卖家已确认
+    "escrow-state-2-2": {
+      transactionId: "TXN-2-2",
+      amount: "12,500",
+      currency: "USDT",
+      type: "卖出",
+      progress: 2,
+      stepStates: {
+        step1State: 2,
+        step2State: 2,
+        step3State: 1,
+        step4State: 1,
+        step5State: 1
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "14:15",
+          getSubtitle: (state: number) => state === 2 ? "已保存合同初稿" : "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同",
+          getActions: (state: number) => state === 2 ? [{ label: "查看合同", type: "secondary" }] : [{ label: "起草合同", type: "primary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "current", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
+              case 2: return "卖家已确认，等待买家确认合同"
+              case 3: return "买家已确认，等待卖家确认合同"
+              case 4: return "合同已生效"
+              default: return "卖家已确认，等待买家确认合同"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认合同", type: "primary" }]
+              case 2: return [{ label: "等待买家", type: "secondary" }]
+              case 3: return [{ label: "等待卖家", type: "secondary" }]
+              case 4: return []
+              default: return [{ label: "等待买家", type: "secondary" }]
+            }
+          }
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待甲方支付到担保账户"
+              case 2: return "资金已托管，等待卖家交付"
+              case 3: return "卖家已交付，等待买家确认"
+              default: return "等待甲方支付到担保账户"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认付款", type: "primary" }]
+              case 2: return [{ label: "确认交付", type: "primary" }]
+              case 3: return [{ label: "等待确认", type: "secondary" }]
+              default: return [{ label: "确认付款", type: "primary" }]
+            }
+          }
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待买家确认交付标的，乙方将收到款项"
+              case 2: return "买家已确认"
+              case 3: return "争议中，等待仲裁"
+              case 4: return "买家申请取消交易，等待卖家确认"
+              case 5: return "卖家申请取消交易，等待买家确认"
+              default: return "等待买家确认交付标的，乙方将收到款项"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认收款", type: "success" }, { label: "申请仲裁", type: "danger" }]
+              case 2: return []
+              case 3: return [{ label: "查看仲裁", type: "secondary" }]
+              case 4: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              case 5: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              default: return [{ label: "确认收款", type: "success" }]
+            }
+          }
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "交易已顺利完成，卖家已收到款项"
+              case 2: return "交易已取消，担保金已回退给买家"
+              case 3: return "仲裁结果：交易完成，买家收到款项"
+              case 4: return "仲裁结果：交易取消，已退款给卖家"
+              default: return "交易已顺利完成，卖家已收到款项"
+            }
+          },
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "15:45",
+      buyer: "赵六",
+      seller: "您"
+    },
+
+    // State 2-3: 买家已确认
+    "escrow-state-2-3": {
+      transactionId: "TXN-2-3",
+      amount: "6,800",
+      currency: "USDT",
+      type: "买入",
+      progress: 2,
+      stepStates: {
+        step1State: 2,
+        step2State: 3,
+        step3State: 1,
+        step4State: 1,
+        step5State: 1
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "14:10",
+          getSubtitle: (state: number) => state === 2 ? "已保存合同初稿" : "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同",
+          getActions: (state: number) => state === 2 ? [{ label: "查看合同", type: "secondary" }] : [{ label: "起草合同", type: "primary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "current", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
+              case 2: return "卖家已确认，等待买家确认合同"
+              case 3: return "买家已确认，等待卖家确认合同"
+              case 4: return "合同已生效"
+              default: return "买家已确认，等待卖家确认合同"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认合同", type: "primary" }]
+              case 2: return [{ label: "等待买家", type: "secondary" }]
+              case 3: return [{ label: "等待卖家", type: "secondary" }]
+              case 4: return []
+              default: return [{ label: "等待卖家", type: "secondary" }]
+            }
+          }
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待甲方支付到担保账户"
+              case 2: return "资金已托管，等待卖家交付"
+              case 3: return "卖家已交付，等待买家确认"
+              default: return "等待甲方支付到担保账户"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认付款", type: "primary" }]
+              case 2: return [{ label: "确认交付", type: "primary" }]
+              case 3: return [{ label: "等待确认", type: "secondary" }]
+              default: return [{ label: "确认付款", type: "primary" }]
+            }
+          }
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待买家确认交付标的，乙方将收到款项"
+              case 2: return "买家已确认"
+              case 3: return "争议中，等待仲裁"
+              case 4: return "买家申请取消交易，等待卖家确认"
+              case 5: return "卖家申请取消交易，等待买家确认"
+              default: return "等待买家确认交付标的，乙方将收到款项"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认收款", type: "success" }, { label: "申请仲裁", type: "danger" }]
+              case 2: return []
+              case 3: return [{ label: "查看仲裁", type: "secondary" }]
+              case 4: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              case 5: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              default: return [{ label: "确认收款", type: "success" }]
+            }
+          }
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "交易已顺利完成，卖家已收到款项"
+              case 2: return "交易已取消，担保金已回退给买家"
+              case 3: return "仲裁结果：交易完成，买家收到款项"
+              case 4: return "仲裁结果：交易取消，已退款给卖家"
+              default: return "交易已顺利完成，卖家已收到款项"
+            }
+          },
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "15:20",
+      buyer: "钱七",
+      seller: "您"
+    },
+
+    // State 2-4: 合同生效
+    "escrow-state-2-4": {
+      transactionId: "TXN-2-4",
+      amount: "20,000",
+      currency: "USDT",
+      type: "卖出",
+      progress: 3,
+      stepStates: {
+        step1State: 2,
+        step2State: 4,
+        step3State: 1,
+        step4State: 1,
+        step5State: 1
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "14:05",
+          getSubtitle: (state: number) => state === 2 ? "已保存合同初稿" : "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同",
+          getActions: (state: number) => state === 2 ? [{ label: "查看合同", type: "secondary" }] : [{ label: "起草合同", type: "primary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "completed", 
+          timestamp: "14:05",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
+              case 2: return "卖家已确认，等待买家确认合同"
+              case 3: return "买家已确认，等待卖家确认合同"
+              case 4: return "合同已生效"
+              default: return "合同已生效"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认合同", type: "primary" }]
+              case 2: return [{ label: "等待买家", type: "secondary" }]
+              case 3: return [{ label: "等待卖家", type: "secondary" }]
+              case 4: return []
+              default: return []
+            }
+          }
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "current", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待甲方支付到担保账户"
+              case 2: return "资金已托管，等待卖家交付"
+              case 3: return "卖家已交付，等待买家确认"
+              default: return "等待甲方支付到担保账户"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认付款", type: "primary" }]
+              case 2: return [{ label: "确认交付", type: "primary" }]
+              case 3: return [{ label: "等待确认", type: "secondary" }]
+              default: return [{ label: "确认付款", type: "primary" }]
+            }
+          }
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待买家确认交付标的，乙方将收到款项"
+              case 2: return "买家已确认"
+              case 3: return "争议中，等待仲裁"
+              case 4: return "买家申请取消交易，等待卖家确认"
+              case 5: return "卖家申请取消交易，等待买家确认"
+              default: return "等待买家确认交付标的，乙方将收到款项"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认收款", type: "success" }, { label: "申请仲裁", type: "danger" }]
+              case 2: return []
+              case 3: return [{ label: "查看仲裁", type: "secondary" }]
+              case 4: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              case 5: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              default: return [{ label: "确认收款", type: "success" }]
+            }
+          }
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "交易已顺利完成，卖家已收到款项"
+              case 2: return "交易已取消，担保金已回退给买家"
+              case 3: return "仲裁结果：交易完成，买家收到款项"
+              case 4: return "仲裁结果：交易取消，已退款给卖家"
+              default: return "交易已顺利完成，卖家已收到款项"
+            }
+          },
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "16:30",
+      buyer: "孙八",
+      seller: "您"
+    },
+
+    // State 3-1: 等待付款
+    "escrow-state-3-1": {
+      transactionId: "TXN-3-1",
+      amount: "9,500",
+      currency: "USDT",
+      type: "买入",
+      progress: 3,
+      stepStates: {
+        step1State: 2,
+        step2State: 4,
+        step3State: 1,
+        step4State: 1,
+        step5State: 1
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "14:00",
+          getSubtitle: (state: number) => state === 2 ? "已保存合同初稿" : "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同",
+          getActions: (state: number) => state === 2 ? [{ label: "查看合同", type: "secondary" }] : [{ label: "起草合同", type: "primary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "completed", 
+          timestamp: "14:00",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
+              case 2: return "卖家已确认，等待买家确认合同"
+              case 3: return "买家已确认，等待卖家确认合同"
+              case 4: return "合同已生效"
+              default: return "合同已生效"
+            }
+          },
+          getActions: (state: number) => []
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "current", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待甲方支付到担保账户"
+              case 2: return "资金已托管，等待卖家交付"
+              case 3: return "卖家已交付，等待买家确认"
+              default: return "等待甲方支付到担保账户"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认付款", type: "primary" }]
+              case 2: return [{ label: "确认交付", type: "primary" }]
+              case 3: return [{ label: "等待确认", type: "secondary" }]
+              default: return [{ label: "确认付款", type: "primary" }]
+            }
+          }
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待买家确认交付标的，乙方将收到款项"
+              case 2: return "买家已确认"
+              case 3: return "争议中，等待仲裁"
+              case 4: return "买家申请取消交易，等待卖家确认"
+              case 5: return "卖家申请取消交易，等待买家确认"
+              default: return "等待买家确认交付标的，乙方将收到款项"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认收款", type: "success" }, { label: "申请仲裁", type: "danger" }]
+              case 2: return []
+              case 3: return [{ label: "查看仲裁", type: "secondary" }]
+              case 4: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              case 5: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              default: return [{ label: "确认收款", type: "success" }]
+            }
+          }
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "交易已顺利完成，卖家已收到款项"
+              case 2: return "交易已取消，担保金已回退给买家"
+              case 3: return "仲裁结果：交易完成，买家收到款项"
+              case 4: return "仲裁结果：交易取消，已退款给卖家"
+              default: return "交易已顺利完成，卖家已收到款项"
+            }
+          },
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "16:15",
+      buyer: "周九",
+      seller: "您"
+    },
+
+    // State 3-2: 资金托管
+    "escrow-state-3-2": {
+      transactionId: "TXN-3-2",
+      amount: "18,600",
       currency: "USDT",
       type: "卖出",
       progress: 3,
@@ -302,45 +1012,17 @@ export default function ChatPage() {
           id: 1, 
           mainTitle: "拟定合同",
           status: "completed", 
-          timestamp: "10:15",
-          getSubtitle: (state: number) => {
-            switch(state) {
-              case 1: return "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同"
-              case 2: return "已保存合同初稿"
-              default: return "已保存合同初稿"
-            }
-          },
-          getActions: (state: number) => {
-            switch(state) {
-              case 1: return [{ label: "起草合同", type: "primary" }]
-              case 2: return [{ label: "查看合同", type: "secondary" }]
-              default: return []
-            }
-          }
+          timestamp: "13:55",
+          getSubtitle: (state: number) => state === 2 ? "已保存合同初稿" : "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同",
+          getActions: (state: number) => state === 2 ? [{ label: "查看合同", type: "secondary" }] : [{ label: "起草合同", type: "primary" }]
         },
         { 
           id: 2, 
           mainTitle: "确定合同",
           status: "completed", 
-          timestamp: "10:30",
-          getSubtitle: (state: number) => {
-            switch(state) {
-              case 1: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
-              case 2: return "卖家已确认，等待买家确认合同"
-              case 3: return "买家已确认，等待卖家确认合同"
-              case 4: return "合同已生效"
-              default: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
-            }
-          },
-          getActions: (state: number) => {
-            switch(state) {
-              case 1: return [{ label: "确认合同", type: "primary" }]
-              case 2: return [{ label: "等待买家", type: "secondary" }]
-              case 3: return [{ label: "等待卖家", type: "secondary" }]
-              case 4: return []
-              default: return [{ label: "确认合同", type: "primary" }]
-            }
-          }
+          timestamp: "13:55",
+          getSubtitle: (state: number) => "合同已生效",
+          getActions: (state: number) => []
         },
         { 
           id: 3, 
@@ -352,7 +1034,7 @@ export default function ChatPage() {
               case 1: return "等待甲方支付到担保账户"
               case 2: return "资金已托管，等待卖家交付"
               case 3: return "卖家已交付，等待买家确认"
-              default: return "等待甲方支付到担保账户"
+              default: return "资金已托管，等待卖家交付"
             }
           },
           getActions: (state: number) => {
@@ -360,7 +1042,7 @@ export default function ChatPage() {
               case 1: return [{ label: "确认付款", type: "primary" }]
               case 2: return [{ label: "确认交付", type: "primary" }]
               case 3: return [{ label: "等待确认", type: "secondary" }]
-              default: return [{ label: "确认付款", type: "primary" }]
+              default: return [{ label: "确认交付", type: "primary" }]
             }
           }
         },
@@ -404,18 +1086,180 @@ export default function ChatPage() {
               default: return "交易已顺利完成，卖家已收到款项"
             }
           },
-          getActions: (state: number) => {
-            return []
-          }
+          getActions: (state: number) => []
         }
       ],
-      expiresAt: "12:15",
-      buyer: "李四",
+      expiresAt: "15:55",
+      buyer: "吴十",
       seller: "您"
     },
-    "escrow-3": {
-      transactionId: "TXN003",
-      amount: "20,000", 
+
+    // State 3-3: 已交付
+    "escrow-state-3-3": {
+      transactionId: "TXN-3-3",
+      amount: "7,200",
+      currency: "USDT",
+      type: "买入",
+      progress: 4,
+      stepStates: {
+        step1State: 2,
+        step2State: 4,
+        step3State: 3,
+        step4State: 1,
+        step5State: 1
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "13:50",
+          getSubtitle: (state: number) => state === 2 ? "已保存合同初稿" : "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同",
+          getActions: (state: number) => state === 2 ? [{ label: "查看合同", type: "secondary" }] : [{ label: "起草合同", type: "primary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "completed", 
+          timestamp: "13:50",
+          getSubtitle: (state: number) => "合同已生效",
+          getActions: (state: number) => []
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "completed", 
+          timestamp: "13:50",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待甲方支付到担保账户"
+              case 2: return "资金已托管，等待卖家交付"
+              case 3: return "卖家已交付，等待买家确认"
+              default: return "卖家已交付，等待买家确认"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认付款", type: "primary" }]
+              case 2: return [{ label: "确认交付", type: "primary" }]
+              case 3: return [{ label: "等待确认", type: "secondary" }]
+              default: return [{ label: "等待确认", type: "secondary" }]
+            }
+          }
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "current", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待买家确认交付标的，乙方将收到款项"
+              case 2: return "买家已确认"
+              case 3: return "争议中，等待仲裁"
+              case 4: return "买家申请取消交易，等待卖家确认"
+              case 5: return "卖家申请取消交易，等待买家确认"
+              default: return "等待买家确认交付标的，乙方将收到款项"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认收款", type: "success" }, { label: "申请仲裁", type: "danger" }]
+              case 2: return []
+              case 3: return [{ label: "查看仲裁", type: "secondary" }]
+              case 4: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              case 5: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              default: return [{ label: "确认收款", type: "success" }]
+            }
+          }
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "交易已顺利完成，卖家已收到款项"
+              case 2: return "交易已取消，担保金已回退给买家"
+              case 3: return "仲裁结果：交易完成，买家收到款项"
+              case 4: return "仲裁结果：交易取消，已退款给卖家"
+              default: return "交易已顺利完成，卖家已收到款项"
+            }
+          },
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "15:20",
+      buyer: "郑十一",
+      seller: "您"
+    },
+
+    // State 4-1: 等待确认
+    "escrow-state-4-1": {
+      transactionId: "TXN-4-1",
+      amount: "11,300",
+      currency: "USDT",
+      type: "卖出",
+      progress: 4,
+      stepStates: {
+        step1State: 2,
+        step2State: 4,
+        step3State: 3,
+        step4State: 1,
+        step5State: 1
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "13:45",
+          getSubtitle: (state: number) => "已保存合同初稿",
+          getActions: (state: number) => [{ label: "查看合同", type: "secondary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "completed", 
+          timestamp: "13:45",
+          getSubtitle: (state: number) => "合同已生效",
+          getActions: (state: number) => []
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "completed", 
+          timestamp: "13:45",
+          getSubtitle: (state: number) => "卖家已交付，等待买家确认",
+          getActions: (state: number) => [{ label: "等待确认", type: "secondary" }]
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "current", 
+          timestamp: "",
+          getSubtitle: (state: number) => "等待买家确认交付标的，乙方将收到款项",
+          getActions: (state: number) => [{ label: "确认收款", type: "success" }, { label: "申请仲裁", type: "danger" }]
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => "交易已顺利完成，卖家已收到款项",
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "15:45",
+      buyer: "冯十二",
+      seller: "您"
+    },
+
+    // State 4-2: 买家确认
+    "escrow-state-4-2": {
+      transactionId: "TXN-4-2",
+      amount: "16,800",
       currency: "USDT",
       type: "买入",
       progress: 5,
@@ -431,120 +1275,293 @@ export default function ChatPage() {
           id: 1, 
           mainTitle: "拟定合同",
           status: "completed", 
-          timestamp: "08:00",
-          getSubtitle: (state: number) => {
-            switch(state) {
-              case 1: return "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同"
-              case 2: return "已保存合同初稿"
-              default: return "已保存合同初稿"
-            }
-          },
-          getActions: (state: number) => {
-            switch(state) {
-              case 1: return [{ label: "起草合同", type: "primary" }]
-              case 2: return [{ label: "查看合同", type: "secondary" }]
-              default: return []
-            }
-          }
+          timestamp: "13:40",
+          getSubtitle: (state: number) => "已保存合同初稿",
+          getActions: (state: number) => [{ label: "查看合同", type: "secondary" }]
         },
         { 
           id: 2, 
           mainTitle: "确定合同",
           status: "completed", 
-          timestamp: "08:15",
-          getSubtitle: (state: number) => {
-            switch(state) {
-              case 1: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
-              case 2: return "卖家已确认，等待买家确认合同"
-              case 3: return "买家已确认，等待卖家确认合同"
-              case 4: return "合同已生效"
-              default: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
-            }
-          },
-          getActions: (state: number) => {
-            switch(state) {
-              case 1: return [{ label: "确认合同", type: "primary" }]
-              case 2: return [{ label: "等待买家", type: "secondary" }]
-              case 3: return [{ label: "等待卖家", type: "secondary" }]
-              case 4: return []
-              default: return [{ label: "确认合同", type: "primary" }]
-            }
-          }
+          timestamp: "13:40",
+          getSubtitle: (state: number) => "合同已生效",
+          getActions: (state: number) => []
         },
         { 
           id: 3, 
           mainTitle: "付款担保金",
           status: "completed", 
-          timestamp: "08:30",
-          getSubtitle: (state: number) => {
-            switch(state) {
-              case 1: return "等待甲方支付到担保账户"
-              case 2: return "资金已托管，等待卖家交付"
-              case 3: return "卖家已交付，等待买家确认"
-              default: return "等待甲方支付到担保账户"
-            }
-          },
-          getActions: (state: number) => {
-            switch(state) {
-              case 1: return [{ label: "确认付款", type: "primary" }]
-              case 2: return [{ label: "确认交付", type: "primary" }]
-              case 3: return [{ label: "等待确认", type: "secondary" }]
-              default: return [{ label: "确认付款", type: "primary" }]
-            }
-          }
+          timestamp: "13:40",
+          getSubtitle: (state: number) => "卖家已交付，等待买家确认",
+          getActions: (state: number) => [{ label: "等待确认", type: "secondary" }]
         },
         { 
           id: 4, 
           mainTitle: "买家确认",
           status: "completed", 
-          timestamp: "08:45",
-          getSubtitle: (state: number) => {
-            switch(state) {
-              case 1: return "等待买家确认交付标的，乙方将收到款项"
-              case 2: return "买家已确认"
-              case 3: return "争议中，等待仲裁"
-              case 4: return "买家申请取消交易，等待卖家确认"
-              case 5: return "卖家申请取消交易，等待买家确认"
-              default: return "等待买家确认交付标的，乙方将收到款项"
-            }
-          },
-          getActions: (state: number) => {
-            switch(state) {
-              case 1: return [{ label: "确认收款", type: "success" }, { label: "申请仲裁", type: "danger" }]
-              case 2: return []
-              case 3: return [{ label: "查看仲裁", type: "secondary" }]
-              case 4: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
-              case 5: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
-              default: return [{ label: "确认收款", type: "success" }]
-            }
-          }
+          timestamp: "13:40",
+          getSubtitle: (state: number) => "买家已确认",
+          getActions: (state: number) => []
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "current", 
+          timestamp: "",
+          getSubtitle: (state: number) => "交易已顺利完成，卖家已收到款项",
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "已完成",
+      buyer: "陈十三",
+      seller: "您"
+    },
+
+    // State 4-3: 争议仲裁
+    "escrow-state-4-3": {
+      transactionId: "TXN-4-3",
+      amount: "13,900",
+      currency: "USDT",
+      type: "卖出",
+      progress: 4,
+      stepStates: {
+        step1State: 2,
+        step2State: 4,
+        step3State: 3,
+        step4State: 3,
+        step5State: 1
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "13:35",
+          getSubtitle: (state: number) => "已保存合同初稿",
+          getActions: (state: number) => [{ label: "查看合同", type: "secondary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "completed", 
+          timestamp: "13:35",
+          getSubtitle: (state: number) => "合同已生效",
+          getActions: (state: number) => []
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "completed", 
+          timestamp: "13:35",
+          getSubtitle: (state: number) => "卖家已交付，等待买家确认",
+          getActions: (state: number) => [{ label: "等待确认", type: "secondary" }]
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "current", 
+          timestamp: "",
+          getSubtitle: (state: number) => "争议中，等待仲裁",
+          getActions: (state: number) => [{ label: "查看仲裁", type: "secondary" }]
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "pending", 
+          timestamp: "",
+          getSubtitle: (state: number) => "仲裁结果：交易完成，买家收到款项",
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "仲裁中",
+      buyer: "褚十四",
+      seller: "您"
+    },
+
+    // State 5-1: 交易完成
+    "escrow-state-5-1": {
+      transactionId: "TXN-5-1",
+      amount: "25,000",
+      currency: "USDT",
+      type: "买入",
+      progress: 5,
+      stepStates: {
+        step1State: 2,
+        step2State: 4,
+        step3State: 3,
+        step4State: 2,
+        step5State: 1
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "13:30",
+          getSubtitle: (state: number) => "已保存合同初稿",
+          getActions: (state: number) => [{ label: "查看合同", type: "secondary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "completed", 
+          timestamp: "13:30",
+          getSubtitle: (state: number) => "合同已生效",
+          getActions: (state: number) => []
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "completed", 
+          timestamp: "13:30",
+          getSubtitle: (state: number) => "卖家已交付，等待买家确认",
+          getActions: (state: number) => [{ label: "等待确认", type: "secondary" }]
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "completed", 
+          timestamp: "13:30",
+          getSubtitle: (state: number) => "买家已确认",
+          getActions: (state: number) => []
         },
         { 
           id: 5, 
           mainTitle: "交易完成",
           status: "completed", 
-          timestamp: "09:00",
-          getSubtitle: (state: number) => {
-            switch(state) {
-              case 1: return "交易已顺利完成，卖家已收到款项"
-              case 2: return "交易已取消，担保金已回退给买家"
-              case 3: return "仲裁结果：交易完成，买家收到款项"
-              case 4: return "仲裁结果：交易取消，已退款给卖家"
-              default: return "交易已顺利完成，卖家已收到款项"
-            }
-          },
-          getActions: (state: number) => {
-            return []
-          }
+          timestamp: "13:30",
+          getSubtitle: (state: number) => "交易已顺利完成，卖家已收到款项",
+          getActions: (state: number) => []
         }
       ],
       expiresAt: "已完成",
-      buyer: "王五",
+      buyer: "卫十五",
+      seller: "您"
+    },
+
+    // State 5-2: 交易取消
+    "escrow-state-5-2": {
+      transactionId: "TXN-5-2",
+      amount: "4,500",
+      currency: "USDT",
+      type: "卖出",
+      progress: 5,
+      stepStates: {
+        step1State: 2,
+        step2State: 4,
+        step3State: 1,
+        step4State: 4,
+        step5State: 2
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "13:25",
+          getSubtitle: (state: number) => "已保存合同初稿",
+          getActions: (state: number) => [{ label: "查看合同", type: "secondary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "completed", 
+          timestamp: "13:25",
+          getSubtitle: (state: number) => "合同已生效",
+          getActions: (state: number) => []
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "completed", 
+          timestamp: "13:25",
+          getSubtitle: (state: number) => "等待甲方支付到担保账户",
+          getActions: (state: number) => [{ label: "确认付款", type: "primary" }]
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "completed", 
+          timestamp: "13:25",
+          getSubtitle: (state: number) => "买家申请取消交易，等待卖家确认",
+          getActions: (state: number) => [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "completed", 
+          timestamp: "13:25",
+          getSubtitle: (state: number) => "交易已取消，担保金已回退给买家",
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "已取消",
+      buyer: "蒋十六",
+      seller: "您"
+    },
+
+    // State 5-3: 仲裁完成
+    "escrow-state-5-3": {
+      transactionId: "TXN-5-3",
+      amount: "22,700",
+      currency: "USDT",
+      type: "买入",
+      progress: 5,
+      stepStates: {
+        step1State: 2,
+        step2State: 4,
+        step3State: 3,
+        step4State: 3,
+        step5State: 3
+      },
+      steps: [
+        { 
+          id: 1, 
+          mainTitle: "拟定合同",
+          status: "completed", 
+          timestamp: "13:20",
+          getSubtitle: (state: number) => "已保存合同初稿",
+          getActions: (state: number) => [{ label: "查看合同", type: "secondary" }]
+        },
+        { 
+          id: 2, 
+          mainTitle: "确定合同",
+          status: "completed", 
+          timestamp: "13:20",
+          getSubtitle: (state: number) => "合同已生效",
+          getActions: (state: number) => []
+        },
+        { 
+          id: 3, 
+          mainTitle: "付款担保金",
+          status: "completed", 
+          timestamp: "13:20",
+          getSubtitle: (state: number) => "卖家已交付，等待买家确认",
+          getActions: (state: number) => [{ label: "等待确认", type: "secondary" }]
+        },
+        { 
+          id: 4, 
+          mainTitle: "买家确认",
+          status: "completed", 
+          timestamp: "13:20",
+          getSubtitle: (state: number) => "争议中，等待仲裁",
+          getActions: (state: number) => [{ label: "查看仲裁", type: "secondary" }]
+        },
+        { 
+          id: 5, 
+          mainTitle: "交易完成",
+          status: "completed", 
+          timestamp: "13:20",
+          getSubtitle: (state: number) => "仲裁结果：交易完成，买家收到款项",
+          getActions: (state: number) => []
+        }
+      ],
+      expiresAt: "仲裁完成",
+      buyer: "沈十七",
       seller: "您"
     }
   }
 
-  // Theme and language toggle handlers
   const handleToggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark")
   }
@@ -1089,28 +2106,138 @@ export default function ChatPage() {
 
   const escrowContacts: Contact[] = [
     {
-      id: "escrow-1",
-      name: "担保交易 #001",
-      avatar: "🛡️",
-      lastMessage: "交易进行中，请等待确认",
-      time: "11:00",
+      id: "escrow-state-1-1",
+      name: "状态1-1 合同起草",
+      avatar: "✏️",
+      lastMessage: "点击起草合同开始交易",
+      time: "14:30",
       unread: 1,
       isOnline: true,
     },
     {
-      id: "escrow-2",
-      name: "担保交易 #002",
-      avatar: "🔒",
-      lastMessage: "资金已托管，等待买家确认",
-      time: "10:15",
+      id: "escrow-state-1-2",
+      name: "状态1-2 合同已保存",
+      avatar: "📝",
+      lastMessage: "合同初稿已保存完成",
+      time: "14:25",
+      unread: 0,
       isOnline: true,
     },
     {
-      id: "escrow-3",
-      name: "担保交易 #003",
+      id: "escrow-state-2-1",
+      name: "状态2-1 双方确认",
+      avatar: "👥",
+      lastMessage: "等待双方确认合同内容",
+      time: "14:20",
+      unread: 1,
+      isOnline: true,
+    },
+    {
+      id: "escrow-state-2-2",
+      name: "状态2-2 卖家已确认",
+      avatar: "👤",
+      lastMessage: "卖家已确认，等待买家",
+      time: "14:15",
+      unread: 0,
+      isOnline: true,
+    },
+    {
+      id: "escrow-state-2-3",
+      name: "状态2-3 买家已确认",
+      avatar: "👨‍💼",
+      lastMessage: "买家已确认，等待卖家",
+      time: "14:10",
+      unread: 1,
+      isOnline: true,
+    },
+    {
+      id: "escrow-state-2-4",
+      name: "状态2-4 合同生效",
       avatar: "✅",
-      lastMessage: "交易已完成",
-      time: "2小时前",
+      lastMessage: "合同已生效，进入下一步",
+      time: "14:05",
+      unread: 0,
+      isOnline: true,
+    },
+    {
+      id: "escrow-state-3-1",
+      name: "状态3-1 等待付款",
+      avatar: "⏳",
+      lastMessage: "等待甲方付款到担保账户",
+      time: "14:00",
+      unread: 1,
+      isOnline: true,
+    },
+    {
+      id: "escrow-state-3-2",
+      name: "状态3-2 资金托管",
+      avatar: "🏦",
+      lastMessage: "资金已托管，等待交付",
+      time: "13:55",
+      unread: 0,
+      isOnline: true,
+    },
+    {
+      id: "escrow-state-3-3",
+      name: "状态3-3 已交付",
+      avatar: "📦",
+      lastMessage: "卖家已交付，等待确认",
+      time: "13:50",
+      unread: 1,
+      isOnline: true,
+    },
+    {
+      id: "escrow-state-4-1",
+      name: "状态4-1 等待确认",
+      avatar: "⌛",
+      lastMessage: "等待买家确认交付标的",
+      time: "13:45",
+      unread: 0,
+      isOnline: true,
+    },
+    {
+      id: "escrow-state-4-2",
+      name: "状态4-2 买家确认",
+      avatar: "✔️",
+      lastMessage: "买家已确认收到",
+      time: "13:40",
+      unread: 1,
+      isOnline: true,
+    },
+    {
+      id: "escrow-state-4-3",
+      name: "状态4-3 争议仲裁",
+      avatar: "⚖️",
+      lastMessage: "争议中，等待仲裁",
+      time: "13:35",
+      unread: 2,
+      isOnline: true,
+    },
+    {
+      id: "escrow-state-5-1",
+      name: "状态5-1 交易完成",
+      avatar: "🎉",
+      lastMessage: "交易已顺利完成",
+      time: "13:30",
+      unread: 0,
+      isOnline: false,
+    },
+    {
+      id: "escrow-state-5-2",
+      name: "状态5-2 交易取消",
+      avatar: "❌",
+      lastMessage: "交易已取消退款",
+      time: "13:25",
+      unread: 0,
+      isOnline: false,
+    },
+    {
+      id: "escrow-state-5-3",
+      name: "状态5-3 仲裁完成",
+      avatar: "🏛️",
+      lastMessage: "仲裁结果已确定",
+      time: "13:20",
+      unread: 1,
       isOnline: false,
     },
   ]
