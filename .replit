@@ -26,7 +26,8 @@ args = "npm run dev -- --port 5000"
 waitForPort = 5000
 
 [deployment]
-run = ["sh", "-c", "python -m pip install flask && python app.py"]
+deploymentTarget = "static"
+publicDir = "public"
 
 [[ports]]
 localPort = 5000
