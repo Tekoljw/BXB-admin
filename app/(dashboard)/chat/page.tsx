@@ -153,7 +153,7 @@ export default function ChatPage() {
     "escrow-3": false
   })
 
-  // Mock escrow transaction data - Updated to 7-step process
+  // Mock escrow transaction data - Updated with main titles, subtitles and different status states
   const escrowTransactionData = {
     "escrow-1": {
       transactionId: "TXN001",
@@ -161,68 +161,123 @@ export default function ChatPage() {
       currency: "USDT",
       type: "买入",
       progress: 2,
+      stepStates: {
+        step1State: 2, // 1: 输入内容点击起草, 2: 已保存合同初稿
+        step2State: 1, // 1: 双方确认, 2: 卖家已确认等待买家, 3: 买家已确认等待卖家, 4: 合同已生效
+        step3State: 1, // 1: 等待甲方支付, 2: 资金已托管等待交付, 3: 卖家已交付等待确认
+        step4State: 1, // 1: 等待买家确认, 2: 买家已确认, 3: 争议中等待仲裁, 4: 买家申请取消等待卖家确认, 5: 卖家申请取消等待买家确认
+        step5State: 1  // 1: 交易完成卖家收到款项, 2: 交易取消担保金回退, 3: 仲裁结果交易完成, 4: 仲裁结果交易取消
+      },
       steps: [
         { 
           id: 1, 
-          title: "AI助手起草合同", 
+          mainTitle: "拟定合同",
           status: "completed", 
           timestamp: "14:30",
-          actions: [
-            { label: "起草合同", type: "primary" }
-          ]
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "把你们的交易内容在担保群内输入，然后点击起草合同，让AI助手帮你写合同"
+              case 2: return "已保存合同初稿"
+              default: return "已保存合同初稿"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "起草合同", type: "primary" }]
+              case 2: return [{ label: "查看合同", type: "secondary" }]
+              default: return []
+            }
+          }
         },
         { 
           id: 2, 
-          title: "双方签名确定合同以及确定付款时间", 
+          mainTitle: "确定合同",
           status: "current", 
           timestamp: "",
-          actions: [
-            { label: "查看合同", type: "primary" }
-          ]
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
+              case 2: return "卖家已确认，等待买家确认合同"
+              case 3: return "买家已确认，等待卖家确认合同"
+              case 4: return "合同已生效"
+              default: return "双方共同确认合同内容以及付款时间，并点击确认按钮"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认合同", type: "primary" }]
+              case 2: return [{ label: "等待买家", type: "secondary" }]
+              case 3: return [{ label: "等待卖家", type: "secondary" }]
+              case 4: return []
+              default: return [{ label: "确认合同", type: "primary" }]
+            }
+          }
         },
         { 
           id: 3, 
-          title: "等待甲方付款到担保账户", 
+          mainTitle: "付款担保金",
           status: "pending", 
           timestamp: "",
-          actions: [
-            { label: "确认付款", type: "primary" }
-          ]
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待甲方支付到担保账户"
+              case 2: return "资金已托管，等待卖家交付"
+              case 3: return "卖家已交付，等待买家确认"
+              default: return "等待甲方支付到担保账户"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认付款", type: "primary" }]
+              case 2: return [{ label: "确认交付", type: "primary" }]
+              case 3: return [{ label: "等待确认", type: "secondary" }]
+              default: return [{ label: "确认付款", type: "primary" }]
+            }
+          }
         },
         { 
           id: 4, 
-          title: "等待乙方交付", 
+          mainTitle: "买家确认",
           status: "pending", 
           timestamp: "",
-          actions: [
-            { label: "确认收到", type: "primary" }
-          ]
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "等待买家确认交付标的，乙方将收到款项"
+              case 2: return "买家已确认"
+              case 3: return "争议中，等待仲裁"
+              case 4: return "买家申请取消交易，等待卖家确认"
+              case 5: return "卖家申请取消交易，等待买家确认"
+              default: return "等待买家确认交付标的，乙方将收到款项"
+            }
+          },
+          getActions: (state: number) => {
+            switch(state) {
+              case 1: return [{ label: "确认收款", type: "success" }, { label: "申请仲裁", type: "danger" }]
+              case 2: return []
+              case 3: return [{ label: "查看仲裁", type: "secondary" }]
+              case 4: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              case 5: return [{ label: "确认取消", type: "danger" }, { label: "拒绝取消", type: "secondary" }]
+              default: return [{ label: "确认收款", type: "success" }]
+            }
+          }
         },
         { 
           id: 5, 
-          title: "等待甲方确认，释放担保金", 
+          mainTitle: "交易完成",
           status: "pending", 
           timestamp: "",
-          actions: [
-            { label: "确认收款", type: "success" },
-            { label: "申请仲裁", type: "danger" }
-          ]
-        },
-        { 
-          id: 6, 
-          title: "争议中，等待仲裁", 
-          status: "pending", 
-          timestamp: "",
-          actions: [
-            { label: "查看仲裁", type: "secondary" }
-          ]
-        },
-        { 
-          id: 7, 
-          title: "交易完成", 
-          status: "pending", 
-          timestamp: "",
-          actions: []
+          getSubtitle: (state: number) => {
+            switch(state) {
+              case 1: return "交易已顺利完成，卖家已收到款项"
+              case 2: return "交易已取消，担保金已回退给买家"
+              case 3: return "仲裁结果：交易完成，买家收到款项"
+              case 4: return "仲裁结果：交易取消，已退款给卖家"
+              default: return "交易已顺利完成，卖家已收到款项"
+            }
+          },
+          getActions: (state: number) => {
+            return [] // 交易完成步骤无操作按钮
+          }
         }
       ],
       expiresAt: "16:30",
@@ -2378,7 +2433,7 @@ export default function ChatPage() {
                             
                             {/* Current Step and Progress */}
                             <div className="text-xs text-gray-500">
-                              {currentStep ? currentStep.title : '交易已完成'} • 第{Math.max(1, escrowData.steps.findIndex(step => step.status === 'current') + 1)}步 / 共{escrowData.steps.length}步 • {Math.round(progressPercent)}%
+                              {currentStep ? currentStep.mainTitle : '交易已完成'} • 第{Math.max(1, escrowData.steps.findIndex(step => step.status === 'current') + 1)}步 / 共{escrowData.steps.length}步 • {Math.round(progressPercent)}%
                             </div>
                           </div>
                           
@@ -2525,7 +2580,15 @@ export default function ChatPage() {
                                             style={{
                                               color: step.status === 'completed' ? '#20B2AA' : undefined
                                             }}>
-                                              {step.title}
+                                              {step.mainTitle}
+                                            </div>
+                                            {/* Subtitle based on current state */}
+                                            <div className="text-xs text-gray-500 mt-1">
+                                              {(() => {
+                                                const stateKey = `step${step.id}State` as keyof typeof escrowData.stepStates
+                                                const currentState = escrowData.stepStates[stateKey] || 1
+                                                return step.getSubtitle(currentState)
+                                              })()}
                                             </div>
                                             {step.timestamp && (
                                               <div className="text-xs text-gray-500">{step.timestamp}</div>
@@ -2537,9 +2600,14 @@ export default function ChatPage() {
                                         </div>
                                         
                                         {/* Action Buttons for Current and Completed Steps */}
-                                        {step.actions && step.id !== 7 && (
-                                          <div className="ml-11 flex space-x-2">
-                                            {step.actions.map((action, actionIndex) => (
+                                        {(() => {
+                                          const stateKey = `step${step.id}State` as keyof typeof escrowData.stepStates
+                                          const currentState = escrowData.stepStates[stateKey] || 1
+                                          const actions = step.getActions(currentState)
+                                          
+                                          return actions.length > 0 && step.id !== 5 && (
+                                            <div className="ml-11 flex space-x-2">
+                                              {actions.map((action, actionIndex) => (
                                               <button
                                                 key={actionIndex}
                                                 disabled={step.status === 'pending'}
@@ -2572,8 +2640,9 @@ export default function ChatPage() {
                                                 {action.label}
                                               </button>
                                             ))}
-                                          </div>
-                                        )}
+                                            </div>
+                                          )
+                                        })()}
                                       </div>
                                     </div>
                                   ))
