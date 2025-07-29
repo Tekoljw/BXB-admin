@@ -1,17 +1,26 @@
 #!/bin/bash
 
-# BeDAO Platform - Deployment Build Script
-# Comprehensive build process with static fallback support
+# BeDAO Platform - Comprehensive Build and Deployment Script
+# Supports both Autoscale and Static deployment types for Replit
 
 set -e  # Exit on any error
 
-echo "🚀 Starting BeDAO Platform deployment build..."
+echo "🚀 BeDAO Platform - Build and Deployment Script"
+echo "=============================================="
+
+# Configuration
+DEPLOYMENT_TYPE=${DEPLOYMENT_TYPE:-"autoscale"}
+NODE_ENV=${NODE_ENV:-"production"}
+
+echo "📋 Configuration:"
+echo "   Deployment Type: $DEPLOYMENT_TYPE"
+echo "   Node Environment: $NODE_ENV"
+echo ""
 
 # Clean previous builds
 echo "🧹 Cleaning previous builds..."
 rm -rf .next
 rm -rf out
-rm -rf public/.next
 rm -rf dist
 
 # Install dependencies if needed
@@ -20,120 +29,123 @@ if [ ! -d "node_modules" ]; then
     npm install
 fi
 
-# Check environment and deployment mode
-if [ "$STATIC_EXPORT" = "true" ]; then
-    echo "📦 Building for STATIC deployment..."
-    export NODE_ENV=production
-    export STATIC_EXPORT=true
+# Build based on deployment type
+if [ "$DEPLOYMENT_TYPE" = "static" ]; then
+    echo "🏗️  Building for Static Deployment..."
+    echo "   - Configuring Next.js for static export"
+    echo "   - Generating static files in 'out' directory"
     
-    # Build static export
+    export DEPLOYMENT_TYPE=static
     npm run build
     
-    # Verify static export
+    # Verify static build
     if [ -d "out" ]; then
-        echo "✅ Static export successful"
+        echo "✅ Static build completed successfully"
+        echo "   - Output directory: out/"
+        echo "   - Files generated: $(find out -type f | wc -l) files"
+        echo "   - Build size: $(du -sh out | cut -f1)"
         
-        # Copy index.html to root for static hosting
-        if [ -f "public/index.html" ]; then
+        # Copy index.html to root of out directory if it doesn't exist
+        if [ ! -f "out/index.html" ] && [ -f "public/index.html" ]; then
             cp public/index.html out/index.html
-            echo "✅ Index.html copied to static output"
+            echo "   - Copied fallback index.html to output directory"
         fi
-        
-        # Create .nojekyll for GitHub Pages compatibility
-        touch out/.nojekyll
-        echo "✅ Static deployment optimizations applied"
     else
-        echo "❌ Static export failed"
+        echo "❌ Static build failed - no output directory created"
         exit 1
     fi
-else
-    echo "🚀 Building for AUTOSCALE deployment (recommended)..."
-    export NODE_ENV=production
     
-    # Standard Next.js build for server deployment
+else
+    echo "🏗️  Building for Autoscale Deployment (Recommended)..."
+    echo "   - Configuring Next.js for server-side rendering"
+    echo "   - Generating standalone server build"
+    
     npm run build
     
-    # Verify build success
+    # Verify autoscale build
     if [ -d ".next" ]; then
-        echo "✅ Next.js build successful"
-        
-        # Check for standalone output
-        if [ -d ".next/standalone" ]; then
-            echo "✅ Standalone server build created"
-        fi
+        echo "✅ Autoscale build completed successfully"
+        echo "   - Output directory: .next/"
+        echo "   - Build type: $([ -d ".next/standalone" ] && echo "Standalone Server" || echo "Standard Build")"
+        echo "   - Build size: $(du -sh .next | cut -f1)"
     else
-        echo "❌ Next.js build failed"
+        echo "❌ Autoscale build failed - no .next directory created"
         exit 1
     fi
 fi
 
 # Deployment verification
-echo "🔍 Deployment verification..."
+echo ""
+echo "🔍 Deployment Verification:"
 
-# Check build output size
-if [ -d ".next" ]; then
-    BUILD_SIZE=$(du -sh .next | cut -f1)
-    echo "📊 Build size: $BUILD_SIZE"
-fi
-
-if [ -d "out" ]; then
-    STATIC_SIZE=$(du -sh out | cut -f1)
-    echo "📊 Static export size: $STATIC_SIZE"
-fi
-
-# Check essential files
-echo "🔍 Checking essential files..."
-
-files_to_check=(
-    "public/index.html"
-    "next.config.mjs"
-    "package.json"
-)
-
-for file in "${files_to_check[@]}"; do
-    if [ -f "$file" ]; then
-        echo "✅ $file exists"
+# Check for required files
+if [ "$DEPLOYMENT_TYPE" = "static" ]; then
+    if [ -f "out/index.html" ]; then
+        echo "✅ Index.html file exists in output directory"
     else
-        echo "⚠️  $file missing"
+        echo "⚠️  Warning: No index.html in output directory"
     fi
-done
-
-# Final deployment readiness check
-echo "🎯 Deployment readiness check..."
-
-if [ "$STATIC_EXPORT" = "true" ] && [ -d "out" ]; then
-    echo "✅ Ready for STATIC deployment"
-    echo "📁 Static files in: ./out/"
-    echo "🔗 Entry point: out/index.html"
-elif [ -d ".next" ]; then
-    echo "✅ Ready for AUTOSCALE deployment"
-    echo "📁 Server files in: ./.next/"
-    echo "🔗 Start command: npm start"
-    echo "🌐 Server mode: Next.js standalone"
+    
+    if [ -d "out/_next" ]; then
+        echo "✅ Next.js static assets generated"
+    else
+        echo "⚠️  Warning: Missing Next.js static assets"
+    fi
 else
-    echo "❌ Deployment build failed"
+    if [ -f "public/index.html" ]; then
+        echo "✅ Fallback index.html exists in public directory"
+    else
+        echo "⚠️  Warning: No fallback index.html for static requests"
+    fi
+    
+    if [ -f ".next/BUILD_ID" ]; then
+        echo "✅ Next.js build completed with ID: $(cat .next/BUILD_ID)"
+    else
+        echo "⚠️  Warning: No build ID generated"
+    fi
+fi
+
+# Check configuration files
+if [ -f "replit.toml" ]; then
+    echo "✅ Replit deployment configuration exists"
+else
+    echo "⚠️  Warning: No replit.toml configuration file"
+fi
+
+if [ -f "next.config.mjs" ]; then
+    echo "✅ Next.js configuration exists"
+else
+    echo "❌ Error: Missing next.config.mjs"
     exit 1
 fi
 
-echo "🎉 Build process completed successfully!"
-
-# Display deployment instructions
+# Final deployment readiness check
 echo ""
-echo "📋 DEPLOYMENT INSTRUCTIONS:"
-echo "=========================="
-if [ "$STATIC_EXPORT" = "true" ]; then
-    echo "1. Select 'Static' deployment type in Replit"
-    echo "2. Set public directory to: ./out"
-    echo "3. Entry file: index.html"
-    echo "4. Build command: ./build-deploy.sh"
+echo "🎯 Deployment Readiness Summary:"
+echo "================================"
+
+if [ "$DEPLOYMENT_TYPE" = "static" ]; then
+    if [ -d "out" ] && [ -f "out/index.html" ]; then
+        echo "✅ READY FOR STATIC DEPLOYMENT"
+        echo "   - Use 'Static' deployment type in Replit"
+        echo "   - Public directory: out/"
+        echo "   - All static files generated successfully"
+    else
+        echo "❌ NOT READY - Static build incomplete"
+        exit 1
+    fi
 else
-    echo "1. Select 'Autoscale' deployment type in Replit (RECOMMENDED)"
-    echo "2. Build command: npm run build"
-    echo "3. Start command: npm start"
-    echo "4. Port: 5000"
-    echo ""
-    echo "📝 For static fallback: STATIC_EXPORT=true ./build-deploy.sh"
+    if [ -d ".next" ] && [ -f "public/index.html" ]; then
+        echo "✅ READY FOR AUTOSCALE DEPLOYMENT (RECOMMENDED)"
+        echo "   - Use 'Autoscale' deployment type in Replit"
+        echo "   - Server build with fallback support"
+        echo "   - Optimal for Next.js applications"
+    else
+        echo "❌ NOT READY - Autoscale build incomplete"
+        exit 1
+    fi
 fi
 
 echo ""
-echo "🔥 BeDAO Platform is ready for deployment!"
+echo "🎉 Build process completed successfully!"
+echo "   You can now deploy using Replit's deployment interface."

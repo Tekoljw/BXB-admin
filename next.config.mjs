@@ -10,9 +10,13 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  // Replit Autoscale deployment configuration (OPTIMIZED FOR REPLIT DEPLOYMENT)
-  output: 'standalone',
+  // Replit deployment configuration - supports both Autoscale and Static deployment
+  output: process.env.DEPLOYMENT_TYPE === 'static' ? 'export' : 'standalone',
   serverExternalPackages: ['@neondatabase/serverless'],
+  
+  // Static export configuration for static deployment
+  trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   
   // Static file optimization
   distDir: '.next',
@@ -20,8 +24,13 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   
-  // Cross-origin and security headers for Replit
+  // Conditional headers based on deployment type
   async headers() {
+    // Skip headers for static export to avoid build issues
+    if (process.env.DEPLOYMENT_TYPE === 'static') {
+      return [];
+    }
+    
     return [
       {
         source: '/(.*)',
@@ -66,19 +75,28 @@ const nextConfig = {
     '127.0.0.1:5000'
   ],
   
-  // Simplified Webpack configuration to avoid build errors
+  // Simplified and robust webpack configuration
   webpack: (config, { dev, isServer }) => {
-    // Completely disable minimization for client-side builds to avoid CSS errors
-    if (!dev && !isServer) {
-      config.optimization.minimize = false;
-      config.optimization.minimizer = [];
+    // Basic fallback configuration for node modules
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
     }
     
     return config;
   },
   
-  // Redirect configuration for fallback
+  // Conditional redirects based on deployment type
   async redirects() {
+    // Skip redirects for static export to avoid build issues
+    if (process.env.DEPLOYMENT_TYPE === 'static') {
+      return [];
+    }
+    
     return [
       {
         source: '/index.html',

@@ -1,43 +1,20 @@
 [deployment]
-# Replit deployment configuration - AUTOSCALE FOR NEXT.JS
-deploymentTarget = "autoscale"
+# Replit deployment configuration - supports both deployment types
+deploymentTarget = "autoscale"  # Change to "static" for static deployment
 ignorePorts = false
 publicDir = "public"
+build = ["npm", "run", "build"]
+run = ["npm", "start"]
 
-[nix]
-channel = "stable-23_11"
+[deployment.autoscale]
+# Autoscale deployment configuration (recommended for Next.js apps)
+minReplicas = 0
+maxReplicas = 10
 
-[packager]
-language = "nodejs"
-
-[packager.features]
-packageSearch = true
-guessImports = true
-enabledForHosting = false
-
-[languages.javascript]
-pattern = "**/{*.js,*.jsx,*.ts,*.tsx,*.json}"
-
-[languages.javascript.languageServer]
-start = "typescript-language-server --stdio"
-
-[env]
-NODE_ENV = "production"
-
-[gitHubImport]
-requiredFiles = [".next", "node_modules"]
-
-[deployment.build]
-command = "npm run build"
-
-[deployment.run]
-command = "npm start"
+[deployment.static]
+# Static deployment configuration (fallback option)
+publicDir = "out"
 
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-# Health check configuration
-[deployment.health]
-path = "/"
-timeout = 10
