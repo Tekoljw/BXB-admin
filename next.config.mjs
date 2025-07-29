@@ -10,12 +10,20 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  // Replit deployment configuration - Autoscale mode (NOT static)
+  // Replit deployment configuration - Autoscale mode (preferred)
   serverExternalPackages: ['@neondatabase/serverless'],
-  output: 'standalone', // CRITICAL: Required for Replit Autoscale deployment - NEVER change to 'export'
+  output: process.env.NODE_ENV === 'production' && process.env.STATIC_EXPORT === 'true' ? 'export' : 'standalone',
   
-  // Explicitly disable static export
+  // Deployment target configuration
   distDir: '.next',
+  trailingSlash: process.env.STATIC_EXPORT === 'true',
+  
+  // Static export configuration for fallback deployment
+  ...(process.env.STATIC_EXPORT === 'true' && {
+    assetPrefix: '',
+    basePath: '',
+    generateBuildId: () => 'build',
+  }),
   
   // Cross-origin configuration for Replit
   headers: async () => {

@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BeDAO Platform - Loading...</title>
     <meta name="description" content="BeDAO - Advanced cryptocurrency and social networking platform">
+    <meta name="keywords" content="cryptocurrency, blockchain, trading, social platform, defi">
+    <meta name="robots" content="index, follow">
     <link rel="icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/bedao-logo.png">
+    <link rel="apple-touch-icon" href="/bedao-logo.png">
     <style>
         body {
             margin: 0;
@@ -76,15 +80,49 @@
     </div>
     
     <script>
-        // This is a fallback page for static deployment
-        // Redirect to the main application after a brief loading period
-        setTimeout(() => {
-            window.location.href = '/';
-        }, 2000);
+        // Enhanced deployment fallback script
+        function initializeApp() {
+            // Check if we're in a static deployment environment
+            const isStaticDeploy = window.location.pathname === '/index.html' || 
+                                   !window.location.pathname.startsWith('/_next/');
+            
+            // Try to detect if Next.js is available
+            const checkNextJS = () => {
+                fetch('/_next/static/chunks/pages/_app.js', { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            // Next.js is available, redirect to app
+                            window.location.href = '/';
+                        } else {
+                            // Fallback: show current page as loading screen
+                            document.querySelector('.redirect-message').textContent = 
+                                'Loading application... Please wait.';
+                        }
+                    })
+                    .catch(() => {
+                        // Network error or Next.js not available
+                        document.querySelector('.redirect-message').textContent = 
+                            'Application is starting up...';
+                        setTimeout(() => window.location.reload(), 5000);
+                    });
+            };
+            
+            // Immediate redirect for direct index.html access
+            if (window.location.pathname === '/index.html') {
+                window.location.href = '/';
+                return;
+            }
+            
+            // Progressive loading check
+            setTimeout(checkNextJS, 1000);
+            setTimeout(() => window.location.href = '/', 3000);
+        }
         
-        // If this is accessed directly, try to load the Next.js app
-        if (window.location.pathname === '/index.html') {
-            window.location.href = '/';
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
         }
     </script>
 </body>

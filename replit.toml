@@ -4,9 +4,15 @@ deploymentTarget = "autoscale"
 buildCommand = "npm run build"
 run = "npm start"
 
+# Alternative static deployment configuration (if needed)
+# To use static deployment, change deploymentTarget to "static" and uncomment:
+# buildCommand = "npm run build && mkdir -p public/out && cp -r .next/out/* public/"
+# publicDir = "public"
+
 [env]
 NODE_ENV = "production"
 PORT = "5000"
+# STATIC_EXPORT = "false"  # Set to "true" for static export mode
 
 [[ports]]
 localPort = 5000
