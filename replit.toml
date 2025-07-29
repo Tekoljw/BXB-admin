@@ -1,0 +1,14 @@
+[deployment]
+deploymentTarget = "autoscale"
+publicDir = "public"
+
+[build]
+main = "package.json"
+run = "npm run build"
+
+[env]
+NODE_ENV = "production"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
