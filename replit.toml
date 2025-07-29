@@ -1,19 +1,22 @@
 [deployment]
-# Replit deployment configuration - supports both deployment types
-deploymentTarget = "autoscale"  # Change to "static" for static deployment
+# Replit deployment configuration - AUTOSCALE recommended for Next.js applications
+deploymentTarget = "autoscale"  # Recommended: Use "autoscale" for full Next.js functionality
 ignorePorts = false
-publicDir = "public"
-build = ["npm", "run", "build"]
-run = ["npm", "start"]
+publicDir = "public"  # For static files and fallback index.html
+build = ["npm", "run", "build"]  # Default build command
+run = ["npm", "start"]  # Production server command
 
 [deployment.autoscale]
-# Autoscale deployment configuration (recommended for Next.js apps)
+# Autoscale deployment configuration (RECOMMENDED for Next.js apps)
+# Provides server-side rendering, API routes, and full Next.js features
 minReplicas = 0
 maxReplicas = 10
 
 [deployment.static]
-# Static deployment configuration (fallback option)
-publicDir = "out"
+# Static deployment configuration (ALTERNATIVE - limited functionality)
+# Note: Static deployment disables API routes and server-side features
+publicDir = "out"  # Output directory for static export
+build = ["sh", "-c", "DEPLOYMENT_TYPE=static npm run build"]  # Static build with environment variable
 
 [[ports]]
 localPort = 5000

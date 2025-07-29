@@ -75,7 +75,7 @@ const nextConfig = {
     '127.0.0.1:5000'
   ],
   
-  // Simplified and robust webpack configuration
+  // Enhanced webpack configuration with CSS error handling
   webpack: (config, { dev, isServer }) => {
     // Basic fallback configuration for node modules
     if (!isServer) {
@@ -85,6 +85,26 @@ const nextConfig = {
         net: false,
         tls: false,
       };
+    }
+    
+    // Fix CSS optimization errors by completely disabling CSS minification in production
+    if (!dev) {
+      config.optimization.minimizer = config.optimization.minimizer.filter(
+        (plugin) => {
+          const name = plugin.constructor.name;
+          return !name.includes('CssMinimizerPlugin') && !name.includes('CssMinimizer');
+        }
+      );
+      
+      // Add better error handling for CSS processing
+      config.ignoreWarnings = [
+        /Failed to parse source map/,
+        /Cannot read properties of undefined/,
+        /css.*unable to parse/i,
+      ];
+      
+      // Keep optimization for JS but disable for CSS
+      config.optimization.minimize = true;
     }
     
     return config;
