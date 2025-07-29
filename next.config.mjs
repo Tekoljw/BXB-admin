@@ -10,8 +10,8 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  // Enable standalone output for autoscale deployment
-  output: 'standalone',
+  // Disable standalone output to avoid build issues
+  // output: 'standalone',
   serverExternalPackages: ['@neondatabase/serverless'],
   
   // Static export configuration for static deployment
@@ -75,9 +75,9 @@ const nextConfig = {
     '127.0.0.1:5000'
   ],
   
-  // Simplified webpack configuration for deployment stability
+  // Disable webpack optimizations to prevent CSS parsing errors
   webpack: (config, { dev, isServer }) => {
-    // Basic fallback configuration for node modules
+    // Only add basic fallbacks for node modules
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -87,15 +87,23 @@ const nextConfig = {
       };
     }
     
-    // Disable CSS optimization completely for deployment stability
+    // Completely disable all optimization for maximum compatibility
     if (!dev) {
-      config.optimization.minimize = false;
-      config.optimization.minimizer = [];
+      config.optimization = {
+        minimize: false,
+        minimizer: [],
+        splitChunks: {
+          chunks: 'all',
+          minSize: 0,
+          cacheGroups: {
+            default: false,
+            vendors: false,
+          },
+        },
+      };
       
-      // Add comprehensive error handling
-      config.ignoreWarnings = [
-        () => true, // Ignore all warnings during build
-      ];
+      // Ignore all webpack warnings and errors
+      config.ignoreWarnings = [() => true];
     }
     
     return config;
