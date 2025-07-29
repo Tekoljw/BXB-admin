@@ -11,3 +11,12 @@ PORT = "5000"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[packager]
+language = "nodejs"
+
+[nix]
+channel = "stable-24_05"
+
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix", ".config"]

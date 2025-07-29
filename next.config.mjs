@@ -43,17 +43,38 @@ const nextConfig = {
     }
   },
   
+  // Development configuration for cross-origin requests
+  allowedDevOrigins: [
+    '*.replit.dev',
+    '*.replit.app', 
+    'localhost:5000',
+    '127.0.0.1:5000'
+  ],
+  
   // Additional configuration for stable deployment
   poweredByHeader: false,
   generateEtags: false,
   compress: true,
   
-  // Webpack configuration to handle CSS issues
+  // Webpack configuration to handle CSS issues and chunk loading
   webpack: (config, { dev, isServer }) => {
     // Disable CSS optimization in production builds
     if (!dev && !isServer) {
       config.optimization.minimize = false;
     }
+    
+    // Fix for missing module chunks
+    config.optimization.splitChunks = {
+      chunks: 'all',
+      cacheGroups: {
+        default: {
+          minChunks: 1,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    };
+    
     return config;
   },
 }
