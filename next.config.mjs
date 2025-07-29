@@ -17,9 +17,6 @@ const nextConfig = {
   
   // Enable standalone output for autoscale deployment
   output: 'standalone',
-  experimental: {
-    outputFileTracingRoot: __dirname,
-  },
   serverExternalPackages: ['@neondatabase/serverless'],
   
   // Static export configuration for static deployment
@@ -68,7 +65,10 @@ const nextConfig = {
     ];
   },
   
-  // Server configuration for Replit deployment
+  // Output file tracing configuration
+  outputFileTracingRoot: __dirname,
+  
+  // Experimental configuration
   experimental: {
     serverActions: {
       allowedOrigins: ['*.replit.dev', '*.replit.app', 'localhost:5000']
@@ -83,35 +83,25 @@ const nextConfig = {
     '127.0.0.1:5000'
   ],
   
-  // Disable webpack optimizations to prevent CSS parsing errors
+  // Webpack configuration for Replit deployment
   webpack: (config, { dev, isServer }) => {
-    // Only add basic fallbacks for node modules
+    // Add proper fallbacks for browser environment
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
         net: false,
         tls: false,
+        process: false,
       };
     }
     
-    // Completely disable all optimization for maximum compatibility
+    // Disable CSS optimization to prevent parsing errors
     if (!dev) {
       config.optimization = {
+        ...config.optimization,
         minimize: false,
-        minimizer: [],
-        splitChunks: {
-          chunks: 'all',
-          minSize: 0,
-          cacheGroups: {
-            default: false,
-            vendors: false,
-          },
-        },
       };
-      
-      // Ignore all webpack warnings and errors
-      config.ignoreWarnings = [() => true];
     }
     
     return config;
