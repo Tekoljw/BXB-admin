@@ -3,127 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeDAO Platform - Loading...</title>
-    <meta name="description" content="BeDAO - Advanced cryptocurrency and social networking platform">
-    <meta name="keywords" content="cryptocurrency, blockchain, trading, social platform, defi">
-    <meta name="robots" content="index, follow">
-    <link rel="icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/bedao-logo.png">
-    <link rel="apple-touch-icon" href="/bedao-logo.png">
+    <title>BXB - Loading...</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
             color: white;
-        }
-        .loading-container {
-            text-align: center;
-            padding: 2rem;
-        }
-        .logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            font-weight: bold;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .loader {
+            text-align: center;
         }
         .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid white;
+            width: 50px;
+            height: 50px;
+            border: 4px solid #14C2A3;
+            border-top: 4px solid transparent;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 1rem auto;
+            margin: 0 auto 20px;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        h1 {
-            margin: 0 0 0.5rem;
-            font-size: 2rem;
-            font-weight: 600;
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #14C2A3;
+            margin-bottom: 10px;
         }
-        p {
-            margin: 0;
-            opacity: 0.8;
-            font-size: 1.1rem;
-        }
-        .redirect-message {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            opacity: 0.7;
+        .subtitle {
+            color: #888;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <div class="loading-container">
-        <div class="logo">B</div>
-        <h1>BeDAO Platform</h1>
-        <p>Advanced Cryptocurrency & Social Platform</p>
+    <div class="loader">
         <div class="spinner"></div>
-        <div class="redirect-message">
-            Initializing application...
-        </div>
+        <div class="logo">BXB</div>
+        <div class="subtitle">Loading your trading platform...</div>
     </div>
     
     <script>
-        // Enhanced deployment fallback script
-        function initializeApp() {
-            // Check if we're in a static deployment environment
-            const isStaticDeploy = window.location.pathname === '/index.html' || 
-                                   !window.location.pathname.startsWith('/_next/');
-            
-            // Try to detect if Next.js is available
-            const checkNextJS = () => {
-                fetch('/_next/static/chunks/pages/_app.js', { method: 'HEAD' })
-                    .then(response => {
-                        if (response.ok) {
-                            // Next.js is available, redirect to app
-                            window.location.href = '/';
-                        } else {
-                            // Fallback: show current page as loading screen
-                            document.querySelector('.redirect-message').textContent = 
-                                'Loading application... Please wait.';
-                        }
-                    })
-                    .catch(() => {
-                        // Network error or Next.js not available
-                        document.querySelector('.redirect-message').textContent = 
-                            'Application is starting up...';
-                        setTimeout(() => window.location.reload(), 5000);
-                    });
-            };
-            
-            // Immediate redirect for direct index.html access
-            if (window.location.pathname === '/index.html') {
-                window.location.href = '/';
-                return;
+        // Auto-redirect to app after 3 seconds if not already redirected
+        setTimeout(() => {
+            if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+                window.location.href = '/wallet';
             }
-            
-            // Progressive loading check
-            setTimeout(checkNextJS, 1000);
-            setTimeout(() => window.location.href = '/', 3000);
-        }
-        
-        // Initialize when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeApp);
-        } else {
-            initializeApp();
-        }
+        }, 3000);
     </script>
 </body>
 </html>

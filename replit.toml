@@ -4,7 +4,7 @@ deploymentTarget = "autoscale"  # Recommended: Use "autoscale" for full Next.js 
 ignorePorts = false
 publicDir = "public"  # For static files and fallback index.html
 build = ["npm", "run", "build"]  # Default build command
-run = ["npm", "start"]  # Production server command
+run = ["node", "start-production.js"]  # Production server command
 
 [deployment.autoscale]
 # Autoscale deployment configuration (RECOMMENDED for Next.js apps)

@@ -1,3 +1,8 @@
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -10,8 +15,11 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  // Disable standalone output to avoid build issues
-  // output: 'standalone',
+  // Enable standalone output for autoscale deployment
+  output: 'standalone',
+  experimental: {
+    outputFileTracingRoot: __dirname,
+  },
   serverExternalPackages: ['@neondatabase/serverless'],
   
   // Static export configuration for static deployment
