@@ -2,6 +2,7 @@
 channel = "stable-24_05"
 
 [deployment]
+build = "./build-deploy.sh"
 run = "npm start"
 deploymentTarget = "autoscale"
 
@@ -11,3 +12,5 @@ externalPort = 80
 
 [env]
 NODE_ENV = "production"
+NPM_CONFIG_LEGACY_PEER_DEPS = "true"
+REPLIT_DISABLE_PACKAGE_LAYER = "true"
