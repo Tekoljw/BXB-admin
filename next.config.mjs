@@ -10,26 +10,25 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  // Replit deployment configuration
+  // Replit deployment configuration - Autoscale mode (NOT static)
   serverExternalPackages: ['@neondatabase/serverless'],
+  output: 'standalone', // Required for Replit Autoscale deployment
   
   // Cross-origin configuration for Replit
   allowedDevOrigins: [
     '*.replit.dev',
-    '*.replit.app',
+    '*.replit.app', 
     'localhost:5000',
     '127.0.0.1:5000'
   ],
   
-  // Webpack configuration to handle CSS issues
-  webpack: (config, { dev, isServer }) => {
-    // Fix CSS handling issues
-    if (!dev && !isServer) {
-      config.optimization.minimizer = config.optimization.minimizer.filter(
-        (minimizer) => !minimizer.constructor.name.includes('CssMinimizerPlugin')
-      );
-    }
-    return config;
+  // Server configuration for Replit
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['*.replit.dev', '*.replit.app']
+    },
+    // Disable CSS optimization to prevent build errors
+    optimizeCss: false,
   },
 }
 

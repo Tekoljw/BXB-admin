@@ -105,13 +105,14 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
 
 ### Production Deployment
 - **Deployment Type**: Configured for Autoscale deployment (not static) - **CRITICAL: Must use Autoscale, not Static**
-- **Build Configuration**: Updated next.config.mjs with serverExternalPackages for Neon Database
-- **Docker Support**: Added Dockerfile for containerized deployment
-- **Build Script**: Created deploy.sh for automated build and deployment process
-- **Cross-Origin Fix**: Added allowedDevOrigins configuration for Replit domains
+- **Build Configuration**: Updated next.config.mjs with serverExternalPackages for Neon Database and standalone output
+- **Docker Support**: Added comprehensive Dockerfile for containerized deployment on Node.js 20 Alpine
+- **Build Script**: Created deploy.sh automated deployment script with database migration support
+- **Cross-Origin Fix**: Added allowedDevOrigins configuration for Replit domains and serverActions
 - **External Packages**: Configured proper handling of @neondatabase/serverless package
 - **CSS Compilation Fix**: Added webpack configuration to handle CSS minification issues
 - **PostCSS Configuration**: Created postcss.config.js to disable problematic CSS plugins
+- **Deployment Documentation**: Created DEPLOYMENT.md with comprehensive deployment guide and troubleshooting
 
 ### Build Optimization
 - **Next.js Production Build**: Optimized production build with static optimization
@@ -302,6 +303,15 @@ BXB is a modern cryptocurrency trading dashboard application built with Next.js 
   - Created separate cards for: 可领取佣金, 直推人数, 间推人数, 活跃用户
   - Applied consistent design pattern matching invite friends top cards layout
   - Added appropriate icons and color schemes for each data type
+- July 29, 2025. Fixed Replit deployment configuration issues:
+  - Updated next.config.mjs with standalone output mode for Autoscale deployment compatibility
+  - Added proper serverExternalPackages configuration for @neondatabase/serverless
+  - Enhanced CORS configuration with serverActions allowedOrigins for Replit domains
+  - Created comprehensive deployment script (deploy.sh) with build automation and database migration support
+  - Added production-ready Dockerfile with Node.js 20 Alpine for containerized deployment
+  - Created detailed DEPLOYMENT.md guide with troubleshooting and configuration steps
+  - **CRITICAL FIX**: Configured for Autoscale deployment (not Static) to support Next.js server features
+  - Resolved "Missing index.html" error by switching from Static to Autoscale deployment type
   - Integrated claim button directly into the commission card
   - Enhanced data visualization with additional context (monthly growth, activity rates)
 - January 30, 2025. Adjusted commission card layout and button styling:

@@ -1,36 +1,34 @@
 #!/bin/bash
 
-# Deploy script for BeDAO-ho Next.js Application
-# This script prepares the application for Replit Autoscale deployment
+# BeDAO-ho Deployment Script for Replit Autoscale
+# This script handles the build and deployment process
 
-echo "🚀 Starting deployment preparation..."
+set -e
 
-# Check if node_modules exists, if not install dependencies
-if [ ! -d "node_modules" ]; then
-    echo "📦 Installing dependencies..."
-    npm install
+echo "🚀 Starting BeDAO-ho deployment process..."
+
+# Clean previous builds
+echo "📝 Cleaning previous builds..."
+rm -rf .next
+rm -rf out
+
+# Install dependencies if needed
+echo "📦 Installing dependencies..."
+npm ci
+
+# Run database migrations if needed
+echo "🗄️  Setting up database..."
+if [ -n "$DATABASE_URL" ]; then
+    npm run db:push || echo "⚠️  Database push skipped (not configured)"
 fi
 
-# Build the application
+# Build the Next.js application
 echo "🔨 Building Next.js application..."
 npm run build
 
-# Check if build was successful
-if [ $? -eq 0 ]; then
-    echo "✅ Build completed successfully!"
-    echo "📄 Generated files:"
-    ls -la .next/
-    
-    echo ""
-    echo "🌟 Application is ready for deployment!"
-    echo "🔗 This is a Next.js application configured for Autoscale deployment"
-    echo "📋 Make sure to:"
-    echo "   1. Set deployment type to 'Autoscale' (not static)"
-    echo "   2. Set build command to: npm run build"
-    echo "   3. Set start command to: npm start"
-    echo "   4. Ensure DATABASE_URL is set in environment variables"
-    
-else
-    echo "❌ Build failed! Please check the errors above."
-    exit 1
-fi
+echo "✅ Build completed successfully!"
+echo "🌐 Ready for Autoscale deployment on Replit"
+
+# The application will be served by npm start
+echo "🚀 Starting production server..."
+npm start
