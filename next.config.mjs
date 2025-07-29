@@ -10,9 +10,9 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  // Replit deployment configuration - Autoscale mode (preferred)
+  // Replit deployment configuration - Autoscale mode (preferred for Next.js)
   serverExternalPackages: ['@neondatabase/serverless'],
-  output: process.env.NODE_ENV === 'production' && process.env.STATIC_EXPORT === 'true' ? 'export' : 'standalone',
+  output: process.env.STATIC_EXPORT === 'true' ? 'export' : 'standalone',
   
   // Deployment target configuration
   distDir: '.next',
