@@ -1,8 +1,8 @@
 [deployment]
-# Replit deployment configuration
-# Set to autoscale for Next.js applications (NOT static)
+# Replit deployment configuration - AUTOSCALE FOR NEXT.JS
 deploymentTarget = "autoscale"
 ignorePorts = false
+publicDir = "public"
 
 [nix]
 channel = "stable-23_11"
@@ -36,3 +36,8 @@ command = "npm start"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+# Health check configuration
+[deployment.health]
+path = "/"
+timeout = 10

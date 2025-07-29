@@ -10,30 +10,37 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  // Replit deployment configuration - Autoscale mode (preferred for Next.js)
+  // Replit Autoscale deployment configuration (OPTIMIZED FOR REPLIT DEPLOYMENT)
+  output: 'standalone',
   serverExternalPackages: ['@neondatabase/serverless'],
-  output: process.env.STATIC_EXPORT === 'true' ? 'export' : 'standalone',
   
-  // Deployment target configuration
+  // Static file optimization
   distDir: '.next',
-  trailingSlash: process.env.STATIC_EXPORT === 'true',
+  generateEtags: false,
+  poweredByHeader: false,
+  compress: true,
   
-  // Static export configuration for fallback deployment
-  ...(process.env.STATIC_EXPORT === 'true' && {
-    assetPrefix: '',
-    basePath: '',
-    generateBuildId: () => 'build',
-  }),
-  
-  // Cross-origin configuration for Replit
-  headers: async () => {
+  // Cross-origin and security headers for Replit
+  async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
           {
+            key: 'Access-Control-Allow-Origin',
+            value: '*',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, PUT, DELETE, OPTIONS',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type, Authorization',
+          },
+          {
             key: 'X-Frame-Options',
-            value: 'DENY',
+            value: 'SAMEORIGIN',
           },
           {
             key: 'X-Content-Type-Options',
@@ -44,7 +51,7 @@ const nextConfig = {
     ];
   },
   
-  // Server configuration for Replit
+  // Server configuration for Replit deployment
   experimental: {
     serverActions: {
       allowedOrigins: ['*.replit.dev', '*.replit.app', 'localhost:5000']
@@ -59,31 +66,26 @@ const nextConfig = {
     '127.0.0.1:5000'
   ],
   
-  // Additional configuration for stable deployment
-  poweredByHeader: false,
-  generateEtags: false,
-  compress: true,
-  
-  // Webpack configuration to handle CSS issues and chunk loading
+  // Simplified Webpack configuration to avoid build errors
   webpack: (config, { dev, isServer }) => {
-    // Disable CSS optimization in production builds
+    // Completely disable minimization for client-side builds to avoid CSS errors
     if (!dev && !isServer) {
       config.optimization.minimize = false;
+      config.optimization.minimizer = [];
     }
     
-    // Fix for missing module chunks
-    config.optimization.splitChunks = {
-      chunks: 'all',
-      cacheGroups: {
-        default: {
-          minChunks: 1,
-          priority: -20,
-          reuseExistingChunk: true,
-        },
-      },
-    };
-    
     return config;
+  },
+  
+  // Redirect configuration for fallback
+  async redirects() {
+    return [
+      {
+        source: '/index.html',
+        destination: '/',
+        permanent: true,
+      },
+    ];
   },
 }
 

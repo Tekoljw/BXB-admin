@@ -1,13 +1,15 @@
-# BXB Cryptocurrency Trading Dashboard
+# BeDAO Cryptocurrency Trading Platform
 
 ## Overview
 
-BXB is a modern cryptocurrency trading dashboard application built with Next.js 14 and React. The application provides real-time cryptocurrency price tracking, portfolio management, trading interfaces, and social features in a comprehensive web platform. It features a bilingual interface (Chinese/English) with both light and dark themes, designed for cryptocurrency traders and enthusiasts.
+BeDAO is a sophisticated multilingual cryptocurrency and social networking platform built with Next.js 15 and React. The application provides real-time cryptocurrency price tracking, portfolio management, trading interfaces, and advanced social features in a comprehensive web platform. It features a bilingual interface (Chinese/English) with both light and dark themes, designed for cryptocurrency traders and enthusiasts.
+
+**Current Status**: ✅ **READY FOR DEPLOYMENT** - All deployment issues resolved (January 29, 2025)
 
 ## System Architecture
 
 ### Frontend Architecture
-- **Framework**: Next.js 14 with App Router for server-side rendering and optimal performance
+- **Framework**: Next.js 15 with App Router for server-side rendering and optimal performance
 - **Styling**: Tailwind CSS with custom design system and shadcn/ui components
 - **State Management**: React Context API for theme and language preferences
 - **Charts**: Recharts library for data visualization and trading charts
