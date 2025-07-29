@@ -1,0 +1,26 @@
+{
+  "name": "BeDAO-ho Next.js App",
+  "description": "Next.js cryptocurrency trading platform",
+  "keywords": ["nextjs", "react", "cryptocurrency", "trading"],
+  "website": "https://nextjs.org/",
+  "repository": "https://github.com/vercel/next.js",
+  "env": {
+    "NODE_ENV": {
+      "value": "production"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "scripts": {
+    "postdeploy": "echo 'Deployment complete'"
+  }
+}

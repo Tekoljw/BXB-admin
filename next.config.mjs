@@ -12,7 +12,10 @@ const nextConfig = {
   
   // Replit deployment configuration - Autoscale mode (NOT static)
   serverExternalPackages: ['@neondatabase/serverless'],
-  output: 'standalone', // Required for Replit Autoscale deployment - DO NOT CHANGE TO 'export'
+  output: 'standalone', // CRITICAL: Required for Replit Autoscale deployment - NEVER change to 'export'
+  
+  // Explicitly disable static export
+  distDir: '.next',
   
   // Cross-origin configuration for Replit
   headers: async () => {

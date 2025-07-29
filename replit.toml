@@ -1,13 +1,12 @@
+# Replit deployment configuration
 [deployment]
 deploymentTarget = "autoscale"
-publicDir = "public"
-
-[build]
-main = "package.json"
-run = "npm run build"
+buildCommand = "npm run build"
+run = "npm start"
 
 [env]
 NODE_ENV = "production"
+PORT = "5000"
 
 [[ports]]
 localPort = 5000
