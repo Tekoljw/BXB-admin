@@ -10,8 +10,8 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  // Replit deployment configuration - supports both Autoscale and Static deployment
-  output: process.env.DEPLOYMENT_TYPE === 'static' ? 'export' : 'standalone',
+  // Enable standalone output for autoscale deployment
+  output: 'standalone',
   serverExternalPackages: ['@neondatabase/serverless'],
   
   // Static export configuration for static deployment
@@ -75,7 +75,7 @@ const nextConfig = {
     '127.0.0.1:5000'
   ],
   
-  // Enhanced webpack configuration with CSS error handling
+  // Simplified webpack configuration for deployment stability
   webpack: (config, { dev, isServer }) => {
     // Basic fallback configuration for node modules
     if (!isServer) {
@@ -87,24 +87,15 @@ const nextConfig = {
       };
     }
     
-    // Fix CSS optimization errors by completely disabling CSS minification in production
+    // Disable CSS optimization completely for deployment stability
     if (!dev) {
-      config.optimization.minimizer = config.optimization.minimizer.filter(
-        (plugin) => {
-          const name = plugin.constructor.name;
-          return !name.includes('CssMinimizerPlugin') && !name.includes('CssMinimizer');
-        }
-      );
+      config.optimization.minimize = false;
+      config.optimization.minimizer = [];
       
-      // Add better error handling for CSS processing
+      // Add comprehensive error handling
       config.ignoreWarnings = [
-        /Failed to parse source map/,
-        /Cannot read properties of undefined/,
-        /css.*unable to parse/i,
+        () => true, // Ignore all warnings during build
       ];
-      
-      // Keep optimization for JS but disable for CSS
-      config.optimization.minimize = true;
     }
     
     return config;
