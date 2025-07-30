@@ -5,6 +5,7 @@ channel = "stable-24_05"
 build = "./build-deploy.sh"
 run = "npm start"
 deploymentTarget = "autoscale"
+ignorePorts = false
 
 [[ports]]
 localPort = 5000
