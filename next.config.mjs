@@ -84,7 +84,7 @@ const nextConfig = {
   ],
   
   // Webpack configuration for Replit deployment
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config, { dev, isServer, webpack }) => {
     // Add proper fallbacks for browser environment
     if (!isServer) {
       config.resolve.fallback = {
@@ -96,12 +96,21 @@ const nextConfig = {
       };
     }
     
-    // Disable CSS optimization to prevent parsing errors
+    // Simplified webpack configuration for stable builds
     if (!dev) {
       config.optimization = {
         ...config.optimization,
         minimize: false,
       };
+      
+      // Define global variables to prevent "self is not defined" errors
+      config.plugins = config.plugins || [];
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          'typeof self': JSON.stringify('undefined'),
+          'typeof window': isServer ? JSON.stringify('undefined') : JSON.stringify('object'),
+        })
+      );
     }
     
     return config;
