@@ -3,7 +3,7 @@ channel = "stable-24_05"
 
 [deployment]
 build = "./build-deploy.sh"
-run = "npm start"
+run = "./start-production.sh"
 deploymentTarget = "autoscale"
 ignorePorts = false
 
@@ -17,3 +17,5 @@ NPM_CONFIG_LEGACY_PEER_DEPS = "true"
 REPLIT_DISABLE_PACKAGE_LAYER = "true"
 NPM_CONFIG_FORCE = "true"
 NPM_CONFIG_UPDATE_NOTIFIER = "false"
+HOSTNAME = "0.0.0.0"
+PORT = "5000"
