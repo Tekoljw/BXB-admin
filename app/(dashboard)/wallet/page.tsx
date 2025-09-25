@@ -167,8 +167,8 @@ export default function WalletPage() {
   const [showGenerateKeyModal, setShowGenerateKeyModal] = useState(false) // 生成密钥弹窗
   const [generatedApiKey, setGeneratedApiKey] = useState("") // 生成的临时密钥
   
-  // 法币出款台弹窗状态
-  const [showWithdrawalModal, setShowWithdrawalModal] = useState(false) // 法币出款台弹窗
+  // 出金台弹窗状态
+  const [showWithdrawalModal, setShowWithdrawalModal] = useState(false) // 出金台弹窗
   
   // 获取代付备用金余额（动态数据）
   const getStandbyFundBalance = (currency: string): number => {
@@ -177,16 +177,9 @@ export default function WalletPage() {
       'EUR': 35280.50,
       'GBP': 29850.75,
       'JPY': 4250000,
-      'CNY': 278650.25,
-      'HKD': 298650.75,
-      'KRW': 46850000
+      'CNY': 278650.25
     }
     return balances[currency as keyof typeof balances] || 0
-  }
-
-  // 通用获取余额函数（用于法币出款台）
-  const getBalance = (currency: string): number => {
-    return getStandbyFundBalance(currency)
   }
 
   // 格式化货币显示
@@ -196,29 +189,27 @@ export default function WalletPage() {
       'EUR': '€',
       'GBP': '£',
       'JPY': '¥',
-      'CNY': '¥',
-      'HKD': 'HK$',
-      'KRW': '₩'
+      'CNY': '¥'
     }
     const symbol = symbols[currency] || currency
     return `${symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }
 
-  // 处理法币出款申请提交
+  // 处理出金申请提交
   const handleWithdrawalSubmit = async (formData: WithdrawalFormData) => {
     try {
-      // 这里可以调用API提交法币出款申请
-      console.log('法币出款申请提交:', formData)
+      // 这里可以调用API提交出金申请
+      console.log('出金申请提交:', formData)
       
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       // 显示成功消息
-      alert(`法币出款申请已提交！\n金额：${formatCurrencyDisplay(parseFloat(formData.amount), formData.selectedCurrency)}\n收款人：${formData.recipientName}\n预计到账时间：1-3个工作日`)
+      alert(`出金申请已提交！\n金额：${formatCurrencyDisplay(parseFloat(formData.amount), formData.currency)}\n收款人：${formData.recipientName}\n预计到账时间：1-3个工作日`)
       
       return Promise.resolve()
     } catch (error) {
-      console.error('法币出款申请提交失败:', error)
+      console.error('出金申请提交失败:', error)
       throw error
     }
   }
@@ -1107,7 +1098,7 @@ export default function WalletPage() {
       name: '资金记录',
       tabs: {
         deposit: '入金记录',
-        withdraw: '法币出款记录',
+        withdraw: '出金记录',
         internal_transfer: '内转记录',
         transfer: '划转记录',
         commission: '佣金结算记录',
@@ -5078,7 +5069,7 @@ export default function WalletPage() {
                         代付备用金：{formatCurrencyDisplay(getStandbyFundBalance(fiatTab), fiatTab)}
                       </div>
                       
-                      {/* 法币出款台按钮 */}
+                      {/* 出金台按钮 */}
                       <div className="flex justify-end">
                         <Button
                           onClick={(e) => {
@@ -5089,7 +5080,7 @@ export default function WalletPage() {
                           size="sm"
                         >
                           <Upload className="h-4 w-4 mr-2" />
-                          法币出款台
+                          出金台
                         </Button>
                       </div>
                     </div>
@@ -5513,7 +5504,7 @@ export default function WalletPage() {
                                     <ArrowDownLeft className="h-3 w-3" />
                                   </Button>
                                   
-                                  {/* 法币出款台按钮 - 移动端 */}
+                                  {/* 出金台按钮 - 移动端 */}
                                   <Button 
                                     size="sm" 
                                     className="bg-[#00D4AA] text-white hover:bg-[#00B898] border-0 w-8 h-8 p-0"
@@ -5522,7 +5513,7 @@ export default function WalletPage() {
                                       e.stopPropagation()
                                       setShowWithdrawalModal(true)
                                     }}
-                                    title="法币出款台"
+                                    title="出金台"
                                   >
                                     <Upload className="h-3 w-3" />
                                   </Button>
@@ -14861,7 +14852,7 @@ export default function WalletPage() {
                           {(() => {
                             const tabMap = {
                               deposit: "入金记录",
-                              withdraw: "法币出款记录", 
+                              withdraw: "出金记录", 
                               internal_transfer: "内转记录",
                               transfer: "划转记录",
                               other: "其他记录"
@@ -14873,7 +14864,7 @@ export default function WalletPage() {
                               case "入金记录":
                                 headers = ['时间', '币种', '数量', '地址/收款账号', '交易哈希', '状态']
                                 break
-                              case "法币出款记录":
+                              case "出金记录":
                                 headers = ['时间', '币种', '数量', '提币网络', '地址/收款账号', '交易哈希', '状态']
                                 break
                               case "内转记录":
@@ -14902,7 +14893,7 @@ export default function WalletPage() {
                         {records.map((record, index) => {
                           const tabMap = {
                             deposit: "入金记录",
-                            withdraw: "法币出款记录", 
+                            withdraw: "出金记录", 
                             internal_transfer: "内转记录",
                             transfer: "划转记录",
                             other: "其他记录"
@@ -14914,7 +14905,7 @@ export default function WalletPage() {
                             case "入金记录":
                               cellData = [record.time, record.currency, record.amount, record.address, record.txHash, record.status]
                               break
-                            case "法币出款记录":
+                            case "出金记录":
                               cellData = [record.time, record.currency, record.amount, record.network, record.address, record.txHash, record.status]
                               break
                             case "内转记录":
@@ -14953,7 +14944,7 @@ export default function WalletPage() {
                     const getColumnConfig = () => {
                       const tabMap = {
                         deposit: "入金记录",
-                        withdraw: "法币出款记录", 
+                        withdraw: "出金记录", 
                         internal_transfer: "内转记录",
                         transfer: "划转记录",
                         other: "其他记录"
@@ -14970,7 +14961,7 @@ export default function WalletPage() {
                             { key: 'txHash', label: '交易哈希' },
                             { key: 'status', label: '状态' }
                           ]
-                        case "法币出款记录":
+                        case "出金记录":
                           return [
                             { key: 'time', label: '时间' },
                             { key: 'currency', label: '币种' },
@@ -15069,7 +15060,7 @@ export default function WalletPage() {
           status: "处理中"
         }
       ],
-      "法币出款记录": [
+      "出金记录": [
         {
           time: "2024-01-14 20:30:15",
           currency: "USDT",
@@ -15247,7 +15238,7 @@ export default function WalletPage() {
       case "funds":
         const tabNameMap = {
           deposit: "入金记录",
-          withdraw: "法币出款记录",
+          withdraw: "出金记录",
           internal_transfer: "内转记录",
           transfer: "划转记录",
           commission: "佣金结算记录",
@@ -15965,7 +15956,7 @@ export default function WalletPage() {
                 if (orderTabType === "资金记录") {
                   const tabMap = {
                     deposit: "入金记录",
-                    withdraw: "法币出款记录", 
+                    withdraw: "出金记录", 
                     internal_transfer: "内转记录",
                     transfer: "划转记录",
                     commission: "佣金结算记录",
@@ -15975,7 +15966,7 @@ export default function WalletPage() {
                   
                   switch (recordType) {
                     case "入金记录":
-                    case "法币出款记录":
+                    case "出金记录":
                     case "内转记录":
                       return (
                         <div className={`p-4 rounded-lg border ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} mb-4`}>
@@ -17917,7 +17908,7 @@ export default function WalletPage() {
                           if (orderTabType === "资金记录") {
                             const tabMap = {
                               deposit: "入金记录",
-                              withdraw: "法币出款记录", 
+                              withdraw: "出金记录", 
                               internal_transfer: "内转记录",
                               transfer: "划转记录",
                               commission: "佣金结算记录"
@@ -17927,7 +17918,7 @@ export default function WalletPage() {
                             switch (recordType) {
                               case "入金记录":
                                 return ['时间', '币种', '数量', '地址/收款账号', '交易哈希', '状态']
-                              case "法币出款记录":
+                              case "出金记录":
                                 return ['时间', '币种', '数量', '提币网络', '地址/收款账号', '交易哈希', '状态']
                               case "内转记录":
                                 return ['时间', '币种', '转入/转出', '数量', '状态']
@@ -18028,7 +18019,7 @@ export default function WalletPage() {
                         if (orderTabType === "资金记录") {
                           const tabMap = {
                             deposit: "入金记录",
-                            withdraw: "法币出款记录", 
+                            withdraw: "出金记录", 
                             internal_transfer: "内转记录",
                             transfer: "划转记录",
                             commission: "佣金结算记录"
@@ -18038,7 +18029,7 @@ export default function WalletPage() {
                           switch (recordType) {
                             case "入金记录":
                               return [record.time, record.currency, record.amount, record.address, record.txHash, record.status]
-                            case "法币出款记录":
+                            case "出金记录":
                               return [record.time, record.currency, record.amount, record.network, record.address, record.txHash, record.status]
                             case "内转记录":
                               return [record.time, record.currency, record.direction, record.amount, record.status]
@@ -23141,14 +23132,13 @@ export default function WalletPage() {
         </div>
       )}
 
-      {/* 法币出款台弹窗 */}
+      {/* 出金台弹窗 */}
       <WithdrawalModal
         isOpen={showWithdrawalModal}
         onClose={() => setShowWithdrawalModal(false)}
         onSubmit={handleWithdrawalSubmit}
-        selectedCurrency={fiatTab}
+        currentCurrency={fiatTab}
         availableBalance={getStandbyFundBalance(fiatTab)}
-        getBalance={getBalance}
       />
 
       {/* 其他弹窗保留原有结构 - 临时注释掉内联模态框 */}
@@ -23160,7 +23150,7 @@ export default function WalletPage() {
             <div className={`p-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
               <div className="flex items-center justify-between">
                 <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  法币出款台
+                  代付出金台
                 </h3>
                 <button
                   onClick={() => {
