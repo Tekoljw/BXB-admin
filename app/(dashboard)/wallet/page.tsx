@@ -5588,14 +5588,29 @@ export default function WalletPage() {
                                 </div>
                                 <div className="flex items-center space-x-6">
                                   <div className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.standbyBalance}</div>
-                                  <Button 
-                                    size="sm" 
-                                    className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-10 h-10 p-0"
-                                    variant="outline"
-                                    onClick={(e) => e.stopPropagation()}
-                                  >
-                                    <ArrowDownLeft className="h-4 w-4" />
-                                  </Button>
+                                  <div className="flex items-center space-x-2">
+                                    <Button 
+                                      size="sm" 
+                                      className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-10 h-10 p-0"
+                                      variant="outline"
+                                      onClick={(e) => e.stopPropagation()}
+                                      title="充值"
+                                    >
+                                      <ArrowDownLeft className="h-4 w-4" />
+                                    </Button>
+                                    <Button 
+                                      size="sm" 
+                                      className="bg-[#00D4AA] text-white hover:bg-[#00B898] border-0 w-10 h-10 p-0"
+                                      variant="outline"
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        setShowWithdrawalModal(true)
+                                      }}
+                                      title="手动代付"
+                                    >
+                                      <Upload className="h-4 w-4" />
+                                    </Button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
