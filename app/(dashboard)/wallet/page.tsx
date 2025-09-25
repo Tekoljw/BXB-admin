@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import TransactionProgress from "@/components/transaction-progress"
+import { WithdrawalModal, type WithdrawalFormData } from "@/components/wallet/withdrawal-modal"
 
 
 import { useRouter } from "next/navigation"
@@ -165,6 +166,53 @@ export default function WalletPage() {
   const [showApiDocsModal, setShowApiDocsModal] = useState(false) // API文档选择弹窗
   const [showGenerateKeyModal, setShowGenerateKeyModal] = useState(false) // 生成密钥弹窗
   const [generatedApiKey, setGeneratedApiKey] = useState("") // 生成的临时密钥
+  
+  // 出金台弹窗状态
+  const [showWithdrawalModal, setShowWithdrawalModal] = useState(false) // 出金台弹窗
+  
+  // 获取代付备用金余额（动态数据）
+  const getStandbyFundBalance = (currency: string): number => {
+    const balances = {
+      'USD': 38520.00,
+      'EUR': 35280.50,
+      'GBP': 29850.75,
+      'JPY': 4250000,
+      'CNY': 278650.25
+    }
+    return balances[currency as keyof typeof balances] || 0
+  }
+
+  // 格式化货币显示
+  const formatCurrencyDisplay = (amount: number, currency: string): string => {
+    const symbols: { [key: string]: string } = {
+      'USD': '$',
+      'EUR': '€',
+      'GBP': '£',
+      'JPY': '¥',
+      'CNY': '¥'
+    }
+    const symbol = symbols[currency] || currency
+    return `${symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  }
+
+  // 处理出金申请提交
+  const handleWithdrawalSubmit = async (formData: WithdrawalFormData) => {
+    try {
+      // 这里可以调用API提交出金申请
+      console.log('出金申请提交:', formData)
+      
+      // 模拟API调用
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // 显示成功消息
+      alert(`出金申请已提交！\n金额：${formatCurrencyDisplay(parseFloat(formData.amount), formData.currency)}\n收款人：${formData.recipientName}\n预计到账时间：1-3个工作日`)
+      
+      return Promise.resolve()
+    } catch (error) {
+      console.error('出金申请提交失败:', error)
+      throw error
+    }
+  }
   
   // 确保当前币种页签在选中的币种列表中
   useEffect(() => {
@@ -5017,8 +5065,23 @@ export default function WalletPage() {
                       <div className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         {balanceVisible ? "$125,860.00" : "****"}
                       </div>
-                      <div className="text-gray-500 text-sm">
-                        代付备用金：$38,520.00
+                      <div className="text-gray-500 text-sm mb-4">
+                        代付备用金：{formatCurrencyDisplay(getStandbyFundBalance(fiatTab), fiatTab)}
+                      </div>
+                      
+                      {/* 出金台按钮 */}
+                      <div className="flex justify-end">
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setShowWithdrawalModal(true)
+                          }}
+                          className="bg-[#00D4AA] text-white hover:bg-[#00B898] border-0"
+                          size="sm"
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          出金台
+                        </Button>
                       </div>
                     </div>
 
@@ -5426,17 +5489,35 @@ export default function WalletPage() {
                                   <div className="text-sm text-gray-500">代付备用金</div>
                                   <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{asset.standbyBalance}</div>
                                 </div>
-                                <Button 
-                                  size="sm" 
-                                  className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-8 h-8 p-0"
-                                  variant="outline"
-                                  onClick={(e) => {
-                                    setStandbyRechargeCurrency(asset.currency)
-                                    handleStandbyRechargeClick(e)
-                                  }}
-                                >
-                                  <ArrowDownLeft className="h-3 w-3" />
-                                </Button>
+                                <div className="flex space-x-2">
+                                  {/* 充值按钮 */}
+                                  <Button 
+                                    size="sm" 
+                                    className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-8 h-8 p-0"
+                                    variant="outline"
+                                    onClick={(e) => {
+                                      setStandbyRechargeCurrency(asset.currency)
+                                      handleStandbyRechargeClick(e)
+                                    }}
+                                    title="充值"
+                                  >
+                                    <ArrowDownLeft className="h-3 w-3" />
+                                  </Button>
+                                  
+                                  {/* 出金台按钮 - 移动端 */}
+                                  <Button 
+                                    size="sm" 
+                                    className="bg-[#00D4AA] text-white hover:bg-[#00B898] border-0 w-8 h-8 p-0"
+                                    variant="outline"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      setShowWithdrawalModal(true)
+                                    }}
+                                    title="出金台"
+                                  >
+                                    <Upload className="h-3 w-3" />
+                                  </Button>
+                                </div>
                               </div>
                             </div>
                             
@@ -23044,6 +23125,338 @@ export default function WalletPage() {
                   }`}
                 >
                   加载更多
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 出金台弹窗 */}
+      <WithdrawalModal
+        isOpen={showWithdrawalModal}
+        onClose={() => setShowWithdrawalModal(false)}
+        onSubmit={handleWithdrawalSubmit}
+        currentCurrency={fiatTab}
+        availableBalance={getStandbyFundBalance(fiatTab)}
+      />
+
+      {/* 其他弹窗保留原有结构 - 临时注释掉内联模态框 */}
+      {false && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`rounded-lg shadow-xl w-full max-w-lg ${
+            isDark ? 'bg-gray-800' : 'bg-white'
+          }`}>
+            <div className={`p-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="flex items-center justify-between">
+                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  代付出金台
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowWithdrawalModal(false)
+                    setWithdrawalErrors({})
+                    setWithdrawalForm({
+                      recipientName: "",
+                      recipientAccount: "",
+                      recipientBank: "",
+                      amount: "",
+                      paymentMethod: "银行转账",
+                      purpose: "",
+                      currency: "USD"
+                    })
+                  }}
+                  className={`p-2 rounded-lg hover:bg-gray-100 ${isDark ? 'hover:bg-gray-700' : ''} transition-colors`}
+                >
+                  <X className={`h-5 w-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6">
+              <div className="space-y-4">
+                {/* 当前余额显示 */}
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                  <div className="flex justify-between items-center">
+                    <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      代付备用金余额
+                    </span>
+                    <span className={`font-semibold text-[#00D4AA]`}>
+                      $38,520.00
+                    </span>
+                  </div>
+                </div>
+
+                {/* 收款人信息 */}
+                <div className="space-y-3">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    收款人姓名 *
+                  </label>
+                  <input
+                    type="text"
+                    value={withdrawalForm.recipientName}
+                    onChange={(e) => {
+                      setWithdrawalForm(prev => ({ ...prev, recipientName: e.target.value }))
+                      if (withdrawalErrors.recipientName) {
+                        setWithdrawalErrors(prev => ({ ...prev, recipientName: "" }))
+                      }
+                    }}
+                    className={`w-full px-3 py-2 border rounded-lg text-sm transition-colors ${
+                      withdrawalErrors.recipientName 
+                        ? 'border-red-500' 
+                        : isDark 
+                          ? 'border-gray-600 bg-gray-700 text-white focus:border-[#00D4AA]' 
+                          : 'border-gray-300 bg-white text-gray-900 focus:border-[#00D4AA]'
+                    } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+                    placeholder="请输入收款人姓名"
+                  />
+                  {withdrawalErrors.recipientName && (
+                    <p className="text-red-500 text-xs">{withdrawalErrors.recipientName}</p>
+                  )}
+                </div>
+
+                {/* 收款账户 */}
+                <div className="space-y-3">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    收款账户 *
+                  </label>
+                  <input
+                    type="text"
+                    value={withdrawalForm.recipientAccount}
+                    onChange={(e) => {
+                      setWithdrawalForm(prev => ({ ...prev, recipientAccount: e.target.value }))
+                      if (withdrawalErrors.recipientAccount) {
+                        setWithdrawalErrors(prev => ({ ...prev, recipientAccount: "" }))
+                      }
+                    }}
+                    className={`w-full px-3 py-2 border rounded-lg text-sm transition-colors ${
+                      withdrawalErrors.recipientAccount 
+                        ? 'border-red-500' 
+                        : isDark 
+                          ? 'border-gray-600 bg-gray-700 text-white focus:border-[#00D4AA]' 
+                          : 'border-gray-300 bg-white text-gray-900 focus:border-[#00D4AA]'
+                    } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+                    placeholder="请输入银行账户号码或IBAN"
+                  />
+                  {withdrawalErrors.recipientAccount && (
+                    <p className="text-red-500 text-xs">{withdrawalErrors.recipientAccount}</p>
+                  )}
+                </div>
+
+                {/* 收款银行 */}
+                <div className="space-y-3">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    收款银行 *
+                  </label>
+                  <input
+                    type="text"
+                    value={withdrawalForm.recipientBank}
+                    onChange={(e) => {
+                      setWithdrawalForm(prev => ({ ...prev, recipientBank: e.target.value }))
+                      if (withdrawalErrors.recipientBank) {
+                        setWithdrawalErrors(prev => ({ ...prev, recipientBank: "" }))
+                      }
+                    }}
+                    className={`w-full px-3 py-2 border rounded-lg text-sm transition-colors ${
+                      withdrawalErrors.recipientBank 
+                        ? 'border-red-500' 
+                        : isDark 
+                          ? 'border-gray-600 bg-gray-700 text-white focus:border-[#00D4AA]' 
+                          : 'border-gray-300 bg-white text-gray-900 focus:border-[#00D4AA]'
+                    } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+                    placeholder="请输入收款银行名称"
+                  />
+                  {withdrawalErrors.recipientBank && (
+                    <p className="text-red-500 text-xs">{withdrawalErrors.recipientBank}</p>
+                  )}
+                </div>
+
+                {/* 转出金额 */}
+                <div className="space-y-3">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    转出金额 *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={withdrawalForm.amount}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        setWithdrawalForm(prev => ({ ...prev, amount: value }))
+                        if (withdrawalErrors.amount) {
+                          setWithdrawalErrors(prev => ({ ...prev, amount: "" }))
+                        }
+                      }}
+                      className={`w-full pl-8 pr-3 py-2 border rounded-lg text-sm transition-colors ${
+                        withdrawalErrors.amount 
+                          ? 'border-red-500' 
+                          : isDark 
+                            ? 'border-gray-600 bg-gray-700 text-white focus:border-[#00D4AA]' 
+                            : 'border-gray-300 bg-white text-gray-900 focus:border-[#00D4AA]'
+                      } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+                      placeholder="请输入转出金额"
+                      min="0"
+                      max="38520"
+                      step="0.01"
+                    />
+                    <DollarSign className={`absolute left-2 top-2.5 h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                  </div>
+                  {withdrawalErrors.amount && (
+                    <p className="text-red-500 text-xs">{withdrawalErrors.amount}</p>
+                  )}
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    最大可转出金额：$38,520.00
+                  </p>
+                </div>
+
+                {/* 支付方式 */}
+                <div className="space-y-3">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    支付方式 *
+                  </label>
+                  <select
+                    value={withdrawalForm.paymentMethod}
+                    onChange={(e) => {
+                      setWithdrawalForm(prev => ({ ...prev, paymentMethod: e.target.value }))
+                    }}
+                    className={`w-full px-3 py-2 border rounded-lg text-sm transition-colors ${
+                      isDark 
+                        ? 'border-gray-600 bg-gray-700 text-white focus:border-[#00D4AA]' 
+                        : 'border-gray-300 bg-white text-gray-900 focus:border-[#00D4AA]'
+                    } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+                  >
+                    <option value="银行转账">银行转账</option>
+                    <option value="SWIFT电汇">SWIFT电汇</option>
+                    <option value="ACH转账">ACH转账</option>
+                    <option value="支票">支票</option>
+                  </select>
+                </div>
+
+                {/* 用途说明 */}
+                <div className="space-y-3">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    用途说明 *
+                  </label>
+                  <textarea
+                    value={withdrawalForm.purpose}
+                    onChange={(e) => {
+                      setWithdrawalForm(prev => ({ ...prev, purpose: e.target.value }))
+                      if (withdrawalErrors.purpose) {
+                        setWithdrawalErrors(prev => ({ ...prev, purpose: "" }))
+                      }
+                    }}
+                    rows={3}
+                    className={`w-full px-3 py-2 border rounded-lg text-sm transition-colors resize-none ${
+                      withdrawalErrors.purpose 
+                        ? 'border-red-500' 
+                        : isDark 
+                          ? 'border-gray-600 bg-gray-700 text-white focus:border-[#00D4AA]' 
+                          : 'border-gray-300 bg-white text-gray-900 focus:border-[#00D4AA]'
+                    } focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20`}
+                    placeholder="请详细说明资金用途，例如：商户分成、供应商付款、运营费用等"
+                  />
+                  {withdrawalErrors.purpose && (
+                    <p className="text-red-500 text-xs">{withdrawalErrors.purpose}</p>
+                  )}
+                </div>
+
+                {/* 重要提醒 */}
+                <div className={`p-3 rounded-lg ${isDark ? 'bg-yellow-900/20' : 'bg-yellow-50'}`}>
+                  <div className="flex items-start space-x-2">
+                    <div className={`w-4 h-4 rounded-full bg-yellow-500 flex-shrink-0 mt-0.5`}></div>
+                    <div>
+                      <p className={`text-sm ${isDark ? 'text-yellow-300' : 'text-yellow-700'} font-medium`}>
+                        重要提醒
+                      </p>
+                      <p className={`text-xs ${isDark ? 'text-yellow-400' : 'text-yellow-600'} mt-1`}>
+                        • 出金申请提交后将进入审核流程，通常需要1-3个工作日<br/>
+                        • 请确保收款信息准确无误，错误信息可能导致退回<br/>
+                        • 大额出金(>$10,000)需要额外审核时间
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* 按钮组 */}
+              <div className="flex space-x-3 mt-6">
+                <button
+                  onClick={() => {
+                    setShowWithdrawalModal(false)
+                    setWithdrawalErrors({})
+                    setWithdrawalForm({
+                      recipientName: "",
+                      recipientAccount: "",
+                      recipientBank: "",
+                      amount: "",
+                      paymentMethod: "银行转账",
+                      purpose: "",
+                      currency: "USD"
+                    })
+                  }}
+                  className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+                    isDark 
+                      ? "border-gray-600 bg-transparent hover:bg-gray-700 text-gray-300" 
+                      : "border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700"
+                  }`}
+                >
+                  取消
+                </button>
+                <button
+                  onClick={() => {
+                    // 表单验证
+                    const errors: {[key: string]: string} = {}
+                    
+                    if (!withdrawalForm.recipientName.trim()) {
+                      errors.recipientName = "请输入收款人姓名"
+                    }
+                    
+                    if (!withdrawalForm.recipientAccount.trim()) {
+                      errors.recipientAccount = "请输入收款账户"
+                    }
+                    
+                    if (!withdrawalForm.recipientBank.trim()) {
+                      errors.recipientBank = "请输入收款银行"
+                    }
+                    
+                    if (!withdrawalForm.amount || parseFloat(withdrawalForm.amount) <= 0) {
+                      errors.amount = "请输入有效的转出金额"
+                    } else if (parseFloat(withdrawalForm.amount) > 38520) {
+                      errors.amount = "转出金额不能超过代付备用金余额 $38,520.00"
+                    }
+                    
+                    if (!withdrawalForm.purpose.trim()) {
+                      errors.purpose = "请输入用途说明"
+                    } else if (withdrawalForm.purpose.trim().length < 10) {
+                      errors.purpose = "用途说明至少需要10个字符"
+                    }
+                    
+                    if (Object.keys(errors).length > 0) {
+                      setWithdrawalErrors(errors)
+                      return
+                    }
+                    
+                    // 提交出金申请
+                    alert(`出金申请已提交！\n金额：$${withdrawalForm.amount}\n收款人：${withdrawalForm.recipientName}\n预计到账时间：1-3个工作日`)
+                    setShowWithdrawalModal(false)
+                    setWithdrawalErrors({})
+                    setWithdrawalForm({
+                      recipientName: "",
+                      recipientAccount: "",
+                      recipientBank: "",
+                      amount: "",
+                      paymentMethod: "银行转账",
+                      purpose: "",
+                      currency: "USD"
+                    })
+                  }}
+                  className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    isDark 
+                      ? "bg-[#00D4AA] hover:bg-[#00B898] text-black" 
+                      : "bg-[#00D4AA] hover:bg-[#00B898] text-white"
+                  }`}
+                >
+                  提交申请
                 </button>
               </div>
             </div>
