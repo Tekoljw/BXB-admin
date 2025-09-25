@@ -14,7 +14,7 @@ interface WithdrawalModalProps {
   onClose: () => void
   onSubmit: (formData: WithdrawalFormData) => void
   currentCurrency: string
-  availableBalance: number
+  getAvailableBalanceForCurrency: (currency: string) => number
 }
 
 export interface WithdrawalFormData {
@@ -36,7 +36,7 @@ export function WithdrawalModal({
   onClose, 
   onSubmit, 
   currentCurrency, 
-  availableBalance 
+  getAvailableBalanceForCurrency 
 }: WithdrawalModalProps) {
   const { theme } = useTheme()
   const isDark = theme === "dark"
@@ -62,6 +62,11 @@ export function WithdrawalModal({
   useEffect(() => {
     setFormData(prev => ({ ...prev, currency: currentCurrency }))
   }, [currentCurrency])
+
+  // 获取当前选择货币的可用余额
+  const getCurrentBalance = () => {
+    return getAvailableBalanceForCurrency(formData.currency)
+  }
 
   // 重置表单
   const resetForm = () => {
@@ -116,16 +121,17 @@ export function WithdrawalModal({
     }
 
     // 金额验证
+    const currentBalance = getCurrentBalance()
     if (!formData.amount) {
-      newErrors.amount = "请输入转出金额"
+      newErrors.amount = "请输入代付金额"
     } else {
       const amount = parseFloat(formData.amount)
       if (isNaN(amount) || amount <= 0) {
-        newErrors.amount = "请输入有效的转出金额"
-      } else if (amount > availableBalance) {
-        newErrors.amount = `转出金额不能超过可用余额 ${formatCurrency(availableBalance, currentCurrency)}`
+        newErrors.amount = "请输入有效的代付金额"
+      } else if (amount > currentBalance) {
+        newErrors.amount = `代付金额不能超过代付备佣金余额 ${formatCurrency(currentBalance, formData.currency)}`
       } else if (amount < 10) {
-        newErrors.amount = "最小转出金额为 10"
+        newErrors.amount = "最小代付金额为 10"
       }
     }
 
@@ -155,7 +161,7 @@ export function WithdrawalModal({
       resetForm()
       onClose()
     } catch (error) {
-      console.error("出金申请提交失败:", error)
+      console.error("代付申请提交失败:", error)
       // 这里可以添加错误提示
     } finally {
       setIsSubmitting(false)
@@ -212,10 +218,10 @@ export function WithdrawalModal({
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Upload className="h-5 w-5 text-[#00D4AA]" />
-            <span>出金台</span>
+            <span>手动代付</span>
           </DialogTitle>
           <DialogDescription>
-            填写出金信息，资金将转入指定账户。请仔细核对信息以确保资金安全。
+            填写代付信息，资金将从代付备佣金转入指定账户。请仔细核对信息以确保资金安全。
           </DialogDescription>
         </DialogHeader>
 
@@ -225,9 +231,9 @@ export function WithdrawalModal({
             isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-200'
           }`}>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600 dark:text-gray-400">可用余额</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">代付备佣金可用余额</span>
               <span className="font-semibold text-[#00D4AA]">
-                {formatCurrency(availableBalance, currentCurrency)}
+                {formatCurrency(getCurrentBalance(), formData.currency)}
               </span>
             </div>
           </div>
@@ -295,23 +301,46 @@ export function WithdrawalModal({
           <div className="space-y-4">
             <h3 className="font-medium text-sm text-gray-700 dark:text-gray-300">转账信息</h3>
             
+            {/* 币种选择 */}
             <div className="space-y-2">
-              <Label htmlFor="amount">转出金额 *</Label>
+              <Label htmlFor="currency">法币币种 *</Label>
+              <Select 
+                value={formData.currency} 
+                onValueChange={(value) => handleFieldChange('currency', value)}
+                disabled={isSubmitting}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="选择法币币种" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="USD">美元 (USD)</SelectItem>
+                  <SelectItem value="CNY">人民币 (CNY)</SelectItem>
+                  <SelectItem value="EUR">欧元 (EUR)</SelectItem>
+                  <SelectItem value="GBP">英镑 (GBP)</SelectItem>
+                  <SelectItem value="JPY">日元 (JPY)</SelectItem>
+                  <SelectItem value="HKD">港币 (HKD)</SelectItem>
+                  <SelectItem value="KRW">韩元 (KRW)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="amount">代付金额 *</Label>
               <div className="relative">
                 <Input
                   id="amount"
                   type="number"
                   value={formData.amount}
                   onChange={(e) => handleFieldChange('amount', e.target.value)}
-                  placeholder="请输入转出金额"
+                  placeholder="请输入代付金额"
                   className={`${errors.amount ? 'border-red-500' : ''} pr-16`}
                   disabled={isSubmitting}
                   min="10"
-                  max={availableBalance}
+                  max={getCurrentBalance()}
                   step="0.01"
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
-                  {currentCurrency}
+                  {formData.currency}
                 </div>
               </div>
               {errors.amount && (
@@ -321,7 +350,7 @@ export function WithdrawalModal({
                 </div>
               )}
               <div className="text-xs text-gray-500">
-                最小转出金额：10 {currentCurrency}
+                最小代付金额：10 {formData.currency}
               </div>
             </div>
 
@@ -398,7 +427,7 @@ export function WithdrawalModal({
               ) : (
                 <div className="flex items-center space-x-2">
                   <Check className="h-4 w-4" />
-                  <span>确认出金</span>
+                  <span>确认代付</span>
                 </div>
               )}
             </Button>
