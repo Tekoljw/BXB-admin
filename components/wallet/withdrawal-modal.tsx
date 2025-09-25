@@ -192,7 +192,9 @@ export function WithdrawalModal({
       'EUR': '€',
       'GBP': '£',
       'JPY': '¥',
-      'CNY': '¥'
+      'CNY': '¥',
+      'HKD': 'HK$',
+      'KRW': '₩'
     }
     const symbol = symbols[currency] || currency
     return `${symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`

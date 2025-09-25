@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import TransactionProgress from "@/components/transaction-progress"
 import { WithdrawalModal, type WithdrawalFormData } from "@/components/wallet/withdrawal-modal"
 
@@ -139,6 +140,7 @@ export default function WalletPage() {
   const [transferAmount, setTransferAmount] = useState("") // 划转金额
   const [selectedPaymentCard, setSelectedPaymentCard] = useState<"fiat" | "crypto">("fiat") // BePAY支付卡片选择
   const [fiatTab, setFiatTab] = useState("商户资产") // 法币卡片页签
+  const [fiatCurrency, setFiatCurrency] = useState("USD") // 法币支付API的选择货币
   const [cryptoTab, setCryptoTab] = useState("商户资产") // 加密货币卡片页签
   const [currencyTab, setCurrencyTab] = useState("CNY") // 通道配置币种页签
   const [paymentMethodTab, setPaymentMethodTab] = useState("代收") // 通道配置支付方式页签
@@ -177,7 +179,9 @@ export default function WalletPage() {
       'EUR': 23500.50,
       'GBP': 19850.75,
       'JPY': 2850000,
-      'CNY': 186750.25
+      'CNY': 186750.25,
+      'HKD': 201250.80,
+      'KRW': 34750000
     }
     return balances[currency as keyof typeof balances] || 0
   }
@@ -189,7 +193,9 @@ export default function WalletPage() {
       'EUR': '€',
       'GBP': '£',
       'JPY': '¥',
-      'CNY': '¥'
+      'CNY': '¥',
+      'HKD': 'HK$',
+      'KRW': '₩'
     }
     const symbol = symbols[currency] || currency
     return `${symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -4904,25 +4910,38 @@ export default function WalletPage() {
                       <Banknote className={`h-4 w-4 ${selectedPaymentCard !== "fiat" ? "text-gray-400" : "text-[#00D4AA]"}`} />
                       <h3 className={`text-xs font-semibold ${selectedPaymentCard !== "fiat" ? "text-gray-400" : ""}`}>法币支付API</h3>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                      }}
-                      className={`flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-xs font-medium border border-black transition-all ${
-                        isDark 
-                          ? "bg-transparent text-white hover:bg-gray-800" 
-                          : "bg-white text-black hover:bg-gray-50"
-                      }`}
+                    <Select 
+                      value={fiatCurrency} 
+                      onValueChange={setFiatCurrency}
                     >
-                      <span className="text-[10px]">USD</span>
-                      <ChevronDown className="h-2 w-2" />
-                    </button>
+                      <SelectTrigger 
+                        onClick={(e) => e.stopPropagation()}
+                        className={`w-auto h-6 px-1.5 py-0.5 rounded-full text-xs font-medium border border-black transition-all ${
+                          isDark 
+                            ? "bg-transparent text-white hover:bg-gray-800" 
+                            : "bg-white text-black hover:bg-gray-50"
+                        }`}
+                      >
+                        <SelectValue>
+                          <span className="text-[10px]">{fiatCurrency}</span>
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="USD">美元 (USD)</SelectItem>
+                        <SelectItem value="CNY">人民币 (CNY)</SelectItem>
+                        <SelectItem value="EUR">欧元 (EUR)</SelectItem>
+                        <SelectItem value="GBP">英镑 (GBP)</SelectItem>
+                        <SelectItem value="JPY">日元 (JPY)</SelectItem>
+                        <SelectItem value="HKD">港币 (HKD)</SelectItem>
+                        <SelectItem value="KRW">韩元 (KRW)</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className={`text-lg font-bold mb-1 ${selectedPaymentCard !== "fiat" ? "text-gray-400" : isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {balanceVisible ? "$125,860" : "****"}
+                    {balanceVisible ? formatCurrencyDisplay(getCommissionBalance(fiatCurrency), fiatCurrency) : "****"}
                   </div>
                   <div className={`text-xs ${selectedPaymentCard !== "fiat" ? "text-gray-400" : "text-gray-500"}`}>
-                    代付备佣金：{formatCurrencyDisplay(getCommissionBalance("USD"), "USD")}
+                    代付备佣金：{formatCurrencyDisplay(getCommissionBalance(fiatCurrency), fiatCurrency)}
                   </div>
                 </div>
 
@@ -23137,7 +23156,7 @@ export default function WalletPage() {
         isOpen={showWithdrawalModal}
         onClose={() => setShowWithdrawalModal(false)}
         onSubmit={handleWithdrawalSubmit}
-        currentCurrency={fiatTab}
+        currentCurrency={fiatCurrency}
         getAvailableBalanceForCurrency={getCommissionBalance}
       />
 
