@@ -4904,19 +4904,33 @@ export default function WalletPage() {
                       <Banknote className={`h-4 w-4 ${selectedPaymentCard !== "fiat" ? "text-gray-400" : "text-[#00D4AA]"}`} />
                       <h3 className={`text-xs font-semibold ${selectedPaymentCard !== "fiat" ? "text-gray-400" : ""}`}>法币支付API</h3>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                      }}
-                      className={`flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-xs font-medium border border-black transition-all ${
-                        isDark 
-                          ? "bg-transparent text-white hover:bg-gray-800" 
-                          : "bg-white text-black hover:bg-gray-50"
-                      }`}
-                    >
-                      <span className="text-[10px]">USD</span>
-                      <ChevronDown className="h-2 w-2" />
-                    </button>
+                    <div className="flex items-center space-x-2">
+                      {/* 手动代付图标按钮 */}
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setShowWithdrawalModal(true)
+                        }}
+                        className="bg-[#00D4AA] text-white hover:bg-[#00B898] border-0 w-6 h-6 p-0"
+                        size="sm"
+                        title="手动代付"
+                      >
+                        <Upload className="h-3 w-3" />
+                      </Button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                        }}
+                        className={`flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-xs font-medium border border-black transition-all ${
+                          isDark 
+                            ? "bg-transparent text-white hover:bg-gray-800" 
+                            : "bg-white text-black hover:bg-gray-50"
+                        }`}
+                      >
+                        <span className="text-[10px]">USD</span>
+                        <ChevronDown className="h-2 w-2" />
+                      </button>
+                    </div>
                   </div>
                   <div className={`text-lg font-bold mb-1 ${selectedPaymentCard !== "fiat" ? "text-gray-400" : isDark ? 'text-white' : 'text-gray-900'}`}>
                     {balanceVisible ? "$125,860" : "****"}
