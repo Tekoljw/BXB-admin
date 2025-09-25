@@ -13,8 +13,9 @@ interface WithdrawalModalProps {
   isOpen: boolean
   onClose: () => void
   onSubmit: (formData: WithdrawalFormData) => void
-  currentCurrency: string
+  selectedCurrency: string
   availableBalance: number
+  getBalance: (currency: string) => number
 }
 
 export interface WithdrawalFormData {
@@ -24,7 +25,7 @@ export interface WithdrawalFormData {
   amount: string
   paymentMethod: string
   purpose: string
-  currency: string
+  selectedCurrency: string
 }
 
 interface FormErrors {
@@ -35,8 +36,9 @@ export function WithdrawalModal({
   isOpen, 
   onClose, 
   onSubmit, 
-  currentCurrency, 
-  availableBalance 
+  selectedCurrency, 
+  availableBalance,
+  getBalance 
 }: WithdrawalModalProps) {
   const { theme } = useTheme()
   const isDark = theme === "dark"
@@ -49,7 +51,7 @@ export function WithdrawalModal({
     amount: "",
     paymentMethod: "银行转账",
     purpose: "",
-    currency: currentCurrency
+    selectedCurrency: selectedCurrency
   })
 
   // 验证错误状态
@@ -57,11 +59,20 @@ export function WithdrawalModal({
   
   // 提交状态
   const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  // 当前实际可用余额（基于选择的货币）
+  const [currentAvailableBalance, setCurrentAvailableBalance] = useState(availableBalance)
 
-  // 当货币发生变化时更新表单
+  // 当货币发生变化时更新表单和余额
   useEffect(() => {
-    setFormData(prev => ({ ...prev, currency: currentCurrency }))
-  }, [currentCurrency])
+    setFormData(prev => ({ ...prev, selectedCurrency: selectedCurrency }))
+  }, [selectedCurrency])
+  
+  // 当选择的货币变化时，重新计算可用余额
+  useEffect(() => {
+    const newBalance = getBalance(formData.selectedCurrency)
+    setCurrentAvailableBalance(newBalance)
+  }, [formData.selectedCurrency, getBalance])
 
   // 重置表单
   const resetForm = () => {
@@ -72,7 +83,7 @@ export function WithdrawalModal({
       amount: "",
       paymentMethod: "银行转账",
       purpose: "",
-      currency: currentCurrency
+      selectedCurrency: selectedCurrency
     })
     setErrors({})
     setIsSubmitting(false)
@@ -122,8 +133,8 @@ export function WithdrawalModal({
       const amount = parseFloat(formData.amount)
       if (isNaN(amount) || amount <= 0) {
         newErrors.amount = "请输入有效的转出金额"
-      } else if (amount > availableBalance) {
-        newErrors.amount = `转出金额不能超过可用余额 ${formatCurrency(availableBalance, currentCurrency)}`
+      } else if (amount > currentAvailableBalance) {
+        newErrors.amount = `转出金额不能超过可用余额 ${formatCurrency(currentAvailableBalance, formData.selectedCurrency)}`
       } else if (amount < 10) {
         newErrors.amount = "最小转出金额为 10"
       }
@@ -155,7 +166,7 @@ export function WithdrawalModal({
       resetForm()
       onClose()
     } catch (error) {
-      console.error("出金申请提交失败:", error)
+      console.error("法币出款申请提交失败:", error)
       // 这里可以添加错误提示
     } finally {
       setIsSubmitting(false)
@@ -186,7 +197,9 @@ export function WithdrawalModal({
       'EUR': '€',
       'GBP': '£',
       'JPY': '¥',
-      'CNY': '¥'
+      'CNY': '¥',
+      'HKD': 'HK$',
+      'KRW': '₩'
     }
     const symbol = symbols[currency] || currency
     return `${symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -212,10 +225,10 @@ export function WithdrawalModal({
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Upload className="h-5 w-5 text-[#00D4AA]" />
-            <span>出金台</span>
+            <span>法币出款台</span>
           </DialogTitle>
           <DialogDescription>
-            填写出金信息，资金将转入指定账户。请仔细核对信息以确保资金安全。
+            填写法币出款信息，资金将转入指定账户。请仔细核对信息以确保资金安全。
           </DialogDescription>
         </DialogHeader>
 
@@ -227,7 +240,7 @@ export function WithdrawalModal({
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600 dark:text-gray-400">可用余额</span>
               <span className="font-semibold text-[#00D4AA]">
-                {formatCurrency(availableBalance, currentCurrency)}
+                {formatCurrency(currentAvailableBalance, formData.selectedCurrency)}
               </span>
             </div>
           </div>
@@ -295,6 +308,29 @@ export function WithdrawalModal({
           <div className="space-y-4">
             <h3 className="font-medium text-sm text-gray-700 dark:text-gray-300">转账信息</h3>
             
+            {/* 法币币种选择 */}
+            <div className="space-y-2">
+              <Label htmlFor="selectedCurrency">法币币种 *</Label>
+              <Select 
+                value={formData.selectedCurrency} 
+                onValueChange={(value) => handleFieldChange('selectedCurrency', value)}
+                disabled={isSubmitting}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="选择法币币种" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="USD">美元 (USD)</SelectItem>
+                  <SelectItem value="EUR">欧元 (EUR)</SelectItem>
+                  <SelectItem value="GBP">英镑 (GBP)</SelectItem>
+                  <SelectItem value="JPY">日元 (JPY)</SelectItem>
+                  <SelectItem value="CNY">人民币 (CNY)</SelectItem>
+                  <SelectItem value="HKD">港币 (HKD)</SelectItem>
+                  <SelectItem value="KRW">韩元 (KRW)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
             <div className="space-y-2">
               <Label htmlFor="amount">转出金额 *</Label>
               <div className="relative">
@@ -307,11 +343,11 @@ export function WithdrawalModal({
                   className={`${errors.amount ? 'border-red-500' : ''} pr-16`}
                   disabled={isSubmitting}
                   min="10"
-                  max={availableBalance}
+                  max={currentAvailableBalance}
                   step="0.01"
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
-                  {currentCurrency}
+                  {formData.selectedCurrency}
                 </div>
               </div>
               {errors.amount && (
@@ -321,7 +357,7 @@ export function WithdrawalModal({
                 </div>
               )}
               <div className="text-xs text-gray-500">
-                最小转出金额：10 {currentCurrency}
+                最小转出金额：10 {formData.selectedCurrency}
               </div>
             </div>
 
@@ -398,7 +434,7 @@ export function WithdrawalModal({
               ) : (
                 <div className="flex items-center space-x-2">
                   <Check className="h-4 w-4" />
-                  <span>确认出金</span>
+                  <span>确认出款</span>
                 </div>
               )}
             </Button>
