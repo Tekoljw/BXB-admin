@@ -214,18 +214,19 @@ export function WithdrawalModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center space-x-2">
-            <Upload className="h-5 w-5 text-[#00D4AA]" />
-            <span>手动代付</span>
-          </DialogTitle>
-          <DialogDescription>
-            填写代付信息，资金将从代付备佣金转入指定账户。请仔细核对信息以确保资金安全。
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent className="sm:max-w-md w-full max-h-[100dvh] sm:max-h-[90vh] overflow-y-auto p-0 sm:p-6 sm:rounded-lg rounded-none h-[100dvh] sm:h-auto">
+        <div className="p-4 pt-[env(safe-area-inset-top,1rem)] pb-[env(safe-area-inset-bottom,1rem)] sm:p-0">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <Upload className="h-5 w-5 text-[#00D4AA]" />
+              <span>手动代付</span>
+            </DialogTitle>
+            <DialogDescription>
+              填写代付信息，资金将从代付备佣金转入指定账户。请仔细核对信息以确保资金安全。
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="space-y-4 py-4">
+          <div className="space-y-4 py-4">
           {/* 可用余额显示 */}
           <div className={`p-4 rounded-lg border ${
             isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-200'
@@ -432,6 +433,7 @@ export function WithdrawalModal({
               )}
             </Button>
           </div>
+        </div>
         </div>
       </DialogContent>
     </Dialog>
