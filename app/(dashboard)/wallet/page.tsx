@@ -248,6 +248,7 @@ export default function WalletPage() {
   const [selectedFiatCurrency, setSelectedFiatCurrency] = useState("")
   const [exchangeAmount, setExchangeAmount] = useState("")
   const [estimatedUSDT, setEstimatedUSDT] = useState("")
+  const [distributionAccountType, setDistributionAccountType] = useState<"bepay" | "spot">("bepay") // 下发账户类型
   
   // OTC供应商选择状态
   const [selectedSupplier, setSelectedSupplier] = useState("MoonPay")
@@ -19143,7 +19144,7 @@ export default function WalletPage() {
               {/* 标题 */}
               <div className="flex justify-between items-center mb-6">
                 <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  兑换成USDT
+                  法币下发
                 </h2>
                 <button
                   onClick={() => setShowExchangeModal(false)}
@@ -19151,6 +19152,40 @@ export default function WalletPage() {
                 >
                   <X className="h-5 w-5" />
                 </button>
+              </div>
+
+              {/* 下发账户选择选项卡 */}
+              <div className="mb-6">
+                <div className="flex space-x-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                  <button
+                    onClick={() => setDistributionAccountType("bepay")}
+                    className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-all duration-200 ${
+                      distributionAccountType === "bepay"
+                        ? isDark 
+                          ? "bg-white text-black"
+                          : "bg-black text-white"
+                        : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-700 hover:text-gray-900"
+                    }`}
+                  >
+                    BePay加密货币账户
+                  </button>
+                  <button
+                    onClick={() => setDistributionAccountType("spot")}
+                    className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-all duration-200 ${
+                      distributionAccountType === "spot"
+                        ? isDark 
+                          ? "bg-white text-black"
+                          : "bg-black text-white"
+                        : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-700 hover:text-gray-900"
+                    }`}
+                  >
+                    钱包现货账户
+                  </button>
+                </div>
               </div>
               
               <div className="space-y-6">
@@ -19224,7 +19259,7 @@ export default function WalletPage() {
                     disabled={!selectedFiatCurrency || !exchangeAmount || !estimatedUSDT}
                     className="flex-1 bg-[#00D4AA] hover:bg-[#00B895] text-white disabled:opacity-50"
                   >
-                    确认兑换
+                    确认下发
                   </Button>
                 </div>
               </div>
