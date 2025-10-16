@@ -19183,7 +19183,7 @@ export default function WalletPage() {
                           : "text-gray-700 hover:text-gray-900"
                     }`}
                   >
-                    下发到代付备用金【可用于代付】
+                    下发到代付备用金
                   </button>
                 </div>
               </div>
