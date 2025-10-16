@@ -146,6 +146,10 @@ export default function WalletPage() {
   const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>(["CNY", "USD", "EUR", "GBP", "JPY"]) // 多选币种列表
   const [financeMode, setFinanceMode] = useState("收益计算") // 理财账户模式选择
   const [expandedContractItems, setExpandedContractItems] = useState<Set<string>>(new Set()) // 合同展开状态
+  const [showCommissionModal, setShowCommissionModal] = useState(false) // 佣金配置弹窗
+  const [selectedChannel, setSelectedChannel] = useState<any>(null) // 选中的通道
+  const [commissionRate, setCommissionRate] = useState("") // 佣金比例
+  const [commissionError, setCommissionError] = useState("") // 佣金验证错误信息
   const [commissionTab, setCommissionTab] = useState("邀请好友") // 佣金页签状态
   // 佣金结算记录筛选状态
   const [commissionSearchTerm, setCommissionSearchTerm] = useState("") // 搜索关键词
@@ -5787,6 +5791,19 @@ export default function WalletPage() {
                                     >
                                       测试
                                     </Button>
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm"
+                                      className="h-8 px-3 text-xs"
+                                      onClick={() => {
+                                        setSelectedChannel(channel)
+                                        setCommissionRate("")
+                                        setCommissionError("")
+                                        setShowCommissionModal(true)
+                                      }}
+                                    >
+                                      我的佣金
+                                    </Button>
                                     <div className="flex items-center">
                                       <button
                                         onClick={() => {
@@ -5827,7 +5844,7 @@ export default function WalletPage() {
                                     </div>
                                   </div>
                                   
-                                  {/* 右上角：测试按钮和开关 */}
+                                  {/* 右上角：测试按钮、我的佣金按钮和开关 */}
                                   <div className="flex items-center space-x-2 flex-shrink-0">
                                     <Button 
                                       variant="outline" 
@@ -5839,6 +5856,19 @@ export default function WalletPage() {
                                       }}
                                     >
                                       测试
+                                    </Button>
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm"
+                                      className="h-6 px-2 text-xs bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
+                                      onClick={() => {
+                                        setSelectedChannel(channel)
+                                        setCommissionRate("")
+                                        setCommissionError("")
+                                        setShowCommissionModal(true)
+                                      }}
+                                    >
+                                      我的佣金
                                     </Button>
                                     <button
                                       onClick={() => {
@@ -19260,6 +19290,164 @@ export default function WalletPage() {
                     className="flex-1 bg-[#00D4AA] hover:bg-[#00B895] text-white disabled:opacity-50"
                   >
                     确认下发
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 我的佣金配置弹窗 */}
+      {showCommissionModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* 背景遮罩 */}
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50"
+            onClick={() => setShowCommissionModal(false)}
+          />
+          
+          {/* 弹窗内容 */}
+          <div className={`relative w-full max-w-md mx-4 rounded-lg shadow-lg ${isDark ? 'bg-[#1a1b23] border border-[#3a3d4a]' : 'bg-white border border-gray-200'}`}>
+            <div className="p-6">
+              {/* 标题 */}
+              <div className="flex justify-between items-center mb-6">
+                <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  配置通道佣金
+                </h2>
+                <button
+                  onClick={() => setShowCommissionModal(false)}
+                  className={`p-2 rounded-lg hover:bg-opacity-80 ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {/* 通道信息 */}
+                {selectedChannel && (
+                  <div className={`p-4 rounded-lg ${isDark ? 'bg-[#2a2d3a]' : 'bg-gray-50'}`}>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>通道名称</span>
+                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{selectedChannel.name}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>通道成本价</span>
+                        <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{selectedChannel.fee}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 佣金比例输入 */}
+                <div className="space-y-2">
+                  <label className={`text-sm font-medium block ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    佣金比例（%）
+                  </label>
+                  <input
+                    type="number"
+                    value={commissionRate}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      setCommissionRate(value)
+                      
+                      // 实时验证
+                      if (value && selectedChannel) {
+                        const rate = parseFloat(value)
+                        if (rate > 30) {
+                          setCommissionError("佣金比例不能超过成本价的30%")
+                        } else if (rate < 0) {
+                          setCommissionError("佣金比例不能为负数")
+                        } else {
+                          setCommissionError("")
+                        }
+                      } else {
+                        setCommissionError("")
+                      }
+                    }}
+                    placeholder="请输入佣金比例（0-30）"
+                    step="0.1"
+                    min="0"
+                    max="30"
+                    className={`w-full px-4 py-3 rounded-lg border ${
+                      commissionError
+                        ? 'border-red-500 focus:ring-red-500'
+                        : isDark 
+                          ? 'bg-[#1a1d29] border-[#3a3d4a] text-white placeholder-gray-500 focus:ring-[#00D4AA]' 
+                          : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:ring-[#00D4AA]'
+                    } focus:outline-none focus:ring-2`}
+                  />
+                  {commissionError ? (
+                    <p className="text-xs text-red-500 flex items-center">
+                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      {commissionError}
+                    </p>
+                  ) : (
+                    <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      提示：佣金比例范围为0-30%（即成本价的0-30%）
+                    </p>
+                  )}
+                </div>
+
+                {/* 计算结果显示 */}
+                {commissionRate && selectedChannel && !commissionError && (
+                  <div className={`p-4 rounded-lg ${isDark ? 'bg-[#2a2d3a]' : 'bg-gray-50'}`}>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>预计佣金费率</span>
+                        <span className={`text-lg font-semibold ${isDark ? 'text-[#00D4AA]' : 'text-[#00D4AA]'}`}>
+                          {(parseFloat(selectedChannel.fee.replace('%', '')) * parseFloat(commissionRate) / 100).toFixed(4)}%
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs">
+                        <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>计算方式</span>
+                        <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                          {selectedChannel.fee} × {commissionRate}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 操作按钮 */}
+                <div className="flex space-x-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowCommissionModal(false)}
+                    className={`flex-1 ${isDark ? 'border-[#3a3d4a] text-gray-300 hover:bg-[#2a2d3a]' : 'border-gray-300'}`}
+                  >
+                    取消
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (!commissionRate || !selectedChannel || commissionError) return
+                      
+                      const costRate = parseFloat(selectedChannel.fee.replace('%', ''))
+                      const commission = parseFloat(commissionRate)
+                      const actualCommissionRate = (costRate * commission / 100).toFixed(4)
+                      
+                      console.log('佣金配置成功:', {
+                        channel: selectedChannel.name,
+                        costRate: selectedChannel.fee,
+                        commissionRatePercent: commissionRate + '%',
+                        actualCommissionRate: actualCommissionRate + '%',
+                        description: `佣金为成本价的${commissionRate}%，实际佣金费率为${actualCommissionRate}%`
+                      })
+                      
+                      // TODO: 这里可以调用API保存佣金配置
+                      
+                      setShowCommissionModal(false)
+                      setCommissionRate("")
+                      setCommissionError("")
+                      setSelectedChannel(null)
+                    }}
+                    disabled={!commissionRate || !!commissionError}
+                    className="flex-1 bg-[#00D4AA] hover:bg-[#00B895] text-white disabled:opacity-50"
+                  >
+                    确认配置
                   </Button>
                 </div>
               </div>
