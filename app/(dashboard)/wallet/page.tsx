@@ -19530,10 +19530,7 @@ export default function WalletPage() {
                     {standbyRechargeTab === "从现金账户充值" ? "当前现金账户余额" : "当前BePay账户余额"}
                   </div>
                   <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {standbyRechargeTab === "从现金账户充值" 
-                      ? "$85,430.50"
-                      : `${getCommissionBalance("USDT").toLocaleString()} USDT`
-                    }
+                    {getCommissionBalance("USDT").toLocaleString()} USDT
                   </div>
                 </div>
               </div>
