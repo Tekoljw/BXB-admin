@@ -826,7 +826,7 @@ export default function WalletPage() {
         currency: "CNY",
         method: "代收",
         enabled: true,
-        commission: "" // 佣金费率，例如 "0.06%"
+        commission: "0.0300%" // 默认10%佣金：0.3% * 10% = 0.03%
       },
       {
         name: "微信扫码",
@@ -841,7 +841,7 @@ export default function WalletPage() {
         currency: "CNY",
         method: "代收",
         enabled: false,
-        commission: ""
+        commission: "0.0300%"
       },
       {
         name: "银行卡快捷支付",
@@ -856,7 +856,7 @@ export default function WalletPage() {
         currency: "CNY",
         method: "代收",
         enabled: true,
-        commission: ""
+        commission: "0.0500%"
       },
       // CNY 代付通道
       {
@@ -872,7 +872,7 @@ export default function WalletPage() {
         currency: "CNY",
         method: "代付",
         enabled: true,
-        commission: ""
+        commission: "0.0200%"
       },
       {
         name: "网银转账",
@@ -887,7 +887,7 @@ export default function WalletPage() {
         currency: "CNY",
         method: "代付",
         enabled: true,
-        commission: ""
+        commission: "0.0800%"
       },
       // USD 代收通道
       {
@@ -903,7 +903,7 @@ export default function WalletPage() {
         currency: "USD",
         method: "代收",
         enabled: true,
-        commission: ""
+        commission: "0.1000%"
       },
       {
         name: "PayPal收款",
@@ -918,7 +918,7 @@ export default function WalletPage() {
         currency: "USD",
         method: "代收",
         enabled: true,
-        commission: ""
+        commission: "0.2500%"
       },
       // USD 代付通道
       {
@@ -934,7 +934,7 @@ export default function WalletPage() {
         currency: "USD",
         method: "代付",
         enabled: true,
-        commission: ""
+        commission: "0.1500%"
       },
       // EUR 代收通道
       {
@@ -950,7 +950,7 @@ export default function WalletPage() {
         currency: "EUR",
         method: "代收",
         enabled: true,
-        commission: ""
+        commission: "0.1200%"
       },
       // EUR 代付通道
       {
@@ -5795,7 +5795,15 @@ export default function WalletPage() {
                                     <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>手续费</div>
                                     <div className="font-semibold">{channel.fee}</div>
                                   </div>
-                                  <div className="text-center">
+                                  <div 
+                                    className="text-center cursor-pointer hover:opacity-75 transition-opacity"
+                                    onClick={() => {
+                                      setSelectedChannel(channel)
+                                      setCommissionRate("")
+                                      setCommissionError("")
+                                      setShowCommissionModal(true)
+                                    }}
+                                  >
                                     <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>我的佣金</div>
                                     <div className={`font-semibold ${channel.commission ? 'text-[#00D4AA]' : ''}`}>
                                       {channel.commission || '未配置'}
@@ -5812,19 +5820,6 @@ export default function WalletPage() {
                                       }}
                                     >
                                       测试
-                                    </Button>
-                                    <Button 
-                                      variant="outline" 
-                                      size="sm"
-                                      className="h-8 px-3 text-xs"
-                                      onClick={() => {
-                                        setSelectedChannel(channel)
-                                        setCommissionRate("")
-                                        setCommissionError("")
-                                        setShowCommissionModal(true)
-                                      }}
-                                    >
-                                      我的佣金
                                     </Button>
                                     <div className="flex items-center">
                                       <button
@@ -5879,19 +5874,6 @@ export default function WalletPage() {
                                     >
                                       测试
                                     </Button>
-                                    <Button 
-                                      variant="outline" 
-                                      size="sm"
-                                      className="h-6 px-2 text-xs bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
-                                      onClick={() => {
-                                        setSelectedChannel(channel)
-                                        setCommissionRate("")
-                                        setCommissionError("")
-                                        setShowCommissionModal(true)
-                                      }}
-                                    >
-                                      我的佣金
-                                    </Button>
                                     <button
                                       onClick={() => {
                                         // 切换通道开关状态的逻辑
@@ -5926,7 +5908,15 @@ export default function WalletPage() {
                                     <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>手续费</div>
                                     <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{channel.fee}</div>
                                   </div>
-                                  <div className="text-center">
+                                  <div 
+                                    className="text-center cursor-pointer hover:opacity-75 transition-opacity"
+                                    onClick={() => {
+                                      setSelectedChannel(channel)
+                                      setCommissionRate("")
+                                      setCommissionError("")
+                                      setShowCommissionModal(true)
+                                    }}
+                                  >
                                     <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>我的佣金</div>
                                     <div className={`font-semibold ${channel.commission ? 'text-[#00D4AA]' : isDark ? 'text-gray-500' : 'text-gray-400'}`}>
                                       {channel.commission || '未配置'}
