@@ -182,7 +182,8 @@ export default function WalletPage() {
       'EUR': 23500.50,
       'GBP': 19850.75,
       'JPY': 2850000,
-      'CNY': 186750.25
+      'CNY': 186750.25,
+      'USDT': 45890.50
     }
     return balances[currency as keyof typeof balances] || 0
   }
@@ -244,8 +245,8 @@ export default function WalletPage() {
   // 代付备佣金充值弹窗状态
   const [showStandbyRechargeModal, setShowStandbyRechargeModal] = useState(false)
   const [standbyRechargeAnimating, setStandbyRechargeAnimating] = useState(false)
-  const [standbyRechargeCurrency, setStandbyRechargeCurrency] = useState("USD") // 选择的充值币种
-  const [standbyRechargeTab, setStandbyRechargeTab] = useState("法币充值") // 充值方式：法币充值/USDT充值
+  const [standbyRechargeCurrency, setStandbyRechargeCurrency] = useState("USDT") // 充值币种统一为USDT
+  const [standbyRechargeTab, setStandbyRechargeTab] = useState("从现金账户充值") // 充值方式：从现金账户充值/从BePay账户充值
   const [standbyRechargeAmount, setStandbyRechargeAmount] = useState("") // 充值金额
   
   // 兑换USDT弹窗状态
@@ -4957,7 +4958,7 @@ export default function WalletPage() {
                     {balanceVisible ? "$125,860" : "****"}
                   </div>
                   <div className={`text-xs ${selectedPaymentCard !== "fiat" ? "text-gray-400" : "text-gray-500"}`}>
-                    代付备佣金：{formatCurrencyDisplay(getCommissionBalance("USD"), "USD")}
+                    代付备佣金：{getCommissionBalance("USDT").toLocaleString()} USDT
                   </div>
                 </div>
 
@@ -5101,7 +5102,7 @@ export default function WalletPage() {
                         {balanceVisible ? "$125,860.00" : "****"}
                       </div>
                       <div className="text-gray-500 text-sm mb-4">
-                        代付备佣金：{formatCurrencyDisplay(getCommissionBalance(fiatTab), fiatTab)}
+                        代付备佣金：{getCommissionBalance("USDT").toLocaleString()} USDT
                       </div>
                       
                       {/* 手动代付按钮 */}
@@ -5231,7 +5232,6 @@ export default function WalletPage() {
                             setSelectedFiatCurrency("USD")
                             setShowExchangeModal(true)
                           } else if (button.id === "代付金充值") {
-                            setStandbyRechargeCurrency("USD")
                             setShowStandbyRechargeModal(true)
                             setTimeout(() => setStandbyRechargeAnimating(true), 50)
                           } else if (button.id === "划转") {
@@ -5336,7 +5336,6 @@ export default function WalletPage() {
                             setSelectedFiatCurrency("USD")
                             setShowExchangeModal(true)
                           } else if (button.id === "代付金充值") {
-                            setStandbyRechargeCurrency("USD")
                             setShowStandbyRechargeModal(true)
                             setTimeout(() => setStandbyRechargeAnimating(true), 50)
                           } else if (button.id === "划转") {
@@ -5531,7 +5530,6 @@ export default function WalletPage() {
                                     className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 border-0 w-8 h-8 p-0"
                                     variant="outline"
                                     onClick={(e) => {
-                                      setStandbyRechargeCurrency(asset.currency)
                                       handleStandbyRechargeClick(e)
                                     }}
                                     title="充值"
@@ -5594,7 +5592,6 @@ export default function WalletPage() {
                               <div 
                                 className={`flex items-center justify-between p-4 rounded-lg ${cardStyle} cursor-pointer hover:bg-opacity-80 transition-colors`}
                                 onClick={(e) => {
-                                  setStandbyRechargeCurrency(asset.currency)
                                   handleStandbyRechargeClick(e)
                                 }}
                               >
@@ -15615,7 +15612,7 @@ export default function WalletPage() {
           recharge: [
             {
               id: "RC001",
-              type: "USDT充值",
+              type: "从BePay账户充值",
               cardNumber: "****1234",
               amount: "500.00",
               currency: "USDT",
@@ -15639,7 +15636,7 @@ export default function WalletPage() {
             },
             {
               id: "RC003",
-              type: "USDT充值",
+              type: "从BePay账户充值",
               cardNumber: "****9012",
               amount: "1000.00", 
               currency: "USDT",
@@ -19507,34 +19504,10 @@ export default function WalletPage() {
                 </Button>
               </div>
 
-              {/* 币种选择 */}
-              <div className="mb-6">
-                <label className={`block text-sm mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  选择充值币种
-                </label>
-                <div className={`relative ${isDark ? 'bg-[#2a2d42] border-[#3a3d4a]' : 'bg-gray-50 border-gray-200'} border rounded-lg`}>
-                  <select
-                    value={standbyRechargeCurrency}
-                    onChange={(e) => setStandbyRechargeCurrency(e.target.value)}
-                    className={`w-full p-3 bg-transparent text-sm focus:outline-none appearance-none ${
-                      isDark ? 'text-white focus:border-[#00D4AA]' : 'text-gray-900 focus:border-[#00D4AA]'
-                    }`}
-                  >
-                    <option value="USD">USD - 美元</option>
-                    <option value="EUR">EUR - 欧元</option>
-                    <option value="GBP">GBP - 英镑</option>
-                    <option value="JPY">JPY - 日元</option>
-                  </select>
-                  <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none ${
-                    isDark ? 'text-gray-400' : 'text-gray-500'
-                  }`} />
-                </div>
-              </div>
-
               {/* 充值方式选择 */}
               <div className="mb-6">
                 <div className="flex space-x-1 p-1 rounded-lg bg-gray-100 dark:bg-[#252842]">
-                  {["法币充值", "USDT充值"].map((tab) => (
+                  {["从现金账户充值", "从BePay账户充值"].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setStandbyRechargeTab(tab)}
@@ -19554,14 +19527,12 @@ export default function WalletPage() {
               <div className="mb-4">
                 <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d42]' : 'bg-gray-50'}`}>
                   <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {standbyRechargeTab === "法币充值" ? `当前${standbyRechargeCurrency}余额` : "当前USDT余额"}
+                    {standbyRechargeTab === "从现金账户充值" ? "当前现金账户余额" : "当前BePay账户余额"}
                   </div>
                   <div className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {standbyRechargeTab === "法币充值" 
-                      ? `${standbyRechargeCurrency === "USD" ? "$85,430.50" : 
-                          standbyRechargeCurrency === "EUR" ? "€12,680.25" : 
-                          standbyRechargeCurrency === "GBP" ? "£8,950.75" : "¥2,580,000"}`
-                      : "45,890.50 USDT"
+                    {standbyRechargeTab === "从现金账户充值" 
+                      ? "$85,430.50"
+                      : `${getCommissionBalance("USDT").toLocaleString()} USDT`
                     }
                   </div>
                 </div>
@@ -19577,7 +19548,7 @@ export default function WalletPage() {
                     type="number"
                     value={standbyRechargeAmount}
                     onChange={(e) => setStandbyRechargeAmount(e.target.value)}
-                    placeholder={standbyRechargeTab === "法币充值" ? `输入${standbyRechargeCurrency}金额` : "输入USDT金额"}
+                    placeholder="输入充值金额"
                     className={`w-full p-3 bg-transparent text-sm focus:outline-none ${
                       isDark ? 'text-white placeholder-gray-500' : 'text-gray-900 placeholder-gray-400'
                     }`}
@@ -19585,20 +19556,20 @@ export default function WalletPage() {
                   <div className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm ${
                     isDark ? 'text-gray-400' : 'text-gray-500'
                   }`}>
-                    {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
+                    USDT
                   </div>
                 </div>
               </div>
 
-              {/* USDT充值时显示汇率和计算结果 */}
-              {standbyRechargeTab === "USDT充值" && standbyRechargeAmount && (
+              {/* 从BePay账户充值时显示充值信息 */}
+              {standbyRechargeTab === "从BePay账户充值" && standbyRechargeAmount && (
                 <div className="mb-4">
                   <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d42]' : 'bg-blue-50'} border ${isDark ? 'border-[#3a3d4a]' : 'border-blue-200'}`}>
                     <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-blue-600'} mb-1`}>
-                      今日汇率：1 USDT = {exchangeRates[standbyRechargeCurrency as keyof typeof exchangeRates] || 1} {standbyRechargeCurrency}
+                      从BePay账户转入代付金账户
                     </div>
                     <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-blue-800'}`}>
-                      可充值：{(parseFloat(standbyRechargeAmount) * (exchangeRates[standbyRechargeCurrency as keyof typeof exchangeRates] || 1)).toFixed(2)} {standbyRechargeCurrency}
+                      充值金额：{parseFloat(standbyRechargeAmount).toFixed(2)} USDT
                     </div>
                   </div>
                 </div>
@@ -19616,7 +19587,7 @@ export default function WalletPage() {
                         充值金额
                       </span>
                       <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                        {standbyRechargeAmount || "0"} {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
+                        {standbyRechargeAmount || "0"} USDT
                       </span>
                     </div>
                     <div className="flex justify-between items-center text-sm">
@@ -19624,7 +19595,7 @@ export default function WalletPage() {
                         平台手续费 (0.5%)
                       </span>
                       <span className={isDark ? 'text-orange-400' : 'text-orange-600'}>
-                        -{standbyRechargeAmount ? (parseFloat(standbyRechargeAmount) * 0.005).toFixed(4) : "0"} {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
+                        -{standbyRechargeAmount ? (parseFloat(standbyRechargeAmount) * 0.005).toFixed(4) : "0"} USDT
                       </span>
                     </div>
                     <div className={`flex justify-between items-center text-sm font-medium pt-1 border-t ${isDark ? 'border-gray-600' : 'border-orange-200'}`}>
@@ -19632,7 +19603,7 @@ export default function WalletPage() {
                         实际到账
                       </span>
                       <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                        {standbyRechargeAmount ? (parseFloat(standbyRechargeAmount) * 0.995).toFixed(4) : "0"} {standbyRechargeTab === "法币充值" ? standbyRechargeCurrency : "USDT"}
+                        {standbyRechargeAmount ? (parseFloat(standbyRechargeAmount) * 0.995).toFixed(4) : "0"} USDT
                       </span>
                     </div>
                   </div>
