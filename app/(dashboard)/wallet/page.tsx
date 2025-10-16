@@ -5819,7 +5819,7 @@ export default function WalletPage() {
                                         window.open('/test-cashier?channel=' + encodeURIComponent(channel.name), '_blank');
                                       }}
                                     >
-                                      测试
+                                      {channel.method === '代收' ? '收银台' : '出金台'}
                                     </Button>
                                     <div className="flex items-center">
                                       <button
@@ -5872,7 +5872,7 @@ export default function WalletPage() {
                                         window.open('/test-cashier?channel=' + encodeURIComponent(channel.name), '_blank');
                                       }}
                                     >
-                                      测试
+                                      {channel.method === '代收' ? '收银台' : '出金台'}
                                     </Button>
                                     <button
                                       onClick={() => {
