@@ -19169,7 +19169,7 @@ export default function WalletPage() {
                           : "text-gray-700 hover:text-gray-900"
                     }`}
                   >
-                    BePay加密货币账户
+                    下发到BXB钱包【可提币】
                   </button>
                   <button
                     onClick={() => setDistributionAccountType("spot")}
@@ -19183,7 +19183,7 @@ export default function WalletPage() {
                           : "text-gray-700 hover:text-gray-900"
                     }`}
                   >
-                    钱包现货账户
+                    下发到代付备用金【可用于代付】
                   </button>
                 </div>
               </div>
