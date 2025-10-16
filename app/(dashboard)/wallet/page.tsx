@@ -151,6 +151,7 @@ export default function WalletPage() {
   const [commissionRate, setCommissionRate] = useState("") // 佣金比例
   const [commissionError, setCommissionError] = useState("") // 佣金验证错误信息
   const [commissionTab, setCommissionTab] = useState("邀请好友") // 佣金页签状态
+  const [channelCommissions, setChannelCommissions] = useState<{[key: string]: string}>({}) // 通道佣金配置映射
   // 佣金结算记录筛选状态
   const [commissionSearchTerm, setCommissionSearchTerm] = useState("") // 搜索关键词
   const [commissionTypeFilter, setCommissionTypeFilter] = useState("全部") // 佣金类型筛选
@@ -824,7 +825,8 @@ export default function WalletPage() {
         color: "green",
         currency: "CNY",
         method: "代收",
-        enabled: true
+        enabled: true,
+        commission: "" // 佣金费率，例如 "0.06%"
       },
       {
         name: "微信扫码",
@@ -838,7 +840,8 @@ export default function WalletPage() {
         color: "yellow",
         currency: "CNY",
         method: "代收",
-        enabled: false
+        enabled: false,
+        commission: ""
       },
       {
         name: "银行卡快捷支付",
@@ -852,7 +855,8 @@ export default function WalletPage() {
         color: "green",
         currency: "CNY",
         method: "代收",
-        enabled: true
+        enabled: true,
+        commission: ""
       },
       // CNY 代付通道
       {
@@ -867,7 +871,8 @@ export default function WalletPage() {
         color: "green",
         currency: "CNY",
         method: "代付",
-        enabled: true
+        enabled: true,
+        commission: ""
       },
       {
         name: "网银转账",
@@ -881,7 +886,8 @@ export default function WalletPage() {
         color: "green",
         currency: "CNY",
         method: "代付",
-        enabled: true
+        enabled: true,
+        commission: ""
       },
       // USD 代收通道
       {
@@ -896,7 +902,8 @@ export default function WalletPage() {
         color: "green",
         currency: "USD",
         method: "代收",
-        enabled: true
+        enabled: true,
+        commission: ""
       },
       {
         name: "PayPal收款",
@@ -910,7 +917,8 @@ export default function WalletPage() {
         color: "green",
         currency: "USD",
         method: "代收",
-        enabled: true
+        enabled: true,
+        commission: ""
       },
       // USD 代付通道
       {
@@ -925,7 +933,8 @@ export default function WalletPage() {
         color: "green",
         currency: "USD",
         method: "代付",
-        enabled: true
+        enabled: true,
+        commission: ""
       },
       // EUR 代收通道
       {
@@ -940,7 +949,8 @@ export default function WalletPage() {
         color: "green",
         currency: "EUR",
         method: "代收",
-        enabled: true
+        enabled: true,
+        commission: ""
       },
       // EUR 代付通道
       {
@@ -959,7 +969,13 @@ export default function WalletPage() {
       }
     ]
 
-    return allChannels.filter(channel => {
+    // 合并通道佣金配置
+    const channelsWithCommission = allChannels.map(channel => ({
+      ...channel,
+      commission: channelCommissions[channel.name] || channel.commission || ""
+    }))
+
+    return channelsWithCommission.filter(channel => {
       const currencyMatch = channel.currency === currency
       const methodMatch = channel.method === method
       return currencyMatch && methodMatch
@@ -5779,6 +5795,12 @@ export default function WalletPage() {
                                     <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>手续费</div>
                                     <div className="font-semibold">{channel.fee}</div>
                                   </div>
+                                  <div className="text-center">
+                                    <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>我的佣金</div>
+                                    <div className={`font-semibold ${channel.commission ? 'text-[#00D4AA]' : ''}`}>
+                                      {channel.commission || '未配置'}
+                                    </div>
+                                  </div>
                                   <div className="flex items-center space-x-3">
                                     <Button 
                                       variant="outline" 
@@ -5903,6 +5925,12 @@ export default function WalletPage() {
                                   <div className="text-center">
                                     <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>手续费</div>
                                     <div className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{channel.fee}</div>
+                                  </div>
+                                  <div className="text-center">
+                                    <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>我的佣金</div>
+                                    <div className={`font-semibold ${channel.commission ? 'text-[#00D4AA]' : isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                                      {channel.commission || '未配置'}
+                                    </div>
                                   </div>
                                   <div className="text-center">
                                     <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mb-1`}>单笔限额</div>
@@ -19427,17 +19455,23 @@ export default function WalletPage() {
                       
                       const costRate = parseFloat(selectedChannel.fee.replace('%', ''))
                       const commission = parseFloat(commissionRate)
-                      const actualCommissionRate = (costRate * commission / 100).toFixed(4)
+                      const actualCommissionRate = (costRate * commission / 100).toFixed(4) + '%'
+                      
+                      // 保存佣金配置到状态
+                      setChannelCommissions(prev => ({
+                        ...prev,
+                        [selectedChannel.name]: actualCommissionRate
+                      }))
                       
                       console.log('佣金配置成功:', {
                         channel: selectedChannel.name,
                         costRate: selectedChannel.fee,
                         commissionRatePercent: commissionRate + '%',
-                        actualCommissionRate: actualCommissionRate + '%',
-                        description: `佣金为成本价的${commissionRate}%，实际佣金费率为${actualCommissionRate}%`
+                        actualCommissionRate: actualCommissionRate,
+                        description: `佣金为成本价的${commissionRate}%，实际佣金费率为${actualCommissionRate}`
                       })
                       
-                      // TODO: 这里可以调用API保存佣金配置
+                      // TODO: 这里可以调用API保存佣金配置到后端
                       
                       setShowCommissionModal(false)
                       setCommissionRate("")
