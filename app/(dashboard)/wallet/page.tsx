@@ -4805,7 +4805,7 @@ export default function WalletPage() {
           { id: "商户资产", label: "商户资产", icon: Landmark },
           { id: "通道配置", label: "通道配置", icon: Network },
           { id: "法币下发", label: "法币下发", icon: Repeat },
-          { id: "代付金充值", label: "代付金充值", icon: Plus }
+          { id: "代付金充值", label: "充U代付", icon: Plus }
         ]
         const fiatIconTabs = [
           { id: "资金记录", icon: Banknote },
@@ -4828,7 +4828,7 @@ export default function WalletPage() {
         // 定义移动端功能按钮
         const mobileFiatButtons = [
           { id: "法币下发", label: "法币下发", icon: Repeat },
-          { id: "代付金充值", label: "代付金充值", icon: Plus },
+          { id: "代付金充值", label: "充U代付", icon: Plus },
           { id: "法币订单", label: "法币订单", icon: BarChart2 },
           { id: "资产分布", label: "资产分布", icon: PieChart }
         ]
@@ -5317,7 +5317,7 @@ export default function WalletPage() {
                   {(selectedPaymentCard === "fiat" ? 
                     [
                       { id: "法币下发", label: "法币下发", icon: Repeat, showText: true },
-                      { id: "代付金充值", label: "代付金充值", icon: Plus, showText: true },
+                      { id: "代付金充值", label: "充U代付", icon: Plus, showText: true },
                       { id: "法币订单", label: "法币订单", icon: BarChart2, showText: false },
                       { id: "资产分布", label: "资产分布", icon: PieChart, showText: false }
                     ] : 
@@ -19489,7 +19489,7 @@ export default function WalletPage() {
               {/* 标题栏 */}
               <div className="flex items-center justify-between mb-6">
                 <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  充值代付备佣金
+                  充U代付
                 </h3>
                 <Button
                   variant="ghost"
