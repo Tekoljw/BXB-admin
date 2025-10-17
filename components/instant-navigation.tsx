@@ -45,6 +45,11 @@ import AdminPage from "@/app/(dashboard)/admin/page"
 import AdminLoginPage from "@/app/(dashboard)/admin/login/page"
 import DashboardPage from "@/app/(dashboard)/admin/operations/dashboard/page"
 import FundsAnalysisPage from "@/app/(dashboard)/admin/operations/funds/page"
+import RetentionAnalysisPage from "@/app/(dashboard)/admin/operations/retention/page"
+import RiskConfigPage from "@/app/(dashboard)/admin/operations/risk/page"
+import OrdersPage from "@/app/(dashboard)/admin/operations/orders/page"
+import ActivitiesConfigPage from "@/app/(dashboard)/admin/operations/activities/page"
+import AuditPage from "@/app/(dashboard)/admin/operations/audit/page"
 import UsersManagementPage from "@/app/(dashboard)/admin/users/page"
 import IMManagementPage from "@/app/(dashboard)/admin/im/page"
 import SocialManagementPage from "@/app/(dashboard)/admin/social/page"
@@ -189,6 +194,11 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/operations") return <DashboardPage />
     if (currentPage === "/admin/operations/dashboard") return <DashboardPage />
     if (currentPage === "/admin/operations/funds") return <FundsAnalysisPage />
+    if (currentPage === "/admin/operations/retention") return <RetentionAnalysisPage />
+    if (currentPage === "/admin/operations/risk") return <RiskConfigPage />
+    if (currentPage === "/admin/operations/orders") return <OrdersPage />
+    if (currentPage === "/admin/operations/activities") return <ActivitiesConfigPage />
+    if (currentPage === "/admin/operations/audit") return <AuditPage />
     if (currentPage === "/admin/users") return <UsersManagementPage />
     if (currentPage === "/admin/im") return <IMManagementPage />
     if (currentPage === "/admin/social") return <SocialManagementPage />
