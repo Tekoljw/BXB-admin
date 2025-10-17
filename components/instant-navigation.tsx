@@ -64,6 +64,20 @@ import IMLogsPage from "@/app/(dashboard)/admin/im/logs/page"
 import IMReviewPage from "@/app/(dashboard)/admin/im/review/page"
 import IMAutoJoinPage from "@/app/(dashboard)/admin/im/auto-join/page"
 import IMGroupSearchPage from "@/app/(dashboard)/admin/im/group-search/page"
+import AllUsersPage from "@/app/(dashboard)/admin/users/all/page"
+import BlacklistPage from "@/app/(dashboard)/admin/users/blacklist/page"
+import DeletedUsersPage from "@/app/(dashboard)/admin/users/deleted/page"
+import UserBehaviorPage from "@/app/(dashboard)/admin/users/behavior/page"
+import APIReviewPage from "@/app/(dashboard)/admin/users/api-review/page"
+import APIManagePage from "@/app/(dashboard)/admin/users/api-manage/page"
+import SMSLogsPage from "@/app/(dashboard)/admin/users/sms-logs/page"
+import EmailLogsPage from "@/app/(dashboard)/admin/users/email-logs/page"
+import F2AReviewPage from "@/app/(dashboard)/admin/users/f2a-review/page"
+import VoiceLogsPage from "@/app/(dashboard)/admin/users/voice-logs/page"
+import AccountTypesPage from "@/app/(dashboard)/admin/users/account-types/page"
+import SpecialAccountsPage from "@/app/(dashboard)/admin/users/special-accounts/page"
+import KYCReviewPage from "@/app/(dashboard)/admin/users/kyc-review/page"
+import KYCRecordsPage from "@/app/(dashboard)/admin/users/kyc-records/page"
 import UsersManagementPage from "@/app/(dashboard)/admin/users/page"
 import IMManagementPage from "@/app/(dashboard)/admin/im/page"
 import SocialManagementPage from "@/app/(dashboard)/admin/social/page"
@@ -221,7 +235,21 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/orders/ucard") return <UCardOrdersPage />
     if (currentPage === "/admin/orders/escrow") return <EscrowRecordsPage />
     if (currentPage === "/admin/orders/payment") return <PaymentOrdersPage />
-    if (currentPage === "/admin/users") return <UsersManagementPage />
+    if (currentPage === "/admin/users") return <AllUsersPage />
+    if (currentPage === "/admin/users/all") return <AllUsersPage />
+    if (currentPage === "/admin/users/blacklist") return <BlacklistPage />
+    if (currentPage === "/admin/users/deleted") return <DeletedUsersPage />
+    if (currentPage === "/admin/users/behavior") return <UserBehaviorPage />
+    if (currentPage === "/admin/users/api-review") return <APIReviewPage />
+    if (currentPage === "/admin/users/api-manage") return <APIManagePage />
+    if (currentPage === "/admin/users/sms-logs") return <SMSLogsPage />
+    if (currentPage === "/admin/users/email-logs") return <EmailLogsPage />
+    if (currentPage === "/admin/users/f2a-review") return <F2AReviewPage />
+    if (currentPage === "/admin/users/voice-logs") return <VoiceLogsPage />
+    if (currentPage === "/admin/users/account-types") return <AccountTypesPage />
+    if (currentPage === "/admin/users/special-accounts") return <SpecialAccountsPage />
+    if (currentPage === "/admin/users/kyc-review") return <KYCReviewPage />
+    if (currentPage === "/admin/users/kyc-records") return <KYCRecordsPage />
     if (currentPage === "/admin/im") return <IMAccountsPage />
     if (currentPage === "/admin/im/accounts") return <IMAccountsPage />
     if (currentPage === "/admin/im/groups") return <IMGroupsPage />

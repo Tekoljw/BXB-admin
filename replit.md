@@ -43,7 +43,21 @@ Preferred communication style: Simple, everyday language.
        - Risk Configuration (风控配置)
        - Activities Configuration (活动配置)
        - Financial Audit (财务审核)
-    2. User Management (用户管理) - User accounts and permissions
+    2. User Management (用户管理) - User accounts and permissions with 14 sub-pages:
+       - All Users (用户总表)
+       - Blacklist Management (黑名单管理)
+       - Deleted Accounts (已删除账户)
+       - User Behavior (用户行为)
+       - API Review (API审核)
+       - API Management (API管理)
+       - SMS Logs (短信日志)
+       - Email Logs (邮箱日志)
+       - F2A Review (F2A审核)
+       - Voice Logs (语音日志)
+       - Account Types Management (账户类型管理)
+       - Special Accounts Management (特殊账户管理)
+       - KYC Review (KYC审核)
+       - KYC Records (KYC审核记录)
     3. IM Management (IM管理) - Messaging and chat monitoring with 7 sub-pages:
        - Accounts Management (账号管理)
        - Groups Management (群组管理)

@@ -40,7 +40,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
 
   const adminNavItems = [
     { path: "/admin/operations/dashboard", icon: BarChart3, label: "运营管理" },
-    { path: "/admin/users", icon: Users, label: "用户管理" },
+    { path: "/admin/users/all", icon: Users, label: "用户管理" },
     { path: "/admin/im/accounts", icon: MessageSquare, label: "IM管理" },
     { path: "/admin/social", icon: Share2, label: "社交管理" },
     { path: "/admin/market", icon: TrendingUp, label: "行情管理" },
@@ -56,7 +56,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
   ]
 
   const isActive = (path: string) => {
-    // 对于运营管理、订单管理和IM管理，只要当前页面以对应路径开头就视为激活状态
+    // 对于运营管理、订单管理、IM管理和用户管理，只要当前页面以对应路径开头就视为激活状态
     if (path === "/admin/operations/dashboard" && currentPage.startsWith("/admin/operations")) {
       return true
     }
@@ -64,6 +64,9 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
       return true
     }
     if (path === "/admin/im/accounts" && currentPage.startsWith("/admin/im")) {
+      return true
+    }
+    if (path === "/admin/users/all" && currentPage.startsWith("/admin/users")) {
       return true
     }
     return currentPage === path
