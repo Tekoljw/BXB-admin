@@ -1,11 +1,9 @@
 "use client"
 
 import React, { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Shield, Lock, User, Eye, EyeOff, AlertCircle } from "lucide-react"
 
 export default function AdminLoginPage() {
-  const router = useRouter()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -24,8 +22,8 @@ export default function AdminLoginPage() {
         sessionStorage.setItem("isAdminLoggedIn", "true")
         localStorage.setItem("isAdminLoggedIn", "true")
         
-        // 跳转到管理后台
-        router.push("/admin")
+        // 刷新页面以更新状态并跳转
+        window.location.href = "/admin/operations"
       } else {
         setError("用户名或密码错误")
         setIsLoading(false)
