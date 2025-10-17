@@ -96,7 +96,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
       )}
 
       {/* 导航菜单 */}
-      <div className={`relative z-10 flex-1 ${isExpanded ? 'p-2' : 'p-1'} flex flex-col justify-start min-h-0 overflow-y-auto custom-scrollbar`}>
+      <div className={`relative z-10 flex-1 ${isExpanded ? 'p-2' : 'p-1'} flex flex-col justify-start min-h-0 overflow-y-auto overflow-x-hidden custom-scrollbar`}>
         <div className="flex flex-col justify-start pt-4" style={{gap: 'clamp(0.25rem, 2vh, 0.75rem)'}}>
           {adminNavItems.map((item, index) => {
             const Icon = item.icon
