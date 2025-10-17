@@ -19266,15 +19266,31 @@ export default function WalletPage() {
                   />
                 </div>
 
-                {/* 今日汇率显示 */}
+                {/* 汇率或手续费显示 */}
                 {selectedFiatCurrency && (
                   <div className={`p-3 rounded-lg ${isDark ? 'bg-[#2a2d3a]' : 'bg-gray-50'}`}>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                      今日汇率
-                    </div>
-                    <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      1 {selectedFiatCurrency} = {exchangeRates[selectedFiatCurrency as keyof typeof exchangeRates]} USDT
-                    </div>
+                    {distributionAccountType === "bepay" ? (
+                      <>
+                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          汇率预估
+                        </div>
+                        <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          1 {selectedFiatCurrency} = {exchangeRates[selectedFiatCurrency as keyof typeof exchangeRates]} USDT
+                        </div>
+                        <div className={`text-xs mt-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                          *最终以实际到账汇率为准
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                          手续费
+                        </div>
+                        <div className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          0.5%
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
 
