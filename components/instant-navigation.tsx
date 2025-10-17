@@ -57,6 +57,13 @@ import FinanceOrdersPage from "@/app/(dashboard)/admin/orders/finance/page"
 import UCardOrdersPage from "@/app/(dashboard)/admin/orders/ucard/page"
 import EscrowRecordsPage from "@/app/(dashboard)/admin/orders/escrow/page"
 import PaymentOrdersPage from "@/app/(dashboard)/admin/orders/payment/page"
+import IMAccountsPage from "@/app/(dashboard)/admin/im/accounts/page"
+import IMGroupsPage from "@/app/(dashboard)/admin/im/groups/page"
+import IMMessagesPage from "@/app/(dashboard)/admin/im/messages/page"
+import IMLogsPage from "@/app/(dashboard)/admin/im/logs/page"
+import IMReviewPage from "@/app/(dashboard)/admin/im/review/page"
+import IMAutoJoinPage from "@/app/(dashboard)/admin/im/auto-join/page"
+import IMGroupSearchPage from "@/app/(dashboard)/admin/im/group-search/page"
 import UsersManagementPage from "@/app/(dashboard)/admin/users/page"
 import IMManagementPage from "@/app/(dashboard)/admin/im/page"
 import SocialManagementPage from "@/app/(dashboard)/admin/social/page"
@@ -215,7 +222,14 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/orders/escrow") return <EscrowRecordsPage />
     if (currentPage === "/admin/orders/payment") return <PaymentOrdersPage />
     if (currentPage === "/admin/users") return <UsersManagementPage />
-    if (currentPage === "/admin/im") return <IMManagementPage />
+    if (currentPage === "/admin/im") return <IMAccountsPage />
+    if (currentPage === "/admin/im/accounts") return <IMAccountsPage />
+    if (currentPage === "/admin/im/groups") return <IMGroupsPage />
+    if (currentPage === "/admin/im/messages") return <IMMessagesPage />
+    if (currentPage === "/admin/im/logs") return <IMLogsPage />
+    if (currentPage === "/admin/im/review") return <IMReviewPage />
+    if (currentPage === "/admin/im/auto-join") return <IMAutoJoinPage />
+    if (currentPage === "/admin/im/group-search") return <IMGroupSearchPage />
     if (currentPage === "/admin/social") return <SocialManagementPage />
     if (currentPage === "/admin/market") return <MarketManagementPage />
     if (currentPage === "/admin/fiat") return <FiatManagementPage />

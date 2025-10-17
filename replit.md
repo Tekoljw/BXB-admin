@@ -44,7 +44,14 @@ Preferred communication style: Simple, everyday language.
        - Activities Configuration (活动配置)
        - Financial Audit (财务审核)
     2. User Management (用户管理) - User accounts and permissions
-    3. IM Management (IM管理) - Messaging and chat monitoring
+    3. IM Management (IM管理) - Messaging and chat monitoring with 7 sub-pages:
+       - Accounts Management (账号管理)
+       - Groups Management (群组管理)
+       - Messages Management (消息管理)
+       - Logs Query (日志查询)
+       - Review Management (审核管理)
+       - Auto Join (自动加群)
+       - Group Search (群搜索)
     4. Social Management (社交管理) - Content moderation and social features
     5. Market Management (行情管理) - Trading pairs and market data
     6. Fiat Management (法币管理) - Fiat currency transactions
