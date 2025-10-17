@@ -4,6 +4,7 @@ import "./globals.css"
 import "../styles/globals.css"
 import { ThemeProvider } from "@/contexts/theme-context"
 import { ChatProvider } from "@/contexts/chat-context"
+import { AdminProvider } from "@/contexts/admin-context"
 
 export const metadata: Metadata = {
   title: "BXB - Global Cryptocurrency Guaranteed Trading Exchange", 
@@ -21,7 +22,9 @@ export default function RootLayout({
       <body className="font-apple">
         <ThemeProvider>
           <ChatProvider>
-            {children}
+            <AdminProvider>
+              {children}
+            </AdminProvider>
           </ChatProvider>
         </ThemeProvider>
       </body>

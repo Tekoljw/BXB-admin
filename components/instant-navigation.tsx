@@ -4,7 +4,9 @@ import React, { useState, useEffect } from "react"
 
 import { useTheme } from "@/contexts/theme-context"
 import { useChat } from "@/contexts/chat-context"
+import { useAdmin } from "@/contexts/admin-context"
 import AccountDropdown from "@/components/account-dropdown"
+import AdminSidebar from "@/components/admin-sidebar"
 import {
   MessageCircle,
   Compass,
@@ -40,6 +42,21 @@ import SpotPage from "@/app/(dashboard)/spot/page"
 import FuturesPage from "@/app/(dashboard)/futures/page"
 import FinancePage from "@/app/(dashboard)/finance/page"
 import AdminPage from "@/app/(dashboard)/admin/page"
+import AdminLoginPage from "@/app/(dashboard)/admin/login/page"
+import OperationsPage from "@/app/(dashboard)/admin/operations/page"
+import UsersManagementPage from "@/app/(dashboard)/admin/users/page"
+import IMManagementPage from "@/app/(dashboard)/admin/im/page"
+import SocialManagementPage from "@/app/(dashboard)/admin/social/page"
+import MarketManagementPage from "@/app/(dashboard)/admin/market/page"
+import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
+import EscrowManagementPage from "@/app/(dashboard)/admin/escrow/page"
+import UCardManagementPage from "@/app/(dashboard)/admin/ucard/page"
+import SpotManagementPage from "@/app/(dashboard)/admin/spot/page"
+import FuturesManagementPage from "@/app/(dashboard)/admin/futures/page"
+import FinanceManagementPage from "@/app/(dashboard)/admin/finance/page"
+import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
+import BePayManagementPage from "@/app/(dashboard)/admin/bepay/page"
+import OrdersManagementPage from "@/app/(dashboard)/admin/orders/page"
 import TetherIcon from "@/components/tether-icon"
 
 interface InstantNavigationProps {
@@ -71,6 +88,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   const [notificationFilter, setNotificationFilter] = useState<"all" | "system" | "activity" | "important">("all")
   const { theme, setTheme, language, setLanguage } = useTheme()
   const { showMobileChat } = useChat()
+  const { isAdminLoggedIn } = useAdmin()
 
   useEffect(() => {
     // Initialize current page from URL on mount
@@ -144,6 +162,24 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       return <ProfilePage />
     }
 
+    // Handle admin pages
+    if (currentPage === "/admin/login") return <AdminLoginPage />
+    if (currentPage === "/admin") return <AdminPage />
+    if (currentPage === "/admin/operations") return <OperationsPage />
+    if (currentPage === "/admin/users") return <UsersManagementPage />
+    if (currentPage === "/admin/im") return <IMManagementPage />
+    if (currentPage === "/admin/social") return <SocialManagementPage />
+    if (currentPage === "/admin/market") return <MarketManagementPage />
+    if (currentPage === "/admin/fiat") return <FiatManagementPage />
+    if (currentPage === "/admin/escrow") return <EscrowManagementPage />
+    if (currentPage === "/admin/ucard") return <UCardManagementPage />
+    if (currentPage === "/admin/spot") return <SpotManagementPage />
+    if (currentPage === "/admin/futures") return <FuturesManagementPage />
+    if (currentPage === "/admin/finance") return <FinanceManagementPage />
+    if (currentPage === "/admin/wallet") return <WalletManagementPage />
+    if (currentPage === "/admin/bepay") return <BePayManagementPage />
+    if (currentPage === "/admin/orders") return <OrdersManagementPage />
+
     return <ChatPage />
   }
 
@@ -192,11 +228,22 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     )
   }
 
+  // 检查是否在管理员模式
+  const isAdminMode = currentPage.startsWith('/admin') && isAdminLoggedIn
+
   // 桌面端布局（原有的侧边栏布局）
   return (
     <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
-      {/* Sidebar */}
-      <div 
+      {/* Sidebar - 根据模式显示不同的侧边栏 */}
+      {isAdminMode ? (
+        <AdminSidebar 
+          currentPage={currentPage}
+          onNavigate={navigate}
+          isExpanded={isExpanded}
+          setIsExpanded={setIsExpanded}
+        />
+      ) : (
+        <div 
         className={`${theme === 'dark' ? 'bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-b from-gray-900 via-black to-gray-900'} text-white flex flex-col shadow-2xl shadow-black/20 relative overflow-hidden h-full`}
         style={{
           width: isExpanded ? '256px' : '96px',
@@ -376,9 +423,10 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
           </div>
         </div>
       </div>
+      )}
 
       {/* Language Dropdown - Positioned outside navigation */}
-      {showLanguageDropdown && (
+      {!isAdminMode && showLanguageDropdown && (
         <div 
           className="fixed left-20 bottom-20 bg-gray-800 border border-gray-600 rounded-lg shadow-xl py-2 min-w-[120px] z-[9999] animate-in fade-in-0 zoom-in-95 duration-200"
           onClick={(e) => e.stopPropagation()}
@@ -417,7 +465,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       </div>
 
       {/* Portal-based Notification Dropdown */}
-      {mounted && showNotificationDropdown && createPortal(
+      {!isAdminMode && mounted && showNotificationDropdown && createPortal(
         <div 
           style={{ 
             position: 'fixed',
