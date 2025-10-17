@@ -1,14 +1,22 @@
 "use client"
 
 import { useEffect } from "react"
-import { useRouter } from "next/navigation"
 
 export default function AdminPage() {
-  const router = useRouter()
-
   useEffect(() => {
-    router.replace("/admin/operations/dashboard")
-  }, [router])
+    // 检查是否已登录
+    const isLoggedIn = 
+      sessionStorage.getItem("isAdminLoggedIn") === "true" || 
+      localStorage.getItem("isAdminLoggedIn") === "true"
+    
+    if (isLoggedIn) {
+      // 已登录，跳转到总仪表盘
+      window.location.href = "/admin/operations/dashboard"
+    } else {
+      // 未登录，跳转到登录页
+      window.location.href = "/admin/login"
+    }
+  }, [])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
@@ -18,7 +26,7 @@ export default function AdminPage() {
           <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-custom-green/30 rounded-full animate-spin mx-auto" style={{ animationDuration: '1.5s' }}></div>
         </div>
         <p className="mt-6 text-gray-400 text-lg font-medium">加载中...</p>
-        <p className="mt-2 text-gray-500 text-sm">正在为您打开总仪表盘</p>
+        <p className="mt-2 text-gray-500 text-sm">正在进入管理后台</p>
       </div>
     </div>
   )
