@@ -34,7 +34,10 @@ export default function OperationsLayout({ children }: OperationsLayoutProps) {
 
   const handleNavigate = (path: string) => {
     setCurrentPath(path)
-    window.location.href = path
+    // 使用 pushState 更新 URL 但不刷新页面
+    window.history.pushState({}, "", path)
+    // 触发自定义事件通知 InstantNavigation 更新
+    window.dispatchEvent(new CustomEvent('navigate', { detail: { path } }))
   }
 
   const isActive = (path: string) => currentPath === path

@@ -95,6 +95,18 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     // Initialize current page from URL on mount
     const path = window.location.pathname
     setCurrentPage(path || "/chat")
+
+    // 监听自定义导航事件
+    const handleNavigateEvent = (e: CustomEvent) => {
+      const { path } = e.detail
+      setCurrentPage(path)
+    }
+
+    window.addEventListener('navigate', handleNavigateEvent as EventListener)
+    
+    return () => {
+      window.removeEventListener('navigate', handleNavigateEvent as EventListener)
+    }
   }, [])
 
   useEffect(() => {
