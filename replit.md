@@ -55,7 +55,15 @@ Preferred communication style: Simple, everyday language.
     11. Finance Management (理财管理) - Investment products management
     12. Wallet Management (钱包管理) - Wallet operations and audits
     13. BePay Management (BePay管理) - Payment gateway administration
-    14. Orders Management (订单管理) - Order tracking and fulfillment
+    14. Orders Management (订单管理) - Order tracking and fulfillment with 8 sub-pages:
+       - Funds Records (资金记录)
+       - USDT Trading Records (USDT买卖记录)
+       - Spot Orders (现货订单)
+       - Futures Orders (合约订单)
+       - Finance Orders (理财订单)
+       - U-Card Orders (U卡订单)
+       - Escrow Records (担保记录)
+       - Payment Orders (支付订单)
   - **Access Control**: Login required to access admin features
   - **Session Management**: Persistent admin authentication state
   - **Navigation System**: Custom event-based navigation for seamless sub-page switching without sidebar reload

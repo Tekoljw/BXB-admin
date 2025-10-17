@@ -49,6 +49,14 @@ import RetentionAnalysisPage from "@/app/(dashboard)/admin/operations/retention/
 import RiskConfigPage from "@/app/(dashboard)/admin/operations/risk/page"
 import ActivitiesConfigPage from "@/app/(dashboard)/admin/operations/activities/page"
 import AuditPage from "@/app/(dashboard)/admin/operations/audit/page"
+import FundsRecordsPage from "@/app/(dashboard)/admin/orders/funds/page"
+import USDTRecordsPage from "@/app/(dashboard)/admin/orders/usdt/page"
+import SpotOrdersPage from "@/app/(dashboard)/admin/orders/spot/page"
+import FuturesOrdersPage from "@/app/(dashboard)/admin/orders/futures/page"
+import FinanceOrdersPage from "@/app/(dashboard)/admin/orders/finance/page"
+import UCardOrdersPage from "@/app/(dashboard)/admin/orders/ucard/page"
+import EscrowRecordsPage from "@/app/(dashboard)/admin/orders/escrow/page"
+import PaymentOrdersPage from "@/app/(dashboard)/admin/orders/payment/page"
 import UsersManagementPage from "@/app/(dashboard)/admin/users/page"
 import IMManagementPage from "@/app/(dashboard)/admin/im/page"
 import SocialManagementPage from "@/app/(dashboard)/admin/social/page"
@@ -197,6 +205,15 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/operations/risk") return <RiskConfigPage />
     if (currentPage === "/admin/operations/activities") return <ActivitiesConfigPage />
     if (currentPage === "/admin/operations/audit") return <AuditPage />
+    if (currentPage === "/admin/orders") return <FundsRecordsPage />
+    if (currentPage === "/admin/orders/funds") return <FundsRecordsPage />
+    if (currentPage === "/admin/orders/usdt") return <USDTRecordsPage />
+    if (currentPage === "/admin/orders/spot") return <SpotOrdersPage />
+    if (currentPage === "/admin/orders/futures") return <FuturesOrdersPage />
+    if (currentPage === "/admin/orders/finance") return <FinanceOrdersPage />
+    if (currentPage === "/admin/orders/ucard") return <UCardOrdersPage />
+    if (currentPage === "/admin/orders/escrow") return <EscrowRecordsPage />
+    if (currentPage === "/admin/orders/payment") return <PaymentOrdersPage />
     if (currentPage === "/admin/users") return <UsersManagementPage />
     if (currentPage === "/admin/im") return <IMManagementPage />
     if (currentPage === "/admin/social") return <SocialManagementPage />
@@ -209,7 +226,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/finance") return <FinanceManagementPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
     if (currentPage === "/admin/bepay") return <BePayManagementPage />
-    if (currentPage === "/admin/orders") return <OrdersManagementPage />
 
     return <ChatPage />
   }
