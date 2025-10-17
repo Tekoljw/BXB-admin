@@ -116,6 +116,14 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
   }, [showLanguageDropdown, showNotificationDropdown])
 
   const navigate = (path: string) => {
+    // 如果访问管理页面但未登录，跳转到登录页
+    if (path.startsWith('/admin') && path !== '/admin/login' && !isAdminLoggedIn) {
+      setCurrentPage('/admin/login')
+      onCloseMobile?.()
+      window.history.pushState({}, "", '/admin/login')
+      return
+    }
+    
     setCurrentPage(path)
     onCloseMobile?.()
     // Update URL without triggering page reload
