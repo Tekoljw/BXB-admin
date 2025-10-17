@@ -18,12 +18,6 @@ import {
   ShoppingCart,
   LogOut,
   Menu,
-  Settings,
-  Key,
-  UserCog,
-  Database,
-  Bell,
-  FileCode,
 } from "lucide-react"
 import { useAdmin } from "@/contexts/admin-context"
 import { useRouter } from "next/navigation"
@@ -59,15 +53,6 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
     { path: "/admin/wallet", icon: Wallet, label: "钱包管理" },
     { path: "/admin/bepay", icon: Banknote, label: "BePay管理" },
     { path: "/admin/orders", icon: ShoppingCart, label: "订单管理" },
-  ]
-
-  const systemNavItems = [
-    { path: "/admin/system/settings", icon: Settings, label: "系统设置" },
-    { path: "/admin/system/roles", icon: UserCog, label: "角色权限" },
-    { path: "/admin/system/logs", icon: FileCode, label: "操作日志" },
-    { path: "/admin/system/security", icon: Key, label: "安全配置" },
-    { path: "/admin/system/database", icon: Database, label: "数据库管理" },
-    { path: "/admin/system/notifications", icon: Bell, label: "通知管理" },
   ]
 
   const isActive = (path: string) => currentPage === path
@@ -159,74 +144,6 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
                   
                   {active && isExpanded && (
                     <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full"></div>
-                  )}
-                </button>
-                
-                {!isExpanded && (
-                  <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50 whitespace-nowrap shadow-xl border border-gray-600">
-                    {item.label}
-                    <div className="absolute left-0 top-1/2 transform -translate-x-1 -translate-y-1/2 w-2 h-2 bg-gray-800 rotate-45 border-l border-b border-gray-600"></div>
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* 系统管理区域 */}
-      <div className="relative z-10 border-t border-gray-700/50">
-        {isExpanded && (
-          <div className="px-4 py-3">
-            <div className="text-xs text-gray-400 uppercase tracking-wider font-semibold">系统管理</div>
-          </div>
-        )}
-        <div className={`${isExpanded ? 'px-2 pb-2' : 'px-1 pb-1'}`} style={{gap: 'clamp(0.25rem, 1vh, 0.5rem)'}}>
-          {systemNavItems.map((item, index) => {
-            const Icon = item.icon
-            const active = isActive(item.path)
-            return (
-              <div key={item.path} className="relative group mb-1">
-                <button
-                  onClick={() => onNavigate(item.path)}
-                  className={`${isExpanded ? 'w-full px-4' : 'w-12 h-12 mx-auto'} flex items-center justify-center rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
-                    active 
-                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
-                      : "hover:scale-105 hover:bg-gray-700/20"
-                  }`}
-                  style={{ 
-                    padding: isExpanded ? 'clamp(0.4rem, 1.2vh, 0.8rem) 1rem' : '0',
-                  }}
-                  title={!isExpanded ? item.label : undefined}
-                >
-                  {active && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl"></div>
-                  )}
-                  
-                  {!active && (
-                    <div className={`absolute inset-1 border border-custom-green/0 group-hover:border-custom-green/30 transition-all duration-400 ease-in-out rounded-lg`}></div>
-                  )}
-                  
-                  <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
-                    <Icon size={20} />
-                  </div>
-                  
-                  <div 
-                    className={`${isExpanded ? 'ml-3' : 'ml-0'} overflow-hidden transition-all duration-500 ease-in-out`}
-                    style={{
-                      width: isExpanded ? '120px' : '0px',
-                      opacity: isExpanded ? 1 : 0,
-                    }}
-                  >
-                    <span className={`text-xs font-medium whitespace-nowrap transition-all duration-300 ${
-                      active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
-                    }`}>
-                      {item.label}
-                    </span>
-                  </div>
-                  
-                  {active && isExpanded && (
-                    <div className="absolute right-2 w-2 h-6 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full"></div>
                   )}
                 </button>
                 
