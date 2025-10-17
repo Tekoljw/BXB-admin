@@ -47,7 +47,6 @@ import DashboardPage from "@/app/(dashboard)/admin/operations/dashboard/page"
 import FundsAnalysisPage from "@/app/(dashboard)/admin/operations/funds/page"
 import RetentionAnalysisPage from "@/app/(dashboard)/admin/operations/retention/page"
 import RiskConfigPage from "@/app/(dashboard)/admin/operations/risk/page"
-import OrdersPage from "@/app/(dashboard)/admin/operations/orders/page"
 import ActivitiesConfigPage from "@/app/(dashboard)/admin/operations/activities/page"
 import AuditPage from "@/app/(dashboard)/admin/operations/audit/page"
 import UsersManagementPage from "@/app/(dashboard)/admin/users/page"
@@ -196,7 +195,6 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/operations/funds") return <FundsAnalysisPage />
     if (currentPage === "/admin/operations/retention") return <RetentionAnalysisPage />
     if (currentPage === "/admin/operations/risk") return <RiskConfigPage />
-    if (currentPage === "/admin/operations/orders") return <OrdersPage />
     if (currentPage === "/admin/operations/activities") return <ActivitiesConfigPage />
     if (currentPage === "/admin/operations/audit") return <AuditPage />
     if (currentPage === "/admin/users") return <UsersManagementPage />

@@ -36,7 +36,13 @@ Preferred communication style: Simple, everyday language.
   - **Authentication**: Dedicated admin login interface (demo: admin/admin123)
   - **Context-Aware Sidebar**: Automatically switches between user and admin navigation
   - **14 Management Modules**:
-    1. Operations Report (运营报表) - Platform statistics and analytics
+    1. Operations Report (运营报表) - Platform statistics and analytics with 6 sub-pages:
+       - Dashboard (总仪表盘)
+       - Funds Analysis (出入金分析报表)
+       - Retention Analysis (留存与活跃分析报表)
+       - Risk Configuration (风控配置)
+       - Activities Configuration (活动配置)
+       - Financial Audit (财务审核)
     2. User Management (用户管理) - User accounts and permissions
     3. IM Management (IM管理) - Messaging and chat monitoring
     4. Social Management (社交管理) - Content moderation and social features
@@ -52,6 +58,7 @@ Preferred communication style: Simple, everyday language.
     14. Orders Management (订单管理) - Order tracking and fulfillment
   - **Access Control**: Login required to access admin features
   - **Session Management**: Persistent admin authentication state
+  - **Navigation System**: Custom event-based navigation for seamless sub-page switching without sidebar reload
 
 ### UI/UX Decisions
 - Responsive navigation (collapsible sidebar, mobile-friendly design)
