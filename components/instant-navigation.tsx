@@ -44,6 +44,7 @@ import FinancePage from "@/app/(dashboard)/finance/page"
 import AdminPage from "@/app/(dashboard)/admin/page"
 import AdminLoginPage from "@/app/(dashboard)/admin/login/page"
 import DashboardPage from "@/app/(dashboard)/admin/operations/dashboard/page"
+import FundsAnalysisPage from "@/app/(dashboard)/admin/operations/funds/page"
 import UsersManagementPage from "@/app/(dashboard)/admin/users/page"
 import IMManagementPage from "@/app/(dashboard)/admin/im/page"
 import SocialManagementPage from "@/app/(dashboard)/admin/social/page"
@@ -174,6 +175,8 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/login") return <AdminLoginPage />
     if (currentPage === "/admin") return <AdminPage />
     if (currentPage === "/admin/operations") return <DashboardPage />
+    if (currentPage === "/admin/operations/dashboard") return <DashboardPage />
+    if (currentPage === "/admin/operations/funds") return <FundsAnalysisPage />
     if (currentPage === "/admin/users") return <UsersManagementPage />
     if (currentPage === "/admin/im") return <IMManagementPage />
     if (currentPage === "/admin/social") return <SocialManagementPage />
