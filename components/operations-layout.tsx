@@ -1,7 +1,6 @@
 "use client"
 
-import React from "react"
-import { usePathname, useRouter } from "next/navigation"
+import React, { useEffect, useState } from "react"
 import {
   LayoutDashboard,
   TrendingUp,
@@ -17,8 +16,11 @@ interface OperationsLayoutProps {
 }
 
 export default function OperationsLayout({ children }: OperationsLayoutProps) {
-  const pathname = usePathname()
-  const router = useRouter()
+  const [currentPath, setCurrentPath] = useState("")
+
+  useEffect(() => {
+    setCurrentPath(window.location.pathname)
+  }, [])
 
   const subNavItems = [
     { path: "/admin/operations/dashboard", icon: LayoutDashboard, label: "总仪表盘" },
@@ -30,7 +32,12 @@ export default function OperationsLayout({ children }: OperationsLayoutProps) {
     { path: "/admin/operations/audit", icon: FileCheck, label: "财务审核" },
   ]
 
-  const isActive = (path: string) => pathname === path
+  const handleNavigate = (path: string) => {
+    setCurrentPath(path)
+    window.location.href = path
+  }
+
+  const isActive = (path: string) => currentPath === path
 
   return (
     <div className="flex flex-col h-full">
@@ -43,7 +50,7 @@ export default function OperationsLayout({ children }: OperationsLayoutProps) {
             return (
               <button
                 key={item.path}
-                onClick={() => router.push(item.path)}
+                onClick={() => handleNavigate(item.path)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 whitespace-nowrap ${
                   active
                     ? "bg-custom-green text-white shadow-md"
