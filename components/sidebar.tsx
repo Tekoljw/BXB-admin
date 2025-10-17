@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { useRoutePreloader, instantNavigate } from "@/lib/route-preloader"
 import { useTheme } from "@/contexts/theme-context"
 import {
@@ -28,8 +28,8 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ onCloseMobile, onToggleExpanded, isExpanded = true }: SidebarProps) {
-  const [currentPath, setCurrentPath] = useState("/chat")
   const router = useRouter()
+  const pathname = usePathname()
   const { theme } = useTheme()
   const isDark = theme === "dark"
   
@@ -41,7 +41,7 @@ export default function Sidebar({ onCloseMobile, onToggleExpanded, isExpanded = 
     onCloseMobile?.()
   }
 
-  const isActive = (path: string) => currentPath === path
+  const isActive = (path: string) => pathname === path
 
   const navItems = [
     { path: "/chat", icon: MessageCircle, label: "聊天" },

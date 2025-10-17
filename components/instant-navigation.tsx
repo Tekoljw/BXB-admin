@@ -39,6 +39,7 @@ import MarketPage from "@/app/(dashboard)/market/page"
 import SpotPage from "@/app/(dashboard)/spot/page"
 import FuturesPage from "@/app/(dashboard)/futures/page"
 import FinancePage from "@/app/(dashboard)/finance/page"
+import AdminPage from "@/app/(dashboard)/admin/page"
 import TetherIcon from "@/components/tether-icon"
 
 interface InstantNavigationProps {
@@ -119,6 +120,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     { path: "/futures", icon: BarChart3, label: "合约", component: FuturesPage },
     { path: "/finance", icon: PiggyBank, label: "理财", component: FinancePage },
     { path: "/wallet", icon: Wallet, label: "钱包", component: WalletPage },
+    { path: "/admin", icon: Shield, label: "管理", component: AdminPage },
   ]
 
   // 底部导航项（移动端）
