@@ -12,13 +12,95 @@ import {
   Eye,
   Edit,
   TrendingUp,
-  DollarSign
+  DollarSign,
+  FileText,
+  BarChart2,
+  LineChart,
+  PiggyBank,
+  CreditCard,
+  HandCoins,
+  Receipt
 } from "lucide-react"
 import { useState } from "react"
 
 export default function OrdersManagementPage() {
   const [selectedStatus, setSelectedStatus] = useState("all")
   const [selectedType, setSelectedType] = useState("all")
+  const [primaryTab, setPrimaryTab] = useState("资金记录")
+  const [secondaryTab, setSecondaryTab] = useState("deposit")
+
+  // 第一级页签配置
+  const primaryTabs = [
+    { id: "资金记录", label: "资金记录", icon: FileText },
+    { id: "USDT买卖记录", label: "USDT买卖记录", icon: DollarSign },
+    { id: "现货订单", label: "现货订单", icon: BarChart2 },
+    { id: "合约订单", label: "合约订单", icon: LineChart },
+    { id: "理财订单", label: "理财订单", icon: PiggyBank },
+    { id: "U卡订单", label: "U卡订单", icon: CreditCard },
+    { id: "担保记录", label: "担保记录", icon: HandCoins },
+    { id: "支付订单", label: "支付订单", icon: Receipt }
+  ]
+
+  // 第二级页签配置
+  const secondaryTabsConfig: Record<string, { key: string; label: string }[]> = {
+    "资金记录": [
+      { key: "deposit", label: "入金记录" },
+      { key: "withdraw", label: "手动代付记录" },
+      { key: "internal_transfer", label: "内转记录" },
+      { key: "transfer", label: "划转记录" },
+      { key: "commission", label: "佣金结算记录" },
+      { key: "other", label: "其他记录" }
+    ],
+    "USDT买卖记录": [
+      { key: "c2c", label: "C2C" },
+      { key: "quick", label: "快捷" },
+      { key: "otc", label: "OTC" }
+    ],
+    "现货订单": [
+      { key: "current", label: "当前委托" },
+      { key: "history", label: "历史委托" },
+      { key: "trades", label: "成交明细" }
+    ],
+    "合约订单": [
+      { key: "current", label: "当前委托" },
+      { key: "plan", label: "计划委托" },
+      { key: "history", label: "历史委托" },
+      { key: "trades", label: "成交明细" },
+      { key: "funding", label: "资金记录" },
+      { key: "fees", label: "资金费用" }
+    ],
+    "理财订单": [
+      { key: "invest", label: "投资订单" },
+      { key: "account", label: "理财资金记录" }
+    ],
+    "U卡订单": [
+      { key: "recharge", label: "充值记录" },
+      { key: "consume", label: "消费记录" }
+    ],
+    "担保记录": [
+      { key: "receive", label: "担保收款记录" },
+      { key: "payment", label: "担保付款记录" },
+      { key: "credit", label: "信用担保资金记录" }
+    ],
+    "支付订单": [
+      { key: "fiatReceive", label: "法币代收" },
+      { key: "fiatPay", label: "法币代付" },
+      { key: "cryptoReceive", label: "加密货币代收" },
+      { key: "cryptoPay", label: "加密货币代付" }
+    ]
+  }
+
+  // 获取当前的二级页签列表
+  const currentSecondaryTabs = secondaryTabsConfig[primaryTab] || []
+
+  // 切换第一级页签时，重置第二级页签
+  const handlePrimaryTabChange = (tabId: string) => {
+    setPrimaryTab(tabId)
+    const newSecondaryTabs = secondaryTabsConfig[tabId] || []
+    if (newSecondaryTabs.length > 0) {
+      setSecondaryTab(newSecondaryTabs[0].key)
+    }
+  }
 
   const orders = [
     { id: "#2024012001", user: "张三", userId: "user_12345", amount: "¥12,500", type: "现货交易", status: "completed", createTime: "2024-01-20 14:30", completeTime: "2024-01-20 14:32" },
@@ -100,6 +182,51 @@ export default function OrdersManagementPage() {
             <div className="text-2xl font-bold">211</div>
             <div className="text-xs text-gray-500 dark:text-gray-400">已取消</div>
           </div>
+        </div>
+
+        {/* 两级页签 */}
+        <div className="mb-6 space-y-4">
+          {/* 第一级页签 */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-1">
+            <div className="flex items-center overflow-x-auto">
+              {primaryTabs.map((tab) => {
+                const Icon = tab.icon
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => handlePrimaryTabChange(tab.id)}
+                    className={`flex items-center space-x-2 px-4 py-2.5 rounded-lg whitespace-nowrap transition-all duration-200 ${
+                      primaryTab === tab.id
+                        ? "bg-custom-green text-white shadow-md"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span className="text-sm font-medium">{tab.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* 第二级页签 */}
+          {currentSecondaryTabs.length > 0 && (
+            <div className="flex items-center space-x-2 overflow-x-auto pb-2">
+              {currentSecondaryTabs.map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setSecondaryTab(tab.key)}
+                  className={`px-4 py-2 rounded-lg whitespace-nowrap text-sm font-medium transition-all duration-200 ${
+                    secondaryTab === tab.key
+                      ? "bg-custom-green/10 text-custom-green border-2 border-custom-green"
+                      : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-custom-green/50"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-4">
