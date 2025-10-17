@@ -17,6 +17,8 @@ import {
   Globe2,
   ChevronLeft,
   ChevronRight,
+  Shield,
+  PiggyBank,
 } from "lucide-react"
 
 interface SidebarProps {
@@ -49,7 +51,9 @@ export default function Sidebar({ onCloseMobile, onToggleExpanded, isExpanded = 
     { path: "/market", icon: LineChart, label: "行情" },
     { path: "/spot", icon: ArrowLeftRight, label: "现货" },
     { path: "/futures", icon: FileText, label: "合约" },
+    { path: "/finance", icon: PiggyBank, label: "理财" },
     { path: "/wallet", icon: Wallet, label: "钱包" },
+    { path: "/admin", icon: Shield, label: "管理" },
   ]
 
   return (
