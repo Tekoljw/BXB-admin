@@ -22,8 +22,8 @@ export default function AdminLoginPage() {
         sessionStorage.setItem("isAdminLoggedIn", "true")
         localStorage.setItem("isAdminLoggedIn", "true")
         
-        // 刷新页面以更新状态并跳转
-        window.location.href = "/admin/operations"
+        // 刷新页面以更新状态并跳转到总仪表盘
+        window.location.href = "/admin/operations/dashboard"
       } else {
         setError("用户名或密码错误")
         setIsLoading(false)
