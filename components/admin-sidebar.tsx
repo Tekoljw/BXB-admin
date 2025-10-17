@@ -84,19 +84,16 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
       </div>
 
       {/* 管理员标识 */}
-      <div className={`relative z-10 ${isExpanded ? 'px-4 py-4' : 'px-0 py-4'} backdrop-blur-sm border-b border-gray-700/50`}>
-        <div className={`flex ${isExpanded ? 'flex-col items-center justify-center' : 'items-center justify-center'} w-full transition-all duration-500`}>
-          <div className="w-10 h-10 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-xl flex items-center justify-center shadow-lg shadow-custom-green/20">
-            <Shield className="w-6 h-6 text-white" />
-          </div>
-          {isExpanded && (
-            <div className="mt-3 overflow-hidden transition-all duration-500 ease-in-out text-center">
+      {isExpanded && (
+        <div className="relative z-10 px-4 py-4 backdrop-blur-sm border-b border-gray-700/50">
+          <div className="flex flex-col items-center justify-center w-full transition-all duration-500">
+            <div className="overflow-hidden transition-all duration-500 ease-in-out text-center">
               <div className="text-sm font-medium text-white whitespace-nowrap">管理后台</div>
               <div className="text-xs text-gray-400 whitespace-nowrap">Admin Panel</div>
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* 导航菜单 */}
       <div className={`relative z-10 flex-1 ${isExpanded ? 'p-2' : 'p-1'} flex flex-col justify-start min-h-0 overflow-y-auto custom-scrollbar`}>
