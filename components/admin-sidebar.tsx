@@ -47,7 +47,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
     { path: "/admin/fiat", icon: DollarSign, label: "法币管理" },
     { path: "/admin/escrow", icon: Shield, label: "担保管理" },
     { path: "/admin/ucard", icon: CreditCard, label: "U卡管理" },
-    { path: "/admin/spot", icon: ArrowLeftRight, label: "现货管理" },
+    { path: "/admin/spot/coins", icon: ArrowLeftRight, label: "现货管理" },
     { path: "/admin/futures", icon: FileText, label: "合约管理" },
     { path: "/admin/finance", icon: PiggyBank, label: "理财管理" },
     { path: "/admin/wallet", icon: Wallet, label: "钱包管理" },
@@ -56,7 +56,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
   ]
 
   const isActive = (path: string) => {
-    // 对于运营管理、订单管理、IM管理和用户管理，只要当前页面以对应路径开头就视为激活状态
+    // 对于运营管理、订单管理、IM管理、用户管理和现货管理，只要当前页面以对应路径开头就视为激活状态
     if (path === "/admin/operations/dashboard" && currentPage.startsWith("/admin/operations")) {
       return true
     }
@@ -67,6 +67,9 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
       return true
     }
     if (path === "/admin/users/all" && currentPage.startsWith("/admin/users")) {
+      return true
+    }
+    if (path === "/admin/spot/coins" && currentPage.startsWith("/admin/spot")) {
       return true
     }
     return currentPage === path

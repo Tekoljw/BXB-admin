@@ -86,6 +86,16 @@ import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
 import EscrowManagementPage from "@/app/(dashboard)/admin/escrow/page"
 import UCardManagementPage from "@/app/(dashboard)/admin/ucard/page"
 import SpotManagementPage from "@/app/(dashboard)/admin/spot/page"
+import SpotCoinsPage from "@/app/(dashboard)/admin/spot/coins/page"
+import SpotNetworksPage from "@/app/(dashboard)/admin/spot/networks/page"
+import SpotMarketsPage from "@/app/(dashboard)/admin/spot/markets/page"
+import SpotMarketMakersPage from "@/app/(dashboard)/admin/spot/market-makers/page"
+import SpotSectorsPage from "@/app/(dashboard)/admin/spot/sectors/page"
+import SpotRestrictedCountriesPage from "@/app/(dashboard)/admin/spot/restricted-countries/page"
+import SpotWhitelistPage from "@/app/(dashboard)/admin/spot/whitelist/page"
+import SpotOrdersPage from "@/app/(dashboard)/admin/spot/orders/page"
+import SpotKlinePage from "@/app/(dashboard)/admin/spot/kline/page"
+import SpotTransactionsPage from "@/app/(dashboard)/admin/spot/transactions/page"
 import FuturesManagementPage from "@/app/(dashboard)/admin/futures/page"
 import FinanceManagementPage from "@/app/(dashboard)/admin/finance/page"
 import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
@@ -263,7 +273,17 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/fiat") return <FiatManagementPage />
     if (currentPage === "/admin/escrow") return <EscrowManagementPage />
     if (currentPage === "/admin/ucard") return <UCardManagementPage />
-    if (currentPage === "/admin/spot") return <SpotManagementPage />
+    if (currentPage === "/admin/spot") return <SpotCoinsPage />
+    if (currentPage === "/admin/spot/coins") return <SpotCoinsPage />
+    if (currentPage === "/admin/spot/networks") return <SpotNetworksPage />
+    if (currentPage === "/admin/spot/markets") return <SpotMarketsPage />
+    if (currentPage === "/admin/spot/market-makers") return <SpotMarketMakersPage />
+    if (currentPage === "/admin/spot/sectors") return <SpotSectorsPage />
+    if (currentPage === "/admin/spot/restricted-countries") return <SpotRestrictedCountriesPage />
+    if (currentPage === "/admin/spot/whitelist") return <SpotWhitelistPage />
+    if (currentPage === "/admin/spot/orders") return <SpotOrdersPage />
+    if (currentPage === "/admin/spot/kline") return <SpotKlinePage />
+    if (currentPage === "/admin/spot/transactions") return <SpotTransactionsPage />
     if (currentPage === "/admin/futures") return <FuturesManagementPage />
     if (currentPage === "/admin/finance") return <FinanceManagementPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
