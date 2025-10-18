@@ -51,7 +51,7 @@ import ActivitiesConfigPage from "@/app/(dashboard)/admin/operations/activities/
 import AuditPage from "@/app/(dashboard)/admin/operations/audit/page"
 import FundsRecordsPage from "@/app/(dashboard)/admin/orders/funds/page"
 import USDTRecordsPage from "@/app/(dashboard)/admin/orders/usdt/page"
-import SpotOrdersPage from "@/app/(dashboard)/admin/orders/spot/page"
+import AdminSpotOrdersPage from "@/app/(dashboard)/admin/orders/spot/page"
 import FuturesOrdersPage from "@/app/(dashboard)/admin/orders/futures/page"
 import FinanceOrdersPage from "@/app/(dashboard)/admin/orders/finance/page"
 import UCardOrdersPage from "@/app/(dashboard)/admin/orders/ucard/page"
@@ -93,7 +93,7 @@ import SpotMarketMakersPage from "@/app/(dashboard)/admin/spot/market-makers/pag
 import SpotSectorsPage from "@/app/(dashboard)/admin/spot/sectors/page"
 import SpotRestrictedCountriesPage from "@/app/(dashboard)/admin/spot/restricted-countries/page"
 import SpotWhitelistPage from "@/app/(dashboard)/admin/spot/whitelist/page"
-import SpotOrdersPage from "@/app/(dashboard)/admin/spot/orders/page"
+import SpotDelegateOrdersPage from "@/app/(dashboard)/admin/spot/orders/page"
 import SpotKlinePage from "@/app/(dashboard)/admin/spot/kline/page"
 import SpotTransactionsPage from "@/app/(dashboard)/admin/spot/transactions/page"
 import FuturesManagementPage from "@/app/(dashboard)/admin/futures/page"
@@ -239,7 +239,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/orders") return <FundsRecordsPage />
     if (currentPage === "/admin/orders/funds") return <FundsRecordsPage />
     if (currentPage === "/admin/orders/usdt") return <USDTRecordsPage />
-    if (currentPage === "/admin/orders/spot") return <SpotOrdersPage />
+    if (currentPage === "/admin/orders/spot") return <AdminSpotOrdersPage />
     if (currentPage === "/admin/orders/futures") return <FuturesOrdersPage />
     if (currentPage === "/admin/orders/finance") return <FinanceOrdersPage />
     if (currentPage === "/admin/orders/ucard") return <UCardOrdersPage />
@@ -281,7 +281,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/spot/sectors") return <SpotSectorsPage />
     if (currentPage === "/admin/spot/restricted-countries") return <SpotRestrictedCountriesPage />
     if (currentPage === "/admin/spot/whitelist") return <SpotWhitelistPage />
-    if (currentPage === "/admin/spot/orders") return <SpotOrdersPage />
+    if (currentPage === "/admin/spot/orders") return <SpotDelegateOrdersPage />
     if (currentPage === "/admin/spot/kline") return <SpotKlinePage />
     if (currentPage === "/admin/spot/transactions") return <SpotTransactionsPage />
     if (currentPage === "/admin/futures") return <FuturesManagementPage />

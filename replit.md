@@ -73,7 +73,17 @@ Preferred communication style: Simple, everyday language.
     6. Fiat Management (法币管理) - Fiat currency transactions
     7. Escrow Management (担保管理) - Guaranteed transaction oversight
     8. U-Card Management (U卡管理) - Virtual card issuance and tracking
-    9. Spot Management (现货管理) - Spot trading operations
+    9. Spot Management (现货管理) - Spot trading operations with 10 sub-pages:
+       - Coins Management (币种管理)
+       - Networks Management (网络管理)
+       - Markets Management (市场管理)
+       - Market Makers (做市账户)
+       - Sectors Management (板块管理)
+       - Restricted Countries (交易受限国家)
+       - User Whitelist (用户白名单)
+       - Orders Management (委托管理)
+       - K-line Management (K线管理)
+       - Transactions (成交记录)
     10. Futures Management (合约管理) - Futures contract monitoring
     11. Finance Management (理财管理) - Investment products management
     12. Wallet Management (钱包管理) - Wallet operations and audits
