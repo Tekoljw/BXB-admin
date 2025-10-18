@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-
-import CreativeLoader from "./creative-loader"
+import SimpleLoader from "./simple-loader"
 
 export default function NavigationLoader() {
   const [loading, setLoading] = useState(false)
@@ -12,7 +11,6 @@ export default function NavigationLoader() {
     const handleStart = () => setLoading(true)
     const handleComplete = () => setLoading(false)
 
-    // 模拟路由变化时的加载状态
     handleStart()
     const timer = setTimeout(handleComplete, 100)
 
@@ -23,7 +21,7 @@ export default function NavigationLoader() {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4">
-      <CreativeLoader size={32} variant="circle" />
+      <SimpleLoader size={32} />
     </div>
   )
 }

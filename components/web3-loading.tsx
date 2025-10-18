@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useTheme } from "@/contexts/theme-context"
-import CreativeLoader from "./creative-loader"
+import SimpleLoader from "./simple-loader"
 
 interface Web3LoadingProps {
   onComplete?: () => void
@@ -46,9 +46,9 @@ export default function Web3Loading({ onComplete }: Web3LoadingProps) {
     }`}>
       {/* 主要内容容器 */}
       <div className="relative z-10 flex flex-col items-center">
-        {/* 创意加载动画 */}
-        <div className="flex justify-center items-center space-x-6 mb-8">
-          <CreativeLoader size={80} variant="circle" />
+        {/* 简易加载动画 */}
+        <div className="flex justify-center items-center mb-8">
+          <SimpleLoader size={60} />
         </div>
         
         {/* 进度条 */}
