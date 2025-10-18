@@ -61,43 +61,22 @@
   }
 }
 
-/* Custom scrollbar styles for horizontal navigation */
+/* Hide scrollbar for horizontal navigation while keeping scroll functionality */
 .scrollbar-thin::-webkit-scrollbar {
-  height: 6px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.dark .scrollbar-thin::-webkit-scrollbar-track {
-  background: #2d3748;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #cbd5e0;
-  border-radius: 10px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #a0aec0;
-}
-
-.dark .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #4a5568;
-}
-
-.dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #718096;
-}
-
-/* Hide scrollbar for other horizontal scroll containers */
-.overflow-x-auto:not(.scrollbar-thin)::-webkit-scrollbar {
   display: none;
 }
 
-.overflow-x-auto:not(.scrollbar-thin) {
+.scrollbar-thin {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for other horizontal scroll containers */
+.overflow-x-auto::-webkit-scrollbar {
+  display: none;
+}
+
+.overflow-x-auto {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
