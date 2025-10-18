@@ -49,7 +49,10 @@ export default function SpotLayout({ children }: SpotLayoutProps) {
   return (
     <div className="flex flex-col h-full">
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-3">
-        <div className="flex items-center space-x-1 overflow-x-auto">
+        <div 
+          className="flex items-center space-x-1 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 pb-2"
+          style={{ scrollbarWidth: 'thin' }}
+        >
           {subNavItems.map((item) => {
             const Icon = item.icon
             const active = isActive(item.path)
@@ -57,7 +60,7 @@ export default function SpotLayout({ children }: SpotLayoutProps) {
               <button
                 key={item.path}
                 onClick={() => handleNavigate(item.path)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 whitespace-nowrap ${
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
                   active
                     ? "bg-custom-green text-white shadow-md"
                     : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
