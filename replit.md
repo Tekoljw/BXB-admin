@@ -3,6 +3,8 @@
 ## Overview
 BeDAO is a multilingual cryptocurrency and social networking platform built with Next.js 15 and React. Its primary purpose is to provide real-time cryptocurrency price tracking, portfolio management, trading interfaces, and advanced social features. The platform aims to be a comprehensive web solution for cryptocurrency traders and enthusiasts, featuring a bilingual (Chinese/English) interface and dynamic light/dark themes. The project's vision is to innovate the crypto economic ecosystem as the world's first integrated "Social + Guarantee + AI" digital asset platform, addressing market pain points like trust deficits and fragmented features. It offers a crypto social network, smart guarantee trading, and zero-threshold quantitative tools.
 
+**Default Entry Point**: The application starts with the admin management system. On launch, users are directed to `/admin`, which automatically redirects to `/admin/login` if not authenticated.
+
 ## User Preferences
 Preferred communication style: Simple, everyday language.
 
