@@ -37,14 +37,15 @@ Preferred communication style: Simple, everyday language.
 - **Admin Management System** (comprehensive backend admin panel with secure login)
   - **Authentication**: Dedicated admin login interface (demo: admin/admin123)
   - **Context-Aware Sidebar**: Automatically switches between user and admin navigation
-  - **14 Management Modules**:
-    1. Operations Report (运营报表) - Platform statistics and analytics with 6 sub-pages:
+  - **13 Management Modules**:
+    1. Operations Report (运营报表) - Platform statistics and analytics with 7 sub-pages:
        - Dashboard (总仪表盘)
        - Funds Analysis (出入金分析报表)
        - Retention Analysis (留存与活跃分析报表)
        - Risk Configuration (风控配置)
        - Activities Configuration (活动配置)
        - Financial Audit (财务审核)
+       - Market Configuration (行情配置管理)
     2. User Management (用户管理) - User accounts and permissions with 14 sub-pages:
        - All Users (用户总表)
        - Blacklist Management (黑名单管理)
@@ -69,11 +70,10 @@ Preferred communication style: Simple, everyday language.
        - Auto Join (自动加群)
        - Group Search (群搜索)
     4. Social Management (社交管理) - Content moderation and social features
-    5. Market Management (行情管理) - Trading pairs and market data
-    6. Fiat Management (法币管理) - Fiat currency transactions
-    7. Escrow Management (担保管理) - Guaranteed transaction oversight
-    8. U-Card Management (U卡管理) - Virtual card issuance and tracking
-    9. Spot Management (现货管理) - Spot trading operations with 10 sub-pages:
+    5. Fiat Management (法币管理) - Fiat currency transactions
+    6. Escrow Management (担保管理) - Guaranteed transaction oversight
+    7. U-Card Management (U卡管理) - Virtual card issuance and tracking
+    8. Spot Management (现货管理) - Spot trading operations with 10 sub-pages:
        - Coins Management (币种管理)
        - Networks Management (网络管理)
        - Markets Management (市场管理)
@@ -84,11 +84,11 @@ Preferred communication style: Simple, everyday language.
        - Orders Management (委托管理)
        - K-line Management (K线管理)
        - Transactions (成交记录)
-    10. Futures Management (合约管理) - Futures contract monitoring
-    11. Finance Management (理财管理) - Investment products management
-    12. Wallet Management (钱包管理) - Wallet operations and audits
-    13. BePay Management (BePay管理) - Payment gateway administration
-    14. Orders Management (订单管理) - Order tracking and fulfillment with 8 sub-pages:
+    9. Futures Management (合约管理) - Futures contract monitoring
+    10. Finance Management (理财管理) - Investment products management
+    11. Wallet Management (钱包管理) - Wallet operations and audits
+    12. BePay Management (BePay管理) - Payment gateway administration
+    13. Orders Management (订单管理) - Order tracking and fulfillment with 8 sub-pages:
        - Funds Records (资金记录)
        - USDT Trading Records (USDT买卖记录)
        - Spot Orders (现货订单)
