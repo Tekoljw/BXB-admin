@@ -96,7 +96,7 @@ Preferred communication style: Simple, everyday language.
        - U-Card Orders (U卡订单)
        - Escrow Records (担保记录)
        - Payment Orders (支付订单)
-    14. IT Management (IT管理) - System and infrastructure management
+    14. System Management (系统管理) - System and infrastructure management
   - **Access Control**: Login required to access admin features with email verification code
   - **Session Management**: Persistent admin authentication state
   - **Navigation System**: Custom event-based navigation for seamless sub-page switching without sidebar reload

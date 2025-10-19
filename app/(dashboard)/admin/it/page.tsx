@@ -7,7 +7,7 @@ export default function ITManagementPage() {
   return (
     <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">IT管理</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">系统管理</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">

@@ -74,7 +74,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
     { path: "/admin/commission", icon: Wallet, label: "佣金管理" },
     { path: "/admin/bepay", icon: Banknote, label: "BePay管理" },
     { path: "/admin/orders/funds", icon: ShoppingCart, label: "财务管理" },
-    { path: "/admin/it", icon: Settings, label: "IT管理" },
+    { path: "/admin/it", icon: Settings, label: "系统管理" },
   ]
 
   const isActive = (path: string) => {
