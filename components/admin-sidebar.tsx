@@ -43,7 +43,6 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
     { path: "/admin/users/all", icon: Users, label: "用户管理" },
     { path: "/admin/im/accounts", icon: MessageSquare, label: "IM管理" },
     { path: "/admin/social", icon: Share2, label: "社交管理" },
-    { path: "/admin/market", icon: TrendingUp, label: "行情管理" },
     { path: "/admin/fiat", icon: DollarSign, label: "法币管理" },
     { path: "/admin/escrow", icon: Shield, label: "担保管理" },
     { path: "/admin/ucard", icon: CreditCard, label: "U卡管理" },
