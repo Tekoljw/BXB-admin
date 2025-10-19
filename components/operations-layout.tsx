@@ -28,7 +28,6 @@ export default function OperationsLayout({ children }: OperationsLayoutProps) {
     { path: "/admin/operations/retention", icon: Users, label: "留存与活跃分析报表" },
     { path: "/admin/operations/risk", icon: Shield, label: "风控配置" },
     { path: "/admin/operations/activities", icon: Calendar, label: "活动配置" },
-    { path: "/admin/operations/audit", icon: FileCheck, label: "财务审核" },
     { path: "/admin/operations/market-config", icon: TrendingUp, label: "行情配置管理" },
   ]
 

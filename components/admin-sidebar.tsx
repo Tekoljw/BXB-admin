@@ -21,6 +21,7 @@ import {
   ChevronDown,
   KeyRound,
   User as UserIcon,
+  Settings,
 } from "lucide-react"
 import { useAdmin } from "@/contexts/admin-context"
 import { useRouter } from "next/navigation"
@@ -70,9 +71,10 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
     { path: "/admin/spot/coins", icon: ArrowLeftRight, label: "现货管理" },
     { path: "/admin/futures", icon: FileText, label: "合约管理" },
     { path: "/admin/finance", icon: PiggyBank, label: "理财管理" },
-    { path: "/admin/wallet", icon: Wallet, label: "钱包管理" },
+    { path: "/admin/commission", icon: Wallet, label: "佣金管理" },
     { path: "/admin/bepay", icon: Banknote, label: "BePay管理" },
-    { path: "/admin/orders/funds", icon: ShoppingCart, label: "订单管理" },
+    { path: "/admin/orders/funds", icon: ShoppingCart, label: "财务管理" },
+    { path: "/admin/it", icon: Settings, label: "IT管理" },
   ]
 
   const isActive = (path: string) => {
