@@ -6,7 +6,6 @@ import { Shield, Lock, User, Eye, EyeOff, AlertCircle, Mail } from "lucide-react
 export default function AdminLoginPage() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [email, setEmail] = useState("")
   const [verificationCode, setVerificationCode] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
@@ -16,14 +15,14 @@ export default function AdminLoginPage() {
   const [countdown, setCountdown] = useState(0)
 
   const handleSendCode = async () => {
-    if (!email) {
-      setError("请输入邮箱地址")
+    if (!username) {
+      setError("请先输入管理员账号（邮箱）")
       return
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      setError("请输入有效的邮箱地址")
+    if (!emailRegex.test(username)) {
+      setError("管理员账号应为有效的邮箱地址")
       return
     }
 
@@ -51,8 +50,14 @@ export default function AdminLoginPage() {
     e.preventDefault()
     setError("")
 
-    if (!username || !password || !email || !verificationCode) {
+    if (!username || !password || !verificationCode) {
       setError("请填写所有必填项")
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(username)) {
+      setError("管理员账号应为有效的邮箱地址")
       return
     }
 
@@ -64,15 +69,16 @@ export default function AdminLoginPage() {
     setIsLoading(true)
 
     setTimeout(() => {
-      if (username === "admin" && password === "admin123") {
+      if (username === "admin@bedao.com" && password === "admin123") {
         sessionStorage.setItem("isAdminLoggedIn", "true")
         localStorage.setItem("isAdminLoggedIn", "true")
+        localStorage.setItem("adminEmail", username)
         
         window.history.pushState({}, "", "/admin/operations/dashboard")
         window.dispatchEvent(new CustomEvent('navigate', { detail: { path: "/admin/operations/dashboard" } }))
         window.location.reload()
       } else {
-        setError("用户名或密码错误")
+        setError("邮箱账号或密码错误")
         setIsLoading(false)
       }
     }, 800)
@@ -108,19 +114,19 @@ export default function AdminLoginPage() {
 
           {/* 登录表单 */}
           <form onSubmit={handleLogin} className="space-y-6">
-            {/* 用户名输入 */}
+            {/* 邮箱账号输入 */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                管理员账号
+                管理员账号（邮箱）
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
                 <input
-                  type="text"
+                  type="email"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-custom-green focus:ring-1 focus:ring-custom-green transition-all"
-                  placeholder="请输入管理员账号"
+                  placeholder="请输入管理员邮箱账号"
                   required
                 />
               </div>
@@ -148,24 +154,6 @@ export default function AdminLoginPage() {
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
-              </div>
-            </div>
-
-            {/* 邮箱输入 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                邮箱地址
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-custom-green focus:ring-1 focus:ring-custom-green transition-all"
-                  placeholder="请输入邮箱地址"
-                  required
-                />
               </div>
             </div>
 
@@ -208,7 +196,7 @@ export default function AdminLoginPage() {
           {/* 提示信息 */}
           <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
             <p className="text-blue-400 text-sm text-center">
-              演示账号：admin / admin123
+              演示账号：admin@bedao.com / admin123
             </p>
           </div>
         </div>

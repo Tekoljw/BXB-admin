@@ -12,7 +12,6 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-  const [email, setEmail] = useState("")
   const [verificationCode, setVerificationCode] = useState("")
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
@@ -23,21 +22,18 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
   const [countdown, setCountdown] = useState(0)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
+  const [adminEmail, setAdminEmail] = useState("")
+
+  React.useEffect(() => {
+    if (isOpen && typeof window !== 'undefined') {
+      const email = localStorage.getItem("adminEmail") || "admin@bedao.com"
+      setAdminEmail(email)
+    }
+  }, [isOpen])
 
   if (!isOpen) return null
 
   const handleSendCode = async () => {
-    if (!email) {
-      setError("请输入邮箱地址")
-      return
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      setError("请输入有效的邮箱地址")
-      return
-    }
-
     setIsSendingCode(true)
     setError("")
 
@@ -62,7 +58,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
     e.preventDefault()
     setError("")
 
-    if (!currentPassword || !newPassword || !confirmPassword || !email || !verificationCode) {
+    if (!currentPassword || !newPassword || !confirmPassword || !verificationCode) {
       setError("请填写所有必填项")
       return
     }
@@ -93,7 +89,6 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
         setCurrentPassword("")
         setNewPassword("")
         setConfirmPassword("")
-        setEmail("")
         setVerificationCode("")
         setCodeSent(false)
         setCountdown(0)
@@ -131,20 +126,13 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
               </div>
             )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                邮箱地址 <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-custom-green focus:ring-1 focus:ring-custom-green transition-all"
-                  placeholder="请输入邮箱地址"
-                  required
-                />
+            <div className="p-4 bg-gray-900/30 border border-gray-700 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Mail className="w-5 h-5 text-gray-400" />
+                <div>
+                  <p className="text-sm text-gray-400">当前账号</p>
+                  <p className="text-white font-medium">{adminEmail}</p>
+                </div>
               </div>
             </div>
 
