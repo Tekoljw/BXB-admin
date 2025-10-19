@@ -37,14 +37,13 @@ Preferred communication style: Simple, everyday language.
 - **Admin Management System** (comprehensive backend admin panel with secure login)
   - **Authentication**: Dedicated admin login interface (demo: admin/admin123)
   - **Context-Aware Sidebar**: Automatically switches between user and admin navigation
-  - **13 Management Modules**:
-    1. Operations Report (运营报表) - Platform statistics and analytics with 7 sub-pages:
+  - **14 Management Modules**:
+    1. Operations Report (运营报表) - Platform statistics and analytics with 6 sub-pages:
        - Dashboard (总仪表盘)
        - Funds Analysis (出入金分析报表)
        - Retention Analysis (留存与活跃分析报表)
        - Risk Configuration (风控配置)
        - Activities Configuration (活动配置)
-       - Financial Audit (财务审核)
        - Market Configuration (行情配置管理)
     2. User Management (用户管理) - User accounts and permissions with 14 sub-pages:
        - All Users (用户总表)
@@ -86,9 +85,9 @@ Preferred communication style: Simple, everyday language.
        - Transactions (成交记录)
     9. Futures Management (合约管理) - Futures contract monitoring
     10. Finance Management (理财管理) - Investment products management
-    11. Wallet Management (钱包管理) - Wallet operations and audits
+    11. Commission Management (佣金管理) - Commission tracking and management
     12. BePay Management (BePay管理) - Payment gateway administration
-    13. Orders Management (订单管理) - Order tracking and fulfillment with 8 sub-pages:
+    13. Financial Management (财务管理) - Financial tracking and fulfillment with 8 sub-pages:
        - Funds Records (资金记录)
        - USDT Trading Records (USDT买卖记录)
        - Spot Orders (现货订单)
@@ -97,7 +96,8 @@ Preferred communication style: Simple, everyday language.
        - U-Card Orders (U卡订单)
        - Escrow Records (担保记录)
        - Payment Orders (支付订单)
-  - **Access Control**: Login required to access admin features
+    14. IT Management (IT管理) - System and infrastructure management
+  - **Access Control**: Login required to access admin features with email verification code
   - **Session Management**: Persistent admin authentication state
   - **Navigation System**: Custom event-based navigation for seamless sub-page switching without sidebar reload
 
