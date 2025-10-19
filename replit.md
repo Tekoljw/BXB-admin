@@ -85,7 +85,12 @@ Preferred communication style: Simple, everyday language.
        - Transactions (成交记录)
     9. Futures Management (合约管理) - Futures contract monitoring
     10. Finance Management (理财管理) - Investment products management
-    11. Commission Management (佣金管理) - Commission tracking and management
+    11. Commission Management (佣金管理) - Commission tracking and management with 5 sub-pages:
+       - Futures Commission (合约佣金)
+       - Finance Commission (理财佣金)
+       - U-Card Commission (U卡佣金)
+       - Escrow Commission (担保佣金)
+       - Payment Commission (支付佣金)
     12. BePay Management (BePay管理) - Payment gateway administration
     13. Financial Management (财务管理) - Financial tracking and fulfillment with 8 sub-pages:
        - Funds Records (资金记录)
