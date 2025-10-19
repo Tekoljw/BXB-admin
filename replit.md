@@ -69,7 +69,13 @@ Preferred communication style: Simple, everyday language.
        - Auto Join (自动加群)
        - Group Search (群搜索)
     4. Social Management (社交管理) - Content moderation and social features
-    5. Fiat Management (法币管理) - Fiat currency transactions
+    5. Fiat Management (法币管理) - Fiat currency transactions with 6 sub-pages:
+       - C2C Management (C2C管理)
+       - C2C Orders (C2C订单)
+       - Quick Config (法币快捷配置)
+       - Quick Orders (法币快捷订单)
+       - OTC Config (OTC配置)
+       - OTC Orders (OTC订单)
     6. Escrow Management (担保管理) - Guaranteed transaction oversight
     7. U-Card Management (U卡管理) - Virtual card issuance and tracking
     8. Spot Management (现货管理) - Spot trading operations with 10 sub-pages:
