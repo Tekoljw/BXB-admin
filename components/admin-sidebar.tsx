@@ -18,9 +18,14 @@ import {
   ShoppingCart,
   LogOut,
   Menu,
+  ChevronDown,
+  KeyRound,
+  User as UserIcon,
 } from "lucide-react"
 import { useAdmin } from "@/contexts/admin-context"
 import { useRouter } from "next/navigation"
+import { useState, useRef, useEffect } from "react"
+import ChangePasswordModal from "./change-password-modal"
 
 interface AdminSidebarProps {
   currentPage: string
@@ -32,11 +37,27 @@ interface AdminSidebarProps {
 export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setIsExpanded }: AdminSidebarProps) {
   const { logout } = useAdmin()
   const router = useRouter()
+  const [showAccountMenu, setShowAccountMenu] = useState(false)
+  const [showChangePassword, setShowChangePassword] = useState(false)
+  const accountMenuRef = useRef<HTMLDivElement>(null)
 
   const handleLogout = () => {
     logout()
     router.push("/chat")
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (accountMenuRef.current && !accountMenuRef.current.contains(event.target as Node)) {
+        setShowAccountMenu(false)
+      }
+    }
+
+    if (showAccountMenu) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [showAccountMenu])
 
   const adminNavItems = [
     { path: "/admin/operations/dashboard", icon: BarChart3, label: "运营管理" },
@@ -100,17 +121,6 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
         </button>
       </div>
 
-      {/* 管理员标识 */}
-      {isExpanded && (
-        <div className="relative z-10 px-4 py-4 backdrop-blur-sm border-b border-gray-700/50">
-          <div className="flex flex-col items-center justify-center w-full transition-all duration-500">
-            <div className="overflow-hidden transition-all duration-500 ease-in-out text-center">
-              <div className="text-sm font-medium text-white whitespace-nowrap">管理后台</div>
-              <div className="text-xs text-gray-400 whitespace-nowrap">Admin Panel</div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* 导航菜单 */}
       <div className={`relative z-10 flex-1 ${isExpanded ? 'p-2' : 'p-1'} flex flex-col justify-start min-h-0 overflow-y-auto overflow-x-hidden custom-scrollbar`}>
@@ -176,19 +186,56 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
         </div>
       </div>
 
-      {/* 退出按钮 */}
-      <div className="relative z-10 p-4 border-t border-gray-700/50">
+      {/* 账号菜单 */}
+      <div className="relative z-10 p-4 border-t border-gray-700/50" ref={accountMenuRef}>
         <button
-          onClick={handleLogout}
-          className={`${isExpanded ? 'w-full px-4' : 'w-12 h-12 mx-auto'} flex items-center justify-center rounded-xl transition-all duration-300 hover:bg-red-500/20 group`}
+          onClick={() => setShowAccountMenu(!showAccountMenu)}
+          className={`${isExpanded ? 'w-full px-4' : 'w-12 h-12 mx-auto'} flex items-center justify-between rounded-xl transition-all duration-300 hover:bg-gray-700/50 group relative`}
           style={{ padding: isExpanded ? '0.75rem 1rem' : '0' }}
         >
-          <LogOut size={22} className="text-red-400 group-hover:text-red-300" />
+          <div className="flex items-center">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-custom-green to-custom-green/80 flex items-center justify-center">
+              <UserIcon size={18} className="text-white" />
+            </div>
+            {isExpanded && (
+              <div className="ml-3 text-left">
+                <div className="text-sm font-medium text-white">admin</div>
+                <div className="text-xs text-gray-400">管理员</div>
+              </div>
+            )}
+          </div>
           {isExpanded && (
-            <span className="ml-3 text-sm font-medium text-red-400 group-hover:text-red-300">退出登录</span>
+            <ChevronDown size={18} className={`text-gray-400 transition-transform ${showAccountMenu ? 'rotate-180' : ''}`} />
           )}
         </button>
+
+        {showAccountMenu && (
+          <div className={`absolute ${isExpanded ? 'bottom-full left-4 right-4' : 'bottom-full left-1/2 -translate-x-1/2'} mb-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl overflow-hidden`}>
+            <button
+              onClick={() => {
+                setShowAccountMenu(false)
+                setShowChangePassword(true)
+              }}
+              className="w-full px-4 py-3 text-left text-sm text-white hover:bg-gray-700 transition-colors flex items-center space-x-3"
+            >
+              <KeyRound size={18} className="text-custom-green" />
+              <span>修改密码</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="w-full px-4 py-3 text-left text-sm text-red-400 hover:bg-gray-700 transition-colors flex items-center space-x-3 border-t border-gray-700"
+            >
+              <LogOut size={18} className="text-red-400" />
+              <span>退出登录</span>
+            </button>
+          </div>
+        )}
       </div>
+
+      <ChangePasswordModal 
+        isOpen={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+      />
 
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {
