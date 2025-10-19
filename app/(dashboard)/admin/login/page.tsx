@@ -1,32 +1,75 @@
 "use client"
 
 import React, { useState } from "react"
-import { Shield, Lock, User, Eye, EyeOff, AlertCircle } from "lucide-react"
+import { Shield, Lock, User, Eye, EyeOff, AlertCircle, Mail } from "lucide-react"
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [verificationCode, setVerificationCode] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [isSendingCode, setIsSendingCode] = useState(false)
+  const [codeSent, setCodeSent] = useState(false)
+  const [countdown, setCountdown] = useState(0)
+
+  const handleSendCode = async () => {
+    if (!email) {
+      setError("请输入邮箱地址")
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setError("请输入有效的邮箱地址")
+      return
+    }
+
+    setIsSendingCode(true)
+    setError("")
+
+    setTimeout(() => {
+      setCodeSent(true)
+      setIsSendingCode(false)
+      setCountdown(60)
+      
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    }, 1000)
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+
+    if (!username || !password || !email || !verificationCode) {
+      setError("请填写所有必填项")
+      return
+    }
+
+    if (verificationCode.length !== 6) {
+      setError("验证码应为6位数字")
+      return
+    }
+
     setIsLoading(true)
 
-    // 模拟登录验证（实际应用中应该调用API）
     setTimeout(() => {
       if (username === "admin" && password === "admin123") {
-        // 设置管理员登录状态
         sessionStorage.setItem("isAdminLoggedIn", "true")
         localStorage.setItem("isAdminLoggedIn", "true")
         
-        // 使用 pushState 跳转到总仪表盘（不刷新页面）
         window.history.pushState({}, "", "/admin/operations/dashboard")
-        // 触发导航事件
         window.dispatchEvent(new CustomEvent('navigate', { detail: { path: "/admin/operations/dashboard" } }))
-        // 刷新页面以加载管理后台
         window.location.reload()
       } else {
         setError("用户名或密码错误")
@@ -104,6 +147,50 @@ export default function AdminLoginPage() {
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-400 transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            {/* 邮箱输入 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                邮箱地址
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-custom-green focus:ring-1 focus:ring-custom-green transition-all"
+                  placeholder="请输入邮箱地址"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* 验证码输入 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                邮箱验证码
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  className="flex-1 px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-custom-green focus:ring-1 focus:ring-custom-green transition-all"
+                  placeholder="请输入6位验证码"
+                  maxLength={6}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={handleSendCode}
+                  disabled={isSendingCode || countdown > 0}
+                  className="px-4 py-3 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-sm"
+                >
+                  {isSendingCode ? "发送中..." : countdown > 0 ? `${countdown}秒` : codeSent ? "重新发送" : "发送验证码"}
                 </button>
               </div>
             </div>
