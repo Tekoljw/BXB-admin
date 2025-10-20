@@ -88,7 +88,12 @@ import QuickConfigPage from "@/app/(dashboard)/admin/fiat/quick-config/page"
 import QuickOrdersPage from "@/app/(dashboard)/admin/fiat/quick-orders/page"
 import OTCConfigPage from "@/app/(dashboard)/admin/fiat/otc-config/page"
 import OTCOrdersPage from "@/app/(dashboard)/admin/fiat/otc-orders/page"
-import EscrowManagementPage from "@/app/(dashboard)/admin/escrow/page"
+import EscrowRulesPage from "@/app/(dashboard)/admin/escrow/rules/page"
+import EscrowRecordsPage from "@/app/(dashboard)/admin/escrow/records/page"
+import EscrowRankingsPage from "@/app/(dashboard)/admin/escrow/rankings/page"
+import EscrowGroupsPage from "@/app/(dashboard)/admin/escrow/groups/page"
+import ArbitratorsPage from "@/app/(dashboard)/admin/escrow/arbitrators/page"
+import ComplaintsPage from "@/app/(dashboard)/admin/escrow/complaints/page"
 import UCardManagementPage from "@/app/(dashboard)/admin/ucard/page"
 import SpotManagementPage from "@/app/(dashboard)/admin/spot/page"
 import SpotCoinsPage from "@/app/(dashboard)/admin/spot/coins/page"
@@ -290,7 +295,13 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/fiat/quick-orders") return <QuickOrdersPage />
     if (currentPage === "/admin/fiat/otc-config") return <OTCConfigPage />
     if (currentPage === "/admin/fiat/otc-orders") return <OTCOrdersPage />
-    if (currentPage === "/admin/escrow") return <EscrowManagementPage />
+    if (currentPage === "/admin/escrow") return <EscrowRulesPage />
+    if (currentPage === "/admin/escrow/rules") return <EscrowRulesPage />
+    if (currentPage === "/admin/escrow/records") return <EscrowRecordsPage />
+    if (currentPage === "/admin/escrow/rankings") return <EscrowRankingsPage />
+    if (currentPage === "/admin/escrow/groups") return <EscrowGroupsPage />
+    if (currentPage === "/admin/escrow/arbitrators") return <ArbitratorsPage />
+    if (currentPage === "/admin/escrow/complaints") return <ComplaintsPage />
     if (currentPage === "/admin/ucard") return <UCardManagementPage />
     if (currentPage === "/admin/spot") return <SpotCoinsPage />
     if (currentPage === "/admin/spot/coins") return <SpotCoinsPage />

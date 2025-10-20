@@ -66,7 +66,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
     { path: "/admin/im/accounts", icon: MessageSquare, label: "IM管理" },
     { path: "/admin/social", icon: Share2, label: "社交管理" },
     { path: "/admin/fiat/c2c", icon: DollarSign, label: "法币管理" },
-    { path: "/admin/escrow", icon: Shield, label: "担保管理" },
+    { path: "/admin/escrow/rules", icon: Shield, label: "担保管理" },
     { path: "/admin/ucard", icon: CreditCard, label: "U卡管理" },
     { path: "/admin/spot/coins", icon: ArrowLeftRight, label: "现货管理" },
     { path: "/admin/futures", icon: FileText, label: "合约管理" },
@@ -101,6 +101,9 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
       return true
     }
     if (path === "/admin/system/permissions" && currentPage.startsWith("/admin/system")) {
+      return true
+    }
+    if (path === "/admin/escrow/rules" && currentPage.startsWith("/admin/escrow")) {
       return true
     }
     return currentPage === path

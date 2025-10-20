@@ -76,7 +76,13 @@ Preferred communication style: Simple, everyday language.
        - Quick Orders (法币快捷订单)
        - OTC Config (OTC配置)
        - OTC Orders (OTC订单)
-    6. Escrow Management (担保管理) - Guaranteed transaction oversight
+    6. Escrow Management (担保管理) - Guaranteed transaction oversight with 6 sub-pages:
+       - Escrow Rules Configuration (担保规则配置)
+       - Escrow Records (担保记录)
+       - Reputation Rankings (信誉担保排名)
+       - Escrow Groups Management (担保群管理)
+       - Arbitrators Management (仲裁员管理)
+       - Arbitration Complaint Records (仲裁投诉记录)
     7. U-Card Management (U卡管理) - Virtual card issuance and tracking
     8. Spot Management (现货管理) - Spot trading operations with 10 sub-pages:
        - Coins Management (币种管理)
