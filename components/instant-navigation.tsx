@@ -113,6 +113,12 @@ import SpotKlinePage from "@/app/(dashboard)/admin/spot/kline/page"
 import SpotTransactionsPage from "@/app/(dashboard)/admin/spot/transactions/page"
 import FuturesManagementPage from "@/app/(dashboard)/admin/futures/page"
 import FinanceManagementPage from "@/app/(dashboard)/admin/finance/page"
+import CommissionManagementPage from "@/app/(dashboard)/admin/commission/page"
+import FuturesCommissionPage from "@/app/(dashboard)/admin/commission/futures/page"
+import FinanceCommissionPage from "@/app/(dashboard)/admin/commission/finance/page"
+import UCardCommissionPage from "@/app/(dashboard)/admin/commission/ucard/page"
+import EscrowCommissionPage from "@/app/(dashboard)/admin/commission/escrow/page"
+import PaymentCommissionPage from "@/app/(dashboard)/admin/commission/payment/page"
 import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
 import BePayManagementPage from "@/app/(dashboard)/admin/bepay/page"
 import OrdersManagementPage from "@/app/(dashboard)/admin/orders/page"
@@ -326,6 +332,12 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/spot/transactions") return <SpotTransactionsPage />
     if (currentPage === "/admin/futures") return <FuturesManagementPage />
     if (currentPage === "/admin/finance") return <FinanceManagementPage />
+    if (currentPage === "/admin/commission") return <FuturesCommissionPage />
+    if (currentPage === "/admin/commission/futures") return <FuturesCommissionPage />
+    if (currentPage === "/admin/commission/finance") return <FinanceCommissionPage />
+    if (currentPage === "/admin/commission/ucard") return <UCardCommissionPage />
+    if (currentPage === "/admin/commission/escrow") return <EscrowCommissionPage />
+    if (currentPage === "/admin/commission/payment") return <PaymentCommissionPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
     if (currentPage === "/admin/bepay") return <BePayManagementPage />
     if (currentPage === "/admin/system") return <PermissionsManagementPage />
