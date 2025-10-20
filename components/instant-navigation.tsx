@@ -331,7 +331,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/spot/orders") return <SpotDelegateOrdersPage />
     if (currentPage === "/admin/spot/kline") return <SpotKlinePage />
     if (currentPage === "/admin/spot/transactions") return <SpotTransactionsPage />
-    if (currentPage === "/admin/futures") return <FuturesManagementPage />
+    if (currentPage.startsWith("/admin/futures")) return <FuturesManagementPage />
     if (currentPage === "/admin/copytrade") return <CopyTradeManagementPage />
     if (currentPage === "/admin/finance") return <FinanceManagementPage />
     if (currentPage === "/admin/commission") return <FuturesCommissionPage />

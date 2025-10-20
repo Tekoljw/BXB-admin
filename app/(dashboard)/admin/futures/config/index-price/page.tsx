@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { TrendingUp, TrendingUp, DollarSign, Users } from "lucide-react"
+import { Settings, TrendingUp, DollarSign, Users } from "lucide-react"
 
 export default function Page() {
   return (
