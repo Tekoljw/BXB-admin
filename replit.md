@@ -100,7 +100,22 @@ Preferred communication style: Simple, everyday language.
        - Orders Management (委托管理)
        - K-line Management (K线管理)
        - Transactions (成交记录)
-    9. Futures Management (合约管理) - Futures contract monitoring
+    9. Futures Management (合约管理) - Futures contract monitoring with 15 second-level and 70+ third-level sub-pages:
+       - Contract Config (合约配置): Sectors, Index Price, Index Source, Special Mark Price, Product Config, Predict Group, Transfer Coins, Mark Price Config, I18N, K-line, Share Page (11 pages)
+       - Special Accounts (特殊账户管理): Market Makers, Internal Accounts (2 pages)
+       - Position Management (持仓管理): Scale Ratio, Position List, Net Position, Position History (4 pages)
+       - Trader System (带单员系统): Trader Review, Trader Config, Review History, Trader List (4 pages)
+       - Order Management (委托管理): Tracking Orders, Limit Orders, Plan Orders, Stop Profit/Loss (4 pages)
+       - Fee Tier (阶梯费率): Fee Tier Config, User Fee Tier (2 pages)
+       - Contract History (合约历史): Auto Delever, Liquidation, Tracking History, Order History, Plan History, Stop History, Takeover History (7 pages)
+       - Risk Control (用户风控): Risk History, Profit ADL Trigger, Profit ADL Delever, Profit ADL Cooldown, Profit ADL, ADL Whitelist, User Monitor, Risk List, User Alert, Alert History (10 pages)
+       - MM Risk (做市商风控): MM Monitor, MM Alert (2 pages)
+       - Funds Management (资金管理): Fee Management, Fee Records, Rebate Details, Fee Details, Risk Fund Management, Risk Fund Records, User Flow, Asset Query, Trial Funds, Trial Details, Deduction Funds, Deduction Details (12 pages)
+       - Analytics (数据分析): Reports, Contract Positions (2 pages)
+       - Monitor (监控): Operation Logs (1 page)
+       - Campaigns (运营活动): Lottery Management (1 page)
+       - User Management (用户管理): Blacklist, Position Limit, User Info (3 pages)
+       - Copy Trade (跟单管理): Stop Profit/Loss, Stop History, Leader Whitelist, Shared Leaders, Global Config, Contract Config, Leaders, Followers, Invite Traders, Positions, History, Pending Profit, Profit History (13 pages)
     10. Copy Trade Management (跟单管理) - Copy trading management and monitoring
     11. Finance Management (理财管理) - Investment products management
     12. Commission Management (佣金管理) - Commission tracking and management with 5 sub-pages:
