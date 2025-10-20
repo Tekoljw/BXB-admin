@@ -74,7 +74,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
     { path: "/admin/commission/futures", icon: Wallet, label: "佣金管理" },
     { path: "/admin/bepay", icon: Banknote, label: "BePay管理" },
     { path: "/admin/orders/funds", icon: ShoppingCart, label: "财务管理" },
-    { path: "/admin/it", icon: Settings, label: "系统管理" },
+    { path: "/admin/system/permissions", icon: Settings, label: "系统管理" },
   ]
 
   const isActive = (path: string) => {
@@ -98,6 +98,9 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
       return true
     }
     if (path === "/admin/fiat/c2c" && currentPage.startsWith("/admin/fiat")) {
+      return true
+    }
+    if (path === "/admin/system/permissions" && currentPage.startsWith("/admin/system")) {
       return true
     }
     return currentPage === path

@@ -106,6 +106,14 @@ import FinanceManagementPage from "@/app/(dashboard)/admin/finance/page"
 import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
 import BePayManagementPage from "@/app/(dashboard)/admin/bepay/page"
 import OrdersManagementPage from "@/app/(dashboard)/admin/orders/page"
+import PermissionsManagementPage from "@/app/(dashboard)/admin/system/permissions/page"
+import RolesManagementPage from "@/app/(dashboard)/admin/system/roles/page"
+import SystemUsersManagementPage from "@/app/(dashboard)/admin/system/users/page"
+import AuditConfigPage from "@/app/(dashboard)/admin/system/audit-config/page"
+import AppManagementPage from "@/app/(dashboard)/admin/system/app/page"
+import OperationsManagementPage from "@/app/(dashboard)/admin/system/operations/page"
+import MaintenancePlanPage from "@/app/(dashboard)/admin/system/maintenance-plan/page"
+import MaintenanceWhitelistPage from "@/app/(dashboard)/admin/system/maintenance-whitelist/page"
 import TetherIcon from "@/components/tether-icon"
 
 interface InstantNavigationProps {
@@ -299,6 +307,24 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/finance") return <FinanceManagementPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
     if (currentPage === "/admin/bepay") return <BePayManagementPage />
+    if (currentPage === "/admin/system") return <PermissionsManagementPage />
+    if (currentPage === "/admin/system/permissions") return <PermissionsManagementPage />
+    if (currentPage === "/admin/system/roles") return <RolesManagementPage />
+    if (currentPage === "/admin/system/users") return <SystemUsersManagementPage />
+    if (currentPage === "/admin/system/audit-config") return <AuditConfigPage />
+    if (currentPage === "/admin/system/app") return <AppManagementPage />
+    if (currentPage === "/admin/system/operations") return <OperationsManagementPage />
+    if (currentPage === "/admin/system/maintenance-plan") return <MaintenancePlanPage />
+    if (currentPage === "/admin/system/maintenance-whitelist") return <MaintenanceWhitelistPage />
+    if (currentPage === "/admin/it") return <PermissionsManagementPage />
+    if (currentPage === "/admin/it/permissions") return <PermissionsManagementPage />
+    if (currentPage === "/admin/it/roles") return <RolesManagementPage />
+    if (currentPage === "/admin/it/users") return <SystemUsersManagementPage />
+    if (currentPage === "/admin/it/audit-config") return <AuditConfigPage />
+    if (currentPage === "/admin/it/app") return <AppManagementPage />
+    if (currentPage === "/admin/it/operations") return <OperationsManagementPage />
+    if (currentPage === "/admin/it/maintenance-plan") return <MaintenancePlanPage />
+    if (currentPage === "/admin/it/maintenance-whitelist") return <MaintenanceWhitelistPage />
 
     return <ChatPage />
   }
