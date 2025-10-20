@@ -67,7 +67,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
     { path: "/admin/social", icon: Share2, label: "社交管理" },
     { path: "/admin/fiat/c2c", icon: DollarSign, label: "法币管理" },
     { path: "/admin/escrow/rules", icon: Shield, label: "担保管理" },
-    { path: "/admin/ucard", icon: CreditCard, label: "U卡管理" },
+    { path: "/admin/ucard/users", icon: CreditCard, label: "U卡管理" },
     { path: "/admin/spot/coins", icon: ArrowLeftRight, label: "现货管理" },
     { path: "/admin/futures", icon: FileText, label: "合约管理" },
     { path: "/admin/finance", icon: PiggyBank, label: "理财管理" },
@@ -104,6 +104,9 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
       return true
     }
     if (path === "/admin/escrow/rules" && currentPage.startsWith("/admin/escrow")) {
+      return true
+    }
+    if (path === "/admin/ucard/users" && currentPage.startsWith("/admin/ucard")) {
       return true
     }
     return currentPage === path

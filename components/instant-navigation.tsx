@@ -95,6 +95,11 @@ import EscrowGroupsPage from "@/app/(dashboard)/admin/escrow/groups/page"
 import ArbitratorsPage from "@/app/(dashboard)/admin/escrow/arbitrators/page"
 import ComplaintsPage from "@/app/(dashboard)/admin/escrow/complaints/page"
 import UCardManagementPage from "@/app/(dashboard)/admin/ucard/page"
+import UCardUsersPage from "@/app/(dashboard)/admin/ucard/users/page"
+import UCardSuppliersPage from "@/app/(dashboard)/admin/ucard/suppliers/page"
+import UCardConfigPage from "@/app/(dashboard)/admin/ucard/config/page"
+import UCardApplicationsPage from "@/app/(dashboard)/admin/ucard/applications/page"
+import UCardTransactionsPage from "@/app/(dashboard)/admin/ucard/transactions/page"
 import SpotManagementPage from "@/app/(dashboard)/admin/spot/page"
 import SpotCoinsPage from "@/app/(dashboard)/admin/spot/coins/page"
 import SpotNetworksPage from "@/app/(dashboard)/admin/spot/networks/page"
@@ -302,7 +307,12 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/escrow/groups") return <EscrowGroupsPage />
     if (currentPage === "/admin/escrow/arbitrators") return <ArbitratorsPage />
     if (currentPage === "/admin/escrow/complaints") return <ComplaintsPage />
-    if (currentPage === "/admin/ucard") return <UCardManagementPage />
+    if (currentPage === "/admin/ucard") return <UCardUsersPage />
+    if (currentPage === "/admin/ucard/users") return <UCardUsersPage />
+    if (currentPage === "/admin/ucard/suppliers") return <UCardSuppliersPage />
+    if (currentPage === "/admin/ucard/config") return <UCardConfigPage />
+    if (currentPage === "/admin/ucard/applications") return <UCardApplicationsPage />
+    if (currentPage === "/admin/ucard/transactions") return <UCardTransactionsPage />
     if (currentPage === "/admin/spot") return <SpotCoinsPage />
     if (currentPage === "/admin/spot/coins") return <SpotCoinsPage />
     if (currentPage === "/admin/spot/networks") return <SpotNetworksPage />
