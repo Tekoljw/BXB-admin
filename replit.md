@@ -83,7 +83,12 @@ Preferred communication style: Simple, everyday language.
        - Escrow Groups Management (担保群管理)
        - Arbitrators Management (仲裁员管理)
        - Arbitration Complaint Records (仲裁投诉记录)
-    7. U-Card Management (U卡管理) - Virtual card issuance and tracking
+    7. U-Card Management (U卡管理) - Virtual card issuance and tracking with 5 sub-pages:
+       - U-Card Users List (U卡用户列表)
+       - U-Card Suppliers (U卡供应商)
+       - U-Card Configuration (U卡基础配置)
+       - U-Card Applications (U卡开卡记录)
+       - U-Card Transactions (U卡消费记录)
     8. Spot Management (现货管理) - Spot trading operations with 10 sub-pages:
        - Coins Management (币种管理)
        - Networks Management (网络管理)
