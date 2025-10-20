@@ -22,6 +22,7 @@ import {
   KeyRound,
   User as UserIcon,
   Settings,
+  Copy,
 } from "lucide-react"
 import { useAdmin } from "@/contexts/admin-context"
 import { useRouter } from "next/navigation"
@@ -70,6 +71,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
     { path: "/admin/ucard/users", icon: CreditCard, label: "U卡管理" },
     { path: "/admin/spot/coins", icon: ArrowLeftRight, label: "现货管理" },
     { path: "/admin/futures", icon: FileText, label: "合约管理" },
+    { path: "/admin/copytrade", icon: Copy, label: "跟单管理" },
     { path: "/admin/finance", icon: PiggyBank, label: "理财管理" },
     { path: "/admin/commission/futures", icon: Wallet, label: "佣金管理" },
     { path: "/admin/bepay", icon: Banknote, label: "BePay管理" },
