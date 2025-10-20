@@ -37,7 +37,7 @@ Preferred communication style: Simple, everyday language.
 - **Admin Management System** (comprehensive backend admin panel with secure login)
   - **Authentication**: Dedicated admin login interface (demo: admin/admin123)
   - **Context-Aware Sidebar**: Automatically switches between user and admin navigation
-  - **14 Management Modules**:
+  - **15 Management Modules**:
     1. Operations Report (运营报表) - Platform statistics and analytics with 6 sub-pages:
        - Dashboard (总仪表盘)
        - Funds Analysis (出入金分析报表)
@@ -101,15 +101,16 @@ Preferred communication style: Simple, everyday language.
        - K-line Management (K线管理)
        - Transactions (成交记录)
     9. Futures Management (合约管理) - Futures contract monitoring
-    10. Finance Management (理财管理) - Investment products management
-    11. Commission Management (佣金管理) - Commission tracking and management with 5 sub-pages:
+    10. Copy Trade Management (跟单管理) - Copy trading management and monitoring
+    11. Finance Management (理财管理) - Investment products management
+    12. Commission Management (佣金管理) - Commission tracking and management with 5 sub-pages:
        - Futures Commission (合约佣金)
        - Finance Commission (理财佣金)
        - U-Card Commission (U卡佣金)
        - Escrow Commission (担保佣金)
        - Payment Commission (支付佣金)
-    12. BePay Management (BePay管理) - Payment gateway administration
-    13. Financial Management (财务管理) - Financial tracking and fulfillment with 8 sub-pages:
+    13. BePay Management (BePay管理) - Payment gateway administration
+    14. Financial Management (财务管理) - Financial tracking and fulfillment with 8 sub-pages:
        - Funds Records (资金记录)
        - USDT Trading Records (USDT买卖记录)
        - Spot Orders (现货订单)
@@ -118,7 +119,7 @@ Preferred communication style: Simple, everyday language.
        - U-Card Orders (U卡订单)
        - Escrow Records (担保记录)
        - Payment Orders (支付订单)
-    14. System Management (系统管理) - System and infrastructure management with 8 sub-pages:
+    15. System Management (系统管理) - System and infrastructure management with 8 sub-pages:
        - Permissions Management (权限管理)
        - Roles Management (角色管理)
        - Users Management (用户管理)

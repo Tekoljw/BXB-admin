@@ -112,6 +112,7 @@ import SpotDelegateOrdersPage from "@/app/(dashboard)/admin/spot/orders/page"
 import SpotKlinePage from "@/app/(dashboard)/admin/spot/kline/page"
 import SpotTransactionsPage from "@/app/(dashboard)/admin/spot/transactions/page"
 import FuturesManagementPage from "@/app/(dashboard)/admin/futures/page"
+import CopyTradeManagementPage from "@/app/(dashboard)/admin/copytrade/page"
 import FinanceManagementPage from "@/app/(dashboard)/admin/finance/page"
 import CommissionManagementPage from "@/app/(dashboard)/admin/commission/page"
 import FuturesCommissionPage from "@/app/(dashboard)/admin/commission/futures/page"
@@ -331,6 +332,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/spot/kline") return <SpotKlinePage />
     if (currentPage === "/admin/spot/transactions") return <SpotTransactionsPage />
     if (currentPage === "/admin/futures") return <FuturesManagementPage />
+    if (currentPage === "/admin/copytrade") return <CopyTradeManagementPage />
     if (currentPage === "/admin/finance") return <FinanceManagementPage />
     if (currentPage === "/admin/commission") return <FuturesCommissionPage />
     if (currentPage === "/admin/commission/futures") return <FuturesCommissionPage />
