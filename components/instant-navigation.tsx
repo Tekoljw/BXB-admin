@@ -55,7 +55,7 @@ import AdminSpotOrdersPage from "@/app/(dashboard)/admin/orders/spot/page"
 import FuturesOrdersPage from "@/app/(dashboard)/admin/orders/futures/page"
 import FinanceOrdersPage from "@/app/(dashboard)/admin/orders/finance/page"
 import UCardOrdersPage from "@/app/(dashboard)/admin/orders/ucard/page"
-import EscrowRecordsPage from "@/app/(dashboard)/admin/orders/escrow/page"
+import OrdersEscrowRecordsPage from "@/app/(dashboard)/admin/orders/escrow/page"
 import PaymentOrdersPage from "@/app/(dashboard)/admin/orders/payment/page"
 import IMAccountsPage from "@/app/(dashboard)/admin/im/accounts/page"
 import IMGroupsPage from "@/app/(dashboard)/admin/im/groups/page"
@@ -261,7 +261,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/orders/futures") return <FuturesOrdersPage />
     if (currentPage === "/admin/orders/finance") return <FinanceOrdersPage />
     if (currentPage === "/admin/orders/ucard") return <UCardOrdersPage />
-    if (currentPage === "/admin/orders/escrow") return <EscrowRecordsPage />
+    if (currentPage === "/admin/orders/escrow") return <OrdersEscrowRecordsPage />
     if (currentPage === "/admin/orders/payment") return <PaymentOrdersPage />
     if (currentPage === "/admin/users") return <AllUsersPage />
     if (currentPage === "/admin/users/all") return <AllUsersPage />
