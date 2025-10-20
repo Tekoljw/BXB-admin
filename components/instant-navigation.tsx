@@ -82,7 +82,12 @@ import UsersManagementPage from "@/app/(dashboard)/admin/users/page"
 import IMManagementPage from "@/app/(dashboard)/admin/im/page"
 import SocialManagementPage from "@/app/(dashboard)/admin/social/page"
 import MarketManagementPage from "@/app/(dashboard)/admin/market/page"
-import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
+import C2CManagementPage from "@/app/(dashboard)/admin/fiat/c2c/page"
+import C2COrdersPage from "@/app/(dashboard)/admin/fiat/c2c-orders/page"
+import QuickConfigPage from "@/app/(dashboard)/admin/fiat/quick-config/page"
+import QuickOrdersPage from "@/app/(dashboard)/admin/fiat/quick-orders/page"
+import OTCConfigPage from "@/app/(dashboard)/admin/fiat/otc-config/page"
+import OTCOrdersPage from "@/app/(dashboard)/admin/fiat/otc-orders/page"
 import EscrowManagementPage from "@/app/(dashboard)/admin/escrow/page"
 import UCardManagementPage from "@/app/(dashboard)/admin/ucard/page"
 import SpotManagementPage from "@/app/(dashboard)/admin/spot/page"
@@ -270,7 +275,13 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/im/group-search") return <IMGroupSearchPage />
     if (currentPage === "/admin/social") return <SocialManagementPage />
     if (currentPage === "/admin/market") return <MarketManagementPage />
-    if (currentPage === "/admin/fiat") return <FiatManagementPage />
+    if (currentPage === "/admin/fiat") return <C2CManagementPage />
+    if (currentPage === "/admin/fiat/c2c") return <C2CManagementPage />
+    if (currentPage === "/admin/fiat/c2c-orders") return <C2COrdersPage />
+    if (currentPage === "/admin/fiat/quick-config") return <QuickConfigPage />
+    if (currentPage === "/admin/fiat/quick-orders") return <QuickOrdersPage />
+    if (currentPage === "/admin/fiat/otc-config") return <OTCConfigPage />
+    if (currentPage === "/admin/fiat/otc-orders") return <OTCOrdersPage />
     if (currentPage === "/admin/escrow") return <EscrowManagementPage />
     if (currentPage === "/admin/ucard") return <UCardManagementPage />
     if (currentPage === "/admin/spot") return <SpotCoinsPage />
