@@ -167,7 +167,7 @@ Preferred communication style: Simple, everyday language.
 - Secure session handling and protected routes
 - Autoscale deployment configured for Next.js server features and standalone output
 - **Reusable Component Architecture**: Created `HorizontalTabNav` shared component for all admin module sub-navigation
-  - Used by OperationsLayout, UsersLayout, IMLayout, SpotLayout, and OrdersLayout
+  - Used by OperationsLayout, UsersLayout, IMLayout, SpotLayout, BePayLayout, and OrdersLayout
   - Provides consistent horizontal tab navigation with scrolling support
   - Reduces code duplication and ensures UI consistency
 
