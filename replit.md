@@ -124,7 +124,12 @@ Preferred communication style: Simple, everyday language.
        - U-Card Commission (U卡佣金)
        - Escrow Commission (担保佣金)
        - Payment Commission (支付佣金)
-    13. BePay Management (BePay管理) - Payment gateway administration
+    13. BePay Management (BePay管理) - Payment gateway administration with 5 sub-pages:
+       - Channels Management (通道管理)
+       - Suppliers Management (供应商管理)
+       - Merchants Management (商户管理)
+       - Commission Management (佣金管理)
+       - Orders Management (订单管理)
     14. Financial Management (财务管理) - Financial tracking and fulfillment with 8 sub-pages:
        - Funds Records (资金记录)
        - USDT Trading Records (USDT买卖记录)

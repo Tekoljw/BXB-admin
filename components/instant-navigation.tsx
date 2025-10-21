@@ -341,7 +341,7 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
     if (currentPage === "/admin/commission/escrow") return <EscrowCommissionPage />
     if (currentPage === "/admin/commission/payment") return <PaymentCommissionPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
-    if (currentPage === "/admin/bepay") return <BePayManagementPage />
+    if (currentPage.startsWith("/admin/bepay")) return <BePayManagementPage />
     if (currentPage === "/admin/system") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/permissions") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/roles") return <RolesManagementPage />

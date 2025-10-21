@@ -74,7 +74,7 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
     { path: "/admin/copytrade", icon: Copy, label: "跟单管理" },
     { path: "/admin/finance", icon: PiggyBank, label: "理财管理" },
     { path: "/admin/commission/futures", icon: Wallet, label: "佣金管理" },
-    { path: "/admin/bepay", icon: Banknote, label: "BePay管理" },
+    { path: "/admin/bepay/channels", icon: Banknote, label: "BePay管理" },
     { path: "/admin/orders/funds", icon: ShoppingCart, label: "财务管理" },
     { path: "/admin/system/permissions", icon: Settings, label: "系统管理" },
   ]
@@ -112,6 +112,9 @@ export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setI
       return true
     }
     if (path === "/admin/futures/config/sectors" && currentPage.startsWith("/admin/futures")) {
+      return true
+    }
+    if (path === "/admin/bepay/channels" && currentPage.startsWith("/admin/bepay")) {
       return true
     }
     return currentPage === path
