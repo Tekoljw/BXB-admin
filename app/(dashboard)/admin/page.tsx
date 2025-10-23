@@ -1,8 +1,11 @@
 "use client"
 
 import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 export default function AdminPage() {
+  const router = useRouter()
+
   useEffect(() => {
     // 检查是否已登录
     const isLoggedIn = 
@@ -11,12 +14,14 @@ export default function AdminPage() {
     
     if (isLoggedIn) {
       // 已登录，跳转到总仪表盘
-      window.location.href = "/admin/operations/dashboard"
+      window.history.pushState({}, "", "/admin/operations/dashboard")
+      window.dispatchEvent(new Event("popstate"))
     } else {
       // 未登录，跳转到登录页
-      window.location.href = "/admin/login"
+      window.history.pushState({}, "", "/admin/login")
+      window.dispatchEvent(new Event("popstate"))
     }
-  }, [])
+  }, [router])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">

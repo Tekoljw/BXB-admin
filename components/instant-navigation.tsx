@@ -175,10 +175,17 @@ export default function InstantNavigation({ onCloseMobile }: InstantNavigationPr
       setCurrentPage(path)
     }
 
+    // 监听popstate事件，用于其他组件触发的导航
+    const handlePopState = () => {
+      setCurrentPage(window.location.pathname)
+    }
+
     window.addEventListener('navigate', handleNavigateEvent as EventListener)
+    window.addEventListener('popstate', handlePopState)
     
     return () => {
       window.removeEventListener('navigate', handleNavigateEvent as EventListener)
+      window.removeEventListener('popstate', handlePopState)
     }
   }, [])
 
