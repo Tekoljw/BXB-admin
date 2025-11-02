@@ -3,7 +3,12 @@
 ## Overview
 BeDAO is a multilingual cryptocurrency and social networking platform built with Next.js 15 and React. Its primary purpose is to provide real-time cryptocurrency price tracking, portfolio management, trading interfaces, and advanced social features. The platform aims to be a comprehensive web solution for cryptocurrency traders and enthusiasts, featuring a bilingual (Chinese/English) interface and dynamic light/dark themes. The project's vision is to innovate the crypto economic ecosystem as the world's first integrated "Social + Guarantee + AI" digital asset platform, addressing market pain points like trust deficits and fragmented features. It offers a crypto social network, smart guarantee trading, and zero-threshold quantitative tools.
 
-**Default Entry Point**: The application starts with the admin management system. On launch, users are directed to `/admin`, which automatically redirects to `/admin/login` if not authenticated.
+**Navigation Architecture**: The platform uses a three-tier navigation system:
+- **Tier 1 (Top Navbar)**: Five main sections - Social, Trading, Finance, Wallet, Admin
+- **Tier 2 (Left Sidebar)**: Section-specific modules that dynamically update based on top navbar selection
+- **Tier 3 (Content Area)**: Sub-pages within each module with horizontal tab navigation
+
+**Default Entry Point**: The application starts with the social section (chat page). Users can navigate between sections via the top navbar, and the left sidebar automatically updates to show relevant modules.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
@@ -166,6 +171,13 @@ Preferred communication style: Simple, everyday language.
 - Optimized data flow with client-side React Context and server-side Drizzle ORM
 - Secure session handling and protected routes
 - Autoscale deployment configured for Next.js server features and standalone output
+- **Three-Tier Navigation Architecture** (November 2025):
+  - Completely redesigned navigation from single-sidebar to top navbar + dynamic left sidebar system
+  - **TopNavbar Component**: First-level menu categories (Social, Trading, Finance, Wallet, Admin)
+  - **LeftSidebar Component**: Second-level modules that dynamically update based on top navbar selection
+  - **NewNavigation Component**: Master controller managing routing, section state, and page rendering
+  - Event-based navigation using browser history API (pushState/popstate) for seamless transitions
+  - All 15 admin management modules integrated into the unified navigation system
 - **Reusable Component Architecture**: Created `HorizontalTabNav` shared component for all admin module sub-navigation
   - Used by OperationsLayout, UsersLayout, IMLayout, SpotLayout, BePayLayout, and OrdersLayout
   - Provides consistent horizontal tab navigation with scrolling support
