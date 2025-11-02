@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect } from "react"
-import InstantNavigation from "@/components/instant-navigation"
+import NewNavigation from "@/components/new-navigation"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -9,5 +9,5 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     document.cookie = "isLoggedIn=true; path=/"
   }, [])
 
-  return <InstantNavigation />
+  return <NewNavigation />
 }
