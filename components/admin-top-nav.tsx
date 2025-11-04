@@ -123,21 +123,8 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
 
   return (
     <div className={`h-14 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b flex items-center justify-between px-4`}>
-      {/* Logo 和品牌 */}
-      <div className="flex items-center gap-3 min-w-[160px] md:min-w-[200px]">
-        <div className="w-8 h-8 bg-custom-green rounded-lg flex items-center justify-center">
-          <Shield className="w-5 h-5 text-white" />
-        </div>
-        <h1 className={`text-base md:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} hidden sm:block`}>
-          BeDAO 管理后台
-        </h1>
-        <h1 className={`text-base font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} sm:hidden`}>
-          BeDAO
-        </h1>
-      </div>
-
       {/* 桌面端：一级菜单导航（带滚动指示器） */}
-      <div className="hidden md:flex flex-1 items-center relative px-2">
+      <div className="hidden md:flex flex-1 items-center relative">
         {/* 左侧滚动按钮和渐变指示 */}
         {mounted && showLeftScroll && (
           <>
