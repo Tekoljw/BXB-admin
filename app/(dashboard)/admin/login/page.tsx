@@ -16,13 +16,7 @@ export default function AdminLoginPage() {
 
   const handleSendCode = async () => {
     if (!username) {
-      setError("请先输入管理员账号（邮箱）")
-      return
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(username)) {
-      setError("管理员账号应为有效的邮箱地址")
+      setError("请先输入管理员账号")
       return
     }
 
@@ -55,12 +49,6 @@ export default function AdminLoginPage() {
       return
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(username)) {
-      setError("管理员账号应为有效的邮箱地址")
-      return
-    }
-
     if (verificationCode.length !== 6) {
       setError("验证码应为6位数字")
       return
@@ -69,7 +57,7 @@ export default function AdminLoginPage() {
     setIsLoading(true)
 
     setTimeout(() => {
-      if (username === "admin@bedao.com" && password === "admin123") {
+      if (username === "123123" && password === "123123" && verificationCode === "123123") {
         sessionStorage.setItem("isAdminLoggedIn", "true")
         localStorage.setItem("isAdminLoggedIn", "true")
         localStorage.setItem("adminEmail", username)
@@ -78,7 +66,7 @@ export default function AdminLoginPage() {
         window.dispatchEvent(new CustomEvent('navigate', { detail: { path: "/admin/operations/dashboard" } }))
         window.location.reload()
       } else {
-        setError("邮箱账号或密码错误")
+        setError("账号、密码或验证码错误")
         setIsLoading(false)
       }
     }, 800)
@@ -114,19 +102,19 @@ export default function AdminLoginPage() {
 
           {/* 登录表单 */}
           <form onSubmit={handleLogin} className="space-y-6">
-            {/* 邮箱账号输入 */}
+            {/* 账号输入 */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                管理员账号（邮箱）
+                管理员账号
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
                 <input
-                  type="email"
+                  type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-custom-green focus:ring-1 focus:ring-custom-green transition-all"
-                  placeholder="请输入管理员邮箱账号"
+                  placeholder="请输入管理员账号"
                   required
                 />
               </div>
@@ -164,7 +152,7 @@ export default function AdminLoginPage() {
             {/* 验证码输入 */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                邮箱验证码
+                验证码
               </label>
               <div className="flex gap-2">
                 <input
@@ -200,7 +188,7 @@ export default function AdminLoginPage() {
           {/* 提示信息 */}
           <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
             <p className="text-blue-400 text-sm text-center">
-              演示账号：admin@bedao.com / admin123
+              演示账号：123123 / 123123 / 验证码：123123
             </p>
           </div>
         </div>
