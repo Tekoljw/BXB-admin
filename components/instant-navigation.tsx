@@ -153,10 +153,21 @@ export default function InstantNavigation() {
       setCurrentModule(getModuleFromPath(newPath))
     }
 
+    // 监听自定义navigate事件（用于登录页面等触发的导航）
+    const handleNavigate = (e: any) => {
+      const newPath = e.detail?.path
+      if (newPath) {
+        setCurrentPage(newPath)
+        setCurrentModule(getModuleFromPath(newPath))
+      }
+    }
+
     window.addEventListener('popstate', handlePopState)
+    window.addEventListener('navigate', handleNavigate as EventListener)
     
     return () => {
       window.removeEventListener('popstate', handlePopState)
+      window.removeEventListener('navigate', handleNavigate as EventListener)
     }
   }, [])
 
