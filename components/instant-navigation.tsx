@@ -227,7 +227,16 @@ export default function InstantNavigation() {
     return <AdminLoginPage />
   }
 
-  // 管理后台布局
+  // 登录页面不显示侧边栏
+  if (currentPage === "/admin/login") {
+    return (
+      <div className={`h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-auto`}>
+        {renderCurrentPage()}
+      </div>
+    )
+  }
+
+  // 管理后台布局（带侧边栏）
   return (
     <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
       <AdminSidebar 
