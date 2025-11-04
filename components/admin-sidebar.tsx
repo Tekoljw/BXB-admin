@@ -1,282 +1,213 @@
 "use client"
 
 import React from "react"
+import { useTheme } from "@/contexts/theme-context"
 import {
   BarChart3,
-  Users,
-  MessageSquare,
-  Share2,
   TrendingUp,
-  DollarSign,
+  Activity,
   Shield,
-  CreditCard,
-  ArrowLeftRight,
-  FileText,
-  PiggyBank,
-  Wallet,
-  Banknote,
-  ShoppingCart,
-  LogOut,
-  Menu,
-  ChevronDown,
-  KeyRound,
-  User as UserIcon,
+  Zap,
+  FileCheck,
+  Users,
+  UserX,
+  Trash2,
+  MousePointerClick,
+  CheckCircle,
   Settings,
+  MessageSquare,
+  Mail,
+  Phone,
+  Key,
+  UserCog,
+  FileText,
+  MessageCircle,
+  UsersRound,
+  Search,
+  DollarSign,
+  CreditCard,
+  ShoppingCart,
+  Wallet,
+  Store,
+  Percent,
+  FileBarChart,
   Copy,
+  PiggyBank,
+  Coins,
+  Network,
+  TrendingDown,
+  Globe,
+  Ban,
+  List,
+  Timer,
+  BarChart,
+  ClipboardCheck,
+  Banknote,
 } from "lucide-react"
-import { useAdmin } from "@/contexts/admin-context"
-import { useRouter } from "next/navigation"
-import { useState, useRef, useEffect } from "react"
-import ChangePasswordModal from "./change-password-modal"
 
-interface AdminSidebarProps {
+interface AdminSidebarV2Props {
+  currentModule: string
   currentPage: string
   onNavigate: (path: string) => void
-  isExpanded: boolean
-  setIsExpanded: (expanded: boolean) => void
 }
 
-export default function AdminSidebar({ currentPage, onNavigate, isExpanded, setIsExpanded }: AdminSidebarProps) {
-  const { logout } = useAdmin()
-  const router = useRouter()
-  const [showAccountMenu, setShowAccountMenu] = useState(false)
-  const [showChangePassword, setShowChangePassword] = useState(false)
-  const accountMenuRef = useRef<HTMLDivElement>(null)
-
-  const handleLogout = () => {
-    logout()
-    router.push("/chat")
-  }
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (accountMenuRef.current && !accountMenuRef.current.contains(event.target as Node)) {
-        setShowAccountMenu(false)
-      }
-    }
-
-    if (showAccountMenu) {
-      document.addEventListener("mousedown", handleClickOutside)
-      return () => document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [showAccountMenu])
-
-  const adminNavItems = [
-    { path: "/admin/operations/dashboard", icon: BarChart3, label: "运营管理" },
-    { path: "/admin/users/all", icon: Users, label: "用户管理" },
-    { path: "/admin/im/accounts", icon: MessageSquare, label: "IM管理" },
-    { path: "/admin/social", icon: Share2, label: "社交管理" },
-    { path: "/admin/fiat/c2c", icon: DollarSign, label: "法币管理" },
-    { path: "/admin/escrow/rules", icon: Shield, label: "担保管理" },
-    { path: "/admin/ucard/users", icon: CreditCard, label: "U卡管理" },
-    { path: "/admin/spot/coins", icon: ArrowLeftRight, label: "现货管理" },
-    { path: "/admin/futures/config/sectors", icon: FileText, label: "合约管理" },
+// 定义每个模块的二级菜单
+const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
+  operations: [
+    { path: "/admin/operations/dashboard", icon: BarChart3, label: "总仪表盘" },
+    { path: "/admin/operations/funds", icon: TrendingUp, label: "出入金分析报表" },
+    { path: "/admin/operations/retention", icon: Activity, label: "留存与活跃分析" },
+    { path: "/admin/operations/risk", icon: Shield, label: "风控配置" },
+    { path: "/admin/operations/activities", icon: Zap, label: "活动配置" },
+    { path: "/admin/operations/audit", icon: FileCheck, label: "行情配置管理" },
+  ],
+  users: [
+    { path: "/admin/users/all", icon: Users, label: "用户总表" },
+    { path: "/admin/users/blacklist", icon: UserX, label: "黑名单管理" },
+    { path: "/admin/users/deleted", icon: Trash2, label: "已删除账户" },
+    { path: "/admin/users/behavior", icon: MousePointerClick, label: "用户行为" },
+    { path: "/admin/users/api-review", icon: CheckCircle, label: "API审核" },
+    { path: "/admin/users/api-manage", icon: Settings, label: "API管理" },
+    { path: "/admin/users/sms-logs", icon: MessageSquare, label: "短信日志" },
+    { path: "/admin/users/email-logs", icon: Mail, label: "邮箱日志" },
+    { path: "/admin/users/f2a-review", icon: Shield, label: "F2A审核" },
+    { path: "/admin/users/voice-logs", icon: Phone, label: "语音日志" },
+    { path: "/admin/users/account-types", icon: UserCog, label: "账户类型管理" },
+    { path: "/admin/users/special-accounts", icon: Key, label: "特殊账户管理" },
+    { path: "/admin/users/kyc-review", icon: FileCheck, label: "KYC审核" },
+    { path: "/admin/users/kyc-records", icon: FileText, label: "KYC审核记录" },
+  ],
+  im: [
+    { path: "/admin/im/accounts", icon: Users, label: "账号管理" },
+    { path: "/admin/im/groups", icon: UsersRound, label: "群组管理" },
+    { path: "/admin/im/messages", icon: MessageCircle, label: "消息管理" },
+    { path: "/admin/im/logs", icon: FileText, label: "日志查询" },
+    { path: "/admin/im/review", icon: CheckCircle, label: "审核管理" },
+    { path: "/admin/im/auto-join", icon: Zap, label: "自动加群" },
+    { path: "/admin/im/group-search", icon: Search, label: "群搜索" },
+  ],
+  social: [
+    { path: "/admin/social", icon: MessageCircle, label: "社交管理" },
+  ],
+  fiat: [
+    { path: "/admin/fiat/c2c", icon: DollarSign, label: "C2C管理" },
+    { path: "/admin/fiat/c2c-orders", icon: ShoppingCart, label: "C2C订单" },
+    { path: "/admin/fiat/quick-config", icon: Settings, label: "法币快捷配置" },
+    { path: "/admin/fiat/quick-orders", icon: List, label: "法币快捷订单" },
+    { path: "/admin/fiat/otc-config", icon: Settings, label: "OTC配置" },
+    { path: "/admin/fiat/otc-orders", icon: ShoppingCart, label: "OTC订单" },
+  ],
+  escrow: [
+    { path: "/admin/escrow/rules", icon: Settings, label: "担保规则配置" },
+    { path: "/admin/escrow/records", icon: FileText, label: "担保记录" },
+    { path: "/admin/escrow/rankings", icon: BarChart, label: "信誉担保排名" },
+    { path: "/admin/escrow/groups", icon: UsersRound, label: "担保群管理" },
+    { path: "/admin/escrow/arbitrators", icon: Shield, label: "仲裁员管理" },
+    { path: "/admin/escrow/complaints", icon: FileCheck, label: "仲裁投诉记录" },
+  ],
+  ucard: [
+    { path: "/admin/ucard/users", icon: Users, label: "U卡用户列表" },
+    { path: "/admin/ucard/suppliers", icon: Store, label: "U卡供应商" },
+    { path: "/admin/ucard/config", icon: Settings, label: "U卡基础配置" },
+    { path: "/admin/ucard/applications", icon: CreditCard, label: "U卡开卡记录" },
+    { path: "/admin/ucard/transactions", icon: ShoppingCart, label: "U卡消费记录" },
+  ],
+  spot: [
+    { path: "/admin/spot/coins", icon: Coins, label: "币种管理" },
+    { path: "/admin/spot/networks", icon: Network, label: "网络管理" },
+    { path: "/admin/spot/markets", icon: TrendingUp, label: "市场管理" },
+    { path: "/admin/spot/market-makers", icon: Users, label: "做市账户" },
+    { path: "/admin/spot/sectors", icon: BarChart, label: "板块管理" },
+    { path: "/admin/spot/restricted-countries", icon: Ban, label: "交易受限国家" },
+    { path: "/admin/spot/whitelist", icon: CheckCircle, label: "用户白名单" },
+    { path: "/admin/spot/orders", icon: List, label: "委托管理" },
+    { path: "/admin/spot/kline", icon: BarChart, label: "K线管理" },
+    { path: "/admin/spot/transactions", icon: ShoppingCart, label: "成交记录" },
+  ],
+  futures: [
+    { path: "/admin/futures/config/sectors", icon: Settings, label: "合约配置" },
+    { path: "/admin/futures/special-accounts", icon: Key, label: "特殊账户管理" },
+    { path: "/admin/futures/positions", icon: BarChart, label: "持仓管理" },
+  ],
+  copytrade: [
     { path: "/admin/copytrade", icon: Copy, label: "跟单管理" },
+  ],
+  finance: [
     { path: "/admin/finance", icon: PiggyBank, label: "理财管理" },
-    { path: "/admin/commission/futures", icon: Wallet, label: "佣金管理" },
-    { path: "/admin/bepay/channels", icon: Banknote, label: "BePay管理" },
-    { path: "/admin/orders/funds", icon: ShoppingCart, label: "财务管理" },
-    { path: "/admin/system/permissions", icon: Settings, label: "系统管理" },
-  ]
+  ],
+  commission: [
+    { path: "/admin/commission/futures", icon: Percent, label: "合约佣金" },
+    { path: "/admin/commission/finance", icon: Percent, label: "理财佣金" },
+    { path: "/admin/commission/ucard", icon: Percent, label: "U卡佣金" },
+    { path: "/admin/commission/escrow", icon: Percent, label: "担保佣金" },
+    { path: "/admin/commission/payment", icon: Percent, label: "支付佣金" },
+  ],
+  bepay: [
+    { path: "/admin/bepay/channels", icon: Network, label: "通道管理" },
+    { path: "/admin/bepay/suppliers", icon: Store, label: "供应商管理" },
+    { path: "/admin/bepay/merchants", icon: Users, label: "商户管理" },
+    { path: "/admin/bepay/commission", icon: Percent, label: "佣金管理" },
+    { path: "/admin/bepay/orders", icon: ShoppingCart, label: "订单管理" },
+  ],
+  orders: [
+    { path: "/admin/orders/funds", icon: Wallet, label: "资金记录" },
+    { path: "/admin/orders/usdt", icon: DollarSign, label: "USDT买卖记录" },
+    { path: "/admin/orders/spot", icon: TrendingUp, label: "现货订单" },
+    { path: "/admin/orders/futures", icon: TrendingDown, label: "合约订单" },
+    { path: "/admin/orders/finance", icon: PiggyBank, label: "理财订单" },
+    { path: "/admin/orders/ucard", icon: CreditCard, label: "U卡订单" },
+    { path: "/admin/orders/escrow", icon: Shield, label: "担保记录" },
+    { path: "/admin/orders/payment", icon: Banknote, label: "支付订单" },
+  ],
+  system: [
+    { path: "/admin/system/permissions", icon: Key, label: "权限管理" },
+    { path: "/admin/system/roles", icon: UserCog, label: "角色管理" },
+    { path: "/admin/system/users", icon: Users, label: "用户管理" },
+    { path: "/admin/system/audit-config", icon: Settings, label: "审核配置" },
+    { path: "/admin/system/app", icon: Settings, label: "APP管理" },
+    { path: "/admin/system/operations", icon: Settings, label: "运维管理" },
+    { path: "/admin/system/maintenance-plan", icon: Timer, label: "维护计划配置" },
+    { path: "/admin/system/maintenance-whitelist", icon: ClipboardCheck, label: "维护白名单管理" },
+  ],
+}
 
-  const isActive = (path: string) => {
-    // 对于运营管理、订单管理、IM管理、用户管理、现货管理和佣金管理，只要当前页面以对应路径开头就视为激活状态
-    if (path === "/admin/operations/dashboard" && currentPage.startsWith("/admin/operations")) {
-      return true
-    }
-    if (path === "/admin/orders/funds" && currentPage.startsWith("/admin/orders")) {
-      return true
-    }
-    if (path === "/admin/im/accounts" && currentPage.startsWith("/admin/im")) {
-      return true
-    }
-    if (path === "/admin/users/all" && currentPage.startsWith("/admin/users")) {
-      return true
-    }
-    if (path === "/admin/spot/coins" && currentPage.startsWith("/admin/spot")) {
-      return true
-    }
-    if (path === "/admin/commission/futures" && currentPage.startsWith("/admin/commission")) {
-      return true
-    }
-    if (path === "/admin/fiat/c2c" && currentPage.startsWith("/admin/fiat")) {
-      return true
-    }
-    if (path === "/admin/system/permissions" && currentPage.startsWith("/admin/system")) {
-      return true
-    }
-    if (path === "/admin/escrow/rules" && currentPage.startsWith("/admin/escrow")) {
-      return true
-    }
-    if (path === "/admin/ucard/users" && currentPage.startsWith("/admin/ucard")) {
-      return true
-    }
-    if (path === "/admin/futures/config/sectors" && currentPage.startsWith("/admin/futures")) {
-      return true
-    }
-    if (path === "/admin/bepay/channels" && currentPage.startsWith("/admin/bepay")) {
-      return true
-    }
-    return currentPage === path
-  }
+export default function AdminSidebarV2({ currentModule, currentPage, onNavigate }: AdminSidebarV2Props) {
+  const { theme } = useTheme()
+  
+  const menuItems = moduleMenus[currentModule] || []
 
   return (
-    <div 
-      className="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col shadow-2xl shadow-black/20 relative overflow-hidden h-full"
-      style={{
-        width: isExpanded ? '256px' : '96px',
-        transition: 'width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)',
-        minHeight: '100vh',
-      }}
-    >
-      {/* 背景装饰 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-custom-green/5 via-transparent to-gray-700/5 opacity-50"></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-transparent via-custom-green/2 to-transparent"></div>
-      
-      {/* Header */}
-      <div className="relative z-10 h-14 flex items-center justify-center px-3 backdrop-blur-sm">
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="p-3 hover:bg-gray-700/50 rounded-xl transition-all duration-300 hover:scale-110 group relative overflow-hidden"
-          title={isExpanded ? "收起侧边栏" : "展开侧边栏"}
-        >
-          <div className="relative transition-all duration-300 group-hover:rotate-180">
-            <Menu size={22} />
-          </div>
-        </button>
-      </div>
-
-
-      {/* 导航菜单 */}
-      <div className={`relative z-10 flex-1 ${isExpanded ? 'p-2' : 'p-1'} flex flex-col justify-start min-h-0 overflow-y-auto overflow-x-hidden custom-scrollbar`}>
-        <div className="flex flex-col justify-start pt-4" style={{gap: 'clamp(0.25rem, 2vh, 0.75rem)'}}>
-          {adminNavItems.map((item, index) => {
+    <div className={`w-56 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-r flex flex-col h-full`}>
+      {/* 二级菜单列表 */}
+      <div className="flex-1 overflow-y-auto py-4">
+        <nav className="space-y-1 px-3">
+          {menuItems.map((item) => {
             const Icon = item.icon
-            const active = isActive(item.path)
+            const isActive = currentPage === item.path
+            
             return (
-              <div key={item.path} className="relative group">
-                <button
-                  onClick={() => onNavigate(item.path)}
-                  className={`${isExpanded ? 'w-full px-4' : 'w-12 h-12 mx-auto'} flex items-center justify-center rounded-xl transition-all duration-500 ease-in-out transform relative overflow-hidden ${
-                    active 
-                      ? "bg-gradient-to-r from-custom-green/20 to-custom-green/10" 
-                      : "hover:scale-105 hover:bg-gray-700/20"
-                  }`}
-                  style={{ 
-                    padding: isExpanded ? 'clamp(0.5rem, 1.5vh, 1rem) 1rem' : '0',
-                    animationDelay: `${index * 50}ms`,
-                  }}
-                  title={!isExpanded ? item.label : undefined}
-                >
-                  {active && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-custom-green/10 to-custom-green/5 rounded-xl"></div>
-                  )}
-                  
-                  {!active && (
-                    <div className={`absolute inset-1 border border-custom-green/0 group-hover:border-custom-green/30 transition-all duration-400 ease-in-out ${isExpanded ? 'rounded-lg' : 'rounded-lg'}`}></div>
-                  )}
-                  
-                  <div className={`relative transition-all duration-300 ${active ? 'text-custom-green' : 'group-hover:scale-110 group-hover:text-custom-green'}`}>
-                    <Icon size={22} />
-                  </div>
-                  
-                  <div 
-                    className={`${isExpanded ? 'ml-4' : 'ml-0'} overflow-hidden transition-all duration-500 ease-in-out`}
-                    style={{
-                      width: isExpanded ? '120px' : '0px',
-                      opacity: isExpanded ? 1 : 0,
-                    }}
-                  >
-                    <span className={`text-sm font-medium whitespace-nowrap transition-all duration-300 ${
-                      active ? 'text-white font-semibold' : 'text-white group-hover:text-custom-green'
-                    }`}>
-                      {item.label}
-                    </span>
-                  </div>
-                  
-                  {active && isExpanded && (
-                    <div className="absolute right-2 w-2 h-8 bg-gradient-to-b from-custom-green to-custom-green/70 rounded-full"></div>
-                  )}
-                </button>
-                
-                {!isExpanded && (
-                  <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50 whitespace-nowrap shadow-xl border border-gray-600">
-                    {item.label}
-                    <div className="absolute left-0 top-1/2 transform -translate-x-1 -translate-y-1/2 w-2 h-2 bg-gray-800 rotate-45 border-l border-b border-gray-600"></div>
-                  </div>
-                )}
-              </div>
+              <button
+                key={item.path}
+                onClick={() => onNavigate(item.path)}
+                className={`
+                  w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors
+                  ${isActive 
+                    ? theme === 'dark'
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-emerald-500 text-white'
+                    : theme === 'dark'
+                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                  }
+                `}
+              >
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                <span className="truncate">{item.label}</span>
+              </button>
             )
           })}
-        </div>
+        </nav>
       </div>
-
-      {/* 账号菜单 */}
-      <div className="relative z-10 p-4 border-t border-gray-700/50" ref={accountMenuRef}>
-        <button
-          onClick={() => setShowAccountMenu(!showAccountMenu)}
-          className={`${isExpanded ? 'w-full px-4' : 'w-12 h-12 mx-auto'} flex items-center justify-between rounded-xl transition-all duration-300 hover:bg-gray-700/50 group relative`}
-          style={{ padding: isExpanded ? '0.75rem 1rem' : '0' }}
-        >
-          <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-custom-green to-custom-green/80 flex items-center justify-center">
-              <UserIcon size={18} className="text-white" />
-            </div>
-            {isExpanded && (
-              <div className="ml-3 text-left">
-                <div className="text-sm font-medium text-white">admin</div>
-                <div className="text-xs text-gray-400">管理员</div>
-              </div>
-            )}
-          </div>
-          {isExpanded && (
-            <ChevronDown size={18} className={`text-gray-400 transition-transform ${showAccountMenu ? 'rotate-180' : ''}`} />
-          )}
-        </button>
-
-        {showAccountMenu && (
-          <div className={`absolute ${isExpanded ? 'bottom-full left-4 right-4' : 'bottom-full left-1/2 -translate-x-1/2'} mb-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl overflow-hidden`}>
-            <button
-              onClick={() => {
-                setShowAccountMenu(false)
-                setShowChangePassword(true)
-              }}
-              className="w-full px-4 py-3 text-left text-sm text-white hover:bg-gray-700 transition-colors flex items-center space-x-3"
-            >
-              <KeyRound size={18} className="text-custom-green" />
-              <span>修改密码</span>
-            </button>
-            <button
-              onClick={handleLogout}
-              className="w-full px-4 py-3 text-left text-sm text-red-400 hover:bg-gray-700 transition-colors flex items-center space-x-3 border-t border-gray-700"
-            >
-              <LogOut size={18} className="text-red-400" />
-              <span>退出登录</span>
-            </button>
-          </div>
-        )}
-      </div>
-
-      <ChangePasswordModal 
-        isOpen={showChangePassword}
-        onClose={() => setShowChangePassword(false)}
-      />
-
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.2);
-        }
-      `}</style>
     </div>
   )
 }

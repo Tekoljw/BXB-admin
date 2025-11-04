@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
 import { useAdmin } from "@/contexts/admin-context"
 import AdminTopNav from "@/components/admin-top-nav"
-import AdminSidebarV2 from "@/components/admin-sidebar-v2"
+import AdminSidebar from "@/components/admin-sidebar"
 
 // 只导入管理后台页面组件
 import AdminPage from "@/app/(dashboard)/admin/page"
@@ -300,7 +300,7 @@ export default function InstantNavigation() {
       {/* 内容区域：左侧边栏 + 主内容 */}
       <div className="flex flex-1 overflow-hidden">
         {/* 左侧二级菜单 */}
-        <AdminSidebarV2
+        <AdminSidebar
           currentModule={currentModule}
           currentPage={currentPage}
           onNavigate={navigate}

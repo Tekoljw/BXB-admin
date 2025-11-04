@@ -3,7 +3,12 @@
 ## Overview
 BeDAO 管理后台是一个专业的加密货币交易平台后台管理系统，基于 Next.js 15 和 React 构建。该系统专注于为平台运营人员提供全面的管理功能，包括用户管理、交易监控、财务管理、系统配置等。本项目是纯后台管理系统，不包含任何用户端功能。
 
-**项目架构变更**: 2024年11月4日进行了重大简化重构，移除了所有用户端页面和功能（包括聊天、钱包、交易、社交等），项目现在只包含管理后台模块。
+**项目架构变更**: 
+- 2024年11月4日进行了重大简化重构，移除了所有用户端页面和功能（包括聊天、钱包、交易、社交等），项目现在只包含管理后台模块。
+- 2024年11月4日进行了导航架构重构，采用全新的三级导航体系：
+  - **一级菜单**：位于顶部导航栏，显示15个主要管理模块
+  - **二级菜单**：位于左侧边栏，显示当前选中模块的子页面
+  - **内容区域**：右侧主内容区域，显示具体页面
 
 **默认入口**: 应用启动时直接跳转到 `/admin/login` 管理员登录页面。登录后可访问完整的15个管理模块及其子页面。
 
@@ -29,7 +34,7 @@ Preferred communication style: Simple, everyday Chinese language.
 ### Core Features (纯管理后台)
 - **管理后台系统** - 综合性后台管理面板，包含安全的登录认证机制
   - **Authentication**: Dedicated admin login interface (demo: admin/admin123)
-  - **Context-Aware Sidebar**: Automatically switches between user and admin navigation
+  - **新导航架构**: 采用顶部+左侧双层导航体系，一级菜单在顶部，二级菜单在左侧
   - **15 Management Modules**:
     1. Operations Report (运营报表) - Platform statistics and analytics with 6 sub-pages:
        - Dashboard (总仪表盘)
@@ -146,12 +151,15 @@ Preferred communication style: Simple, everyday Chinese language.
   - **Navigation System**: Custom event-based navigation for seamless sub-page switching without sidebar reload
 
 ### UI/UX Decisions (仅管理后台)
-- 响应式侧边栏导航（可折叠，适配桌面端）
+- **全新导航架构**：采用顶部+左侧双层导航体系
+  - 顶部导航栏：显示15个一级模块菜单，所有页面共用
+  - 左侧边栏：动态显示当前选中模块的二级子菜单
+  - 智能切换：点击顶部模块自动跳转到该模块的默认页面
 - 动态亮色/暗色主题切换，持久化用户偏好
 - 自定义加载状态和性能优化（即时响应按钮）
 - 统一的品牌设计（BeDAO）和标准化配色方案（绿色、黑色、深蓝色、白色）
 - 管理后台专用设计，重点关注数据展示和操作效率
-- 三级导航体系：侧边栏一级菜单 + 页面顶部二级标签 + 部分模块的三级子标签
+- 登录页面独立布局，不显示任何导航栏
 
 ### System Design Choices
 - 客户端路由系统：使用 `instant-navigation` 组件处理所有页面导航，避免页面重载
