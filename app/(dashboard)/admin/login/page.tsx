@@ -62,14 +62,13 @@ export default function AdminLoginPage() {
         localStorage.setItem("isAdminLoggedIn", "true")
         localStorage.setItem("adminEmail", username)
         
-        window.history.pushState({}, "", "/admin/operations/dashboard")
+        // 触发导航到管理后台首页
         window.dispatchEvent(new CustomEvent('navigate', { detail: { path: "/admin/operations/dashboard" } }))
-        window.location.reload()
       } else {
         setError("账号、密码或验证码错误")
         setIsLoading(false)
       }
-    }, 800)
+    }, 1500)
   }
 
   return (
