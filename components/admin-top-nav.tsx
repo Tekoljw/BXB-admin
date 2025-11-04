@@ -123,35 +123,31 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
 
   return (
     <div className={`h-14 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b flex items-center justify-between px-4`}>
-      {/* 桌面端：一级菜单导航（带滚动指示器） */}
-      <div className="hidden md:flex flex-1 items-center relative">
-        {/* 左侧滚动按钮和渐变指示 */}
-        {mounted && showLeftScroll && (
-          <>
-            <div className={`absolute left-0 top-0 bottom-0 w-12 pointer-events-none z-10 ${
-              theme === 'dark' 
-                ? 'bg-gradient-to-r from-gray-800 to-transparent' 
-                : 'bg-gradient-to-r from-white to-transparent'
-            }`} />
-            <button
-              onClick={() => scroll('left')}
-              aria-label="向左滚动"
-              className={`absolute left-2 z-20 p-1 rounded-md transition-colors ${
-                theme === 'dark' 
-                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-              }`}
-            >
-              <ChevronLeft className="w-4 h-4" />
-              <span className="sr-only">向左滚动</span>
-            </button>
-          </>
-        )}
+      {/* 桌面端：一级菜单导航（带滚动箭头） */}
+      <div className="hidden md:flex flex-1 items-center gap-2">
+        {/* 左侧滚动按钮 */}
+        <button
+          onClick={() => scroll('left')}
+          disabled={!showLeftScroll}
+          aria-label="向左滚动"
+          className={`p-1.5 rounded-md transition-colors flex-shrink-0 ${
+            showLeftScroll
+              ? theme === 'dark'
+                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+              : theme === 'dark'
+                ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
+                : 'bg-gray-50 text-gray-300 cursor-not-allowed'
+          }`}
+        >
+          <ChevronLeft className="w-4 h-4" />
+          <span className="sr-only">向左滚动</span>
+        </button>
 
         {/* 滚动容器 */}
         <div 
           ref={scrollContainerRef}
-          className="flex-1 flex items-center gap-1 overflow-x-auto px-10 scrollbar-hide"
+          className="flex-1 flex items-center gap-1 overflow-x-auto scrollbar-hide"
         >
           {modules.map((module) => {
             const Icon = module.icon
@@ -178,28 +174,24 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
           })}
         </div>
 
-        {/* 右侧滚动按钮和渐变指示 */}
-        {mounted && showRightScroll && (
-          <>
-            <div className={`absolute right-0 top-0 bottom-0 w-12 pointer-events-none z-10 ${
-              theme === 'dark' 
-                ? 'bg-gradient-to-l from-gray-800 to-transparent' 
-                : 'bg-gradient-to-l from-white to-transparent'
-            }`} />
-            <button
-              onClick={() => scroll('right')}
-              aria-label="向右滚动"
-              className={`absolute right-2 z-20 p-1 rounded-md transition-colors ${
-                theme === 'dark' 
-                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-              }`}
-            >
-              <ChevronRight className="w-4 h-4" />
-              <span className="sr-only">向右滚动</span>
-            </button>
-          </>
-        )}
+        {/* 右侧滚动按钮 */}
+        <button
+          onClick={() => scroll('right')}
+          disabled={!showRightScroll}
+          aria-label="向右滚动"
+          className={`p-1.5 rounded-md transition-colors flex-shrink-0 ${
+            showRightScroll
+              ? theme === 'dark'
+                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+              : theme === 'dark'
+                ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
+                : 'bg-gray-50 text-gray-300 cursor-not-allowed'
+          }`}
+        >
+          <ChevronRight className="w-4 h-4" />
+          <span className="sr-only">向右滚动</span>
+        </button>
       </div>
 
       {/* 移动端：汉堡菜单按钮 */}
