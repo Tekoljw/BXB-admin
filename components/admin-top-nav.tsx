@@ -98,11 +98,25 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
     checkScrollPosition()
     const container = scrollContainerRef.current
     if (container) {
+      // 滚动事件监听
       container.addEventListener('scroll', checkScrollPosition)
       window.addEventListener('resize', checkScrollPosition)
+      
+      // 鼠标滚轮横向滚动
+      const handleWheel = (e: WheelEvent) => {
+        if (e.deltaY !== 0) {
+          e.preventDefault()
+          container.scrollLeft += e.deltaY
+          checkScrollPosition()
+        }
+      }
+      
+      container.addEventListener('wheel', handleWheel, { passive: false })
+      
       return () => {
         container.removeEventListener('scroll', checkScrollPosition)
         window.removeEventListener('resize', checkScrollPosition)
+        container.removeEventListener('wheel', handleWheel)
       }
     }
   }, [])
