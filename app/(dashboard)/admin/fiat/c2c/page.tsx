@@ -7,7 +7,7 @@ import { Users, TrendingUp, DollarSign, CheckCircle } from "lucide-react"
 export default function C2CManagementPage() {
   return (
     <FiatLayout>
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">C2C管理</h1>
           
