@@ -111,7 +111,7 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
     <div className={`h-14 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b flex items-center justify-between px-4`}>
       {/* Logo 和品牌 */}
       <div className="flex items-center gap-3 min-w-[160px] md:min-w-[200px]">
-        <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center">
+        <div className="w-8 h-8 bg-custom-green rounded-lg flex items-center justify-center">
           <Shield className="w-5 h-5 text-white" />
         </div>
         <h1 className={`text-base md:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} hidden sm:block`}>
@@ -163,9 +163,7 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
                 className={`
                   flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors
                   ${isActive 
-                    ? theme === 'dark'
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-emerald-500 text-white'
+                    ? 'bg-custom-green text-white'
                     : theme === 'dark'
                       ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
@@ -207,11 +205,7 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
       <div className="flex md:hidden flex-1 justify-center">
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-            theme === 'dark' 
-              ? 'bg-emerald-600 text-white' 
-              : 'bg-emerald-500 text-white'
-          }`}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-custom-green text-white"
         >
           <Menu className="w-4 h-4" />
           <span>{modules.find(m => m.id === currentModule)?.label || '菜单'}</span>
@@ -266,9 +260,7 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
                   className={`
                     w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors
                     ${isActive 
-                      ? theme === 'dark'
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-emerald-500 text-white'
+                      ? 'bg-custom-green text-white'
                       : theme === 'dark'
                         ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
                         : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'

@@ -175,10 +175,10 @@ Preferred communication style: Simple, everyday Chinese language.
 - 简化架构：移除了所有用户端相关的 Context（ChatProvider 等）和组件
 - 安全的会话处理和路由保护（未登录时自动跳转登录页）
 - 自动扩展部署配置，支持 Next.js 服务器功能和独立输出
-- **可复用组件架构**: 创建了 `HorizontalTabNav` 共享组件用于所有管理模块的子导航
-  - 被 OperationsLayout、UsersLayout、IMLayout、SpotLayout、BePayLayout 和 OrdersLayout 使用
-  - 提供一致的水平标签导航和滚动支持
-  - 减少代码重复并确保 UI 一致性
+- **双层导航架构**: 采用顶部一级菜单 + 左侧二级菜单的设计
+  - 移除了所有二级顶部菜单（HorizontalTabNav），简化导航结构
+  - 所有layout组件（OperationsLayout、UsersLayout等）简化为容器组件
+  - 统一使用custom-green (#13C2A3) 作为主题绿色，替代原来的emerald色系
 
 ## External Dependencies
 
