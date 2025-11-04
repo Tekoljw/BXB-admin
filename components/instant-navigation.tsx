@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
 import { useAdmin } from "@/contexts/admin-context"
-import AdminSidebar from "@/components/admin-sidebar"
+import AdminTopNav from "@/components/admin-top-nav"
+import AdminSidebarV2 from "@/components/admin-sidebar-v2"
 
 // 只导入管理后台页面组件
 import AdminPage from "@/app/(dashboard)/admin/page"
@@ -93,18 +94,63 @@ import MaintenanceWhitelistPage from "@/app/(dashboard)/admin/system/maintenance
 
 export default function InstantNavigation() {
   const [currentPage, setCurrentPage] = useState("/admin/login")
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [currentModule, setCurrentModule] = useState("operations")
   const { theme } = useTheme()
   const { isAdminLoggedIn } = useAdmin()
+
+  // 根据路径确定当前模块
+  const getModuleFromPath = (path: string): string => {
+    if (path.startsWith('/admin/operations')) return 'operations'
+    if (path.startsWith('/admin/users')) return 'users'
+    if (path.startsWith('/admin/im')) return 'im'
+    if (path.startsWith('/admin/social')) return 'social'
+    if (path.startsWith('/admin/fiat')) return 'fiat'
+    if (path.startsWith('/admin/escrow')) return 'escrow'
+    if (path.startsWith('/admin/ucard')) return 'ucard'
+    if (path.startsWith('/admin/spot')) return 'spot'
+    if (path.startsWith('/admin/futures')) return 'futures'
+    if (path.startsWith('/admin/copytrade')) return 'copytrade'
+    if (path.startsWith('/admin/finance')) return 'finance'
+    if (path.startsWith('/admin/commission')) return 'commission'
+    if (path.startsWith('/admin/bepay')) return 'bepay'
+    if (path.startsWith('/admin/orders')) return 'orders'
+    if (path.startsWith('/admin/system')) return 'system'
+    return 'operations'
+  }
+
+  // 获取模块的默认页面
+  const getModuleDefaultPath = (module: string): string => {
+    const defaults: Record<string, string> = {
+      operations: '/admin/operations/dashboard',
+      users: '/admin/users/all',
+      im: '/admin/im/accounts',
+      social: '/admin/social',
+      fiat: '/admin/fiat/c2c',
+      escrow: '/admin/escrow/rules',
+      ucard: '/admin/ucard/users',
+      spot: '/admin/spot/coins',
+      futures: '/admin/futures/config/sectors',
+      copytrade: '/admin/copytrade',
+      finance: '/admin/finance',
+      commission: '/admin/commission/futures',
+      bepay: '/admin/bepay/channels',
+      orders: '/admin/orders/funds',
+      system: '/admin/system/permissions',
+    }
+    return defaults[module] || '/admin/operations/dashboard'
+  }
 
   useEffect(() => {
     // 初始化当前页面
     const path = window.location.pathname
     setCurrentPage(path || "/admin/login")
+    setCurrentModule(getModuleFromPath(path))
 
     // 监听popstate事件，用于其他组件触发的导航
     const handlePopState = () => {
-      setCurrentPage(window.location.pathname)
+      const newPath = window.location.pathname
+      setCurrentPage(newPath)
+      setCurrentModule(getModuleFromPath(newPath))
     }
 
     window.addEventListener('popstate', handlePopState)
@@ -123,7 +169,13 @@ export default function InstantNavigation() {
     }
     
     setCurrentPage(path)
+    setCurrentModule(getModuleFromPath(path))
     window.history.pushState({}, "", path)
+  }
+
+  const handleModuleChange = (module: string) => {
+    const defaultPath = getModuleDefaultPath(module)
+    navigate(defaultPath)
   }
 
   const renderCurrentPage = () => {
@@ -227,7 +279,7 @@ export default function InstantNavigation() {
     return <AdminLoginPage />
   }
 
-  // 登录页面不显示侧边栏
+  // 登录页面不显示导航栏
   if (currentPage === "/admin/login") {
     return (
       <div className={`h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-auto`}>
@@ -236,19 +288,28 @@ export default function InstantNavigation() {
     )
   }
 
-  // 管理后台布局（带侧边栏）
+  // 管理后台布局（顶部导航 + 左侧边栏 + 内容区）
   return (
-    <div className={`flex h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-hidden`}>
-      <AdminSidebar 
-        currentPage={currentPage}
-        onNavigate={navigate}
-        isExpanded={isExpanded}
-        setIsExpanded={setIsExpanded}
+    <div className={`flex flex-col h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      {/* 顶部导航栏 */}
+      <AdminTopNav 
+        currentModule={currentModule}
+        onModuleChange={handleModuleChange}
       />
 
-      {/* 主内容区域 */}
-      <div className="flex-1 overflow-auto">
-        {renderCurrentPage()}
+      {/* 内容区域：左侧边栏 + 主内容 */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* 左侧二级菜单 */}
+        <AdminSidebarV2
+          currentModule={currentModule}
+          currentPage={currentPage}
+          onNavigate={navigate}
+        />
+
+        {/* 主内容区域 */}
+        <div className="flex-1 overflow-auto">
+          {renderCurrentPage()}
+        </div>
       </div>
     </div>
   )
