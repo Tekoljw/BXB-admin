@@ -147,7 +147,8 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
         {/* 滚动容器 */}
         <div 
           ref={scrollContainerRef}
-          className="flex-1 flex items-center gap-1 overflow-x-auto scrollbar-hide"
+          className="flex-1 flex items-center gap-1 overflow-x-auto scrollbar-hide relative"
+          style={{ maxWidth: 'calc(100vw - 250px)' }}
         >
           {modules.map((module) => {
             const Icon = module.icon
@@ -158,7 +159,7 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
                 key={module.id}
                 onClick={() => handleModuleClick(module.id)}
                 className={`
-                  flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors
+                  flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0
                   ${isActive 
                     ? 'bg-custom-green text-white'
                     : theme === 'dark'
