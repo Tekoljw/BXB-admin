@@ -3,13 +3,12 @@ import type { Metadata } from "next"
 import "./globals.css"
 import "../styles/globals.css"
 import { ThemeProvider } from "@/contexts/theme-context"
-import { ChatProvider } from "@/contexts/chat-context"
 import { AdminProvider } from "@/contexts/admin-context"
 
 export const metadata: Metadata = {
-  title: "BXB - Global Cryptocurrency Guaranteed Trading Exchange", 
-  description: "BXB Global Cryptocurrency Guaranteed Trading Exchange - Advanced crypto trading platform with comprehensive guarantee account system",
-    generator: 'v0.dev'
+  title: "BeDAO - 管理后台系统", 
+  description: "BeDAO 加密货币交易平台管理后台 - 综合管理系统",
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -18,14 +17,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="zh" suppressHydrationWarning>
       <body className="font-apple">
         <ThemeProvider>
-          <ChatProvider>
-            <AdminProvider>
-              {children}
-            </AdminProvider>
-          </ChatProvider>
+          <AdminProvider>
+            {children}
+          </AdminProvider>
         </ThemeProvider>
       </body>
     </html>
