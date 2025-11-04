@@ -1,12 +1,14 @@
-# BeDAO Cryptocurrency Trading Platform
+# BeDAO 管理后台系统
 
 ## Overview
-BeDAO is a multilingual cryptocurrency and social networking platform built with Next.js 15 and React. Its primary purpose is to provide real-time cryptocurrency price tracking, portfolio management, trading interfaces, and advanced social features. The platform aims to be a comprehensive web solution for cryptocurrency traders and enthusiasts, featuring a bilingual (Chinese/English) interface and dynamic light/dark themes. The project's vision is to innovate the crypto economic ecosystem as the world's first integrated "Social + Guarantee + AI" digital asset platform, addressing market pain points like trust deficits and fragmented features. It offers a crypto social network, smart guarantee trading, and zero-threshold quantitative tools.
+BeDAO 管理后台是一个专业的加密货币交易平台后台管理系统，基于 Next.js 15 和 React 构建。该系统专注于为平台运营人员提供全面的管理功能，包括用户管理、交易监控、财务管理、系统配置等。本项目是纯后台管理系统，不包含任何用户端功能。
 
-**Default Entry Point**: The application starts with the admin management system. On launch, users are directed to `/admin`, which automatically redirects to `/admin/login` if not authenticated.
+**项目架构变更**: 2024年11月4日进行了重大简化重构，移除了所有用户端页面和功能（包括聊天、钱包、交易、社交等），项目现在只包含管理后台模块。
+
+**默认入口**: 应用启动时直接跳转到 `/admin/login` 管理员登录页面。登录后可访问完整的15个管理模块及其子页面。
 
 ## User Preferences
-Preferred communication style: Simple, everyday language.
+Preferred communication style: Simple, everyday Chinese language.
 
 ## System Architecture
 
@@ -24,17 +26,8 @@ Preferred communication style: Simple, everyday language.
 - **Authentication**: Replit Auth (OpenID Connect)
 - **Session Storage**: PostgreSQL-backed session store
 
-### Core Features
-- Multi-page Dashboard (chat, social moments, marketplace, wallet)
-- Comprehensive Trading Interfaces (USDT, spot, futures, market analysis)
-- Wallet Management (portfolio, transaction history, balance)
-- Social Features (chat, friend moments, community interaction)
-- Real-time Cryptocurrency Data Feeds
-- BePAY merchant account system with dual-currency cards and payment management
-- Finance center with investment management and product showcases
-- Integrated multi-step card application and activation workflows
-- Enhanced escrow transaction workflow with multi-step process and visual tracking
-- **Admin Management System** (comprehensive backend admin panel with secure login)
+### Core Features (纯管理后台)
+- **管理后台系统** - 综合性后台管理面板，包含安全的登录认证机制
   - **Authentication**: Dedicated admin login interface (demo: admin/admin123)
   - **Context-Aware Sidebar**: Automatically switches between user and admin navigation
   - **15 Management Modules**:
@@ -152,24 +145,25 @@ Preferred communication style: Simple, everyday language.
   - **Session Management**: Persistent admin authentication state
   - **Navigation System**: Custom event-based navigation for seamless sub-page switching without sidebar reload
 
-### UI/UX Decisions
-- Responsive navigation (collapsible sidebar, mobile-friendly design)
-- Dynamic light/dark mode with persistent preferences
-- Custom loading states and performance optimizations (instant response buttons)
-- Consistent branding (BXB) and a standardized color palette (green, black, deep blue, white)
-- Redesigned homepage emphasizing "Social + Guarantee + AI"
-- Mobile-first design approach for all core features (wallet, trading, finance, guarantee, BePAY, chat) with optimized layouts, touch-friendly elements, and responsive typography.
-- Implementation of distinct mobile layouts (e.g., card-based views for tables, vertical icon+text buttons, horizontal scrolling tabs)
+### UI/UX Decisions (仅管理后台)
+- 响应式侧边栏导航（可折叠，适配桌面端）
+- 动态亮色/暗色主题切换，持久化用户偏好
+- 自定义加载状态和性能优化（即时响应按钮）
+- 统一的品牌设计（BeDAO）和标准化配色方案（绿色、黑色、深蓝色、白色）
+- 管理后台专用设计，重点关注数据展示和操作效率
+- 三级导航体系：侧边栏一级菜单 + 页面顶部二级标签 + 部分模块的三级子标签
 
 ### System Design Choices
-- RESTful API endpoints with authentication middleware
-- Optimized data flow with client-side React Context and server-side Drizzle ORM
-- Secure session handling and protected routes
-- Autoscale deployment configured for Next.js server features and standalone output
-- **Reusable Component Architecture**: Created `HorizontalTabNav` shared component for all admin module sub-navigation
-  - Used by OperationsLayout, UsersLayout, IMLayout, SpotLayout, BePayLayout, and OrdersLayout
-  - Provides consistent horizontal tab navigation with scrolling support
-  - Reduces code duplication and ensures UI consistency
+- 客户端路由系统：使用 `instant-navigation` 组件处理所有页面导航，避免页面重载
+- 自定义路由机制：使用 `window.history.pushState` 和 `popstate` 事件实现即时页面切换
+- 状态管理：使用 React Context API（ThemeProvider、AdminProvider）管理全局状态
+- 简化架构：移除了所有用户端相关的 Context（ChatProvider 等）和组件
+- 安全的会话处理和路由保护（未登录时自动跳转登录页）
+- 自动扩展部署配置，支持 Next.js 服务器功能和独立输出
+- **可复用组件架构**: 创建了 `HorizontalTabNav` 共享组件用于所有管理模块的子导航
+  - 被 OperationsLayout、UsersLayout、IMLayout、SpotLayout、BePayLayout 和 OrdersLayout 使用
+  - 提供一致的水平标签导航和滚动支持
+  - 减少代码重复并确保 UI 一致性
 
 ## External Dependencies
 
