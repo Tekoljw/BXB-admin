@@ -190,15 +190,22 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
         </button>
       </div>
 
-      {/* 移动端：汉堡菜单按钮 */}
-      <div className="flex md:hidden flex-1 justify-center">
+      {/* 移动端：汉堡菜单按钮（左侧） */}
+      <div className="flex md:hidden items-center gap-2">
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-custom-green text-white"
+          className={`p-2 rounded-lg transition-colors ${
+            theme === 'dark' 
+              ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+          }`}
+          aria-label="打开菜单"
         >
-          <Menu className="w-4 h-4" />
-          <span>{modules.find(m => m.id === currentModule)?.label || '菜单'}</span>
+          <Menu className="w-6 h-6" />
         </button>
+        <span className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+          {modules.find(m => m.id === currentModule)?.label || 'BeDAO 管理后台'}
+        </span>
       </div>
 
       {/* 右侧操作按钮 */}
