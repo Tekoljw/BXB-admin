@@ -113,92 +113,98 @@ export default function BusinessManagementPage() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                      业务线
-                    </th>
-                    <th className="px-6 py-4 text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                      显示状态
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                      角色权限
-                    </th>
-                    <th className="px-6 py-4 text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                      操作
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {menuItems.map((item) => {
-                    const Icon = item.icon
-                    return (
-                      <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-lg ${item.visible ? 'bg-custom-green/10' : 'bg-gray-100 dark:bg-gray-700'}`}>
-                              <Icon className={`w-5 h-5 ${item.visible ? 'text-custom-green' : 'text-gray-400'}`} />
-                            </div>
-                            <span className={`font-medium ${item.visible ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500'}`}>
-                              {item.label}
+          {/* 卡片网格 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+            {menuItems.map((item) => {
+              const Icon = item.icon
+              return (
+                <div
+                  key={item.id}
+                  className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border transition-all hover:shadow-md ${
+                    item.visible
+                      ? 'border-custom-green/30 dark:border-custom-green/20'
+                      : 'border-gray-200 dark:border-gray-700 opacity-75'
+                  }`}
+                >
+                  {/* 卡片头部 */}
+                  <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <div className={`p-2.5 rounded-lg flex-shrink-0 ${
+                          item.visible 
+                            ? 'bg-custom-green/10' 
+                            : 'bg-gray-100 dark:bg-gray-700'
+                        }`}>
+                          <Icon className={`w-5 h-5 ${
+                            item.visible 
+                              ? 'text-custom-green' 
+                              : 'text-gray-400'
+                          }`} />
+                        </div>
+                        <h3 className={`font-semibold text-sm truncate ${
+                          item.visible 
+                            ? 'text-gray-900 dark:text-white' 
+                            : 'text-gray-400 dark:text-gray-500'
+                        }`}>
+                          {item.label}
+                        </h3>
+                      </div>
+                      <button
+                        onClick={() => toggleVisibility(item.id)}
+                        className={`flex-shrink-0 p-1.5 rounded-lg transition-colors ${
+                          item.visible
+                            ? 'bg-custom-green/10 text-custom-green hover:bg-custom-green/20'
+                            : 'bg-gray-100 dark:bg-gray-700 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                        }`}
+                        title={item.visible ? '点击隐藏' : '点击显示'}
+                      >
+                        {item.visible ? (
+                          <Eye className="w-4 h-4" />
+                        ) : (
+                          <EyeOff className="w-4 h-4" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 卡片内容 */}
+                  <div className="p-4 space-y-3">
+                    {/* 角色权限 */}
+                    <div>
+                      <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+                        角色权限
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {item.roles.length > 0 ? (
+                          item.roles.map(role => (
+                            <span
+                              key={role}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-medium rounded"
+                            >
+                              <UserCheck className="w-3 h-3" />
+                              {role}
                             </span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <button
-                            onClick={() => toggleVisibility(item.id)}
-                            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium text-sm transition-colors ${
-                              item.visible
-                                ? 'bg-custom-green/10 text-custom-green hover:bg-custom-green/20'
-                                : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
-                            }`}
-                          >
-                            {item.visible ? (
-                              <>
-                                <Eye className="w-4 h-4" />
-                                <span>显示</span>
-                              </>
-                            ) : (
-                              <>
-                                <EyeOff className="w-4 h-4" />
-                                <span>隐藏</span>
-                              </>
-                            )}
-                          </button>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex flex-wrap gap-2">
-                            {item.roles.map(role => (
-                              <span
-                                key={role}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-medium rounded-md"
-                              >
-                                <UserCheck className="w-3 h-3" />
-                                {role}
-                              </span>
-                            ))}
-                            {item.roles.length === 0 && (
-                              <span className="text-sm text-gray-400 dark:text-gray-500">未分配角色</span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <button className="px-4 py-2 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors text-sm font-medium">
-                            配置权限
-                          </button>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
+                          ))
+                        ) : (
+                          <span className="text-xs text-gray-400 dark:text-gray-500">
+                            未分配角色
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 操作按钮 */}
+                    <button className="w-full px-3 py-2 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors text-sm font-medium">
+                      配置权限
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
           </div>
 
-          <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          {/* 说明提示 */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
             <div className="flex items-start gap-3">
               <Settings className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-blue-800 dark:text-blue-300">
