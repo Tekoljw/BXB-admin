@@ -98,10 +98,14 @@ export default function AdminLoginPage() {
         <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700/50 p-8">
           {/* Logo和标题 */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-custom-green to-custom-green/80 rounded-2xl mb-4 shadow-lg shadow-custom-green/20">
-              <Shield className="w-8 h-8 text-white" />
+            <div className="inline-flex items-center justify-center mb-4">
+              <img 
+                src="/bxb-logo.png" 
+                alt="BXB Logo" 
+                className="w-20 h-20 object-contain"
+              />
             </div>
-            <h1 className="text-2xl font-bold text-white mb-2">BeDAO 管理后台</h1>
+            <h1 className="text-2xl font-bold text-white mb-2">BXB 管理后台</h1>
             <p className="text-gray-400 text-sm">请登录以访问管理系统</p>
           </div>
 
@@ -208,7 +212,7 @@ export default function AdminLoginPage() {
 
         {/* 底部版权 */}
         <p className="text-center text-gray-500 text-sm mt-6">
-          © 2024 BeDAO. All rights reserved.
+          © 2024 BXB. All rights reserved.
         </p>
       </div>
     </div>
