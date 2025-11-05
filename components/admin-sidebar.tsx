@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React from "react"
 import { useTheme } from "@/contexts/theme-context"
 import {
   BarChart3,
@@ -180,44 +180,38 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
   ],
 }
 
-export default function AdminSidebarV2({ currentModule, currentPage, onNavigate }: AdminSidebarV2Props) {
+interface AdminSidebarV2PropsExtended extends AdminSidebarV2Props {
+  isOpen?: boolean
+  onToggle?: () => void
+}
+
+export default function AdminSidebarV2({ currentModule, currentPage, onNavigate, isOpen = false, onToggle }: AdminSidebarV2PropsExtended) {
   const { theme } = useTheme()
-  const [isOpen, setIsOpen] = useState(false)
   
   const menuItems = moduleMenus[currentModule] || []
 
   const handleNavigate = (path: string) => {
     onNavigate(path)
-    setIsOpen(false) // 移动端点击后关闭侧边栏
+    if (onToggle && isOpen) {
+      onToggle() // 移动端点击后关闭侧边栏
+    }
+  }
+  
+  const handleClose = () => {
+    if (onToggle) {
+      onToggle()
+    }
   }
 
   return (
     <>
-      {/* 移动端切换按钮（右下角） */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`md:hidden fixed bottom-6 right-6 z-60 p-4 rounded-full shadow-lg transition-colors ${
-          theme === 'dark' 
-            ? 'bg-custom-green text-white hover:bg-custom-green/90' 
-            : 'bg-custom-green text-white hover:bg-custom-green/90'
-        }`}
-        aria-label="切换二级菜单"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          {isOpen ? (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          ) : (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          )}
-        </svg>
-      </button>
 
       {/* 移动端二级菜单遮罩层 */}
       <div 
         className={`md:hidden fixed inset-0 bg-black/50 z-45 transition-opacity duration-300 ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
-        onClick={() => setIsOpen(false)}
+        onClick={handleClose}
       />
 
       {/* 侧边栏 - 桌面端左侧，移动端右侧 */}
@@ -233,7 +227,7 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate 
             子菜单
           </h2>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
             className={`p-2 rounded-lg transition-colors ${
               theme === 'dark' 
                 ? 'text-gray-400 hover:bg-gray-700 hover:text-white' 

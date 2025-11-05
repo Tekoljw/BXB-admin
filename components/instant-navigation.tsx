@@ -102,6 +102,7 @@ import MaintenanceWhitelistPage from "@/app/(dashboard)/admin/system/maintenance
 export default function InstantNavigation() {
   const [currentPage, setCurrentPage] = useState("/admin/login")
   const [currentModule, setCurrentModule] = useState("operations")
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const { theme } = useTheme()
   const { isAdminLoggedIn } = useAdmin()
 
@@ -324,6 +325,7 @@ export default function InstantNavigation() {
       <AdminTopNav 
         currentModule={currentModule}
         onModuleChange={handleModuleChange}
+        onToggleSidebar={() => setSidebarOpen(prev => !prev)}
       />
 
       {/* 内容区域：左侧边栏 + 主内容 */}
@@ -333,6 +335,8 @@ export default function InstantNavigation() {
           currentModule={currentModule}
           currentPage={currentPage}
           onNavigate={navigate}
+          isOpen={sidebarOpen}
+          onToggle={() => setSidebarOpen(prev => !prev)}
         />
 
         {/* 主内容区域 */}

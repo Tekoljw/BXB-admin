@@ -30,6 +30,7 @@ import {
 interface AdminTopNavProps {
   currentModule: string
   onModuleChange: (module: string) => void
+  onToggleSidebar?: () => void
 }
 
 const modules = [
@@ -51,7 +52,7 @@ const modules = [
   { id: "system", label: "系统管理", icon: Settings },
 ]
 
-export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopNavProps) {
+export default function AdminTopNav({ currentModule, onModuleChange, onToggleSidebar }: AdminTopNavProps) {
   const { theme, setTheme } = useTheme()
   const { logout } = useAdmin()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -210,6 +211,21 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
 
       {/* 右侧操作按钮 */}
       <div className="flex items-center gap-2 min-w-[80px] md:min-w-[120px] justify-end">
+        {/* 移动端二级菜单按钮 */}
+        {onToggleSidebar && (
+          <button
+            onClick={onToggleSidebar}
+            className={`md:hidden p-2 rounded-md transition-colors ${
+              theme === 'dark' 
+                ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+            }`}
+            aria-label="打开子菜单"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
+        
         {/* 主题切换 */}
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
