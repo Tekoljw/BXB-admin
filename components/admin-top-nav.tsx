@@ -47,7 +47,7 @@ const modules = [
   { id: "copytrade", label: "跟单管理", icon: Copy },
   { id: "finance", label: "理财管理", icon: PiggyBank },
   { id: "commission", label: "佣金管理", icon: Percent },
-  { id: "bepay", label: "BePay管理", icon: Store },
+  { id: "bepay", label: "法币管理", icon: Store },
   { id: "orders", label: "财务管理", icon: FileText },
   { id: "system", label: "系统管理", icon: Settings },
 ]
