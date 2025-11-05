@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import PermissionsLayout from "@/components/permissions-layout"
 import { useMaintenance } from "@/contexts/maintenance-context"
 import { 
@@ -22,7 +22,8 @@ import {
   EyeOff,
   UserCheck,
   Construction,
-  PlayCircle
+  PlayCircle,
+  X
 } from "lucide-react"
 
 interface MenuItem {
@@ -35,6 +36,8 @@ interface MenuItem {
 
 export default function BusinessManagementPage() {
   const { isModuleUnderMaintenance, setModuleMaintenance } = useMaintenance()
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)
+  const [showRoleModal, setShowRoleModal] = useState(false)
   
   const [menuItems, setMenuItems] = useState<MenuItem[]>([
     { id: "permissions", label: "权限管理", icon: Shield, visible: true, roles: ["超级管理员", "系统管理员"] },
@@ -103,6 +106,30 @@ export default function BusinessManagementPage() {
         return item
       })
     )
+    
+    // 同时更新弹窗中的选中项
+    if (selectedItem && selectedItem.id === itemId) {
+      const updatedItem = menuItems.find(item => item.id === itemId)
+      if (updatedItem) {
+        const hasRole = updatedItem.roles.includes(role)
+        setSelectedItem({
+          ...updatedItem,
+          roles: hasRole
+            ? updatedItem.roles.filter(r => r !== role)
+            : [...updatedItem.roles, role]
+        })
+      }
+    }
+  }
+
+  const openRoleModal = (item: MenuItem) => {
+    setSelectedItem(item)
+    setShowRoleModal(true)
+  }
+
+  const closeRoleModal = () => {
+    setShowRoleModal(false)
+    setSelectedItem(null)
   }
 
   const maintenanceCount = menuItems.filter(item => isModuleUnderMaintenance(item.id)).length
@@ -220,35 +247,17 @@ export default function BusinessManagementPage() {
 
                   {/* 卡片内容 */}
                   <div className="p-4 space-y-3">
-                    {/* 角色权限 */}
-                    <div>
-                      <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
-                        角色权限
-                      </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        {item.roles.length > 0 ? (
-                          item.roles.map(role => (
-                            <span
-                              key={role}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-medium rounded"
-                            >
-                              <UserCheck className="w-3 h-3" />
-                              {role}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="text-xs text-gray-400 dark:text-gray-500">
-                            未分配角色
-                          </span>
-                        )}
-                      </div>
+                    {/* 角色权限信息 */}
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      已分配角色: <span className="font-medium text-gray-900 dark:text-white">{item.roles.length}</span> 个
                     </div>
 
                     {/* 操作按钮 */}
                     <button 
-                      className="w-full px-3 py-2 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors text-sm font-medium"
-                      disabled={isMaintenance}
+                      onClick={() => openRoleModal(item)}
+                      className="w-full px-3 py-2 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors text-sm font-medium flex items-center justify-center gap-2"
                     >
+                      <UserCheck className="w-4 h-4" />
                       配置权限
                     </button>
                   </div>
@@ -266,7 +275,7 @@ export default function BusinessManagementPage() {
                 <ul className="space-y-1 text-blue-700 dark:text-blue-400">
                   <li>• <strong>显示/隐藏</strong>：控制该菜单是否在顶部导航栏中显示</li>
                   <li>• <strong>维护模式</strong>：开启后访问该业务线时将显示维护页面，所有功能不可用</li>
-                  <li>• <strong>角色权限</strong>：控制哪些角色可以访问该业务线</li>
+                  <li>• <strong>角色权限</strong>：控制哪些角色可以访问该业务线，点击"配置权限"按钮进行设置</li>
                   <li>• <strong>超级管理员</strong>：默认拥有所有业务线的访问权限</li>
                 </ul>
               </div>
@@ -274,6 +283,106 @@ export default function BusinessManagementPage() {
           </div>
         </div>
       </div>
+
+      {/* 角色权限配置弹窗 */}
+      {showRoleModal && selectedItem && (
+        <>
+          {/* 遮罩层 */}
+          <div 
+            className="fixed inset-0 bg-black/50 z-50 transition-opacity"
+            onClick={closeRoleModal}
+          ></div>
+          
+          {/* 弹窗 */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+              {/* 弹窗头部 */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-3">
+                  {React.createElement(selectedItem.icon, {
+                    className: "w-6 h-6 text-custom-green"
+                  })}
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                      {selectedItem.label}
+                    </h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                      配置访问权限
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={closeRoleModal}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                </button>
+              </div>
+
+              {/* 弹窗内容 */}
+              <div className="flex-1 overflow-y-auto p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      选择可访问的角色
+                    </h3>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      已选择: <span className="font-medium text-custom-green">{selectedItem.roles.length}</span> 个
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {allRoles.map(role => {
+                      const isSelected = selectedItem.roles.includes(role)
+                      return (
+                        <button
+                          key={role}
+                          onClick={() => toggleRole(selectedItem.id, role)}
+                          className={`flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
+                            isSelected
+                              ? 'border-custom-green bg-custom-green/5 dark:bg-custom-green/10'
+                              : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                          }`}
+                        >
+                          <div className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+                            isSelected
+                              ? 'border-custom-green bg-custom-green'
+                              : 'border-gray-300 dark:border-gray-600'
+                          }`}>
+                            {isSelected && (
+                              <UserCheck className="w-3 h-3 text-white" />
+                            )}
+                          </div>
+                          <span className={`text-sm font-medium ${
+                            isSelected
+                              ? 'text-custom-green'
+                              : 'text-gray-700 dark:text-gray-300'
+                          }`}>
+                            {role}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* 弹窗底部 */}
+              <div className="flex items-center justify-between p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  点击角色进行选择或取消
+                </p>
+                <button
+                  onClick={closeRoleModal}
+                  className="px-6 py-2 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors font-medium"
+                >
+                  完成
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </PermissionsLayout>
   )
 }
