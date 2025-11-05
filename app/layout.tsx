@@ -4,6 +4,7 @@ import "./globals.css"
 import "../styles/globals.css"
 import { ThemeProvider } from "@/contexts/theme-context"
 import { AdminProvider } from "@/contexts/admin-context"
+import { MaintenanceProvider } from "@/contexts/maintenance-context"
 import { Toaster } from "sonner"
 
 export const metadata: Metadata = {
@@ -21,15 +22,17 @@ export default function RootLayout({
     <html lang="zh" suppressHydrationWarning>
       <body className="font-apple">
         <ThemeProvider>
-          <AdminProvider>
-            {children}
-            <Toaster 
-              position="top-center"
-              richColors 
-              closeButton
-              duration={3000}
-            />
-          </AdminProvider>
+          <MaintenanceProvider>
+            <AdminProvider>
+              {children}
+              <Toaster 
+                position="top-center"
+                richColors 
+                closeButton
+                duration={3000}
+              />
+            </AdminProvider>
+          </MaintenanceProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -3,8 +3,10 @@
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
 import { useAdmin } from "@/contexts/admin-context"
+import { useMaintenance } from "@/contexts/maintenance-context"
 import AdminTopNav from "@/components/admin-top-nav"
 import AdminSidebar from "@/components/admin-sidebar"
+import MaintenancePage from "@/components/maintenance-page"
 
 // 只导入管理后台页面组件
 import AdminPage from "@/app/(dashboard)/admin/page"
@@ -104,6 +106,7 @@ export default function InstantNavigation() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { theme } = useTheme()
   const { isAdminLoggedIn } = useAdmin()
+  const { isModuleUnderMaintenance } = useMaintenance()
 
   // 根据路径确定当前模块
   const getModuleFromPath = (path: string): string => {
@@ -199,10 +202,42 @@ export default function InstantNavigation() {
     navigate(defaultPath)
   }
 
+  // 获取模块的中文名称
+  const getModuleName = (moduleId: string): string => {
+    const names: Record<string, string> = {
+      permissions: '权限管理',
+      operations: '运营报表',
+      users: '用户管理',
+      im: 'IM管理',
+      social: '社交管理',
+      fiat: '法币管理',
+      escrow: '担保管理',
+      ucard: 'U卡管理',
+      spot: '现货管理',
+      futures: '合约管理',
+      copytrade: '跟单管理',
+      finance: '理财管理',
+      commission: '佣金管理',
+      bepay: 'BePay管理',
+      orders: '财务管理',
+      system: '系统管理',
+    }
+    return names[moduleId] || '此模块'
+  }
+
   const renderCurrentPage = () => {
-    // 管理后台页面
+    // 登录页面不受维护影响
     if (currentPage === "/admin/login") return <AdminLoginPage />
     if (currentPage === "/admin") return <AdminPage />
+    
+    // 检查当前模块是否处于维护状态（业务线配置页面除外）
+    if (currentPage !== "/admin/permissions/business-lines" && 
+        currentModule && 
+        isModuleUnderMaintenance(currentModule)) {
+      return <MaintenancePage moduleName={getModuleName(currentModule)} />
+    }
+    
+    // 管理后台页面
     if (currentPage === "/admin/permissions") return <BusinessLinesPage />
     if (currentPage === "/admin/permissions/business-lines") return <BusinessLinesPage />
     if (currentPage === "/admin/permissions/audit-config") return <PermissionsAuditConfigPage />

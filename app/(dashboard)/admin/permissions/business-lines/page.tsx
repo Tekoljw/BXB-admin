@@ -1,7 +1,8 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import PermissionsLayout from "@/components/permissions-layout"
+import { useMaintenance } from "@/contexts/maintenance-context"
 import { 
   Shield, 
   BarChart3, 
@@ -19,7 +20,9 @@ import {
   Settings,
   Eye,
   EyeOff,
-  UserCheck
+  UserCheck,
+  Construction,
+  PlayCircle
 } from "lucide-react"
 
 interface MenuItem {
@@ -31,6 +34,8 @@ interface MenuItem {
 }
 
 export default function BusinessManagementPage() {
+  const { isModuleUnderMaintenance, setModuleMaintenance } = useMaintenance()
+  
   const [menuItems, setMenuItems] = useState<MenuItem[]>([
     { id: "permissions", label: "权限管理", icon: Shield, visible: true, roles: ["超级管理员", "系统管理员"] },
     { id: "operations", label: "运营报表", icon: BarChart3, visible: true, roles: ["超级管理员", "运营人员", "数据分析师"] },
@@ -78,6 +83,11 @@ export default function BusinessManagementPage() {
     )
   }
 
+  const toggleMaintenance = (id: string) => {
+    const isMaintenance = isModuleUnderMaintenance(id)
+    setModuleMaintenance(id, !isMaintenance)
+  }
+
   const toggleRole = (itemId: string, role: string) => {
     setMenuItems(items =>
       items.map(item => {
@@ -95,6 +105,8 @@ export default function BusinessManagementPage() {
     )
   }
 
+  const maintenanceCount = menuItems.filter(item => isModuleUnderMaintenance(item.id)).length
+
   return (
     <PermissionsLayout>
       <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
@@ -110,6 +122,10 @@ export default function BusinessManagementPage() {
                 <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
                 <span>已禁用: {menuItems.filter(m => !m.visible).length}</span>
               </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <span>维护中: {maintenanceCount}</span>
+              </div>
             </div>
           </div>
 
@@ -117,11 +133,15 @@ export default function BusinessManagementPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
             {menuItems.map((item) => {
               const Icon = item.icon
+              const isMaintenance = isModuleUnderMaintenance(item.id)
+              
               return (
                 <div
                   key={item.id}
                   className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border transition-all hover:shadow-md ${
-                    item.visible
+                    isMaintenance
+                      ? 'border-yellow-500/50 dark:border-yellow-500/30 bg-yellow-50/50 dark:bg-yellow-900/10'
+                      : item.visible
                       ? 'border-custom-green/30 dark:border-custom-green/20'
                       : 'border-gray-200 dark:border-gray-700 opacity-75'
                   }`}
@@ -131,40 +151,71 @@ export default function BusinessManagementPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <div className={`p-2.5 rounded-lg flex-shrink-0 ${
-                          item.visible 
+                          isMaintenance
+                            ? 'bg-yellow-100 dark:bg-yellow-900/30'
+                            : item.visible 
                             ? 'bg-custom-green/10' 
                             : 'bg-gray-100 dark:bg-gray-700'
                         }`}>
                           <Icon className={`w-5 h-5 ${
-                            item.visible 
+                            isMaintenance
+                              ? 'text-yellow-600 dark:text-yellow-500'
+                              : item.visible 
                               ? 'text-custom-green' 
                               : 'text-gray-400'
                           }`} />
                         </div>
                         <h3 className={`font-semibold text-sm truncate ${
-                          item.visible 
+                          isMaintenance
+                            ? 'text-yellow-700 dark:text-yellow-400'
+                            : item.visible 
                             ? 'text-gray-900 dark:text-white' 
                             : 'text-gray-400 dark:text-gray-500'
                         }`}>
                           {item.label}
                         </h3>
                       </div>
-                      <button
-                        onClick={() => toggleVisibility(item.id)}
-                        className={`flex-shrink-0 p-1.5 rounded-lg transition-colors ${
-                          item.visible
-                            ? 'bg-custom-green/10 text-custom-green hover:bg-custom-green/20'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
-                        }`}
-                        title={item.visible ? '点击隐藏' : '点击显示'}
-                      >
-                        {item.visible ? (
-                          <Eye className="w-4 h-4" />
-                        ) : (
-                          <EyeOff className="w-4 h-4" />
-                        )}
-                      </button>
+                      <div className="flex flex-col gap-1.5">
+                        <button
+                          onClick={() => toggleVisibility(item.id)}
+                          className={`flex-shrink-0 p-1.5 rounded-lg transition-colors ${
+                            item.visible
+                              ? 'bg-custom-green/10 text-custom-green hover:bg-custom-green/20'
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                          }`}
+                          title={item.visible ? '点击隐藏' : '点击显示'}
+                        >
+                          {item.visible ? (
+                            <Eye className="w-4 h-4" />
+                          ) : (
+                            <EyeOff className="w-4 h-4" />
+                          )}
+                        </button>
+                        <button
+                          onClick={() => toggleMaintenance(item.id)}
+                          className={`flex-shrink-0 p-1.5 rounded-lg transition-colors ${
+                            isMaintenance
+                              ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-500 hover:bg-yellow-200 dark:hover:bg-yellow-900/40'
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                          }`}
+                          title={isMaintenance ? '结束维护' : '开启维护'}
+                        >
+                          {isMaintenance ? (
+                            <Construction className="w-4 h-4" />
+                          ) : (
+                            <PlayCircle className="w-4 h-4" />
+                          )}
+                        </button>
+                      </div>
                     </div>
+                    
+                    {/* 维护状态标签 */}
+                    {isMaintenance && (
+                      <div className="mt-2 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-700 rounded text-xs font-medium text-yellow-700 dark:text-yellow-400 flex items-center gap-1.5">
+                        <Construction className="w-3 h-3" />
+                        <span>维护中</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* 卡片内容 */}
@@ -194,7 +245,10 @@ export default function BusinessManagementPage() {
                     </div>
 
                     {/* 操作按钮 */}
-                    <button className="w-full px-3 py-2 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors text-sm font-medium">
+                    <button 
+                      className="w-full px-3 py-2 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors text-sm font-medium"
+                      disabled={isMaintenance}
+                    >
                       配置权限
                     </button>
                   </div>
@@ -210,9 +264,10 @@ export default function BusinessManagementPage() {
               <div className="text-sm text-blue-800 dark:text-blue-300">
                 <p className="font-semibold mb-1">权限说明</p>
                 <ul className="space-y-1 text-blue-700 dark:text-blue-400">
-                  <li>• 显示/隐藏控制该菜单是否在顶部导航栏中显示</li>
-                  <li>• 角色权限控制哪些角色可以访问该业务线</li>
-                  <li>• 超级管理员默认拥有所有业务线的访问权限</li>
+                  <li>• <strong>显示/隐藏</strong>：控制该菜单是否在顶部导航栏中显示</li>
+                  <li>• <strong>维护模式</strong>：开启后访问该业务线时将显示维护页面，所有功能不可用</li>
+                  <li>• <strong>角色权限</strong>：控制哪些角色可以访问该业务线</li>
+                  <li>• <strong>超级管理员</strong>：默认拥有所有业务线的访问权限</li>
                 </ul>
               </div>
             </div>
