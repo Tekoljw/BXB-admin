@@ -126,8 +126,8 @@ Preferred communication style: Simple, everyday Chinese language.
        - Escrow Commission (担保佣金)
        - Payment Commission (支付佣金)
     13. BePay Management (法币管理) - Payment gateway administration with 5 sub-pages:
-       - Channels Management (通道管理)
        - Suppliers Management (供应商管理)
+       - Channels Management (通道管理)
        - Merchants Management (商户管理)
        - Commission Management (佣金管理)
        - Orders Management (订单管理)

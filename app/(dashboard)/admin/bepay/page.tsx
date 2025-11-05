@@ -18,9 +18,9 @@ export default function BePayManagementPage() {
   useEffect(() => {
     setCurrentPath(window.location.pathname)
     
-    // 如果访问的是根路径，重定向到通道管理
+    // 如果访问的是根路径，重定向到供应商管理
     if (window.location.pathname === "/admin/bepay") {
-      router.replace("/admin/bepay/channels")
+      router.replace("/admin/bepay/suppliers")
     }
     
     // 监听路径变化
@@ -34,11 +34,11 @@ export default function BePayManagementPage() {
 
   // 渲染对应的子页面
   const renderSubPage = () => {
-    if (currentPath === "/admin/bepay/channels") {
-      return <ChannelsPage />
-    }
     if (currentPath === "/admin/bepay/suppliers") {
       return <SuppliersPage />
+    }
+    if (currentPath === "/admin/bepay/channels") {
+      return <ChannelsPage />
     }
     if (currentPath === "/admin/bepay/merchants") {
       return <MerchantsPage />
