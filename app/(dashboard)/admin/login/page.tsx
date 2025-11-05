@@ -2,8 +2,11 @@
 
 import React, { useState } from "react"
 import { Shield, Lock, User, Eye, EyeOff, AlertCircle, Mail } from "lucide-react"
+import { useAdmin } from "@/contexts/admin-context"
+import { toast } from "sonner"
 
 export default function AdminLoginPage() {
+  const { login } = useAdmin()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [verificationCode, setVerificationCode] = useState("")
@@ -58,12 +61,23 @@ export default function AdminLoginPage() {
 
     setTimeout(() => {
       if (username === "123123" && password === "123123" && verificationCode === "123123") {
-        sessionStorage.setItem("isAdminLoggedIn", "true")
-        localStorage.setItem("isAdminLoggedIn", "true")
         localStorage.setItem("adminEmail", username)
         
-        // 触发导航到管理后台首页
-        window.dispatchEvent(new CustomEvent('navigate', { detail: { path: "/admin/operations/dashboard" } }))
+        // 显示登录成功提示
+        toast.success("登录成功", {
+          description: "欢迎回到 BeDAO 管理后台",
+          duration: 2000,
+        })
+        
+        // 调用 context 的 login 方法，并在回调中触发导航
+        // 确保 context 状态更新后再导航，避免认证检查失败
+        login(() => {
+          window.dispatchEvent(new CustomEvent('navigate', { 
+            detail: { 
+              path: "/admin/operations/dashboard"
+            } 
+          }))
+        })
       } else {
         setError("账号、密码或验证码错误")
         setIsLoading(false)

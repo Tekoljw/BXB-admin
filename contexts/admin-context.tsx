@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from "react"
 
 interface AdminContextType {
   isAdminLoggedIn: boolean
-  login: () => void
+  login: (callback?: () => void) => void
   logout: () => void
 }
 
@@ -20,10 +20,15 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     setIsAdminLoggedIn(adminLoggedIn)
   }, [])
 
-  const login = () => {
+  const login = (callback?: () => void) => {
     setIsAdminLoggedIn(true)
     sessionStorage.setItem("isAdminLoggedIn", "true")
     localStorage.setItem("isAdminLoggedIn", "true")
+    
+    // 如果提供了回调，在下一个事件循环中执行，确保状态已更新
+    if (callback) {
+      setTimeout(callback, 0)
+    }
   }
 
   const logout = () => {

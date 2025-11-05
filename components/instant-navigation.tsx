@@ -166,8 +166,8 @@ export default function InstantNavigation() {
     const handleNavigate = (e: any) => {
       const newPath = e.detail?.path
       if (newPath) {
-        setCurrentPage(newPath)
-        setCurrentModule(getModuleFromPath(newPath))
+        // 使用常规导航（会检查登录状态，包括实时检查 storage）
+        navigate(newPath)
       }
     }
 
@@ -181,6 +181,7 @@ export default function InstantNavigation() {
   }, [])
 
   const navigate = (path: string) => {
+    // 只信任 context 中的登录状态，确保安全性
     // 如果访问管理页面但未登录，跳转到登录页
     if (path.startsWith('/admin') && path !== '/admin/login' && !isAdminLoggedIn) {
       setCurrentPage('/admin/login')
