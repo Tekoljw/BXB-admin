@@ -178,7 +178,7 @@ export default function InstantNavigation() {
       window.removeEventListener('popstate', handlePopState)
       window.removeEventListener('navigate', handleNavigate as EventListener)
     }
-  }, [])
+  }, [isAdminLoggedIn])
 
   const navigate = (path: string) => {
     // 只信任 context 中的登录状态，确保安全性
