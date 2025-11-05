@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import { useTheme } from "@/contexts/theme-context"
 import {
   BarChart3,
@@ -182,39 +182,80 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
 
 export default function AdminSidebarV2({ currentModule, currentPage, onNavigate }: AdminSidebarV2Props) {
   const { theme } = useTheme()
+  const [isOpen, setIsOpen] = useState(false)
   
   const menuItems = moduleMenus[currentModule] || []
 
+  const handleNavigate = (path: string) => {
+    onNavigate(path)
+    setIsOpen(false) // 移动端点击后关闭侧边栏
+  }
+
   return (
-    <div className={`w-56 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-r flex flex-col h-full`}>
-      {/* 二级菜单列表 */}
-      <div className="flex-1 overflow-y-auto py-4">
-        <nav className="space-y-1 px-3">
-          {menuItems.map((item) => {
-            const Icon = item.icon
-            const isActive = currentPage === item.path
-            
-            return (
-              <button
-                key={item.path}
-                onClick={() => onNavigate(item.path)}
-                className={`
-                  w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors
-                  ${isActive 
-                    ? 'bg-custom-green text-white'
-                    : theme === 'dark'
-                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                  }
-                `}
-              >
-                <Icon className="w-4 h-4 flex-shrink-0" />
-                <span className="truncate">{item.label}</span>
-              </button>
-            )
-          })}
-        </nav>
+    <>
+      {/* 移动端切换按钮 */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`md:hidden fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-lg transition-colors ${
+          theme === 'dark' 
+            ? 'bg-custom-green text-white hover:bg-custom-green/90' 
+            : 'bg-custom-green text-white hover:bg-custom-green/90'
+        }`}
+        aria-label="切换侧边栏"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {isOpen ? (
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          ) : (
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          )}
+        </svg>
+      </button>
+
+      {/* 移动端遮罩层 */}
+      {isOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-30"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* 侧边栏 */}
+      <div className={`
+        w-56 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-r flex flex-col h-full
+        md:relative md:translate-x-0
+        fixed inset-y-0 left-0 z-40 transition-transform duration-300
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        {/* 二级菜单列表 */}
+        <div className="flex-1 overflow-y-auto py-4">
+          <nav className="space-y-1 px-3">
+            {menuItems.map((item) => {
+              const Icon = item.icon
+              const isActive = currentPage === item.path
+              
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => handleNavigate(item.path)}
+                  className={`
+                    w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors
+                    ${isActive 
+                      ? 'bg-custom-green text-white'
+                      : theme === 'dark'
+                        ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                    }
+                  `}
+                >
+                  <Icon className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">{item.label}</span>
+                </button>
+              )
+            })}
+          </nav>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
