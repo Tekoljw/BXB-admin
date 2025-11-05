@@ -9,6 +9,13 @@ import AdminSidebar from "@/components/admin-sidebar"
 // 只导入管理后台页面组件
 import AdminPage from "@/app/(dashboard)/admin/page"
 import AdminLoginPage from "@/app/(dashboard)/admin/login/page"
+import BusinessLinesPage from "@/app/(dashboard)/admin/permissions/business-lines/page"
+import BusinessManagementPage from "@/app/(dashboard)/admin/permissions/business-management/page"
+import PermissionsAuditConfigPage from "@/app/(dashboard)/admin/permissions/audit-config/page"
+import StaffManagementPage from "@/app/(dashboard)/admin/permissions/staff-management/page"
+import UserPermissionsPage from "@/app/(dashboard)/admin/permissions/user-permissions/page"
+import PermissionsSystemManagementPage from "@/app/(dashboard)/admin/permissions/system-management/page"
+import SystemLogsPage from "@/app/(dashboard)/admin/permissions/system-logs/page"
 import DashboardPage from "@/app/(dashboard)/admin/operations/dashboard/page"
 import FundsAnalysisPage from "@/app/(dashboard)/admin/operations/funds/page"
 import RetentionAnalysisPage from "@/app/(dashboard)/admin/operations/retention/page"
@@ -100,6 +107,7 @@ export default function InstantNavigation() {
 
   // 根据路径确定当前模块
   const getModuleFromPath = (path: string): string => {
+    if (path.startsWith('/admin/permissions')) return 'permissions'
     if (path.startsWith('/admin/operations')) return 'operations'
     if (path.startsWith('/admin/users')) return 'users'
     if (path.startsWith('/admin/im')) return 'im'
@@ -115,12 +123,13 @@ export default function InstantNavigation() {
     if (path.startsWith('/admin/bepay')) return 'bepay'
     if (path.startsWith('/admin/orders')) return 'orders'
     if (path.startsWith('/admin/system')) return 'system'
-    return 'operations'
+    return 'permissions'
   }
 
   // 获取模块的默认页面
   const getModuleDefaultPath = (module: string): string => {
     const defaults: Record<string, string> = {
+      permissions: '/admin/permissions/business-lines',
       operations: '/admin/operations/dashboard',
       users: '/admin/users/all',
       im: '/admin/im/accounts',
@@ -137,7 +146,7 @@ export default function InstantNavigation() {
       orders: '/admin/orders/funds',
       system: '/admin/system/permissions',
     }
-    return defaults[module] || '/admin/operations/dashboard'
+    return defaults[module] || '/admin/permissions/business-lines'
   }
 
   useEffect(() => {
@@ -193,6 +202,14 @@ export default function InstantNavigation() {
     // 管理后台页面
     if (currentPage === "/admin/login") return <AdminLoginPage />
     if (currentPage === "/admin") return <AdminPage />
+    if (currentPage === "/admin/permissions") return <BusinessLinesPage />
+    if (currentPage === "/admin/permissions/business-lines") return <BusinessLinesPage />
+    if (currentPage === "/admin/permissions/business-management") return <BusinessManagementPage />
+    if (currentPage === "/admin/permissions/audit-config") return <PermissionsAuditConfigPage />
+    if (currentPage === "/admin/permissions/staff-management") return <StaffManagementPage />
+    if (currentPage === "/admin/permissions/user-permissions") return <UserPermissionsPage />
+    if (currentPage === "/admin/permissions/system-management") return <PermissionsSystemManagementPage />
+    if (currentPage === "/admin/permissions/system-logs") return <SystemLogsPage />
     if (currentPage === "/admin/operations") return <DashboardPage />
     if (currentPage === "/admin/operations/dashboard") return <DashboardPage />
     if (currentPage === "/admin/operations/funds") return <FundsAnalysisPage />

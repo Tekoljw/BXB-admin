@@ -53,6 +53,15 @@ interface AdminSidebarV2Props {
 
 // 定义每个模块的二级菜单
 const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
+  permissions: [
+    { path: "/admin/permissions/business-lines", icon: BarChart3, label: "业务线" },
+    { path: "/admin/permissions/business-management", icon: Settings, label: "业务线管理" },
+    { path: "/admin/permissions/audit-config", icon: FileCheck, label: "审核配置" },
+    { path: "/admin/permissions/staff-management", icon: Users, label: "人员管理" },
+    { path: "/admin/permissions/user-permissions", icon: Key, label: "用户权限" },
+    { path: "/admin/permissions/system-management", icon: Settings, label: "系统管理" },
+    { path: "/admin/permissions/system-logs", icon: FileText, label: "系统日志" },
+  ],
   operations: [
     { path: "/admin/operations/dashboard", icon: BarChart3, label: "总仪表盘" },
     { path: "/admin/operations/funds", icon: TrendingUp, label: "出入金分析报表" },

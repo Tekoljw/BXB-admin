@@ -39,6 +39,7 @@ interface AdminTopNavProps {
 }
 
 const modules = [
+  { id: "permissions", label: "权限管理", icon: Shield },
   { id: "operations", label: "运营报表", icon: BarChart3 },
   { id: "users", label: "用户管理", icon: Users },
   { id: "im", label: "IM管理", icon: MessageSquare },
