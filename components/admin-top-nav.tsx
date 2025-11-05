@@ -26,12 +26,6 @@ import {
   ChevronLeft,
   ChevronRight
 } from "lucide-react"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
 
 interface AdminTopNavProps {
   currentModule: string
@@ -235,41 +229,71 @@ export default function AdminTopNav({ currentModule, onModuleChange }: AdminTopN
         </button>
       </div>
 
-      {/* 移动端菜单弹窗 */}
-      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-        <SheetContent side="left" className={theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white'}>
-          <SheetHeader>
-            <SheetTitle className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>
-              管理模块
-            </SheetTitle>
-          </SheetHeader>
-          <div className="mt-6 space-y-2">
-            {modules.map((module) => {
-              const Icon = module.icon
-              const isActive = currentModule === module.id
-              
-              return (
+      {/* 移动端一级菜单遮罩层 */}
+      <div 
+        className={`md:hidden fixed inset-0 bg-black/50 z-30 transition-opacity duration-300 ${
+          mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setMobileMenuOpen(false)}
+      />
+      
+      {/* 移动端一级菜单（从左侧划出） */}
+      <div className={`
+        md:hidden fixed inset-y-0 left-0 w-72 z-40
+        ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}
+        shadow-2xl transition-transform duration-300
+        ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+            <div className="flex flex-col h-full">
+              {/* 标题栏 */}
+              <div className={`flex items-center justify-between p-4 border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                <h2 className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                  管理模块
+                </h2>
                 <button
-                  key={module.id}
-                  onClick={() => handleModuleClick(module.id)}
-                  className={`
-                    w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors
-                    ${isActive 
-                      ? 'bg-custom-green text-white'
-                      : theme === 'dark'
-                        ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                    }
-                  `}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`p-2 rounded-lg transition-colors ${
+                    theme === 'dark' 
+                      ? 'text-gray-400 hover:bg-gray-700 hover:text-white' 
+                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                  }`}
                 >
-                  <Icon className="w-5 h-5" />
-                  <span className="font-medium">{module.label}</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
-              )
-            })}
+              </div>
+
+              {/* 菜单列表 */}
+              <div className="flex-1 overflow-y-auto p-4">
+                <div className="space-y-2">
+                  {modules.map((module) => {
+                    const Icon = module.icon
+                    const isActive = currentModule === module.id
+                    
+                    return (
+                      <button
+                        key={module.id}
+                        onClick={() => handleModuleClick(module.id)}
+                        className={`
+                          w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors
+                          ${isActive 
+                            ? 'bg-custom-green text-white'
+                            : theme === 'dark'
+                              ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                          }
+                        `}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span className="font-medium">{module.label}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
-        </SheetContent>
-      </Sheet>
 
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {

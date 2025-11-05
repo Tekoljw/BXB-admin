@@ -97,6 +97,10 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      zIndex: {
+        '45': '45',
+        '60': '60',
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

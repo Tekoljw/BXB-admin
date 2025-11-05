@@ -193,40 +193,59 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate 
 
   return (
     <>
-      {/* 移动端切换按钮 */}
+      {/* 移动端切换按钮（右下角） */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`md:hidden fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-lg transition-colors ${
+        className={`md:hidden fixed bottom-6 right-6 z-60 p-4 rounded-full shadow-lg transition-colors ${
           theme === 'dark' 
             ? 'bg-custom-green text-white hover:bg-custom-green/90' 
             : 'bg-custom-green text-white hover:bg-custom-green/90'
         }`}
-        aria-label="切换侧边栏"
+        aria-label="切换二级菜单"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           {isOpen ? (
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           ) : (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           )}
         </svg>
       </button>
 
-      {/* 移动端遮罩层 */}
-      {isOpen && (
-        <div 
-          className="md:hidden fixed inset-0 bg-black/50 z-30"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
+      {/* 移动端二级菜单遮罩层 */}
+      <div 
+        className={`md:hidden fixed inset-0 bg-black/50 z-45 transition-opacity duration-300 ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setIsOpen(false)}
+      />
 
-      {/* 侧边栏 */}
+      {/* 侧边栏 - 桌面端左侧，移动端右侧 */}
       <div className={`
-        w-56 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-r flex flex-col h-full
-        md:relative md:translate-x-0
-        fixed inset-y-0 left-0 z-40 transition-transform duration-300
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        w-56 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} flex flex-col h-full
+        md:relative md:translate-x-0 md:border-r
+        fixed inset-y-0 right-0 z-50 transition-transform duration-300 shadow-2xl md:shadow-none
+        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
       `}>
+        {/* 移动端标题栏 */}
+        <div className={`md:hidden flex items-center justify-between p-4 border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+          <h2 className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+            子菜单
+          </h2>
+          <button
+            onClick={() => setIsOpen(false)}
+            className={`p-2 rounded-lg transition-colors ${
+              theme === 'dark' 
+                ? 'text-gray-400 hover:bg-gray-700 hover:text-white' 
+                : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+            }`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
         {/* 二级菜单列表 */}
         <div className="flex-1 overflow-y-auto py-4">
           <nav className="space-y-1 px-3">
