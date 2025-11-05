@@ -105,7 +105,7 @@ export default function AdminLoginPage() {
                 className="w-20 h-20 object-contain"
               />
             </div>
-            <h1 className="text-2xl font-bold text-white mb-2">BXB 管理后台</h1>
+            <h1 className="text-2xl font-bold text-white mb-2">管理后台</h1>
             <p className="text-gray-400 text-sm">请登录以访问管理系统</p>
           </div>
 
