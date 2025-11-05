@@ -10,7 +10,6 @@ import AdminSidebar from "@/components/admin-sidebar"
 import AdminPage from "@/app/(dashboard)/admin/page"
 import AdminLoginPage from "@/app/(dashboard)/admin/login/page"
 import BusinessLinesPage from "@/app/(dashboard)/admin/permissions/business-lines/page"
-import BusinessManagementPage from "@/app/(dashboard)/admin/permissions/business-management/page"
 import PermissionsAuditConfigPage from "@/app/(dashboard)/admin/permissions/audit-config/page"
 import StaffManagementPage from "@/app/(dashboard)/admin/permissions/staff-management/page"
 import UserPermissionsPage from "@/app/(dashboard)/admin/permissions/user-permissions/page"
@@ -206,7 +205,6 @@ export default function InstantNavigation() {
     if (currentPage === "/admin") return <AdminPage />
     if (currentPage === "/admin/permissions") return <BusinessLinesPage />
     if (currentPage === "/admin/permissions/business-lines") return <BusinessLinesPage />
-    if (currentPage === "/admin/permissions/business-management") return <BusinessManagementPage />
     if (currentPage === "/admin/permissions/audit-config") return <PermissionsAuditConfigPage />
     if (currentPage === "/admin/permissions/staff-management") return <StaffManagementPage />
     if (currentPage === "/admin/permissions/user-permissions") return <UserPermissionsPage />

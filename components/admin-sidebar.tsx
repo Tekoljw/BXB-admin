@@ -55,7 +55,6 @@ interface AdminSidebarV2Props {
 const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
   permissions: [
     { path: "/admin/permissions/business-lines", icon: BarChart3, label: "业务线" },
-    { path: "/admin/permissions/business-management", icon: Settings, label: "业务线管理" },
     { path: "/admin/permissions/audit-config", icon: FileCheck, label: "审核配置" },
     { path: "/admin/permissions/staff-management", icon: Users, label: "人员管理" },
     { path: "/admin/permissions/user-permissions", icon: Key, label: "用户权限" },
