@@ -226,10 +226,10 @@ export default function AdminTopNav({ currentModule, onModuleChange, onToggleSid
           </button>
         )}
         
-        {/* 主题切换 */}
+        {/* 桌面端：主题切换 */}
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className={`p-2 rounded-md transition-colors ${
+          className={`hidden md:block p-2 rounded-md transition-colors ${
             theme === 'dark' 
               ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
               : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
@@ -238,10 +238,10 @@ export default function AdminTopNav({ currentModule, onModuleChange, onToggleSid
           {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
 
-        {/* 退出登录 */}
+        {/* 桌面端：退出登录 */}
         <button
           onClick={logout}
-          className={`p-2 rounded-md transition-colors ${
+          className={`hidden md:block p-2 rounded-md transition-colors ${
             theme === 'dark' 
               ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
               : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
@@ -313,6 +313,37 @@ export default function AdminTopNav({ currentModule, onModuleChange, onToggleSid
                       </button>
                     )
                   })}
+                </div>
+              </div>
+
+              {/* 底部操作按钮 */}
+              <div className={`p-4 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                <div className="space-y-2">
+                  {/* 主题切换 */}
+                  <button
+                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                      theme === 'dark'
+                        ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                    }`}
+                  >
+                    {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                    <span className="font-medium">{theme === 'dark' ? '浅色模式' : '深色模式'}</span>
+                  </button>
+
+                  {/* 退出登录 */}
+                  <button
+                    onClick={logout}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                      theme === 'dark'
+                        ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                    }`}
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span className="font-medium">退出登录</span>
+                  </button>
                 </div>
               </div>
             </div>
