@@ -39,7 +39,7 @@ const modules = [
   { id: "users", label: "用户管理", icon: Users },
   { id: "im", label: "IM管理", icon: MessageSquare },
   { id: "social", label: "社交管理", icon: Share2 },
-  { id: "fiat", label: "法币管理", icon: DollarSign },
+  { id: "fiat", label: "C2C&OTC", icon: DollarSign },
   { id: "escrow", label: "担保管理", icon: Shield },
   { id: "ucard", label: "U卡管理", icon: CreditCard },
   { id: "spot", label: "现货管理", icon: TrendingUp },

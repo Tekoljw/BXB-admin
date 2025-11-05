@@ -70,7 +70,7 @@ Preferred communication style: Simple, everyday Chinese language.
        - Auto Join (自动加群)
        - Group Search (群搜索)
     4. Social Management (社交管理) - Content moderation and social features
-    5. Fiat Management (法币管理) - Fiat currency transactions with 6 sub-pages:
+    5. Fiat Management (C2C&OTC) - Fiat currency transactions with 6 sub-pages:
        - C2C Management (C2C管理)
        - C2C Orders (C2C订单)
        - Quick Config (法币快捷配置)
