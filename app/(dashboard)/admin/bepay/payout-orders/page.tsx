@@ -13,15 +13,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
-interface Order {
+interface PayoutOrder {
   id: string
   upstreamOrderId: string
   downstreamOrderId: string
@@ -36,82 +29,56 @@ interface Order {
   status: "pending" | "success" | "failed"
 }
 
-const mockOrders: Order[] = [
+const mockPayoutOrders: PayoutOrder[] = [
   {
-    id: "ORD2024110601",
-    upstreamOrderId: "UP20241106001",
-    downstreamOrderId: "DOWN20241106001",
+    id: "PAYOUT2024110601",
+    upstreamOrderId: "UP20241106101",
+    downstreamOrderId: "DOWN20241106101",
     merchantId: "M001",
     currency: "CNY",
     paymentChannel: "支付宝",
-    amount: 1500.00,
-    fee: 7.50,
-    createdAt: "2024-11-06 10:30:00",
-    paidAt: "2024-11-06 10:32:15",
+    amount: 3500.00,
+    fee: 17.50,
+    createdAt: "2024-11-06 14:30:00",
+    paidAt: "2024-11-06 14:32:15",
     status: "success"
   },
   {
-    id: "ORD2024110602",
-    upstreamOrderId: "UP20241106002",
-    downstreamOrderId: "DOWN20241106002",
+    id: "PAYOUT2024110602",
+    upstreamOrderId: "UP20241106102",
+    downstreamOrderId: "DOWN20241106102",
     merchantId: "M002",
     currency: "CNY",
     paymentChannel: "微信支付",
-    amount: 2800.00,
-    fee: 14.00,
-    createdAt: "2024-11-06 10:45:00",
-    paidAt: "2024-11-06 10:46:30",
+    amount: 5800.00,
+    fee: 29.00,
+    createdAt: "2024-11-06 14:45:00",
+    paidAt: "2024-11-06 14:46:30",
     status: "success"
   },
   {
-    id: "ORD2024110603",
-    upstreamOrderId: "UP20241106003",
-    downstreamOrderId: "DOWN20241106003",
+    id: "PAYOUT2024110603",
+    upstreamOrderId: "UP20241106103",
+    downstreamOrderId: "DOWN20241106103",
     merchantId: "M001",
     currency: "CNY",
     paymentChannel: "银行转账",
-    amount: 5000.00,
-    fee: 15.00,
-    createdAt: "2024-11-06 11:00:00",
+    amount: 12000.00,
+    fee: 36.00,
+    createdAt: "2024-11-06 15:00:00",
     status: "pending"
   },
   {
-    id: "ORD2024110604",
-    upstreamOrderId: "UP20241106004",
-    downstreamOrderId: "DOWN20241106004",
+    id: "PAYOUT2024110604",
+    upstreamOrderId: "UP20241106104",
+    downstreamOrderId: "DOWN20241106104",
     merchantId: "M003",
     currency: "BRL",
     paymentChannel: "PIX支付",
-    amount: 3200.00,
-    fee: 25.60,
-    createdAt: "2024-11-06 11:15:00",
-    paidAt: "2024-11-06 11:16:05",
-    status: "success"
-  },
-  {
-    id: "ORD2024110605",
-    upstreamOrderId: "UP20241106005",
-    downstreamOrderId: "DOWN20241106005",
-    merchantId: "M004",
-    currency: "INR",
-    paymentChannel: "UPI支付",
-    amount: 8500.00,
-    fee: 51.00,
-    createdAt: "2024-11-06 11:30:00",
+    amount: 8200.00,
+    fee: 65.60,
+    createdAt: "2024-11-06 15:15:00",
     status: "failed"
-  },
-  {
-    id: "ORD2024110606",
-    upstreamOrderId: "UP20241106006",
-    downstreamOrderId: "DOWN20241106006",
-    merchantId: "M002",
-    currency: "CNY",
-    paymentChannel: "支付宝",
-    amount: 950.00,
-    fee: 4.75,
-    createdAt: "2024-11-06 11:45:00",
-    paidAt: "2024-11-06 11:47:20",
-    status: "success"
   },
 ]
 
@@ -125,8 +92,8 @@ const paymentChannelsMap: Record<string, string[]> = {
   "EUR": ["全部", "SEPA转账", "信用卡"],
 }
 
-export default function OrdersPage() {
-  const [orders, setOrders] = useState<Order[]>(mockOrders)
+export default function PayoutOrdersPage() {
+  const [orders, setOrders] = useState<PayoutOrder[]>(mockPayoutOrders)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCurrency, setSelectedCurrency] = useState("全部")
   const [selectedChannel, setSelectedChannel] = useState("全部")
@@ -134,7 +101,7 @@ export default function OrdersPage() {
   const [isReverifyDialogOpen, setIsReverifyDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
   const [isRefundDialogOpen, setIsRefundDialogOpen] = useState(false)
-  const [currentOrder, setCurrentOrder] = useState<Order | null>(null)
+  const [currentOrder, setCurrentOrder] = useState<PayoutOrder | null>(null)
   const [actionMessage, setActionMessage] = useState<string | null>(null)
 
   const availableChannels = paymentChannelsMap[selectedCurrency] || ["全部"]
@@ -221,22 +188,22 @@ export default function OrdersPage() {
     }
   }
 
-  const openResendDialog = (order: Order) => {
+  const openResendDialog = (order: PayoutOrder) => {
     setCurrentOrder(order)
     setIsResendDialogOpen(true)
   }
 
-  const openReverifyDialog = (order: Order) => {
+  const openReverifyDialog = (order: PayoutOrder) => {
     setCurrentOrder(order)
     setIsReverifyDialogOpen(true)
   }
 
-  const openFreezeDialog = (order: Order) => {
+  const openFreezeDialog = (order: PayoutOrder) => {
     setCurrentOrder(order)
     setIsFreezeDialogOpen(true)
   }
 
-  const openRefundDialog = (order: Order) => {
+  const openRefundDialog = (order: PayoutOrder) => {
     setCurrentOrder(order)
     setIsRefundDialogOpen(true)
   }
@@ -249,7 +216,7 @@ export default function OrdersPage() {
         </div>
       )}
 
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">代收订单列表</h2>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">代付订单列表</h2>
 
       <div className="space-y-4">
         <div>

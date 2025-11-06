@@ -157,7 +157,9 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/bepay/channels", icon: Network, label: "通道管理" },
     { path: "/admin/bepay/merchants", icon: Users, label: "商户管理" },
     { path: "/admin/bepay/commission", icon: Percent, label: "代理商管理" },
-    { path: "/admin/bepay/orders", icon: ShoppingCart, label: "订单管理" },
+    { path: "/admin/bepay/orders", icon: ShoppingCart, label: "代收订单" },
+    { path: "/admin/bepay/payout-orders", icon: TrendingDown, label: "代付订单" },
+    { path: "/admin/bepay/exchange-orders", icon: Globe, label: "兑换订单" },
   ],
   orders: [
     { path: "/admin/orders/funds", icon: Wallet, label: "资金记录" },
