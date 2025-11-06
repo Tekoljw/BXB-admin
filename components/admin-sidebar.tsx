@@ -151,7 +151,9 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/commission/payment", icon: Percent, label: "支付佣金" },
   ],
   bepay: [
+    { path: "/admin/bepay/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/bepay/suppliers", icon: Store, label: "供应商管理" },
+    { path: "/admin/bepay/interfaces", icon: Network, label: "接口管理" },
     { path: "/admin/bepay/channels", icon: Network, label: "通道管理" },
     { path: "/admin/bepay/merchants", icon: Users, label: "商户管理" },
     { path: "/admin/bepay/commission", icon: Percent, label: "佣金管理" },

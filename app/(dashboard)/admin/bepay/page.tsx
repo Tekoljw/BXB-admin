@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation"
 import BePayLayout from "@/components/bepay-layout"
 
 // 导入子页面
-import ChannelsPage from "./channels/page"
+import CurrenciesPage from "./currencies/page"
 import SuppliersPage from "./suppliers/page"
+import InterfacesPage from "./interfaces/page"
+import ChannelsPage from "./channels/page"
 import MerchantsPage from "./merchants/page"
 import CommissionPage from "./commission/page"
 import OrdersPage from "./orders/page"
@@ -18,9 +20,9 @@ export default function BePayManagementPage() {
   useEffect(() => {
     setCurrentPath(window.location.pathname)
     
-    // 如果访问的是根路径，重定向到供应商管理
+    // 如果访问的是根路径，重定向到币种管理
     if (window.location.pathname === "/admin/bepay") {
-      router.replace("/admin/bepay/suppliers")
+      router.replace("/admin/bepay/currencies")
     }
     
     // 监听路径变化
@@ -34,8 +36,14 @@ export default function BePayManagementPage() {
 
   // 渲染对应的子页面
   const renderSubPage = () => {
+    if (currentPath === "/admin/bepay/currencies") {
+      return <CurrenciesPage />
+    }
     if (currentPath === "/admin/bepay/suppliers") {
       return <SuppliersPage />
+    }
+    if (currentPath === "/admin/bepay/interfaces") {
+      return <InterfacesPage />
     }
     if (currentPath === "/admin/bepay/channels") {
       return <ChannelsPage />
