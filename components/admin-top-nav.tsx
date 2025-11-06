@@ -49,8 +49,9 @@ const modules = [
   { id: "ucard", label: "U卡", icon: CreditCard },
   { id: "escrow", label: "担保", icon: Shield },
   { id: "spot", label: "现货", icon: TrendingUp },
-  { id: "commission", label: "佣金", icon: Percent },
   { id: "bepay", label: "法币", icon: Store },
+  { id: "commission", label: "佣金", icon: Percent },
+  { id: "maintenance", label: "运维", icon: Settings },
 ]
 
 export default function AdminTopNav({ currentModule, onModuleChange, onToggleSidebar }: AdminTopNavProps) {
