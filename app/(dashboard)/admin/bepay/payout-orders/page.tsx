@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Send, RefreshCw, Lock, RotateCcw } from "lucide-react"
+import { Search, Send, RefreshCw, Lock, RotateCcw, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -92,6 +92,56 @@ const paymentChannelsMap: Record<string, string[]> = {
   "EUR": ["全部", "SEPA转账", "信用卡"],
 }
 
+const getPaymentInfo = (channel: string) => {
+  const infoMap: Record<string, { type: string; details: { label: string; value: string }[] }> = {
+    "支付宝": {
+      type: "支付宝付款",
+      details: [
+        { label: "付款账号", value: "user_12345@alipay.com" },
+        { label: "付款姓名", value: "张三" },
+        { label: "备注信息", value: "BeDAO代付订单" }
+      ]
+    },
+    "微信支付": {
+      type: "微信付款",
+      details: [
+        { label: "付款账号", value: "微信号: wxid_abc123" },
+        { label: "付款姓名", value: "李四" },
+        { label: "备注信息", value: "BeDAO代付订单" }
+      ]
+    },
+    "银行转账": {
+      type: "银行转账付款",
+      details: [
+        { label: "收款银行", value: "中国建设银行" },
+        { label: "收款账号", value: "6217 0012 3456 7890 123" },
+        { label: "收款户名", value: "王五" },
+        { label: "开户行", value: "建设银行上海分行" }
+      ]
+    },
+    "PIX支付": {
+      type: "PIX付款",
+      details: [
+        { label: "收款PIX Key", value: "user@pix.com.br" },
+        { label: "收款人", value: "João Silva" },
+        { label: "付款备注", value: "BeDAO Payout" }
+      ]
+    },
+    "UPI支付": {
+      type: "UPI付款",
+      details: [
+        { label: "收款UPI ID", value: "user@upi" },
+        { label: "收款人", value: "Rahul Kumar" },
+        { label: "付款备注", value: "BeDAO Payout" }
+      ]
+    }
+  }
+  return infoMap[channel] || {
+    type: "其他付款方式",
+    details: [{ label: "付款信息", value: "暂无详细信息" }]
+  }
+}
+
 export default function PayoutOrdersPage() {
   const [orders, setOrders] = useState<PayoutOrder[]>(mockPayoutOrders)
   const [searchTerm, setSearchTerm] = useState("")
@@ -101,6 +151,7 @@ export default function PayoutOrdersPage() {
   const [isReverifyDialogOpen, setIsReverifyDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
   const [isRefundDialogOpen, setIsRefundDialogOpen] = useState(false)
+  const [isPaymentInfoDialogOpen, setIsPaymentInfoDialogOpen] = useState(false)
   const [currentOrder, setCurrentOrder] = useState<PayoutOrder | null>(null)
   const [actionMessage, setActionMessage] = useState<string | null>(null)
 
@@ -206,6 +257,11 @@ export default function PayoutOrdersPage() {
   const openRefundDialog = (order: PayoutOrder) => {
     setCurrentOrder(order)
     setIsRefundDialogOpen(true)
+  }
+
+  const openPaymentInfoDialog = (order: PayoutOrder) => {
+    setCurrentOrder(order)
+    setIsPaymentInfoDialogOpen(true)
   }
 
   return (
@@ -326,6 +382,15 @@ export default function PayoutOrdersPage() {
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <div className="flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openPaymentInfoDialog(order)}
+                        className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
+                        title="付款信息"
+                      >
+                        <Info className="w-4 h-4" />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -452,6 +517,46 @@ export default function PayoutOrdersPage() {
             </Button>
             <Button variant="destructive" onClick={handleRefund}>
               确认退款
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isPaymentInfoDialogOpen} onOpenChange={setIsPaymentInfoDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>付款信息</DialogTitle>
+            <DialogDescription>
+              订单 "{currentOrder?.id}" 的付款账户详情
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+              <div className="text-sm font-medium text-purple-900 dark:text-purple-300 mb-3">
+                {currentOrder && getPaymentInfo(currentOrder.paymentChannel).type}
+              </div>
+              <div className="space-y-3">
+                {currentOrder && getPaymentInfo(currentOrder.paymentChannel).details.map((detail, index) => (
+                  <div key={index} className="flex flex-col">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">{detail.label}</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white break-all">{detail.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-start gap-2">
+                <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <div className="text-xs text-blue-800 dark:text-blue-300">
+                  <div className="font-medium mb-1">付款说明</div>
+                  <div>系统将按照上述付款信息向用户账户进行转账。请确认付款信息准确无误。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setIsPaymentInfoDialogOpen(false)}>
+              关闭
             </Button>
           </DialogFooter>
         </DialogContent>

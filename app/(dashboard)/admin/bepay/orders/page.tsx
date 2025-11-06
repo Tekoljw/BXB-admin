@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Send, RefreshCw, Lock, RotateCcw } from "lucide-react"
+import { Search, Send, RefreshCw, Lock, RotateCcw, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -125,6 +125,56 @@ const paymentChannelsMap: Record<string, string[]> = {
   "EUR": ["全部", "SEPA转账", "信用卡"],
 }
 
+const getCollectionInfo = (channel: string) => {
+  const infoMap: Record<string, { type: string; details: { label: string; value: string }[] }> = {
+    "支付宝": {
+      type: "支付宝收款",
+      details: [
+        { label: "收款账号", value: "bepay_collect@alipay.com" },
+        { label: "收款姓名", value: "BeDAO支付服务有限公司" },
+        { label: "收款二维码", value: "https://qr.alipay.com/abc123456" }
+      ]
+    },
+    "微信支付": {
+      type: "微信收款",
+      details: [
+        { label: "收款账号", value: "BeDAO-Pay" },
+        { label: "商户号", value: "1234567890" },
+        { label: "收款二维码", value: "weixin://wxpay/bizpayurl?pr=abc1234" }
+      ]
+    },
+    "银行转账": {
+      type: "银行转账收款",
+      details: [
+        { label: "收款银行", value: "中国工商银行" },
+        { label: "收款账号", value: "6222 0212 3456 7890 123" },
+        { label: "收款户名", value: "BeDAO支付服务有限公司" },
+        { label: "开户行", value: "工商银行深圳分行" }
+      ]
+    },
+    "PIX支付": {
+      type: "PIX收款",
+      details: [
+        { label: "PIX Key", value: "bepay@pix.com.br" },
+        { label: "收款人", value: "BeDAO Pagamentos Ltda" },
+        { label: "PIX QR Code", value: "00020126580014br.gov.bcb.pix..." }
+      ]
+    },
+    "UPI支付": {
+      type: "UPI收款",
+      details: [
+        { label: "UPI ID", value: "bepay@upi" },
+        { label: "收款人", value: "BeDAO Payments India" },
+        { label: "UPI QR Code", value: "upi://pay?pa=bepay@upi&pn=BeDAO" }
+      ]
+    }
+  }
+  return infoMap[channel] || {
+    type: "其他收款方式",
+    details: [{ label: "收款信息", value: "暂无详细信息" }]
+  }
+}
+
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>(mockOrders)
   const [searchTerm, setSearchTerm] = useState("")
@@ -134,6 +184,7 @@ export default function OrdersPage() {
   const [isReverifyDialogOpen, setIsReverifyDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
   const [isRefundDialogOpen, setIsRefundDialogOpen] = useState(false)
+  const [isCollectionInfoDialogOpen, setIsCollectionInfoDialogOpen] = useState(false)
   const [currentOrder, setCurrentOrder] = useState<Order | null>(null)
   const [actionMessage, setActionMessage] = useState<string | null>(null)
 
@@ -239,6 +290,11 @@ export default function OrdersPage() {
   const openRefundDialog = (order: Order) => {
     setCurrentOrder(order)
     setIsRefundDialogOpen(true)
+  }
+
+  const openCollectionInfoDialog = (order: Order) => {
+    setCurrentOrder(order)
+    setIsCollectionInfoDialogOpen(true)
   }
 
   return (
@@ -359,6 +415,15 @@ export default function OrdersPage() {
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <div className="flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openCollectionInfoDialog(order)}
+                        className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
+                        title="收款信息"
+                      >
+                        <Info className="w-4 h-4" />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -485,6 +550,46 @@ export default function OrdersPage() {
             </Button>
             <Button variant="destructive" onClick={handleRefund}>
               确认退款
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isCollectionInfoDialogOpen} onOpenChange={setIsCollectionInfoDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>收款信息</DialogTitle>
+            <DialogDescription>
+              订单 "{currentOrder?.id}" 的收款账户详情
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+              <div className="text-sm font-medium text-purple-900 dark:text-purple-300 mb-3">
+                {currentOrder && getCollectionInfo(currentOrder.paymentChannel).type}
+              </div>
+              <div className="space-y-3">
+                {currentOrder && getCollectionInfo(currentOrder.paymentChannel).details.map((detail, index) => (
+                  <div key={index} className="flex flex-col">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">{detail.label}</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white break-all">{detail.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-start gap-2">
+                <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <div className="text-xs text-blue-800 dark:text-blue-300">
+                  <div className="font-medium mb-1">收款说明</div>
+                  <div>请确保用户使用正确的收款信息进行支付。如有疑问，请联系技术支持。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setIsCollectionInfoDialogOpen(false)}>
+              关闭
             </Button>
           </DialogFooter>
         </DialogContent>
