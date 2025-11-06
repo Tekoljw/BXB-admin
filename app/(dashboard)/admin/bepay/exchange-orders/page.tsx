@@ -86,12 +86,21 @@ const mockExchangeOrders: ExchangeOrder[] = [
 ]
 
 const currencies = ["全部", "CNY", "USD", "EUR", "BRL", "INR"]
+const statuses = ["全部", "已完成", "处理中", "已失败"]
+
+const statusMap: Record<string, string> = {
+  "全部": "all",
+  "已完成": "success",
+  "处理中": "pending",
+  "已失败": "failed",
+}
 
 export default function ExchangeOrdersPage() {
   const [orders] = useState<ExchangeOrder[]>(mockExchangeOrders)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedFromCurrency, setSelectedFromCurrency] = useState("全部")
   const [selectedToCurrency, setSelectedToCurrency] = useState("全部")
+  const [selectedStatus, setSelectedStatus] = useState("全部")
 
   const filteredOrders = orders.filter(order => {
     const matchesSearch = 
@@ -100,8 +109,10 @@ export default function ExchangeOrdersPage() {
     
     const matchesFromCurrency = selectedFromCurrency === "全部" || order.fromCurrency === selectedFromCurrency
     const matchesToCurrency = selectedToCurrency === "全部" || order.toCurrency === selectedToCurrency
+    const statusValue = statusMap[selectedStatus]
+    const matchesStatus = statusValue === "all" || order.status === statusValue
     
-    return matchesSearch && matchesFromCurrency && matchesToCurrency
+    return matchesSearch && matchesFromCurrency && matchesToCurrency && matchesStatus
   })
 
   return (
@@ -129,6 +140,19 @@ export default function ExchangeOrdersPage() {
               {currencies.map(currency => (
                 <TabsTrigger key={currency} value={currency}>
                   {currency}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">状态筛选</label>
+          <Tabs value={selectedStatus} onValueChange={setSelectedStatus}>
+            <TabsList className="grid grid-cols-4 w-full max-w-xl">
+              {statuses.map(status => (
+                <TabsTrigger key={status} value={status}>
+                  {status}
                 </TabsTrigger>
               ))}
             </TabsList>
