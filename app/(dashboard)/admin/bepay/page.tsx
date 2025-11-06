@@ -12,6 +12,8 @@ import ChannelsPage from "./channels/page"
 import MerchantsPage from "./merchants/page"
 import CommissionPage from "./commission/page"
 import OrdersPage from "./orders/page"
+import PayoutOrdersPage from "./payout-orders/page"
+import ExchangeOrdersPage from "./exchange-orders/page"
 
 export default function BePayManagementPage() {
   const router = useRouter()
@@ -67,6 +69,12 @@ export default function BePayManagementPage() {
     }
     if (currentPath === "/admin/bepay/orders") {
       return <OrdersPage />
+    }
+    if (currentPath === "/admin/bepay/payout-orders") {
+      return <PayoutOrdersPage />
+    }
+    if (currentPath === "/admin/bepay/exchange-orders") {
+      return <ExchangeOrdersPage />
     }
 
     // 默认页面
