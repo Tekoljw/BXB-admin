@@ -145,7 +145,7 @@ export default function InstantNavigation() {
       copytrade: '/admin/copytrade',
       finance: '/admin/finance',
       commission: '/admin/commission/futures',
-      bepay: '/admin/bepay/channels',
+      bepay: '/admin/bepay/suppliers',
       orders: '/admin/orders/funds',
       system: '/admin/system/permissions',
     }
