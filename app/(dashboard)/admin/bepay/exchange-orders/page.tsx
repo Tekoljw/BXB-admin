@@ -207,7 +207,7 @@ export default function ExchangeOrdersPage() {
 
       <div className="space-y-4">
         <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">划出账户（一级页签）</label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">划出账户</label>
           <Tabs value={selectedFromAccount} onValueChange={setSelectedFromAccount}>
             <TabsList className="grid grid-cols-5 w-full max-w-3xl">
               {fromAccounts.map(account => (
@@ -220,7 +220,7 @@ export default function ExchangeOrdersPage() {
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">划入账户（二级页签）</label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">划入账户</label>
           <Tabs value={selectedToAccount} onValueChange={setSelectedToAccount}>
             <TabsList className="grid grid-cols-5 w-full max-w-3xl">
               {toAccounts.map(account => (
@@ -233,7 +233,7 @@ export default function ExchangeOrdersPage() {
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">用户行为分类（三级页签）</label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">用户行为分类</label>
           <Tabs value={selectedBehaviorType} onValueChange={setSelectedBehaviorType}>
             <TabsList className="grid grid-cols-4 w-full max-w-2xl">
               {behaviorTypes.map(type => (
