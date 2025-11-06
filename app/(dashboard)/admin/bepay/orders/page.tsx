@@ -343,40 +343,25 @@ export default function OrdersPage() {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  内部订单号
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  订单信息
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  上游订单号
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  商户
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  下游订单号
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  支付信息
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  商户ID
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  金额
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  支付币种
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  时间
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  支付通道
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  状态
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  支付金额
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  手续费
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  发起时间
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  付款时间
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  订单状态
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   操作
                 </th>
               </tr>
@@ -384,39 +369,33 @@ export default function OrdersPage() {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredOrders.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                    {order.id}
+                  <td className="px-4 py-3 text-sm">
+                    <div className="font-medium text-gray-900 dark:text-white">{order.id}</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">上游: {order.upstreamOrderId}</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs">下游: {order.downstreamOrderId}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {order.upstreamOrderId}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {order.downstreamOrderId}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {order.merchantId}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">
-                      {order.currency}
-                    </span>
+                  <td className="px-4 py-3 text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">
+                        {order.currency}
+                      </span>
+                      <span className="text-gray-900 dark:text-gray-300 text-xs">{order.paymentChannel}</span>
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {order.paymentChannel}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <div className="text-gray-900 dark:text-white font-medium">${order.amount.toFixed(2)}</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">费: ${order.fee.toFixed(2)}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    ${order.amount.toFixed(2)}
+                  <td className="px-4 py-3 text-sm">
+                    <div className="text-gray-900 dark:text-gray-300 text-xs">{order.createdAt}</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">
+                      {order.paidAt ? `付: ${order.paidAt}` : "-"}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    ${order.fee.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {order.createdAt}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {order.paidAt || "-"}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       order.status === "success"
                         ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
@@ -427,8 +406,8 @@ export default function OrdersPage() {
                       {order.status === "success" ? "已成功" : order.status === "pending" ? "等待付款" : "已失效"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-2">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <div className="flex items-center gap-1">
                       <Button
                         variant="ghost"
                         size="sm"

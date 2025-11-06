@@ -283,34 +283,25 @@ export default function ChannelsPage() {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  通道ID
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  通道信息
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  通道代码
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  通道名称
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   币种
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   接口来源
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  代收手续费
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  代收费率
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  代付手续费
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  代付费率
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Demo视频
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   状态
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   操作
                 </th>
               </tr>
@@ -318,45 +309,25 @@ export default function ChannelsPage() {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredChannels.map((channel) => (
                 <tr key={channel.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                    {channel.id}
+                  <td className="px-4 py-3 text-sm">
+                    <div className="font-medium text-gray-900 dark:text-white">{channel.name}</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">ID: {channel.id} | {channel.code}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {channel.code}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {channel.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">
                       {channel.currency}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {channel.interface}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {channel.collectionFee}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {channel.paymentFee}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {channel.demoVideo ? (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openDemoDialog(channel)}
-                        className="text-custom-green hover:text-custom-green/80"
-                      >
-                        <Eye className="w-4 h-4 mr-1" />
-                        查看
-                      </Button>
-                    ) : (
-                      <span className="text-gray-400">无</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       channel.status === "active"
                         ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
@@ -365,13 +336,25 @@ export default function ChannelsPage() {
                       {channel.status === "active" ? "启用" : "禁用"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-2">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <div className="flex items-center gap-1">
+                      {channel.demoVideo && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openDemoDialog(channel)}
+                          className="text-custom-green hover:text-custom-green/80"
+                          title="查看演示"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => openEditDialog(channel)}
                         className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                        title="编辑"
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
@@ -380,6 +363,7 @@ export default function ChannelsPage() {
                         size="sm"
                         onClick={() => openDeleteDialog(channel)}
                         className="text-red-600 hover:text-red-800 dark:text-red-400"
+                        title="删除"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

@@ -336,31 +336,22 @@ export default function MerchantsPage() {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  商户ID
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  商户信息
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  商户名称
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  联系方式
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  联系邮箱
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  账户余额
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  联系电话
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  可用余额
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  冻结余额
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   成功率
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   状态
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   操作
                 </th>
               </tr>
@@ -368,27 +359,21 @@ export default function MerchantsPage() {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredMerchants.map((merchant) => (
                 <tr key={merchant.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                    {merchant.id}
+                  <td className="px-4 py-3 text-sm">
+                    <div className="font-medium text-gray-900 dark:text-white">{merchant.name}</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{merchant.id}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {merchant.name}
+                  <td className="px-4 py-3 text-sm">
+                    <div className="text-gray-900 dark:text-gray-300">{merchant.email}</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{merchant.phone}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {merchant.email}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <div className="text-gray-900 dark:text-gray-300">可用: ${merchant.balance.toLocaleString()}</div>
+                    <div className={`text-xs mt-1 ${merchant.frozenBalance > 0 ? "text-red-600 dark:text-red-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
+                      冻结: ${merchant.frozenBalance.toLocaleString()}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {merchant.phone}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    ${merchant.balance.toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    <span className={merchant.frozenBalance > 0 ? "text-red-600 dark:text-red-400 font-medium" : ""}>
-                      ${merchant.frozenBalance.toLocaleString()}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <span className={`font-medium ${
                       merchant.successRate >= 98 ? "text-green-600 dark:text-green-400" :
                       merchant.successRate >= 95 ? "text-yellow-600 dark:text-yellow-400" :
@@ -397,7 +382,7 @@ export default function MerchantsPage() {
                       {merchant.successRate}%
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       merchant.status === "active"
                         ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
@@ -408,8 +393,8 @@ export default function MerchantsPage() {
                       {merchant.status === "active" ? "正常" : merchant.status === "frozen" ? "冻结" : "禁用"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-2">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <div className="flex items-center gap-1">
                       <Button
                         variant="ghost"
                         size="sm"

@@ -268,31 +268,19 @@ export default function CommissionPage() {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   排名
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  用户ID
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  用户信息
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  用户名
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  佣金数据
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  邮箱
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  交易数据
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  累计佣金
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  本月佣金
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  订单数量
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  成功率
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   操作
                 </th>
               </tr>
@@ -300,42 +288,38 @@ export default function CommissionPage() {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredUsers.map((user) => (
                 <tr key={user.userId} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <div className="flex items-center gap-2">
                       {getRankIcon(user.rank)}
                       <span className={getRankColor(user.rank)}>#{user.rank}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                    {user.userId}
+                  <td className="px-4 py-3 text-sm">
+                    <div className="font-medium text-gray-900 dark:text-white">{user.userName}</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{user.userId}</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs">{user.email}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {user.userName}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <div className="font-semibold text-green-600 dark:text-green-400">
+                      累计: ${user.totalCommission.toLocaleString()}
+                    </div>
+                    <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                      本月: ${user.monthlyCommission.toLocaleString()}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {user.email}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    <span className="font-semibold text-green-600 dark:text-green-400">
-                      ${user.totalCommission.toLocaleString()}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    ${user.monthlyCommission.toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {user.orderCount.toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    <span className={`font-medium ${
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <div className="text-gray-900 dark:text-gray-300">
+                      订单: {user.orderCount.toLocaleString()}
+                    </div>
+                    <div className={`text-xs mt-1 font-medium ${
                       user.successRate >= 98 ? "text-green-600 dark:text-green-400" :
                       user.successRate >= 95 ? "text-yellow-600 dark:text-yellow-400" :
                       "text-red-600 dark:text-red-400"
                     }`}>
-                      {user.successRate}%
-                    </span>
+                      成功率: {user.successRate}%
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <Button
                       variant="ghost"
                       size="sm"
