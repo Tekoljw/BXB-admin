@@ -198,7 +198,7 @@ export default function ChannelsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">通道列表</h2>
         <Button 

@@ -198,7 +198,7 @@ export default function CommissionPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white">用户佣金排行榜</h2>
 
       <div className="relative">
