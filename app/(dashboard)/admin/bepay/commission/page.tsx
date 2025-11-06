@@ -380,9 +380,9 @@ export default function CommissionPage() {
       <Dialog open={isCommissionDialogOpen} onOpenChange={setIsCommissionDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>佣金比例设置 - {selectedAgent?.agentName}</DialogTitle>
+            <DialogTitle>佣金比例设置 - {selectedAgent?.agentName || "-"}</DialogTitle>
             <DialogDescription>
-              代理商ID: {selectedAgent?.agentId} | 查看该代理商在各支付通道的佣金比例
+              代理商ID: {selectedAgent?.agentId || "-"} | 查看该代理商在各支付通道的佣金比例
             </DialogDescription>
           </DialogHeader>
 
@@ -449,9 +449,9 @@ export default function CommissionPage() {
       <Dialog open={isRecordDialogOpen} onOpenChange={setIsRecordDialogOpen}>
         <DialogContent className="max-w-6xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>佣金详细记录 - {selectedAgent?.agentName}</DialogTitle>
+            <DialogTitle>佣金详细记录 - {selectedAgent?.agentName || "-"}</DialogTitle>
             <DialogDescription>
-              代理商ID: {selectedAgent?.agentId} | 累计佣金: ${selectedAgent?.totalCommission.toLocaleString()}
+              代理商ID: {selectedAgent?.agentId || "-"} | 累计佣金: ${selectedAgent ? selectedAgent.totalCommission.toLocaleString() : "0"}
             </DialogDescription>
           </DialogHeader>
 
