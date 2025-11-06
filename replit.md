@@ -74,7 +74,9 @@ Preferred communication style: Simple, everyday Chinese language.
       - 二级页签：划入账户（法币资产、法币代付金、现货USDT、U卡USDT）
       - 三级页签：用户行为分类（法币换U、代付金划转、快捷充U）
       - 状态分类：待确认汇率、已完成、已拒绝
-      - 汇率确认功能：待确认汇率状态显示为黄色按钮，可点击输入汇率
+      - 汇率确认功能：待确认汇率状态显示为黄色按钮，可点击输入两个汇率（用户汇率、成本汇率）
+      - 自动利润计算：系统自动计算并显示USDT利润（成本USDT - 用户USDT）
+      - 实时利润显示：输入汇率后即时显示用户获得USDT、成本USDT和利润
       - 汇率显示：待确认订单汇率显示为红色"待确认"字样
 - **System Design Choices**:
   - 客户端路由系统：使用 `instant-navigation` 组件处理所有页面导航，避免页面重载。

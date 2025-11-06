@@ -120,7 +120,8 @@ export default function ExchangeOrdersPage() {
   const [selectedStatus, setSelectedStatus] = useState("全部")
   const [isRateDialogOpen, setIsRateDialogOpen] = useState(false)
   const [currentOrder, setCurrentOrder] = useState<ExchangeOrder | null>(null)
-  const [inputRate, setInputRate] = useState("")
+  const [userRate, setUserRate] = useState("")
+  const [costRate, setCostRate] = useState("")
   const [actionMessage, setActionMessage] = useState<string | null>(null)
 
   const filteredOrders = orders.filter(order => {
@@ -137,26 +138,47 @@ export default function ExchangeOrdersPage() {
     return matchesSearch && matchesFromAccount && matchesToAccount && matchesBehaviorType && matchesStatus
   })
 
+  const calculateProfit = (): number => {
+    if (!userRate || !costRate || !currentOrder) return 0
+    const userRateNum = parseFloat(userRate)
+    const costRateNum = parseFloat(costRate)
+    if (isNaN(userRateNum) || isNaN(costRateNum)) return 0
+    
+    const userUSDT = currentOrder.fromAmount / userRateNum
+    const costUSDT = currentOrder.fromAmount / costRateNum
+    return costUSDT - userUSDT
+  }
+
   const openRateDialog = (order: ExchangeOrder) => {
     setCurrentOrder(order)
-    setInputRate("")
+    setUserRate("")
+    setCostRate("")
     setIsRateDialogOpen(true)
   }
 
   const handleConfirmRate = () => {
-    if (currentOrder && inputRate) {
-      const rate = parseFloat(inputRate)
-      if (isNaN(rate) || rate <= 0) {
-        setActionMessage("请输入有效的汇率")
+    if (currentOrder && userRate && costRate) {
+      const userRateNum = parseFloat(userRate)
+      const costRateNum = parseFloat(costRate)
+      
+      if (isNaN(userRateNum) || userRateNum <= 0) {
+        setActionMessage("请输入有效的用户汇率")
+        setTimeout(() => setActionMessage(null), 3000)
+        return
+      }
+      
+      if (isNaN(costRateNum) || costRateNum <= 0) {
+        setActionMessage("请输入有效的成本汇率")
         setTimeout(() => setActionMessage(null), 3000)
         return
       }
 
+      const profit = calculateProfit()
       const updatedOrders = orders.map(order => {
         if (order.id === currentOrder.id) {
           return { 
             ...order, 
-            exchangeRate: rate,
+            exchangeRate: userRateNum,
             status: "completed" as const,
             completedAt: new Date().toLocaleString('zh-CN')
           }
@@ -164,11 +186,12 @@ export default function ExchangeOrdersPage() {
         return order
       })
       setOrders(updatedOrders)
-      setActionMessage(`订单 ${currentOrder.id} 的汇率已确认为 ${rate}`)
-      setTimeout(() => setActionMessage(null), 3000)
+      setActionMessage(`订单 ${currentOrder.id} 已确认 - 用户汇率: ${userRateNum}, 成本汇率: ${costRateNum}, 利润: ${profit.toFixed(4)} USDT`)
+      setTimeout(() => setActionMessage(null), 5000)
       setIsRateDialogOpen(false)
       setCurrentOrder(null)
-      setInputRate("")
+      setUserRate("")
+      setCostRate("")
     }
   }
 
@@ -358,11 +381,11 @@ export default function ExchangeOrdersPage() {
       </div>
 
       <Dialog open={isRateDialogOpen} onOpenChange={setIsRateDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>确认汇率</DialogTitle>
             <DialogDescription>
-              请为订单 "{currentOrder?.id}" 输入汇率
+              请为订单 "{currentOrder?.id}" 输入用户汇率和成本汇率
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
@@ -381,26 +404,76 @@ export default function ExchangeOrdersPage() {
                   <span className="font-medium text-gray-900 dark:text-white">${currentOrder?.fromAmount.toFixed(2)}</span>
                 </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-                  汇率
-                </label>
-                <Input
-                  type="number"
-                  step="0.0001"
-                  placeholder="请输入汇率（例如：7.0000）"
-                  value={inputRate}
-                  onChange={(e) => setInputRate(e.target.value)}
-                  className="w-full"
-                />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                    用户汇率
+                  </label>
+                  <Input
+                    type="number"
+                    step="0.0001"
+                    placeholder="例如：7.2000"
+                    value={userRate}
+                    onChange={(e) => setUserRate(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                    成本汇率
+                  </label>
+                  <Input
+                    type="number"
+                    step="0.0001"
+                    placeholder="例如：7.0000"
+                    value={costRate}
+                    onChange={(e) => setCostRate(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
               </div>
+
+              {userRate && costRate && (
+                <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 p-4 rounded-lg">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600 dark:text-gray-400">用户获得USDT:</span>
+                      <span className="font-medium text-gray-900 dark:text-white">
+                        {(currentOrder ? currentOrder.fromAmount / parseFloat(userRate) : 0).toFixed(4)} USDT
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600 dark:text-gray-400">成本USDT:</span>
+                      <span className="font-medium text-gray-900 dark:text-white">
+                        {(currentOrder ? currentOrder.fromAmount / parseFloat(costRate) : 0).toFixed(4)} USDT
+                      </span>
+                    </div>
+                    <div className="h-px bg-blue-200 dark:bg-blue-800 my-2"></div>
+                    <div className="flex justify-between text-sm">
+                      <span className="font-semibold text-gray-700 dark:text-gray-300">利润 (USDT):</span>
+                      <span className={`font-bold text-lg ${
+                        calculateProfit() >= 0 
+                          ? 'text-green-600 dark:text-green-400' 
+                          : 'text-red-600 dark:text-red-400'
+                      }`}>
+                        {calculateProfit() >= 0 ? '+' : ''}{calculateProfit().toFixed(4)} USDT
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsRateDialogOpen(false)}>
               取消
             </Button>
-            <Button onClick={handleConfirmRate} className="bg-green-600 hover:bg-green-700">
+            <Button 
+              onClick={handleConfirmRate} 
+              className="bg-green-600 hover:bg-green-700"
+              disabled={!userRate || !costRate}
+            >
               确认汇率
             </Button>
           </DialogFooter>
