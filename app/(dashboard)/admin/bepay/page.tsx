@@ -30,9 +30,20 @@ export default function BePayManagementPage() {
       setCurrentPath(window.location.pathname)
     }
     
+    // 监听URL变化的间隔器
+    const intervalId = setInterval(() => {
+      if (window.location.pathname !== currentPath && window.location.pathname.startsWith("/admin/bepay")) {
+        setCurrentPath(window.location.pathname)
+      }
+    }, 100)
+    
     window.addEventListener("popstate", handlePathChange)
-    return () => window.removeEventListener("popstate", handlePathChange)
-  }, [router])
+    
+    return () => {
+      window.removeEventListener("popstate", handlePathChange)
+      clearInterval(intervalId)
+    }
+  }, [router, currentPath])
 
   // 渲染对应的子页面
   const renderSubPage = () => {
