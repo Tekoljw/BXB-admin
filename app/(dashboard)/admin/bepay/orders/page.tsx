@@ -176,7 +176,7 @@ export default function OrdersPage() {
   const handleReverify = () => {
     if (currentOrder) {
       const updatedOrders = orders.map(order => {
-        if (order.id === currentOrder.id && order.status === "pending") {
+        if (order.id === currentOrder.id && order.status === "failed") {
           return { ...order, status: "success" as const, paidAt: new Date().toLocaleString('zh-CN') }
         }
         return order
