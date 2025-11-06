@@ -24,6 +24,7 @@ import { Label } from "@/components/ui/label"
 interface Merchant {
   id: string
   name: string
+  bxbUserId: string
   email: string
   phone: string
   apiKey: string
@@ -41,6 +42,7 @@ const mockMerchants: Merchant[] = [
   {
     id: "M001",
     name: "优付商城",
+    bxbUserId: "BXB001",
     email: "youfu@example.com",
     phone: "+86 138 0000 0001",
     apiKey: "sk_live_xxxxxxxxxxxxxx01",
@@ -56,6 +58,7 @@ const mockMerchants: Merchant[] = [
   {
     id: "M002",
     name: "快捷支付平台",
+    bxbUserId: "BXB002",
     email: "kuaijie@example.com",
     phone: "+86 138 0000 0002",
     apiKey: "sk_live_xxxxxxxxxxxxxx02",
@@ -71,6 +74,7 @@ const mockMerchants: Merchant[] = [
   {
     id: "M003",
     name: "云端收银",
+    bxbUserId: "BXB003",
     email: "yunduan@example.com",
     phone: "+86 138 0000 0003",
     apiKey: "sk_live_xxxxxxxxxxxxxx03",
@@ -86,6 +90,7 @@ const mockMerchants: Merchant[] = [
   {
     id: "M004",
     name: "星际支付",
+    bxbUserId: "BXB004",
     email: "xingji@example.com",
     phone: "+86 138 0000 0004",
     apiKey: "sk_live_xxxxxxxxxxxxxx04",
@@ -113,6 +118,7 @@ export default function MerchantsPage() {
   const [freezeAmount, setFreezeAmount] = useState("")
   const [formData, setFormData] = useState({
     name: "",
+    bxbUserId: "",
     email: "",
     phone: "",
     collectionFee: "",
@@ -129,12 +135,18 @@ export default function MerchantsPage() {
   const handleAdd = () => {
     const newMerchant: Merchant = {
       id: `M${String(merchants.length + 1).padStart(3, '0')}`,
-      ...formData,
+      name: formData.name,
+      bxbUserId: formData.bxbUserId,
+      email: "",
+      phone: "",
       apiKey: `sk_live_${Math.random().toString(36).substring(2, 18)}`,
       balance: 0,
       frozenBalance: 0,
       totalOrders: 0,
       successRate: 0,
+      collectionFee: "0%",
+      paymentFee: "0%",
+      status: "active",
       createdAt: new Date().toLocaleString('zh-CN')
     }
     setMerchants([...merchants, newMerchant])
@@ -251,6 +263,7 @@ export default function MerchantsPage() {
   const resetForm = () => {
     setFormData({
       name: "",
+      bxbUserId: "",
       email: "",
       phone: "",
       collectionFee: "",
@@ -407,12 +420,12 @@ export default function MerchantsPage() {
       </div>
 
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>添加商户</DialogTitle>
             <DialogDescription>添加新的商户账户</DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 py-4">
+          <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="name">商户名称</Label>
               <Input
@@ -423,53 +436,12 @@ export default function MerchantsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">联系邮箱</Label>
+              <Label htmlFor="bxbUserId">BXB UserID</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="merchant@example.com"
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">联系电话</Label>
-              <Input
-                id="phone"
-                placeholder="+86 138 0000 0000"
-                value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="status">状态</Label>
-              <Select value={formData.status} onValueChange={(value: "active" | "frozen" | "disabled") => setFormData({...formData, status: value})}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">正常</SelectItem>
-                  <SelectItem value="frozen">冻结</SelectItem>
-                  <SelectItem value="disabled">禁用</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="collectionFee">代收手续费</Label>
-              <Input
-                id="collectionFee"
-                placeholder="例如：0.5%"
-                value={formData.collectionFee}
-                onChange={(e) => setFormData({...formData, collectionFee: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="paymentFee">代付手续费</Label>
-              <Input
-                id="paymentFee"
-                placeholder="例如：0.3%"
-                value={formData.paymentFee}
-                onChange={(e) => setFormData({...formData, paymentFee: e.target.value})}
+                id="bxbUserId"
+                placeholder="请输入BXB UserID"
+                value={formData.bxbUserId}
+                onChange={(e) => setFormData({...formData, bxbUserId: e.target.value})}
               />
             </div>
           </div>
@@ -477,7 +449,11 @@ export default function MerchantsPage() {
             <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
               取消
             </Button>
-            <Button onClick={handleAdd} className="bg-custom-green hover:bg-custom-green/90">
+            <Button 
+              onClick={handleAdd} 
+              className="bg-custom-green hover:bg-custom-green/90"
+              disabled={!formData.name || !formData.bxbUserId}
+            >
               添加
             </Button>
           </DialogFooter>
