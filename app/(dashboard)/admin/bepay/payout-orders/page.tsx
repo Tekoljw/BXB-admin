@@ -1,8 +1,17 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search } from "lucide-react"
+import { Search, Send, RefreshCw, Lock, RotateCcw } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface PayoutOrder {
@@ -74,7 +83,6 @@ const mockPayoutOrders: PayoutOrder[] = [
 ]
 
 const currencies = ["全部", "CNY", "BRL", "INR", "USD", "EUR"]
-const statuses = ["全部", "已成功", "等待付款", "已失效"]
 const paymentChannelsMap: Record<string, string[]> = {
   "全部": ["全部"],
   "CNY": ["全部", "支付宝", "微信支付", "银行转账"],
@@ -84,19 +92,17 @@ const paymentChannelsMap: Record<string, string[]> = {
   "EUR": ["全部", "SEPA转账", "信用卡"],
 }
 
-const statusMap: Record<string, string> = {
-  "全部": "all",
-  "已成功": "success",
-  "等待付款": "pending",
-  "已失效": "failed",
-}
-
 export default function PayoutOrdersPage() {
-  const [orders] = useState<PayoutOrder[]>(mockPayoutOrders)
+  const [orders, setOrders] = useState<PayoutOrder[]>(mockPayoutOrders)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCurrency, setSelectedCurrency] = useState("全部")
   const [selectedChannel, setSelectedChannel] = useState("全部")
-  const [selectedStatus, setSelectedStatus] = useState("全部")
+  const [isResendDialogOpen, setIsResendDialogOpen] = useState(false)
+  const [isReverifyDialogOpen, setIsReverifyDialogOpen] = useState(false)
+  const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
+  const [isRefundDialogOpen, setIsRefundDialogOpen] = useState(false)
+  const [currentOrder, setCurrentOrder] = useState<PayoutOrder | null>(null)
+  const [actionMessage, setActionMessage] = useState<string | null>(null)
 
   const availableChannels = paymentChannelsMap[selectedCurrency] || ["全部"]
 
@@ -114,14 +120,101 @@ export default function PayoutOrdersPage() {
     
     const matchesCurrency = selectedCurrency === "全部" || order.currency === selectedCurrency
     const matchesChannel = selectedChannel === "全部" || order.paymentChannel === selectedChannel
-    const statusValue = statusMap[selectedStatus]
-    const matchesStatus = statusValue === "all" || order.status === statusValue
     
-    return matchesSearch && matchesCurrency && matchesChannel && matchesStatus
+    return matchesSearch && matchesCurrency && matchesChannel
   })
+
+  const handleResend = () => {
+    if (currentOrder) {
+      const updatedOrders = orders.map(order => {
+        if (order.id === currentOrder.id) {
+          return { ...order, lastResent: new Date().toLocaleString('zh-CN') }
+        }
+        return order
+      })
+      setOrders(updatedOrders)
+      setActionMessage(`订单 ${currentOrder.id} 的通知已补发`)
+      setTimeout(() => setActionMessage(null), 3000)
+      setIsResendDialogOpen(false)
+      setCurrentOrder(null)
+    }
+  }
+
+  const handleReverify = () => {
+    if (currentOrder) {
+      const updatedOrders = orders.map(order => {
+        if (order.id === currentOrder.id && order.status === "failed") {
+          return { ...order, status: "success" as const, paidAt: new Date().toLocaleString('zh-CN') }
+        }
+        return order
+      })
+      setOrders(updatedOrders)
+      setActionMessage(`订单 ${currentOrder.id} 已重新校验并更新为成功状态`)
+      setTimeout(() => setActionMessage(null), 3000)
+      setIsReverifyDialogOpen(false)
+      setCurrentOrder(null)
+    }
+  }
+
+  const handleFreeze = () => {
+    if (currentOrder) {
+      const updatedOrders = orders.map(order => {
+        if (order.id === currentOrder.id) {
+          return { ...order, status: "failed" as const }
+        }
+        return order
+      })
+      setOrders(updatedOrders)
+      setActionMessage(`订单 ${currentOrder.id} 已冻结`)
+      setTimeout(() => setActionMessage(null), 3000)
+      setIsFreezeDialogOpen(false)
+      setCurrentOrder(null)
+    }
+  }
+
+  const handleRefund = () => {
+    if (currentOrder) {
+      const updatedOrders = orders.map(order => {
+        if (order.id === currentOrder.id) {
+          return { ...order, status: "failed" as const }
+        }
+        return order
+      })
+      setOrders(updatedOrders)
+      setActionMessage(`订单 ${currentOrder.id} 已退款，金额 $${currentOrder.amount.toFixed(2)} 已退回用户账户`)
+      setTimeout(() => setActionMessage(null), 3000)
+      setIsRefundDialogOpen(false)
+      setCurrentOrder(null)
+    }
+  }
+
+  const openResendDialog = (order: PayoutOrder) => {
+    setCurrentOrder(order)
+    setIsResendDialogOpen(true)
+  }
+
+  const openReverifyDialog = (order: PayoutOrder) => {
+    setCurrentOrder(order)
+    setIsReverifyDialogOpen(true)
+  }
+
+  const openFreezeDialog = (order: PayoutOrder) => {
+    setCurrentOrder(order)
+    setIsFreezeDialogOpen(true)
+  }
+
+  const openRefundDialog = (order: PayoutOrder) => {
+    setCurrentOrder(order)
+    setIsRefundDialogOpen(true)
+  }
 
   return (
     <div className="p-6 space-y-6">
+      {actionMessage && (
+        <div className="bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-700 text-green-800 dark:text-green-300 px-4 py-3 rounded-lg">
+          {actionMessage}
+        </div>
+      )}
 
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white">代付订单列表</h2>
 
@@ -146,19 +239,6 @@ export default function PayoutOrdersPage() {
               {availableChannels.map(channel => (
                 <TabsTrigger key={channel} value={channel}>
                   {channel}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        </div>
-
-        <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">状态筛选</label>
-          <Tabs value={selectedStatus} onValueChange={setSelectedStatus}>
-            <TabsList className="grid grid-cols-4 w-full max-w-xl">
-              {statuses.map(status => (
-                <TabsTrigger key={status} value={status}>
-                  {status}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -198,6 +278,9 @@ export default function PayoutOrdersPage() {
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   状态
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  操作
                 </th>
               </tr>
             </thead>
@@ -241,6 +324,50 @@ export default function PayoutOrdersPage() {
                       {order.status === "success" ? "已成功" : order.status === "pending" ? "等待付款" : "已失效"}
                     </span>
                   </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <div className="flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openResendDialog(order)}
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="补发通知"
+                        disabled={order.status !== "success"}
+                      >
+                        <Send className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openReverifyDialog(order)}
+                        className="text-green-600 hover:text-green-800 dark:text-green-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="重新校验"
+                        disabled={order.status !== "failed"}
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openFreezeDialog(order)}
+                        className="text-orange-600 hover:text-orange-800 dark:text-orange-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="冻结订单"
+                        disabled={order.status !== "success"}
+                      >
+                        <Lock className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openRefundDialog(order)}
+                        className="text-red-600 hover:text-red-800 dark:text-red-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="订单退款"
+                        disabled={order.status !== "success"}
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -252,6 +379,83 @@ export default function PayoutOrdersPage() {
             暂无数据
           </div>
         )}
+      </div>
+
+      <Dialog open={isResendDialogOpen} onOpenChange={setIsResendDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>补发通知</DialogTitle>
+            <DialogDescription>
+              确定要补发订单 "{currentOrder?.id}" 的通知吗？
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsResendDialogOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={handleResend} className="bg-blue-600 hover:bg-blue-700">
+              补发
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isReverifyDialogOpen} onOpenChange={setIsReverifyDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>重新校验</DialogTitle>
+            <DialogDescription>
+              确定要重新校验订单 "{currentOrder?.id}" 吗？
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsReverifyDialogOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={handleReverify} className="bg-green-600 hover:bg-green-700">
+              校验
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isFreezeDialogOpen} onOpenChange={setIsFreezeDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>冻结订单</DialogTitle>
+            <DialogDescription>
+              确定要冻结订单 "{currentOrder?.id}" 吗？冻结后将暂停该订单的所有操作。
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsFreezeDialogOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={handleFreeze} className="bg-orange-600 hover:bg-orange-700">
+              冻结
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isRefundDialogOpen} onOpenChange={setIsRefundDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>订单退款</DialogTitle>
+            <DialogDescription>
+              确定要退款订单 "{currentOrder?.id}" 吗？金额 ${currentOrder?.amount.toFixed(2)} 将退回到用户账户。此操作不可撤销。
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsRefundDialogOpen(false)}>
+              取消
+            </Button>
+            <Button variant="destructive" onClick={handleRefund}>
+              确认退款
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
