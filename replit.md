@@ -14,13 +14,17 @@ BeDAO 管理后台是一个专业的加密货币交易平台后台管理系统�
   - **移动端**（<768px）：汉堡菜单按钮，点击打开侧边Sheet弹窗显示所有模块
 
 **最新更新 (2024年11月6日)**:
-- 完成法币管理模块的四个核心页面开发：
-  - **通道管理**: 支持币种页签筛选、通道列表展示（代码、ID、demo视频、代收/代付手续费、接口来源）、完整的CRUD操作
+- 完成法币管理模块的全部7个核心页面开发：
+  - **币种管理**: 添加/删除/编辑币种、配置币种简称、支持emoji和图片两种图标方式、真实文件上传功能（最大2MB）、图片预览和删除
+  - **供应商管理**: 完整的CRUD操作、搜索功能、详细信息弹窗（接口/商户/余额/费率）
+  - **接口管理**: 卡片式展示所有接口（Bitzpay、BePayOTC、CFpay等）、点击查看支持的币种和支付通道列表、接口统计数据
+  - **通道管理**: 币种页签筛选、通道列表展示（代码、ID、demo视频、代收/代付手续费、接口来源）、完整的CRUD操作
   - **商户管理**: 商户列表、添加/删除/冻结商户、冻结资金、配置费率等功能
-  - **订单记录**: 两级页签筛选（币种+支付通道）、订单详情展示、四种操作（补发通知、重新校验、冻结订单、订单退款）
   - **佣金记录**: 用户佣金排行榜（前三名带奖杯图标）、点击查看详细佣金记录
-- 修复了"法币"模块的默认路由，点击后正确跳转到供应商管理页面
-- 所有页面采用统一的设计风格，包括搜索、筛选、表格展示、弹窗操作等
+  - **订单记录**: 两级页签筛选（币种+支付通道）、订单详情展示、四种操作（补发通知、重新校验、冻结订单、订单退款）
+- 修复了"法币"模块的默认路由，点击后正确跳转到币种管理页面
+- 所有页面采用统一的设计风格，包括搜索、筛选、表格展示、卡片展示、弹窗操作等
+- 实现了真实的图标上传功能：文件选择、类型和大小验证、Base64转换、预览显示
 
 **默认入口**: 应用启动时直接跳转到 `/admin/login` 管理员登录页面。登录后可访问完整的15个管理模块及其子页面。
 
@@ -134,12 +138,14 @@ Preferred communication style: Simple, everyday Chinese language.
        - U-Card Commission (U卡佣金)
        - Escrow Commission (担保佣金)
        - Payment Commission (支付佣金)
-    13. BePay Management (法币管理) - Payment gateway administration with 5 sub-pages:
+    13. BePay Management (法币管理) - Payment gateway administration with 7 sub-pages:
+       - Currencies Management (币种管理): Add/edit/delete currencies, configure currency symbols, upload currency icons (emoji or image with 2MB limit), icon preview and removal
        - Suppliers Management (供应商管理): Full CRUD operations, search functionality, detailed modals for interfaces/merchants/balance/rates
+       - Interfaces Management (接口管理): Card-based display of all payment interfaces (Bitzpay, BePayOTC, CFpay, etc.), click to view supported currencies and payment channels
        - Channels Management (通道管理): Channel listing with code/ID/demo video/fee configs, currency tab filtering, add/edit/delete operations
        - Merchants Management (商户管理): Merchant accounts with add/delete/freeze, fund freezing, fee rate configuration
-       - Commission Management (佣金管理): User commission rankings, detailed commission records view
-       - Orders Management (订单管理): Two-level filtering (currency + payment channel), order operations (resend notification, reverify, freeze, refund)
+       - Commission Management (佣金管理): User commission rankings with trophy icons for top 3, detailed commission records view
+       - Orders Management (订单管理): Two-level filtering (currency + payment channel), order operations (resend notification, reverify, freeze, refund) with real-time state updates
     14. Financial Management (财务管理) - Financial tracking and fulfillment with 8 sub-pages:
        - Funds Records (资金记录)
        - USDT Trading Records (USDT买卖记录)
