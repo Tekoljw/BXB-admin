@@ -1,10 +1,9 @@
 "use client"
 
 import React, { useState } from "react"
-import { Wallet, TrendingUp, DollarSign, Users, Trophy, Eye } from "lucide-react"
+import { Trophy, Eye, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -184,11 +183,6 @@ export default function CommissionPage() {
     setIsDetailDialogOpen(true)
   }
 
-  const totalCommissionToday = 12345
-  const totalCommissionMonth = 345000
-  const growthRate = 18
-  const beneficiaryCount = 2156
-
   const getRankIcon = (rank: number) => {
     if (rank === 1) return <Trophy className="w-5 h-5 text-yellow-500" />
     if (rank === 2) return <Trophy className="w-5 h-5 text-gray-400" />
@@ -205,48 +199,6 @@ export default function CommissionPage() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">今日佣金</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">${totalCommissionToday.toLocaleString()}</h3>
-            </div>
-            <Wallet className="w-10 h-10 text-custom-green" />
-          </div>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">本月佣金</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">${(totalCommissionMonth / 1000).toFixed(0)}K</h3>
-            </div>
-            <DollarSign className="w-10 h-10 text-green-500" />
-          </div>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">增长率</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">+{growthRate}%</h3>
-            </div>
-            <TrendingUp className="w-10 h-10 text-blue-500" />
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">受益用户</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{beneficiaryCount.toLocaleString()}</h3>
-            </div>
-            <Users className="w-10 h-10 text-orange-500" />
-          </div>
-        </div>
-      </div>
-
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-4">

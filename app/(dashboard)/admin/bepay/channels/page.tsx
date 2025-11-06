@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Settings, TrendingUp, CheckCircle, Users, Search, Plus, Edit, Trash2, Upload, Eye } from "lucide-react"
+import { Search, Plus, Edit, Trash2, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -197,54 +197,8 @@ export default function ChannelsPage() {
     })
   }
 
-  const activeChannels = channels.filter(c => c.status === "active").length
-  const totalTransactions = 1856
-  const merchantsUsing = 456
-
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">通道总数</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{channels.length}</h3>
-            </div>
-            <Settings className="w-10 h-10 text-custom-green" />
-          </div>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">活跃通道</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{activeChannels}</h3>
-            </div>
-            <CheckCircle className="w-10 h-10 text-green-500" />
-          </div>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">今日交易</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{totalTransactions.toLocaleString()}</h3>
-            </div>
-            <TrendingUp className="w-10 h-10 text-blue-500" />
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">使用商户</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{merchantsUsing}</h3>
-            </div>
-            <Users className="w-10 h-10 text-orange-500" />
-          </div>
-        </div>
-      </div>
-
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-4">

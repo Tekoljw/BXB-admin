@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Users, TrendingUp, CheckCircle, DollarSign, Search, Plus, Edit, Trash2, Lock, Unlock, Settings } from "lucide-react"
+import { Search, Plus, Edit, Trash2, Lock, Unlock, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -259,55 +259,8 @@ export default function MerchantsPage() {
     })
   }
 
-  const totalMerchants = merchants.length
-  const activeMerchants = merchants.filter(m => m.status === "active").length
-  const todayOrders = 8765
-  const todayVolume = 456000
-
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">商户总数</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{totalMerchants}</h3>
-            </div>
-            <Users className="w-10 h-10 text-custom-green" />
-          </div>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">活跃商户</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{activeMerchants}</h3>
-            </div>
-            <CheckCircle className="w-10 h-10 text-green-500" />
-          </div>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">今日订单</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{todayOrders.toLocaleString()}</h3>
-            </div>
-            <TrendingUp className="w-10 h-10 text-blue-500" />
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">今日交易额</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">${(todayVolume / 1000).toFixed(0)}K</h3>
-            </div>
-            <DollarSign className="w-10 h-10 text-orange-500" />
-          </div>
-        </div>
-      </div>
-
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-4">

@@ -35,6 +35,9 @@ Preferred communication style: Simple, everyday Chinese language.
   - 动态亮色/暗色主题切换，持久化用户偏好。
   - 统一的品牌设计（BeDAO）和标准化配色方案（绿色、黑色、深蓝色、白色）。
   - 登录页面独立布局。
+  - **页面优化（法币管理模块）**: 
+    - 表格布局优化：通道管理(10→7列)、商户管理(9→6列)、佣金管理(9→5列)、订单管理(12→7列)，采用垂直堆叠设计合并相关信息
+    - 删除顶部统计卡片：移除4个页面（通道/商户/佣金/订单管理）的顶部KPI卡片，让页面更简洁专注于核心功能
 - **System Design Choices**:
   - 客户端路由系统：使用 `instant-navigation` 组件处理所有页面导航，避免页面重载。
   - 自定义路由机制：使用 `window.history.pushState` 和 `popstate` 事件实现即时页面切换。
