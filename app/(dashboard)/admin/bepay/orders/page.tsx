@@ -363,8 +363,9 @@ export default function OrdersPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => openResendDialog(order)}
-                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
                         title="补发通知"
+                        disabled={order.status !== "success"}
                       >
                         <Send className="w-4 h-4" />
                       </Button>
@@ -372,8 +373,9 @@ export default function OrdersPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => openReverifyDialog(order)}
-                        className="text-green-600 hover:text-green-800 dark:text-green-400"
+                        className="text-green-600 hover:text-green-800 dark:text-green-400 disabled:opacity-50 disabled:cursor-not-allowed"
                         title="重新校验"
+                        disabled={order.status !== "failed"}
                       >
                         <RefreshCw className="w-4 h-4" />
                       </Button>
@@ -381,8 +383,9 @@ export default function OrdersPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => openFreezeDialog(order)}
-                        className="text-orange-600 hover:text-orange-800 dark:text-orange-400"
+                        className="text-orange-600 hover:text-orange-800 dark:text-orange-400 disabled:opacity-50 disabled:cursor-not-allowed"
                         title="冻结订单"
+                        disabled={order.status !== "success"}
                       >
                         <Lock className="w-4 h-4" />
                       </Button>
@@ -390,7 +393,7 @@ export default function OrdersPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => openRefundDialog(order)}
-                        className="text-red-600 hover:text-red-800 dark:text-red-400"
+                        className="text-red-600 hover:text-red-800 dark:text-red-400 disabled:opacity-50 disabled:cursor-not-allowed"
                         title="订单退款"
                         disabled={order.status !== "success"}
                       >
