@@ -249,7 +249,7 @@ const mockMerchants: Merchant[] = [
 export default function MerchantsPage() {
   const [merchants, setMerchants] = useState<Merchant[]>(mockMerchants)
   const [searchTerm, setSearchTerm] = useState("")
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [merchantFilter, setMerchantFilter] = useState<"all" | "pending" | "hasApi">("all")
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
@@ -266,7 +266,6 @@ export default function MerchantsPage() {
   })
   const [formData, setFormData] = useState({
     name: "",
-    bxbUserId: "",
     email: "",
     phone: "",
     status: "active" as "active" | "frozen" | "disabled"
@@ -282,42 +281,35 @@ export default function MerchantsPage() {
   })
   const [activeCurrency, setActiveCurrency] = useState<string>("")
 
-  const filteredMerchants = merchants.filter(merchant => 
-    merchant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    merchant.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    merchant.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    merchant.userId.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  const handleAdd = () => {
-    const newMerchant: Merchant = {
-      id: `M${String(merchants.length + 1).padStart(3, '0')}`,
-      name: formData.name,
-      userId: `U${String(100000 + merchants.length + 1)}`,
-      bxbUserId: formData.bxbUserId,
-      email: "",
-      phone: "",
-      apiKeys: [],
-      balance: 0,
-      paymentBalance: 0,
-      frozenBalance: 0,
-      currencyBalances: [
-        { currency: "CNY", balance: 0, paymentBalance: 0 },
-        { currency: "USD", balance: 0, paymentBalance: 0 },
-        { currency: "USDT", balance: 0, paymentBalance: 0 },
-        { currency: "EUR", balance: 0, paymentBalance: 0 },
-        { currency: "GBP", balance: 0, paymentBalance: 0 }
-      ],
-      totalOrders: 0,
-      feeConfigs: [],
-      status: "active",
-      hasPendingDomain: false,
-      createdAt: new Date().toLocaleString('zh-CN')
+  const getMerchantCounts = () => {
+    return {
+      all: merchants.length,
+      pending: merchants.filter(m => m.hasPendingDomain).length,
+      hasApi: merchants.filter(m => m.apiKeys.length > 0).length
     }
-    setMerchants([...merchants, newMerchant])
-    setIsAddDialogOpen(false)
-    resetForm()
   }
+
+  const counts = getMerchantCounts()
+
+  const filteredMerchants = merchants.filter(merchant => {
+    // 先按页签筛选
+    if (merchantFilter === "pending" && !merchant.hasPendingDomain) {
+      return false
+    }
+    if (merchantFilter === "hasApi" && merchant.apiKeys.length === 0) {
+      return false
+    }
+    
+    // 再按搜索词筛选
+    if (searchTerm) {
+      return merchant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        merchant.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        merchant.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        merchant.userId.toLowerCase().includes(searchTerm.toLowerCase())
+    }
+    
+    return true
+  })
 
   const openBalanceDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
@@ -336,7 +328,12 @@ export default function MerchantsPage() {
       ))
       setIsEditDialogOpen(false)
       setCurrentMerchant(null)
-      resetForm()
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        status: "active"
+      })
     }
   }
 
@@ -395,7 +392,6 @@ export default function MerchantsPage() {
       name: merchant.name,
       email: merchant.email,
       phone: merchant.phone,
-      bxbUserId: merchant.bxbUserId,
       status: merchant.status
     })
     setIsEditDialogOpen(true)
@@ -528,16 +524,6 @@ export default function MerchantsPage() {
     }
   }
 
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      bxbUserId: "",
-      email: "",
-      phone: "",
-      status: "active"
-    })
-  }
-
   const updateMerchantState = (updatedMerchant: Merchant) => {
     setMerchants(merchants.map(m => 
       m.id === updatedMerchant.id ? updatedMerchant : m
@@ -578,16 +564,34 @@ export default function MerchantsPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">商户列表</h2>
-        <Button 
-          onClick={() => setIsAddDialogOpen(true)}
-          className="bg-custom-green hover:bg-custom-green/90"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          添加商户
-        </Button>
-      </div>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">商户列表</h2>
+
+      <Tabs value={merchantFilter} onValueChange={(value) => setMerchantFilter(value as "all" | "pending" | "hasApi")}>
+        <TabsList>
+          <TabsTrigger value="pending">
+            API申请中的商户
+            {counts.pending > 0 && (
+              <span className="ml-2 px-2 py-0.5 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full">
+                {counts.pending}
+              </span>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="hasApi">
+            已有API商户
+            {counts.hasApi > 0 && (
+              <span className="ml-2 px-2 py-0.5 text-xs bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full">
+                {counts.hasApi}
+              </span>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="all">
+            全部
+            <span className="ml-2 px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">
+              {counts.all}
+            </span>
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -724,47 +728,6 @@ export default function MerchantsPage() {
           </div>
         )}
       </div>
-
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>添加商户</DialogTitle>
-            <DialogDescription>添加新的商户账户</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">商户名称</Label>
-              <Input
-                id="name"
-                placeholder="请输入商户名称"
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="bxbUserId">BXB UserID</Label>
-              <Input
-                id="bxbUserId"
-                placeholder="请输入BXB UserID"
-                value={formData.bxbUserId}
-                onChange={(e) => setFormData({...formData, bxbUserId: e.target.value})}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-              取消
-            </Button>
-            <Button 
-              onClick={handleAdd} 
-              className="bg-custom-green hover:bg-custom-green/90"
-              disabled={!formData.name || !formData.bxbUserId}
-            >
-              添加
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl">

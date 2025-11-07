@@ -75,6 +75,12 @@ Preferred communication style: Simple, everyday Chinese language.
   - **商户管理功能**：
     - 展示商户基本信息（商户名称、商户ID、UserID、邮箱、电话、账户余额、状态）
     - 商户本身也是用户，因此同时显示商户ID和UserID
+    - **商户筛选页签**：三个页签快速筛选不同类型的商户
+      - API申请中的商户：显示有待审核域名的商户（hasPendingDomain为true）
+      - 已有API商户：显示已有API密钥的商户（apiKeys.length > 0）
+      - 全部：显示所有商户
+    - 页签显示对应的商户数量统计
+    - 所有用户都是商户，无需手动添加商户
     - **状态开关控制**：使用开关按钮控制商户状态
       - 开关打开（绿色）：正常状态
       - 开关关闭（灰色）：冻结状态
