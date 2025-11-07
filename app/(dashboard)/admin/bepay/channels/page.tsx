@@ -172,7 +172,7 @@ export default function ChannelsPage() {
     const newChannel: Channel = {
       id: `CH${String(channels.length + 1).padStart(3, '0')}`,
       ...formData,
-      feeRates: feeRatesFormData,
+      feeRates: feeRatesFormData.map(rate => ({...rate})),
       createdAt: new Date().toLocaleString('zh-CN')
     }
     setChannels([...channels, newChannel])
@@ -183,7 +183,7 @@ export default function ChannelsPage() {
   const handleEdit = () => {
     if (currentChannel) {
       setChannels(channels.map(c => 
-        c.id === currentChannel.id ? { ...currentChannel, ...formData, feeRates: feeRatesFormData } : c
+        c.id === currentChannel.id ? { ...currentChannel, ...formData, feeRates: feeRatesFormData.map(rate => ({...rate})) } : c
       ))
       setIsEditDialogOpen(false)
       setCurrentChannel(null)
@@ -211,7 +211,7 @@ export default function ChannelsPage() {
       demoVideo: channel.demoVideo || "",
       status: channel.status
     })
-    setFeeRatesFormData(channel.feeRates)
+    setFeeRatesFormData(channel.feeRates.map(rate => ({...rate})))
     setIsEditDialogOpen(true)
   }
 
