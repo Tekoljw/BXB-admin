@@ -28,6 +28,14 @@ interface ApiKey {
   createdAt: string
 }
 
+interface FeeConfig {
+  id: string
+  currency: string
+  channel: string
+  collectionFee: string
+  paymentFee: string
+}
+
 interface Merchant {
   id: string
   name: string
@@ -39,8 +47,7 @@ interface Merchant {
   balance: number
   frozenBalance: number
   totalOrders: number
-  collectionFee: string
-  paymentFee: string
+  feeConfigs: FeeConfig[]
   status: "active" | "frozen" | "disabled" | "domain_pending"
   createdAt: string
 }
@@ -70,8 +77,12 @@ const mockMerchants: Merchant[] = [
     balance: 125000.50,
     frozenBalance: 0,
     totalOrders: 15234,
-    collectionFee: "0.5%",
-    paymentFee: "0.3%",
+    feeConfigs: [
+      { id: "FC001", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%" },
+      { id: "FC002", currency: "CNY", channel: "微信支付", collectionFee: "0.5%", paymentFee: "0.3%" },
+      { id: "FC003", currency: "USD", channel: "Stripe", collectionFee: "2.9%", paymentFee: "2.5%" },
+      { id: "FC004", currency: "USDT", channel: "TRC20", collectionFee: "1.0%", paymentFee: "0.8%" },
+    ],
     status: "active",
     createdAt: "2024-01-10 10:00:00"
   },
@@ -93,8 +104,11 @@ const mockMerchants: Merchant[] = [
     balance: 89500.25,
     frozenBalance: 5000,
     totalOrders: 9876,
-    collectionFee: "0.6%",
-    paymentFee: "0.4%",
+    feeConfigs: [
+      { id: "FC005", currency: "CNY", channel: "支付宝", collectionFee: "0.6%", paymentFee: "0.4%" },
+      { id: "FC006", currency: "CNY", channel: "微信支付", collectionFee: "0.6%", paymentFee: "0.4%" },
+      { id: "FC007", currency: "CNY", channel: "云闪付", collectionFee: "0.55%", paymentFee: "0.35%" },
+    ],
     status: "domain_pending",
     createdAt: "2024-01-12 14:30:00"
   },
@@ -128,8 +142,12 @@ const mockMerchants: Merchant[] = [
     balance: 45200.00,
     frozenBalance: 10000,
     totalOrders: 5432,
-    collectionFee: "0.5%",
-    paymentFee: "0.3%",
+    feeConfigs: [
+      { id: "FC008", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%" },
+      { id: "FC009", currency: "CNY", channel: "微信支付", collectionFee: "0.5%", paymentFee: "0.3%" },
+      { id: "FC010", currency: "USDT", channel: "TRC20", collectionFee: "1.2%", paymentFee: "1.0%" },
+      { id: "FC011", currency: "USDT", channel: "ERC20", collectionFee: "1.5%", paymentFee: "1.3%" },
+    ],
     status: "frozen",
     createdAt: "2024-01-15 09:15:00"
   },
@@ -151,8 +169,13 @@ const mockMerchants: Merchant[] = [
     balance: 210000.75,
     frozenBalance: 0,
     totalOrders: 23456,
-    collectionFee: "0.4%",
-    paymentFee: "0.2%",
+    feeConfigs: [
+      { id: "FC012", currency: "CNY", channel: "支付宝", collectionFee: "0.4%", paymentFee: "0.2%" },
+      { id: "FC013", currency: "CNY", channel: "微信支付", collectionFee: "0.4%", paymentFee: "0.2%" },
+      { id: "FC014", currency: "CNY", channel: "银行卡", collectionFee: "0.45%", paymentFee: "0.25%" },
+      { id: "FC015", currency: "USD", channel: "Stripe", collectionFee: "2.8%", paymentFee: "2.4%" },
+      { id: "FC016", currency: "USDT", channel: "TRC20", collectionFee: "0.9%", paymentFee: "0.7%" },
+    ],
     status: "active",
     createdAt: "2024-01-08 16:45:00"
   },
@@ -175,8 +198,6 @@ export default function MerchantsPage() {
     bxbUserId: "",
     email: "",
     phone: "",
-    collectionFee: "",
-    paymentFee: "",
     status: "active" as "active" | "frozen" | "disabled" | "domain_pending"
   })
 
@@ -199,8 +220,7 @@ export default function MerchantsPage() {
       balance: 0,
       frozenBalance: 0,
       totalOrders: 0,
-      collectionFee: "0%",
-      paymentFee: "0%",
+      feeConfigs: [],
       status: "active",
       createdAt: new Date().toLocaleString('zh-CN')
     }
@@ -262,31 +282,13 @@ export default function MerchantsPage() {
     }
   }
 
-  const handleUpdateFee = () => {
-    if (currentMerchant) {
-      setMerchants(merchants.map(m => 
-        m.id === currentMerchant.id 
-          ? { 
-              ...m, 
-              collectionFee: formData.collectionFee,
-              paymentFee: formData.paymentFee
-            } 
-          : m
-      ))
-      setIsFeeConfigDialogOpen(false)
-      setCurrentMerchant(null)
-      resetForm()
-    }
-  }
-
   const openEditDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
     setFormData({
       name: merchant.name,
       email: merchant.email,
       phone: merchant.phone,
-      collectionFee: merchant.collectionFee,
-      paymentFee: merchant.paymentFee,
+      bxbUserId: merchant.bxbUserId,
       status: merchant.status
     })
     setIsEditDialogOpen(true)
@@ -309,14 +311,6 @@ export default function MerchantsPage() {
 
   const openFeeConfigDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
-    setFormData({
-      name: merchant.name,
-      email: merchant.email,
-      phone: merchant.phone,
-      collectionFee: merchant.collectionFee,
-      paymentFee: merchant.paymentFee,
-      status: merchant.status
-    })
     setIsFeeConfigDialogOpen(true)
   }
 
@@ -326,8 +320,6 @@ export default function MerchantsPage() {
       bxbUserId: "",
       email: "",
       phone: "",
-      collectionFee: "",
-      paymentFee: "",
       status: "active"
     })
   }
@@ -590,37 +582,106 @@ export default function MerchantsPage() {
       </Dialog>
 
       <Dialog open={isFeeConfigDialogOpen} onOpenChange={setIsFeeConfigDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-5xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>配置费率 - {currentMerchant?.name}</DialogTitle>
-            <DialogDescription>设置商户的手续费率</DialogDescription>
+            <DialogDescription>
+              商户ID: {currentMerchant?.id} | 按币种和支付通道设置不同的手续费率
+            </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="fee-collection">代收手续费</Label>
-              <Input
-                id="fee-collection"
-                placeholder="例如：0.5%"
-                value={formData.collectionFee}
-                onChange={(e) => setFormData({...formData, collectionFee: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="fee-payment">代付手续费</Label>
-              <Input
-                id="fee-payment"
-                placeholder="例如：0.3%"
-                value={formData.paymentFee}
-                onChange={(e) => setFormData({...formData, paymentFee: e.target.value})}
-              />
+
+          <div className="mt-4">
+            {currentMerchant?.feeConfigs && currentMerchant.feeConfigs.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead className="bg-gray-50 dark:bg-gray-700/50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        币种
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        支付通道
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        代收费率
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        代付费率
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        操作
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {currentMerchant.feeConfigs.map((config) => (
+                      <tr key={config.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                          <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">
+                            {config.currency}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
+                          {config.channel}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                          <span className="font-semibold text-green-600 dark:text-green-400">
+                            {config.collectionFee}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                          <span className="font-semibold text-orange-600 dark:text-orange-400">
+                            {config.paymentFee}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                          >
+                            <Edit className="w-4 h-4 mr-1" />
+                            编辑
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                该商户暂无费率配置
+              </div>
+            )}
+
+            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-start gap-3">
+                <div className="text-blue-600 dark:text-blue-400 mt-0.5">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100">费率说明</h4>
+                  <ul className="mt-2 text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                    <li>• 不同币种和支付通道可以设置不同的费率</li>
+                    <li>• 代收费率：用户向商户支付时收取的手续费</li>
+                    <li>• 代付费率：商户向用户付款时收取的手续费</li>
+                    <li>• 点击"编辑"可修改对应币种和通道的费率</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
+
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsFeeConfigDialogOpen(false)}>
-              取消
+              关闭
             </Button>
-            <Button onClick={handleUpdateFee} className="bg-custom-green hover:bg-custom-green/90">
-              保存
+            <Button className="bg-custom-green hover:bg-custom-green/90">
+              <Plus className="w-4 h-4 mr-1" />
+              添加费率配置
             </Button>
           </DialogFooter>
         </DialogContent>
