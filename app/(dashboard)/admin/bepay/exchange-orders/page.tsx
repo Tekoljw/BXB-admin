@@ -6,6 +6,13 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -232,40 +239,42 @@ export default function ExchangeOrdersPage() {
           </Tabs>
         </div>
 
-        <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">用户行为分类</label>
-          <Tabs value={selectedBehaviorType} onValueChange={setSelectedBehaviorType}>
-            <TabsList className="grid grid-cols-4 w-full max-w-2xl">
+        <div className="flex gap-4 items-center">
+          <Select value={selectedBehaviorType} onValueChange={setSelectedBehaviorType}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="用户行为分类" />
+            </SelectTrigger>
+            <SelectContent>
               {behaviorTypes.map(type => (
-                <TabsTrigger key={type} value={type}>
+                <SelectItem key={type} value={type}>
                   {type}
-                </TabsTrigger>
+                </SelectItem>
               ))}
-            </TabsList>
-          </Tabs>
-        </div>
+            </SelectContent>
+          </Select>
 
-        <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">状态筛选</label>
-          <Tabs value={selectedStatus} onValueChange={setSelectedStatus}>
-            <TabsList className="grid grid-cols-4 w-full max-w-2xl">
+          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="状态筛选" />
+            </SelectTrigger>
+            <SelectContent>
               {statuses.map(status => (
-                <TabsTrigger key={status} value={status}>
+                <SelectItem key={status} value={status}>
                   {status}
-                </TabsTrigger>
+                </SelectItem>
               ))}
-            </TabsList>
-          </Tabs>
-        </div>
+            </SelectContent>
+          </Select>
 
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input
-            placeholder="搜索订单号、商户ID..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              placeholder="搜索订单号、商户ID..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
         </div>
       </div>
 
