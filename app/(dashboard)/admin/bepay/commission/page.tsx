@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState } from "react"
-import { Eye, Search, Percent } from "lucide-react"
+import React, { useState, useMemo } from "react"
+import { Eye, Search, Percent, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -219,41 +219,37 @@ const mockChannelCommissions: Record<string, ChannelCommission[]> = {
   ],
 }
 
+const generateMockRecords = (count: number): CommissionRecord[] => {
+  const records: CommissionRecord[] = []
+  const merchants = ["M001", "M002", "M003", "M004", "M005", "M006", "M007", "M008"]
+  const statuses: ("pending" | "settled")[] = ["settled", "settled", "settled", "pending"]
+  
+  for (let i = 1; i <= count; i++) {
+    const date = new Date(2024, 9, 1 + Math.floor(i / 20))
+    const dateStr = date.toISOString().split('T')[0]
+    const timeStr = `${String(9 + Math.floor(i / 10) % 12).padStart(2, '0')}:${String((i * 15) % 60).padStart(2, '0')}:00`
+    
+    records.push({
+      id: `COM${String(i).padStart(4, '0')}`,
+      orderId: `ORD${dateStr.replace(/-/g, '')}${String(i).padStart(3, '0')}`,
+      amount: Math.floor(Math.random() * 9000) + 1000,
+      commission: Math.floor(Math.random() * 90) + 10,
+      rate: `${(Math.random() * 1.5 + 0.5).toFixed(1)}%`,
+      merchantId: merchants[i % merchants.length],
+      createdAt: `${dateStr} ${timeStr}`,
+      status: statuses[i % statuses.length]
+    })
+  }
+  
+  return records
+}
+
 const mockRecords: Record<string, CommissionRecord[]> = {
-  "AG001": [
-    {
-      id: "COM001",
-      orderId: "ORD2024110601",
-      amount: 1500.00,
-      commission: 15.00,
-      rate: "1.0%",
-      merchantId: "M001",
-      createdAt: "2024-11-06 10:30:00",
-      status: "settled"
-    },
-    {
-      id: "COM002",
-      orderId: "ORD2024110602",
-      amount: 2800.00,
-      commission: 28.00,
-      rate: "1.0%",
-      merchantId: "M002",
-      createdAt: "2024-11-06 10:45:00",
-      status: "settled"
-    },
-  ],
-  "AG002": [
-    {
-      id: "COM005",
-      orderId: "ORD2024110605",
-      amount: 8500.00,
-      commission: 85.00,
-      rate: "1.0%",
-      merchantId: "M004",
-      createdAt: "2024-11-06 11:30:00",
-      status: "settled"
-    },
-  ],
+  "AG001": generateMockRecords(120),
+  "AG002": generateMockRecords(85),
+  "AG003": generateMockRecords(65),
+  "AG004": generateMockRecords(45),
+  "AG005": generateMockRecords(30),
 }
 
 export default function CommissionPage() {
@@ -265,6 +261,13 @@ export default function CommissionPage() {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
   const [channelCommissions, setChannelCommissions] = useState<ChannelCommission[]>([])
   const [agentRecords, setAgentRecords] = useState<CommissionRecord[]>([])
+  
+  // 详情对话框的筛选和分页状态
+  const [recordCurrentPage, setRecordCurrentPage] = useState(1)
+  const [recordStartDate, setRecordStartDate] = useState("")
+  const [recordEndDate, setRecordEndDate] = useState("")
+  const [recordMerchantId, setRecordMerchantId] = useState("")
+  const recordsPerPage = 50
 
   const filteredAgents = agents.filter(agent => 
     agent.agentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -299,8 +302,53 @@ export default function CommissionPage() {
   const openRecordDialog = (agent: Agent) => {
     setSelectedAgent(agent)
     setAgentRecords(mockRecords[agent.agentId] || [])
+    // 重置筛选和分页状态
+    setRecordCurrentPage(1)
+    setRecordStartDate("")
+    setRecordEndDate("")
+    setRecordMerchantId("")
     setIsRecordDialogOpen(true)
   }
+
+  // 筛选和分页佣金记录
+  const { filteredRecords, totalPages, currentPageRecords } = useMemo(() => {
+    // 先筛选
+    let filtered = agentRecords.filter(record => {
+      // 商户ID筛选
+      if (recordMerchantId && !record.merchantId.toLowerCase().includes(recordMerchantId.toLowerCase())) {
+        return false
+      }
+
+      // 日期筛选
+      if (recordStartDate || recordEndDate) {
+        const recordDate = new Date(record.createdAt.split(" ")[0])
+        if (recordStartDate) {
+          const startDate = new Date(recordStartDate)
+          if (recordDate < startDate) return false
+        }
+        if (recordEndDate) {
+          const endDate = new Date(recordEndDate)
+          if (recordDate > endDate) return false
+        }
+      }
+
+      return true
+    })
+
+    // 计算总页数
+    const total = Math.ceil(filtered.length / recordsPerPage)
+
+    // 分页
+    const startIndex = (recordCurrentPage - 1) * recordsPerPage
+    const endIndex = startIndex + recordsPerPage
+    const paginated = filtered.slice(startIndex, endIndex)
+
+    return {
+      filteredRecords: filtered,
+      totalPages: total,
+      currentPageRecords: paginated
+    }
+  }, [agentRecords, recordMerchantId, recordStartDate, recordEndDate, recordCurrentPage, recordsPerPage])
 
   return (
     <div className="p-6 space-y-6">
@@ -569,11 +617,62 @@ export default function CommissionPage() {
           <DialogHeader>
             <DialogTitle>佣金详细记录 - {selectedAgent?.agentName || "-"}</DialogTitle>
             <DialogDescription>
-              代理商ID: {selectedAgent?.agentId || "-"} | 累计佣金: ${selectedAgent ? selectedAgent.totalCommission.toLocaleString() : "0"}
+              代理商ID: {selectedAgent?.agentId || "-"} | 累计佣金: ${selectedAgent ? selectedAgent.totalCommission.toLocaleString() : "0"} | 共 {filteredRecords.length} 条记录
             </DialogDescription>
           </DialogHeader>
 
-          <div className="mt-4">
+          <div className="mt-4 space-y-4">
+            {/* 筛选区域 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                  开始日期
+                </label>
+                <Input
+                  type="date"
+                  value={recordStartDate}
+                  onChange={(e) => {
+                    setRecordStartDate(e.target.value)
+                    setRecordCurrentPage(1) // 重置到第一页
+                  }}
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                  结束日期
+                </label>
+                <Input
+                  type="date"
+                  value={recordEndDate}
+                  onChange={(e) => {
+                    setRecordEndDate(e.target.value)
+                    setRecordCurrentPage(1) // 重置到第一页
+                  }}
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                  商户ID搜索
+                </label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    placeholder="搜索商户ID..."
+                    value={recordMerchantId}
+                    onChange={(e) => {
+                      setRecordMerchantId(e.target.value)
+                      setRecordCurrentPage(1) // 重置到第一页
+                    }}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+            </div>
+
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 dark:bg-gray-700/50">
@@ -605,7 +704,7 @@ export default function CommissionPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {agentRecords.map((record) => (
+                  {currentPageRecords.map((record) => (
                     <tr key={record.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                       <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                         {record.id}
@@ -645,9 +744,44 @@ export default function CommissionPage() {
               </table>
             </div>
 
-            {agentRecords.length === 0 && (
+            {currentPageRecords.length === 0 && (
               <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                该代理商暂无佣金记录
+                {agentRecords.length === 0 ? "该代理商暂无佣金记录" : "没有符合条件的记录"}
+              </div>
+            )}
+
+            {/* 分页控件 */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+                <div className="text-sm text-gray-700 dark:text-gray-300">
+                  显示第 {((recordCurrentPage - 1) * recordsPerPage) + 1} - {Math.min(recordCurrentPage * recordsPerPage, filteredRecords.length)} 条，
+                  共 {filteredRecords.length} 条
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setRecordCurrentPage(prev => Math.max(1, prev - 1))}
+                    disabled={recordCurrentPage === 1}
+                    className="flex items-center gap-1"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    上一页
+                  </Button>
+                  <div className="text-sm text-gray-700 dark:text-gray-300">
+                    第 {recordCurrentPage} / {totalPages} 页
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setRecordCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    disabled={recordCurrentPage === totalPages}
+                    className="flex items-center gap-1"
+                  >
+                    下一页
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             )}
           </div>
