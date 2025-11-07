@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Plus, Edit, Trash2, Eye } from "lucide-react"
+import { Search, Plus, Edit, Trash2, Eye, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -144,6 +144,8 @@ export default function ChannelsPage() {
   const [isDemoDialogOpen, setIsDemoDialogOpen] = useState(false)
   const [currentChannel, setCurrentChannel] = useState<Channel | null>(null)
   const [isFeeRatesDialogOpen, setIsFeeRatesDialogOpen] = useState(false)
+  const [editingDisplayName, setEditingDisplayName] = useState<string | null>(null)
+  const [tempDisplayName, setTempDisplayName] = useState("")
   const [formData, setFormData] = useState({
     code: "",
     name: "",
@@ -221,6 +223,24 @@ export default function ChannelsPage() {
   const openFeeRatesDialog = (channel: Channel) => {
     setCurrentChannel(channel)
     setIsFeeRatesDialogOpen(true)
+  }
+
+  const startEditDisplayName = (channelId: string, currentDisplayName: string) => {
+    setEditingDisplayName(channelId)
+    setTempDisplayName(currentDisplayName)
+  }
+
+  const saveDisplayName = (channelId: string) => {
+    setChannels(channels.map(c => 
+      c.id === channelId ? { ...c, displayName: tempDisplayName } : c
+    ))
+    setEditingDisplayName(null)
+    setTempDisplayName("")
+  }
+
+  const cancelEditDisplayName = () => {
+    setEditingDisplayName(null)
+    setTempDisplayName("")
   }
 
   const openDeleteDialog = (channel: Channel) => {
@@ -339,9 +359,52 @@ export default function ChannelsPage() {
                           <span className="text-blue-600 dark:text-blue-300">{channel.name.substring(0, 2)}</span>
                         )}
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <div className="font-medium text-gray-900 dark:text-white">{channel.name}</div>
-                        <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">{channel.displayName}</div>
+                        <div className="text-xs mt-0.5">
+                          {editingDisplayName === channel.id ? (
+                            <div className="flex items-center gap-1">
+                              <Input
+                                value={tempDisplayName}
+                                onChange={(e) => setTempDisplayName(e.target.value)}
+                                className="h-6 text-xs py-1 px-2"
+                                placeholder="输入外显名称"
+                                autoFocus
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    saveDisplayName(channel.id)
+                                  } else if (e.key === 'Escape') {
+                                    cancelEditDisplayName()
+                                  }
+                                }}
+                              />
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+                                onClick={() => saveDisplayName(channel.id)}
+                              >
+                                <Check className="w-3 h-3" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-6 w-6 p-0 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                                onClick={cancelEditDisplayName}
+                              >
+                                <X className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div 
+                              className="text-gray-500 dark:text-gray-400 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                              onClick={() => startEditDisplayName(channel.id, channel.displayName)}
+                            >
+                              <span>{channel.displayName}</span>
+                              <Edit className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
+                          )}
+                        </div>
                         <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">ID: {channel.id} | {channel.code}</div>
                       </div>
                     </div>
