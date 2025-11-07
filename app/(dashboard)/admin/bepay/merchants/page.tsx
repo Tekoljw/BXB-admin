@@ -49,6 +49,7 @@ interface Merchant {
   phone: string
   apiKeys: ApiKey[]
   balance: number
+  paymentBalance: number
   frozenBalance: number
   totalOrders: number
   feeConfigs: FeeConfig[]
@@ -82,6 +83,7 @@ const mockMerchants: Merchant[] = [
       }
     ],
     balance: 125000.50,
+    paymentBalance: 50000.00,
     frozenBalance: 0,
     totalOrders: 15234,
     feeConfigs: [
@@ -118,6 +120,7 @@ const mockMerchants: Merchant[] = [
       }
     ],
     balance: 89500.25,
+    paymentBalance: 35000.00,
     frozenBalance: 5000,
     totalOrders: 9876,
     feeConfigs: [
@@ -160,6 +163,7 @@ const mockMerchants: Merchant[] = [
       }
     ],
     balance: 45200.00,
+    paymentBalance: 20000.00,
     frozenBalance: 10000,
     totalOrders: 5432,
     feeConfigs: [
@@ -189,6 +193,7 @@ const mockMerchants: Merchant[] = [
       }
     ],
     balance: 210000.75,
+    paymentBalance: 80000.00,
     frozenBalance: 0,
     totalOrders: 23456,
     feeConfigs: [
@@ -255,10 +260,12 @@ export default function MerchantsPage() {
       phone: "",
       apiKeys: [],
       balance: 0,
+      paymentBalance: 0,
       frozenBalance: 0,
       totalOrders: 0,
       feeConfigs: [],
       status: "active",
+      hasPendingDomain: false,
       createdAt: new Date().toLocaleString('zh-CN')
     }
     setMerchants([...merchants, newMerchant])
@@ -552,7 +559,12 @@ export default function MerchantsPage() {
                     <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{merchant.phone}</div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="text-gray-900 dark:text-gray-300">可用: ${merchant.balance.toLocaleString()}</div>
+                    <div className="text-gray-900 dark:text-gray-300">
+                      可用: ${merchant.balance.toLocaleString()}
+                    </div>
+                    <div className="text-blue-600 dark:text-blue-400 text-xs mt-1">
+                      代付金: ${merchant.paymentBalance.toLocaleString()}
+                    </div>
                     <div className={`text-xs mt-1 ${merchant.frozenBalance > 0 ? "text-red-600 dark:text-red-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
                       冻结: ${merchant.frozenBalance.toLocaleString()}
                     </div>
@@ -985,7 +997,7 @@ export default function MerchantsPage() {
           <DialogHeader>
             <DialogTitle>冻结资金 - {currentMerchant?.name}</DialogTitle>
             <DialogDescription>
-              可用余额: ${currentMerchant?.balance.toLocaleString()}
+              可用余额: ${currentMerchant?.balance.toLocaleString()} | 代付金余额: ${currentMerchant?.paymentBalance.toLocaleString()}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
