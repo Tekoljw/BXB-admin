@@ -40,12 +40,6 @@ interface FeeConfig {
   minPaymentFee: string
 }
 
-interface CurrencyBalance {
-  currency: string
-  fiatBalance: number
-  paymentBalance: number
-}
-
 interface Merchant {
   id: string
   name: string
@@ -56,8 +50,6 @@ interface Merchant {
   apiKeys: ApiKey[]
   balance: number
   frozenBalance: number
-  paymentBalance: number
-  currencyBalances: CurrencyBalance[]
   totalOrders: number
   feeConfigs: FeeConfig[]
   status: "active" | "frozen" | "disabled"
@@ -91,12 +83,6 @@ const mockMerchants: Merchant[] = [
     ],
     balance: 125000.50,
     frozenBalance: 0,
-    paymentBalance: 85000.00,
-    currencyBalances: [
-      { currency: "CNY", fiatBalance: 125000.50, paymentBalance: 85000.00 },
-      { currency: "USD", fiatBalance: 15000.00, paymentBalance: 8000.00 },
-      { currency: "USDT", fiatBalance: 5000.00, paymentBalance: 2000.00 },
-    ],
     totalOrders: 15234,
     feeConfigs: [
       { id: "FC001", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50" },
@@ -133,11 +119,6 @@ const mockMerchants: Merchant[] = [
     ],
     balance: 89500.25,
     frozenBalance: 5000,
-    paymentBalance: 50000.00,
-    currencyBalances: [
-      { currency: "CNY", fiatBalance: 89500.25, paymentBalance: 50000.00 },
-      { currency: "USD", fiatBalance: 12000.00, paymentBalance: 5000.00 },
-    ],
     totalOrders: 9876,
     feeConfigs: [
       { id: "FC005", currency: "CNY", channel: "支付宝", collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80" },
@@ -180,11 +161,6 @@ const mockMerchants: Merchant[] = [
     ],
     balance: 45200.00,
     frozenBalance: 10000,
-    paymentBalance: 28000.00,
-    currencyBalances: [
-      { currency: "CNY", fiatBalance: 45200.00, paymentBalance: 28000.00 },
-      { currency: "USDT", fiatBalance: 3000.00, paymentBalance: 1500.00 },
-    ],
     totalOrders: 5432,
     feeConfigs: [
       { id: "FC008", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50" },
@@ -214,13 +190,6 @@ const mockMerchants: Merchant[] = [
     ],
     balance: 210000.75,
     frozenBalance: 0,
-    paymentBalance: 150000.00,
-    currencyBalances: [
-      { currency: "CNY", fiatBalance: 210000.75, paymentBalance: 150000.00 },
-      { currency: "USD", fiatBalance: 20000.00, paymentBalance: 10000.00 },
-      { currency: "USDT", fiatBalance: 8000.00, paymentBalance: 4000.00 },
-      { currency: "EUR", fiatBalance: 5000.00, paymentBalance: 2000.00 },
-    ],
     totalOrders: 23456,
     feeConfigs: [
       { id: "FC012", currency: "CNY", channel: "支付宝", collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40" },
@@ -246,7 +215,6 @@ export default function MerchantsPage() {
   const [isFeeConfigDialogOpen, setIsFeeConfigDialogOpen] = useState(false)
   const [isAddFeeConfigDialogOpen, setIsAddFeeConfigDialogOpen] = useState(false)
   const [isApiKeysDialogOpen, setIsApiKeysDialogOpen] = useState(false)
-  const [isBalanceDetailDialogOpen, setIsBalanceDetailDialogOpen] = useState(false)
   const [currentMerchant, setCurrentMerchant] = useState<Merchant | null>(null)
   const [freezeAmount, setFreezeAmount] = useState("")
   const [freezeFormData, setFreezeFormData] = useState({
@@ -583,26 +551,10 @@ export default function MerchantsPage() {
                     <div className="text-gray-900 dark:text-gray-300">{merchant.email}</div>
                     <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{merchant.phone}</div>
                   </td>
-                  <td className="px-4 py-3 text-sm">
-                    <div className="space-y-1">
-                      <div className="text-gray-900 dark:text-gray-300">
-                        法币: ${merchant.balance.toLocaleString()}
-                      </div>
-                      <div className="text-gray-900 dark:text-gray-300">
-                        代付金: ${merchant.paymentBalance.toLocaleString()}
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          setCurrentMerchant(merchant)
-                          setIsBalanceDetailDialogOpen(true)
-                        }}
-                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 p-0 h-auto text-xs"
-                      >
-                        <Eye className="w-3 h-3 mr-1" />
-                        查看详情
-                      </Button>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <div className="text-gray-900 dark:text-gray-300">可用: ${merchant.balance.toLocaleString()}</div>
+                    <div className={`text-xs mt-1 ${merchant.frozenBalance > 0 ? "text-red-600 dark:text-red-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
+                      冻结: ${merchant.frozenBalance.toLocaleString()}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm">
@@ -1233,77 +1185,6 @@ export default function MerchantsPage() {
             </Button>
             <Button variant="destructive" onClick={handleDelete}>
               删除
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isBalanceDetailDialogOpen} onOpenChange={setIsBalanceDetailDialogOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>账户余额详情 - {currentMerchant?.name}</DialogTitle>
-            <DialogDescription>
-              商户ID: {currentMerchant?.id} | 各币种余额明细
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="mt-4">
-            {currentMerchant?.currencyBalances && currentMerchant.currencyBalances.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead className="bg-gray-50 dark:bg-gray-700/50">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        币种
-                      </th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        法币余额
-                      </th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        代付金余额
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {currentMerchant.currencyBalances.map((balance) => (
-                      <tr key={balance.currency} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                        <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300">
-                          {balance.currency}
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-green-600 dark:text-green-400 font-medium">
-                          ${balance.fiatBalance.toLocaleString()}
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm text-right text-blue-600 dark:text-blue-400 font-medium">
-                          ${balance.paymentBalance.toLocaleString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                  <tfoot className="bg-gray-50 dark:bg-gray-700/50">
-                    <tr>
-                      <td className="px-4 py-3 text-sm font-bold text-gray-900 dark:text-white">
-                        总计
-                      </td>
-                      <td className="px-4 py-3 text-sm text-right font-bold text-green-600 dark:text-green-400">
-                        ${currentMerchant.balance.toLocaleString()}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-right font-bold text-blue-600 dark:text-blue-400">
-                        ${currentMerchant.paymentBalance.toLocaleString()}
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                暂无余额数据
-              </div>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsBalanceDetailDialogOpen(false)}>
-              关闭
             </Button>
           </DialogFooter>
         </DialogContent>
