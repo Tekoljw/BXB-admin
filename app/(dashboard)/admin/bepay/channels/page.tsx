@@ -52,7 +52,7 @@ const mockChannels: Channel[] = [
     code: "ALIPAY_CN",
     name: "支付宝",
     displayName: "支付宝收款",
-    logo: "https://gw.alipayobjects.com/mdn/rms_08e378/afts/img/A*3ijaRbx7JV0AAAAAAAAAAABkARQnAQ",
+    logo: "💰",
     currency: "CNY",
     interface: "Bitzpay",
     feeRates: [
@@ -69,7 +69,7 @@ const mockChannels: Channel[] = [
     code: "WECHAT_CN",
     name: "微信支付",
     displayName: "微信收款码",
-    logo: "https://www.wechat.com/app/img/logo.png",
+    logo: "💬",
     currency: "CNY",
     interface: "Bitzpay",
     feeRates: [
@@ -86,6 +86,7 @@ const mockChannels: Channel[] = [
     code: "BANK_CN",
     name: "银行转账",
     displayName: "银行卡转账",
+    logo: "🏦",
     currency: "CNY",
     interface: "BePayOTC",
     feeRates: [
@@ -101,6 +102,7 @@ const mockChannels: Channel[] = [
     code: "PIX_BR",
     name: "PIX支付",
     displayName: "PIX即时转账",
+    logo: "🇧🇷",
     currency: "BRL",
     interface: "CFpay",
     feeRates: [
@@ -117,6 +119,7 @@ const mockChannels: Channel[] = [
     code: "UPI_IN",
     name: "UPI支付",
     displayName: "UPI快速支付",
+    logo: "🇮🇳",
     currency: "INR",
     interface: "CFpay",
     feeRates: [
@@ -311,18 +314,31 @@ export default function ChannelsPage() {
                 <tr key={channel.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="px-4 py-3 text-sm">
                     <div className="flex items-center gap-3">
-                      {channel.logo && (
-                        <div className="w-8 h-8 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
-                          <Image 
-                            src={channel.logo} 
-                            alt={channel.name}
-                            width={32}
-                            height={32}
-                            className="object-contain"
-                            unoptimized
-                          />
-                        </div>
-                      )}
+                      <div className="w-10 h-10 rounded-lg overflow-hidden bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 flex items-center justify-center flex-shrink-0 text-xl font-bold">
+                        {channel.logo ? (
+                          channel.logo.startsWith('http') ? (
+                            <Image 
+                              src={channel.logo} 
+                              alt={channel.name}
+                              width={40}
+                              height={40}
+                              className="object-contain"
+                              unoptimized
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                const parent = e.currentTarget.parentElement;
+                                if (parent) {
+                                  parent.innerHTML = channel.name.substring(0, 2);
+                                }
+                              }}
+                            />
+                          ) : (
+                            <span>{channel.logo}</span>
+                          )
+                        ) : (
+                          <span className="text-blue-600 dark:text-blue-300">{channel.name.substring(0, 2)}</span>
+                        )}
+                      </div>
                       <div>
                         <div className="font-medium text-gray-900 dark:text-white">{channel.name}</div>
                         <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">{channel.displayName}</div>
