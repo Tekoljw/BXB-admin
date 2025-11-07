@@ -146,6 +146,8 @@ export default function ChannelsPage() {
   const [isFeeRatesDialogOpen, setIsFeeRatesDialogOpen] = useState(false)
   const [editingDisplayName, setEditingDisplayName] = useState<string | null>(null)
   const [tempDisplayName, setTempDisplayName] = useState("")
+  const [editingName, setEditingName] = useState<string | null>(null)
+  const [tempName, setTempName] = useState("")
   const [formData, setFormData] = useState({
     code: "",
     name: "",
@@ -241,6 +243,24 @@ export default function ChannelsPage() {
   const cancelEditDisplayName = () => {
     setEditingDisplayName(null)
     setTempDisplayName("")
+  }
+
+  const startEditName = (channelId: string, currentName: string) => {
+    setEditingName(channelId)
+    setTempName(currentName)
+  }
+
+  const saveName = (channelId: string) => {
+    setChannels(channels.map(c => 
+      c.id === channelId ? { ...c, name: tempName } : c
+    ))
+    setEditingName(null)
+    setTempName("")
+  }
+
+  const cancelEditName = () => {
+    setEditingName(null)
+    setTempName("")
   }
 
   const openDeleteDialog = (channel: Channel) => {
@@ -362,8 +382,49 @@ export default function ChannelsPage() {
                           <span className="text-blue-600 dark:text-blue-300">{channel.name.substring(0, 2)}</span>
                         )}
                       </div>
-                      <div>
-                        <div className="font-medium text-gray-900 dark:text-white">{channel.name}</div>
+                      <div className="flex-1">
+                        {editingName === channel.id ? (
+                          <div className="flex items-center gap-1 mb-1">
+                            <Input
+                              value={tempName}
+                              onChange={(e) => setTempName(e.target.value)}
+                              className="h-7 text-sm py-1 px-2 max-w-[150px]"
+                              placeholder="输入通道名称"
+                              autoFocus
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  saveName(channel.id)
+                                } else if (e.key === 'Escape') {
+                                  cancelEditName()
+                                }
+                              }}
+                            />
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 w-7 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+                              onClick={() => saveName(channel.id)}
+                            >
+                              <Check className="w-3 h-3" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 w-7 p-0 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                              onClick={cancelEditName}
+                            >
+                              <X className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        ) : (
+                          <div 
+                            className="font-medium text-gray-900 dark:text-white cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                            onClick={() => startEditName(channel.id, channel.name)}
+                          >
+                            <span>{channel.name}</span>
+                            <Edit className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        )}
                         <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">ID: {channel.id} | {channel.code}</div>
                       </div>
                     </div>
