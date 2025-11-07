@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Switch } from "@/components/ui/switch"
 
 interface ApiKey {
   keyId: string
@@ -375,6 +376,17 @@ export default function MerchantsPage() {
     }
   }
 
+  const handleMerchantStatusToggle = (merchant: Merchant, checked: boolean) => {
+    if (merchant.status === "disabled") {
+      return
+    }
+    
+    const newStatus = checked ? "active" : "frozen"
+    setMerchants(merchants.map(m => 
+      m.id === merchant.id ? { ...m, status: newStatus } : m
+    ))
+  }
+
   const openEditDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
     setFormData({
@@ -638,16 +650,23 @@ export default function MerchantsPage() {
                     )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      merchant.status === "active"
-                        ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                        : merchant.status === "frozen"
-                        ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300"
-                    }`}>
-                      {merchant.status === "active" ? "正常" : 
-                       merchant.status === "frozen" ? "冻结" : "禁用"}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        checked={merchant.status === "active"}
+                        onCheckedChange={(checked) => handleMerchantStatusToggle(merchant, checked)}
+                        disabled={merchant.status === "disabled"}
+                      />
+                      <span className={`text-sm font-medium ${
+                        merchant.status === "active"
+                          ? "text-green-600 dark:text-green-400"
+                          : merchant.status === "frozen"
+                          ? "text-gray-600 dark:text-gray-400"
+                          : "text-gray-400 dark:text-gray-500"
+                      }`}>
+                        {merchant.status === "active" ? "正常" : 
+                         merchant.status === "frozen" ? "冻结" : "禁用"}
+                      </span>
+                    </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <div className="flex items-center gap-1">
