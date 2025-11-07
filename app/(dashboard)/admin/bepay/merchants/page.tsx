@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Switch } from "@/components/ui/switch"
 
 interface ApiKey {
   keyId: string
@@ -218,6 +217,10 @@ export default function MerchantsPage() {
   const [isApiKeysDialogOpen, setIsApiKeysDialogOpen] = useState(false)
   const [currentMerchant, setCurrentMerchant] = useState<Merchant | null>(null)
   const [freezeAmount, setFreezeAmount] = useState("")
+  const [freezeFormData, setFreezeFormData] = useState({
+    currency: "",
+    amount: ""
+  })
   const [formData, setFormData] = useState({
     name: "",
     bxbUserId: "",
@@ -288,21 +291,15 @@ export default function MerchantsPage() {
   }
 
   const handleToggleFreeze = () => {
-    if (currentMerchant) {
+    if (currentMerchant && freezeFormData.currency && freezeFormData.amount) {
       const newStatus = currentMerchant.status === "frozen" ? "active" : "frozen"
       setMerchants(merchants.map(m => 
         m.id === currentMerchant.id ? { ...m, status: newStatus } : m
       ))
       setIsFreezeDialogOpen(false)
       setCurrentMerchant(null)
+      setFreezeFormData({ currency: "", amount: "" })
     }
-  }
-
-  const handleToggleFreezeSwitch = (merchant: Merchant, checked: boolean) => {
-    const newStatus = checked ? "frozen" : "active"
-    setMerchants(merchants.map(m => 
-      m.id === merchant.id ? { ...m, status: newStatus } : m
-    ))
   }
 
   const handleFreezeFunds = () => {
@@ -342,6 +339,7 @@ export default function MerchantsPage() {
 
   const openFreezeDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
+    setFreezeFormData({ currency: "", amount: "" })
     setIsFreezeDialogOpen(true)
   }
 
@@ -590,7 +588,7 @@ export default function MerchantsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -618,16 +616,15 @@ export default function MerchantsPage() {
                       >
                         <Lock className="w-4 h-4" />
                       </Button>
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor={`freeze-switch-${merchant.id}`} className="text-xs text-gray-600 dark:text-gray-400 cursor-pointer">
-                          {merchant.status === "frozen" ? "已冻结" : "正常"}
-                        </Label>
-                        <Switch
-                          id={`freeze-switch-${merchant.id}`}
-                          checked={merchant.status === "frozen"}
-                          onCheckedChange={(checked) => handleToggleFreezeSwitch(merchant, checked)}
-                        />
-                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openFreezeDialog(merchant)}
+                        className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400"
+                        title={merchant.status === "frozen" ? "解冻商户" : "冻结商户"}
+                      >
+                        {merchant.status === "frozen" ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                      </Button>
                     </div>
                   </td>
                 </tr>
@@ -1021,9 +1018,39 @@ export default function MerchantsPage() {
               {currentMerchant?.status === "frozen" ? "解冻" : "冻结"}商户
             </DialogTitle>
             <DialogDescription>
-              确定要{currentMerchant?.status === "frozen" ? "解冻" : "冻结"}商户 "{currentMerchant?.name}" 吗？
+              商户名称: {currentMerchant?.name} | 当前状态: {currentMerchant?.status === "frozen" ? "已冻结" : "正常"}
             </DialogDescription>
           </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="freeze-currency">币种 *</Label>
+              <Select 
+                value={freezeFormData.currency} 
+                onValueChange={(value) => setFreezeFormData({...freezeFormData, currency: value})}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="选择币种" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="CNY">CNY (人民币)</SelectItem>
+                  <SelectItem value="USD">USD (美元)</SelectItem>
+                  <SelectItem value="USDT">USDT</SelectItem>
+                  <SelectItem value="EUR">EUR (欧元)</SelectItem>
+                  <SelectItem value="GBP">GBP (英镑)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="freeze-merchant-amount">冻结金额 *</Label>
+              <Input
+                id="freeze-merchant-amount"
+                type="number"
+                placeholder="请输入冻结金额"
+                value={freezeFormData.amount}
+                onChange={(e) => setFreezeFormData({...freezeFormData, amount: e.target.value})}
+              />
+            </div>
+          </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsFreezeDialogOpen(false)}>
               取消
@@ -1034,6 +1061,7 @@ export default function MerchantsPage() {
                 ? "bg-green-600 hover:bg-green-700" 
                 : "bg-yellow-600 hover:bg-yellow-700"
               }
+              disabled={!freezeFormData.currency || !freezeFormData.amount}
             >
               {currentMerchant?.status === "frozen" ? "解冻" : "冻结"}
             </Button>
