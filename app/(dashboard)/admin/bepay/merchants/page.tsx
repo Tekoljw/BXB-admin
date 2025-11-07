@@ -617,9 +617,6 @@ export default function MerchantsPage() {
                       <div className="text-blue-600 dark:text-blue-400 text-xs mt-1 font-medium">
                         代付金: ${merchant.paymentBalance.toLocaleString()}
                       </div>
-                      <div className={`text-xs mt-1 ${merchant.frozenBalance > 0 ? "text-red-600 dark:text-red-400 font-medium" : "text-gray-400 dark:text-gray-500"}`}>
-                        冻结: ${merchant.frozenBalance.toLocaleString()}
-                      </div>
                     </button>
                   </td>
                   <td className="px-4 py-3 text-sm">
@@ -686,7 +683,7 @@ export default function MerchantsPage() {
                         size="sm"
                         onClick={() => openFreezeDialog(merchant)}
                         className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400"
-                        title={merchant.status === "frozen" ? "解冻商户" : "冻结商户"}
+                        title={merchant.status === "frozen" ? "解冻资金" : "冻结资金"}
                       >
                         {merchant.status === "frozen" ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
                       </Button>
@@ -1080,7 +1077,7 @@ export default function MerchantsPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {currentMerchant?.status === "frozen" ? "解冻" : "冻结"}商户
+              {currentMerchant?.status === "frozen" ? "解冻" : "冻结"}资金
             </DialogTitle>
             <DialogDescription>
               商户名称: {currentMerchant?.name} | 当前状态: {currentMerchant?.status === "frozen" ? "已冻结" : "正常"}
