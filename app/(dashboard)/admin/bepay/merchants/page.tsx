@@ -39,6 +39,7 @@ interface FeeConfig {
   paymentFee: string
   minCollectionFee: string
   minPaymentFee: string
+  useSystemTieredFee: boolean
 }
 
 interface CurrencyBalance {
@@ -102,10 +103,10 @@ const mockMerchants: Merchant[] = [
     ],
     totalOrders: 15234,
     feeConfigs: [
-      { id: "FC001", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50" },
-      { id: "FC002", currency: "CNY", channel: "微信支付", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50" },
-      { id: "FC003", currency: "USD", channel: "Stripe", collectionFee: "2.9%", paymentFee: "2.5%", minCollectionFee: "$0.30", minPaymentFee: "$0.25" },
-      { id: "FC004", currency: "USDT", channel: "TRC20", collectionFee: "1.0%", paymentFee: "0.8%", minCollectionFee: "1 USDT", minPaymentFee: "0.5 USDT" },
+      { id: "FC001", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false },
+      { id: "FC002", currency: "CNY", channel: "微信支付", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: true },
+      { id: "FC003", currency: "USD", channel: "Stripe", collectionFee: "2.9%", paymentFee: "2.5%", minCollectionFee: "$0.30", minPaymentFee: "$0.25", useSystemTieredFee: false },
+      { id: "FC004", currency: "USDT", channel: "TRC20", collectionFee: "1.0%", paymentFee: "0.8%", minCollectionFee: "1 USDT", minPaymentFee: "0.5 USDT", useSystemTieredFee: true },
     ],
     status: "active",
     hasPendingDomain: false,
@@ -146,9 +147,9 @@ const mockMerchants: Merchant[] = [
     ],
     totalOrders: 9876,
     feeConfigs: [
-      { id: "FC005", currency: "CNY", channel: "支付宝", collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80" },
-      { id: "FC006", currency: "CNY", channel: "微信支付", collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80" },
-      { id: "FC007", currency: "CNY", channel: "云闪付", collectionFee: "0.55%", paymentFee: "0.35%", minCollectionFee: "¥1.10", minPaymentFee: "¥0.70" },
+      { id: "FC005", currency: "CNY", channel: "支付宝", collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80", useSystemTieredFee: false },
+      { id: "FC006", currency: "CNY", channel: "微信支付", collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80", useSystemTieredFee: false },
+      { id: "FC007", currency: "CNY", channel: "云闪付", collectionFee: "0.55%", paymentFee: "0.35%", minCollectionFee: "¥1.10", minPaymentFee: "¥0.70", useSystemTieredFee: true },
     ],
     status: "active",
     hasPendingDomain: true,
@@ -196,10 +197,10 @@ const mockMerchants: Merchant[] = [
     ],
     totalOrders: 5432,
     feeConfigs: [
-      { id: "FC008", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50" },
-      { id: "FC009", currency: "CNY", channel: "微信支付", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50" },
-      { id: "FC010", currency: "USDT", channel: "TRC20", collectionFee: "1.2%", paymentFee: "1.0%", minCollectionFee: "1.2 USDT", minPaymentFee: "1.0 USDT" },
-      { id: "FC011", currency: "USDT", channel: "ERC20", collectionFee: "1.5%", paymentFee: "1.3%", minCollectionFee: "2.0 USDT", minPaymentFee: "1.5 USDT" },
+      { id: "FC008", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false },
+      { id: "FC009", currency: "CNY", channel: "微信支付", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false },
+      { id: "FC010", currency: "USDT", channel: "TRC20", collectionFee: "1.2%", paymentFee: "1.0%", minCollectionFee: "1.2 USDT", minPaymentFee: "1.0 USDT", useSystemTieredFee: true },
+      { id: "FC011", currency: "USDT", channel: "ERC20", collectionFee: "1.5%", paymentFee: "1.3%", minCollectionFee: "2.0 USDT", minPaymentFee: "1.5 USDT", useSystemTieredFee: false },
     ],
     status: "frozen",
     hasPendingDomain: false,
@@ -233,11 +234,11 @@ const mockMerchants: Merchant[] = [
     ],
     totalOrders: 23456,
     feeConfigs: [
-      { id: "FC012", currency: "CNY", channel: "支付宝", collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40" },
-      { id: "FC013", currency: "CNY", channel: "微信支付", collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40" },
-      { id: "FC014", currency: "CNY", channel: "银行卡", collectionFee: "0.45%", paymentFee: "0.25%", minCollectionFee: "¥0.90", minPaymentFee: "¥0.50" },
-      { id: "FC015", currency: "USD", channel: "Stripe", collectionFee: "2.8%", paymentFee: "2.4%", minCollectionFee: "$0.30", minPaymentFee: "$0.25" },
-      { id: "FC016", currency: "USDT", channel: "TRC20", collectionFee: "0.9%", paymentFee: "0.7%", minCollectionFee: "0.9 USDT", minPaymentFee: "0.7 USDT" },
+      { id: "FC012", currency: "CNY", channel: "支付宝", collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: true },
+      { id: "FC013", currency: "CNY", channel: "微信支付", collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: false },
+      { id: "FC014", currency: "CNY", channel: "银行卡", collectionFee: "0.45%", paymentFee: "0.25%", minCollectionFee: "¥0.90", minPaymentFee: "¥0.50", useSystemTieredFee: true },
+      { id: "FC015", currency: "USD", channel: "Stripe", collectionFee: "2.8%", paymentFee: "2.4%", minCollectionFee: "$0.30", minPaymentFee: "$0.25", useSystemTieredFee: false },
+      { id: "FC016", currency: "USDT", channel: "TRC20", collectionFee: "0.9%", paymentFee: "0.7%", minCollectionFee: "0.9 USDT", minPaymentFee: "0.7 USDT", useSystemTieredFee: true },
     ],
     status: "active",
     hasPendingDomain: false,
@@ -276,7 +277,8 @@ export default function MerchantsPage() {
     collectionFee: "",
     paymentFee: "",
     minCollectionFee: "",
-    minPaymentFee: ""
+    minPaymentFee: "",
+    useSystemTieredFee: false
   })
   const [activeCurrency, setActiveCurrency] = useState<string>("")
 
@@ -429,7 +431,8 @@ export default function MerchantsPage() {
       collectionFee: "",
       paymentFee: "",
       minCollectionFee: "",
-      minPaymentFee: ""
+      minPaymentFee: "",
+      useSystemTieredFee: false
     })
     setIsAddFeeConfigDialogOpen(true)
   }
@@ -443,7 +446,8 @@ export default function MerchantsPage() {
         collectionFee: feeFormData.collectionFee,
         paymentFee: feeFormData.paymentFee,
         minCollectionFee: feeFormData.minCollectionFee,
-        minPaymentFee: feeFormData.minPaymentFee
+        minPaymentFee: feeFormData.minPaymentFee,
+        useSystemTieredFee: feeFormData.useSystemTieredFee
       }
       const updatedFeeConfigs = [...currentMerchant.feeConfigs, newFeeConfig]
       setMerchants(merchants.map(m => 
@@ -465,7 +469,8 @@ export default function MerchantsPage() {
         collectionFee: "",
         paymentFee: "",
         minCollectionFee: "",
-        minPaymentFee: ""
+        minPaymentFee: "",
+        useSystemTieredFee: false
       })
     }
   }
@@ -503,6 +508,23 @@ export default function MerchantsPage() {
       if (!remainingCurrencies.includes(activeCurrency) && remainingCurrencies.length > 0) {
         setActiveCurrency(remainingCurrencies[0])
       }
+    }
+  }
+
+  const handleToggleSystemTieredFee = (configId: string, checked: boolean) => {
+    if (currentMerchant) {
+      const updatedConfigs = currentMerchant.feeConfigs.map(fc =>
+        fc.id === configId ? { ...fc, useSystemTieredFee: checked } : fc
+      )
+      setMerchants(merchants.map(m => 
+        m.id === currentMerchant.id 
+          ? { ...m, feeConfigs: updatedConfigs }
+          : m
+      ))
+      setCurrentMerchant({
+        ...currentMerchant,
+        feeConfigs: updatedConfigs
+      })
     }
   }
 
@@ -842,6 +864,9 @@ export default function MerchantsPage() {
                               最低代付费
                             </th>
                             <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                              系统梯度费率
+                            </th>
+                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                               操作
                             </th>
                           </tr>
@@ -885,6 +910,17 @@ export default function MerchantsPage() {
                                 />
                               </td>
                               <td className="px-3 py-3 whitespace-nowrap text-sm">
+                                <div className="flex items-center gap-2">
+                                  <Switch
+                                    checked={config.useSystemTieredFee}
+                                    onCheckedChange={(checked) => handleToggleSystemTieredFee(config.id, checked)}
+                                  />
+                                  <span className={`text-xs ${config.useSystemTieredFee ? "text-green-600 dark:text-green-400" : "text-gray-400 dark:text-gray-500"}`}>
+                                    {config.useSystemTieredFee ? "已启用" : "未启用"}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="px-3 py-3 whitespace-nowrap text-sm">
                                 <Button
                                   variant="ghost"
                                   size="sm"
@@ -924,6 +960,7 @@ export default function MerchantsPage() {
                     <li>• 最低代收费：单笔交易最低收取的手续费（固定金额）</li>
                     <li>• 代付费率：商户向用户付款时收取的手续费（百分比）</li>
                     <li>• 最低代付费：单笔交易最低收取的手续费（固定金额）</li>
+                    <li>• 系统梯度费率：开启后将使用系统预设的阶梯式费率，根据交易金额自动调整手续费</li>
                     <li>• 直接在输入框中修改费率，实时保存</li>
                   </ul>
                 </div>
