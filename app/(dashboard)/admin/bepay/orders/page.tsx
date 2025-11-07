@@ -180,6 +180,7 @@ export default function OrdersPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCurrency, setSelectedCurrency] = useState("全部")
   const [selectedChannel, setSelectedChannel] = useState("全部")
+  const [selectedStatus, setSelectedStatus] = useState("全部")
   const [isResendDialogOpen, setIsResendDialogOpen] = useState(false)
   const [isReverifyDialogOpen, setIsReverifyDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
@@ -204,8 +205,12 @@ export default function OrdersPage() {
     
     const matchesCurrency = selectedCurrency === "全部" || order.currency === selectedCurrency
     const matchesChannel = selectedChannel === "全部" || order.paymentChannel === selectedChannel
+    const matchesStatus = selectedStatus === "全部" || 
+      (selectedStatus === "待支付" && order.status === "pending") ||
+      (selectedStatus === "成功" && order.status === "success") ||
+      (selectedStatus === "失败" && order.status === "failed")
     
-    return matchesSearch && matchesCurrency && matchesChannel
+    return matchesSearch && matchesCurrency && matchesChannel && matchesStatus
   })
 
   const handleResend = () => {
@@ -334,14 +339,28 @@ export default function OrdersPage() {
           </Tabs>
         </div>
 
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input
-            placeholder="搜索订单号、商户ID..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
+        <div className="flex gap-4 items-center">
+          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="状态筛选" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="全部">全部</SelectItem>
+              <SelectItem value="待支付">待支付</SelectItem>
+              <SelectItem value="成功">成功</SelectItem>
+              <SelectItem value="失败">失败</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              placeholder="搜索订单号、商户ID..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
         </div>
       </div>
 
