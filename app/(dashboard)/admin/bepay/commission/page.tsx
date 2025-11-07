@@ -366,7 +366,12 @@ export default function CommissionPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">代理商管理</h2>
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">代理商管理</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          给自己配置了佣金大于0的用户则自动成为支付代理商，未配置过佣金的用户则不显示在本页面
+        </p>
+      </div>
 
       <div className="space-y-4">
         <div>
