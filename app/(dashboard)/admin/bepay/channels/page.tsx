@@ -405,96 +405,178 @@ export default function ChannelsPage() {
       </div>
 
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>添加通道</DialogTitle>
             <DialogDescription>添加新的支付通道</DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="code">通道代码</Label>
-              <Input
-                id="code"
-                placeholder="例如：ALIPAY_CN"
-                value={formData.code}
-                onChange={(e) => setFormData({...formData, code: e.target.value})}
-              />
+          <div className="space-y-6 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="code">通道代码</Label>
+                <Input
+                  id="code"
+                  placeholder="例如：ALIPAY_CN"
+                  value={formData.code}
+                  onChange={(e) => setFormData({...formData, code: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="name">通道名称</Label>
+                <Input
+                  id="name"
+                  placeholder="例如：支付宝"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="displayName">外显名称</Label>
+                <Input
+                  id="displayName"
+                  placeholder="例如：支付宝扫码支付"
+                  value={formData.displayName}
+                  onChange={(e) => setFormData({...formData, displayName: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="logo">LOGO链接</Label>
+                <Input
+                  id="logo"
+                  placeholder="https://example.com/logo.png"
+                  value={formData.logo}
+                  onChange={(e) => setFormData({...formData, logo: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="currency">币种</Label>
+                <Select value={formData.currency} onValueChange={(value) => setFormData({...formData, currency: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择币种" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="CNY">CNY</SelectItem>
+                    <SelectItem value="BRL">BRL</SelectItem>
+                    <SelectItem value="INR">INR</SelectItem>
+                    <SelectItem value="USD">USD</SelectItem>
+                    <SelectItem value="EUR">EUR</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="interface">接口来源</Label>
+                <Select value={formData.interface} onValueChange={(value) => setFormData({...formData, interface: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择接口" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Bitzpay">Bitzpay</SelectItem>
+                    <SelectItem value="BePayOTC">BePayOTC</SelectItem>
+                    <SelectItem value="CFpay">CFpay</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2 col-span-2">
+                <Label htmlFor="demoVideo">Demo视频链接</Label>
+                <Input
+                  id="demoVideo"
+                  placeholder="https://example.com/demo.mp4"
+                  value={formData.demoVideo}
+                  onChange={(e) => setFormData({...formData, demoVideo: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="status">状态</Label>
+                <Select value={formData.status} onValueChange={(value: "active" | "inactive") => setFormData({...formData, status: value})}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">启用</SelectItem>
+                    <SelectItem value="inactive">禁用</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="name">通道名称</Label>
-              <Input
-                id="name"
-                placeholder="例如：支付宝"
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="currency">币种</Label>
-              <Select value={formData.currency} onValueChange={(value) => setFormData({...formData, currency: value})}>
-                <SelectTrigger>
-                  <SelectValue placeholder="选择币种" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="CNY">CNY</SelectItem>
-                  <SelectItem value="BRL">BRL</SelectItem>
-                  <SelectItem value="INR">INR</SelectItem>
-                  <SelectItem value="USD">USD</SelectItem>
-                  <SelectItem value="EUR">EUR</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="interface">接口来源</Label>
-              <Select value={formData.interface} onValueChange={(value) => setFormData({...formData, interface: value})}>
-                <SelectTrigger>
-                  <SelectValue placeholder="选择接口" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Bitzpay">Bitzpay</SelectItem>
-                  <SelectItem value="BePayOTC">BePayOTC</SelectItem>
-                  <SelectItem value="CFpay">CFpay</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="collectionFee">代收手续费</Label>
-              <Input
-                id="collectionFee"
-                placeholder="例如：0.5%"
-                value={formData.collectionFee}
-                onChange={(e) => setFormData({...formData, collectionFee: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="paymentFee">代付手续费</Label>
-              <Input
-                id="paymentFee"
-                placeholder="例如：0.3%"
-                value={formData.paymentFee}
-                onChange={(e) => setFormData({...formData, paymentFee: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2 col-span-2">
-              <Label htmlFor="demoVideo">Demo视频链接</Label>
-              <Input
-                id="demoVideo"
-                placeholder="https://example.com/demo.mp4"
-                value={formData.demoVideo}
-                onChange={(e) => setFormData({...formData, demoVideo: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="status">状态</Label>
-              <Select value={formData.status} onValueChange={(value: "active" | "inactive") => setFormData({...formData, status: value})}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">启用</SelectItem>
-                  <SelectItem value="inactive">禁用</SelectItem>
-                </SelectContent>
-              </Select>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b">
+                <h3 className="text-lg font-semibold">阶梯费率配置</h3>
+                <span className="text-sm text-gray-500 dark:text-gray-400">（根据交易金额自动匹配费率）</span>
+              </div>
+              
+              {feeRatesFormData.map((rate, index) => (
+                <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full text-sm font-semibold">
+                      第 {index + 1} 档
+                    </span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      交易金额：{rate.minAmount.toLocaleString()} - {rate.maxAmount === Infinity ? '无上限' : rate.maxAmount.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-medium text-green-700 dark:text-green-400">代收费用</h4>
+                      <div className="space-y-2">
+                        <div>
+                          <Label className="text-xs text-gray-600 dark:text-gray-400">代收费率（%）</Label>
+                          <Input
+                            placeholder="例如：0.5%"
+                            value={rate.collectionFeeRate}
+                            onChange={(e) => {
+                              const newRates = [...feeRatesFormData]
+                              newRates[index].collectionFeeRate = e.target.value
+                              setFeeRatesFormData(newRates)
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs text-gray-600 dark:text-gray-400">最低代收费</Label>
+                          <Input
+                            placeholder="例如：¥1.00"
+                            value={rate.minCollectionFee}
+                            onChange={(e) => {
+                              const newRates = [...feeRatesFormData]
+                              newRates[index].minCollectionFee = e.target.value
+                              setFeeRatesFormData(newRates)
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400">代付费用</h4>
+                      <div className="space-y-2">
+                        <div>
+                          <Label className="text-xs text-gray-600 dark:text-gray-400">代付费率（%）</Label>
+                          <Input
+                            placeholder="例如：0.3%"
+                            value={rate.paymentFeeRate}
+                            onChange={(e) => {
+                              const newRates = [...feeRatesFormData]
+                              newRates[index].paymentFeeRate = e.target.value
+                              setFeeRatesFormData(newRates)
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs text-gray-600 dark:text-gray-400">最低代付费</Label>
+                          <Input
+                            placeholder="例如：¥0.50"
+                            value={rate.minPaymentFee}
+                            onChange={(e) => {
+                              const newRates = [...feeRatesFormData]
+                              newRates[index].minPaymentFee = e.target.value
+                              setFeeRatesFormData(newRates)
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
           <DialogFooter>
@@ -509,91 +591,175 @@ export default function ChannelsPage() {
       </Dialog>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>编辑通道</DialogTitle>
             <DialogDescription>修改通道配置信息</DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-code">通道代码</Label>
-              <Input
-                id="edit-code"
-                value={formData.code}
-                onChange={(e) => setFormData({...formData, code: e.target.value})}
-              />
+          <div className="space-y-6 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-code">通道代码</Label>
+                <Input
+                  id="edit-code"
+                  value={formData.code}
+                  onChange={(e) => setFormData({...formData, code: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-name">通道名称</Label>
+                <Input
+                  id="edit-name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-displayName">外显名称</Label>
+                <Input
+                  id="edit-displayName"
+                  placeholder="例如：支付宝扫码支付"
+                  value={formData.displayName}
+                  onChange={(e) => setFormData({...formData, displayName: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-logo">LOGO链接</Label>
+                <Input
+                  id="edit-logo"
+                  placeholder="https://example.com/logo.png"
+                  value={formData.logo}
+                  onChange={(e) => setFormData({...formData, logo: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-currency">币种</Label>
+                <Select value={formData.currency} onValueChange={(value) => setFormData({...formData, currency: value})}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="CNY">CNY</SelectItem>
+                    <SelectItem value="BRL">BRL</SelectItem>
+                    <SelectItem value="INR">INR</SelectItem>
+                    <SelectItem value="USD">USD</SelectItem>
+                    <SelectItem value="EUR">EUR</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-interface">接口来源</Label>
+                <Select value={formData.interface} onValueChange={(value) => setFormData({...formData, interface: value})}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Bitzpay">Bitzpay</SelectItem>
+                    <SelectItem value="BePayOTC">BePayOTC</SelectItem>
+                    <SelectItem value="CFpay">CFpay</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2 col-span-2">
+                <Label htmlFor="edit-demoVideo">Demo视频链接</Label>
+                <Input
+                  id="edit-demoVideo"
+                  value={formData.demoVideo}
+                  onChange={(e) => setFormData({...formData, demoVideo: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-status">状态</Label>
+                <Select value={formData.status} onValueChange={(value: "active" | "inactive") => setFormData({...formData, status: value})}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">启用</SelectItem>
+                    <SelectItem value="inactive">禁用</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-name">通道名称</Label>
-              <Input
-                id="edit-name"
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-currency">币种</Label>
-              <Select value={formData.currency} onValueChange={(value) => setFormData({...formData, currency: value})}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="CNY">CNY</SelectItem>
-                  <SelectItem value="BRL">BRL</SelectItem>
-                  <SelectItem value="INR">INR</SelectItem>
-                  <SelectItem value="USD">USD</SelectItem>
-                  <SelectItem value="EUR">EUR</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-interface">接口来源</Label>
-              <Select value={formData.interface} onValueChange={(value) => setFormData({...formData, interface: value})}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Bitzpay">Bitzpay</SelectItem>
-                  <SelectItem value="BePayOTC">BePayOTC</SelectItem>
-                  <SelectItem value="CFpay">CFpay</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-collectionFee">代收手续费</Label>
-              <Input
-                id="edit-collectionFee"
-                value={formData.collectionFee}
-                onChange={(e) => setFormData({...formData, collectionFee: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-paymentFee">代付手续费</Label>
-              <Input
-                id="edit-paymentFee"
-                value={formData.paymentFee}
-                onChange={(e) => setFormData({...formData, paymentFee: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2 col-span-2">
-              <Label htmlFor="edit-demoVideo">Demo视频链接</Label>
-              <Input
-                id="edit-demoVideo"
-                value={formData.demoVideo}
-                onChange={(e) => setFormData({...formData, demoVideo: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-status">状态</Label>
-              <Select value={formData.status} onValueChange={(value: "active" | "inactive") => setFormData({...formData, status: value})}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">启用</SelectItem>
-                  <SelectItem value="inactive">禁用</SelectItem>
-                </SelectContent>
-              </Select>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b">
+                <h3 className="text-lg font-semibold">阶梯费率配置</h3>
+                <span className="text-sm text-gray-500 dark:text-gray-400">（根据交易金额自动匹配费率）</span>
+              </div>
+              
+              {feeRatesFormData.map((rate, index) => (
+                <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full text-sm font-semibold">
+                      第 {index + 1} 档
+                    </span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      交易金额：{rate.minAmount.toLocaleString()} - {rate.maxAmount === Infinity ? '无上限' : rate.maxAmount.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-medium text-green-700 dark:text-green-400">代收费用</h4>
+                      <div className="space-y-2">
+                        <div>
+                          <Label className="text-xs text-gray-600 dark:text-gray-400">代收费率（%）</Label>
+                          <Input
+                            placeholder="例如：0.5%"
+                            value={rate.collectionFeeRate}
+                            onChange={(e) => {
+                              const newRates = [...feeRatesFormData]
+                              newRates[index].collectionFeeRate = e.target.value
+                              setFeeRatesFormData(newRates)
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs text-gray-600 dark:text-gray-400">最低代收费</Label>
+                          <Input
+                            placeholder="例如：¥1.00"
+                            value={rate.minCollectionFee}
+                            onChange={(e) => {
+                              const newRates = [...feeRatesFormData]
+                              newRates[index].minCollectionFee = e.target.value
+                              setFeeRatesFormData(newRates)
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400">代付费用</h4>
+                      <div className="space-y-2">
+                        <div>
+                          <Label className="text-xs text-gray-600 dark:text-gray-400">代付费率（%）</Label>
+                          <Input
+                            placeholder="例如：0.3%"
+                            value={rate.paymentFeeRate}
+                            onChange={(e) => {
+                              const newRates = [...feeRatesFormData]
+                              newRates[index].paymentFeeRate = e.target.value
+                              setFeeRatesFormData(newRates)
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs text-gray-600 dark:text-gray-400">最低代付费</Label>
+                          <Input
+                            placeholder="例如：¥0.50"
+                            value={rate.minPaymentFee}
+                            onChange={(e) => {
+                              const newRates = [...feeRatesFormData]
+                              newRates[index].minPaymentFee = e.target.value
+                              setFeeRatesFormData(newRates)
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
           <DialogFooter>
