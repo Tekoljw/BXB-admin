@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Switch } from "@/components/ui/switch"
 
 interface ApiKey {
   keyId: string
@@ -295,6 +296,13 @@ export default function MerchantsPage() {
       setIsFreezeDialogOpen(false)
       setCurrentMerchant(null)
     }
+  }
+
+  const handleToggleFreezeSwitch = (merchant: Merchant, checked: boolean) => {
+    const newStatus = checked ? "frozen" : "active"
+    setMerchants(merchants.map(m => 
+      m.id === merchant.id ? { ...m, status: newStatus } : m
+    ))
   }
 
   const handleFreezeFunds = () => {
@@ -582,7 +590,7 @@ export default function MerchantsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-3">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -610,24 +618,16 @@ export default function MerchantsPage() {
                       >
                         <Lock className="w-4 h-4" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openFreezeDialog(merchant)}
-                        className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400"
-                        title={merchant.status === "frozen" ? "解冻商户" : "冻结商户"}
-                      >
-                        {merchant.status === "frozen" ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openDeleteDialog(merchant)}
-                        className="text-red-600 hover:text-red-800 dark:text-red-400"
-                        title="删除"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Label htmlFor={`freeze-switch-${merchant.id}`} className="text-xs text-gray-600 dark:text-gray-400 cursor-pointer">
+                          {merchant.status === "frozen" ? "已冻结" : "正常"}
+                        </Label>
+                        <Switch
+                          id={`freeze-switch-${merchant.id}`}
+                          checked={merchant.status === "frozen"}
+                          onCheckedChange={(checked) => handleToggleFreezeSwitch(merchant, checked)}
+                        />
+                      </div>
                     </div>
                   </td>
                 </tr>
