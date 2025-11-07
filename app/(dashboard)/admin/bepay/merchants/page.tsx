@@ -997,36 +997,40 @@ export default function MerchantsPage() {
                     key={apiKey.keyId} 
                     className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600"
                   >
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="text-xs text-gray-500 dark:text-gray-400">密钥ID</Label>
-                        <div className="mt-1 font-mono text-sm text-gray-900 dark:text-white">
-                          {apiKey.keyId}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label className="text-xs text-gray-500 dark:text-gray-400">密钥ID</Label>
+                          <div className="mt-1 font-mono text-sm text-gray-900 dark:text-white">
+                            {apiKey.keyId}
+                          </div>
+                        </div>
+                        <div>
+                          <Label className="text-xs text-gray-500 dark:text-gray-400">创建时间</Label>
+                          <div className="mt-1 text-sm text-gray-900 dark:text-gray-300">
+                            {apiKey.createdAt}
+                          </div>
                         </div>
                       </div>
-                      <div>
-                        <Label className="text-xs text-gray-500 dark:text-gray-400">创建时间</Label>
-                        <div className="mt-1 text-sm text-gray-900 dark:text-gray-300">
-                          {apiKey.createdAt}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label className="text-xs text-gray-500 dark:text-gray-400">API密钥</Label>
+                          <div className="mt-1 font-mono text-xs bg-white dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white break-all">
+                            {apiKey.key}
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-span-2">
-                        <Label className="text-xs text-gray-500 dark:text-gray-400">API密钥</Label>
-                        <div className="mt-1 font-mono text-sm bg-white dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white break-all">
-                          {apiKey.key}
-                        </div>
-                      </div>
-                      <div className="col-span-2">
-                        <Label className="text-xs text-gray-500 dark:text-gray-400">回调主域名</Label>
-                        <div className="mt-1 text-sm bg-white dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-600">
-                          <a 
-                            href={apiKey.callbackDomain} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-blue-600 dark:text-blue-400 hover:underline"
-                          >
-                            {apiKey.callbackDomain}
-                          </a>
+                        <div>
+                          <Label className="text-xs text-gray-500 dark:text-gray-400">回调主域名</Label>
+                          <div className="mt-1 text-sm bg-white dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-600">
+                            <a 
+                              href={apiKey.callbackDomain} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 dark:text-blue-400 hover:underline break-all"
+                            >
+                              {apiKey.callbackDomain}
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </div>
