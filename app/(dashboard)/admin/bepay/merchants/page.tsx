@@ -190,8 +190,11 @@ export default function MerchantsPage() {
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
   const [isFreezeFundsDialogOpen, setIsFreezeFundsDialogOpen] = useState(false)
   const [isFeeConfigDialogOpen, setIsFeeConfigDialogOpen] = useState(false)
+  const [isEditFeeConfigDialogOpen, setIsEditFeeConfigDialogOpen] = useState(false)
+  const [isAddFeeConfigDialogOpen, setIsAddFeeConfigDialogOpen] = useState(false)
   const [isApiKeysDialogOpen, setIsApiKeysDialogOpen] = useState(false)
   const [currentMerchant, setCurrentMerchant] = useState<Merchant | null>(null)
+  const [currentFeeConfig, setCurrentFeeConfig] = useState<FeeConfig | null>(null)
   const [freezeAmount, setFreezeAmount] = useState("")
   const [formData, setFormData] = useState({
     name: "",
@@ -199,6 +202,12 @@ export default function MerchantsPage() {
     email: "",
     phone: "",
     status: "active" as "active" | "frozen" | "disabled" | "domain_pending"
+  })
+  const [feeFormData, setFeeFormData] = useState({
+    currency: "",
+    channel: "",
+    collectionFee: "",
+    paymentFee: ""
   })
 
   const filteredMerchants = merchants.filter(merchant => 
@@ -312,6 +321,80 @@ export default function MerchantsPage() {
   const openFeeConfigDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
     setIsFeeConfigDialogOpen(true)
+  }
+
+  const openEditFeeConfigDialog = (feeConfig: FeeConfig) => {
+    setCurrentFeeConfig(feeConfig)
+    setFeeFormData({
+      currency: feeConfig.currency,
+      channel: feeConfig.channel,
+      collectionFee: feeConfig.collectionFee,
+      paymentFee: feeConfig.paymentFee
+    })
+    setIsEditFeeConfigDialogOpen(true)
+  }
+
+  const openAddFeeConfigDialog = () => {
+    setFeeFormData({
+      currency: "",
+      channel: "",
+      collectionFee: "",
+      paymentFee: ""
+    })
+    setIsAddFeeConfigDialogOpen(true)
+  }
+
+  const handleEditFeeConfig = () => {
+    if (currentMerchant && currentFeeConfig) {
+      setMerchants(merchants.map(m => 
+        m.id === currentMerchant.id 
+          ? { 
+              ...m, 
+              feeConfigs: m.feeConfigs.map(fc => 
+                fc.id === currentFeeConfig.id 
+                  ? { ...fc, ...feeFormData }
+                  : fc
+              )
+            } 
+          : m
+      ))
+      setIsEditFeeConfigDialogOpen(false)
+      setCurrentFeeConfig(null)
+    }
+  }
+
+  const handleAddFeeConfig = () => {
+    if (currentMerchant) {
+      const newFeeConfig: FeeConfig = {
+        id: `FC${String(Date.now()).slice(-3)}`,
+        currency: feeFormData.currency,
+        channel: feeFormData.channel,
+        collectionFee: feeFormData.collectionFee,
+        paymentFee: feeFormData.paymentFee
+      }
+      setMerchants(merchants.map(m => 
+        m.id === currentMerchant.id 
+          ? { ...m, feeConfigs: [...m.feeConfigs, newFeeConfig] }
+          : m
+      ))
+      setIsAddFeeConfigDialogOpen(false)
+      setFeeFormData({
+        currency: "",
+        channel: "",
+        collectionFee: "",
+        paymentFee: ""
+      })
+    }
+  }
+
+  const handleDeleteFeeConfig = (feeConfigId: string) => {
+    if (currentMerchant) {
+      setMerchants(merchants.map(m => 
+        m.id === currentMerchant.id 
+          ? { ...m, feeConfigs: m.feeConfigs.filter(fc => fc.id !== feeConfigId) }
+          : m
+      ))
+    }
   }
 
   const resetForm = () => {
@@ -634,14 +717,24 @@ export default function MerchantsPage() {
                             {config.paymentFee}
                           </span>
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm space-x-2">
                           <Button
                             variant="ghost"
                             size="sm"
                             className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                            onClick={() => openEditFeeConfigDialog(config)}
                           >
                             <Edit className="w-4 h-4 mr-1" />
                             编辑
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600 hover:text-red-800 dark:text-red-400"
+                            onClick={() => handleDeleteFeeConfig(config.id)}
+                          >
+                            <Trash2 className="w-4 h-4 mr-1" />
+                            删除
                           </Button>
                         </td>
                       </tr>
@@ -679,9 +772,140 @@ export default function MerchantsPage() {
             <Button variant="outline" onClick={() => setIsFeeConfigDialogOpen(false)}>
               关闭
             </Button>
-            <Button className="bg-custom-green hover:bg-custom-green/90">
+            <Button className="bg-custom-green hover:bg-custom-green/90" onClick={openAddFeeConfigDialog}>
               <Plus className="w-4 h-4 mr-1" />
               添加费率配置
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isEditFeeConfigDialogOpen} onOpenChange={setIsEditFeeConfigDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>编辑费率配置</DialogTitle>
+            <DialogDescription>
+              修改 {currentFeeConfig?.currency} - {currentFeeConfig?.channel} 的费率设置
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>币种</Label>
+                <Input value={feeFormData.currency} disabled className="bg-gray-100 dark:bg-gray-700" />
+              </div>
+              <div className="space-y-2">
+                <Label>支付通道</Label>
+                <Input value={feeFormData.channel} disabled className="bg-gray-100 dark:bg-gray-700" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-collection-fee">代收费率</Label>
+                <Input
+                  id="edit-collection-fee"
+                  placeholder="例如：0.5%"
+                  value={feeFormData.collectionFee}
+                  onChange={(e) => setFeeFormData({...feeFormData, collectionFee: e.target.value})}
+                />
+                <p className="text-xs text-gray-500">用户向商户支付时的手续费</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-payment-fee">代付费率</Label>
+                <Input
+                  id="edit-payment-fee"
+                  placeholder="例如：0.3%"
+                  value={feeFormData.paymentFee}
+                  onChange={(e) => setFeeFormData({...feeFormData, paymentFee: e.target.value})}
+                />
+                <p className="text-xs text-gray-500">商户向用户付款时的手续费</p>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditFeeConfigDialogOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={handleEditFeeConfig} className="bg-custom-green hover:bg-custom-green/90">
+              保存
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isAddFeeConfigDialogOpen} onOpenChange={setIsAddFeeConfigDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>添加费率配置</DialogTitle>
+            <DialogDescription>
+              为商户 {currentMerchant?.name} 添加新的币种和通道费率配置
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="add-currency">币种 *</Label>
+                <Select value={feeFormData.currency} onValueChange={(value) => setFeeFormData({...feeFormData, currency: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择币种" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="CNY">CNY</SelectItem>
+                    <SelectItem value="USD">USD</SelectItem>
+                    <SelectItem value="USDT">USDT</SelectItem>
+                    <SelectItem value="EUR">EUR</SelectItem>
+                    <SelectItem value="GBP">GBP</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="add-channel">支付通道 *</Label>
+                <Select value={feeFormData.channel} onValueChange={(value) => setFeeFormData({...feeFormData, channel: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择通道" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="支付宝">支付宝</SelectItem>
+                    <SelectItem value="微信支付">微信支付</SelectItem>
+                    <SelectItem value="银行卡">银行卡</SelectItem>
+                    <SelectItem value="云闪付">云闪付</SelectItem>
+                    <SelectItem value="Stripe">Stripe</SelectItem>
+                    <SelectItem value="PayPal">PayPal</SelectItem>
+                    <SelectItem value="TRC20">TRC20</SelectItem>
+                    <SelectItem value="ERC20">ERC20</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="add-collection-fee">代收费率 *</Label>
+                <Input
+                  id="add-collection-fee"
+                  placeholder="例如：0.5%"
+                  value={feeFormData.collectionFee}
+                  onChange={(e) => setFeeFormData({...feeFormData, collectionFee: e.target.value})}
+                />
+                <p className="text-xs text-gray-500">用户向商户支付时的手续费</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="add-payment-fee">代付费率 *</Label>
+                <Input
+                  id="add-payment-fee"
+                  placeholder="例如：0.3%"
+                  value={feeFormData.paymentFee}
+                  onChange={(e) => setFeeFormData({...feeFormData, paymentFee: e.target.value})}
+                />
+                <p className="text-xs text-gray-500">商户向用户付款时的手续费</p>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddFeeConfigDialogOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={handleAddFeeConfig} className="bg-custom-green hover:bg-custom-green/90">
+              添加
             </Button>
           </DialogFooter>
         </DialogContent>
