@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { Eye, Search, Percent } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Dialog,
   DialogContent,
@@ -17,8 +18,10 @@ interface Agent {
   agentName: string
   email: string
   phone: string
-  totalCommission: number
+  todayCommission: number
+  yesterdayCommission: number
   monthlyCommission: number
+  totalCommission: number
   merchantCount: number
   status: "active" | "inactive"
 }
@@ -48,8 +51,10 @@ const mockAgents: Agent[] = [
     agentName: "张三代理",
     email: "zhangsan@example.com",
     phone: "+86 138-0000-0001",
-    totalCommission: 125000.50,
+    todayCommission: 850.00,
+    yesterdayCommission: 920.50,
     monthlyCommission: 12500.00,
+    totalCommission: 125000.50,
     merchantCount: 15,
     status: "active"
   },
@@ -58,8 +63,10 @@ const mockAgents: Agent[] = [
     agentName: "李四代理",
     email: "lisi@example.com",
     phone: "+86 138-0000-0002",
-    totalCommission: 98500.25,
+    todayCommission: 720.00,
+    yesterdayCommission: 780.25,
     monthlyCommission: 9850.00,
+    totalCommission: 98500.25,
     merchantCount: 12,
     status: "active"
   },
@@ -68,8 +75,10 @@ const mockAgents: Agent[] = [
     agentName: "王五代理",
     email: "wangwu@example.com",
     phone: "+86 138-0000-0003",
-    totalCommission: 85200.00,
+    todayCommission: 650.00,
+    yesterdayCommission: 690.00,
     monthlyCommission: 8520.00,
+    totalCommission: 85200.00,
     merchantCount: 10,
     status: "active"
   },
@@ -78,8 +87,10 @@ const mockAgents: Agent[] = [
     agentName: "赵六代理",
     email: "zhaoliu@example.com",
     phone: "+86 138-0000-0004",
-    totalCommission: 72000.75,
+    todayCommission: 580.00,
+    yesterdayCommission: 610.75,
     monthlyCommission: 7200.00,
+    totalCommission: 72000.75,
     merchantCount: 8,
     status: "active"
   },
@@ -88,8 +99,10 @@ const mockAgents: Agent[] = [
     agentName: "孙七代理",
     email: "sunqi@example.com",
     phone: "+86 138-0000-0005",
-    totalCommission: 68500.00,
+    todayCommission: 550.00,
+    yesterdayCommission: 590.00,
     monthlyCommission: 6850.00,
+    totalCommission: 68500.00,
     merchantCount: 7,
     status: "inactive"
   },
@@ -246,6 +259,7 @@ const mockRecords: Record<string, CommissionRecord[]> = {
 export default function CommissionPage() {
   const [agents] = useState<Agent[]>(mockAgents)
   const [searchTerm, setSearchTerm] = useState("")
+  const [rankingType, setRankingType] = useState("today")
   const [isCommissionDialogOpen, setIsCommissionDialogOpen] = useState(false)
   const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false)
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
@@ -258,6 +272,23 @@ export default function CommissionPage() {
     agent.agentId.toLowerCase().includes(searchTerm.toLowerCase()) ||
     agent.phone.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const sortedAgents = [...filteredAgents].sort((a, b) => {
+    switch (rankingType) {
+      case "today":
+        return b.todayCommission - a.todayCommission
+      case "yesterday":
+        return b.yesterdayCommission - a.yesterdayCommission
+      case "month":
+        return b.monthlyCommission - a.monthlyCommission
+      case "total":
+        return b.totalCommission - a.totalCommission
+      case "merchants":
+        return b.merchantCount - a.merchantCount
+      default:
+        return 0
+    }
+  })
 
   const openCommissionDialog = (agent: Agent) => {
     setSelectedAgent(agent)
@@ -275,14 +306,29 @@ export default function CommissionPage() {
     <div className="p-6 space-y-6">
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white">代理商管理</h2>
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-        <Input
-          placeholder="搜索代理商名称、邮箱、电话或ID..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10"
-        />
+      <div className="space-y-4">
+        <div>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">排名筛选</label>
+          <Tabs value={rankingType} onValueChange={setRankingType}>
+            <TabsList className="grid grid-cols-5 w-full max-w-3xl">
+              <TabsTrigger value="today">今日佣金排名</TabsTrigger>
+              <TabsTrigger value="yesterday">昨日佣金排名</TabsTrigger>
+              <TabsTrigger value="month">本月佣金排名</TabsTrigger>
+              <TabsTrigger value="total">历史佣金排名</TabsTrigger>
+              <TabsTrigger value="merchants">商户数排名</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input
+            placeholder="搜索代理商名称、邮箱、电话或ID..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -290,6 +336,9 @@ export default function CommissionPage() {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  排名
+                </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   代理商信息
                 </th>
@@ -311,24 +360,92 @@ export default function CommissionPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredAgents.map((agent) => (
-                <tr key={agent.agentId} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="px-4 py-3 text-sm">
-                    <div className="font-medium text-gray-900 dark:text-white">{agent.agentName}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{agent.agentId}</div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    <div className="text-gray-900 dark:text-gray-300">{agent.email}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{agent.phone}</div>
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="font-semibold text-green-600 dark:text-green-400">
-                      累计: ${agent.totalCommission.toLocaleString()}
-                    </div>
-                    <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
-                      本月: ${agent.monthlyCommission.toLocaleString()}
-                    </div>
-                  </td>
+              {sortedAgents.map((agent, index) => {
+                const getRankDisplay = () => {
+                  if (index === 0) return <span className="text-yellow-500 font-bold text-lg">🥇</span>
+                  if (index === 1) return <span className="text-gray-400 font-bold text-lg">🥈</span>
+                  if (index === 2) return <span className="text-orange-600 font-bold text-lg">🥉</span>
+                  return <span className="text-gray-600 dark:text-gray-400 font-medium">#{index + 1}</span>
+                }
+
+                const getCommissionDisplay = () => {
+                  switch (rankingType) {
+                    case "today":
+                      return (
+                        <>
+                          <div className="font-semibold text-blue-600 dark:text-blue-400">
+                            今日: ${agent.todayCommission.toLocaleString()}
+                          </div>
+                          <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                            累计: ${agent.totalCommission.toLocaleString()}
+                          </div>
+                        </>
+                      )
+                    case "yesterday":
+                      return (
+                        <>
+                          <div className="font-semibold text-purple-600 dark:text-purple-400">
+                            昨日: ${agent.yesterdayCommission.toLocaleString()}
+                          </div>
+                          <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                            累计: ${agent.totalCommission.toLocaleString()}
+                          </div>
+                        </>
+                      )
+                    case "month":
+                      return (
+                        <>
+                          <div className="font-semibold text-orange-600 dark:text-orange-400">
+                            本月: ${agent.monthlyCommission.toLocaleString()}
+                          </div>
+                          <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                            累计: ${agent.totalCommission.toLocaleString()}
+                          </div>
+                        </>
+                      )
+                    case "total":
+                      return (
+                        <>
+                          <div className="font-semibold text-green-600 dark:text-green-400">
+                            累计: ${agent.totalCommission.toLocaleString()}
+                          </div>
+                          <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                            本月: ${agent.monthlyCommission.toLocaleString()}
+                          </div>
+                        </>
+                      )
+                    case "merchants":
+                      return (
+                        <>
+                          <div className="font-semibold text-gray-900 dark:text-white">
+                            商户数: {agent.merchantCount} 个
+                          </div>
+                          <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                            累计佣金: ${agent.totalCommission.toLocaleString()}
+                          </div>
+                        </>
+                      )
+                    default:
+                      return null
+                  }
+                }
+
+                return (
+                  <tr key={agent.agentId} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td className="px-4 py-3 text-sm text-center">
+                      {getRankDisplay()}
+                    </td>
+                    <td className="px-4 py-3 text-sm">
+                      <div className="font-medium text-gray-900 dark:text-white">{agent.agentName}</div>
+                      <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{agent.agentId}</div>
+                    </td>
+                    <td className="px-4 py-3 text-sm">
+                      <div className="text-gray-900 dark:text-gray-300">{agent.email}</div>
+                      <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{agent.phone}</div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      {getCommissionDisplay()}
+                    </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {agent.merchantCount} 个
                   </td>
@@ -363,13 +480,14 @@ export default function CommissionPage() {
                       </Button>
                     </div>
                   </td>
-                </tr>
-              ))}
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
 
-        {filteredAgents.length === 0 && (
+        {sortedAgents.length === 0 && (
           <div className="text-center py-12 text-gray-500 dark:text-gray-400">
             暂无数据
           </div>
