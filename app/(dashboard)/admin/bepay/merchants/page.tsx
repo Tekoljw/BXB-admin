@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Plus, Edit, Trash2, Lock, Unlock, Settings } from "lucide-react"
+import { Search, Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -21,20 +21,27 @@ import {
 } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 
+interface ApiKey {
+  keyId: string
+  key: string
+  callbackDomain: string
+  createdAt: string
+}
+
 interface Merchant {
   id: string
   name: string
+  userId: string
   bxbUserId: string
   email: string
   phone: string
-  apiKey: string
+  apiKeys: ApiKey[]
   balance: number
   frozenBalance: number
   totalOrders: number
-  successRate: number
   collectionFee: string
   paymentFee: string
-  status: "active" | "frozen" | "disabled"
+  status: "active" | "frozen" | "disabled" | "domain_pending"
   createdAt: string
 }
 
@@ -42,14 +49,27 @@ const mockMerchants: Merchant[] = [
   {
     id: "M001",
     name: "优付商城",
+    userId: "U100001",
     bxbUserId: "BXB001",
     email: "youfu@example.com",
     phone: "+86 138 0000 0001",
-    apiKey: "sk_live_xxxxxxxxxxxxxx01",
+    apiKeys: [
+      {
+        keyId: "KEY001",
+        key: "sk_live_4f8a9b2c3d1e5f6g7h8i9j0k1l2m3n4o",
+        callbackDomain: "https://api.youfu.com",
+        createdAt: "2024-01-10 10:00:00"
+      },
+      {
+        keyId: "KEY002",
+        key: "sk_live_9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k",
+        callbackDomain: "https://backup.youfu.com",
+        createdAt: "2024-02-15 14:30:00"
+      }
+    ],
     balance: 125000.50,
     frozenBalance: 0,
     totalOrders: 15234,
-    successRate: 98.5,
     collectionFee: "0.5%",
     paymentFee: "0.3%",
     status: "active",
@@ -58,30 +78,56 @@ const mockMerchants: Merchant[] = [
   {
     id: "M002",
     name: "快捷支付平台",
+    userId: "U100002",
     bxbUserId: "BXB002",
     email: "kuaijie@example.com",
     phone: "+86 138 0000 0002",
-    apiKey: "sk_live_xxxxxxxxxxxxxx02",
+    apiKeys: [
+      {
+        keyId: "KEY003",
+        key: "sk_live_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
+        callbackDomain: "https://api.kuaijie.com",
+        createdAt: "2024-01-12 14:30:00"
+      }
+    ],
     balance: 89500.25,
     frozenBalance: 5000,
     totalOrders: 9876,
-    successRate: 97.2,
     collectionFee: "0.6%",
     paymentFee: "0.4%",
-    status: "active",
+    status: "domain_pending",
     createdAt: "2024-01-12 14:30:00"
   },
   {
     id: "M003",
     name: "云端收银",
+    userId: "U100003",
     bxbUserId: "BXB003",
     email: "yunduan@example.com",
     phone: "+86 138 0000 0003",
-    apiKey: "sk_live_xxxxxxxxxxxxxx03",
+    apiKeys: [
+      {
+        keyId: "KEY004",
+        key: "sk_live_q1w2e3r4t5y6u7i8o9p0a1s2d3f4g5h6",
+        callbackDomain: "https://api.yunduan.com",
+        createdAt: "2024-01-15 09:15:00"
+      },
+      {
+        keyId: "KEY005",
+        key: "sk_live_z9x8c7v6b5n4m3l2k1j0h9g8f7d6s5a4",
+        callbackDomain: "https://webhook.yunduan.com",
+        createdAt: "2024-03-01 11:20:00"
+      },
+      {
+        keyId: "KEY006",
+        key: "sk_live_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p",
+        callbackDomain: "https://notify.yunduan.com",
+        createdAt: "2024-04-10 16:45:00"
+      }
+    ],
     balance: 45200.00,
     frozenBalance: 10000,
     totalOrders: 5432,
-    successRate: 95.8,
     collectionFee: "0.5%",
     paymentFee: "0.3%",
     status: "frozen",
@@ -90,14 +136,21 @@ const mockMerchants: Merchant[] = [
   {
     id: "M004",
     name: "星际支付",
+    userId: "U100004",
     bxbUserId: "BXB004",
     email: "xingji@example.com",
     phone: "+86 138 0000 0004",
-    apiKey: "sk_live_xxxxxxxxxxxxxx04",
+    apiKeys: [
+      {
+        keyId: "KEY007",
+        key: "sk_live_7h6g5f4d3s2a1p0o9i8u7y6t5r4e3w2q",
+        callbackDomain: "https://api.xingji.com",
+        createdAt: "2024-01-08 16:45:00"
+      }
+    ],
     balance: 210000.75,
     frozenBalance: 0,
     totalOrders: 23456,
-    successRate: 99.1,
     collectionFee: "0.4%",
     paymentFee: "0.2%",
     status: "active",
@@ -114,6 +167,7 @@ export default function MerchantsPage() {
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
   const [isFreezeFundsDialogOpen, setIsFreezeFundsDialogOpen] = useState(false)
   const [isFeeConfigDialogOpen, setIsFeeConfigDialogOpen] = useState(false)
+  const [isApiKeysDialogOpen, setIsApiKeysDialogOpen] = useState(false)
   const [currentMerchant, setCurrentMerchant] = useState<Merchant | null>(null)
   const [freezeAmount, setFreezeAmount] = useState("")
   const [formData, setFormData] = useState({
@@ -123,27 +177,28 @@ export default function MerchantsPage() {
     phone: "",
     collectionFee: "",
     paymentFee: "",
-    status: "active" as "active" | "frozen" | "disabled"
+    status: "active" as "active" | "frozen" | "disabled" | "domain_pending"
   })
 
   const filteredMerchants = merchants.filter(merchant => 
     merchant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     merchant.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    merchant.id.toLowerCase().includes(searchTerm.toLowerCase())
+    merchant.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    merchant.userId.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const handleAdd = () => {
     const newMerchant: Merchant = {
       id: `M${String(merchants.length + 1).padStart(3, '0')}`,
       name: formData.name,
+      userId: `U${String(100000 + merchants.length + 1)}`,
       bxbUserId: formData.bxbUserId,
       email: "",
       phone: "",
-      apiKey: `sk_live_${Math.random().toString(36).substring(2, 18)}`,
+      apiKeys: [],
       balance: 0,
       frozenBalance: 0,
       totalOrders: 0,
-      successRate: 0,
       collectionFee: "0%",
       paymentFee: "0%",
       status: "active",
@@ -152,6 +207,11 @@ export default function MerchantsPage() {
     setMerchants([...merchants, newMerchant])
     setIsAddDialogOpen(false)
     resetForm()
+  }
+
+  const openApiKeysDialog = (merchant: Merchant) => {
+    setCurrentMerchant(merchant)
+    setIsApiKeysDialogOpen(true)
   }
 
   const handleEdit = () => {
@@ -288,7 +348,7 @@ export default function MerchantsPage() {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
         <Input
-          placeholder="搜索商户名称、邮箱或ID..."
+          placeholder="搜索商户名称、邮箱、商户ID或UserID..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-10"
@@ -310,7 +370,7 @@ export default function MerchantsPage() {
                   账户余额
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  成功率
+                  密钥
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   状态
@@ -325,7 +385,12 @@ export default function MerchantsPage() {
                 <tr key={merchant.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="px-4 py-3 text-sm">
                     <div className="font-medium text-gray-900 dark:text-white">{merchant.name}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{merchant.id}</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">
+                      商户ID: {merchant.id}
+                    </div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">
+                      UserID: {merchant.userId}
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <div className="text-gray-900 dark:text-gray-300">{merchant.email}</div>
@@ -338,13 +403,15 @@ export default function MerchantsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <span className={`font-medium ${
-                      merchant.successRate >= 98 ? "text-green-600 dark:text-green-400" :
-                      merchant.successRate >= 95 ? "text-yellow-600 dark:text-yellow-400" :
-                      "text-red-600 dark:text-red-400"
-                    }`}>
-                      {merchant.successRate}%
-                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => openApiKeysDialog(merchant)}
+                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                    >
+                      <Key className="w-4 h-4 mr-1" />
+                      查看密钥 ({merchant.apiKeys.length})
+                    </Button>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -352,9 +419,13 @@ export default function MerchantsPage() {
                         ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
                         : merchant.status === "frozen"
                         ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
+                        : merchant.status === "domain_pending"
+                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300"
                         : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300"
                     }`}>
-                      {merchant.status === "active" ? "正常" : merchant.status === "frozen" ? "冻结" : "禁用"}
+                      {merchant.status === "active" ? "正常" : 
+                       merchant.status === "frozen" ? "冻结" : 
+                       merchant.status === "domain_pending" ? "新域名待审核" : "禁用"}
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
@@ -494,7 +565,7 @@ export default function MerchantsPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="edit-status">状态</Label>
-              <Select value={formData.status} onValueChange={(value: "active" | "frozen" | "disabled") => setFormData({...formData, status: value})}>
+              <Select value={formData.status} onValueChange={(value: "active" | "frozen" | "disabled" | "domain_pending") => setFormData({...formData, status: value})}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -502,6 +573,7 @@ export default function MerchantsPage() {
                   <SelectItem value="active">正常</SelectItem>
                   <SelectItem value="frozen">冻结</SelectItem>
                   <SelectItem value="disabled">禁用</SelectItem>
+                  <SelectItem value="domain_pending">新域名待审核</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -607,6 +679,74 @@ export default function MerchantsPage() {
               }
             >
               {currentMerchant?.status === "frozen" ? "解冻" : "冻结"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isApiKeysDialogOpen} onOpenChange={setIsApiKeysDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>密钥管理 - {currentMerchant?.name}</DialogTitle>
+            <DialogDescription>
+              商户ID: {currentMerchant?.id} | UserID: {currentMerchant?.userId} | 共 {currentMerchant?.apiKeys.length} 个密钥
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-4">
+            {currentMerchant?.apiKeys && currentMerchant.apiKeys.length > 0 ? (
+              <div className="space-y-4">
+                {currentMerchant.apiKeys.map((apiKey) => (
+                  <div 
+                    key={apiKey.keyId} 
+                    className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600"
+                  >
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs text-gray-500 dark:text-gray-400">密钥ID</Label>
+                        <div className="mt-1 font-mono text-sm text-gray-900 dark:text-white">
+                          {apiKey.keyId}
+                        </div>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-gray-500 dark:text-gray-400">创建时间</Label>
+                        <div className="mt-1 text-sm text-gray-900 dark:text-gray-300">
+                          {apiKey.createdAt}
+                        </div>
+                      </div>
+                      <div className="col-span-2">
+                        <Label className="text-xs text-gray-500 dark:text-gray-400">API密钥</Label>
+                        <div className="mt-1 font-mono text-sm bg-white dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white break-all">
+                          {apiKey.key}
+                        </div>
+                      </div>
+                      <div className="col-span-2">
+                        <Label className="text-xs text-gray-500 dark:text-gray-400">回调主域名</Label>
+                        <div className="mt-1 text-sm bg-white dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-600">
+                          <a 
+                            href={apiKey.callbackDomain} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-blue-600 dark:text-blue-400 hover:underline"
+                          >
+                            {apiKey.callbackDomain}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                该商户暂无密钥
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsApiKeysDialogOpen(false)}>
+              关闭
             </Button>
           </DialogFooter>
         </DialogContent>
