@@ -318,9 +318,6 @@ export default function MerchantsPage() {
 
   const openBalanceDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
-    if (merchant.currencyBalances && merchant.currencyBalances.length > 0) {
-      setActiveCurrency(merchant.currencyBalances[0].currency)
-    }
     setIsBalanceDialogOpen(true)
   }
 
@@ -1240,80 +1237,75 @@ export default function MerchantsPage() {
       </Dialog>
 
       <Dialog open={isBalanceDialogOpen} onOpenChange={setIsBalanceDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>账户余额详情</DialogTitle>
             <DialogDescription>
               商户 {currentMerchant?.name} 的各币种余额信息
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4">
+          <div className="py-4 space-y-4">
             {currentMerchant && currentMerchant.currencyBalances && currentMerchant.currencyBalances.length > 0 ? (
-              <Tabs value={activeCurrency || currentMerchant.currencyBalances[0].currency} onValueChange={setActiveCurrency} className="w-full">
-                <TabsList className="grid w-full grid-cols-5">
-                  {currentMerchant.currencyBalances.map((cb) => (
-                    <TabsTrigger key={cb.currency} value={cb.currency}>
-                      {cb.currency}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {currentMerchant.currencyBalances.map((cb) => (
-                  <TabsContent key={cb.currency} value={cb.currency} className="space-y-4">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                          {cb.currency} 余额
-                        </h3>
-                      </div>
-                      <div className="p-6 space-y-6">
-                        <div className="grid grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                            <Label className="text-sm text-gray-500 dark:text-gray-400">法币余额（可用余额）</Label>
-                            <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                              {cb.currency === "CNY" && "¥"}
-                              {cb.currency === "USD" && "$"}
-                              {cb.currency === "EUR" && "€"}
-                              {cb.currency === "GBP" && "£"}
-                              {cb.balance.toLocaleString()}
-                              {cb.currency === "USDT" && " USDT"}
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-sm text-blue-600 dark:text-blue-400">代付金余额</Label>
-                            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                              {cb.currency === "CNY" && "¥"}
-                              {cb.currency === "USD" && "$"}
-                              {cb.currency === "EUR" && "€"}
-                              {cb.currency === "GBP" && "£"}
-                              {cb.paymentBalance.toLocaleString()}
-                              {cb.currency === "USDT" && " USDT"}
-                            </div>
+                  <div 
+                    key={cb.currency} 
+                    className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                  >
+                    <div className="px-4 py-3 bg-gradient-to-r from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-800 border-b border-gray-200 dark:border-gray-700">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <span className="text-2xl">
+                          {cb.currency === "CNY" && "¥"}
+                          {cb.currency === "USD" && "$"}
+                          {cb.currency === "EUR" && "€"}
+                          {cb.currency === "GBP" && "£"}
+                          {cb.currency === "USDT" && "₮"}
+                        </span>
+                        {cb.currency}
+                      </h3>
+                    </div>
+                    <div className="p-4 space-y-4">
+                      <div className="space-y-3">
+                        <div>
+                          <Label className="text-xs text-gray-500 dark:text-gray-400">法币余额（可用余额）</Label>
+                          <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                            {cb.currency === "CNY" && "¥"}
+                            {cb.currency === "USD" && "$"}
+                            {cb.currency === "EUR" && "€"}
+                            {cb.currency === "GBP" && "£"}
+                            {cb.balance.toLocaleString()}
+                            {cb.currency === "USDT" && " USDT"}
                           </div>
                         </div>
-                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                          <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div className="flex justify-between">
-                              <span className="text-gray-500 dark:text-gray-400">总余额：</span>
-                              <span className="font-semibold text-gray-900 dark:text-white">
-                                {cb.currency === "CNY" && "¥"}
-                                {cb.currency === "USD" && "$"}
-                                {cb.currency === "EUR" && "€"}
-                                {cb.currency === "GBP" && "£"}
-                                {(cb.balance + cb.paymentBalance).toLocaleString()}
-                                {cb.currency === "USDT" && " USDT"}
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-gray-500 dark:text-gray-400">币种：</span>
-                              <span className="font-semibold text-gray-900 dark:text-white">{cb.currency}</span>
-                            </div>
+                        <div>
+                          <Label className="text-xs text-blue-600 dark:text-blue-400">代付金余额</Label>
+                          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">
+                            {cb.currency === "CNY" && "¥"}
+                            {cb.currency === "USD" && "$"}
+                            {cb.currency === "EUR" && "€"}
+                            {cb.currency === "GBP" && "£"}
+                            {cb.paymentBalance.toLocaleString()}
+                            {cb.currency === "USDT" && " USDT"}
                           </div>
+                        </div>
+                      </div>
+                      <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-gray-500 dark:text-gray-400">总余额：</span>
+                          <span className="text-xl font-bold text-gray-900 dark:text-white">
+                            {cb.currency === "CNY" && "¥"}
+                            {cb.currency === "USD" && "$"}
+                            {cb.currency === "EUR" && "€"}
+                            {cb.currency === "GBP" && "£"}
+                            {(cb.balance + cb.paymentBalance).toLocaleString()}
+                            {cb.currency === "USDT" && " USDT"}
+                          </span>
                         </div>
                       </div>
                     </div>
-                  </TabsContent>
+                  </div>
                 ))}
-              </Tabs>
+              </div>
             ) : (
               <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                 暂无余额数据
