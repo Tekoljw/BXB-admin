@@ -1237,38 +1237,47 @@ export default function MerchantsPage() {
       </Dialog>
 
       <Dialog open={isBalanceDialogOpen} onOpenChange={setIsBalanceDialogOpen}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[75vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>账户余额详情</DialogTitle>
             <DialogDescription>
               商户 {currentMerchant?.name} 的各币种余额信息
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4 space-y-4">
+          <div className="py-4">
             {currentMerchant && currentMerchant.currencyBalances && currentMerchant.currencyBalances.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {currentMerchant.currencyBalances.map((cb) => (
-                  <div 
-                    key={cb.currency} 
-                    className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
-                  >
-                    <div className="px-4 py-3 bg-gradient-to-r from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-800 border-b border-gray-200 dark:border-gray-700">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                        <span className="text-2xl">
-                          {cb.currency === "CNY" && "¥"}
-                          {cb.currency === "USD" && "$"}
-                          {cb.currency === "EUR" && "€"}
-                          {cb.currency === "GBP" && "£"}
-                          {cb.currency === "USDT" && "₮"}
-                        </span>
-                        {cb.currency}
-                      </h3>
-                    </div>
-                    <div className="p-4 space-y-4">
-                      <div className="space-y-3">
-                        <div>
-                          <Label className="text-xs text-gray-500 dark:text-gray-400">法币余额（可用余额）</Label>
-                          <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">币种</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">法币余额</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-blue-600 dark:text-blue-400">代付金余额</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">总余额</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentMerchant.currencyBalances.map((cb, index) => (
+                      <tr 
+                        key={cb.currency}
+                        className={`border-b border-gray-100 dark:border-gray-800 ${
+                          index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'
+                        }`}
+                      >
+                        <td className="py-3 px-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">
+                              {cb.currency === "CNY" && "¥"}
+                              {cb.currency === "USD" && "$"}
+                              {cb.currency === "EUR" && "€"}
+                              {cb.currency === "GBP" && "£"}
+                              {cb.currency === "USDT" && "₮"}
+                            </span>
+                            <span className="font-medium text-gray-900 dark:text-white">{cb.currency}</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-medium text-gray-900 dark:text-white">
                             {cb.currency === "CNY" && "¥"}
                             {cb.currency === "USD" && "$"}
                             {cb.currency === "EUR" && "€"}
@@ -1276,10 +1285,9 @@ export default function MerchantsPage() {
                             {cb.balance.toLocaleString()}
                             {cb.currency === "USDT" && " USDT"}
                           </div>
-                        </div>
-                        <div>
-                          <Label className="text-xs text-blue-600 dark:text-blue-400">代付金余额</Label>
-                          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-medium text-blue-600 dark:text-blue-400">
                             {cb.currency === "CNY" && "¥"}
                             {cb.currency === "USD" && "$"}
                             {cb.currency === "EUR" && "€"}
@@ -1287,24 +1295,21 @@ export default function MerchantsPage() {
                             {cb.paymentBalance.toLocaleString()}
                             {cb.currency === "USDT" && " USDT"}
                           </div>
-                        </div>
-                      </div>
-                      <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-500 dark:text-gray-400">总余额：</span>
-                          <span className="text-xl font-bold text-gray-900 dark:text-white">
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-semibold text-gray-900 dark:text-white">
                             {cb.currency === "CNY" && "¥"}
                             {cb.currency === "USD" && "$"}
                             {cb.currency === "EUR" && "€"}
                             {cb.currency === "GBP" && "£"}
                             {(cb.balance + cb.paymentBalance).toLocaleString()}
                             {cb.currency === "USDT" && " USDT"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             ) : (
               <div className="text-center py-12 text-gray-500 dark:text-gray-400">
