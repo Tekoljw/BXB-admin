@@ -1,10 +1,11 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Eye, Search, Percent, ChevronLeft, ChevronRight, Lock, Unlock } from "lucide-react"
+import { Eye, Search, Percent, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Dialog,
@@ -34,7 +35,7 @@ interface Agent {
   monthlyCommission: number
   totalCommission: number
   merchantCount: number
-  status: "active" | "inactive" | "frozen"
+  status: "active" | "frozen"
 }
 
 interface ChannelCommission {
@@ -125,7 +126,7 @@ const mockAgents: Agent[] = [
     monthlyCommission: 6850.00,
     totalCommission: 68500.00,
     merchantCount: 7,
-    status: "inactive"
+    status: "frozen"
   },
 ]
 
@@ -451,7 +452,7 @@ export default function CommissionPage() {
                   商户数量
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  状态
+                  启用/冻结
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   操作
@@ -554,18 +555,26 @@ export default function CommissionPage() {
                     {agent.merchantCount} 个
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      agent.status === "active"
-                        ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                        : agent.status === "frozen"
-                        ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
-                        : "bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300"
-                    }`}>
-                      {agent.status === "active" ? "启用" : agent.status === "frozen" ? "冻结" : "停用"}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <Switch
+                        checked={agent.status === "active"}
+                        onCheckedChange={(checked) => {
+                          if (!checked) {
+                            openFreezeDialog(agent)
+                          } else {
+                            setAgents(agents.map(a => 
+                              a.agentId === agent.agentId ? { ...a, status: "active" } : a
+                            ))
+                          }
+                        }}
+                      />
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                        {agent.status === "active" ? "已启用" : "已冻结"}
+                      </span>
+                    </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -583,15 +592,6 @@ export default function CommissionPage() {
                       >
                         <Eye className="w-4 h-4 mr-1" />
                         详情
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openFreezeDialog(agent)}
-                        className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400"
-                        title={agent.status === "frozen" ? "解冻代理商" : "冻结代理商"}
-                      >
-                        {agent.status === "frozen" ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
                       </Button>
                     </div>
                   </td>
@@ -863,7 +863,7 @@ export default function CommissionPage() {
               {selectedAgent?.status === "frozen" ? "解冻" : "冻结"}代理商
             </DialogTitle>
             <DialogDescription>
-              代理商名称: {selectedAgent?.agentName} | 当前状态: {selectedAgent?.status === "frozen" ? "已冻结" : selectedAgent?.status === "active" ? "启用" : "停用"}
+              代理商名称: {selectedAgent?.agentName} | 当前状态: {selectedAgent?.status === "frozen" ? "已冻结" : "已启用"}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
