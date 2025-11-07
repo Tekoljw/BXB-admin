@@ -1,17 +1,26 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Eye, Search, Percent, ChevronLeft, ChevronRight } from "lucide-react"
+import { Eye, Search, Percent, ChevronLeft, ChevronRight, Lock, Unlock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface Agent {
   agentId: string
@@ -25,7 +34,7 @@ interface Agent {
   monthlyCommission: number
   totalCommission: number
   merchantCount: number
-  status: "active" | "inactive"
+  status: "active" | "inactive" | "frozen"
 }
 
 interface ChannelCommission {
@@ -265,14 +274,19 @@ const mockRecords: Record<string, CommissionRecord[]> = {
 }
 
 export default function CommissionPage() {
-  const [agents] = useState<Agent[]>(mockAgents)
+  const [agents, setAgents] = useState<Agent[]>(mockAgents)
   const [searchTerm, setSearchTerm] = useState("")
   const [rankingType, setRankingType] = useState("today")
   const [isCommissionDialogOpen, setIsCommissionDialogOpen] = useState(false)
   const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false)
+  const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
   const [channelCommissions, setChannelCommissions] = useState<ChannelCommission[]>([])
   const [agentRecords, setAgentRecords] = useState<CommissionRecord[]>([])
+  const [freezeFormData, setFreezeFormData] = useState({
+    currency: "",
+    amount: ""
+  })
   
   // 详情对话框的筛选和分页状态
   const [recordCurrentPage, setRecordCurrentPage] = useState(1)
@@ -322,6 +336,24 @@ export default function CommissionPage() {
     setRecordEndDate("")
     setRecordMerchantId("")
     setIsRecordDialogOpen(true)
+  }
+
+  const openFreezeDialog = (agent: Agent) => {
+    setSelectedAgent(agent)
+    setFreezeFormData({ currency: "", amount: "" })
+    setIsFreezeDialogOpen(true)
+  }
+
+  const handleToggleFreeze = () => {
+    if (selectedAgent && freezeFormData.currency && freezeFormData.amount) {
+      const newStatus = selectedAgent.status === "frozen" ? "active" : "frozen"
+      setAgents(agents.map(a => 
+        a.agentId === selectedAgent.agentId ? { ...a, status: newStatus } : a
+      ))
+      setIsFreezeDialogOpen(false)
+      setSelectedAgent(null)
+      setFreezeFormData({ currency: "", amount: "" })
+    }
   }
 
   // 筛选和分页佣金记录
@@ -525,13 +557,15 @@ export default function CommissionPage() {
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       agent.status === "active"
                         ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+                        : agent.status === "frozen"
+                        ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
                         : "bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300"
                     }`}>
-                      {agent.status === "active" ? "启用" : "停用"}
+                      {agent.status === "active" ? "启用" : agent.status === "frozen" ? "冻结" : "停用"}
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -549,6 +583,15 @@ export default function CommissionPage() {
                       >
                         <Eye className="w-4 h-4 mr-1" />
                         详情
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openFreezeDialog(agent)}
+                        className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400"
+                        title={agent.status === "frozen" ? "解冻代理商" : "冻结代理商"}
+                      >
+                        {agent.status === "frozen" ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
                       </Button>
                     </div>
                   </td>
@@ -809,6 +852,65 @@ export default function CommissionPage() {
               </div>
             )}
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* 冻结代理商对话框 */}
+      <Dialog open={isFreezeDialogOpen} onOpenChange={setIsFreezeDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {selectedAgent?.status === "frozen" ? "解冻" : "冻结"}代理商
+            </DialogTitle>
+            <DialogDescription>
+              代理商名称: {selectedAgent?.agentName} | 当前状态: {selectedAgent?.status === "frozen" ? "已冻结" : selectedAgent?.status === "active" ? "启用" : "停用"}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="agent-freeze-currency">币种 *</Label>
+              <Select 
+                value={freezeFormData.currency} 
+                onValueChange={(value) => setFreezeFormData({...freezeFormData, currency: value})}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="选择币种" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="CNY">CNY (人民币)</SelectItem>
+                  <SelectItem value="USD">USD (美元)</SelectItem>
+                  <SelectItem value="USDT">USDT</SelectItem>
+                  <SelectItem value="EUR">EUR (欧元)</SelectItem>
+                  <SelectItem value="GBP">GBP (英镑)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="agent-freeze-amount">冻结金额 *</Label>
+              <Input
+                id="agent-freeze-amount"
+                type="number"
+                placeholder="请输入冻结金额"
+                value={freezeFormData.amount}
+                onChange={(e) => setFreezeFormData({...freezeFormData, amount: e.target.value})}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsFreezeDialogOpen(false)}>
+              取消
+            </Button>
+            <Button 
+              onClick={handleToggleFreeze}
+              className={selectedAgent?.status === "frozen" 
+                ? "bg-green-600 hover:bg-green-700" 
+                : "bg-yellow-600 hover:bg-yellow-700"
+              }
+              disabled={!freezeFormData.currency || !freezeFormData.amount}
+            >
+              {selectedAgent?.status === "frozen" ? "解冻" : "冻结"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
