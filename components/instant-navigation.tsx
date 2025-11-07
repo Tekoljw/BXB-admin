@@ -104,6 +104,7 @@ export default function InstantNavigation() {
   const [currentPage, setCurrentPage] = useState("/admin/login")
   const [currentModule, setCurrentModule] = useState("operations")
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { theme } = useTheme()
   const { isAdminLoggedIn } = useAdmin()
   const { isModuleUnderMaintenance } = useMaintenance()
@@ -192,9 +193,20 @@ export default function InstantNavigation() {
       return
     }
     
-    setCurrentPage(path)
-    setCurrentModule(getModuleFromPath(path))
-    window.history.pushState({}, "", path)
+    // 显示加载动画
+    setIsLoading(true)
+    
+    // 使用 setTimeout 确保 UI 更新
+    setTimeout(() => {
+      setCurrentPage(path)
+      setCurrentModule(getModuleFromPath(path))
+      window.history.pushState({}, "", path)
+      
+      // 延迟隐藏加载动画，让用户能看到过渡效果
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 300)
+    }, 50)
   }
 
   const handleModuleChange = (module: string) => {
@@ -373,7 +385,18 @@ export default function InstantNavigation() {
         />
 
         {/* 主内容区域 */}
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto relative">
+          {isLoading && (
+            <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 flex items-center justify-center">
+              <div className="flex flex-col items-center gap-4">
+                <div className="relative w-16 h-16">
+                  <div className="absolute inset-0 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
+                  <div className="absolute inset-0 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">加载中...</p>
+              </div>
+            </div>
+          )}
           {renderCurrentPage()}
         </div>
       </div>

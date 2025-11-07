@@ -83,6 +83,7 @@ Preferred communication style: Simple, everyday Chinese language.
 - **System Design Choices**:
   - 客户端路由系统：使用 `instant-navigation` 组件处理所有页面导航，避免页面重载。
   - 自定义路由机制：使用 `window.history.pushState` 和 `popstate` 事件实现即时页面切换。
+  - **页面切换加载动画**: 切换左侧菜单时显示旋转加载器和"加载中..."文字，提供视觉反馈（300ms 过渡）。
   - 状态管理：使用 React Context API（ThemeProvider、AdminProvider）管理全局状态。
   - 安全的会话处理和路由保护（未登录时自动跳转登录页）。
   - 自动扩展部署配置，支持 Next.js 服务器功能和独立输出。
