@@ -313,6 +313,9 @@ export default function ChannelsPage() {
                   通道信息
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  外显名称
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   币种
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -359,55 +362,55 @@ export default function ChannelsPage() {
                           <span className="text-blue-600 dark:text-blue-300">{channel.name.substring(0, 2)}</span>
                         )}
                       </div>
-                      <div className="flex-1">
+                      <div>
                         <div className="font-medium text-gray-900 dark:text-white">{channel.name}</div>
-                        <div className="text-xs mt-0.5">
-                          {editingDisplayName === channel.id ? (
-                            <div className="flex items-center gap-1">
-                              <Input
-                                value={tempDisplayName}
-                                onChange={(e) => setTempDisplayName(e.target.value)}
-                                className="h-6 text-xs py-1 px-2"
-                                placeholder="输入外显名称"
-                                autoFocus
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') {
-                                    saveDisplayName(channel.id)
-                                  } else if (e.key === 'Escape') {
-                                    cancelEditDisplayName()
-                                  }
-                                }}
-                              />
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
-                                onClick={() => saveDisplayName(channel.id)}
-                              >
-                                <Check className="w-3 h-3" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-6 w-6 p-0 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                                onClick={cancelEditDisplayName}
-                              >
-                                <X className="w-3 h-3" />
-                              </Button>
-                            </div>
-                          ) : (
-                            <div 
-                              className="text-gray-500 dark:text-gray-400 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
-                              onClick={() => startEditDisplayName(channel.id, channel.displayName)}
-                            >
-                              <span>{channel.displayName}</span>
-                              <Edit className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </div>
-                          )}
-                        </div>
                         <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">ID: {channel.id} | {channel.code}</div>
                       </div>
                     </div>
+                  </td>
+                  <td className="px-4 py-3 text-sm">
+                    {editingDisplayName === channel.id ? (
+                      <div className="flex items-center gap-1">
+                        <Input
+                          value={tempDisplayName}
+                          onChange={(e) => setTempDisplayName(e.target.value)}
+                          className="h-8 text-sm py-1 px-2 max-w-[200px]"
+                          placeholder="输入外显名称"
+                          autoFocus
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              saveDisplayName(channel.id)
+                            } else if (e.key === 'Escape') {
+                              cancelEditDisplayName()
+                            }
+                          }}
+                        />
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+                          onClick={() => saveDisplayName(channel.id)}
+                        >
+                          <Check className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 w-8 p-0 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                          onClick={cancelEditDisplayName}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div 
+                        className="text-gray-900 dark:text-white cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                        onClick={() => startEditDisplayName(channel.id, channel.displayName)}
+                      >
+                        <span>{channel.displayName}</span>
+                        <Edit className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">
