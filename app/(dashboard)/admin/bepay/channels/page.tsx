@@ -147,6 +147,12 @@ export default function ChannelsPage() {
   const [tempDisplayName, setTempDisplayName] = useState("")
   const [editingName, setEditingName] = useState<string | null>(null)
   const [tempName, setTempName] = useState("")
+  const [editingFee, setEditingFee] = useState<{
+    channelId: string
+    tier: number
+    field: 'minAmount' | 'maxAmount' | 'collectionFeeRate' | 'minCollectionFee' | 'paymentFeeRate' | 'minPaymentFee'
+    value: string
+  } | null>(null)
   const [formData, setFormData] = useState({
     code: "",
     name: "",
@@ -255,6 +261,43 @@ export default function ChannelsPage() {
   const cancelEditName = () => {
     setEditingName(null)
     setTempName("")
+  }
+
+  const startEditFee = (channelId: string, tier: number, field: 'minAmount' | 'maxAmount' | 'collectionFeeRate' | 'minCollectionFee' | 'paymentFeeRate' | 'minPaymentFee', currentValue: any) => {
+    setEditingFee({
+      channelId,
+      tier,
+      field,
+      value: String(currentValue === Infinity ? '' : currentValue)
+    })
+  }
+
+  const saveFee = () => {
+    if (!editingFee) return
+    
+    setChannels(channels.map(channel => {
+      if (channel.id !== editingFee.channelId) return channel
+      
+      const updatedFeeRates = channel.feeRates.map((rate, index) => {
+        if (index !== editingFee.tier) return rate
+        
+        const newRate = { ...rate }
+        if (editingFee.field === 'minAmount' || editingFee.field === 'maxAmount') {
+          newRate[editingFee.field] = editingFee.value === '' ? Infinity : Number(editingFee.value)
+        } else {
+          newRate[editingFee.field] = editingFee.value
+        }
+        return newRate
+      })
+      
+      return { ...channel, feeRates: updatedFeeRates }
+    }))
+    
+    setEditingFee(null)
+  }
+
+  const cancelEditFee = () => {
+    setEditingFee(null)
   }
 
   const openDeleteDialog = (channel: Channel) => {
@@ -490,8 +533,36 @@ export default function ChannelsPage() {
                   <td className="px-2 py-3 text-xs">
                     <div className="space-y-1">
                       {channel.feeRates.map((rate, index) => (
-                        <div key={index} className="text-gray-700 dark:text-gray-300">
-                          {rate.minAmount.toLocaleString()}{rate.maxAmount ? ` - ${rate.maxAmount.toLocaleString()}` : '+'}
+                        <div key={index}>
+                          {editingFee?.channelId === channel.id && editingFee?.tier === index && editingFee?.field === 'minAmount' ? (
+                            <div className="flex items-center gap-1">
+                              <Input
+                                value={editingFee.value}
+                                onChange={(e) => setEditingFee({ ...editingFee, value: e.target.value })}
+                                className="h-6 text-xs py-1 px-2 w-20"
+                                placeholder="最小值"
+                                autoFocus
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') saveFee()
+                                  else if (e.key === 'Escape') cancelEditFee()
+                                }}
+                              />
+                              <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-green-600" onClick={saveFee}>
+                                <Check className="w-3 h-3" />
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-gray-500" onClick={cancelEditFee}>
+                                <X className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div 
+                              className="text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                              onClick={() => startEditFee(channel.id, index, 'minAmount', rate.minAmount)}
+                            >
+                              <span>{rate.minAmount.toLocaleString()}{rate.maxAmount !== Infinity ? ` - ${rate.maxAmount.toLocaleString()}` : '+'}</span>
+                              <Edit className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -499,8 +570,36 @@ export default function ChannelsPage() {
                   <td className="px-2 py-3 text-xs">
                     <div className="space-y-1">
                       {channel.feeRates.map((rate, index) => (
-                        <div key={index} className="text-gray-900 dark:text-white font-medium">
-                          {rate.collectionFeeRate}%
+                        <div key={index}>
+                          {editingFee?.channelId === channel.id && editingFee?.tier === index && editingFee?.field === 'collectionFeeRate' ? (
+                            <div className="flex items-center gap-1">
+                              <Input
+                                value={editingFee.value}
+                                onChange={(e) => setEditingFee({ ...editingFee, value: e.target.value })}
+                                className="h-6 text-xs py-1 px-2 w-16"
+                                placeholder="费率"
+                                autoFocus
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') saveFee()
+                                  else if (e.key === 'Escape') cancelEditFee()
+                                }}
+                              />
+                              <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-green-600" onClick={saveFee}>
+                                <Check className="w-3 h-3" />
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-gray-500" onClick={cancelEditFee}>
+                                <X className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div 
+                              className="text-gray-900 dark:text-white font-medium cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                              onClick={() => startEditFee(channel.id, index, 'collectionFeeRate', rate.collectionFeeRate)}
+                            >
+                              <span>{rate.collectionFeeRate}</span>
+                              <Edit className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -508,8 +607,36 @@ export default function ChannelsPage() {
                   <td className="px-2 py-3 text-xs">
                     <div className="space-y-1">
                       {channel.feeRates.map((rate, index) => (
-                        <div key={index} className="text-gray-700 dark:text-gray-300">
-                          {rate.minCollectionFee}
+                        <div key={index}>
+                          {editingFee?.channelId === channel.id && editingFee?.tier === index && editingFee?.field === 'minCollectionFee' ? (
+                            <div className="flex items-center gap-1">
+                              <Input
+                                value={editingFee.value}
+                                onChange={(e) => setEditingFee({ ...editingFee, value: e.target.value })}
+                                className="h-6 text-xs py-1 px-2 w-16"
+                                placeholder="单笔"
+                                autoFocus
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') saveFee()
+                                  else if (e.key === 'Escape') cancelEditFee()
+                                }}
+                              />
+                              <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-green-600" onClick={saveFee}>
+                                <Check className="w-3 h-3" />
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-gray-500" onClick={cancelEditFee}>
+                                <X className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div 
+                              className="text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                              onClick={() => startEditFee(channel.id, index, 'minCollectionFee', rate.minCollectionFee)}
+                            >
+                              <span>{rate.minCollectionFee}</span>
+                              <Edit className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -517,8 +644,36 @@ export default function ChannelsPage() {
                   <td className="px-2 py-3 text-xs">
                     <div className="space-y-1">
                       {channel.feeRates.map((rate, index) => (
-                        <div key={index} className="text-gray-900 dark:text-white font-medium">
-                          {rate.paymentFeeRate}%
+                        <div key={index}>
+                          {editingFee?.channelId === channel.id && editingFee?.tier === index && editingFee?.field === 'paymentFeeRate' ? (
+                            <div className="flex items-center gap-1">
+                              <Input
+                                value={editingFee.value}
+                                onChange={(e) => setEditingFee({ ...editingFee, value: e.target.value })}
+                                className="h-6 text-xs py-1 px-2 w-16"
+                                placeholder="费率"
+                                autoFocus
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') saveFee()
+                                  else if (e.key === 'Escape') cancelEditFee()
+                                }}
+                              />
+                              <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-green-600" onClick={saveFee}>
+                                <Check className="w-3 h-3" />
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-gray-500" onClick={cancelEditFee}>
+                                <X className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div 
+                              className="text-gray-900 dark:text-white font-medium cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                              onClick={() => startEditFee(channel.id, index, 'paymentFeeRate', rate.paymentFeeRate)}
+                            >
+                              <span>{rate.paymentFeeRate}</span>
+                              <Edit className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -526,8 +681,36 @@ export default function ChannelsPage() {
                   <td className="px-2 py-3 text-xs">
                     <div className="space-y-1">
                       {channel.feeRates.map((rate, index) => (
-                        <div key={index} className="text-gray-700 dark:text-gray-300">
-                          {rate.minPaymentFee}
+                        <div key={index}>
+                          {editingFee?.channelId === channel.id && editingFee?.tier === index && editingFee?.field === 'minPaymentFee' ? (
+                            <div className="flex items-center gap-1">
+                              <Input
+                                value={editingFee.value}
+                                onChange={(e) => setEditingFee({ ...editingFee, value: e.target.value })}
+                                className="h-6 text-xs py-1 px-2 w-16"
+                                placeholder="单笔"
+                                autoFocus
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') saveFee()
+                                  else if (e.key === 'Escape') cancelEditFee()
+                                }}
+                              />
+                              <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-green-600" onClick={saveFee}>
+                                <Check className="w-3 h-3" />
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-gray-500" onClick={cancelEditFee}>
+                                <X className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div 
+                              className="text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                              onClick={() => startEditFee(channel.id, index, 'minPaymentFee', rate.minPaymentFee)}
+                            >
+                              <span>{rate.minPaymentFee}</span>
+                              <Edit className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
