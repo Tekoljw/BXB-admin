@@ -16,6 +16,8 @@ import {
 interface Agent {
   agentId: string
   agentName: string
+  merchantId: string
+  userId: string
   email: string
   phone: string
   todayCommission: number
@@ -49,6 +51,8 @@ const mockAgents: Agent[] = [
   {
     agentId: "AG001",
     agentName: "张三代理",
+    merchantId: "M0001",
+    userId: "U100001",
     email: "zhangsan@example.com",
     phone: "+86 138-0000-0001",
     todayCommission: 850.00,
@@ -61,6 +65,8 @@ const mockAgents: Agent[] = [
   {
     agentId: "AG002",
     agentName: "李四代理",
+    merchantId: "M0002",
+    userId: "U100002",
     email: "lisi@example.com",
     phone: "+86 138-0000-0002",
     todayCommission: 720.00,
@@ -73,6 +79,8 @@ const mockAgents: Agent[] = [
   {
     agentId: "AG003",
     agentName: "王五代理",
+    merchantId: "M0003",
+    userId: "U100003",
     email: "wangwu@example.com",
     phone: "+86 138-0000-0003",
     todayCommission: 650.00,
@@ -85,6 +93,8 @@ const mockAgents: Agent[] = [
   {
     agentId: "AG004",
     agentName: "赵六代理",
+    merchantId: "M0004",
+    userId: "U100004",
     email: "zhaoliu@example.com",
     phone: "+86 138-0000-0004",
     todayCommission: 580.00,
@@ -97,6 +107,8 @@ const mockAgents: Agent[] = [
   {
     agentId: "AG005",
     agentName: "孙七代理",
+    merchantId: "M0005",
+    userId: "U100005",
     email: "sunqi@example.com",
     phone: "+86 138-0000-0005",
     todayCommission: 550.00,
@@ -273,6 +285,8 @@ export default function CommissionPage() {
     agent.agentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     agent.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     agent.agentId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    agent.merchantId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    agent.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
     agent.phone.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
@@ -371,7 +385,7 @@ export default function CommissionPage() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
-            placeholder="搜索代理商名称、邮箱、电话或ID..."
+            placeholder="搜索代理商名称、邮箱、电话、代理商ID、商户ID或UserID..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -485,7 +499,12 @@ export default function CommissionPage() {
                     </td>
                     <td className="px-4 py-3 text-sm">
                       <div className="font-medium text-gray-900 dark:text-white">{agent.agentName}</div>
-                      <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{agent.agentId}</div>
+                      <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">
+                        代理商ID: {agent.agentId}
+                      </div>
+                      <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">
+                        商户ID: {agent.merchantId} | UserID: {agent.userId}
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-sm">
                       <div className="text-gray-900 dark:text-gray-300">{agent.email}</div>
