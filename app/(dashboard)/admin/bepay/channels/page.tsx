@@ -21,15 +21,26 @@ import {
 } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Image from "next/image"
+
+interface FeeRate {
+  minAmount: number
+  maxAmount: number
+  collectionFeeRate: string
+  minCollectionFee: string
+  paymentFeeRate: string
+  minPaymentFee: string
+}
 
 interface Channel {
   id: string
   code: string
   name: string
+  displayName: string
+  logo?: string
   currency: string
   interface: string
-  collectionFee: string
-  paymentFee: string
+  feeRates: FeeRate[]
   demoVideo?: string
   status: "active" | "inactive"
   createdAt: string
@@ -40,10 +51,15 @@ const mockChannels: Channel[] = [
     id: "CH001",
     code: "ALIPAY_CN",
     name: "支付宝",
+    displayName: "支付宝收款",
+    logo: "https://gw.alipayobjects.com/mdn/rms_08e378/afts/img/A*3ijaRbx7JV0AAAAAAAAAAABkARQnAQ",
     currency: "CNY",
     interface: "Bitzpay",
-    collectionFee: "0.5%",
-    paymentFee: "0.3%",
+    feeRates: [
+      { minAmount: 0, maxAmount: 10000, collectionFeeRate: "0.6%", minCollectionFee: "¥1.00", paymentFeeRate: "0.4%", minPaymentFee: "¥0.50" },
+      { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "0.5%", minCollectionFee: "¥1.00", paymentFeeRate: "0.3%", minPaymentFee: "¥0.50" },
+      { minAmount: 100000, maxAmount: Infinity, collectionFeeRate: "0.4%", minCollectionFee: "¥1.00", paymentFeeRate: "0.25%", minPaymentFee: "¥0.50" }
+    ],
     demoVideo: "https://example.com/demo1.mp4",
     status: "active",
     createdAt: "2024-01-15 10:30:00"
@@ -52,10 +68,15 @@ const mockChannels: Channel[] = [
     id: "CH002",
     code: "WECHAT_CN",
     name: "微信支付",
+    displayName: "微信收款码",
+    logo: "https://www.wechat.com/app/img/logo.png",
     currency: "CNY",
     interface: "Bitzpay",
-    collectionFee: "0.5%",
-    paymentFee: "0.3%",
+    feeRates: [
+      { minAmount: 0, maxAmount: 10000, collectionFeeRate: "0.6%", minCollectionFee: "¥1.00", paymentFeeRate: "0.4%", minPaymentFee: "¥0.50" },
+      { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "0.5%", minCollectionFee: "¥1.00", paymentFeeRate: "0.3%", minPaymentFee: "¥0.50" },
+      { minAmount: 100000, maxAmount: Infinity, collectionFeeRate: "0.4%", minCollectionFee: "¥1.00", paymentFeeRate: "0.25%", minPaymentFee: "¥0.50" }
+    ],
     demoVideo: "https://example.com/demo2.mp4",
     status: "active",
     createdAt: "2024-01-15 10:35:00"
@@ -64,10 +85,14 @@ const mockChannels: Channel[] = [
     id: "CH003",
     code: "BANK_CN",
     name: "银行转账",
+    displayName: "银行卡转账",
     currency: "CNY",
     interface: "BePayOTC",
-    collectionFee: "0.3%",
-    paymentFee: "0.2%",
+    feeRates: [
+      { minAmount: 0, maxAmount: 10000, collectionFeeRate: "0.4%", minCollectionFee: "¥0.80", paymentFeeRate: "0.3%", minPaymentFee: "¥0.40" },
+      { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "0.3%", minCollectionFee: "¥0.80", paymentFeeRate: "0.2%", minPaymentFee: "¥0.40" },
+      { minAmount: 100000, maxAmount: Infinity, collectionFeeRate: "0.25%", minCollectionFee: "¥0.80", paymentFeeRate: "0.15%", minPaymentFee: "¥0.40" }
+    ],
     status: "active",
     createdAt: "2024-01-16 09:20:00"
   },
@@ -75,10 +100,14 @@ const mockChannels: Channel[] = [
     id: "CH004",
     code: "PIX_BR",
     name: "PIX支付",
+    displayName: "PIX即时转账",
     currency: "BRL",
     interface: "CFpay",
-    collectionFee: "0.8%",
-    paymentFee: "0.5%",
+    feeRates: [
+      { minAmount: 0, maxAmount: 5000, collectionFeeRate: "1.0%", minCollectionFee: "R$2.00", paymentFeeRate: "0.6%", minPaymentFee: "R$1.00" },
+      { minAmount: 5000, maxAmount: 50000, collectionFeeRate: "0.8%", minCollectionFee: "R$2.00", paymentFeeRate: "0.5%", minPaymentFee: "R$1.00" },
+      { minAmount: 50000, maxAmount: Infinity, collectionFeeRate: "0.6%", minCollectionFee: "R$2.00", paymentFeeRate: "0.4%", minPaymentFee: "R$1.00" }
+    ],
     demoVideo: "https://example.com/demo3.mp4",
     status: "active",
     createdAt: "2024-01-17 14:15:00"
@@ -87,10 +116,14 @@ const mockChannels: Channel[] = [
     id: "CH005",
     code: "UPI_IN",
     name: "UPI支付",
+    displayName: "UPI快速支付",
     currency: "INR",
     interface: "CFpay",
-    collectionFee: "0.6%",
-    paymentFee: "0.4%",
+    feeRates: [
+      { minAmount: 0, maxAmount: 50000, collectionFeeRate: "0.8%", minCollectionFee: "₹10", paymentFeeRate: "0.5%", minPaymentFee: "₹5" },
+      { minAmount: 50000, maxAmount: 500000, collectionFeeRate: "0.6%", minCollectionFee: "₹10", paymentFeeRate: "0.4%", minPaymentFee: "₹5" },
+      { minAmount: 500000, maxAmount: Infinity, collectionFeeRate: "0.5%", minCollectionFee: "₹10", paymentFeeRate: "0.3%", minPaymentFee: "₹5" }
+    ],
     status: "active",
     createdAt: "2024-01-18 11:00:00"
   },
@@ -107,16 +140,22 @@ export default function ChannelsPage() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isDemoDialogOpen, setIsDemoDialogOpen] = useState(false)
   const [currentChannel, setCurrentChannel] = useState<Channel | null>(null)
+  const [isFeeRatesDialogOpen, setIsFeeRatesDialogOpen] = useState(false)
   const [formData, setFormData] = useState({
     code: "",
     name: "",
+    displayName: "",
+    logo: "",
     currency: "",
     interface: "",
-    collectionFee: "",
-    paymentFee: "",
     demoVideo: "",
     status: "active" as "active" | "inactive"
   })
+  const [feeRatesFormData, setFeeRatesFormData] = useState<FeeRate[]>([
+    { minAmount: 0, maxAmount: 10000, collectionFeeRate: "", minCollectionFee: "", paymentFeeRate: "", minPaymentFee: "" },
+    { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "", minCollectionFee: "", paymentFeeRate: "", minPaymentFee: "" },
+    { minAmount: 100000, maxAmount: Infinity, collectionFeeRate: "", minCollectionFee: "", paymentFeeRate: "", minPaymentFee: "" }
+  ])
 
   const filteredChannels = channels.filter(channel => {
     const matchesSearch = 
@@ -133,6 +172,7 @@ export default function ChannelsPage() {
     const newChannel: Channel = {
       id: `CH${String(channels.length + 1).padStart(3, '0')}`,
       ...formData,
+      feeRates: feeRatesFormData,
       createdAt: new Date().toLocaleString('zh-CN')
     }
     setChannels([...channels, newChannel])
@@ -143,7 +183,7 @@ export default function ChannelsPage() {
   const handleEdit = () => {
     if (currentChannel) {
       setChannels(channels.map(c => 
-        c.id === currentChannel.id ? { ...currentChannel, ...formData } : c
+        c.id === currentChannel.id ? { ...currentChannel, ...formData, feeRates: feeRatesFormData } : c
       ))
       setIsEditDialogOpen(false)
       setCurrentChannel(null)
@@ -164,14 +204,20 @@ export default function ChannelsPage() {
     setFormData({
       code: channel.code,
       name: channel.name,
+      displayName: channel.displayName,
+      logo: channel.logo || "",
       currency: channel.currency,
       interface: channel.interface,
-      collectionFee: channel.collectionFee,
-      paymentFee: channel.paymentFee,
       demoVideo: channel.demoVideo || "",
       status: channel.status
     })
+    setFeeRatesFormData(channel.feeRates)
     setIsEditDialogOpen(true)
+  }
+
+  const openFeeRatesDialog = (channel: Channel) => {
+    setCurrentChannel(channel)
+    setIsFeeRatesDialogOpen(true)
   }
 
   const openDeleteDialog = (channel: Channel) => {
@@ -188,13 +234,18 @@ export default function ChannelsPage() {
     setFormData({
       code: "",
       name: "",
+      displayName: "",
+      logo: "",
       currency: "",
       interface: "",
-      collectionFee: "",
-      paymentFee: "",
       demoVideo: "",
       status: "active"
     })
+    setFeeRatesFormData([
+      { minAmount: 0, maxAmount: 10000, collectionFeeRate: "", minCollectionFee: "", paymentFeeRate: "", minPaymentFee: "" },
+      { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "", minCollectionFee: "", paymentFeeRate: "", minPaymentFee: "" },
+      { minAmount: 100000, maxAmount: Infinity, collectionFeeRate: "", minCollectionFee: "", paymentFeeRate: "", minPaymentFee: "" }
+    ])
   }
 
   return (
@@ -245,10 +296,7 @@ export default function ChannelsPage() {
                   接口来源
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  代收费率
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  代付费率
+                  阶梯费率
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   状态
@@ -262,8 +310,25 @@ export default function ChannelsPage() {
               {filteredChannels.map((channel) => (
                 <tr key={channel.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="px-4 py-3 text-sm">
-                    <div className="font-medium text-gray-900 dark:text-white">{channel.name}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">ID: {channel.id} | {channel.code}</div>
+                    <div className="flex items-center gap-3">
+                      {channel.logo && (
+                        <div className="w-8 h-8 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                          <Image 
+                            src={channel.logo} 
+                            alt={channel.name}
+                            width={32}
+                            height={32}
+                            className="object-contain"
+                            unoptimized
+                          />
+                        </div>
+                      )}
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-white">{channel.name}</div>
+                        <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">{channel.displayName}</div>
+                        <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">ID: {channel.id} | {channel.code}</div>
+                      </div>
+                    </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">
@@ -273,11 +338,16 @@ export default function ChannelsPage() {
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {channel.interface}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {channel.collectionFee}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {channel.paymentFee}
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => openFeeRatesDialog(channel)}
+                      className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
+                    >
+                      <Eye className="w-4 h-4 mr-1" />
+                      查看三档费率
+                    </Button>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -551,6 +621,96 @@ export default function ChannelsPage() {
             </Button>
             <Button variant="destructive" onClick={handleDelete}>
               删除
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isFeeRatesDialogOpen} onOpenChange={setIsFeeRatesDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>阶梯费率配置 - {currentChannel?.name}</DialogTitle>
+            <DialogDescription>根据交易金额自动匹配对应档位的手续费率</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+              <div className="flex items-start gap-3">
+                <div className="text-blue-600 dark:text-blue-400 mt-0.5">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="text-sm text-blue-800 dark:text-blue-200">
+                  <p className="font-medium mb-1">阶梯费率说明：</p>
+                  <ul className="space-y-1">
+                    <li>• 系统根据订单金额自动匹配对应档位的费率</li>
+                    <li>• 代收费率：用户向商户支付时收取的手续费（百分比）</li>
+                    <li>• 最低代收费：单笔交易最低收取的代收手续费（固定金额）</li>
+                    <li>• 代付费率：商户向用户付款时收取的手续费（百分比）</li>
+                    <li>• 最低代付费：单笔交易最低收取的代付手续费（固定金额）</li>
+                    <li>• 交易量越大，费率越低，鼓励大额交易</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            {currentChannel?.feeRates.map((rate, index) => (
+              <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full text-sm font-semibold">
+                    第 {index + 1} 档
+                  </span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    交易金额范围：
+                    <span className="font-medium text-gray-900 dark:text-white mx-1">
+                      {rate.minAmount.toLocaleString()} - {rate.maxAmount === Infinity ? '无上限' : rate.maxAmount.toLocaleString()}
+                    </span>
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-green-700 dark:text-green-400 flex items-center gap-1">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                      </svg>
+                      代收费用
+                    </h4>
+                    <div className="space-y-1.5 pl-5">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">代收费率：</span>
+                        <span className="font-semibold text-green-600 dark:text-green-400">{rate.collectionFeeRate}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">最低代收费：</span>
+                        <span className="font-semibold text-green-600 dark:text-green-400">{rate.minCollectionFee}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400 flex items-center gap-1">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                      </svg>
+                      代付费用
+                    </h4>
+                    <div className="space-y-1.5 pl-5">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">代付费率：</span>
+                        <span className="font-semibold text-orange-600 dark:text-orange-400">{rate.paymentFeeRate}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">最低代付费：</span>
+                        <span className="font-semibold text-orange-600 dark:text-orange-400">{rate.minPaymentFee}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsFeeRatesDialogOpen(false)}>
+              关闭
             </Button>
           </DialogFooter>
         </DialogContent>
