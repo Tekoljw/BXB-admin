@@ -40,6 +40,12 @@ interface FeeConfig {
   minPaymentFee: string
 }
 
+interface CurrencyBalance {
+  currency: string
+  balance: number
+  paymentBalance: number
+}
+
 interface Merchant {
   id: string
   name: string
@@ -51,6 +57,7 @@ interface Merchant {
   balance: number
   paymentBalance: number
   frozenBalance: number
+  currencyBalances: CurrencyBalance[]
   totalOrders: number
   feeConfigs: FeeConfig[]
   status: "active" | "frozen" | "disabled"
@@ -85,6 +92,13 @@ const mockMerchants: Merchant[] = [
     balance: 125000.50,
     paymentBalance: 50000.00,
     frozenBalance: 0,
+    currencyBalances: [
+      { currency: "CNY", balance: 850000, paymentBalance: 320000 },
+      { currency: "USD", balance: 125000.50, paymentBalance: 50000.00 },
+      { currency: "USDT", balance: 95000, paymentBalance: 40000 },
+      { currency: "EUR", balance: 68000, paymentBalance: 25000 },
+      { currency: "GBP", balance: 45000, paymentBalance: 18000 }
+    ],
     totalOrders: 15234,
     feeConfigs: [
       { id: "FC001", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50" },
@@ -122,6 +136,13 @@ const mockMerchants: Merchant[] = [
     balance: 89500.25,
     paymentBalance: 35000.00,
     frozenBalance: 5000,
+    currencyBalances: [
+      { currency: "CNY", balance: 650000, paymentBalance: 250000 },
+      { currency: "USD", balance: 89500.25, paymentBalance: 35000.00 },
+      { currency: "USDT", balance: 72000, paymentBalance: 28000 },
+      { currency: "EUR", balance: 52000, paymentBalance: 20000 },
+      { currency: "GBP", balance: 38000, paymentBalance: 15000 }
+    ],
     totalOrders: 9876,
     feeConfigs: [
       { id: "FC005", currency: "CNY", channel: "支付宝", collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80" },
@@ -165,6 +186,13 @@ const mockMerchants: Merchant[] = [
     balance: 45200.00,
     paymentBalance: 20000.00,
     frozenBalance: 10000,
+    currencyBalances: [
+      { currency: "CNY", balance: 320000, paymentBalance: 140000 },
+      { currency: "USD", balance: 45200.00, paymentBalance: 20000.00 },
+      { currency: "USDT", balance: 58000, paymentBalance: 22000 },
+      { currency: "EUR", balance: 35000, paymentBalance: 15000 },
+      { currency: "GBP", balance: 28000, paymentBalance: 12000 }
+    ],
     totalOrders: 5432,
     feeConfigs: [
       { id: "FC008", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50" },
@@ -195,6 +223,13 @@ const mockMerchants: Merchant[] = [
     balance: 210000.75,
     paymentBalance: 80000.00,
     frozenBalance: 0,
+    currencyBalances: [
+      { currency: "CNY", balance: 1250000, paymentBalance: 580000 },
+      { currency: "USD", balance: 210000.75, paymentBalance: 80000.00 },
+      { currency: "USDT", balance: 165000, paymentBalance: 70000 },
+      { currency: "EUR", balance: 120000, paymentBalance: 55000 },
+      { currency: "GBP", balance: 95000, paymentBalance: 42000 }
+    ],
     totalOrders: 23456,
     feeConfigs: [
       { id: "FC012", currency: "CNY", channel: "支付宝", collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40" },
@@ -220,6 +255,7 @@ export default function MerchantsPage() {
   const [isFeeConfigDialogOpen, setIsFeeConfigDialogOpen] = useState(false)
   const [isAddFeeConfigDialogOpen, setIsAddFeeConfigDialogOpen] = useState(false)
   const [isApiKeysDialogOpen, setIsApiKeysDialogOpen] = useState(false)
+  const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false)
   const [currentMerchant, setCurrentMerchant] = useState<Merchant | null>(null)
   const [freezeAmount, setFreezeAmount] = useState("")
   const [freezeFormData, setFreezeFormData] = useState({
@@ -262,6 +298,13 @@ export default function MerchantsPage() {
       balance: 0,
       paymentBalance: 0,
       frozenBalance: 0,
+      currencyBalances: [
+        { currency: "CNY", balance: 0, paymentBalance: 0 },
+        { currency: "USD", balance: 0, paymentBalance: 0 },
+        { currency: "USDT", balance: 0, paymentBalance: 0 },
+        { currency: "EUR", balance: 0, paymentBalance: 0 },
+        { currency: "GBP", balance: 0, paymentBalance: 0 }
+      ],
       totalOrders: 0,
       feeConfigs: [],
       status: "active",
@@ -271,6 +314,14 @@ export default function MerchantsPage() {
     setMerchants([...merchants, newMerchant])
     setIsAddDialogOpen(false)
     resetForm()
+  }
+
+  const openBalanceDialog = (merchant: Merchant) => {
+    setCurrentMerchant(merchant)
+    if (merchant.currencyBalances && merchant.currencyBalances.length > 0) {
+      setActiveCurrency(merchant.currencyBalances[0].currency)
+    }
+    setIsBalanceDialogOpen(true)
   }
 
   const openApiKeysDialog = (merchant: Merchant) => {
@@ -559,15 +610,20 @@ export default function MerchantsPage() {
                     <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{merchant.phone}</div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="text-gray-900 dark:text-gray-300">
-                      可用: ${merchant.balance.toLocaleString()}
-                    </div>
-                    <div className="text-blue-600 dark:text-blue-400 text-xs mt-1">
-                      代付金: ${merchant.paymentBalance.toLocaleString()}
-                    </div>
-                    <div className={`text-xs mt-1 ${merchant.frozenBalance > 0 ? "text-red-600 dark:text-red-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
-                      冻结: ${merchant.frozenBalance.toLocaleString()}
-                    </div>
+                    <button
+                      onClick={() => openBalanceDialog(merchant)}
+                      className="text-left hover:opacity-70 transition-opacity cursor-pointer"
+                    >
+                      <div className="text-gray-900 dark:text-white font-medium">
+                        可用: ${merchant.balance.toLocaleString()}
+                      </div>
+                      <div className="text-blue-600 dark:text-blue-400 text-xs mt-1 font-medium">
+                        代付金: ${merchant.paymentBalance.toLocaleString()}
+                      </div>
+                      <div className={`text-xs mt-1 ${merchant.frozenBalance > 0 ? "text-red-600 dark:text-red-400 font-medium" : "text-gray-400 dark:text-gray-500"}`}>
+                        冻结: ${merchant.frozenBalance.toLocaleString()}
+                      </div>
+                    </button>
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <Button
@@ -1177,6 +1233,96 @@ export default function MerchantsPage() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsApiKeysDialogOpen(false)}>
+              关闭
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isBalanceDialogOpen} onOpenChange={setIsBalanceDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>账户余额详情</DialogTitle>
+            <DialogDescription>
+              商户 {currentMerchant?.name} 的各币种余额信息
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            {currentMerchant && currentMerchant.currencyBalances && currentMerchant.currencyBalances.length > 0 ? (
+              <Tabs value={activeCurrency || currentMerchant.currencyBalances[0].currency} onValueChange={setActiveCurrency} className="w-full">
+                <TabsList className="grid w-full grid-cols-5">
+                  {currentMerchant.currencyBalances.map((cb) => (
+                    <TabsTrigger key={cb.currency} value={cb.currency}>
+                      {cb.currency}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                {currentMerchant.currencyBalances.map((cb) => (
+                  <TabsContent key={cb.currency} value={cb.currency} className="space-y-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                          {cb.currency} 余额
+                        </h3>
+                      </div>
+                      <div className="p-6 space-y-6">
+                        <div className="grid grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label className="text-sm text-gray-500 dark:text-gray-400">法币余额（可用余额）</Label>
+                            <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                              {cb.currency === "CNY" && "¥"}
+                              {cb.currency === "USD" && "$"}
+                              {cb.currency === "EUR" && "€"}
+                              {cb.currency === "GBP" && "£"}
+                              {cb.balance.toLocaleString()}
+                              {cb.currency === "USDT" && " USDT"}
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm text-blue-600 dark:text-blue-400">代付金余额</Label>
+                            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                              {cb.currency === "CNY" && "¥"}
+                              {cb.currency === "USD" && "$"}
+                              {cb.currency === "EUR" && "€"}
+                              {cb.currency === "GBP" && "£"}
+                              {cb.paymentBalance.toLocaleString()}
+                              {cb.currency === "USDT" && " USDT"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-gray-500 dark:text-gray-400">总余额：</span>
+                              <span className="font-semibold text-gray-900 dark:text-white">
+                                {cb.currency === "CNY" && "¥"}
+                                {cb.currency === "USD" && "$"}
+                                {cb.currency === "EUR" && "€"}
+                                {cb.currency === "GBP" && "£"}
+                                {(cb.balance + cb.paymentBalance).toLocaleString()}
+                                {cb.currency === "USDT" && " USDT"}
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-500 dark:text-gray-400">币种：</span>
+                              <span className="font-semibold text-gray-900 dark:text-white">{cb.currency}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </TabsContent>
+                ))}
+              </Tabs>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                暂无余额数据
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsBalanceDialogOpen(false)}>
               关闭
             </Button>
           </DialogFooter>
