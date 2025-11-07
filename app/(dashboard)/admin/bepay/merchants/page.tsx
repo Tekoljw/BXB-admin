@@ -352,11 +352,19 @@ export default function MerchantsPage() {
         minCollectionFee: feeFormData.minCollectionFee,
         minPaymentFee: feeFormData.minPaymentFee
       }
+      const updatedFeeConfigs = [...currentMerchant.feeConfigs, newFeeConfig]
       setMerchants(merchants.map(m => 
         m.id === currentMerchant.id 
-          ? { ...m, feeConfigs: [...m.feeConfigs, newFeeConfig] }
+          ? { ...m, feeConfigs: updatedFeeConfigs }
           : m
       ))
+      setCurrentMerchant({
+        ...currentMerchant,
+        feeConfigs: updatedFeeConfigs
+      })
+      if (!Array.from(new Set(currentMerchant.feeConfigs.map(fc => fc.currency))).includes(feeFormData.currency)) {
+        setActiveCurrency(feeFormData.currency)
+      }
       setIsAddFeeConfigDialogOpen(false)
       setFeeFormData({
         currency: "",
@@ -371,34 +379,37 @@ export default function MerchantsPage() {
 
   const handleUpdateFeeConfig = (configId: string, field: keyof FeeConfig, value: string) => {
     if (currentMerchant) {
+      const updatedConfigs = currentMerchant.feeConfigs.map(fc =>
+        fc.id === configId ? { ...fc, [field]: value } : fc
+      )
       setMerchants(merchants.map(m => 
         m.id === currentMerchant.id 
-          ? { 
-              ...m, 
-              feeConfigs: m.feeConfigs.map(fc => 
-                fc.id === configId 
-                  ? { ...fc, [field]: value }
-                  : fc
-              )
-            } 
+          ? { ...m, feeConfigs: updatedConfigs }
           : m
       ))
       setCurrentMerchant({
         ...currentMerchant,
-        feeConfigs: currentMerchant.feeConfigs.map(fc =>
-          fc.id === configId ? { ...fc, [field]: value } : fc
-        )
+        feeConfigs: updatedConfigs
       })
     }
   }
 
   const handleDeleteFeeConfig = (feeConfigId: string) => {
     if (currentMerchant) {
+      const updatedFeeConfigs = currentMerchant.feeConfigs.filter(fc => fc.id !== feeConfigId)
       setMerchants(merchants.map(m => 
         m.id === currentMerchant.id 
-          ? { ...m, feeConfigs: m.feeConfigs.filter(fc => fc.id !== feeConfigId) }
+          ? { ...m, feeConfigs: updatedFeeConfigs }
           : m
       ))
+      setCurrentMerchant({
+        ...currentMerchant,
+        feeConfigs: updatedFeeConfigs
+      })
+      const remainingCurrencies = Array.from(new Set(updatedFeeConfigs.map(fc => fc.currency)))
+      if (!remainingCurrencies.includes(activeCurrency) && remainingCurrencies.length > 0) {
+        setActiveCurrency(remainingCurrencies[0])
+      }
     }
   }
 
