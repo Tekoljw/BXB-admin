@@ -335,8 +335,20 @@ export default function ChannelsPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   接口来源
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  阶梯费率
+                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  流水
+                </th>
+                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  代收费率
+                </th>
+                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  代收单笔
+                </th>
+                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  代付费率
+                </th>
+                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  代付单笔
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   状态
@@ -475,40 +487,49 @@ export default function ChannelsPage() {
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {channel.interface}
                   </td>
-                  <td className="px-4 py-3 text-sm">
-                    <div className="min-w-[450px]">
-                      <table className="w-full text-xs border-collapse">
-                        <thead>
-                          <tr className="bg-gray-50 dark:bg-gray-800/50">
-                            <th className="px-2 py-1 text-left font-medium text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">流水</th>
-                            <th className="px-2 py-1 text-left font-medium text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">代收费率</th>
-                            <th className="px-2 py-1 text-left font-medium text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">代收单笔</th>
-                            <th className="px-2 py-1 text-left font-medium text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">代付费率</th>
-                            <th className="px-2 py-1 text-left font-medium text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">代付单笔</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {channel.feeRates.map((rate, index) => (
-                            <tr key={index} className="border-b border-gray-100 dark:border-gray-800 last:border-0">
-                              <td className="px-2 py-1.5 text-gray-700 dark:text-gray-300">
-                                {rate.minAmount.toLocaleString()}{rate.maxAmount ? ` - ${rate.maxAmount.toLocaleString()}` : '+'}
-                              </td>
-                              <td className="px-2 py-1.5 text-gray-900 dark:text-white font-medium">
-                                {rate.collectionFeeRate}%
-                              </td>
-                              <td className="px-2 py-1.5 text-gray-700 dark:text-gray-300">
-                                {rate.minCollectionFee}
-                              </td>
-                              <td className="px-2 py-1.5 text-gray-900 dark:text-white font-medium">
-                                {rate.paymentFeeRate}%
-                              </td>
-                              <td className="px-2 py-1.5 text-gray-700 dark:text-gray-300">
-                                {rate.minPaymentFee}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                  <td className="px-2 py-3 text-xs">
+                    <div className="space-y-1">
+                      {channel.feeRates.map((rate, index) => (
+                        <div key={index} className="text-gray-700 dark:text-gray-300">
+                          {rate.minAmount.toLocaleString()}{rate.maxAmount ? ` - ${rate.maxAmount.toLocaleString()}` : '+'}
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-2 py-3 text-xs">
+                    <div className="space-y-1">
+                      {channel.feeRates.map((rate, index) => (
+                        <div key={index} className="text-gray-900 dark:text-white font-medium">
+                          {rate.collectionFeeRate}%
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-2 py-3 text-xs">
+                    <div className="space-y-1">
+                      {channel.feeRates.map((rate, index) => (
+                        <div key={index} className="text-gray-700 dark:text-gray-300">
+                          {rate.minCollectionFee}
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-2 py-3 text-xs">
+                    <div className="space-y-1">
+                      {channel.feeRates.map((rate, index) => (
+                        <div key={index} className="text-gray-900 dark:text-white font-medium">
+                          {rate.paymentFeeRate}%
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-2 py-3 text-xs">
+                    <div className="space-y-1">
+                      {channel.feeRates.map((rate, index) => (
+                        <div key={index} className="text-gray-700 dark:text-gray-300">
+                          {rate.minPaymentFee}
+                        </div>
+                      ))}
                     </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
