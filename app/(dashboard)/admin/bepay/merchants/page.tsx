@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X } from "lucide-react"
+import { Search, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -249,7 +249,7 @@ const mockMerchants: Merchant[] = [
 export default function MerchantsPage() {
   const [merchants, setMerchants] = useState<Merchant[]>(mockMerchants)
   const [searchTerm, setSearchTerm] = useState("")
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [merchantFilter, setMerchantFilter] = useState<"all" | "pending" | "hasApi">("all")
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
@@ -282,42 +282,19 @@ export default function MerchantsPage() {
   })
   const [activeCurrency, setActiveCurrency] = useState<string>("")
 
-  const filteredMerchants = merchants.filter(merchant => 
-    merchant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    merchant.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    merchant.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    merchant.userId.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  const handleAdd = () => {
-    const newMerchant: Merchant = {
-      id: `M${String(merchants.length + 1).padStart(3, '0')}`,
-      name: formData.name,
-      userId: `U${String(100000 + merchants.length + 1)}`,
-      bxbUserId: formData.bxbUserId,
-      email: "",
-      phone: "",
-      apiKeys: [],
-      balance: 0,
-      paymentBalance: 0,
-      frozenBalance: 0,
-      currencyBalances: [
-        { currency: "CNY", balance: 0, paymentBalance: 0 },
-        { currency: "USD", balance: 0, paymentBalance: 0 },
-        { currency: "USDT", balance: 0, paymentBalance: 0 },
-        { currency: "EUR", balance: 0, paymentBalance: 0 },
-        { currency: "GBP", balance: 0, paymentBalance: 0 }
-      ],
-      totalOrders: 0,
-      feeConfigs: [],
-      status: "active",
-      hasPendingDomain: false,
-      createdAt: new Date().toLocaleString('zh-CN')
+  const filteredMerchants = merchants.filter(merchant => {
+    const matchesSearch = merchant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      merchant.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      merchant.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      merchant.userId.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    if (merchantFilter === "pending") {
+      return matchesSearch && merchant.hasPendingDomain
+    } else if (merchantFilter === "hasApi") {
+      return matchesSearch && merchant.apiKeys.length > 0
     }
-    setMerchants([...merchants, newMerchant])
-    setIsAddDialogOpen(false)
-    resetForm()
-  }
+    return matchesSearch
+  })
 
   const openBalanceDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
@@ -336,7 +313,6 @@ export default function MerchantsPage() {
       ))
       setIsEditDialogOpen(false)
       setCurrentMerchant(null)
-      resetForm()
     }
   }
 
@@ -528,16 +504,6 @@ export default function MerchantsPage() {
     }
   }
 
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      bxbUserId: "",
-      email: "",
-      phone: "",
-      status: "active"
-    })
-  }
-
   const updateMerchantState = (updatedMerchant: Merchant) => {
     setMerchants(merchants.map(m => 
       m.id === updatedMerchant.id ? updatedMerchant : m
@@ -580,23 +546,28 @@ export default function MerchantsPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">商户列表</h2>
-        <Button 
-          onClick={() => setIsAddDialogOpen(true)}
-          className="bg-custom-green hover:bg-custom-green/90"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          添加商户
-        </Button>
       </div>
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-        <Input
-          placeholder="搜索商户名称、邮箱、商户ID或UserID..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10"
-        />
+      <div className="flex items-center gap-4">
+        <Select value={merchantFilter} onValueChange={(value: "all" | "pending" | "hasApi") => setMerchantFilter(value)}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="筛选商户类型" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">全部商户</SelectItem>
+            <SelectItem value="pending">API申请中的商户</SelectItem>
+            <SelectItem value="hasApi">已有API商户</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input
+            placeholder="搜索商户名称、邮箱、商户ID或UserID..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -724,47 +695,6 @@ export default function MerchantsPage() {
           </div>
         )}
       </div>
-
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>添加商户</DialogTitle>
-            <DialogDescription>添加新的商户账户</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">商户名称</Label>
-              <Input
-                id="name"
-                placeholder="请输入商户名称"
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="bxbUserId">BXB UserID</Label>
-              <Input
-                id="bxbUserId"
-                placeholder="请输入BXB UserID"
-                value={formData.bxbUserId}
-                onChange={(e) => setFormData({...formData, bxbUserId: e.target.value})}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-              取消
-            </Button>
-            <Button 
-              onClick={handleAdd} 
-              className="bg-custom-green hover:bg-custom-green/90"
-              disabled={!formData.name || !formData.bxbUserId}
-            >
-              添加
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl">

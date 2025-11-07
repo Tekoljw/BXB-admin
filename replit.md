@@ -73,6 +73,10 @@ Preferred communication style: Simple, everyday Chinese language.
       - 根据选中的排名类型，佣金数据列动态显示对应的佣金金额（不同颜色区分）
       - 支持实时排序，自动按选中维度从高到低排列
   - **商户管理功能**：
+    - **商户筛选系统**：三种筛选方式快速定位商户
+      - 全部商户：显示所有商户
+      - API申请中的商户：仅显示有新域名待审核的商户（hasPendingDomain=true）
+      - 已有API商户：仅显示已拥有API密钥的商户（apiKeys.length>0）
     - 展示商户基本信息（商户名称、商户ID、UserID、邮箱、电话、账户余额、状态）
     - 商户本身也是用户，因此同时显示商户ID和UserID
     - **状态开关控制**：使用开关按钮控制商户状态
