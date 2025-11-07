@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye } from "lucide-react"
+import { Search, Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -26,6 +26,7 @@ interface ApiKey {
   keyId: string
   key: string
   callbackDomain: string
+  domainStatus: "approved" | "pending"
   createdAt: string
 }
 
@@ -69,12 +70,14 @@ const mockMerchants: Merchant[] = [
         keyId: "KEY001",
         key: "sk_live_4f8a9b2c3d1e5f6g7h8i9j0k1l2m3n4o",
         callbackDomain: "https://api.youfu.com",
+        domainStatus: "approved",
         createdAt: "2024-01-10 10:00:00"
       },
       {
         keyId: "KEY002",
         key: "sk_live_9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k",
         callbackDomain: "https://backup.youfu.com",
+        domainStatus: "approved",
         createdAt: "2024-02-15 14:30:00"
       }
     ],
@@ -103,7 +106,15 @@ const mockMerchants: Merchant[] = [
         keyId: "KEY003",
         key: "sk_live_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
         callbackDomain: "https://api.kuaijie.com",
+        domainStatus: "approved",
         createdAt: "2024-01-12 14:30:00"
+      },
+      {
+        keyId: "KEY003_NEW",
+        key: "sk_live_b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7",
+        callbackDomain: "https://new-api.kuaijie.com",
+        domainStatus: "pending",
+        createdAt: "2024-11-06 15:30:00"
       }
     ],
     balance: 89500.25,
@@ -130,18 +141,21 @@ const mockMerchants: Merchant[] = [
         keyId: "KEY004",
         key: "sk_live_q1w2e3r4t5y6u7i8o9p0a1s2d3f4g5h6",
         callbackDomain: "https://api.yunduan.com",
+        domainStatus: "approved",
         createdAt: "2024-01-15 09:15:00"
       },
       {
         keyId: "KEY005",
         key: "sk_live_z9x8c7v6b5n4m3l2k1j0h9g8f7d6s5a4",
         callbackDomain: "https://webhook.yunduan.com",
+        domainStatus: "approved",
         createdAt: "2024-03-01 11:20:00"
       },
       {
         keyId: "KEY006",
         key: "sk_live_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p",
         callbackDomain: "https://notify.yunduan.com",
+        domainStatus: "approved",
         createdAt: "2024-04-10 16:45:00"
       }
     ],
@@ -170,6 +184,7 @@ const mockMerchants: Merchant[] = [
         keyId: "KEY007",
         key: "sk_live_7h6g5f4d3s2a1p0o9i8u7y6t5r4e3w2q",
         callbackDomain: "https://api.xingji.com",
+        domainStatus: "approved",
         createdAt: "2024-01-08 16:45:00"
       }
     ],
@@ -426,6 +441,44 @@ export default function MerchantsPage() {
       phone: "",
       status: "active"
     })
+  }
+
+  const updateMerchantState = (updatedMerchant: Merchant) => {
+    setMerchants(merchants.map(m => 
+      m.id === updatedMerchant.id ? updatedMerchant : m
+    ))
+    setCurrentMerchant(updatedMerchant)
+  }
+
+  const handleApproveDomain = (merchantId: string, keyId: string) => {
+    if (currentMerchant && currentMerchant.id === merchantId) {
+      const updatedApiKeys = currentMerchant.apiKeys.map(k =>
+        k.keyId === keyId ? { ...k, domainStatus: "approved" as const } : k
+      )
+      const hasPendingDomain = updatedApiKeys.some(k => k.domainStatus === "pending")
+      const updatedMerchant = {
+        ...currentMerchant,
+        apiKeys: updatedApiKeys,
+        hasPendingDomain
+      }
+      updateMerchantState(updatedMerchant)
+    }
+  }
+
+  const handleRejectDomain = (merchantId: string, keyId: string) => {
+    const confirmed = window.confirm("确定要拒绝并删除此API密钥吗？此操作不可恢复。")
+    if (!confirmed) return
+
+    if (currentMerchant && currentMerchant.id === merchantId) {
+      const updatedApiKeys = currentMerchant.apiKeys.filter(k => k.keyId !== keyId)
+      const hasPendingDomain = updatedApiKeys.some(k => k.domainStatus === "pending")
+      const updatedMerchant = {
+        ...currentMerchant,
+        apiKeys: updatedApiKeys,
+        hasPendingDomain
+      }
+      updateMerchantState(updatedMerchant)
+    }
   }
 
   return (
@@ -1007,11 +1060,20 @@ export default function MerchantsPage() {
                   >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <div>
-                          <Label className="text-xs text-gray-500 dark:text-gray-400">密钥ID</Label>
-                          <div className="mt-1 font-mono text-sm text-gray-900 dark:text-white">
-                            {apiKey.keyId}
+                        <div className="flex items-center gap-3">
+                          <div>
+                            <Label className="text-xs text-gray-500 dark:text-gray-400">密钥ID</Label>
+                            <div className="mt-1 font-mono text-sm text-gray-900 dark:text-white">
+                              {apiKey.keyId}
+                            </div>
                           </div>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            apiKey.domainStatus === "approved"
+                              ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+                              : "bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300"
+                          }`}>
+                            {apiKey.domainStatus === "approved" ? "已审核" : "待审核"}
+                          </span>
                         </div>
                         <div>
                           <Label className="text-xs text-gray-500 dark:text-gray-400">创建时间</Label>
@@ -1041,6 +1103,27 @@ export default function MerchantsPage() {
                           </div>
                         </div>
                       </div>
+                      {apiKey.domainStatus === "pending" && (
+                        <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-600">
+                          <Button
+                            size="sm"
+                            onClick={() => handleApproveDomain(currentMerchant.id, apiKey.keyId)}
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                          >
+                            <Check className="w-4 h-4 mr-1" />
+                            审核通过
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleRejectDomain(currentMerchant.id, apiKey.keyId)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 border-red-300 dark:border-red-700"
+                          >
+                            <X className="w-4 h-4 mr-1" />
+                            拒绝
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
