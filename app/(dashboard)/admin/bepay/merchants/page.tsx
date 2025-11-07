@@ -51,7 +51,8 @@ interface Merchant {
   frozenBalance: number
   totalOrders: number
   feeConfigs: FeeConfig[]
-  status: "active" | "frozen" | "disabled" | "domain_pending"
+  status: "active" | "frozen" | "disabled"
+  hasPendingDomain: boolean
   createdAt: string
 }
 
@@ -87,6 +88,7 @@ const mockMerchants: Merchant[] = [
       { id: "FC004", currency: "USDT", channel: "TRC20", collectionFee: "1.0%", paymentFee: "0.8%", minCollectionFee: "1 USDT", minPaymentFee: "0.5 USDT" },
     ],
     status: "active",
+    hasPendingDomain: false,
     createdAt: "2024-01-10 10:00:00"
   },
   {
@@ -112,7 +114,8 @@ const mockMerchants: Merchant[] = [
       { id: "FC006", currency: "CNY", channel: "微信支付", collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80" },
       { id: "FC007", currency: "CNY", channel: "云闪付", collectionFee: "0.55%", paymentFee: "0.35%", minCollectionFee: "¥1.10", minPaymentFee: "¥0.70" },
     ],
-    status: "domain_pending",
+    status: "active",
+    hasPendingDomain: true,
     createdAt: "2024-01-12 14:30:00"
   },
   {
@@ -152,6 +155,7 @@ const mockMerchants: Merchant[] = [
       { id: "FC011", currency: "USDT", channel: "ERC20", collectionFee: "1.5%", paymentFee: "1.3%", minCollectionFee: "2.0 USDT", minPaymentFee: "1.5 USDT" },
     ],
     status: "frozen",
+    hasPendingDomain: false,
     createdAt: "2024-01-15 09:15:00"
   },
   {
@@ -180,6 +184,7 @@ const mockMerchants: Merchant[] = [
       { id: "FC016", currency: "USDT", channel: "TRC20", collectionFee: "0.9%", paymentFee: "0.7%", minCollectionFee: "0.9 USDT", minPaymentFee: "0.7 USDT" },
     ],
     status: "active",
+    hasPendingDomain: false,
     createdAt: "2024-01-08 16:45:00"
   },
 ]
@@ -202,7 +207,7 @@ export default function MerchantsPage() {
     bxbUserId: "",
     email: "",
     phone: "",
-    status: "active" as "active" | "frozen" | "disabled" | "domain_pending"
+    status: "active" as "active" | "frozen" | "disabled"
   })
   const [feeFormData, setFeeFormData] = useState({
     currency: "",
@@ -493,7 +498,7 @@ export default function MerchantsPage() {
                       冻结: ${merchant.frozenBalance.toLocaleString()}
                     </div>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                  <td className="px-4 py-3 text-sm">
                     <Button
                       variant="ghost"
                       size="sm"
@@ -503,6 +508,13 @@ export default function MerchantsPage() {
                       <Key className="w-4 h-4 mr-1" />
                       查看密钥 ({merchant.apiKeys.length})
                     </Button>
+                    {merchant.hasPendingDomain && (
+                      <div className="mt-1">
+                        <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded-full text-xs font-medium">
+                          新域名待审核
+                        </span>
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -510,13 +522,10 @@ export default function MerchantsPage() {
                         ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
                         : merchant.status === "frozen"
                         ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
-                        : merchant.status === "domain_pending"
-                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300"
                         : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300"
                     }`}>
                       {merchant.status === "active" ? "正常" : 
-                       merchant.status === "frozen" ? "冻结" : 
-                       merchant.status === "domain_pending" ? "新域名待审核" : "禁用"}
+                       merchant.status === "frozen" ? "冻结" : "禁用"}
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
@@ -656,7 +665,7 @@ export default function MerchantsPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="edit-status">状态</Label>
-              <Select value={formData.status} onValueChange={(value: "active" | "frozen" | "disabled" | "domain_pending") => setFormData({...formData, status: value})}>
+              <Select value={formData.status} onValueChange={(value: "active" | "frozen" | "disabled") => setFormData({...formData, status: value})}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -664,7 +673,6 @@ export default function MerchantsPage() {
                   <SelectItem value="active">正常</SelectItem>
                   <SelectItem value="frozen">冻结</SelectItem>
                   <SelectItem value="disabled">禁用</SelectItem>
-                  <SelectItem value="domain_pending">新域名待审核</SelectItem>
                 </SelectContent>
               </Select>
             </div>
