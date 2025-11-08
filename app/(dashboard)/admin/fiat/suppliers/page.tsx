@@ -135,37 +135,37 @@ export default function SuppliersPage() {
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
-      <div className="max-w-full mx-auto">
-        <div className="flex items-center justify-between mb-6">
+      <div className="max-w-full mx-auto space-y-6">
+        <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">供应商管理</h1>
-          
-          <div className="flex items-center gap-2 flex-1">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="搜索供应商名称、TGID或TG账号..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-custom-green"
-              />
-            </div>
-            <Button
-              onClick={handleSearch}
-              className="bg-custom-green hover:bg-custom-green/90 text-white"
-            >
-              <Search className="w-4 h-4 mr-1" />
-              搜索
-            </Button>
-            <Button
-              onClick={handleReset}
-              variant="outline"
-            >
-              <RotateCcw className="w-4 h-4 mr-1" />
-              重置
-            </Button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="搜索供应商名称、TGID或TG账号..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-custom-green"
+            />
           </div>
+          <Button
+            onClick={handleSearch}
+            className="bg-custom-green hover:bg-custom-green/90 text-white"
+          >
+            <Search className="w-4 h-4 mr-1" />
+            搜索
+          </Button>
+          <Button
+            onClick={handleReset}
+            variant="outline"
+          >
+            <RotateCcw className="w-4 h-4 mr-1" />
+            重置
+          </Button>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
