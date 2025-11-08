@@ -491,13 +491,13 @@ export default function ChannelsPage() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">通道列表</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">支付方式</h2>
         <Button 
           onClick={() => setIsAddDialogOpen(true)}
           className="bg-custom-green hover:bg-custom-green/90"
         >
           <Plus className="w-4 h-4 mr-2" />
-          添加通道
+          添加支付方式
         </Button>
       </div>
 
@@ -1052,9 +1052,20 @@ export default function ChannelsPage() {
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center gap-2 pb-2 border-b">
-                <h3 className="text-lg font-semibold">阶梯费率配置</h3>
-                <span className="text-sm text-gray-500 dark:text-gray-400">（根据交易金额自动匹配费率）</span>
+              <div className="pb-2 border-b space-y-2">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-semibold">阶梯费率配置</h3>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">（根据交易金额自动匹配费率）</span>
+                </div>
+                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <span className="text-amber-600 dark:text-amber-400 text-lg">⚠️</span>
+                    <div className="text-xs text-amber-800 dark:text-amber-300">
+                      <div className="font-medium mb-0.5">配置提示</div>
+                      <div>支付方式的费率不可以低于该支付方式所包含通道中的任意一个，否则可能导致亏损。</div>
+                    </div>
+                  </div>
+                </div>
               </div>
               
               {feeRatesFormData.map((rate, index) => (
@@ -1260,9 +1271,20 @@ export default function ChannelsPage() {
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center gap-2 pb-2 border-b">
-                <h3 className="text-lg font-semibold">阶梯费率配置</h3>
-                <span className="text-sm text-gray-500 dark:text-gray-400">（根据交易金额自动匹配费率）</span>
+              <div className="pb-2 border-b space-y-2">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-semibold">阶梯费率配置</h3>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">（根据交易金额自动匹配费率）</span>
+                </div>
+                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <span className="text-amber-600 dark:text-amber-400 text-lg">⚠️</span>
+                    <div className="text-xs text-amber-800 dark:text-amber-300">
+                      <div className="font-medium mb-0.5">配置提示</div>
+                      <div>支付方式的费率不可以低于该支付方式所包含通道中的任意一个，否则可能导致亏损。</div>
+                    </div>
+                  </div>
+                </div>
               </div>
               
               {feeRatesFormData.map((rate, index) => (
@@ -1495,7 +1517,7 @@ export default function ChannelsPage() {
                       </div>
 
                       <div>
-                        <div className="text-gray-500 dark:text-gray-400 mb-1">代收</div>
+                        <div className="text-gray-500 dark:text-gray-400 mb-1">代收成本费率</div>
                         <div className="font-medium text-green-600 dark:text-green-400">
                           {channel.collectionFeeRate}
                         </div>
@@ -1505,7 +1527,7 @@ export default function ChannelsPage() {
                       </div>
 
                       <div>
-                        <div className="text-gray-500 dark:text-gray-400 mb-1">代付</div>
+                        <div className="text-gray-500 dark:text-gray-400 mb-1">代付成本费率</div>
                         <div className="font-medium text-blue-600 dark:text-blue-400">
                           {channel.paymentFeeRate}
                         </div>
