@@ -10,6 +10,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
 import { 
   Search, 
   Network,
@@ -459,16 +465,16 @@ export default function InterfacesPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={isSupplierConfigDialogOpen} onOpenChange={setIsSupplierConfigDialogOpen}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+      <Sheet open={isSupplierConfigDialogOpen} onOpenChange={setIsSupplierConfigDialogOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2">
               <Settings className="w-5 h-5 text-blue-600" />
               {currentConfigInterface?.name} - 供应商配置
-            </DialogTitle>
-          </DialogHeader>
+            </SheetTitle>
+          </SheetHeader>
           {currentConfigInterface && (
-            <div className="space-y-6 py-4">
+            <div className="space-y-6 py-6">
               <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
                 <p className="text-sm text-yellow-800 dark:text-yellow-300">
                   <strong>安全提示：</strong>此功能仅用于演示。在生产环境中，API密钥应该通过安全的后端系统管理，使用环境变量或密钥管理服务存储，而不是在前端处理。
@@ -477,93 +483,94 @@ export default function InterfacesPage() {
 
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-                  选择支持的供应商
+                  选择支持的供应商并配置密钥
                 </h3>
-                <div className="space-y-2 mb-6">
-                  {mockSuppliers.map(supplier => (
-                    <div key={supplier.id} className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
-                      <Checkbox
-                        checked={selectedSuppliers.includes(supplier.id)}
-                        onCheckedChange={() => handleToggleSupplier(supplier.id, supplier.name)}
-                      />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{supplier.name}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">{supplier.tgAccount}</p>
+                <div className="space-y-3">
+                  {mockSuppliers.map(supplier => {
+                    const isSelected = selectedSuppliers.includes(supplier.id)
+                    const config = supplierConfigs.find(c => c.supplierId === supplier.id)
+                    
+                    return (
+                      <div key={supplier.id} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                        <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/30">
+                          <Checkbox
+                            checked={isSelected}
+                            onCheckedChange={() => handleToggleSupplier(supplier.id, supplier.name)}
+                          />
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900 dark:text-white">{supplier.name}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{supplier.tgAccount}</p>
+                          </div>
+                        </div>
+                        
+                        {isSelected && config && (
+                          <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center justify-between mb-3">
+                              <Label className="text-xs font-semibold text-gray-700 dark:text-gray-300">密钥格式</Label>
+                              <Select
+                                value={config.keyFormat}
+                                onValueChange={(value) => handleUpdateSupplierConfig(config.supplierId, 'keyFormat', value)}
+                              >
+                                <SelectTrigger className="w-[140px] h-8">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="standard">通用格式</SelectItem>
+                                  <SelectItem value="custom">自定义代码</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            {config.keyFormat === 'standard' ? (
+                              <div className="space-y-3">
+                                <div>
+                                  <Label htmlFor={`merchant-${config.supplierId}`} className="text-xs">商户ID</Label>
+                                  <Input
+                                    id={`merchant-${config.supplierId}`}
+                                    placeholder="请输入商户ID"
+                                    value={config.merchantId || ''}
+                                    onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'merchantId', e.target.value)}
+                                    className="mt-1 h-9"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor={`apikey-${config.supplierId}`} className="text-xs">API密钥</Label>
+                                  <Input
+                                    id={`apikey-${config.supplierId}`}
+                                    type="password"
+                                    placeholder="请输入API密钥"
+                                    value={config.apiKey || ''}
+                                    onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'apiKey', e.target.value)}
+                                    className="mt-1 h-9"
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              <div>
+                                <Label htmlFor={`code-${config.supplierId}`} className="text-xs">自定义配置代码</Label>
+                                <Textarea
+                                  id={`code-${config.supplierId}`}
+                                  placeholder="请输入JSON配置或其他自定义代码..."
+                                  rows={5}
+                                  value={config.customCode || ''}
+                                  onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'customCode', e.target.value)}
+                                  className="font-mono text-xs mt-1"
+                                />
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                  支持JSON格式或其他自定义配置格式
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
-
-              {supplierConfigs.length > 0 && (
-                <div className="space-y-4">
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-                    密钥配置
-                  </h3>
-                  {supplierConfigs.map(config => (
-                    <div key={config.supplierId} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                          {config.supplierName}
-                        </h4>
-                        <Select
-                          value={config.keyFormat}
-                          onValueChange={(value) => handleUpdateSupplierConfig(config.supplierId, 'keyFormat', value)}
-                        >
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="standard">通用格式</SelectItem>
-                            <SelectItem value="custom">自定义代码</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      {config.keyFormat === 'standard' ? (
-                        <div className="space-y-3">
-                          <div>
-                            <Label htmlFor={`merchant-${config.supplierId}`}>商户ID</Label>
-                            <Input
-                              id={`merchant-${config.supplierId}`}
-                              placeholder="请输入商户ID"
-                              value={config.merchantId || ''}
-                              onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'merchantId', e.target.value)}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor={`apikey-${config.supplierId}`}>API密钥</Label>
-                            <Input
-                              id={`apikey-${config.supplierId}`}
-                              type="password"
-                              placeholder="请输入API密钥"
-                              value={config.apiKey || ''}
-                              onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'apiKey', e.target.value)}
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <div>
-                          <Label htmlFor={`code-${config.supplierId}`}>自定义配置代码</Label>
-                          <Textarea
-                            id={`code-${config.supplierId}`}
-                            placeholder="请输入自定义配置代码或JSON配置..."
-                            className="font-mono text-sm min-h-[120px]"
-                            value={config.customCode || ''}
-                            onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'customCode', e.target.value)}
-                          />
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            支持JSON格式或其他自定义配置格式
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           )}
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pt-4 border-t border-gray-200 dark:border-gray-700 sticky bottom-0 bg-background">
             <Button
               onClick={() => setIsSupplierConfigDialogOpen(false)}
               variant="outline"
@@ -572,13 +579,13 @@ export default function InterfacesPage() {
             </Button>
             <Button
               onClick={handleSaveSupplierConfigs}
-              className="bg-custom-green hover:bg-custom-green/90"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               保存配置
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
