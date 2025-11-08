@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Plus, Edit, Trash2, Eye, Check, X, RotateCcw } from "lucide-react"
+import { Search, Plus, Edit, Trash2, Eye, Check, X, RotateCcw, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -12,6 +12,13 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
 import {
   Select,
   SelectContent,
@@ -45,6 +52,22 @@ interface Channel {
   demoVideo?: string
   status: "active" | "inactive"
   createdAt: string
+}
+
+interface PaymentChannel {
+  id: string
+  name: string
+  weight: number
+  collectionFeeRate: string
+  collectionCost: string
+  paymentFeeRate: string
+  paymentCost: string
+  status: "active" | "inactive"
+}
+
+interface PaymentMethodConfig {
+  paymentMethodId: string
+  channels: PaymentChannel[]
 }
 
 const mockChannels: Channel[] = [
@@ -135,6 +158,85 @@ const mockChannels: Channel[] = [
 
 const currencies = ["全部", "CNY", "BRL", "INR", "USD", "EUR"]
 
+// 模拟每个支付方式包含的支付通道配置
+const mockPaymentMethodConfigs: PaymentMethodConfig[] = [
+  {
+    paymentMethodId: "CH001",
+    channels: [
+      {
+        id: "PC001",
+        name: "支付宝通道A",
+        weight: 60,
+        collectionFeeRate: "0.6%",
+        collectionCost: "¥1.00",
+        paymentFeeRate: "0.4%",
+        paymentCost: "¥0.50",
+        status: "active"
+      },
+      {
+        id: "PC002",
+        name: "支付宝通道B",
+        weight: 40,
+        collectionFeeRate: "0.5%",
+        collectionCost: "¥0.80",
+        paymentFeeRate: "0.3%",
+        paymentCost: "¥0.40",
+        status: "active"
+      }
+    ]
+  },
+  {
+    paymentMethodId: "CH002",
+    channels: [
+      {
+        id: "PC003",
+        name: "微信通道A",
+        weight: 50,
+        collectionFeeRate: "0.6%",
+        collectionCost: "¥1.00",
+        paymentFeeRate: "0.4%",
+        paymentCost: "¥0.50",
+        status: "active"
+      },
+      {
+        id: "PC004",
+        name: "微信通道B",
+        weight: 30,
+        collectionFeeRate: "0.5%",
+        collectionCost: "¥0.90",
+        paymentFeeRate: "0.35%",
+        paymentCost: "¥0.45",
+        status: "active"
+      },
+      {
+        id: "PC005",
+        name: "微信通道C",
+        weight: 20,
+        collectionFeeRate: "0.55%",
+        collectionCost: "¥0.95",
+        paymentFeeRate: "0.38%",
+        paymentCost: "¥0.48",
+        status: "inactive"
+      }
+    ]
+  },
+  {
+    paymentMethodId: "CH003",
+    channels: [
+      {
+        id: "PC006",
+        name: "银行通道A",
+        weight: 100,
+        collectionFeeRate: "0.4%",
+        collectionCost: "¥0.80",
+        paymentFeeRate: "0.3%",
+        paymentCost: "¥0.40",
+        status: "active"
+      }
+    ]
+  }
+]
+
 export default function ChannelsPage() {
   const [channels, setChannels] = useState<Channel[]>(mockChannels)
   const [searchInput, setSearchInput] = useState("")
@@ -147,7 +249,9 @@ export default function ChannelsPage() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isDemoDialogOpen, setIsDemoDialogOpen] = useState(false)
+  const [isChannelConfigOpen, setIsChannelConfigOpen] = useState(false)
   const [currentChannel, setCurrentChannel] = useState<Channel | null>(null)
+  const [currentChannelConfig, setCurrentChannelConfig] = useState<PaymentMethodConfig | null>(null)
   const [editingDisplayName, setEditingDisplayName] = useState<string | null>(null)
   const [tempDisplayName, setTempDisplayName] = useState("")
   const [editingName, setEditingName] = useState<string | null>(null)
@@ -266,6 +370,13 @@ export default function ChannelsPage() {
   const cancelEditName = () => {
     setEditingName(null)
     setTempName("")
+  }
+
+  const openChannelConfig = (channel: Channel) => {
+    setCurrentChannel(channel)
+    const config = mockPaymentMethodConfigs.find(c => c.paymentMethodId === channel.id)
+    setCurrentChannelConfig(config || { paymentMethodId: channel.id, channels: [] })
+    setIsChannelConfigOpen(true)
   }
 
   const startEditFee = (channelId: string, tier: number, field: 'minAmount' | 'maxAmount' | 'collectionFeeRate' | 'minCollectionFee' | 'paymentFeeRate' | 'minPaymentFee', currentValue: any) => {
@@ -756,6 +867,15 @@ export default function ChannelsPage() {
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <div className="flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openChannelConfig(channel)}
+                        className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
+                        title="支付通道配置"
+                      >
+                        <Settings className="w-4 h-4" />
+                      </Button>
                       {channel.demoVideo && (
                         <Button
                           variant="ghost"
@@ -1258,6 +1378,134 @@ export default function ChannelsPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <Sheet open={isChannelConfigOpen} onOpenChange={setIsChannelConfigOpen}>
+        <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>支付通道配置 - {currentChannel?.name}</SheetTitle>
+            <SheetDescription>
+              查看该支付方式包含的支付通道、权重配置及费率信息
+            </SheetDescription>
+          </SheetHeader>
+          
+          <div className="mt-6 space-y-4">
+            {currentChannelConfig?.channels && currentChannelConfig.channels.length > 0 ? (
+              <>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  共 {currentChannelConfig.channels.length} 个支付通道
+                </div>
+                
+                {currentChannelConfig.channels.map((channel, index) => (
+                  <div 
+                    key={channel.id} 
+                    className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 rounded-lg w-10 h-10 flex items-center justify-center text-purple-600 dark:text-purple-300 font-bold text-sm">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900 dark:text-white">
+                            {channel.name}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">
+                            ID: {channel.id}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          channel.status === "active"
+                            ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+                            : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300"
+                        }`}>
+                          {channel.status === "active" ? "启用" : "禁用"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <div className="space-y-2">
+                        <div className="text-xs text-gray-500 dark:text-gray-400">权重配置</div>
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                            <div 
+                              className="bg-gradient-to-r from-purple-500 to-purple-600 h-full rounded-full"
+                              style={{ width: `${channel.weight}%` }}
+                            />
+                          </div>
+                          <div className="text-sm font-semibold text-purple-600 dark:text-purple-400 min-w-[45px] text-right">
+                            {channel.weight}%
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="text-xs text-gray-500 dark:text-gray-400">代收费率</div>
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-sm font-semibold text-green-600 dark:text-green-400">
+                            {channel.collectionFeeRate}
+                          </span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            + {channel.collectionCost}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="text-xs text-gray-500 dark:text-gray-400">代付费率</div>
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                            {channel.paymentFeeRate}
+                          </span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            + {channel.paymentCost}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="text-xs text-gray-500 dark:text-gray-400">单笔成本</div>
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="px-2 py-0.5 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded">
+                            代收: {channel.collectionCost}
+                          </span>
+                          <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded">
+                            代付: {channel.paymentCost}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <div className="flex items-start gap-2">
+                    <div className="text-blue-600 dark:text-blue-400 mt-0.5">
+                      <Settings className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 text-xs text-blue-800 dark:text-blue-300">
+                      <div className="font-medium mb-1">配置说明</div>
+                      <ul className="space-y-1 list-disc list-inside">
+                        <li>权重决定了订单分配到各通道的比例</li>
+                        <li>所有通道权重总和应为100%</li>
+                        <li>禁用的通道不参与订单分配</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                <Settings className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p>暂无支付通道配置</p>
+                <p className="text-xs mt-1">请先添加支付通道</p>
+              </div>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
