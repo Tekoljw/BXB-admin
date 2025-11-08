@@ -1494,16 +1494,7 @@ export default function MerchantsPage() {
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${
-                            allSuppliersEnabled 
-                              ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" 
-                              : someSuppliersEnabled 
-                                ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" 
-                                : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                          }`}>
-                            {supplierStatus}
-                          </span>
+                        <div className="flex items-center gap-2">
                           <Button
                             variant="ghost"
                             size="sm"
@@ -1525,6 +1516,15 @@ export default function MerchantsPage() {
                         </p>
                         <p className="text-xs text-orange-600 dark:text-orange-400 font-medium">
                           成本：{paymentInterface.collectionFeeRate}+{paymentInterface.collectionFeeFixed}   {paymentInterface.paymentFeeRate}+{paymentInterface.paymentFeeFixed}
+                        </p>
+                        <p className={`text-xs font-medium ${
+                          allSuppliersEnabled 
+                            ? "text-green-600 dark:text-green-400" 
+                            : someSuppliersEnabled 
+                              ? "text-blue-600 dark:text-blue-400" 
+                              : "text-gray-400 dark:text-gray-500"
+                        }`}>
+                          {supplierStatus}
                         </p>
                       </div>
                     </div>
