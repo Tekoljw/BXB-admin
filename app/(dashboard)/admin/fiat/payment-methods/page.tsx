@@ -388,8 +388,7 @@ export default function ChannelsPage() {
 
   const saveWeight = (channelId: string) => {
     const newWeight = parseInt(tempWeight)
-    if (!isNaN(newWeight) && newWeight >= 0 && newWeight <= 100) {
-      // Update the weight in the config
+    if (!isNaN(newWeight) && newWeight >= 0) {
       if (currentChannelConfig) {
         const updatedChannels = currentChannelConfig.channels.map(c =>
           c.id === channelId ? { ...c, weight: newWeight } : c
@@ -1482,9 +1481,10 @@ export default function ChannelsPage() {
                             <Input
                               value={tempWeight}
                               onChange={(e) => setTempWeight(e.target.value)}
-                              className="h-6 text-xs py-1 px-2 w-14"
-                              placeholder="0-100"
+                              className="h-7 text-xs py-1 px-2 w-16"
+                              placeholder="数字"
                               autoFocus
+                              type="number"
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') saveWeight(channel.id)
                                 else if (e.key === 'Escape') cancelEditWeight()
@@ -1502,14 +1502,14 @@ export default function ChannelsPage() {
                             className="flex items-center gap-1 cursor-pointer hover:text-purple-600 dark:hover:text-purple-400 group"
                             onClick={() => startEditWeight(channel.id, channel.weight)}
                           >
-                            <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
-                              <div 
-                                className="bg-gradient-to-r from-purple-500 to-purple-600 h-full rounded-full"
-                                style={{ width: `${channel.weight}%` }}
-                              />
-                            </div>
-                            <span className="font-semibold text-purple-600 dark:text-purple-400 min-w-[35px]">
-                              {channel.weight}%
+                            <span className="font-semibold text-purple-600 dark:text-purple-400">
+                              {channel.weight}
+                            </span>
+                            <span className="text-gray-500 dark:text-gray-400">
+                              ({(() => {
+                                const totalWeight = currentChannelConfig?.channels.reduce((sum, c) => sum + c.weight, 0) || 1
+                                return ((channel.weight / totalWeight) * 100).toFixed(1)
+                              })()}%)
                             </span>
                             <Edit className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
@@ -1543,7 +1543,7 @@ export default function ChannelsPage() {
                   <div className="text-xs text-blue-800 dark:text-blue-300">
                     <div className="font-medium mb-1">💡 配置说明</div>
                     <div className="text-xs opacity-90">
-                      权重决定订单分配比例，总和应为100%。禁用的通道不参与分配。
+                      权重按数值比例自动计算分配概率（如权重60和40，则分配比例为60%和40%）。禁用的通道不参与分配。
                     </div>
                   </div>
                 </div>
