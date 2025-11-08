@@ -1478,7 +1478,7 @@ export default function MerchantsPage() {
                   const supplierStatus = allSuppliersEnabled ? "全部供应商" : (someSuppliersEnabled ? "指定供应商" : "未指定")
                   
                   return (
-                    <div key={paymentInterface.name} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                    <div key={paymentInterface.name} className="relative p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${
@@ -1510,13 +1510,15 @@ export default function MerchantsPage() {
                           />
                         </div>
                       </div>
-                      <div className="ml-[52px] space-y-1">
+                      <div className="ml-[52px] space-y-1 pr-24">
                         <p className="text-xs text-gray-500 dark:text-gray-400">
                           {paymentInterface.enabled ? "已启用" : "已禁用"}
                         </p>
                         <p className="text-xs text-orange-600 dark:text-orange-400 font-medium">
                           成本：{paymentInterface.collectionFeeRate}+{paymentInterface.collectionFeeFixed}   {paymentInterface.paymentFeeRate}+{paymentInterface.paymentFeeFixed}
                         </p>
+                      </div>
+                      <div className="absolute bottom-3 right-4">
                         <p className={`text-xs font-medium ${
                           allSuppliersEnabled 
                             ? "text-green-600 dark:text-green-400" 
