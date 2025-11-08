@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Switch } from "@/components/ui/switch"
 import Image from "next/image"
 
 interface FeeRate {
@@ -298,6 +299,14 @@ export default function ChannelsPage() {
 
   const cancelEditFee = () => {
     setEditingFee(null)
+  }
+
+  const toggleChannelStatus = (channelId: string) => {
+    setChannels(channels.map(c => 
+      c.id === channelId 
+        ? { ...c, status: c.status === "active" ? "inactive" : "active" } 
+        : c
+    ))
   }
 
   const openDeleteDialog = (channel: Channel) => {
@@ -716,13 +725,19 @@ export default function ChannelsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      channel.status === "active"
-                        ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300"
-                    }`}>
-                      {channel.status === "active" ? "启用" : "禁用"}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        channel.status === "active"
+                          ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+                          : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300"
+                      }`}>
+                        {channel.status === "active" ? "启用" : "禁用"}
+                      </span>
+                      <Switch
+                        checked={channel.status === "active"}
+                        onCheckedChange={() => toggleChannelStatus(channel.id)}
+                      />
+                    </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <div className="flex items-center gap-1">
