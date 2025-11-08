@@ -436,31 +436,6 @@ export default function ChannelsPage() {
                 <tr key={channel.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="px-4 py-3 text-sm">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg overflow-hidden bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 flex items-center justify-center flex-shrink-0 text-xl font-bold">
-                        {channel.logo ? (
-                          channel.logo.startsWith('http') ? (
-                            <Image 
-                              src={channel.logo} 
-                              alt={channel.name}
-                              width={40}
-                              height={40}
-                              className="object-contain"
-                              unoptimized
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                const parent = e.currentTarget.parentElement;
-                                if (parent) {
-                                  parent.innerHTML = channel.name.substring(0, 2);
-                                }
-                              }}
-                            />
-                          ) : (
-                            <span>{channel.logo}</span>
-                          )
-                        ) : (
-                          <span className="text-blue-600 dark:text-blue-300">{channel.name.substring(0, 2)}</span>
-                        )}
-                      </div>
                       <div className="flex-1">
                         {editingName === channel.id ? (
                           <div className="flex items-center gap-1 mb-1">
@@ -842,15 +817,6 @@ export default function ChannelsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="logo">LOGO链接</Label>
-                <Input
-                  id="logo"
-                  placeholder="https://example.com/logo.png"
-                  value={formData.logo}
-                  onChange={(e) => setFormData({...formData, logo: e.target.value})}
-                />
-              </div>
-              <div className="space-y-2">
                 <Label htmlFor="currency">币种</Label>
                 <Select value={formData.currency} onValueChange={(value) => setFormData({...formData, currency: value})}>
                   <SelectTrigger>
@@ -903,107 +869,79 @@ export default function ChannelsPage() {
 
             <div className="space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b">
-                <h3 className="text-lg font-semibold">阶梯费率配置</h3>
-                <span className="text-sm text-gray-500 dark:text-gray-400">（根据交易金额自动匹配费率）</span>
+                <h3 className="text-lg font-semibold">通道成本价格</h3>
               </div>
               
-              {feeRatesFormData.map((rate, index) => (
-                <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
-                  <div className="mb-3">
-                    <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full text-sm font-semibold">
-                      第 {index + 1} 档
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <Label className="text-xs text-gray-600 dark:text-gray-400">最小金额</Label>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        value={rate.minAmount === Infinity ? '' : rate.minAmount}
-                        onChange={(e) => {
-                          const newRates = [...feeRatesFormData]
-                          newRates[index].minAmount = e.target.value === '' ? 0 : Number(e.target.value)
-                          setFeeRatesFormData(newRates)
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <Label className="text-xs text-gray-600 dark:text-gray-400">最大金额（留空表示无上限）</Label>
-                      <Input
-                        type="number"
-                        placeholder="无上限"
-                        value={rate.maxAmount === Infinity ? '' : rate.maxAmount}
-                        onChange={(e) => {
-                          const newRates = [...feeRatesFormData]
-                          newRates[index].maxAmount = e.target.value === '' ? Infinity : Number(e.target.value)
-                          setFeeRatesFormData(newRates)
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-medium text-green-700 dark:text-green-400">代收费用</h4>
-                      <div className="space-y-2">
-                        <div>
-                          <Label className="text-xs text-gray-600 dark:text-gray-400">代收费率（%）</Label>
-                          <Input
-                            placeholder="例如：0.5%"
-                            value={rate.collectionFeeRate}
-                            onChange={(e) => {
-                              const newRates = [...feeRatesFormData]
-                              newRates[index].collectionFeeRate = e.target.value
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium text-green-700 dark:text-green-400">代收费用</h4>
+                    <div className="space-y-2">
+                      <div>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">代收费率（%）</Label>
+                        <Input
+                          placeholder="例如：0.5%"
+                          value={feeRatesFormData[0]?.collectionFeeRate || ''}
+                          onChange={(e) => {
+                            const newRates = [...feeRatesFormData]
+                            if (newRates[0]) {
+                              newRates[0].collectionFeeRate = e.target.value
                               setFeeRatesFormData(newRates)
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <Label className="text-xs text-gray-600 dark:text-gray-400">最低代收费</Label>
-                          <Input
-                            placeholder="例如：¥1.00"
-                            value={rate.minCollectionFee}
-                            onChange={(e) => {
-                              const newRates = [...feeRatesFormData]
-                              newRates[index].minCollectionFee = e.target.value
+                            }
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">最低代收费</Label>
+                        <Input
+                          placeholder="例如：¥1.00"
+                          value={feeRatesFormData[0]?.minCollectionFee || ''}
+                          onChange={(e) => {
+                            const newRates = [...feeRatesFormData]
+                            if (newRates[0]) {
+                              newRates[0].minCollectionFee = e.target.value
                               setFeeRatesFormData(newRates)
-                            }}
-                          />
-                        </div>
+                            }
+                          }}
+                        />
                       </div>
                     </div>
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400">代付费用</h4>
-                      <div className="space-y-2">
-                        <div>
-                          <Label className="text-xs text-gray-600 dark:text-gray-400">代付费率（%）</Label>
-                          <Input
-                            placeholder="例如：0.3%"
-                            value={rate.paymentFeeRate}
-                            onChange={(e) => {
-                              const newRates = [...feeRatesFormData]
-                              newRates[index].paymentFeeRate = e.target.value
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400">代付费用</h4>
+                    <div className="space-y-2">
+                      <div>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">代付费率（%）</Label>
+                        <Input
+                          placeholder="例如：0.3%"
+                          value={feeRatesFormData[0]?.paymentFeeRate || ''}
+                          onChange={(e) => {
+                            const newRates = [...feeRatesFormData]
+                            if (newRates[0]) {
+                              newRates[0].paymentFeeRate = e.target.value
                               setFeeRatesFormData(newRates)
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <Label className="text-xs text-gray-600 dark:text-gray-400">最低代付费</Label>
-                          <Input
-                            placeholder="例如：¥0.50"
-                            value={rate.minPaymentFee}
-                            onChange={(e) => {
-                              const newRates = [...feeRatesFormData]
-                              newRates[index].minPaymentFee = e.target.value
+                            }
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">最低代付费</Label>
+                        <Input
+                          placeholder="例如：¥0.50"
+                          value={feeRatesFormData[0]?.minPaymentFee || ''}
+                          onChange={(e) => {
+                            const newRates = [...feeRatesFormData]
+                            if (newRates[0]) {
+                              newRates[0].minPaymentFee = e.target.value
                               setFeeRatesFormData(newRates)
-                            }}
-                          />
-                        </div>
+                            }
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
           <DialogFooter>
@@ -1048,15 +986,6 @@ export default function ChannelsPage() {
                   placeholder="例如：支付宝扫码支付"
                   value={formData.displayName}
                   onChange={(e) => setFormData({...formData, displayName: e.target.value})}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-logo">LOGO链接</Label>
-                <Input
-                  id="edit-logo"
-                  placeholder="https://example.com/logo.png"
-                  value={formData.logo}
-                  onChange={(e) => setFormData({...formData, logo: e.target.value})}
                 />
               </div>
               <div className="space-y-2">
@@ -1111,107 +1040,79 @@ export default function ChannelsPage() {
 
             <div className="space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b">
-                <h3 className="text-lg font-semibold">阶梯费率配置</h3>
-                <span className="text-sm text-gray-500 dark:text-gray-400">（根据交易金额自动匹配费率）</span>
+                <h3 className="text-lg font-semibold">通道成本价格</h3>
               </div>
               
-              {feeRatesFormData.map((rate, index) => (
-                <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
-                  <div className="mb-3">
-                    <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full text-sm font-semibold">
-                      第 {index + 1} 档
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <Label className="text-xs text-gray-600 dark:text-gray-400">最小金额</Label>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        value={rate.minAmount === Infinity ? '' : rate.minAmount}
-                        onChange={(e) => {
-                          const newRates = [...feeRatesFormData]
-                          newRates[index].minAmount = e.target.value === '' ? 0 : Number(e.target.value)
-                          setFeeRatesFormData(newRates)
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <Label className="text-xs text-gray-600 dark:text-gray-400">最大金额（留空表示无上限）</Label>
-                      <Input
-                        type="number"
-                        placeholder="无上限"
-                        value={rate.maxAmount === Infinity ? '' : rate.maxAmount}
-                        onChange={(e) => {
-                          const newRates = [...feeRatesFormData]
-                          newRates[index].maxAmount = e.target.value === '' ? Infinity : Number(e.target.value)
-                          setFeeRatesFormData(newRates)
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-medium text-green-700 dark:text-green-400">代收费用</h4>
-                      <div className="space-y-2">
-                        <div>
-                          <Label className="text-xs text-gray-600 dark:text-gray-400">代收费率（%）</Label>
-                          <Input
-                            placeholder="例如：0.5%"
-                            value={rate.collectionFeeRate}
-                            onChange={(e) => {
-                              const newRates = [...feeRatesFormData]
-                              newRates[index].collectionFeeRate = e.target.value
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium text-green-700 dark:text-green-400">代收费用</h4>
+                    <div className="space-y-2">
+                      <div>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">代收费率（%）</Label>
+                        <Input
+                          placeholder="例如：0.5%"
+                          value={feeRatesFormData[0]?.collectionFeeRate || ''}
+                          onChange={(e) => {
+                            const newRates = [...feeRatesFormData]
+                            if (newRates[0]) {
+                              newRates[0].collectionFeeRate = e.target.value
                               setFeeRatesFormData(newRates)
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <Label className="text-xs text-gray-600 dark:text-gray-400">最低代收费</Label>
-                          <Input
-                            placeholder="例如：¥1.00"
-                            value={rate.minCollectionFee}
-                            onChange={(e) => {
-                              const newRates = [...feeRatesFormData]
-                              newRates[index].minCollectionFee = e.target.value
+                            }
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">最低代收费</Label>
+                        <Input
+                          placeholder="例如：¥1.00"
+                          value={feeRatesFormData[0]?.minCollectionFee || ''}
+                          onChange={(e) => {
+                            const newRates = [...feeRatesFormData]
+                            if (newRates[0]) {
+                              newRates[0].minCollectionFee = e.target.value
                               setFeeRatesFormData(newRates)
-                            }}
-                          />
-                        </div>
+                            }
+                          }}
+                        />
                       </div>
                     </div>
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400">代付费用</h4>
-                      <div className="space-y-2">
-                        <div>
-                          <Label className="text-xs text-gray-600 dark:text-gray-400">代付费率（%）</Label>
-                          <Input
-                            placeholder="例如：0.3%"
-                            value={rate.paymentFeeRate}
-                            onChange={(e) => {
-                              const newRates = [...feeRatesFormData]
-                              newRates[index].paymentFeeRate = e.target.value
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400">代付费用</h4>
+                    <div className="space-y-2">
+                      <div>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">代付费率（%）</Label>
+                        <Input
+                          placeholder="例如：0.3%"
+                          value={feeRatesFormData[0]?.paymentFeeRate || ''}
+                          onChange={(e) => {
+                            const newRates = [...feeRatesFormData]
+                            if (newRates[0]) {
+                              newRates[0].paymentFeeRate = e.target.value
                               setFeeRatesFormData(newRates)
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <Label className="text-xs text-gray-600 dark:text-gray-400">最低代付费</Label>
-                          <Input
-                            placeholder="例如：¥0.50"
-                            value={rate.minPaymentFee}
-                            onChange={(e) => {
-                              const newRates = [...feeRatesFormData]
-                              newRates[index].minPaymentFee = e.target.value
+                            }
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">最低代付费</Label>
+                        <Input
+                          placeholder="例如：¥0.50"
+                          value={feeRatesFormData[0]?.minPaymentFee || ''}
+                          onChange={(e) => {
+                            const newRates = [...feeRatesFormData]
+                            if (newRates[0]) {
+                              newRates[0].minPaymentFee = e.target.value
                               setFeeRatesFormData(newRates)
-                            }}
-                          />
-                        </div>
+                            }
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
           <DialogFooter>
