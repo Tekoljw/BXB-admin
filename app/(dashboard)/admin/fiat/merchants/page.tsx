@@ -914,13 +914,13 @@ export default function MerchantsPage() {
                               </td>
                               <td className="px-3 py-3 whitespace-nowrap text-sm">
                                 <Button
-                                  variant="outline"
+                                  variant="ghost"
                                   size="sm"
                                   onClick={() => openSupplierManageDialog(config)}
                                   className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
+                                  title="管理供应商"
                                 >
-                                  <Settings className="w-4 h-4 mr-1" />
-                                  管理供应商
+                                  <Settings className="w-4 h-4" />
                                 </Button>
                               </td>
                               <td className="px-3 py-3 whitespace-nowrap text-sm">
