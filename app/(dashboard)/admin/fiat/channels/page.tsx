@@ -145,6 +145,10 @@ export default function ChannelsPage() {
   const [channels, setChannels] = useState<Channel[]>(mockChannels)
   const [searchInput, setSearchInput] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
+  
+  // 获取所有唯一的接口名称
+  const interfaces = ["全部", ...Array.from(new Set(mockChannels.map(ch => ch.interface)))]
+  const [selectedInterface, setSelectedInterface] = useState("全部")
   const [selectedCurrency, setSelectedCurrency] = useState("全部")
   
   const handleSearch = () => setSearchTerm(searchInput)
@@ -186,9 +190,10 @@ export default function ChannelsPage() {
       channel.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
       channel.interface.toLowerCase().includes(searchTerm.toLowerCase())
     
+    const matchesInterface = selectedInterface === "全部" || channel.interface === selectedInterface
     const matchesCurrency = selectedCurrency === "全部" || channel.currency === selectedCurrency
     
-    return matchesSearch && matchesCurrency
+    return matchesSearch && matchesInterface && matchesCurrency
   })
 
   const handleAdd = () => {
@@ -361,6 +366,21 @@ export default function ChannelsPage() {
         </Button>
       </div>
 
+      {/* 一级页签：接口名称 */}
+      <Tabs value={selectedInterface} onValueChange={(value) => {
+        setSelectedInterface(value)
+        setSelectedCurrency("全部") // 切换接口时重置币种
+      }}>
+        <TabsList className={`grid w-full max-w-3xl`} style={{ gridTemplateColumns: `repeat(${interfaces.length}, minmax(0, 1fr))` }}>
+          {interfaces.map(interfaceName => (
+            <TabsTrigger key={interfaceName} value={interfaceName}>
+              {interfaceName}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+
+      {/* 二级页签：币种 */}
       <Tabs value={selectedCurrency} onValueChange={setSelectedCurrency}>
         <TabsList className="grid grid-cols-6 w-full max-w-2xl">
           {currencies.map(currency => (
