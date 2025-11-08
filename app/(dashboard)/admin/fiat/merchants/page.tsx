@@ -13,6 +13,14 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetFooter,
+} from "@/components/ui/sheet"
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -809,16 +817,16 @@ export default function MerchantsPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={isFeeConfigDialogOpen} onOpenChange={setIsFeeConfigDialogOpen}>
-        <DialogContent className="max-w-7xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>支付方式配置 - {currentMerchant?.name}</DialogTitle>
-            <DialogDescription>
+      <Sheet open={isFeeConfigDialogOpen} onOpenChange={setIsFeeConfigDialogOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>支付方式配置 - {currentMerchant?.name}</SheetTitle>
+            <SheetDescription>
               商户ID: {currentMerchant?.id} | 按币种、支付通道和供应商设置不同的手续费率
-            </DialogDescription>
-          </DialogHeader>
+            </SheetDescription>
+          </SheetHeader>
 
-          <div className="mt-4">
+          <div className="mt-6">
             {currentMerchant?.feeConfigs && currentMerchant.feeConfigs.length > 0 ? (
               <Tabs value={activeCurrency} onValueChange={setActiveCurrency}>
                 <TabsList className="grid w-full" style={{ gridTemplateColumns: `repeat(${Array.from(new Set(currentMerchant.feeConfigs.map(fc => fc.currency))).length}, 1fr)` }}>
@@ -960,7 +968,7 @@ export default function MerchantsPage() {
             </div>
           </div>
 
-          <DialogFooter>
+          <SheetFooter className="mt-6">
             <Button variant="outline" onClick={() => setIsFeeConfigDialogOpen(false)}>
               关闭
             </Button>
@@ -968,9 +976,9 @@ export default function MerchantsPage() {
               <Plus className="w-4 h-4 mr-1" />
               添加支付方式
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       <Dialog open={isAddFeeConfigDialogOpen} onOpenChange={setIsAddFeeConfigDialogOpen}>
         <DialogContent className="max-w-2xl">
