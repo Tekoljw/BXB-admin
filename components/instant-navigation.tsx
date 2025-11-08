@@ -54,12 +54,7 @@ import KYCReviewPage from "@/app/(dashboard)/admin/users/kyc-review/page"
 import KYCRecordsPage from "@/app/(dashboard)/admin/users/kyc-records/page"
 import SocialManagementPage from "@/app/(dashboard)/admin/social/page"
 import MarketManagementPage from "@/app/(dashboard)/admin/market/page"
-import C2CManagementPage from "@/app/(dashboard)/admin/fiat/c2c/page"
-import C2COrdersPage from "@/app/(dashboard)/admin/fiat/c2c-orders/page"
-import QuickConfigPage from "@/app/(dashboard)/admin/fiat/quick-config/page"
-import QuickOrdersPage from "@/app/(dashboard)/admin/fiat/quick-orders/page"
-import OTCConfigPage from "@/app/(dashboard)/admin/fiat/otc-config/page"
-import OTCOrdersPage from "@/app/(dashboard)/admin/fiat/otc-orders/page"
+import C2CModulePage from "@/app/(dashboard)/admin/c2c/page"
 import EscrowRulesPage from "@/app/(dashboard)/admin/escrow/rules/page"
 import EscrowRecordsPage from "@/app/(dashboard)/admin/escrow/records/page"
 import EscrowRankingsPage from "@/app/(dashboard)/admin/escrow/rankings/page"
@@ -90,7 +85,7 @@ import UCardCommissionPage from "@/app/(dashboard)/admin/commission/ucard/page"
 import EscrowCommissionPage from "@/app/(dashboard)/admin/commission/escrow/page"
 import PaymentCommissionPage from "@/app/(dashboard)/admin/commission/payment/page"
 import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
-import BePayManagementPage from "@/app/(dashboard)/admin/bepay/page"
+import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
 import PermissionsManagementPage from "@/app/(dashboard)/admin/system/permissions/page"
 import RolesManagementPage from "@/app/(dashboard)/admin/system/roles/page"
 import SystemUsersManagementPage from "@/app/(dashboard)/admin/system/users/page"
@@ -116,7 +111,7 @@ export default function InstantNavigation() {
     if (path.startsWith('/admin/users')) return 'users'
     if (path.startsWith('/admin/im')) return 'im'
     if (path.startsWith('/admin/social')) return 'social'
-    if (path.startsWith('/admin/fiat')) return 'fiat'
+    if (path.startsWith('/admin/c2c')) return 'c2c'
     if (path.startsWith('/admin/escrow')) return 'escrow'
     if (path.startsWith('/admin/ucard')) return 'ucard'
     if (path.startsWith('/admin/spot')) return 'spot'
@@ -124,7 +119,7 @@ export default function InstantNavigation() {
     if (path.startsWith('/admin/copytrade')) return 'copytrade'
     if (path.startsWith('/admin/finance')) return 'finance'
     if (path.startsWith('/admin/commission')) return 'commission'
-    if (path.startsWith('/admin/bepay')) return 'bepay'
+    if (path.startsWith('/admin/fiat')) return 'fiat'
     if (path.startsWith('/admin/orders')) return 'orders'
     if (path.startsWith('/admin/system')) return 'system'
     return 'permissions'
@@ -138,7 +133,7 @@ export default function InstantNavigation() {
       users: '/admin/users/all',
       im: '/admin/im/accounts',
       social: '/admin/social',
-      fiat: '/admin/fiat/c2c',
+      c2c: '/admin/c2c/c2c',
       escrow: '/admin/escrow/rules',
       ucard: '/admin/ucard/users',
       spot: '/admin/spot/coins',
@@ -146,7 +141,7 @@ export default function InstantNavigation() {
       copytrade: '/admin/copytrade',
       finance: '/admin/finance',
       commission: '/admin/commission/futures',
-      bepay: '/admin/bepay/suppliers',
+      fiat: '/admin/fiat/currencies',
       orders: '/admin/orders/funds',
       system: '/admin/system/permissions',
     }
@@ -222,7 +217,7 @@ export default function InstantNavigation() {
       users: '用户管理',
       im: 'IM管理',
       social: '社交管理',
-      fiat: '法币管理',
+      c2c: 'C2C',
       escrow: '担保管理',
       ucard: 'U卡管理',
       spot: '现货管理',
@@ -230,7 +225,7 @@ export default function InstantNavigation() {
       copytrade: '跟单管理',
       finance: '理财管理',
       commission: '佣金管理',
-      bepay: 'BePay管理',
+      fiat: '法币',
       orders: '财务管理',
       system: '系统管理',
     }
@@ -298,13 +293,7 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/im/group-search") return <IMGroupSearchPage />
     if (currentPage === "/admin/social") return <SocialManagementPage />
     if (currentPage === "/admin/market") return <MarketManagementPage />
-    if (currentPage === "/admin/fiat") return <C2CManagementPage />
-    if (currentPage === "/admin/fiat/c2c") return <C2CManagementPage />
-    if (currentPage === "/admin/fiat/c2c-orders") return <C2COrdersPage />
-    if (currentPage === "/admin/fiat/quick-config") return <QuickConfigPage />
-    if (currentPage === "/admin/fiat/quick-orders") return <QuickOrdersPage />
-    if (currentPage === "/admin/fiat/otc-config") return <OTCConfigPage />
-    if (currentPage === "/admin/fiat/otc-orders") return <OTCOrdersPage />
+    if (currentPage.startsWith("/admin/c2c")) return <C2CModulePage />
     if (currentPage === "/admin/escrow") return <EscrowRulesPage />
     if (currentPage === "/admin/escrow/rules") return <EscrowRulesPage />
     if (currentPage === "/admin/escrow/records") return <EscrowRecordsPage />
@@ -339,7 +328,7 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/commission/escrow") return <EscrowCommissionPage />
     if (currentPage === "/admin/commission/payment") return <PaymentCommissionPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
-    if (currentPage.startsWith("/admin/bepay")) return <BePayManagementPage />
+    if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />
     if (currentPage === "/admin/system") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/permissions") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/roles") return <RolesManagementPage />

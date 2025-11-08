@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import BePayLayout from "@/components/bepay-layout"
+import FiatLayout from "@/components/fiat-layout"
 
 // 导入子页面
 import CurrenciesPage from "./currencies/page"
 import SuppliersPage from "./suppliers/page"
 import InterfacesPage from "./interfaces/page"
+import PaymentMethodsPage from "./payment-methods/page"
 import ChannelsPage from "./channels/page"
 import MerchantsPage from "./merchants/page"
 import CommissionPage from "./commission/page"
@@ -15,7 +16,7 @@ import OrdersPage from "./orders/page"
 import PayoutOrdersPage from "./payout-orders/page"
 import ExchangeOrdersPage from "./exchange-orders/page"
 
-export default function BePayManagementPage() {
+export default function FiatManagementPage() {
   const router = useRouter()
   const [currentPath, setCurrentPath] = useState("")
 
@@ -23,8 +24,8 @@ export default function BePayManagementPage() {
     setCurrentPath(window.location.pathname)
     
     // 如果访问的是根路径，重定向到币种管理
-    if (window.location.pathname === "/admin/bepay") {
-      router.replace("/admin/bepay/currencies")
+    if (window.location.pathname === "/admin/fiat") {
+      router.replace("/admin/fiat/currencies")
     }
     
     // 监听路径变化
@@ -34,7 +35,7 @@ export default function BePayManagementPage() {
     
     // 监听URL变化的间隔器
     const intervalId = setInterval(() => {
-      if (window.location.pathname !== currentPath && window.location.pathname.startsWith("/admin/bepay")) {
+      if (window.location.pathname !== currentPath && window.location.pathname.startsWith("/admin/fiat")) {
         setCurrentPath(window.location.pathname)
       }
     }, 100)
@@ -49,31 +50,34 @@ export default function BePayManagementPage() {
 
   // 渲染对应的子页面
   const renderSubPage = () => {
-    if (currentPath === "/admin/bepay/currencies") {
+    if (currentPath === "/admin/fiat/currencies") {
       return <CurrenciesPage />
     }
-    if (currentPath === "/admin/bepay/suppliers") {
+    if (currentPath === "/admin/fiat/suppliers") {
       return <SuppliersPage />
     }
-    if (currentPath === "/admin/bepay/interfaces") {
+    if (currentPath === "/admin/fiat/interfaces") {
       return <InterfacesPage />
     }
-    if (currentPath === "/admin/bepay/channels") {
+    if (currentPath === "/admin/fiat/payment-methods") {
+      return <PaymentMethodsPage />
+    }
+    if (currentPath === "/admin/fiat/channels") {
       return <ChannelsPage />
     }
-    if (currentPath === "/admin/bepay/merchants") {
+    if (currentPath === "/admin/fiat/merchants") {
       return <MerchantsPage />
     }
-    if (currentPath === "/admin/bepay/commission") {
+    if (currentPath === "/admin/fiat/commission") {
       return <CommissionPage />
     }
-    if (currentPath === "/admin/bepay/orders") {
+    if (currentPath === "/admin/fiat/orders") {
       return <OrdersPage />
     }
-    if (currentPath === "/admin/bepay/payout-orders") {
+    if (currentPath === "/admin/fiat/payout-orders") {
       return <PayoutOrdersPage />
     }
-    if (currentPath === "/admin/bepay/exchange-orders") {
+    if (currentPath === "/admin/fiat/exchange-orders") {
       return <ExchangeOrdersPage />
     }
 
@@ -82,8 +86,8 @@ export default function BePayManagementPage() {
   }
 
   return (
-    <BePayLayout>
+    <FiatLayout>
       {renderSubPage()}
-    </BePayLayout>
+    </FiatLayout>
   )
 }

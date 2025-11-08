@@ -45,7 +45,7 @@ export default function BusinessManagementPage() {
     { id: "users", label: "用户管理", icon: Users, visible: true, roles: ["超级管理员", "用户管理员"] },
     { id: "im", label: "IM管理", icon: MessageSquare, visible: true, roles: ["超级管理员", "客服主管"] },
     { id: "social", label: "社交管理", icon: Share2, visible: true, roles: ["超级管理员", "内容审核员"] },
-    { id: "fiat", label: "法币管理", icon: DollarSign, visible: true, roles: ["超级管理员", "财务主管"] },
+    { id: "c2c", label: "C2C", icon: DollarSign, visible: true, roles: ["超级管理员", "财务主管"] },
     { id: "escrow", label: "担保管理", icon: Shield, visible: true, roles: ["超级管理员", "风控专员"] },
     { id: "ucard", label: "U卡管理", icon: CreditCard, visible: true, roles: ["超级管理员", "卡务管理员"] },
     { id: "spot", label: "现货管理", icon: TrendingUp, visible: true, roles: ["超级管理员", "交易管理员"] },
@@ -53,7 +53,7 @@ export default function BusinessManagementPage() {
     { id: "copytrade", label: "跟单管理", icon: Copy, visible: true, roles: ["超级管理员", "跟单审核员"] },
     { id: "finance", label: "理财管理", icon: PiggyBank, visible: true, roles: ["超级管理员", "理财顾问"] },
     { id: "commission", label: "佣金管理", icon: Percent, visible: true, roles: ["超级管理员", "财务专员"] },
-    { id: "bepay", label: "BePay管理", icon: Store, visible: true, roles: ["超级管理员", "支付管理员"] },
+    { id: "fiat", label: "法币", icon: Store, visible: true, roles: ["超级管理员", "支付管理员"] },
     { id: "orders", label: "财务管理", icon: FileText, visible: true, roles: ["超级管理员", "财务主管", "会计"] },
     { id: "system", label: "系统管理", icon: Settings, visible: true, roles: ["超级管理员"] },
   ])

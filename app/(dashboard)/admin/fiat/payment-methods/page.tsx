@@ -344,13 +344,13 @@ export default function ChannelsPage() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">支付方式列表</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">通道列表</h2>
         <Button 
           onClick={() => setIsAddDialogOpen(true)}
           className="bg-custom-green hover:bg-custom-green/90"
         >
           <Plus className="w-4 h-4 mr-2" />
-          添加支付方式
+          添加通道
         </Button>
       </div>
 
@@ -368,7 +368,7 @@ export default function ChannelsPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
-            placeholder="搜索支付方式名称、代码或接口..."
+            placeholder="搜索通道名称、代码或接口..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -397,7 +397,7 @@ export default function ChannelsPage() {
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  支付方式信息
+                  通道信息
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   外显名称
@@ -809,8 +809,8 @@ export default function ChannelsPage() {
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>添加支付方式</DialogTitle>
-            <DialogDescription>添加新的支付方式</DialogDescription>
+            <DialogTitle>添加通道</DialogTitle>
+            <DialogDescription>添加新的支付通道</DialogDescription>
           </DialogHeader>
           <div className="space-y-6 py-4">
             <div className="grid grid-cols-2 gap-4">
@@ -1020,8 +1020,8 @@ export default function ChannelsPage() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>编辑支付方式</DialogTitle>
-            <DialogDescription>修改支付方式配置信息</DialogDescription>
+            <DialogTitle>编辑通道</DialogTitle>
+            <DialogDescription>修改通道配置信息</DialogDescription>
           </DialogHeader>
           <div className="space-y-6 py-4">
             <div className="grid grid-cols-2 gap-4">
@@ -1228,9 +1228,9 @@ export default function ChannelsPage() {
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>删除支付方式</DialogTitle>
+            <DialogTitle>删除通道</DialogTitle>
             <DialogDescription>
-              确定要删除支付方式 "{currentChannel?.name}" 吗？此操作不可恢复。
+              确定要删除通道 "{currentChannel?.name}" 吗？此操作不可恢复。
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
