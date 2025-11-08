@@ -39,16 +39,22 @@ interface ApiKey {
   createdAt: string
 }
 
-interface Supplier {
+interface InterfaceSupplier {
   name: string
   enabled: boolean
+}
+
+interface PaymentInterface {
+  name: string
+  enabled: boolean
+  suppliers: InterfaceSupplier[]
 }
 
 interface FeeConfig {
   id: string
   currency: string
   channel: string
-  suppliers: Supplier[]
+  interfaces: PaymentInterface[]
   collectionFee: string
   paymentFee: string
   minCollectionFee: string
@@ -124,10 +130,36 @@ const mockMerchants: Merchant[] = [
     ],
     totalOrders: 5432,
     feeConfigs: [
-      { id: "FC008", currency: "CNY", channel: "支付宝", suppliers: [{ name: "Bitzpay", enabled: true }], collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false },
-      { id: "FC009", currency: "CNY", channel: "微信支付", suppliers: [{ name: "BePayOTC", enabled: true }, { name: "CFpay", enabled: false }], collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false },
-      { id: "FC010", currency: "USDT", channel: "TRC20", suppliers: [{ name: "PayGate", enabled: true }, { name: "EasyPay", enabled: true }], collectionFee: "1.2%", paymentFee: "1.0%", minCollectionFee: "1.2 USDT", minPaymentFee: "1.0 USDT", useSystemTieredFee: true },
-      { id: "FC011", currency: "USDT", channel: "ERC20", suppliers: [{ name: "Bitzpay", enabled: true }], collectionFee: "1.5%", paymentFee: "1.3%", minCollectionFee: "2.0 USDT", minPaymentFee: "1.5 USDT", useSystemTieredFee: false },
+      { 
+        id: "FC008", currency: "CNY", channel: "支付宝", 
+        interfaces: [
+          { name: "Bitzpay", enabled: true, suppliers: [{ name: "云端支付", enabled: true }, { name: "极速支付", enabled: false }] }
+        ], 
+        collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false 
+      },
+      { 
+        id: "FC009", currency: "CNY", channel: "微信支付", 
+        interfaces: [
+          { name: "BePayOTC", enabled: true, suppliers: [{ name: "星辰支付", enabled: true }] }, 
+          { name: "CFpay", enabled: false, suppliers: [{ name: "快付通", enabled: true }, { name: "支付宝", enabled: false }] }
+        ], 
+        collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false 
+      },
+      { 
+        id: "FC010", currency: "USDT", channel: "TRC20", 
+        interfaces: [
+          { name: "PayGate", enabled: true, suppliers: [{ name: "链上支付", enabled: true }, { name: "数字钱包", enabled: true }] }, 
+          { name: "EasyPay", enabled: true, suppliers: [{ name: "USDT通道", enabled: true }] }
+        ], 
+        collectionFee: "1.2%", paymentFee: "1.0%", minCollectionFee: "1.2 USDT", minPaymentFee: "1.0 USDT", useSystemTieredFee: true 
+      },
+      { 
+        id: "FC011", currency: "USDT", channel: "ERC20", 
+        interfaces: [
+          { name: "Bitzpay", enabled: true, suppliers: [{ name: "以太坊网关", enabled: true }] }
+        ], 
+        collectionFee: "1.5%", paymentFee: "1.3%", minCollectionFee: "2.0 USDT", minPaymentFee: "1.5 USDT", useSystemTieredFee: false 
+      },
     ],
     status: "frozen",
     hasPendingDomain: false,
@@ -161,11 +193,45 @@ const mockMerchants: Merchant[] = [
     ],
     totalOrders: 23456,
     feeConfigs: [
-      { id: "FC012", currency: "CNY", channel: "支付宝", suppliers: [{ name: "CFpay", enabled: true }, { name: "PayGate", enabled: true }, { name: "EasyPay", enabled: false }], collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: true },
-      { id: "FC013", currency: "CNY", channel: "微信支付", suppliers: [{ name: "Bitzpay", enabled: true }, { name: "BePayOTC", enabled: true }], collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: false },
-      { id: "FC014", currency: "CNY", channel: "银行卡", suppliers: [{ name: "CFpay", enabled: true }], collectionFee: "0.45%", paymentFee: "0.25%", minCollectionFee: "¥0.90", minPaymentFee: "¥0.50", useSystemTieredFee: true },
-      { id: "FC015", currency: "USD", channel: "Stripe", suppliers: [{ name: "PayGate", enabled: true }], collectionFee: "2.8%", paymentFee: "2.4%", minCollectionFee: "$0.30", minPaymentFee: "$0.25", useSystemTieredFee: false },
-      { id: "FC016", currency: "USDT", channel: "TRC20", suppliers: [{ name: "EasyPay", enabled: true }, { name: "Bitzpay", enabled: false }], collectionFee: "0.9%", paymentFee: "0.7%", minCollectionFee: "0.9 USDT", minPaymentFee: "0.7 USDT", useSystemTieredFee: true },
+      { 
+        id: "FC012", currency: "CNY", channel: "支付宝", 
+        interfaces: [
+          { name: "CFpay", enabled: true, suppliers: [{ name: "云支付", enabled: true }, { name: "付费通", enabled: true }] }, 
+          { name: "PayGate", enabled: true, suppliers: [{ name: "支付网关", enabled: true }] }, 
+          { name: "EasyPay", enabled: false, suppliers: [{ name: "简易支付", enabled: false }] }
+        ], 
+        collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: true 
+      },
+      { 
+        id: "FC013", currency: "CNY", channel: "微信支付", 
+        interfaces: [
+          { name: "Bitzpay", enabled: true, suppliers: [{ name: "微信通道", enabled: true }] }, 
+          { name: "BePayOTC", enabled: true, suppliers: [{ name: "场外支付", enabled: true }] }
+        ], 
+        collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: false 
+      },
+      { 
+        id: "FC014", currency: "CNY", channel: "银行卡", 
+        interfaces: [
+          { name: "CFpay", enabled: true, suppliers: [{ name: "银行直连", enabled: true }, { name: "聚合支付", enabled: true }] }
+        ], 
+        collectionFee: "0.45%", paymentFee: "0.25%", minCollectionFee: "¥0.90", minPaymentFee: "¥0.50", useSystemTieredFee: true 
+      },
+      { 
+        id: "FC015", currency: "USD", channel: "Stripe", 
+        interfaces: [
+          { name: "PayGate", enabled: true, suppliers: [{ name: "国际支付", enabled: true }] }
+        ], 
+        collectionFee: "2.8%", paymentFee: "2.4%", minCollectionFee: "$0.30", minPaymentFee: "$0.25", useSystemTieredFee: false 
+      },
+      { 
+        id: "FC016", currency: "USDT", channel: "TRC20", 
+        interfaces: [
+          { name: "EasyPay", enabled: true, suppliers: [{ name: "波场网络", enabled: true }] }, 
+          { name: "Bitzpay", enabled: false, suppliers: [{ name: "数字货币", enabled: false }] }
+        ], 
+        collectionFee: "0.9%", paymentFee: "0.7%", minCollectionFee: "0.9 USDT", minPaymentFee: "0.7 USDT", useSystemTieredFee: true 
+      },
     ],
     status: "active",
     hasPendingDomain: false,
@@ -189,9 +255,11 @@ export default function MerchantsPage() {
   const [isAddFeeConfigDialogOpen, setIsAddFeeConfigDialogOpen] = useState(false)
   const [isApiKeysDialogOpen, setIsApiKeysDialogOpen] = useState(false)
   const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false)
+  const [isInterfaceManageDialogOpen, setIsInterfaceManageDialogOpen] = useState(false)
   const [isSupplierManageDialogOpen, setIsSupplierManageDialogOpen] = useState(false)
   const [currentMerchant, setCurrentMerchant] = useState<Merchant | null>(null)
   const [currentFeeConfig, setCurrentFeeConfig] = useState<FeeConfig | null>(null)
+  const [currentInterface, setCurrentInterface] = useState<PaymentInterface | null>(null)
   const [freezeAmount, setFreezeAmount] = useState("")
   const [freezeFormData, setFreezeFormData] = useState({
     currency: "",
@@ -236,7 +304,7 @@ export default function MerchantsPage() {
             id: `auto-${currency}-${channel}`,
             currency,
             channel,
-            suppliers: [],
+            interfaces: [],
             collectionFee: "",
             paymentFee: "",
             minCollectionFee: "",
@@ -402,20 +470,25 @@ export default function MerchantsPage() {
     setIsAddFeeConfigDialogOpen(true)
   }
 
-  const openSupplierManageDialog = (feeConfig: FeeConfig) => {
+  const openInterfaceManageDialog = (feeConfig: FeeConfig) => {
     setCurrentFeeConfig(feeConfig)
+    setIsInterfaceManageDialogOpen(true)
+  }
+
+  const openSupplierManageDialog = (paymentInterface: PaymentInterface) => {
+    setCurrentInterface(paymentInterface)
     setIsSupplierManageDialogOpen(true)
   }
 
-  const handleToggleSupplier = (supplierName: string, enabled: boolean) => {
+  const handleToggleInterface = (interfaceName: string, enabled: boolean) => {
     if (!currentFeeConfig || !currentMerchant) return
     
     const updatedFeeConfigs = currentMerchant.feeConfigs.map(fc => {
       if (fc.id === currentFeeConfig.id) {
-        const updatedSuppliers = fc.suppliers.map(s => 
-          s.name === supplierName ? { ...s, enabled } : s
+        const updatedInterfaces = fc.interfaces.map(iface => 
+          iface.name === interfaceName ? { ...iface, enabled } : iface
         )
-        return { ...fc, suppliers: updatedSuppliers }
+        return { ...fc, interfaces: updatedInterfaces }
       }
       return fc
     })
@@ -423,6 +496,40 @@ export default function MerchantsPage() {
     setMerchants(merchants.map(m => 
       m.id === currentMerchant.id ? { ...m, feeConfigs: updatedFeeConfigs } : m
     ))
+    
+    setCurrentFeeConfig(updatedFeeConfigs.find(fc => fc.id === currentFeeConfig.id) || null)
+  }
+
+  const handleToggleSupplier = (supplierName: string, enabled: boolean) => {
+    if (!currentInterface || !currentFeeConfig || !currentMerchant) return
+    
+    const updatedFeeConfigs = currentMerchant.feeConfigs.map(fc => {
+      if (fc.id === currentFeeConfig.id) {
+        const updatedInterfaces = fc.interfaces.map(iface => {
+          if (iface.name === currentInterface.name) {
+            const updatedSuppliers = iface.suppliers.map(s => 
+              s.name === supplierName ? { ...s, enabled } : s
+            )
+            return { ...iface, suppliers: updatedSuppliers }
+          }
+          return iface
+        })
+        return { ...fc, interfaces: updatedInterfaces }
+      }
+      return fc
+    })
+    
+    setMerchants(merchants.map(m => 
+      m.id === currentMerchant.id ? { ...m, feeConfigs: updatedFeeConfigs } : m
+    ))
+    
+    const updatedInterface = updatedFeeConfigs
+      .find(fc => fc.id === currentFeeConfig.id)
+      ?.interfaces.find(iface => iface.name === currentInterface.name)
+    
+    if (updatedInterface) {
+      setCurrentInterface(updatedInterface)
+    }
     
     setCurrentMerchant({ ...currentMerchant, feeConfigs: updatedFeeConfigs })
     
@@ -903,9 +1010,9 @@ export default function MerchantsPage() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  onClick={() => openSupplierManageDialog(config)}
+                                  onClick={() => openInterfaceManageDialog(config)}
                                   className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
-                                  title="管理供应商"
+                                  title="接口配置"
                                 >
                                   <Settings className="w-4 h-4" />
                                 </Button>
@@ -1333,10 +1440,10 @@ export default function MerchantsPage() {
         </DialogContent>
       </Dialog>
 
-      <Sheet open={isSupplierManageDialogOpen} onOpenChange={setIsSupplierManageDialogOpen}>
+      <Sheet open={isInterfaceManageDialogOpen} onOpenChange={setIsInterfaceManageDialogOpen}>
         <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>供应商管理</SheetTitle>
+            <SheetTitle>接口配置</SheetTitle>
             <SheetDescription>
               支付通道: {currentFeeConfig?.channel} | 币种: {currentFeeConfig?.currency}
             </SheetDescription>
@@ -1345,13 +1452,86 @@ export default function MerchantsPage() {
           <div className="mt-6">
             <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
               <p className="text-sm text-amber-800 dark:text-amber-200">
-                💡 这里只展示支持该支付通道的供应商
+                💡 这里只展示支持该支付通道的接口
               </p>
             </div>
 
-            {currentFeeConfig?.suppliers && currentFeeConfig.suppliers.length > 0 ? (
+            {currentFeeConfig?.interfaces && currentFeeConfig.interfaces.length > 0 ? (
               <div className="space-y-3">
-                {currentFeeConfig.suppliers.map((supplier) => (
+                {currentFeeConfig.interfaces.map((paymentInterface) => (
+                  <div key={paymentInterface.name} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${
+                          paymentInterface.enabled 
+                            ? "bg-gradient-to-br from-purple-400 to-purple-600" 
+                            : "bg-gray-400 dark:bg-gray-600"
+                        }`}>
+                          {paymentInterface.name.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-gray-100">
+                            {paymentInterface.name}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {paymentInterface.enabled ? "已启用" : "已禁用"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openSupplierManageDialog(paymentInterface)}
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                          title="指定供应商"
+                        >
+                          <Settings className="w-4 h-4" />
+                        </Button>
+                        <Switch
+                          checked={paymentInterface.enabled}
+                          onCheckedChange={(checked) => handleToggleInterface(paymentInterface.name, checked)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                <p className="mb-2">暂无支持该支付通道的接口</p>
+                <p className="text-sm">请联系系统管理员配置接口</p>
+              </div>
+            )}
+          </div>
+
+          <SheetFooter className="mt-6">
+            <Button variant="outline" onClick={() => setIsInterfaceManageDialogOpen(false)} className="w-full">
+              完成
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={isSupplierManageDialogOpen} onOpenChange={setIsSupplierManageDialogOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-sm overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>指定供应商</SheetTitle>
+            <SheetDescription>
+              接口: {currentInterface?.name}
+            </SheetDescription>
+          </SheetHeader>
+
+          <div className="mt-6">
+            <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+              <p className="text-sm text-amber-800 dark:text-amber-200">
+                💡 这里罗列支持该接口的所有供应商
+              </p>
+            </div>
+
+            {currentInterface?.suppliers && currentInterface.suppliers.length > 0 ? (
+              <div className="space-y-3">
+                {currentInterface.suppliers.map((supplier) => (
                   <div key={supplier.name} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${
@@ -1379,7 +1559,7 @@ export default function MerchantsPage() {
               </div>
             ) : (
               <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                <p className="mb-2">暂无支持该支付方式的供应商</p>
+                <p className="mb-2">暂无支持该接口的供应商</p>
                 <p className="text-sm">请联系系统管理员配置供应商</p>
               </div>
             )}
