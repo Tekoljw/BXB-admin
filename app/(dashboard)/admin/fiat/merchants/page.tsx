@@ -35,6 +35,7 @@ interface FeeConfig {
   id: string
   currency: string
   channel: string
+  supplier?: string
   collectionFee: string
   paymentFee: string
   minCollectionFee: string
@@ -277,6 +278,7 @@ export default function MerchantsPage() {
   const [feeFormData, setFeeFormData] = useState({
     currency: "",
     channel: "",
+    supplier: "",
     collectionFee: "",
     paymentFee: "",
     minCollectionFee: "",
@@ -722,7 +724,7 @@ export default function MerchantsPage() {
                         size="sm"
                         onClick={() => openFeeConfigDialog(merchant)}
                         className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
-                        title="配置费率"
+                        title="支付方式配置"
                       >
                         <Settings className="w-4 h-4" />
                       </Button>
@@ -810,9 +812,9 @@ export default function MerchantsPage() {
       <Dialog open={isFeeConfigDialogOpen} onOpenChange={setIsFeeConfigDialogOpen}>
         <DialogContent className="max-w-7xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>配置费率 - {currentMerchant?.name}</DialogTitle>
+            <DialogTitle>支付方式配置 - {currentMerchant?.name}</DialogTitle>
             <DialogDescription>
-              商户ID: {currentMerchant?.id} | 按币种和支付通道设置不同的手续费率
+              商户ID: {currentMerchant?.id} | 按币种、支付通道和供应商设置不同的手续费率
             </DialogDescription>
           </DialogHeader>
 
@@ -834,6 +836,9 @@ export default function MerchantsPage() {
                           <tr>
                             <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                               支付通道
+                            </th>
+                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                              供应商
                             </th>
                             <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                               代收费率
@@ -860,6 +865,9 @@ export default function MerchantsPage() {
                             <tr key={config.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                               <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300 font-medium">
                                 {config.channel}
+                              </td>
+                              <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                                {config.supplier || "-"}
                               </td>
                               <td className="px-3 py-2">
                                 <Input
@@ -958,7 +966,7 @@ export default function MerchantsPage() {
             </Button>
             <Button className="bg-custom-green hover:bg-custom-green/90" onClick={openAddFeeConfigDialog}>
               <Plus className="w-4 h-4 mr-1" />
-              添加费率配置
+              添加支付方式
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -967,13 +975,13 @@ export default function MerchantsPage() {
       <Dialog open={isAddFeeConfigDialogOpen} onOpenChange={setIsAddFeeConfigDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>添加费率配置</DialogTitle>
+            <DialogTitle>添加支付方式</DialogTitle>
             <DialogDescription>
-              为商户 {currentMerchant?.name} 添加新的币种和通道费率配置
+              为商户 {currentMerchant?.name} 添加新的支付方式配置（币种、通道、供应商）
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="add-currency">币种 *</Label>
                 <Select value={feeFormData.currency} onValueChange={(value) => setFeeFormData({...feeFormData, currency: value})}>
@@ -1004,6 +1012,21 @@ export default function MerchantsPage() {
                     <SelectItem value="PayPal">PayPal</SelectItem>
                     <SelectItem value="TRC20">TRC20</SelectItem>
                     <SelectItem value="ERC20">ERC20</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="add-supplier">供应商</Label>
+                <Select value={feeFormData.supplier} onValueChange={(value) => setFeeFormData({...feeFormData, supplier: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择供应商（可选）" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Bitzpay">Bitzpay</SelectItem>
+                    <SelectItem value="BePayOTC">BePayOTC</SelectItem>
+                    <SelectItem value="CFpay">CFpay</SelectItem>
+                    <SelectItem value="PayGate">PayGate</SelectItem>
+                    <SelectItem value="EasyPay">EasyPay</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
