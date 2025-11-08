@@ -49,6 +49,8 @@ interface PaymentInterface {
   code: string
   description: string
   status: "active" | "inactive"
+  type: "OTC" | "三方支付" | "四方支付"
+  isUsed: boolean
   channelCount: number
   currencyCount: number
   createdAt: string
@@ -70,6 +72,8 @@ const mockSuppliers = [
 
 export default function InterfacesPage() {
   const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState<string>("all")
+  const [currencyFilter, setCurrencyFilter] = useState<string>("all")
   const [isSupplierConfigDialogOpen, setIsSupplierConfigDialogOpen] = useState(false)
   const [currentConfigInterface, setCurrentConfigInterface] = useState<PaymentInterface | null>(null)
   const [supplierConfigs, setSupplierConfigs] = useState<SupplierConfig[]>([])
@@ -88,6 +92,8 @@ export default function InterfacesPage() {
       code: "BITZPAY",
       description: "专业的数字货币支付接口",
       status: "active",
+      type: "四方支付",
+      isUsed: true,
       channelCount: 8,
       currencyCount: 5,
       createdAt: "2024-01-10",
@@ -109,6 +115,8 @@ export default function InterfacesPage() {
       code: "BEPAY_OTC",
       description: "场外交易支付接口",
       status: "active",
+      type: "OTC",
+      isUsed: true,
       channelCount: 6,
       currencyCount: 4,
       createdAt: "2024-01-15",
@@ -128,6 +136,8 @@ export default function InterfacesPage() {
       code: "CFPAY",
       description: "跨境支付解决方案",
       status: "active",
+      type: "三方支付",
+      isUsed: false,
       channelCount: 10,
       currencyCount: 6,
       createdAt: "2024-01-20",
@@ -151,6 +161,8 @@ export default function InterfacesPage() {
       code: "GLOBALPAY",
       description: "全球支付网关",
       status: "active",
+      type: "四方支付",
+      isUsed: true,
       channelCount: 12,
       currencyCount: 8,
       createdAt: "2024-02-01",
@@ -175,7 +187,9 @@ export default function InterfacesPage() {
       name: "CryptoPay",
       code: "CRYPTOPAY",
       description: "加密货币支付网关",
-      status: "active",
+      status: "inactive",
+      type: "OTC",
+      isUsed: false,
       channelCount: 5,
       currencyCount: 3,
       createdAt: "2024-02-10",
@@ -190,11 +204,29 @@ export default function InterfacesPage() {
     }
   ])
 
-  const filteredInterfaces = interfaces.filter(iface =>
-    iface.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    iface.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    iface.description.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const allCurrencies = Array.from(
+    new Set(interfaces.flatMap(iface => iface.supportedCurrencies))
+  ).sort()
+
+  const filteredInterfaces = interfaces.filter(iface => {
+    const matchesSearch = iface.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      iface.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      iface.description.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    const matchesStatus = (() => {
+      if (statusFilter === "all") return true
+      if (statusFilter === "used") return iface.isUsed
+      if (statusFilter === "unused") return !iface.isUsed
+      if (statusFilter === "otc") return iface.type === "OTC"
+      if (statusFilter === "third-party") return iface.type === "三方支付"
+      if (statusFilter === "fourth-party") return iface.type === "四方支付"
+      return true
+    })()
+    
+    const matchesCurrency = currencyFilter === "all" || iface.supportedCurrencies.includes(currencyFilter)
+    
+    return matchesSearch && matchesStatus && matchesCurrency
+  })
 
   const handleToggleStatus = (id: string) => {
     setInterfaces(interfaces.map(iface =>
@@ -307,7 +339,31 @@ export default function InterfacesPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+      <div className="space-y-4">
+        <Tabs value={statusFilter} onValueChange={setStatusFilter}>
+          <TabsList>
+            <TabsTrigger value="all">全部</TabsTrigger>
+            <TabsTrigger value="used">使用中</TabsTrigger>
+            <TabsTrigger value="unused">未使用</TabsTrigger>
+            <TabsTrigger value="otc">合规OTC</TabsTrigger>
+            <TabsTrigger value="third-party">合规三方支付</TabsTrigger>
+            <TabsTrigger value="fourth-party">合规四方支付</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <Tabs value={currencyFilter} onValueChange={setCurrencyFilter}>
+          <TabsList className="flex-wrap h-auto">
+            <TabsTrigger value="all">全部币种</TabsTrigger>
+            {allCurrencies.map(currency => (
+              <TabsTrigger key={currency} value={currency}>
+                {currency}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredInterfaces.map((iface) => (
           <Card 
             key={iface.id} 
