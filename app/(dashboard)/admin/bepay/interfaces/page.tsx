@@ -15,8 +15,24 @@ import {
   Network,
   Eye,
   TrendingUp,
-  Globe
+  Globe,
+  Settings,
+  Plus,
+  Trash2
 } from "lucide-react"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
+
+interface SupplierConfig {
+  supplierId: string
+  supplierName: string
+  keyFormat: "standard" | "custom"
+  merchantId?: string
+  apiKey?: string
+  customCode?: string
+}
 
 interface PaymentInterface {
   id: string
@@ -33,12 +49,24 @@ interface PaymentInterface {
     code: string
     type: string
   }[]
+  supplierConfigs?: SupplierConfig[]
 }
+
+const mockSuppliers = [
+  { id: "SUP001", name: "供应商A", tgAccount: "@supplier_a" },
+  { id: "SUP002", name: "供应商B", tgAccount: "@supplier_b" },
+  { id: "SUP003", name: "供应商C", tgAccount: "@supplier_c" },
+  { id: "SUP004", name: "供应商D", tgAccount: "@supplier_d" },
+]
 
 export default function InterfacesPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedInterface, setSelectedInterface] = useState<PaymentInterface | null>(null)
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false)
+  const [isSupplierConfigDialogOpen, setIsSupplierConfigDialogOpen] = useState(false)
+  const [currentConfigInterface, setCurrentConfigInterface] = useState<PaymentInterface | null>(null)
+  const [supplierConfigs, setSupplierConfigs] = useState<SupplierConfig[]>([])
+  const [selectedSuppliers, setSelectedSuppliers] = useState<string[]>([])
   
   const [interfaces] = useState<PaymentInterface[]>([
     {
@@ -160,6 +188,44 @@ export default function InterfacesPage() {
     setIsDetailDialogOpen(true)
   }
 
+  const handleOpenSupplierConfig = (iface: PaymentInterface) => {
+    setCurrentConfigInterface(iface)
+    setSupplierConfigs(iface.supplierConfigs || [])
+    setSelectedSuppliers(iface.supplierConfigs?.map(c => c.supplierId) || [])
+    setIsSupplierConfigDialogOpen(true)
+  }
+
+  const handleToggleSupplier = (supplierId: string, supplierName: string) => {
+    if (selectedSuppliers.includes(supplierId)) {
+      setSelectedSuppliers(selectedSuppliers.filter(id => id !== supplierId))
+      setSupplierConfigs(supplierConfigs.filter(c => c.supplierId !== supplierId))
+    } else {
+      setSelectedSuppliers([...selectedSuppliers, supplierId])
+      setSupplierConfigs([...supplierConfigs, {
+        supplierId,
+        supplierName,
+        keyFormat: "standard",
+        merchantId: "",
+        apiKey: "",
+        customCode: ""
+      }])
+    }
+  }
+
+  const handleUpdateSupplierConfig = (supplierId: string, field: string, value: string) => {
+    setSupplierConfigs(supplierConfigs.map(config => 
+      config.supplierId === supplierId 
+        ? { ...config, [field]: value }
+        : config
+    ))
+  }
+
+  const handleSaveSupplierConfigs = () => {
+    // In production, this would save to backend
+    console.log("Saving supplier configs:", supplierConfigs)
+    setIsSupplierConfigDialogOpen(false)
+  }
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -232,18 +298,32 @@ export default function InterfacesPage() {
               <span className="text-xs text-gray-500 dark:text-gray-400">
                 创建于 {iface.createdAt}
               </span>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="text-custom-green hover:text-custom-green/80 hover:bg-custom-green/10"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleViewDetails(iface)
-                }}
-              >
-                <Eye className="w-4 h-4 mr-1" />
-                查看详情
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:text-blue-400"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleOpenSupplierConfig(iface)
+                  }}
+                  title="供应商配置"
+                >
+                  <Settings className="w-4 h-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-custom-green hover:text-custom-green/80 hover:bg-custom-green/10"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleViewDetails(iface)
+                  }}
+                >
+                  <Eye className="w-4 h-4 mr-1" />
+                  查看详情
+                </Button>
+              </div>
             </div>
           </Card>
         ))}
@@ -374,6 +454,127 @@ export default function InterfacesPage() {
               variant="outline"
             >
               关闭
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isSupplierConfigDialogOpen} onOpenChange={setIsSupplierConfigDialogOpen}>
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="w-5 h-5 text-blue-600" />
+              {currentConfigInterface?.name} - 供应商配置
+            </DialogTitle>
+          </DialogHeader>
+          {currentConfigInterface && (
+            <div className="space-y-6 py-4">
+              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                <p className="text-sm text-yellow-800 dark:text-yellow-300">
+                  <strong>安全提示：</strong>此功能仅用于演示。在生产环境中，API密钥应该通过安全的后端系统管理，使用环境变量或密钥管理服务存储，而不是在前端处理。
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                  选择支持的供应商
+                </h3>
+                <div className="space-y-2 mb-6">
+                  {mockSuppliers.map(supplier => (
+                    <div key={supplier.id} className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                      <Checkbox
+                        checked={selectedSuppliers.includes(supplier.id)}
+                        onCheckedChange={() => handleToggleSupplier(supplier.id, supplier.name)}
+                      />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">{supplier.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{supplier.tgAccount}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {supplierConfigs.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                    密钥配置
+                  </h3>
+                  {supplierConfigs.map(config => (
+                    <div key={config.supplierId} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+                          {config.supplierName}
+                        </h4>
+                        <Select
+                          value={config.keyFormat}
+                          onValueChange={(value) => handleUpdateSupplierConfig(config.supplierId, 'keyFormat', value)}
+                        >
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="standard">通用格式</SelectItem>
+                            <SelectItem value="custom">自定义代码</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {config.keyFormat === 'standard' ? (
+                        <div className="space-y-3">
+                          <div>
+                            <Label htmlFor={`merchant-${config.supplierId}`}>商户ID</Label>
+                            <Input
+                              id={`merchant-${config.supplierId}`}
+                              placeholder="请输入商户ID"
+                              value={config.merchantId || ''}
+                              onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'merchantId', e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor={`apikey-${config.supplierId}`}>API密钥</Label>
+                            <Input
+                              id={`apikey-${config.supplierId}`}
+                              type="password"
+                              placeholder="请输入API密钥"
+                              value={config.apiKey || ''}
+                              onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'apiKey', e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <Label htmlFor={`code-${config.supplierId}`}>自定义配置代码</Label>
+                          <Textarea
+                            id={`code-${config.supplierId}`}
+                            placeholder="请输入自定义配置代码或JSON配置..."
+                            className="font-mono text-sm min-h-[120px]"
+                            value={config.customCode || ''}
+                            onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'customCode', e.target.value)}
+                          />
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            支持JSON格式或其他自定义配置格式
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+          <div className="flex justify-end gap-2">
+            <Button
+              onClick={() => setIsSupplierConfigDialogOpen(false)}
+              variant="outline"
+            >
+              取消
+            </Button>
+            <Button
+              onClick={handleSaveSupplierConfigs}
+              className="bg-custom-green hover:bg-custom-green/90"
+            >
+              保存配置
             </Button>
           </div>
         </DialogContent>
