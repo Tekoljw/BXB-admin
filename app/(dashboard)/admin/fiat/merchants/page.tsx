@@ -74,6 +74,14 @@ interface CurrencyBalance {
   frozenBalance: number
 }
 
+interface CurrencyProfit {
+  currency: string
+  collectionProfit: number
+  paymentProfit: number
+  exchangeRateProfit: number
+  totalProfit: number
+}
+
 interface Merchant {
   id: string
   name: string
@@ -86,6 +94,13 @@ interface Merchant {
   paymentBalance: number
   frozenBalance: number
   currencyBalances: CurrencyBalance[]
+  dailyProfit: number
+  monthlyProfit: number
+  totalProfit: number
+  currencyProfits: CurrencyProfit[]
+  dailyVolume: number
+  monthlyVolume: number
+  totalVolume: number
   totalOrders: number
   feeConfigs: FeeConfig[]
   status: "active" | "frozen" | "disabled"
@@ -134,6 +149,19 @@ const mockMerchants: Merchant[] = [
       { currency: "EUR", balance: 35000, paymentBalance: 15000, frozenBalance: 5000 },
       { currency: "GBP", balance: 28000, paymentBalance: 12000, frozenBalance: 3000 }
     ],
+    dailyProfit: 1250.50,
+    monthlyProfit: 28500.00,
+    totalProfit: 156000.00,
+    currencyProfits: [
+      { currency: "CNY", collectionProfit: 8500, paymentProfit: 3200, exchangeRateProfit: 1500, totalProfit: 13200 },
+      { currency: "USD", collectionProfit: 2800, paymentProfit: 1200, exchangeRateProfit: 800, totalProfit: 4800 },
+      { currency: "USDT", collectionProfit: 35000, paymentProfit: 18000, exchangeRateProfit: 12000, totalProfit: 65000 },
+      { currency: "EUR", collectionProfit: 5200, paymentProfit: 2100, exchangeRateProfit: 900, totalProfit: 8200 },
+      { currency: "GBP", collectionProfit: 4500, paymentProfit: 1800, exchangeRateProfit: 700, totalProfit: 7000 }
+    ],
+    dailyVolume: 125000,
+    monthlyVolume: 2850000,
+    totalVolume: 15600000,
     totalOrders: 5432,
     feeConfigs: [
       { 
@@ -197,6 +225,19 @@ const mockMerchants: Merchant[] = [
       { currency: "EUR", balance: 120000, paymentBalance: 55000, frozenBalance: 0 },
       { currency: "GBP", balance: 95000, paymentBalance: 42000, frozenBalance: 0 }
     ],
+    dailyProfit: 5800.25,
+    monthlyProfit: 158000.00,
+    totalProfit: 980000.00,
+    currencyProfits: [
+      { currency: "CNY", collectionProfit: 85000, paymentProfit: 42000, exchangeRateProfit: 28000, totalProfit: 155000 },
+      { currency: "USD", collectionProfit: 125000, paymentProfit: 68000, exchangeRateProfit: 45000, totalProfit: 238000 },
+      { currency: "USDT", collectionProfit: 220000, paymentProfit: 115000, exchangeRateProfit: 82000, totalProfit: 417000 },
+      { currency: "EUR", collectionProfit: 68000, paymentProfit: 35000, exchangeRateProfit: 22000, totalProfit: 125000 },
+      { currency: "GBP", collectionProfit: 28000, paymentProfit: 12000, exchangeRateProfit: 5000, totalProfit: 45000 }
+    ],
+    dailyVolume: 580000,
+    monthlyVolume: 15800000,
+    totalVolume: 98000000,
     totalOrders: 23456,
     feeConfigs: [
       { 
