@@ -958,13 +958,13 @@ export default function ChannelsPage() {
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>添加通道</DialogTitle>
-            <DialogDescription>添加新的支付通道</DialogDescription>
+            <DialogTitle>添加支付方式</DialogTitle>
+            <DialogDescription>添加新的支付方式</DialogDescription>
           </DialogHeader>
           <div className="space-y-6 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="code">通道代码</Label>
+                <Label htmlFor="code">支付方式代码</Label>
                 <Input
                   id="code"
                   placeholder="例如：ALIPAY_CN"
@@ -973,7 +973,7 @@ export default function ChannelsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="name">通道名称</Label>
+                <Label htmlFor="name">支付方式名称</Label>
                 <Input
                   id="name"
                   placeholder="例如：支付宝"
@@ -1011,19 +1011,6 @@ export default function ChannelsPage() {
                     <SelectItem value="INR">INR</SelectItem>
                     <SelectItem value="USD">USD</SelectItem>
                     <SelectItem value="EUR">EUR</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="interface">接口来源</Label>
-                <Select value={formData.interface} onValueChange={(value) => setFormData({...formData, interface: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="选择接口" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Bitzpay">Bitzpay</SelectItem>
-                    <SelectItem value="BePayOTC">BePayOTC</SelectItem>
-                    <SelectItem value="CFpay">CFpay</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
