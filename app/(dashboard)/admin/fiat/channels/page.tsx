@@ -41,6 +41,7 @@ interface Channel {
   logo?: string
   currency: string
   interface: string
+  cost: string
   feeRates: FeeRate[]
   demoVideo?: string
   status: "active" | "inactive"
@@ -56,6 +57,7 @@ const mockChannels: Channel[] = [
     logo: "💰",
     currency: "CNY",
     interface: "Bitzpay",
+    cost: "0.38%",
     feeRates: [
       { minAmount: 0, maxAmount: 10000, collectionFeeRate: "0.6%", minCollectionFee: "¥1.00", paymentFeeRate: "0.4%", minPaymentFee: "¥0.50" },
       { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "0.5%", minCollectionFee: "¥1.00", paymentFeeRate: "0.3%", minPaymentFee: "¥0.50" },
@@ -73,6 +75,7 @@ const mockChannels: Channel[] = [
     logo: "💬",
     currency: "CNY",
     interface: "Bitzpay",
+    cost: "0.35%",
     feeRates: [
       { minAmount: 0, maxAmount: 10000, collectionFeeRate: "0.6%", minCollectionFee: "¥1.00", paymentFeeRate: "0.4%", minPaymentFee: "¥0.50" },
       { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "0.5%", minCollectionFee: "¥1.00", paymentFeeRate: "0.3%", minPaymentFee: "¥0.50" },
@@ -90,6 +93,7 @@ const mockChannels: Channel[] = [
     logo: "🏦",
     currency: "CNY",
     interface: "BePayOTC",
+    cost: "0.25%",
     feeRates: [
       { minAmount: 0, maxAmount: 10000, collectionFeeRate: "0.4%", minCollectionFee: "¥0.80", paymentFeeRate: "0.3%", minPaymentFee: "¥0.40" },
       { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "0.3%", minCollectionFee: "¥0.80", paymentFeeRate: "0.2%", minPaymentFee: "¥0.40" },
@@ -106,6 +110,7 @@ const mockChannels: Channel[] = [
     logo: "🇧🇷",
     currency: "BRL",
     interface: "CFpay",
+    cost: "0.68%",
     feeRates: [
       { minAmount: 0, maxAmount: 5000, collectionFeeRate: "1.0%", minCollectionFee: "R$2.00", paymentFeeRate: "0.6%", minPaymentFee: "R$1.00" },
       { minAmount: 5000, maxAmount: 50000, collectionFeeRate: "0.8%", minCollectionFee: "R$2.00", paymentFeeRate: "0.5%", minPaymentFee: "R$1.00" },
@@ -123,6 +128,7 @@ const mockChannels: Channel[] = [
     logo: "🇮🇳",
     currency: "INR",
     interface: "CFpay",
+    cost: "0.55%",
     feeRates: [
       { minAmount: 0, maxAmount: 50000, collectionFeeRate: "0.8%", minCollectionFee: "₹10", paymentFeeRate: "0.5%", minPaymentFee: "₹5" },
       { minAmount: 50000, maxAmount: 500000, collectionFeeRate: "0.6%", minCollectionFee: "₹10", paymentFeeRate: "0.4%", minPaymentFee: "₹5" },
@@ -408,6 +414,9 @@ export default function ChannelsPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   接口来源
                 </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  通道成本
+                </th>
                 <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   流水
                 </th>
@@ -534,6 +543,11 @@ export default function ChannelsPage() {
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {channel.interface}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <span className="text-orange-600 dark:text-orange-400 font-semibold">
+                      {channel.cost}
+                    </span>
                   </td>
                   <td className="px-2 py-3 text-xs">
                     <div className="space-y-1">
