@@ -39,11 +39,16 @@ interface ApiKey {
   createdAt: string
 }
 
+interface Supplier {
+  name: string
+  enabled: boolean
+}
+
 interface FeeConfig {
   id: string
   currency: string
   channel: string
-  supplier?: string
+  suppliers: Supplier[]
   collectionFee: string
   paymentFee: string
   minCollectionFee: string
@@ -77,50 +82,6 @@ interface Merchant {
 }
 
 const mockMerchants: Merchant[] = [
-  {
-    id: "M001",
-    name: "优付商城",
-    userId: "U100001",
-    bxbUserId: "BXB001",
-    email: "youfu@example.com",
-    phone: "+86 138 0000 0001",
-    apiKeys: [
-      {
-        keyId: "KEY001",
-        key: "sk_live_4f8a9b2c3d1e5f6g7h8i9j0k1l2m3n4o",
-        callbackDomain: "https://api.youfu.com",
-        domainStatus: "approved",
-        createdAt: "2024-01-10 10:00:00"
-      },
-      {
-        keyId: "KEY002",
-        key: "sk_live_9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k",
-        callbackDomain: "https://backup.youfu.com",
-        domainStatus: "approved",
-        createdAt: "2024-02-15 14:30:00"
-      }
-    ],
-    balance: 125000.50,
-    paymentBalance: 50000.00,
-    frozenBalance: 0,
-    currencyBalances: [
-      { currency: "CNY", balance: 850000, paymentBalance: 320000 },
-      { currency: "USD", balance: 125000.50, paymentBalance: 50000.00 },
-      { currency: "USDT", balance: 95000, paymentBalance: 40000 },
-      { currency: "EUR", balance: 68000, paymentBalance: 25000 },
-      { currency: "GBP", balance: 45000, paymentBalance: 18000 }
-    ],
-    totalOrders: 15234,
-    feeConfigs: [
-      { id: "FC001", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false },
-      { id: "FC002", currency: "CNY", channel: "微信支付", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: true },
-      { id: "FC003", currency: "USD", channel: "Stripe", collectionFee: "2.9%", paymentFee: "2.5%", minCollectionFee: "$0.30", minPaymentFee: "$0.25", useSystemTieredFee: false },
-      { id: "FC004", currency: "USDT", channel: "TRC20", collectionFee: "1.0%", paymentFee: "0.8%", minCollectionFee: "1 USDT", minPaymentFee: "0.5 USDT", useSystemTieredFee: true },
-    ],
-    status: "active",
-    hasPendingDomain: false,
-    createdAt: "2024-01-10 10:00:00"
-  },
   {
     id: "M002",
     name: "快捷支付平台",
@@ -156,9 +117,9 @@ const mockMerchants: Merchant[] = [
     ],
     totalOrders: 9876,
     feeConfigs: [
-      { id: "FC005", currency: "CNY", channel: "支付宝", collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80", useSystemTieredFee: false },
-      { id: "FC006", currency: "CNY", channel: "微信支付", collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80", useSystemTieredFee: false },
-      { id: "FC007", currency: "CNY", channel: "云闪付", collectionFee: "0.55%", paymentFee: "0.35%", minCollectionFee: "¥1.10", minPaymentFee: "¥0.70", useSystemTieredFee: true },
+      { id: "FC005", currency: "CNY", channel: "支付宝", suppliers: [{ name: "Bitzpay", enabled: true }, { name: "BePayOTC", enabled: false }], collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80", useSystemTieredFee: false },
+      { id: "FC006", currency: "CNY", channel: "微信支付", suppliers: [{ name: "CFpay", enabled: true }, { name: "PayGate", enabled: true }], collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80", useSystemTieredFee: false },
+      { id: "FC007", currency: "CNY", channel: "云闪付", suppliers: [{ name: "EasyPay", enabled: true }], collectionFee: "0.55%", paymentFee: "0.35%", minCollectionFee: "¥1.10", minPaymentFee: "¥0.70", useSystemTieredFee: true },
     ],
     status: "active",
     hasPendingDomain: true,
@@ -206,10 +167,10 @@ const mockMerchants: Merchant[] = [
     ],
     totalOrders: 5432,
     feeConfigs: [
-      { id: "FC008", currency: "CNY", channel: "支付宝", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false },
-      { id: "FC009", currency: "CNY", channel: "微信支付", collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false },
-      { id: "FC010", currency: "USDT", channel: "TRC20", collectionFee: "1.2%", paymentFee: "1.0%", minCollectionFee: "1.2 USDT", minPaymentFee: "1.0 USDT", useSystemTieredFee: true },
-      { id: "FC011", currency: "USDT", channel: "ERC20", collectionFee: "1.5%", paymentFee: "1.3%", minCollectionFee: "2.0 USDT", minPaymentFee: "1.5 USDT", useSystemTieredFee: false },
+      { id: "FC008", currency: "CNY", channel: "支付宝", suppliers: [{ name: "Bitzpay", enabled: true }], collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false },
+      { id: "FC009", currency: "CNY", channel: "微信支付", suppliers: [{ name: "BePayOTC", enabled: true }, { name: "CFpay", enabled: false }], collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false },
+      { id: "FC010", currency: "USDT", channel: "TRC20", suppliers: [{ name: "PayGate", enabled: true }, { name: "EasyPay", enabled: true }], collectionFee: "1.2%", paymentFee: "1.0%", minCollectionFee: "1.2 USDT", minPaymentFee: "1.0 USDT", useSystemTieredFee: true },
+      { id: "FC011", currency: "USDT", channel: "ERC20", suppliers: [{ name: "Bitzpay", enabled: true }], collectionFee: "1.5%", paymentFee: "1.3%", minCollectionFee: "2.0 USDT", minPaymentFee: "1.5 USDT", useSystemTieredFee: false },
     ],
     status: "frozen",
     hasPendingDomain: false,
@@ -243,11 +204,11 @@ const mockMerchants: Merchant[] = [
     ],
     totalOrders: 23456,
     feeConfigs: [
-      { id: "FC012", currency: "CNY", channel: "支付宝", collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: true },
-      { id: "FC013", currency: "CNY", channel: "微信支付", collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: false },
-      { id: "FC014", currency: "CNY", channel: "银行卡", collectionFee: "0.45%", paymentFee: "0.25%", minCollectionFee: "¥0.90", minPaymentFee: "¥0.50", useSystemTieredFee: true },
-      { id: "FC015", currency: "USD", channel: "Stripe", collectionFee: "2.8%", paymentFee: "2.4%", minCollectionFee: "$0.30", minPaymentFee: "$0.25", useSystemTieredFee: false },
-      { id: "FC016", currency: "USDT", channel: "TRC20", collectionFee: "0.9%", paymentFee: "0.7%", minCollectionFee: "0.9 USDT", minPaymentFee: "0.7 USDT", useSystemTieredFee: true },
+      { id: "FC012", currency: "CNY", channel: "支付宝", suppliers: [{ name: "CFpay", enabled: true }, { name: "PayGate", enabled: true }, { name: "EasyPay", enabled: false }], collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: true },
+      { id: "FC013", currency: "CNY", channel: "微信支付", suppliers: [{ name: "Bitzpay", enabled: true }, { name: "BePayOTC", enabled: true }], collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: false },
+      { id: "FC014", currency: "CNY", channel: "银行卡", suppliers: [{ name: "CFpay", enabled: true }], collectionFee: "0.45%", paymentFee: "0.25%", minCollectionFee: "¥0.90", minPaymentFee: "¥0.50", useSystemTieredFee: true },
+      { id: "FC015", currency: "USD", channel: "Stripe", suppliers: [{ name: "PayGate", enabled: true }], collectionFee: "2.8%", paymentFee: "2.4%", minCollectionFee: "$0.30", minPaymentFee: "$0.25", useSystemTieredFee: false },
+      { id: "FC016", currency: "USDT", channel: "TRC20", suppliers: [{ name: "EasyPay", enabled: true }, { name: "Bitzpay", enabled: false }], collectionFee: "0.9%", paymentFee: "0.7%", minCollectionFee: "0.9 USDT", minPaymentFee: "0.7 USDT", useSystemTieredFee: true },
     ],
     status: "active",
     hasPendingDomain: false,
@@ -271,7 +232,9 @@ export default function MerchantsPage() {
   const [isAddFeeConfigDialogOpen, setIsAddFeeConfigDialogOpen] = useState(false)
   const [isApiKeysDialogOpen, setIsApiKeysDialogOpen] = useState(false)
   const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false)
+  const [isSupplierManageDialogOpen, setIsSupplierManageDialogOpen] = useState(false)
   const [currentMerchant, setCurrentMerchant] = useState<Merchant | null>(null)
+  const [currentFeeConfig, setCurrentFeeConfig] = useState<FeeConfig | null>(null)
   const [freezeAmount, setFreezeAmount] = useState("")
   const [freezeFormData, setFreezeFormData] = useState({
     currency: "",
@@ -438,6 +401,7 @@ export default function MerchantsPage() {
     setFeeFormData({
       currency: "",
       channel: "",
+      supplier: "",
       collectionFee: "",
       paymentFee: "",
       minCollectionFee: "",
@@ -447,12 +411,43 @@ export default function MerchantsPage() {
     setIsAddFeeConfigDialogOpen(true)
   }
 
+  const openSupplierManageDialog = (feeConfig: FeeConfig) => {
+    setCurrentFeeConfig(feeConfig)
+    setIsSupplierManageDialogOpen(true)
+  }
+
+  const handleToggleSupplier = (supplierName: string, enabled: boolean) => {
+    if (!currentFeeConfig || !currentMerchant) return
+    
+    const updatedFeeConfigs = currentMerchant.feeConfigs.map(fc => {
+      if (fc.id === currentFeeConfig.id) {
+        const updatedSuppliers = fc.suppliers.map(s => 
+          s.name === supplierName ? { ...s, enabled } : s
+        )
+        return { ...fc, suppliers: updatedSuppliers }
+      }
+      return fc
+    })
+    
+    setMerchants(merchants.map(m => 
+      m.id === currentMerchant.id ? { ...m, feeConfigs: updatedFeeConfigs } : m
+    ))
+    
+    setCurrentMerchant({ ...currentMerchant, feeConfigs: updatedFeeConfigs })
+    
+    const updatedFeeConfig = updatedFeeConfigs.find(fc => fc.id === currentFeeConfig.id)
+    if (updatedFeeConfig) {
+      setCurrentFeeConfig(updatedFeeConfig)
+    }
+  }
+
   const handleAddFeeConfig = () => {
     if (currentMerchant) {
       const newFeeConfig: FeeConfig = {
         id: `FC${String(Date.now()).slice(-3)}`,
         currency: feeFormData.currency,
         channel: feeFormData.channel,
+        suppliers: [],
         collectionFee: feeFormData.collectionFee,
         paymentFee: feeFormData.paymentFee,
         minCollectionFee: feeFormData.minCollectionFee,
@@ -846,9 +841,6 @@ export default function MerchantsPage() {
                               支付通道
                             </th>
                             <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                              供应商
-                            </th>
-                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                               代收费率
                             </th>
                             <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
@@ -864,6 +856,9 @@ export default function MerchantsPage() {
                               系统梯度费率
                             </th>
                             <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                              供应商管理
+                            </th>
+                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                               操作
                             </th>
                           </tr>
@@ -873,9 +868,6 @@ export default function MerchantsPage() {
                             <tr key={config.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                               <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300 font-medium">
                                 {config.channel}
-                              </td>
-                              <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                                {config.supplier || "-"}
                               </td>
                               <td className="px-3 py-2">
                                 <Input
@@ -919,6 +911,17 @@ export default function MerchantsPage() {
                                     {config.useSystemTieredFee ? "已启用" : "未启用"}
                                   </span>
                                 </div>
+                              </td>
+                              <td className="px-3 py-3 whitespace-nowrap text-sm">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => openSupplierManageDialog(config)}
+                                  className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
+                                >
+                                  <Settings className="w-4 h-4 mr-1" />
+                                  管理供应商
+                                </Button>
                               </td>
                               <td className="px-3 py-3 whitespace-nowrap text-sm">
                                 <Button
@@ -985,11 +988,11 @@ export default function MerchantsPage() {
           <DialogHeader>
             <DialogTitle>添加支付方式</DialogTitle>
             <DialogDescription>
-              为商户 {currentMerchant?.name} 添加新的支付方式配置（币种、通道、供应商）
+              为商户 {currentMerchant?.name} 添加新的支付方式配置（币种、通道）。添加后可通过"管理供应商"配置具体供应商。
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="add-currency">币种 *</Label>
                 <Select value={feeFormData.currency} onValueChange={(value) => setFeeFormData({...feeFormData, currency: value})}>
@@ -1020,21 +1023,6 @@ export default function MerchantsPage() {
                     <SelectItem value="PayPal">PayPal</SelectItem>
                     <SelectItem value="TRC20">TRC20</SelectItem>
                     <SelectItem value="ERC20">ERC20</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="add-supplier">供应商</Label>
-                <Select value={feeFormData.supplier} onValueChange={(value) => setFeeFormData({...feeFormData, supplier: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="选择供应商（可选）" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Bitzpay">Bitzpay</SelectItem>
-                    <SelectItem value="BePayOTC">BePayOTC</SelectItem>
-                    <SelectItem value="CFpay">CFpay</SelectItem>
-                    <SelectItem value="PayGate">PayGate</SelectItem>
-                    <SelectItem value="EasyPay">EasyPay</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -1394,6 +1382,66 @@ export default function MerchantsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Sheet open={isSupplierManageDialogOpen} onOpenChange={setIsSupplierManageDialogOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>供应商管理</SheetTitle>
+            <SheetDescription>
+              支付通道: {currentFeeConfig?.channel} | 币种: {currentFeeConfig?.currency}
+            </SheetDescription>
+          </SheetHeader>
+
+          <div className="mt-6">
+            <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+              <p className="text-sm text-amber-800 dark:text-amber-200">
+                💡 这里只展示支持该支付方式的供应商
+              </p>
+            </div>
+
+            {currentFeeConfig?.suppliers && currentFeeConfig.suppliers.length > 0 ? (
+              <div className="space-y-3">
+                {currentFeeConfig.suppliers.map((supplier) => (
+                  <div key={supplier.name} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${
+                        supplier.enabled 
+                          ? "bg-gradient-to-br from-green-400 to-green-600" 
+                          : "bg-gray-400 dark:bg-gray-600"
+                      }`}>
+                        {supplier.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                          {supplier.name}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {supplier.enabled ? "已启用" : "已禁用"}
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={supplier.enabled}
+                      onCheckedChange={(checked) => handleToggleSupplier(supplier.name, checked)}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                <p className="mb-2">暂无支持该支付方式的供应商</p>
+                <p className="text-sm">请联系系统管理员配置供应商</p>
+              </div>
+            )}
+          </div>
+
+          <SheetFooter className="mt-6">
+            <Button variant="outline" onClick={() => setIsSupplierManageDialogOpen(false)} className="w-full">
+              完成
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
