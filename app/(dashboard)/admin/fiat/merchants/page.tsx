@@ -58,6 +58,7 @@ interface FeeConfig {
   id: string
   currency: string
   channel: string
+  channelType: "代收" | "代付"
   interfaces: PaymentInterface[]
   collectionFee: string
   paymentFee: string
@@ -135,14 +136,14 @@ const mockMerchants: Merchant[] = [
     totalOrders: 5432,
     feeConfigs: [
       { 
-        id: "FC008", currency: "CNY", channel: "支付宝", 
+        id: "FC008", currency: "CNY", channel: "支付宝", channelType: "代收",
         interfaces: [
           { name: "Bitzpay", enabled: true, collectionFeeRate: "1%", collectionFeeFixed: "1", paymentFeeRate: "2%", paymentFeeFixed: "0", suppliers: [{ name: "云端支付", enabled: true }, { name: "极速支付", enabled: false }] }
         ], 
         collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false 
       },
       { 
-        id: "FC009", currency: "CNY", channel: "微信支付", 
+        id: "FC009", currency: "CNY", channel: "微信支付", channelType: "代收",
         interfaces: [
           { name: "BePayOTC", enabled: true, collectionFeeRate: "0.8%", collectionFeeFixed: "0.5", paymentFeeRate: "1.5%", paymentFeeFixed: "0", suppliers: [{ name: "星辰支付", enabled: true }] }, 
           { name: "CFpay", enabled: false, collectionFeeRate: "1.2%", collectionFeeFixed: "2", paymentFeeRate: "1.8%", paymentFeeFixed: "1", suppliers: [{ name: "快付通", enabled: true }, { name: "支付宝", enabled: false }] }
@@ -150,7 +151,7 @@ const mockMerchants: Merchant[] = [
         collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false 
       },
       { 
-        id: "FC010", currency: "USDT", channel: "TRC20", 
+        id: "FC010", currency: "USDT", channel: "TRC20", channelType: "代收",
         interfaces: [
           { name: "PayGate", enabled: true, collectionFeeRate: "0.5%", collectionFeeFixed: "1", paymentFeeRate: "0.8%", paymentFeeFixed: "0.5", suppliers: [{ name: "链上支付", enabled: true }, { name: "数字钱包", enabled: true }] }, 
           { name: "EasyPay", enabled: true, collectionFeeRate: "0.6%", collectionFeeFixed: "0", paymentFeeRate: "1%", paymentFeeFixed: "0", suppliers: [{ name: "USDT通道", enabled: true }] }
@@ -158,7 +159,7 @@ const mockMerchants: Merchant[] = [
         collectionFee: "1.2%", paymentFee: "1.0%", minCollectionFee: "1.2 USDT", minPaymentFee: "1.0 USDT", useSystemTieredFee: true 
       },
       { 
-        id: "FC011", currency: "USDT", channel: "ERC20", 
+        id: "FC011", currency: "USDT", channel: "ERC20", channelType: "代付",
         interfaces: [
           { name: "Bitzpay", enabled: true, collectionFeeRate: "1%", collectionFeeFixed: "2", paymentFeeRate: "1.2%", paymentFeeFixed: "1.5", suppliers: [{ name: "以太坊网关", enabled: true }] }
         ], 
@@ -198,7 +199,7 @@ const mockMerchants: Merchant[] = [
     totalOrders: 23456,
     feeConfigs: [
       { 
-        id: "FC012", currency: "CNY", channel: "支付宝", 
+        id: "FC012", currency: "CNY", channel: "支付宝", channelType: "代收",
         interfaces: [
           { name: "CFpay", enabled: true, collectionFeeRate: "0.9%", collectionFeeFixed: "1.5", paymentFeeRate: "1.2%", paymentFeeFixed: "0.8", suppliers: [{ name: "云支付", enabled: true }, { name: "付费通", enabled: true }] }, 
           { name: "PayGate", enabled: true, collectionFeeRate: "1.1%", collectionFeeFixed: "2", paymentFeeRate: "1.5%", paymentFeeFixed: "1", suppliers: [{ name: "支付网关", enabled: true }] }, 
@@ -207,7 +208,7 @@ const mockMerchants: Merchant[] = [
         collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: true 
       },
       { 
-        id: "FC013", currency: "CNY", channel: "微信支付", 
+        id: "FC013", currency: "CNY", channel: "微信支付", channelType: "代收",
         interfaces: [
           { name: "Bitzpay", enabled: true, collectionFeeRate: "1%", collectionFeeFixed: "1", paymentFeeRate: "1.3%", paymentFeeFixed: "0", suppliers: [{ name: "微信通道", enabled: true }] }, 
           { name: "BePayOTC", enabled: true, collectionFeeRate: "0.8%", collectionFeeFixed: "0.5", paymentFeeRate: "1.2%", paymentFeeFixed: "0", suppliers: [{ name: "场外支付", enabled: true }] }
@@ -215,21 +216,21 @@ const mockMerchants: Merchant[] = [
         collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: false 
       },
       { 
-        id: "FC014", currency: "CNY", channel: "银行卡", 
+        id: "FC014", currency: "CNY", channel: "银行卡", channelType: "代付",
         interfaces: [
           { name: "CFpay", enabled: true, collectionFeeRate: "1.2%", collectionFeeFixed: "2", paymentFeeRate: "1.5%", paymentFeeFixed: "1.5", suppliers: [{ name: "银行直连", enabled: true }, { name: "聚合支付", enabled: true }] }
         ], 
         collectionFee: "0.45%", paymentFee: "0.25%", minCollectionFee: "¥0.90", minPaymentFee: "¥0.50", useSystemTieredFee: true 
       },
       { 
-        id: "FC015", currency: "USD", channel: "Stripe", 
+        id: "FC015", currency: "USD", channel: "Stripe", channelType: "代收",
         interfaces: [
           { name: "PayGate", enabled: true, collectionFeeRate: "2.5%", collectionFeeFixed: "0.3", paymentFeeRate: "2.8%", paymentFeeFixed: "0.25", suppliers: [{ name: "国际支付", enabled: true }] }
         ], 
         collectionFee: "2.8%", paymentFee: "2.4%", minCollectionFee: "$0.30", minPaymentFee: "$0.25", useSystemTieredFee: false 
       },
       { 
-        id: "FC016", currency: "USDT", channel: "TRC20", 
+        id: "FC016", currency: "USDT", channel: "TRC20", channelType: "代付",
         interfaces: [
           { name: "EasyPay", enabled: true, collectionFeeRate: "0.6%", collectionFeeFixed: "0", paymentFeeRate: "0.9%", paymentFeeFixed: "0", suppliers: [{ name: "波场网络", enabled: true }] }, 
           { name: "Bitzpay", enabled: false, collectionFeeRate: "0.8%", collectionFeeFixed: "1", paymentFeeRate: "1.1%", paymentFeeFixed: "0.5", suppliers: [{ name: "数字货币", enabled: false }] }
@@ -278,6 +279,7 @@ export default function MerchantsPage() {
   const [feeFormData, setFeeFormData] = useState({
     currency: "",
     channel: "",
+    channelType: "代收" as "代收" | "代付",
     supplier: "",
     collectionFee: "",
     paymentFee: "",
@@ -308,6 +310,7 @@ export default function MerchantsPage() {
             id: `auto-${currency}-${channel}`,
             currency,
             channel,
+            channelType: "代收",
             interfaces: [],
             collectionFee: "",
             paymentFee: "",
@@ -936,25 +939,22 @@ export default function MerchantsPage() {
                       <thead className="bg-gray-50 dark:bg-gray-700/50">
                         <tr>
                           <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            通道类型
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                             支付通道
                           </th>
                           <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                            代收费率
+                            手续费率
                           </th>
                           <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                            最低代收费
-                          </th>
-                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                            代付费率
-                          </th>
-                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                            最低代付费
+                            单笔最低费用
                           </th>
                           <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                             系统梯度费率
                           </th>
                           <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                            供应商管理
+                            接口配置
                           </th>
                           <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                             操作
@@ -962,26 +962,24 @@ export default function MerchantsPage() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {getAllPaymentMethods(currentMerchant).filter(fc => fc.currency === currency).map((config) => (
+                        {getAllPaymentMethods(currentMerchant).filter(fc => fc.currency === currency).sort((a, b) => {
+                          // 代收在前，代付在后
+                          if (a.channelType === "代收" && b.channelType === "代付") return -1;
+                          if (a.channelType === "代付" && b.channelType === "代收") return 1;
+                          return 0;
+                        }).map((config) => (
                             <tr key={config.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                              <td className="px-3 py-3 whitespace-nowrap text-sm font-medium">
+                                <span className={`px-2 py-1 rounded text-xs ${
+                                  config.channelType === "代收" 
+                                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" 
+                                    : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                                }`}>
+                                  {config.channelType}
+                                </span>
+                              </td>
                               <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300 font-medium">
                                 {config.channel}
-                              </td>
-                              <td className="px-3 py-2">
-                                <Input
-                                  value={config.collectionFee}
-                                  onChange={(e) => handleUpdateFeeConfig(config.id, 'collectionFee', e.target.value)}
-                                  className="h-8 text-sm w-24 text-green-600 dark:text-green-400 font-semibold"
-                                  placeholder="0.5%"
-                                />
-                              </td>
-                              <td className="px-3 py-2">
-                                <Input
-                                  value={config.minCollectionFee}
-                                  onChange={(e) => handleUpdateFeeConfig(config.id, 'minCollectionFee', e.target.value)}
-                                  className="h-8 text-sm w-28 text-green-600 dark:text-green-400"
-                                  placeholder="¥1.00"
-                                />
                               </td>
                               <td className="px-3 py-2">
                                 <Input
@@ -1053,7 +1051,7 @@ export default function MerchantsPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="add-currency">币种 *</Label>
                 <Select value={feeFormData.currency} onValueChange={(value) => setFeeFormData({...feeFormData, currency: value})}>
@@ -1084,6 +1082,18 @@ export default function MerchantsPage() {
                     <SelectItem value="PayPal">PayPal</SelectItem>
                     <SelectItem value="TRC20">TRC20</SelectItem>
                     <SelectItem value="ERC20">ERC20</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="add-channel-type">通道类型 *</Label>
+                <Select value={feeFormData.channelType} onValueChange={(value: "代收" | "代付") => setFeeFormData({...feeFormData, channelType: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择类型" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="代收">代收</SelectItem>
+                    <SelectItem value="代付">代付</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
