@@ -98,6 +98,7 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/social", icon: MessageCircle, label: "社交管理" },
   ],
   fiat: [
+    { path: "/admin/fiat/payment-methods", icon: CreditCard, label: "支付方式" },
     { path: "/admin/fiat/c2c", icon: DollarSign, label: "C2C管理" },
     { path: "/admin/fiat/c2c-orders", icon: ShoppingCart, label: "C2C订单" },
     { path: "/admin/fiat/quick-config", icon: Settings, label: "法币快捷配置" },

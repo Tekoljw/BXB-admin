@@ -53,6 +53,7 @@ Preferred communication style: Simple, everyday Chinese language.
     - 15个管理模块，涵盖运营报表、用户管理、IM管理、社交管理、法币管理、担保管理、U卡管理、现货管理、合约管理、跟单管理、理财管理、佣金管理、BePay管理、财务管理、系统管理。
     - 登录后访问控制，持久化管理员认证状态。
     - BePay管理模块包含币种、供应商、接口、通道、商户、代理商、代收订单、代付订单、兑换订单9个子页面，通道管理支持三档阶梯费率配置。
+    - 法币管理模块包含支付方式、C2C管理、C2C订单、法币快捷配置、法币快捷订单、OTC配置、OTC订单7个子页面，支付方式页面功能与BePay通道管理完全相同（独立代码，不共用）。
 
 ### System Design Choices
 - **客户端路由**: 使用 `instant-navigation` 组件和 `window.history.pushState`/`popstate` 实现即时页面切换，避免页面重载。
