@@ -1462,47 +1462,64 @@ export default function MerchantsPage() {
 
             {currentFeeConfig?.interfaces && currentFeeConfig.interfaces.length > 0 ? (
               <div className="space-y-3">
-                {currentFeeConfig.interfaces.map((paymentInterface) => (
-                  <div key={paymentInterface.name} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${
-                          paymentInterface.enabled 
-                            ? "bg-gradient-to-br from-purple-400 to-purple-600" 
-                            : "bg-gray-400 dark:bg-gray-600"
-                        }`}>
-                          {paymentInterface.name.charAt(0)}
+                {currentFeeConfig.interfaces.map((paymentInterface) => {
+                  const allSuppliersEnabled = paymentInterface.suppliers.every(s => s.enabled)
+                  const someSuppliersEnabled = paymentInterface.suppliers.some(s => s.enabled)
+                  const supplierStatus = allSuppliersEnabled ? "全部供应商" : (someSuppliersEnabled ? "指定供应商" : "未指定")
+                  
+                  return (
+                    <div key={paymentInterface.name} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${
+                            paymentInterface.enabled 
+                              ? "bg-gradient-to-br from-purple-400 to-purple-600" 
+                              : "bg-gray-400 dark:bg-gray-600"
+                          }`}>
+                            {paymentInterface.name.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900 dark:text-gray-100">
+                              {paymentInterface.name}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">
-                            {paymentInterface.name}
-                          </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {paymentInterface.enabled ? "已启用" : "已禁用"}
-                          </p>
-                          <p className="text-xs mt-1 text-orange-600 dark:text-orange-400 font-medium">
-                            成本：{paymentInterface.collectionFeeRate}+{paymentInterface.collectionFeeFixed}   {paymentInterface.paymentFeeRate}+{paymentInterface.paymentFeeFixed}
-                          </p>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => openSupplierManageDialog(paymentInterface)}
+                            className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                            title="指定供应商"
+                          >
+                            <Settings className="w-4 h-4" />
+                          </Button>
+                          <Switch
+                            checked={paymentInterface.enabled}
+                            onCheckedChange={(checked) => handleToggleInterface(paymentInterface.name, checked)}
+                          />
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => openSupplierManageDialog(paymentInterface)}
-                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
-                          title="指定供应商"
-                        >
-                          <Settings className="w-4 h-4" />
-                        </Button>
-                        <Switch
-                          checked={paymentInterface.enabled}
-                          onCheckedChange={(checked) => handleToggleInterface(paymentInterface.name, checked)}
-                        />
+                      <div className="ml-[52px] space-y-1">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {paymentInterface.enabled ? "已启用" : "已禁用"}
+                        </p>
+                        <p className="text-xs text-orange-600 dark:text-orange-400 font-medium">
+                          成本：{paymentInterface.collectionFeeRate}+{paymentInterface.collectionFeeFixed}   {paymentInterface.paymentFeeRate}+{paymentInterface.paymentFeeFixed}
+                        </p>
+                        <p className={`text-xs font-medium ${
+                          allSuppliersEnabled 
+                            ? "text-green-600 dark:text-green-400" 
+                            : someSuppliersEnabled 
+                              ? "text-blue-600 dark:text-blue-400" 
+                              : "text-gray-400 dark:text-gray-500"
+                        }`}>
+                          {supplierStatus}
+                        </p>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             ) : (
               <div className="text-center py-12 text-gray-500 dark:text-gray-400">
