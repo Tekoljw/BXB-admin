@@ -199,6 +199,7 @@ export default function ChannelsPage() {
   const [isDemoDialogOpen, setIsDemoDialogOpen] = useState(false)
   const [isInterfaceSelectOpen, setIsInterfaceSelectOpen] = useState(false)
   const [tempInterface, setTempInterface] = useState("")
+  const [interfaceUsageFilter, setInterfaceUsageFilter] = useState<"使用中" | "未使用">("使用中")
   const [currentChannel, setCurrentChannel] = useState<Channel | null>(null)
   const [editingDisplayName, setEditingDisplayName] = useState<string | null>(null)
   const [tempDisplayName, setTempDisplayName] = useState("")
@@ -1256,8 +1257,26 @@ export default function ChannelsPage() {
             <SheetTitle>选择接口</SheetTitle>
             <SheetDescription>从列表中选择一个支付接口</SheetDescription>
           </SheetHeader>
+          
+          {/* 使用中/未使用页签 */}
+          <Tabs value={interfaceUsageFilter} onValueChange={(value) => setInterfaceUsageFilter(value as "使用中" | "未使用")} className="mt-4">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="使用中">使用中</TabsTrigger>
+              <TabsTrigger value="未使用">未使用</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
           <div className="py-6 space-y-4">
-            {mockInterfaces.map((item) => (
+            {mockInterfaces
+              .filter(item => {
+                // 检查接口是否被通道使用（包括当前正在选择的接口）
+                const isUsedInChannels = channels.some(ch => ch.interface === item.name)
+                const isCurrentSelection = tempInterface === item.name
+                const isUsed = isUsedInChannels || isCurrentSelection
+                
+                return interfaceUsageFilter === "使用中" ? isUsed : !isUsed
+              })
+              .map((item) => (
               <div
                 key={item.id}
                 className={`border rounded-lg p-4 ${
