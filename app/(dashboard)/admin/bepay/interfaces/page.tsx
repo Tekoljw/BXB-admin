@@ -24,18 +24,21 @@ import {
   Globe,
   Settings,
   Plus,
-  Trash2
+  Trash2,
+  Check,
+  X
 } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface SupplierConfig {
   supplierId: string
   supplierName: string
-  keyFormat: "standard" | "custom"
-  merchantId?: string
+  upstreamMerchantId?: string
+  hostApi?: string
   apiKey?: string
   customCode?: string
 }
@@ -67,14 +70,14 @@ const mockSuppliers = [
 
 export default function InterfacesPage() {
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedInterface, setSelectedInterface] = useState<PaymentInterface | null>(null)
-  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false)
   const [isSupplierConfigDialogOpen, setIsSupplierConfigDialogOpen] = useState(false)
   const [currentConfigInterface, setCurrentConfigInterface] = useState<PaymentInterface | null>(null)
   const [supplierConfigs, setSupplierConfigs] = useState<SupplierConfig[]>([])
   const [selectedSuppliers, setSelectedSuppliers] = useState<string[]>([])
+  const [editingNameId, setEditingNameId] = useState<string | null>(null)
+  const [editingNameValue, setEditingNameValue] = useState("")
   
-  const [interfaces] = useState<PaymentInterface[]>([
+  const [interfaces, setInterfaces] = useState<PaymentInterface[]>([
     {
       id: "IF001",
       name: "Bitzpay",
@@ -189,9 +192,32 @@ export default function InterfacesPage() {
     iface.description.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const handleViewDetails = (iface: PaymentInterface) => {
-    setSelectedInterface(iface)
-    setIsDetailDialogOpen(true)
+  const handleToggleStatus = (id: string) => {
+    setInterfaces(interfaces.map(iface =>
+      iface.id === id
+        ? { ...iface, status: iface.status === 'active' ? 'inactive' : 'active' }
+        : iface
+    ))
+  }
+
+  const handleStartEditName = (id: string, currentName: string) => {
+    setEditingNameId(id)
+    setEditingNameValue(currentName)
+  }
+
+  const handleSaveName = (id: string) => {
+    if (editingNameValue.trim()) {
+      setInterfaces(interfaces.map(iface =>
+        iface.id === id ? { ...iface, name: editingNameValue.trim() } : iface
+      ))
+    }
+    setEditingNameId(null)
+    setEditingNameValue("")
+  }
+
+  const handleCancelEditName = () => {
+    setEditingNameId(null)
+    setEditingNameValue("")
   }
 
   const handleOpenSupplierConfig = (iface: PaymentInterface) => {
@@ -210,8 +236,8 @@ export default function InterfacesPage() {
       setSupplierConfigs([...supplierConfigs, {
         supplierId,
         supplierName,
-        keyFormat: "standard",
-        merchantId: "",
+        upstreamMerchantId: "",
+        hostApi: "",
         apiKey: "",
         customCode: ""
       }])
@@ -227,7 +253,6 @@ export default function InterfacesPage() {
   }
 
   const handleSaveSupplierConfigs = () => {
-    // In production, this would save to backend
     console.log("Saving supplier configs:", supplierConfigs)
     setIsSupplierConfigDialogOpen(false)
   }
@@ -257,28 +282,60 @@ export default function InterfacesPage() {
         {filteredInterfaces.map((iface) => (
           <Card 
             key={iface.id} 
-            className="p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-            onClick={() => handleViewDetails(iface)}
+            className="p-6 hover:shadow-lg transition-shadow"
           >
             <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-1">
                 <div className="w-12 h-12 rounded-lg bg-custom-green/10 flex items-center justify-center">
                   <Network className="w-6 h-6 text-custom-green" />
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-custom-green transition-colors">
-                    {iface.name}
-                  </h3>
+                <div className="flex-1">
+                  {editingNameId === iface.id ? (
+                    <div className="flex items-center gap-1">
+                      <Input
+                        value={editingNameValue}
+                        onChange={(e) => setEditingNameValue(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleSaveName(iface.id)
+                          if (e.key === 'Escape') handleCancelEditName()
+                        }}
+                        className="h-7 text-base font-semibold"
+                        autoFocus
+                      />
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 w-7 p-0 text-green-600 hover:text-green-800 hover:bg-green-50"
+                        onClick={() => handleSaveName(iface.id)}
+                      >
+                        <Check className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 w-7 p-0 text-red-600 hover:text-red-800 hover:bg-red-50"
+                        onClick={handleCancelEditName}
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <h3 
+                      className="text-lg font-semibold text-gray-900 dark:text-white hover:text-custom-green transition-colors cursor-pointer"
+                      onClick={() => handleStartEditName(iface.id, iface.name)}
+                    >
+                      {iface.name}
+                    </h3>
+                  )}
                   <p className="text-xs text-gray-500 dark:text-gray-400">{iface.code}</p>
                 </div>
               </div>
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                iface.status === 'active' 
-                  ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                  : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
-              }`}>
-                {iface.status === 'active' ? '运行中' : '已停用'}
-              </span>
+              <div className="flex items-center gap-2">
+                <Switch
+                  checked={iface.status === 'active'}
+                  onCheckedChange={() => handleToggleStatus(iface.id)}
+                />
+              </div>
             </div>
 
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
@@ -304,32 +361,18 @@ export default function InterfacesPage() {
               <span className="text-xs text-gray-500 dark:text-gray-400">
                 创建于 {iface.createdAt}
               </span>
-              <div className="flex items-center gap-1">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:text-blue-400"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleOpenSupplierConfig(iface)
-                  }}
-                  title="供应商配置"
-                >
-                  <Settings className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-custom-green hover:text-custom-green/80 hover:bg-custom-green/10"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleViewDetails(iface)
-                  }}
-                >
-                  <Eye className="w-4 h-4 mr-1" />
-                  查看详情
-                </Button>
-              </div>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:text-blue-400"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleOpenSupplierConfig(iface)
+                }}
+                title="供应商配置"
+              >
+                <Settings className="w-4 h-4" />
+              </Button>
             </div>
           </Card>
         ))}
@@ -341,129 +384,6 @@ export default function InterfacesPage() {
           <p className="text-gray-500 dark:text-gray-400">未找到相关接口</p>
         </div>
       )}
-
-      <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-        <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Network className="w-5 h-5 text-custom-green" />
-              {selectedInterface?.name} - 接口详情
-            </DialogTitle>
-          </DialogHeader>
-          {selectedInterface && (
-            <div className="space-y-6 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">接口代码</p>
-                  <p className="text-base font-medium text-gray-900 dark:text-white mt-1">
-                    {selectedInterface.code}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">状态</p>
-                  <p className="text-base font-medium text-gray-900 dark:text-white mt-1">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      selectedInterface.status === 'active' 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
-                    }`}>
-                      {selectedInterface.status === 'active' ? '运行中' : '已停用'}
-                    </span>
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">支付通道数</p>
-                  <p className="text-base font-medium text-blue-600 dark:text-blue-400 mt-1">
-                    {selectedInterface.channelCount} 个
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">支持币种数</p>
-                  <p className="text-base font-medium text-purple-600 dark:text-purple-400 mt-1">
-                    {selectedInterface.currencyCount} 种
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">接口描述</p>
-                <p className="text-base text-gray-700 dark:text-gray-300">
-                  {selectedInterface.description}
-                </p>
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Globe className="w-4 h-4 text-custom-green" />
-                  <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                    支持的币种
-                  </h3>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {selectedInterface.supportedCurrencies.map((currency) => (
-                    <span
-                      key={currency}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
-                    >
-                      {currency}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <TrendingUp className="w-4 h-4 text-custom-green" />
-                  <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                    支持的支付通道
-                  </h3>
-                </div>
-                <div className="space-y-2">
-                  {selectedInterface.supportedChannels.map((channel, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 rounded-full bg-custom-green"></div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900 dark:text-white">
-                            {channel.name}
-                          </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {channel.code}
-                          </p>
-                        </div>
-                      </div>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        channel.type === '代收'
-                          ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-                          : 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400'
-                      }`}>
-                        {channel.type}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  创建时间: {selectedInterface.createdAt}
-                </p>
-              </div>
-            </div>
-          )}
-          <div className="flex justify-end">
-            <Button
-              onClick={() => setIsDetailDialogOpen(false)}
-              variant="outline"
-            >
-              关闭
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
 
       <Sheet open={isSupplierConfigDialogOpen} onOpenChange={setIsSupplierConfigDialogOpen}>
         <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">
@@ -505,31 +425,29 @@ export default function InterfacesPage() {
                         
                         {isSelected && config && (
                           <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-                            <div className="flex items-center justify-between mb-3">
-                              <Label className="text-xs font-semibold text-gray-700 dark:text-gray-300">密钥格式</Label>
-                              <Select
-                                value={config.keyFormat}
-                                onValueChange={(value) => handleUpdateSupplierConfig(config.supplierId, 'keyFormat', value)}
-                              >
-                                <SelectTrigger className="w-[140px] h-8">
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="standard">通用格式</SelectItem>
-                                  <SelectItem value="custom">自定义代码</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-
-                            {config.keyFormat === 'standard' ? (
-                              <div className="space-y-3">
+                            <Tabs defaultValue="standard" className="w-full">
+                              <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="standard">通用格式</TabsTrigger>
+                                <TabsTrigger value="custom">自定义代码</TabsTrigger>
+                              </TabsList>
+                              <TabsContent value="standard" className="space-y-3 mt-3">
                                 <div>
-                                  <Label htmlFor={`merchant-${config.supplierId}`} className="text-xs">商户ID</Label>
+                                  <Label htmlFor={`merchant-${config.supplierId}`} className="text-xs">上游接口商户ID</Label>
                                   <Input
                                     id={`merchant-${config.supplierId}`}
-                                    placeholder="请输入商户ID"
-                                    value={config.merchantId || ''}
-                                    onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'merchantId', e.target.value)}
+                                    placeholder="请输入上游接口商户ID"
+                                    value={config.upstreamMerchantId || ''}
+                                    onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'upstreamMerchantId', e.target.value)}
+                                    className="mt-1 h-9"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor={`hostapi-${config.supplierId}`} className="text-xs">hostApi</Label>
+                                  <Input
+                                    id={`hostapi-${config.supplierId}`}
+                                    placeholder="请输入hostApi地址"
+                                    value={config.hostApi || ''}
+                                    onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'hostApi', e.target.value)}
                                     className="mt-1 h-9"
                                   />
                                 </div>
@@ -544,14 +462,13 @@ export default function InterfacesPage() {
                                     className="mt-1 h-9"
                                   />
                                 </div>
-                              </div>
-                            ) : (
-                              <div>
+                              </TabsContent>
+                              <TabsContent value="custom" className="mt-3">
                                 <Label htmlFor={`code-${config.supplierId}`} className="text-xs">自定义配置代码</Label>
                                 <Textarea
                                   id={`code-${config.supplierId}`}
                                   placeholder="请输入JSON配置或其他自定义代码..."
-                                  rows={5}
+                                  rows={6}
                                   value={config.customCode || ''}
                                   onChange={(e) => handleUpdateSupplierConfig(config.supplierId, 'customCode', e.target.value)}
                                   className="font-mono text-xs mt-1"
@@ -559,8 +476,8 @@ export default function InterfacesPage() {
                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                   支持JSON格式或其他自定义配置格式
                                 </p>
-                              </div>
-                            )}
+                              </TabsContent>
+                            </Tabs>
                           </div>
                         )}
                       </div>
