@@ -927,7 +927,7 @@ export default function ChannelsPage() {
                         size="sm"
                         onClick={() => openEditDialog(channel)}
                         className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
-                        title="编辑"
+                        title="支付方式编辑"
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
@@ -1180,13 +1180,13 @@ export default function ChannelsPage() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>编辑通道</DialogTitle>
-            <DialogDescription>修改通道配置信息</DialogDescription>
+            <DialogTitle>支付方式编辑</DialogTitle>
+            <DialogDescription>修改支付方式配置信息</DialogDescription>
           </DialogHeader>
           <div className="space-y-6 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="edit-code">通道代码</Label>
+                <Label htmlFor="edit-code">支付方式代码</Label>
                 <Input
                   id="edit-code"
                   value={formData.code}
@@ -1194,7 +1194,7 @@ export default function ChannelsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-name">通道名称</Label>
+                <Label htmlFor="edit-name">支付方式名称</Label>
                 <Input
                   id="edit-name"
                   value={formData.name}
@@ -1231,19 +1231,6 @@ export default function ChannelsPage() {
                     <SelectItem value="INR">INR</SelectItem>
                     <SelectItem value="USD">USD</SelectItem>
                     <SelectItem value="EUR">EUR</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-interface">接口来源</Label>
-                <Select value={formData.interface} onValueChange={(value) => setFormData({...formData, interface: value})}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Bitzpay">Bitzpay</SelectItem>
-                    <SelectItem value="BePayOTC">BePayOTC</SelectItem>
-                    <SelectItem value="CFpay">CFpay</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
