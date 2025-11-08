@@ -83,49 +83,6 @@ interface Merchant {
 
 const mockMerchants: Merchant[] = [
   {
-    id: "M002",
-    name: "快捷支付平台",
-    userId: "U100002",
-    bxbUserId: "BXB002",
-    email: "kuaijie@example.com",
-    phone: "+86 138 0000 0002",
-    apiKeys: [
-      {
-        keyId: "KEY003",
-        key: "sk_live_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
-        callbackDomain: "https://api.kuaijie.com",
-        domainStatus: "approved",
-        createdAt: "2024-01-12 14:30:00"
-      },
-      {
-        keyId: "KEY003_NEW",
-        key: "sk_live_b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7",
-        callbackDomain: "https://new-api.kuaijie.com",
-        domainStatus: "pending",
-        createdAt: "2024-11-06 15:30:00"
-      }
-    ],
-    balance: 89500.25,
-    paymentBalance: 35000.00,
-    frozenBalance: 5000,
-    currencyBalances: [
-      { currency: "CNY", balance: 650000, paymentBalance: 250000 },
-      { currency: "USD", balance: 89500.25, paymentBalance: 35000.00 },
-      { currency: "USDT", balance: 72000, paymentBalance: 28000 },
-      { currency: "EUR", balance: 52000, paymentBalance: 20000 },
-      { currency: "GBP", balance: 38000, paymentBalance: 15000 }
-    ],
-    totalOrders: 9876,
-    feeConfigs: [
-      { id: "FC005", currency: "CNY", channel: "支付宝", suppliers: [{ name: "Bitzpay", enabled: true }, { name: "BePayOTC", enabled: false }], collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80", useSystemTieredFee: false },
-      { id: "FC006", currency: "CNY", channel: "微信支付", suppliers: [{ name: "CFpay", enabled: true }, { name: "PayGate", enabled: true }], collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.20", minPaymentFee: "¥0.80", useSystemTieredFee: false },
-      { id: "FC007", currency: "CNY", channel: "云闪付", suppliers: [{ name: "EasyPay", enabled: true }], collectionFee: "0.55%", paymentFee: "0.35%", minCollectionFee: "¥1.10", minPaymentFee: "¥0.70", useSystemTieredFee: true },
-    ],
-    status: "active",
-    hasPendingDomain: true,
-    createdAt: "2024-01-12 14:30:00"
-  },
-  {
     id: "M003",
     name: "云端收银",
     userId: "U100003",
@@ -929,9 +886,9 @@ export default function MerchantsPage() {
                                   size="sm"
                                   className="text-red-600 hover:text-red-800 dark:text-red-400"
                                   onClick={() => handleDeleteFeeConfig(config.id)}
+                                  title="删除"
                                 >
-                                  <Trash2 className="w-4 h-4 mr-1" />
-                                  删除
+                                  <Trash2 className="w-4 h-4" />
                                 </Button>
                               </td>
                             </tr>
