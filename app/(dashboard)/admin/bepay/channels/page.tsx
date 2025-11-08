@@ -873,13 +873,38 @@ export default function ChannelsPage() {
               
               {feeRatesFormData.map((rate, index) => (
                 <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="mb-3">
                     <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full text-sm font-semibold">
                       第 {index + 1} 档
                     </span>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      交易金额：{rate.minAmount.toLocaleString()} - {rate.maxAmount === Infinity ? '无上限' : rate.maxAmount.toLocaleString()}
-                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <Label className="text-xs text-gray-600 dark:text-gray-400">最小金额</Label>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        value={rate.minAmount === Infinity ? '' : rate.minAmount}
+                        onChange={(e) => {
+                          const newRates = [...feeRatesFormData]
+                          newRates[index].minAmount = e.target.value === '' ? 0 : Number(e.target.value)
+                          setFeeRatesFormData(newRates)
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-600 dark:text-gray-400">最大金额（留空表示无上限）</Label>
+                      <Input
+                        type="number"
+                        placeholder="无上限"
+                        value={rate.maxAmount === Infinity ? '' : rate.maxAmount}
+                        onChange={(e) => {
+                          const newRates = [...feeRatesFormData]
+                          newRates[index].maxAmount = e.target.value === '' ? Infinity : Number(e.target.value)
+                          setFeeRatesFormData(newRates)
+                        }}
+                      />
+                    </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-3">
@@ -1056,13 +1081,38 @@ export default function ChannelsPage() {
               
               {feeRatesFormData.map((rate, index) => (
                 <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="mb-3">
                     <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full text-sm font-semibold">
                       第 {index + 1} 档
                     </span>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      交易金额：{rate.minAmount.toLocaleString()} - {rate.maxAmount === Infinity ? '无上限' : rate.maxAmount.toLocaleString()}
-                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <Label className="text-xs text-gray-600 dark:text-gray-400">最小金额</Label>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        value={rate.minAmount === Infinity ? '' : rate.minAmount}
+                        onChange={(e) => {
+                          const newRates = [...feeRatesFormData]
+                          newRates[index].minAmount = e.target.value === '' ? 0 : Number(e.target.value)
+                          setFeeRatesFormData(newRates)
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-600 dark:text-gray-400">最大金额（留空表示无上限）</Label>
+                      <Input
+                        type="number"
+                        placeholder="无上限"
+                        value={rate.maxAmount === Infinity ? '' : rate.maxAmount}
+                        onChange={(e) => {
+                          const newRates = [...feeRatesFormData]
+                          newRates[index].maxAmount = e.target.value === '' ? Infinity : Number(e.target.value)
+                          setFeeRatesFormData(newRates)
+                        }}
+                      />
+                    </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-3">
