@@ -393,6 +393,8 @@ export default function MerchantsPage() {
   const [isApiKeysDialogOpen, setIsApiKeysDialogOpen] = useState(false)
   const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false)
   const [isProfitDialogOpen, setIsProfitDialogOpen] = useState(false)
+  const [isVolumeDialogOpen, setIsVolumeDialogOpen] = useState(false)
+  const [profitTimeRange, setProfitTimeRange] = useState<"today" | "yesterday" | "thisMonth" | "total">("total")
   const [isInterfaceManageDialogOpen, setIsInterfaceManageDialogOpen] = useState(false)
   const [isSupplierManageDialogOpen, setIsSupplierManageDialogOpen] = useState(false)
   const [currentMerchant, setCurrentMerchant] = useState<Merchant | null>(null)
@@ -507,7 +509,13 @@ export default function MerchantsPage() {
 
   const openProfitDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
+    setProfitTimeRange("total")
     setIsProfitDialogOpen(true)
+  }
+
+  const openVolumeDialog = (merchant: Merchant) => {
+    setCurrentMerchant(merchant)
+    setIsVolumeDialogOpen(true)
   }
 
   const openApiKeysDialog = (merchant: Merchant) => {
@@ -970,15 +978,20 @@ export default function MerchantsPage() {
                     </button>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="text-purple-900 dark:text-purple-100 font-medium">
-                      日: ${merchant.dailyVolume.toLocaleString()}
-                    </div>
-                    <div className="text-purple-700 dark:text-purple-300 text-xs mt-1">
-                      月: ${merchant.monthlyVolume.toLocaleString()}
-                    </div>
-                    <div className="text-purple-600 dark:text-purple-400 text-xs mt-1 font-medium">
-                      总: ${merchant.totalVolume.toLocaleString()}
-                    </div>
+                    <button
+                      onClick={() => openVolumeDialog(merchant)}
+                      className="text-left hover:opacity-70 transition-opacity cursor-pointer"
+                    >
+                      <div className="text-purple-900 dark:text-purple-100 font-medium">
+                        日: ${merchant.dailyVolume.toLocaleString()}
+                      </div>
+                      <div className="text-purple-700 dark:text-purple-300 text-xs mt-1">
+                        月: ${merchant.monthlyVolume.toLocaleString()}
+                      </div>
+                      <div className="text-purple-600 dark:text-purple-400 text-xs mt-1 font-medium">
+                        总: ${merchant.totalVolume.toLocaleString()}
+                      </div>
+                    </button>
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <Button
@@ -1646,8 +1659,18 @@ export default function MerchantsPage() {
               商户 {currentMerchant?.name} 的各币种利润明细
             </DialogDescription>
           </DialogHeader>
+          
+          <Tabs value={profitTimeRange} onValueChange={(value) => setProfitTimeRange(value as "today" | "yesterday" | "thisMonth" | "total")} className="mt-4">
+            <TabsList>
+              <TabsTrigger value="today">今日</TabsTrigger>
+              <TabsTrigger value="yesterday">昨日</TabsTrigger>
+              <TabsTrigger value="thisMonth">本月</TabsTrigger>
+              <TabsTrigger value="total">累计</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
           <div className="py-4">
-            {currentMerchant && currentMerchant.currencyProfits && currentMerchant.currencyProfits.length > 0 ? (
+            {currentMerchant && currentMerchant.profitDataByTimeRange && currentMerchant.profitDataByTimeRange[profitTimeRange] && currentMerchant.profitDataByTimeRange[profitTimeRange].length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -1660,7 +1683,7 @@ export default function MerchantsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentMerchant.currencyProfits.map((cp, index) => (
+                    {currentMerchant.profitDataByTimeRange[profitTimeRange].map((cp, index) => (
                       <tr 
                         key={cp.currency}
                         className={`border-b border-gray-100 dark:border-gray-800 ${
@@ -1733,6 +1756,96 @@ export default function MerchantsPage() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsProfitDialogOpen(false)}>
+              关闭
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isVolumeDialogOpen} onOpenChange={setIsVolumeDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[75vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>交易量详情</DialogTitle>
+            <DialogDescription>
+              商户 {currentMerchant?.name} 的各币种交易量明细
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            {currentMerchant && currentMerchant.currencyVolumes && currentMerchant.currencyVolumes.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">币种</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-green-600 dark:text-green-400">代收交易量</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-blue-600 dark:text-blue-400">代付交易量</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-purple-600 dark:text-purple-400">总交易量</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentMerchant.currencyVolumes.map((cv, index) => (
+                      <tr 
+                        key={cv.currency}
+                        className={`border-b border-gray-100 dark:border-gray-800 ${
+                          index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'
+                        }`}
+                      >
+                        <td className="py-3 px-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">
+                              {cv.currency === "CNY" && "¥"}
+                              {cv.currency === "USD" && "$"}
+                              {cv.currency === "EUR" && "€"}
+                              {cv.currency === "GBP" && "£"}
+                              {cv.currency === "USDT" && "₮"}
+                            </span>
+                            <span className="font-medium text-gray-900 dark:text-white">{cv.currency}</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-medium text-green-600 dark:text-green-400">
+                            {cv.currency === "CNY" && "¥"}
+                            {cv.currency === "USD" && "$"}
+                            {cv.currency === "EUR" && "€"}
+                            {cv.currency === "GBP" && "£"}
+                            {cv.collectionVolume.toLocaleString()}
+                            {cv.currency === "USDT" && " USDT"}
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-medium text-blue-600 dark:text-blue-400">
+                            {cv.currency === "CNY" && "¥"}
+                            {cv.currency === "USD" && "$"}
+                            {cv.currency === "EUR" && "€"}
+                            {cv.currency === "GBP" && "£"}
+                            {cv.paymentVolume.toLocaleString()}
+                            {cv.currency === "USDT" && " USDT"}
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-semibold text-purple-600 dark:text-purple-400">
+                            {cv.currency === "CNY" && "¥"}
+                            {cv.currency === "USD" && "$"}
+                            {cv.currency === "EUR" && "€"}
+                            {cv.currency === "GBP" && "£"}
+                            {cv.totalVolume.toLocaleString()}
+                            {cv.currency === "USDT" && " USDT"}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                暂无交易量数据
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsVolumeDialogOpen(false)}>
               关闭
             </Button>
           </DialogFooter>
