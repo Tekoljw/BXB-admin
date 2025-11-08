@@ -21,9 +21,11 @@ import {
   SheetFooter,
 } from "@/components/ui/sheet"
 import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-interface InterfaceFee {
-  interfaceName: string
+interface ChannelCost {
+  channelName: string
+  interface: string
   feeRate: string
   minFee: string
 }
@@ -39,7 +41,7 @@ interface Supplier {
   supportedInterfaces: string[]
   supportedMerchants: string[]
   balances: Array<{ currency: string; deposit: string; pending: string }>
-  interfaceFees: InterfaceFee[]
+  channelCosts: ChannelCost[]
 }
 
 const mockInterfaces = [
@@ -66,10 +68,13 @@ const mockSuppliers: Supplier[] = [
       { currency: "BTC", deposit: "1.5", pending: "0.3" },
       { currency: "CNY", deposit: "50,000", pending: "12,000" },
     ],
-    interfaceFees: [
-      { interfaceName: "Bitzpay", feeRate: "0.5%", minFee: "¥1.00" },
-      { interfaceName: "BePayOTC", feeRate: "0.4%", minFee: "¥0.80" },
-      { interfaceName: "CFpay", feeRate: "0.6%", minFee: "¥1.20" },
+    channelCosts: [
+      { channelName: "支付宝", interface: "Bitzpay", feeRate: "0.5%", minFee: "¥1.00" },
+      { channelName: "微信支付", interface: "Bitzpay", feeRate: "0.5%", minFee: "¥1.00" },
+      { channelName: "银行转账", interface: "BePayOTC", feeRate: "0.4%", minFee: "¥0.80" },
+      { channelName: "PIX支付", interface: "BePayOTC", feeRate: "0.4%", minFee: "¥0.80" },
+      { channelName: "云闪付", interface: "CFpay", feeRate: "0.6%", minFee: "¥1.20" },
+      { channelName: "数字钱包", interface: "CFpay", feeRate: "0.6%", minFee: "¥1.20" },
     ],
   },
   {
@@ -86,9 +91,11 @@ const mockSuppliers: Supplier[] = [
       { currency: "USDT", deposit: "25,000", pending: "5,000" },
       { currency: "ETH", deposit: "10.5", pending: "2.1" },
     ],
-    interfaceFees: [
-      { interfaceName: "Bitzpay", feeRate: "0.45%", minFee: "¥0.90" },
-      { interfaceName: "PayTrust", feeRate: "0.55%", minFee: "¥1.10" },
+    channelCosts: [
+      { channelName: "支付宝", interface: "Bitzpay", feeRate: "0.45%", minFee: "¥0.90" },
+      { channelName: "微信支付", interface: "Bitzpay", feeRate: "0.45%", minFee: "¥0.90" },
+      { channelName: "信用卡", interface: "PayTrust", feeRate: "0.55%", minFee: "¥1.10" },
+      { channelName: "借记卡", interface: "PayTrust", feeRate: "0.55%", minFee: "¥1.10" },
     ],
   },
   {
@@ -104,9 +111,10 @@ const mockSuppliers: Supplier[] = [
     balances: [
       { currency: "USDT", deposit: "5,000", pending: "1,000" },
     ],
-    interfaceFees: [
-      { interfaceName: "BePayOTC", feeRate: "0.7%", minFee: "¥1.40" },
-      { interfaceName: "FastPay", feeRate: "0.5%", minFee: "¥1.00" },
+    channelCosts: [
+      { channelName: "银行转账", interface: "BePayOTC", feeRate: "0.7%", minFee: "¥1.40" },
+      { channelName: "PIX支付", interface: "BePayOTC", feeRate: "0.7%", minFee: "¥1.40" },
+      { channelName: "PayPal", interface: "FastPay", feeRate: "0.5%", minFee: "¥1.00" },
     ],
   },
 ]
@@ -124,6 +132,7 @@ export default function SuppliersPage() {
   const [tempMerchantId, setTempMerchantId] = useState("")
   const [tempApiKey, setTempApiKey] = useState("")
   const [tempInterfaces, setTempInterfaces] = useState<string[]>([])
+  const [selectedFeeInterface, setSelectedFeeInterface] = useState("全部")
 
   const handleSearch = () => {
     setSearchTerm(searchInput)
@@ -195,6 +204,7 @@ export default function SuppliersPage() {
 
   const openFeeSheet = (supplier: Supplier) => {
     setSelectedSupplier(supplier)
+    setSelectedFeeInterface("全部")
     setIsFeeSheetOpen(true)
   }
 
@@ -509,41 +519,53 @@ export default function SuppliersPage() {
           <SheetHeader>
             <SheetTitle>费率成本</SheetTitle>
             <SheetDescription>
-              供应商 {selectedSupplier?.name} 各接口的手续费（数据从供应商后台获取，仅供参考）
+              供应商 {selectedSupplier?.name} 各支付通道的成本费率（数据从供应商后台获取，仅供参考）
             </SheetDescription>
           </SheetHeader>
-          <div className="py-6">
-            {selectedSupplier && selectedSupplier.interfaceFees.length > 0 ? (
-              <div className="space-y-4">
-                <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                  <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                    <span className="font-semibold">提示：</span>以下费率数据从供应商后台实时同步获取，仅供查看，无法在此处修改。
-                  </p>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50 dark:bg-gray-900/50">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">接口名称</th>
-                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">手续费率</th>
-                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">单笔最低手续费</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                      {selectedSupplier.interfaceFees.map((fee, index) => (
+          <div className="py-6 space-y-4">
+            <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+              <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                <span className="font-semibold">提示：</span>以下费率数据从供应商后台实时同步获取，仅供查看，无法在此处修改。
+              </p>
+            </div>
+
+            <Tabs value={selectedFeeInterface} onValueChange={setSelectedFeeInterface}>
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="全部">全部</TabsTrigger>
+                <TabsTrigger value="Bitzpay">Bitzpay</TabsTrigger>
+                <TabsTrigger value="BePayOTC">BePayOTC</TabsTrigger>
+                <TabsTrigger value="CFpay">CFpay</TabsTrigger>
+              </TabsList>
+            </Tabs>
+
+            {selectedSupplier && selectedSupplier.channelCosts.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-gray-900/50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">通道名称</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">接口来源</th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">手续费率</th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">单笔最低手续费</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {selectedSupplier.channelCosts
+                      .filter(cost => selectedFeeInterface === "全部" || cost.interface === selectedFeeInterface)
+                      .map((cost, index) => (
                         <tr key={index} className={index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'}>
-                          <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{fee.interfaceName}</td>
-                          <td className="px-4 py-3 text-sm text-right text-yellow-600 dark:text-yellow-400 font-medium">{fee.feeRate}</td>
-                          <td className="px-4 py-3 text-sm text-right text-yellow-600 dark:text-yellow-400 font-medium">{fee.minFee}</td>
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{cost.channelName}</td>
+                          <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{cost.interface}</td>
+                          <td className="px-4 py-3 text-sm text-right text-yellow-600 dark:text-yellow-400 font-medium">{cost.feeRate}</td>
+                          <td className="px-4 py-3 text-sm text-right text-yellow-600 dark:text-yellow-400 font-medium">{cost.minFee}</td>
                         </tr>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
+                  </tbody>
+                </table>
               </div>
             ) : (
               <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                暂无费率数据
+                暂无通道成本数据
               </div>
             )}
           </div>
