@@ -71,6 +71,7 @@ interface CurrencyBalance {
   currency: string
   balance: number
   paymentBalance: number
+  frozenBalance: number
 }
 
 interface Merchant {
@@ -127,11 +128,11 @@ const mockMerchants: Merchant[] = [
     paymentBalance: 20000.00,
     frozenBalance: 10000,
     currencyBalances: [
-      { currency: "CNY", balance: 320000, paymentBalance: 140000 },
-      { currency: "USD", balance: 45200.00, paymentBalance: 20000.00 },
-      { currency: "USDT", balance: 58000, paymentBalance: 22000 },
-      { currency: "EUR", balance: 35000, paymentBalance: 15000 },
-      { currency: "GBP", balance: 28000, paymentBalance: 12000 }
+      { currency: "CNY", balance: 320000, paymentBalance: 140000, frozenBalance: 25000 },
+      { currency: "USD", balance: 45200.00, paymentBalance: 20000.00, frozenBalance: 10000 },
+      { currency: "USDT", balance: 58000, paymentBalance: 22000, frozenBalance: 8000 },
+      { currency: "EUR", balance: 35000, paymentBalance: 15000, frozenBalance: 5000 },
+      { currency: "GBP", balance: 28000, paymentBalance: 12000, frozenBalance: 3000 }
     ],
     totalOrders: 5432,
     feeConfigs: [
@@ -190,11 +191,11 @@ const mockMerchants: Merchant[] = [
     paymentBalance: 80000.00,
     frozenBalance: 0,
     currencyBalances: [
-      { currency: "CNY", balance: 1250000, paymentBalance: 580000 },
-      { currency: "USD", balance: 210000.75, paymentBalance: 80000.00 },
-      { currency: "USDT", balance: 165000, paymentBalance: 70000 },
-      { currency: "EUR", balance: 120000, paymentBalance: 55000 },
-      { currency: "GBP", balance: 95000, paymentBalance: 42000 }
+      { currency: "CNY", balance: 1250000, paymentBalance: 580000, frozenBalance: 0 },
+      { currency: "USD", balance: 210000.75, paymentBalance: 80000.00, frozenBalance: 0 },
+      { currency: "USDT", balance: 165000, paymentBalance: 70000, frozenBalance: 0 },
+      { currency: "EUR", balance: 120000, paymentBalance: 55000, frozenBalance: 0 },
+      { currency: "GBP", balance: 95000, paymentBalance: 42000, frozenBalance: 0 }
     ],
     totalOrders: 23456,
     feeConfigs: [
@@ -786,6 +787,9 @@ export default function MerchantsPage() {
                       <div className="text-blue-600 dark:text-blue-400 text-xs mt-1 font-medium">
                         代付金: ${merchant.paymentBalance.toLocaleString()}
                       </div>
+                      <div className="text-orange-600 dark:text-orange-400 text-xs mt-1 font-medium">
+                        冻结: ${merchant.frozenBalance.toLocaleString()}
+                      </div>
                     </button>
                   </td>
                   <td className="px-4 py-3 text-sm">
@@ -1362,6 +1366,7 @@ export default function MerchantsPage() {
                       <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">币种</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">法币余额</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-blue-600 dark:text-blue-400">代付金余额</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-orange-600 dark:text-orange-400">冻结金额</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">总余额</th>
                     </tr>
                   </thead>
@@ -1402,6 +1407,16 @@ export default function MerchantsPage() {
                             {cb.currency === "EUR" && "€"}
                             {cb.currency === "GBP" && "£"}
                             {cb.paymentBalance.toLocaleString()}
+                            {cb.currency === "USDT" && " USDT"}
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-medium text-orange-600 dark:text-orange-400">
+                            {cb.currency === "CNY" && "¥"}
+                            {cb.currency === "USD" && "$"}
+                            {cb.currency === "EUR" && "€"}
+                            {cb.currency === "GBP" && "£"}
+                            {cb.frozenBalance.toLocaleString()}
                             {cb.currency === "USDT" && " USDT"}
                           </div>
                         </td>
