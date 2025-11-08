@@ -149,6 +149,38 @@ const mockChannels: Channel[] = [
 
 const currencies = ["全部", "CNY", "BRL", "INR", "USD", "EUR"]
 
+// Mock接口数据
+const mockInterfaces = [
+  {
+    id: "IF001",
+    name: "Bitzpay",
+    code: "BITZPAY",
+    description: "专业的数字货币支付接口",
+    status: "active" as const,
+  },
+  {
+    id: "IF002",
+    name: "BePayOTC",
+    code: "BEPAYOTC",
+    description: "高效的OTC支付解决方案",
+    status: "active" as const,
+  },
+  {
+    id: "IF003",
+    name: "CFpay",
+    code: "CFPAY",
+    description: "跨境支付专业接口",
+    status: "active" as const,
+  },
+  {
+    id: "IF004",
+    name: "PayTrust",
+    code: "PAYTRUST",
+    description: "可信赖的支付通道",
+    status: "inactive" as const,
+  },
+]
+
 export default function ChannelsPage() {
   const [channels, setChannels] = useState<Channel[]>(mockChannels)
   const [searchInput, setSearchInput] = useState("")
@@ -165,6 +197,8 @@ export default function ChannelsPage() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isDemoDialogOpen, setIsDemoDialogOpen] = useState(false)
+  const [isInterfaceSelectOpen, setIsInterfaceSelectOpen] = useState(false)
+  const [tempInterface, setTempInterface] = useState("")
   const [currentChannel, setCurrentChannel] = useState<Channel | null>(null)
   const [editingDisplayName, setEditingDisplayName] = useState<string | null>(null)
   const [tempDisplayName, setTempDisplayName] = useState("")
@@ -879,19 +913,6 @@ export default function ChannelsPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="interface">接口来源</Label>
-                <Select value={formData.interface} onValueChange={(value) => setFormData({...formData, interface: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="选择接口" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Bitzpay">Bitzpay</SelectItem>
-                    <SelectItem value="BePayOTC">BePayOTC</SelectItem>
-                    <SelectItem value="CFpay">CFpay</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2 col-span-2">
                 <Label htmlFor="demoVideo">Demo视频链接</Label>
                 <Input
                   id="demoVideo"
@@ -911,6 +932,20 @@ export default function ChannelsPage() {
                     <SelectItem value="inactive">禁用</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="space-y-2 col-span-2">
+                <Label>接口来源</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    setTempInterface(formData.interface)
+                    setIsInterfaceSelectOpen(true)
+                  }}
+                >
+                  {formData.interface || "选择接口"}
+                </Button>
               </div>
             </div>
 
@@ -1051,19 +1086,6 @@ export default function ChannelsPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-interface">接口来源</Label>
-                <Select value={formData.interface} onValueChange={(value) => setFormData({...formData, interface: value})}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Bitzpay">Bitzpay</SelectItem>
-                    <SelectItem value="BePayOTC">BePayOTC</SelectItem>
-                    <SelectItem value="CFpay">CFpay</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2 col-span-2">
                 <Label htmlFor="edit-demoVideo">Demo视频链接</Label>
                 <Input
                   id="edit-demoVideo"
@@ -1082,6 +1104,20 @@ export default function ChannelsPage() {
                     <SelectItem value="inactive">禁用</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="space-y-2 col-span-2">
+                <Label>接口来源</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    setTempInterface(formData.interface)
+                    setIsInterfaceSelectOpen(true)
+                  }}
+                >
+                  {formData.interface || "选择接口"}
+                </Button>
               </div>
             </div>
 
@@ -1212,6 +1248,81 @@ export default function ChannelsPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* 接口选择弹窗 */}
+      <Sheet open={isInterfaceSelectOpen} onOpenChange={setIsInterfaceSelectOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>选择接口</SheetTitle>
+            <SheetDescription>从列表中选择一个支付接口</SheetDescription>
+          </SheetHeader>
+          <div className="py-6 space-y-4">
+            {mockInterfaces.map((item) => (
+              <div
+                key={item.id}
+                className={`border rounded-lg p-4 ${
+                  item.status === "inactive" 
+                    ? "bg-gray-100 dark:bg-gray-800 opacity-60" 
+                    : "bg-white dark:bg-gray-800"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
+                        {item.name}
+                      </h3>
+                      <span className={`px-2 py-0.5 text-xs rounded-full ${
+                        item.status === "active" 
+                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" 
+                          : "bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                      }`}>
+                        {item.status === "active" ? "启用" : "停用"}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      {item.description}
+                    </p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                      代码: {item.code}
+                    </p>
+                  </div>
+                  <Switch
+                    checked={tempInterface === item.name}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setTempInterface(item.name)
+                      }
+                    }}
+                    disabled={item.status === "inactive"}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <SheetFooter className="flex gap-2 pt-4 border-t">
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setTempInterface(formData.interface)
+                setIsInterfaceSelectOpen(false)
+              }}
+              className="flex-1"
+            >
+              取消
+            </Button>
+            <Button 
+              onClick={() => {
+                setFormData(prev => ({ ...prev, interface: tempInterface }))
+                setIsInterfaceSelectOpen(false)
+              }}
+              className="bg-custom-green hover:bg-custom-green/90 flex-1"
+            >
+              确认
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
