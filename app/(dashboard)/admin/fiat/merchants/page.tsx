@@ -82,6 +82,20 @@ interface CurrencyProfit {
   totalProfit: number
 }
 
+interface CurrencyVolume {
+  currency: string
+  collectionVolume: number
+  paymentVolume: number
+  totalVolume: number
+}
+
+interface TimeRangeProfitData {
+  today: CurrencyProfit[]
+  yesterday: CurrencyProfit[]
+  thisMonth: CurrencyProfit[]
+  total: CurrencyProfit[]
+}
+
 interface Merchant {
   id: string
   name: string
@@ -98,9 +112,11 @@ interface Merchant {
   monthlyProfit: number
   totalProfit: number
   currencyProfits: CurrencyProfit[]
+  profitDataByTimeRange: TimeRangeProfitData
   dailyVolume: number
   monthlyVolume: number
   totalVolume: number
+  currencyVolumes: CurrencyVolume[]
   totalOrders: number
   feeConfigs: FeeConfig[]
   status: "active" | "frozen" | "disabled"
