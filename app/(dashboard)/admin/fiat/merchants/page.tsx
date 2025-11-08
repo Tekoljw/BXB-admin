@@ -175,9 +175,46 @@ const mockMerchants: Merchant[] = [
       { currency: "EUR", collectionProfit: 5200, paymentProfit: 2100, exchangeRateProfit: 900, totalProfit: 8200 },
       { currency: "GBP", collectionProfit: 4500, paymentProfit: 1800, exchangeRateProfit: 700, totalProfit: 7000 }
     ],
+    profitDataByTimeRange: {
+      today: [
+        { currency: "CNY", collectionProfit: 850, paymentProfit: 320, exchangeRateProfit: 150, totalProfit: 1320 },
+        { currency: "USD", collectionProfit: 280, paymentProfit: 120, exchangeRateProfit: 80, totalProfit: 480 },
+        { currency: "USDT", collectionProfit: 3500, paymentProfit: 1800, exchangeRateProfit: 1200, totalProfit: 6500 },
+        { currency: "EUR", collectionProfit: 520, paymentProfit: 210, exchangeRateProfit: 90, totalProfit: 820 },
+        { currency: "GBP", collectionProfit: 450, paymentProfit: 180, exchangeRateProfit: 70, totalProfit: 700 }
+      ],
+      yesterday: [
+        { currency: "CNY", collectionProfit: 900, paymentProfit: 340, exchangeRateProfit: 160, totalProfit: 1400 },
+        { currency: "USD", collectionProfit: 300, paymentProfit: 130, exchangeRateProfit: 85, totalProfit: 515 },
+        { currency: "USDT", collectionProfit: 3700, paymentProfit: 1900, exchangeRateProfit: 1250, totalProfit: 6850 },
+        { currency: "EUR", collectionProfit: 550, paymentProfit: 220, exchangeRateProfit: 95, totalProfit: 865 },
+        { currency: "GBP", collectionProfit: 480, paymentProfit: 190, exchangeRateProfit: 75, totalProfit: 745 }
+      ],
+      thisMonth: [
+        { currency: "CNY", collectionProfit: 2850, paymentProfit: 1070, exchangeRateProfit: 500, totalProfit: 4420 },
+        { currency: "USD", collectionProfit: 930, paymentProfit: 400, exchangeRateProfit: 270, totalProfit: 1600 },
+        { currency: "USDT", collectionProfit: 11700, paymentProfit: 6000, exchangeRateProfit: 4000, totalProfit: 21700 },
+        { currency: "EUR", collectionProfit: 1730, paymentProfit: 700, exchangeRateProfit: 300, totalProfit: 2730 },
+        { currency: "GBP", collectionProfit: 1500, paymentProfit: 600, exchangeRateProfit: 230, totalProfit: 2330 }
+      ],
+      total: [
+        { currency: "CNY", collectionProfit: 8500, paymentProfit: 3200, exchangeRateProfit: 1500, totalProfit: 13200 },
+        { currency: "USD", collectionProfit: 2800, paymentProfit: 1200, exchangeRateProfit: 800, totalProfit: 4800 },
+        { currency: "USDT", collectionProfit: 35000, paymentProfit: 18000, exchangeRateProfit: 12000, totalProfit: 65000 },
+        { currency: "EUR", collectionProfit: 5200, paymentProfit: 2100, exchangeRateProfit: 900, totalProfit: 8200 },
+        { currency: "GBP", collectionProfit: 4500, paymentProfit: 1800, exchangeRateProfit: 700, totalProfit: 7000 }
+      ]
+    },
     dailyVolume: 125000,
     monthlyVolume: 2850000,
     totalVolume: 15600000,
+    currencyVolumes: [
+      { currency: "CNY", collectionVolume: 8500000, paymentVolume: 3200000, totalVolume: 11700000 },
+      { currency: "USD", collectionVolume: 850000, paymentVolume: 320000, totalVolume: 1170000 },
+      { currency: "USDT", collectionVolume: 1800000, paymentVolume: 900000, totalVolume: 2700000 },
+      { currency: "EUR", collectionVolume: 180000, paymentVolume: 90000, totalVolume: 270000 },
+      { currency: "GBP", collectionVolume: 120000, paymentVolume: 50000, totalVolume: 170000 }
+    ],
     totalOrders: 5432,
     feeConfigs: [
       { 
@@ -251,9 +288,46 @@ const mockMerchants: Merchant[] = [
       { currency: "EUR", collectionProfit: 68000, paymentProfit: 35000, exchangeRateProfit: 22000, totalProfit: 125000 },
       { currency: "GBP", collectionProfit: 28000, paymentProfit: 12000, exchangeRateProfit: 5000, totalProfit: 45000 }
     ],
+    profitDataByTimeRange: {
+      today: [
+        { currency: "CNY", collectionProfit: 8500, paymentProfit: 4200, exchangeRateProfit: 2800, totalProfit: 15500 },
+        { currency: "USD", collectionProfit: 12500, paymentProfit: 6800, exchangeRateProfit: 4500, totalProfit: 23800 },
+        { currency: "USDT", collectionProfit: 22000, paymentProfit: 11500, exchangeRateProfit: 8200, totalProfit: 41700 },
+        { currency: "EUR", collectionProfit: 6800, paymentProfit: 3500, exchangeRateProfit: 2200, totalProfit: 12500 },
+        { currency: "GBP", collectionProfit: 2800, paymentProfit: 1200, exchangeRateProfit: 500, totalProfit: 4500 }
+      ],
+      yesterday: [
+        { currency: "CNY", collectionProfit: 9000, paymentProfit: 4400, exchangeRateProfit: 2900, totalProfit: 16300 },
+        { currency: "USD", collectionProfit: 13200, paymentProfit: 7100, exchangeRateProfit: 4700, totalProfit: 25000 },
+        { currency: "USDT", collectionProfit: 23000, paymentProfit: 12000, exchangeRateProfit: 8500, totalProfit: 43500 },
+        { currency: "EUR", collectionProfit: 7100, paymentProfit: 3700, exchangeRateProfit: 2300, totalProfit: 13100 },
+        { currency: "GBP", collectionProfit: 2900, paymentProfit: 1300, exchangeRateProfit: 530, totalProfit: 4730 }
+      ],
+      thisMonth: [
+        { currency: "CNY", collectionProfit: 28500, paymentProfit: 14000, exchangeRateProfit: 9300, totalProfit: 51800 },
+        { currency: "USD", collectionProfit: 41700, paymentProfit: 22700, exchangeRateProfit: 15000, totalProfit: 79400 },
+        { currency: "USDT", collectionProfit: 73300, paymentProfit: 38300, exchangeRateProfit: 27300, totalProfit: 138900 },
+        { currency: "EUR", collectionProfit: 22700, paymentProfit: 11700, exchangeRateProfit: 7300, totalProfit: 41700 },
+        { currency: "GBP", collectionProfit: 9300, paymentProfit: 4000, exchangeRateProfit: 1670, totalProfit: 15000 }
+      ],
+      total: [
+        { currency: "CNY", collectionProfit: 85000, paymentProfit: 42000, exchangeRateProfit: 28000, totalProfit: 155000 },
+        { currency: "USD", collectionProfit: 125000, paymentProfit: 68000, exchangeRateProfit: 45000, totalProfit: 238000 },
+        { currency: "USDT", collectionProfit: 220000, paymentProfit: 115000, exchangeRateProfit: 82000, totalProfit: 417000 },
+        { currency: "EUR", collectionProfit: 68000, paymentProfit: 35000, exchangeRateProfit: 22000, totalProfit: 125000 },
+        { currency: "GBP", collectionProfit: 28000, paymentProfit: 12000, exchangeRateProfit: 5000, totalProfit: 45000 }
+      ]
+    },
     dailyVolume: 580000,
     monthlyVolume: 15800000,
     totalVolume: 98000000,
+    currencyVolumes: [
+      { currency: "CNY", collectionVolume: 55000000, paymentVolume: 25000000, totalVolume: 80000000 },
+      { currency: "USD", collectionVolume: 8500000, paymentVolume: 3800000, totalVolume: 12300000 },
+      { currency: "USDT", collectionVolume: 3500000, paymentVolume: 1800000, totalVolume: 5300000 },
+      { currency: "EUR", collectionVolume: 280000, paymentVolume: 120000, totalVolume: 400000 },
+      { currency: "GBP", collectionVolume: 180000, paymentVolume: 80000, totalVolume: 260000 }
+    ],
     totalOrders: 23456,
     feeConfigs: [
       { 
