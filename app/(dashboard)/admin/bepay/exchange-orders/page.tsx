@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, ArrowRightLeft } from "lucide-react"
+import { Search, ArrowRightLeft, RotateCcw } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -120,8 +120,12 @@ const statusMap: Record<string, string> = {
 
 export default function ExchangeOrdersPage() {
   const [orders, setOrders] = useState<ExchangeOrder[]>(mockExchangeOrders)
+  const [searchInput, setSearchInput] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedFromAccount, setSelectedFromAccount] = useState("全部")
+  
+  const handleSearch = () => setSearchTerm(searchInput)
+  const handleReset = () => { setSearchInput(""); setSearchTerm("") }
   const [selectedToAccount, setSelectedToAccount] = useState("全部")
   const [selectedBehaviorType, setSelectedBehaviorType] = useState("全部")
   const [selectedStatus, setSelectedStatus] = useState("全部")
@@ -270,11 +274,26 @@ export default function ExchangeOrdersPage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
               placeholder="搜索订单号、商户ID..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               className="pl-10"
             />
           </div>
+          <Button
+            onClick={handleSearch}
+            className="bg-custom-green hover:bg-custom-green/90 text-white"
+          >
+            <Search className="w-4 h-4 mr-1" />
+            搜索
+          </Button>
+          <Button
+            onClick={handleReset}
+            variant="outline"
+          >
+            <RotateCcw className="w-4 h-4 mr-1" />
+            重置
+          </Button>
         </div>
       </div>
 

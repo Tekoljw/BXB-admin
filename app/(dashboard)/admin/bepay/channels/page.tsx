@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Plus, Edit, Trash2, Eye, Check, X } from "lucide-react"
+import { Search, Plus, Edit, Trash2, Eye, Check, X, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -137,8 +137,12 @@ const currencies = ["全部", "CNY", "BRL", "INR", "USD", "EUR"]
 
 export default function ChannelsPage() {
   const [channels, setChannels] = useState<Channel[]>(mockChannels)
+  const [searchInput, setSearchInput] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCurrency, setSelectedCurrency] = useState("全部")
+  
+  const handleSearch = () => setSearchTerm(searchInput)
+  const handleReset = () => { setSearchInput(""); setSearchTerm("") }
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -360,14 +364,31 @@ export default function ChannelsPage() {
         </TabsList>
       </Tabs>
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-        <Input
-          placeholder="搜索通道名称、代码或接口..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10"
-        />
+      <div className="flex items-center gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input
+            placeholder="搜索通道名称、代码或接口..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="pl-10"
+          />
+        </div>
+        <Button
+          onClick={handleSearch}
+          className="bg-custom-green hover:bg-custom-green/90 text-white"
+        >
+          <Search className="w-4 h-4 mr-1" />
+          搜索
+        </Button>
+        <Button
+          onClick={handleReset}
+          variant="outline"
+        >
+          <RotateCcw className="w-4 h-4 mr-1" />
+          重置
+        </Button>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
