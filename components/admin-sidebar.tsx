@@ -154,7 +154,6 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/fiat/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/fiat/suppliers", icon: Store, label: "供应商管理" },
     { path: "/admin/fiat/interfaces", icon: Network, label: "接口管理" },
-    { path: "/admin/fiat/payment-methods", icon: CreditCard, label: "支付方式" },
     { path: "/admin/fiat/channels", icon: Network, label: "通道管理" },
     { path: "/admin/fiat/merchants", icon: Users, label: "商户管理" },
     { path: "/admin/fiat/commission", icon: Percent, label: "代理商管理" },

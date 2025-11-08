@@ -8,7 +8,6 @@ import FiatLayout from "@/components/fiat-layout"
 import CurrenciesPage from "./currencies/page"
 import SuppliersPage from "./suppliers/page"
 import InterfacesPage from "./interfaces/page"
-import PaymentMethodsPage from "./payment-methods/page"
 import ChannelsPage from "./channels/page"
 import MerchantsPage from "./merchants/page"
 import CommissionPage from "./commission/page"
@@ -58,9 +57,6 @@ export default function FiatManagementPage() {
     }
     if (currentPath === "/admin/fiat/interfaces") {
       return <InterfacesPage />
-    }
-    if (currentPath === "/admin/fiat/payment-methods") {
-      return <PaymentMethodsPage />
     }
     if (currentPath === "/admin/fiat/channels") {
       return <ChannelsPage />
