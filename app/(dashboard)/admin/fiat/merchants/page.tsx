@@ -47,6 +47,10 @@ interface InterfaceSupplier {
 interface PaymentInterface {
   name: string
   enabled: boolean
+  collectionFeeRate: string
+  collectionFeeFixed: string
+  paymentFeeRate: string
+  paymentFeeFixed: string
   suppliers: InterfaceSupplier[]
 }
 
@@ -133,30 +137,30 @@ const mockMerchants: Merchant[] = [
       { 
         id: "FC008", currency: "CNY", channel: "支付宝", 
         interfaces: [
-          { name: "Bitzpay", enabled: true, suppliers: [{ name: "云端支付", enabled: true }, { name: "极速支付", enabled: false }] }
+          { name: "Bitzpay", enabled: true, collectionFeeRate: "1%", collectionFeeFixed: "1", paymentFeeRate: "2%", paymentFeeFixed: "0", suppliers: [{ name: "云端支付", enabled: true }, { name: "极速支付", enabled: false }] }
         ], 
         collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false 
       },
       { 
         id: "FC009", currency: "CNY", channel: "微信支付", 
         interfaces: [
-          { name: "BePayOTC", enabled: true, suppliers: [{ name: "星辰支付", enabled: true }] }, 
-          { name: "CFpay", enabled: false, suppliers: [{ name: "快付通", enabled: true }, { name: "支付宝", enabled: false }] }
+          { name: "BePayOTC", enabled: true, collectionFeeRate: "0.8%", collectionFeeFixed: "0.5", paymentFeeRate: "1.5%", paymentFeeFixed: "0", suppliers: [{ name: "星辰支付", enabled: true }] }, 
+          { name: "CFpay", enabled: false, collectionFeeRate: "1.2%", collectionFeeFixed: "2", paymentFeeRate: "1.8%", paymentFeeFixed: "1", suppliers: [{ name: "快付通", enabled: true }, { name: "支付宝", enabled: false }] }
         ], 
         collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.50", useSystemTieredFee: false 
       },
       { 
         id: "FC010", currency: "USDT", channel: "TRC20", 
         interfaces: [
-          { name: "PayGate", enabled: true, suppliers: [{ name: "链上支付", enabled: true }, { name: "数字钱包", enabled: true }] }, 
-          { name: "EasyPay", enabled: true, suppliers: [{ name: "USDT通道", enabled: true }] }
+          { name: "PayGate", enabled: true, collectionFeeRate: "0.5%", collectionFeeFixed: "1", paymentFeeRate: "0.8%", paymentFeeFixed: "0.5", suppliers: [{ name: "链上支付", enabled: true }, { name: "数字钱包", enabled: true }] }, 
+          { name: "EasyPay", enabled: true, collectionFeeRate: "0.6%", collectionFeeFixed: "0", paymentFeeRate: "1%", paymentFeeFixed: "0", suppliers: [{ name: "USDT通道", enabled: true }] }
         ], 
         collectionFee: "1.2%", paymentFee: "1.0%", minCollectionFee: "1.2 USDT", minPaymentFee: "1.0 USDT", useSystemTieredFee: true 
       },
       { 
         id: "FC011", currency: "USDT", channel: "ERC20", 
         interfaces: [
-          { name: "Bitzpay", enabled: true, suppliers: [{ name: "以太坊网关", enabled: true }] }
+          { name: "Bitzpay", enabled: true, collectionFeeRate: "1%", collectionFeeFixed: "2", paymentFeeRate: "1.2%", paymentFeeFixed: "1.5", suppliers: [{ name: "以太坊网关", enabled: true }] }
         ], 
         collectionFee: "1.5%", paymentFee: "1.3%", minCollectionFee: "2.0 USDT", minPaymentFee: "1.5 USDT", useSystemTieredFee: false 
       },
@@ -196,39 +200,39 @@ const mockMerchants: Merchant[] = [
       { 
         id: "FC012", currency: "CNY", channel: "支付宝", 
         interfaces: [
-          { name: "CFpay", enabled: true, suppliers: [{ name: "云支付", enabled: true }, { name: "付费通", enabled: true }] }, 
-          { name: "PayGate", enabled: true, suppliers: [{ name: "支付网关", enabled: true }] }, 
-          { name: "EasyPay", enabled: false, suppliers: [{ name: "简易支付", enabled: false }] }
+          { name: "CFpay", enabled: true, collectionFeeRate: "0.9%", collectionFeeFixed: "1.5", paymentFeeRate: "1.2%", paymentFeeFixed: "0.8", suppliers: [{ name: "云支付", enabled: true }, { name: "付费通", enabled: true }] }, 
+          { name: "PayGate", enabled: true, collectionFeeRate: "1.1%", collectionFeeFixed: "2", paymentFeeRate: "1.5%", paymentFeeFixed: "1", suppliers: [{ name: "支付网关", enabled: true }] }, 
+          { name: "EasyPay", enabled: false, collectionFeeRate: "0.7%", collectionFeeFixed: "1", paymentFeeRate: "1%", paymentFeeFixed: "0.5", suppliers: [{ name: "简易支付", enabled: false }] }
         ], 
         collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: true 
       },
       { 
         id: "FC013", currency: "CNY", channel: "微信支付", 
         interfaces: [
-          { name: "Bitzpay", enabled: true, suppliers: [{ name: "微信通道", enabled: true }] }, 
-          { name: "BePayOTC", enabled: true, suppliers: [{ name: "场外支付", enabled: true }] }
+          { name: "Bitzpay", enabled: true, collectionFeeRate: "1%", collectionFeeFixed: "1", paymentFeeRate: "1.3%", paymentFeeFixed: "0", suppliers: [{ name: "微信通道", enabled: true }] }, 
+          { name: "BePayOTC", enabled: true, collectionFeeRate: "0.8%", collectionFeeFixed: "0.5", paymentFeeRate: "1.2%", paymentFeeFixed: "0", suppliers: [{ name: "场外支付", enabled: true }] }
         ], 
         collectionFee: "0.4%", paymentFee: "0.2%", minCollectionFee: "¥0.80", minPaymentFee: "¥0.40", useSystemTieredFee: false 
       },
       { 
         id: "FC014", currency: "CNY", channel: "银行卡", 
         interfaces: [
-          { name: "CFpay", enabled: true, suppliers: [{ name: "银行直连", enabled: true }, { name: "聚合支付", enabled: true }] }
+          { name: "CFpay", enabled: true, collectionFeeRate: "1.2%", collectionFeeFixed: "2", paymentFeeRate: "1.5%", paymentFeeFixed: "1.5", suppliers: [{ name: "银行直连", enabled: true }, { name: "聚合支付", enabled: true }] }
         ], 
         collectionFee: "0.45%", paymentFee: "0.25%", minCollectionFee: "¥0.90", minPaymentFee: "¥0.50", useSystemTieredFee: true 
       },
       { 
         id: "FC015", currency: "USD", channel: "Stripe", 
         interfaces: [
-          { name: "PayGate", enabled: true, suppliers: [{ name: "国际支付", enabled: true }] }
+          { name: "PayGate", enabled: true, collectionFeeRate: "2.5%", collectionFeeFixed: "0.3", paymentFeeRate: "2.8%", paymentFeeFixed: "0.25", suppliers: [{ name: "国际支付", enabled: true }] }
         ], 
         collectionFee: "2.8%", paymentFee: "2.4%", minCollectionFee: "$0.30", minPaymentFee: "$0.25", useSystemTieredFee: false 
       },
       { 
         id: "FC016", currency: "USDT", channel: "TRC20", 
         interfaces: [
-          { name: "EasyPay", enabled: true, suppliers: [{ name: "波场网络", enabled: true }] }, 
-          { name: "Bitzpay", enabled: false, suppliers: [{ name: "数字货币", enabled: false }] }
+          { name: "EasyPay", enabled: true, collectionFeeRate: "0.6%", collectionFeeFixed: "0", paymentFeeRate: "0.9%", paymentFeeFixed: "0", suppliers: [{ name: "波场网络", enabled: true }] }, 
+          { name: "Bitzpay", enabled: false, collectionFeeRate: "0.8%", collectionFeeFixed: "1", paymentFeeRate: "1.1%", paymentFeeFixed: "0.5", suppliers: [{ name: "数字货币", enabled: false }] }
         ], 
         collectionFee: "0.9%", paymentFee: "0.7%", minCollectionFee: "0.9 USDT", minPaymentFee: "0.7 USDT", useSystemTieredFee: true 
       },
@@ -1460,7 +1464,7 @@ export default function MerchantsPage() {
               <div className="space-y-3">
                 {currentFeeConfig.interfaces.map((paymentInterface) => (
                   <div key={paymentInterface.name} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${
                           paymentInterface.enabled 
@@ -1475,6 +1479,9 @@ export default function MerchantsPage() {
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
                             {paymentInterface.enabled ? "已启用" : "已禁用"}
+                          </p>
+                          <p className="text-xs mt-1 text-orange-600 dark:text-orange-400 font-medium">
+                            成本：{paymentInterface.collectionFeeRate}+{paymentInterface.collectionFeeFixed}   {paymentInterface.paymentFeeRate}+{paymentInterface.paymentFeeFixed}
                           </p>
                         </div>
                       </div>
