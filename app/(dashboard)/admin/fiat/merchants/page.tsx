@@ -718,7 +718,7 @@ export default function MerchantsPage() {
                         size="sm"
                         onClick={() => openFeeConfigDialog(merchant)}
                         className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
-                        title="支付方式配置"
+                        title="商户通道配置"
                       >
                         <Settings className="w-4 h-4" />
                       </Button>
@@ -806,7 +806,7 @@ export default function MerchantsPage() {
       <Sheet open={isFeeConfigDialogOpen} onOpenChange={setIsFeeConfigDialogOpen}>
         <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>支付方式配置</SheetTitle>
+            <SheetTitle>商户通道配置</SheetTitle>
           </SheetHeader>
 
           <div className="mt-6">
@@ -1345,7 +1345,7 @@ export default function MerchantsPage() {
           <div className="mt-6">
             <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
               <p className="text-sm text-amber-800 dark:text-amber-200">
-                💡 这里只展示支持该支付方式的供应商
+                💡 这里只展示支持该支付通道的供应商
               </p>
             </div>
 
