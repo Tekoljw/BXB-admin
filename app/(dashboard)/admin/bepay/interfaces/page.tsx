@@ -76,6 +76,10 @@ export default function InterfacesPage() {
   const [selectedSuppliers, setSelectedSuppliers] = useState<string[]>([])
   const [editingNameId, setEditingNameId] = useState<string | null>(null)
   const [editingNameValue, setEditingNameValue] = useState("")
+  const [editingDescId, setEditingDescId] = useState<string | null>(null)
+  const [editingDescValue, setEditingDescValue] = useState("")
+  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false)
+  const [selectedInterface, setSelectedInterface] = useState<PaymentInterface | null>(null)
   
   const [interfaces, setInterfaces] = useState<PaymentInterface[]>([
     {
@@ -220,6 +224,31 @@ export default function InterfacesPage() {
     setEditingNameValue("")
   }
 
+  const handleStartEditDesc = (id: string, currentDesc: string) => {
+    setEditingDescId(id)
+    setEditingDescValue(currentDesc)
+  }
+
+  const handleSaveDesc = (id: string) => {
+    if (editingDescValue.trim()) {
+      setInterfaces(interfaces.map(iface =>
+        iface.id === id ? { ...iface, description: editingDescValue.trim() } : iface
+      ))
+    }
+    setEditingDescId(null)
+    setEditingDescValue("")
+  }
+
+  const handleCancelEditDesc = () => {
+    setEditingDescId(null)
+    setEditingDescValue("")
+  }
+
+  const handleViewDetails = (iface: PaymentInterface) => {
+    setSelectedInterface(iface)
+    setIsDetailDialogOpen(true)
+  }
+
   const handleOpenSupplierConfig = (iface: PaymentInterface) => {
     setCurrentConfigInterface(iface)
     setSupplierConfigs(iface.supplierConfigs || [])
@@ -278,100 +307,151 @@ export default function InterfacesPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         {filteredInterfaces.map((iface) => (
           <Card 
             key={iface.id} 
-            className="p-6 hover:shadow-lg transition-shadow"
+            className={`p-4 hover:shadow-lg transition-all ${
+              iface.status === 'inactive' 
+                ? 'bg-gray-100 dark:bg-gray-800 opacity-60' 
+                : ''
+            }`}
           >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3 flex-1">
-                <div className="w-12 h-12 rounded-lg bg-custom-green/10 flex items-center justify-center">
-                  <Network className="w-6 h-6 text-custom-green" />
-                </div>
-                <div className="flex-1">
-                  {editingNameId === iface.id ? (
-                    <div className="flex items-center gap-1">
-                      <Input
-                        value={editingNameValue}
-                        onChange={(e) => setEditingNameValue(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') handleSaveName(iface.id)
-                          if (e.key === 'Escape') handleCancelEditName()
-                        }}
-                        className="h-7 text-base font-semibold"
-                        autoFocus
-                      />
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-7 w-7 p-0 text-green-600 hover:text-green-800 hover:bg-green-50"
-                        onClick={() => handleSaveName(iface.id)}
-                      >
-                        <Check className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-7 w-7 p-0 text-red-600 hover:text-red-800 hover:bg-red-50"
-                        onClick={handleCancelEditName}
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <h3 
-                      className="text-lg font-semibold text-gray-900 dark:text-white hover:text-custom-green transition-colors cursor-pointer"
-                      onClick={() => handleStartEditName(iface.id, iface.name)}
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex-1">
+                {editingNameId === iface.id ? (
+                  <div className="flex items-center gap-1">
+                    <Input
+                      value={editingNameValue}
+                      onChange={(e) => setEditingNameValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSaveName(iface.id)
+                        if (e.key === 'Escape') handleCancelEditName()
+                      }}
+                      className="h-6 text-sm font-semibold"
+                      autoFocus
+                    />
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-6 w-6 p-0 text-green-600 hover:text-green-800 hover:bg-green-50"
+                      onClick={() => handleSaveName(iface.id)}
                     >
-                      {iface.name}
-                    </h3>
-                  )}
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{iface.code}</p>
-                </div>
+                      <Check className="w-3 h-3" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-6 w-6 p-0 text-red-600 hover:text-red-800 hover:bg-red-50"
+                      onClick={handleCancelEditName}
+                    >
+                      <X className="w-3 h-3" />
+                    </Button>
+                  </div>
+                ) : (
+                  <h3 
+                    className="text-base font-semibold text-gray-900 dark:text-white hover:text-custom-green transition-colors cursor-pointer"
+                    onClick={() => handleStartEditName(iface.id, iface.name)}
+                  >
+                    {iface.name}
+                  </h3>
+                )}
+                <p className="text-xs text-gray-500 dark:text-gray-400">{iface.code}</p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <span className={`text-xs px-1.5 py-0.5 rounded ${
+                  iface.status === 'active' 
+                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                    : 'bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                }`}>
+                  {iface.status === 'active' ? '启用' : '停用'}
+                </span>
                 <Switch
                   checked={iface.status === 'active'}
                   onCheckedChange={() => handleToggleStatus(iface.id)}
+                  className="scale-75"
                 />
               </div>
             </div>
 
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              {iface.description}
-            </p>
+            {editingDescId === iface.id ? (
+              <div className="mb-3">
+                <Input
+                  value={editingDescValue}
+                  onChange={(e) => setEditingDescValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveDesc(iface.id)
+                    if (e.key === 'Escape') handleCancelEditDesc()
+                  }}
+                  className="h-7 text-xs"
+                  autoFocus
+                />
+                <div className="flex gap-1 mt-1">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-6 px-2 text-xs text-green-600 hover:text-green-800 hover:bg-green-50"
+                    onClick={() => handleSaveDesc(iface.id)}
+                  >
+                    <Check className="w-3 h-3 mr-1" />
+                    保存
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-6 px-2 text-xs text-red-600 hover:text-red-800 hover:bg-red-50"
+                    onClick={handleCancelEditDesc}
+                  >
+                    <X className="w-3 h-3 mr-1" />
+                    取消
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <p 
+                className="text-xs text-gray-600 dark:text-gray-400 mb-3 cursor-pointer hover:text-custom-green"
+                onClick={() => handleStartEditDesc(iface.id, iface.description)}
+              >
+                {iface.description}
+              </p>
+            )}
 
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              <div 
+                className="text-center p-2 bg-blue-50 dark:bg-blue-900/20 rounded cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                onClick={() => handleViewDetails(iface)}
+              >
+                <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
                   {iface.channelCount}
                 </div>
-                <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">支付通道</div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">支付通道</div>
               </div>
-              <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+              <div 
+                className="text-center p-2 bg-purple-50 dark:bg-purple-900/20 rounded cursor-pointer hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+                onClick={() => handleViewDetails(iface)}
+              >
+                <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
                   {iface.currencyCount}
                 </div>
-                <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">支持币种</div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">支持币种</div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
               <span className="text-xs text-gray-500 dark:text-gray-400">
-                创建于 {iface.createdAt}
+                {iface.createdAt}
               </span>
               <Button
                 size="sm"
                 variant="ghost"
-                className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:text-blue-400"
+                className="h-7 px-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:text-blue-400"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleOpenSupplierConfig(iface)
                 }}
                 title="供应商配置"
               >
-                <Settings className="w-4 h-4" />
+                <Settings className="w-3 h-3" />
               </Button>
             </div>
           </Card>
@@ -384,6 +464,83 @@ export default function InterfacesPage() {
           <p className="text-gray-500 dark:text-gray-400">未找到相关接口</p>
         </div>
       )}
+
+      <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
+        <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Network className="w-5 h-5 text-custom-green" />
+              {selectedInterface?.name} - 接口详情
+            </DialogTitle>
+          </DialogHeader>
+          {selectedInterface && (
+            <div className="space-y-6 py-4">
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Globe className="w-4 h-4 text-custom-green" />
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                    支持的币种
+                  </h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {selectedInterface.supportedCurrencies.map((currency) => (
+                    <span
+                      key={currency}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
+                    >
+                      {currency}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <TrendingUp className="w-4 h-4 text-custom-green" />
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                    支持的支付通道
+                  </h3>
+                </div>
+                <div className="space-y-2">
+                  {selectedInterface.supportedChannels.map((channel, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 rounded-full bg-custom-green"></div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">
+                            {channel.name}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {channel.code}
+                          </p>
+                        </div>
+                      </div>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        channel.type === '代收'
+                          ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                          : 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400'
+                      }`}>
+                        {channel.type}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end">
+            <Button
+              onClick={() => setIsDetailDialogOpen(false)}
+              variant="outline"
+            >
+              关闭
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Sheet open={isSupplierConfigDialogOpen} onOpenChange={setIsSupplierConfigDialogOpen}>
         <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">
