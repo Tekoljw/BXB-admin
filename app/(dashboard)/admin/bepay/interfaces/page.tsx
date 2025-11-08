@@ -30,7 +30,6 @@ import {
 } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
@@ -77,7 +76,8 @@ export default function InterfacesPage() {
   const [isSupplierConfigDialogOpen, setIsSupplierConfigDialogOpen] = useState(false)
   const [currentConfigInterface, setCurrentConfigInterface] = useState<PaymentInterface | null>(null)
   const [supplierConfigs, setSupplierConfigs] = useState<SupplierConfig[]>([])
-  const [selectedSuppliers, setSelectedSuppliers] = useState<string[]>([])
+  const [expandedSuppliers, setExpandedSuppliers] = useState<string[]>([])
+  const [enabledSuppliers, setEnabledSuppliers] = useState<string[]>([])
   const [editingNameId, setEditingNameId] = useState<string | null>(null)
   const [editingNameValue, setEditingNameValue] = useState("")
   const [editingDescId, setEditingDescId] = useState<string | null>(null)
@@ -284,24 +284,62 @@ export default function InterfacesPage() {
   const handleOpenSupplierConfig = (iface: PaymentInterface) => {
     setCurrentConfigInterface(iface)
     setSupplierConfigs(iface.supplierConfigs || [])
-    setSelectedSuppliers(iface.supplierConfigs?.map(c => c.supplierId) || [])
+    setExpandedSuppliers([])
+    setEnabledSuppliers(iface.supplierConfigs?.filter(c => 
+      c.upstreamMerchantId || c.hostApi || c.apiKey || c.customCode
+    ).map(c => c.supplierId) || [])
     setIsSupplierConfigDialogOpen(true)
   }
 
-  const handleToggleSupplier = (supplierId: string, supplierName: string) => {
-    if (selectedSuppliers.includes(supplierId)) {
-      setSelectedSuppliers(selectedSuppliers.filter(id => id !== supplierId))
-      setSupplierConfigs(supplierConfigs.filter(c => c.supplierId !== supplierId))
+  const handleToggleSupplierExpand = (supplierId: string, supplierName: string) => {
+    if (expandedSuppliers.includes(supplierId)) {
+      setExpandedSuppliers(expandedSuppliers.filter(id => id !== supplierId))
     } else {
-      setSelectedSuppliers([...selectedSuppliers, supplierId])
-      setSupplierConfigs([...supplierConfigs, {
-        supplierId,
-        supplierName,
-        upstreamMerchantId: "",
-        hostApi: "",
-        apiKey: "",
-        customCode: ""
-      }])
+      setExpandedSuppliers([...expandedSuppliers, supplierId])
+      
+      if (!supplierConfigs.find(c => c.supplierId === supplierId)) {
+        setSupplierConfigs([...supplierConfigs, {
+          supplierId,
+          supplierName,
+          upstreamMerchantId: "",
+          hostApi: "",
+          apiKey: "",
+          customCode: ""
+        }])
+      }
+    }
+  }
+
+  const isSupplierConfigured = (supplierId: string): boolean => {
+    const config = supplierConfigs.find(c => c.supplierId === supplierId)
+    if (!config) return false
+    return !!(config.upstreamMerchantId || config.hostApi || config.apiKey || config.customCode)
+  }
+
+  const handleToggleSupplierEnabled = (supplierId: string, supplierName: string, checked: boolean) => {
+    if (checked) {
+      if (!isSupplierConfigured(supplierId)) {
+        setExpandedSuppliers(prev => {
+          if (!prev.includes(supplierId)) {
+            return [...prev, supplierId]
+          }
+          return prev
+        })
+        if (!supplierConfigs.find(c => c.supplierId === supplierId)) {
+          setSupplierConfigs([...supplierConfigs, {
+            supplierId,
+            supplierName,
+            upstreamMerchantId: "",
+            hostApi: "",
+            apiKey: "",
+            customCode: ""
+          }])
+        }
+        return
+      }
+      setEnabledSuppliers([...enabledSuppliers, supplierId])
+    } else {
+      setEnabledSuppliers(enabledSuppliers.filter(id => id !== supplierId))
     }
   }
 
@@ -620,23 +658,45 @@ export default function InterfacesPage() {
                 </h3>
                 <div className="space-y-3">
                   {mockSuppliers.map(supplier => {
-                    const isSelected = selectedSuppliers.includes(supplier.id)
+                    const isExpanded = expandedSuppliers.includes(supplier.id)
+                    const isEnabled = enabledSuppliers.includes(supplier.id)
                     const config = supplierConfigs.find(c => c.supplierId === supplier.id)
                     
                     return (
                       <div key={supplier.id} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                        <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/30">
-                          <Checkbox
-                            checked={isSelected}
-                            onCheckedChange={() => handleToggleSupplier(supplier.id, supplier.name)}
-                          />
+                        <div 
+                          className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/30 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors"
+                          onClick={() => handleToggleSupplierExpand(supplier.id, supplier.name)}
+                        >
                           <div className="flex-1">
                             <p className="text-sm font-medium text-gray-900 dark:text-white">{supplier.name}</p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">{supplier.tgAccount}</p>
                           </div>
+                          <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                            {!isEnabled && !isSupplierConfigured(supplier.id) && (
+                              <span className="text-xs text-orange-600 dark:text-orange-400">
+                                需要配置
+                              </span>
+                            )}
+                            {isEnabled && (
+                              <span className="text-xs text-green-600 dark:text-green-400">
+                                已启用
+                              </span>
+                            )}
+                            {!isEnabled && isSupplierConfigured(supplier.id) && (
+                              <span className="text-xs text-gray-400">
+                                未启用
+                              </span>
+                            )}
+                            <Switch
+                              checked={isEnabled}
+                              onCheckedChange={(checked) => handleToggleSupplierEnabled(supplier.id, supplier.name, checked)}
+                              className="scale-75"
+                            />
+                          </div>
                         </div>
                         
-                        {isSelected && config && (
+                        {isExpanded && config && (
                           <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
                             <Tabs defaultValue="standard" className="w-full">
                               <TabsList className="grid w-full grid-cols-2">
