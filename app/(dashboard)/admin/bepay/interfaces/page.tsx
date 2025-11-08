@@ -48,7 +48,7 @@ interface PaymentInterface {
   code: string
   description: string
   status: "active" | "inactive"
-  type: "OTC" | "三方支付" | "四方支付"
+  type: "OTC" | "三方支付" | "四方支付" | "加密货币托管钱包"
   isUsed: boolean
   channelCount: number
   currencyCount: number
@@ -201,6 +201,27 @@ export default function InterfacesPage() {
         { name: "链上转账", code: "ONCHAIN", type: "代付" },
         { name: "闪电网络", code: "LIGHTNING", type: "代付" }
       ]
+    },
+    {
+      id: "IF006",
+      name: "CustodyWallet",
+      code: "CUSTODY_WALLET",
+      description: "企业级加密货币托管钱包服务",
+      status: "active",
+      type: "加密货币托管钱包",
+      isUsed: true,
+      channelCount: 6,
+      currencyCount: 8,
+      createdAt: "2024-02-15",
+      supportedCurrencies: ["BTC", "ETH", "USDT", "USDC", "BNB", "SOL", "XRP", "ADA"],
+      supportedChannels: [
+        { name: "BTC主网", code: "BTC_MAINNET", type: "托管" },
+        { name: "以太坊", code: "ETH_MAINNET", type: "托管" },
+        { name: "币安智能链", code: "BSC", type: "托管" },
+        { name: "波场", code: "TRON", type: "托管" },
+        { name: "Solana", code: "SOLANA", type: "托管" },
+        { name: "多签钱包", code: "MULTISIG", type: "托管" }
+      ]
     }
   ])
 
@@ -220,6 +241,7 @@ export default function InterfacesPage() {
       if (statusFilter === "otc") return iface.type === "OTC"
       if (statusFilter === "third-party") return iface.type === "三方支付"
       if (statusFilter === "fourth-party") return iface.type === "四方支付"
+      if (statusFilter === "crypto-wallet") return iface.type === "加密货币托管钱包"
       return true
     })()
     
@@ -386,6 +408,7 @@ export default function InterfacesPage() {
             <TabsTrigger value="otc">合规OTC</TabsTrigger>
             <TabsTrigger value="third-party">合规三方支付</TabsTrigger>
             <TabsTrigger value="fourth-party">合规四方支付</TabsTrigger>
+            <TabsTrigger value="crypto-wallet">加密货币托管钱包</TabsTrigger>
           </TabsList>
         </Tabs>
 
