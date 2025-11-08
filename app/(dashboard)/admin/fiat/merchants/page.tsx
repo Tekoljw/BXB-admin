@@ -290,7 +290,7 @@ export default function MerchantsPage() {
   const [merchants, setMerchants] = useState<Merchant[]>(mockMerchants)
   const [searchInput, setSearchInput] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
-  const [merchantFilter, setMerchantFilter] = useState<"all" | "pending" | "hasApi">("all")
+  const [merchantFilter, setMerchantFilter] = useState<"all" | "pending" | "hasApi" | "profitRanking" | "volumeRanking">("all")
   
   const handleSearch = () => setSearchTerm(searchInput)
   const handleReset = () => { setSearchInput(""); setSearchTerm("") }
@@ -302,6 +302,7 @@ export default function MerchantsPage() {
   const [isAddFeeConfigDialogOpen, setIsAddFeeConfigDialogOpen] = useState(false)
   const [isApiKeysDialogOpen, setIsApiKeysDialogOpen] = useState(false)
   const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false)
+  const [isProfitDialogOpen, setIsProfitDialogOpen] = useState(false)
   const [isInterfaceManageDialogOpen, setIsInterfaceManageDialogOpen] = useState(false)
   const [isSupplierManageDialogOpen, setIsSupplierManageDialogOpen] = useState(false)
   const [currentMerchant, setCurrentMerchant] = useState<Merchant | null>(null)
@@ -385,6 +386,9 @@ export default function MerchantsPage() {
     if (merchantFilter === "hasApi" && merchant.apiKeys.length === 0) {
       return false
     }
+    if (merchantFilter === "profitRanking" || merchantFilter === "volumeRanking") {
+      // 利润排序和交易量排序显示所有商户
+    }
     
     // 再按搜索词筛选
     if (searchTerm) {
@@ -395,11 +399,25 @@ export default function MerchantsPage() {
     }
     
     return true
+  }).sort((a, b) => {
+    // 根据页签进行排序
+    if (merchantFilter === "profitRanking") {
+      return b.totalProfit - a.totalProfit // 按总利润降序排序
+    }
+    if (merchantFilter === "volumeRanking") {
+      return b.totalVolume - a.totalVolume // 按总交易量降序排序
+    }
+    return 0 // 其他页签不排序
   })
 
   const openBalanceDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
     setIsBalanceDialogOpen(true)
+  }
+
+  const openProfitDialog = (merchant: Merchant) => {
+    setCurrentMerchant(merchant)
+    setIsProfitDialogOpen(true)
   }
 
   const openApiKeysDialog = (merchant: Merchant) => {
@@ -722,7 +740,7 @@ export default function MerchantsPage() {
     <div className="p-6 space-y-6">
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white">商户列表</h2>
 
-      <Tabs value={merchantFilter} onValueChange={(value) => setMerchantFilter(value as "all" | "pending" | "hasApi")}>
+      <Tabs value={merchantFilter} onValueChange={(value) => setMerchantFilter(value as "all" | "pending" | "hasApi" | "profitRanking" | "volumeRanking")}>
         <TabsList>
           <TabsTrigger value="pending">
             API申请中的商户
@@ -739,6 +757,12 @@ export default function MerchantsPage() {
                 {counts.hasApi}
               </span>
             )}
+          </TabsTrigger>
+          <TabsTrigger value="profitRanking">
+            利润贡献排序
+          </TabsTrigger>
+          <TabsTrigger value="volumeRanking">
+            交易量排名
           </TabsTrigger>
           <TabsTrigger value="all">
             全部
@@ -791,6 +815,12 @@ export default function MerchantsPage() {
                   账户余额
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  利润贡献
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  交易量
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   密钥
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -832,6 +862,33 @@ export default function MerchantsPage() {
                         冻结: ${merchant.frozenBalance.toLocaleString()}
                       </div>
                     </button>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <button
+                      onClick={() => openProfitDialog(merchant)}
+                      className="text-left hover:opacity-70 transition-opacity cursor-pointer"
+                    >
+                      <div className="text-green-600 dark:text-green-400 font-medium">
+                        日: ${merchant.dailyProfit.toLocaleString()}
+                      </div>
+                      <div className="text-emerald-600 dark:text-emerald-400 text-xs mt-1 font-medium">
+                        月: ${merchant.monthlyProfit.toLocaleString()}
+                      </div>
+                      <div className="text-teal-600 dark:text-teal-400 text-xs mt-1 font-medium">
+                        总: ${merchant.totalProfit.toLocaleString()}
+                      </div>
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <div className="text-gray-900 dark:text-white font-medium">
+                      日: ${merchant.dailyVolume.toLocaleString()}
+                    </div>
+                    <div className="text-gray-700 dark:text-gray-300 text-xs mt-1">
+                      月: ${merchant.monthlyVolume.toLocaleString()}
+                    </div>
+                    <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                      总: ${merchant.totalVolume.toLocaleString()}
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <Button
@@ -1485,6 +1542,107 @@ export default function MerchantsPage() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsBalanceDialogOpen(false)}>
+              关闭
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isProfitDialogOpen} onOpenChange={setIsProfitDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[75vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>利润贡献详情</DialogTitle>
+            <DialogDescription>
+              商户 {currentMerchant?.name} 的各币种利润明细
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            {currentMerchant && currentMerchant.currencyProfits && currentMerchant.currencyProfits.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">币种</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-green-600 dark:text-green-400">代收利润</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-blue-600 dark:text-blue-400">代付利润</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-purple-600 dark:text-purple-400">汇率利润</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-teal-600 dark:text-teal-400">总利润</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentMerchant.currencyProfits.map((cp, index) => (
+                      <tr 
+                        key={cp.currency}
+                        className={`border-b border-gray-100 dark:border-gray-800 ${
+                          index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'
+                        }`}
+                      >
+                        <td className="py-3 px-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">
+                              {cp.currency === "CNY" && "¥"}
+                              {cp.currency === "USD" && "$"}
+                              {cp.currency === "EUR" && "€"}
+                              {cp.currency === "GBP" && "£"}
+                              {cp.currency === "USDT" && "₮"}
+                            </span>
+                            <span className="font-medium text-gray-900 dark:text-white">{cp.currency}</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-medium text-green-600 dark:text-green-400">
+                            {cp.currency === "CNY" && "¥"}
+                            {cp.currency === "USD" && "$"}
+                            {cp.currency === "EUR" && "€"}
+                            {cp.currency === "GBP" && "£"}
+                            {cp.collectionProfit.toLocaleString()}
+                            {cp.currency === "USDT" && " USDT"}
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-medium text-blue-600 dark:text-blue-400">
+                            {cp.currency === "CNY" && "¥"}
+                            {cp.currency === "USD" && "$"}
+                            {cp.currency === "EUR" && "€"}
+                            {cp.currency === "GBP" && "£"}
+                            {cp.paymentProfit.toLocaleString()}
+                            {cp.currency === "USDT" && " USDT"}
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-medium text-purple-600 dark:text-purple-400">
+                            {cp.currency === "CNY" && "¥"}
+                            {cp.currency === "USD" && "$"}
+                            {cp.currency === "EUR" && "€"}
+                            {cp.currency === "GBP" && "£"}
+                            {cp.exchangeRateProfit.toLocaleString()}
+                            {cp.currency === "USDT" && " USDT"}
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="font-semibold text-teal-600 dark:text-teal-400">
+                            {cp.currency === "CNY" && "¥"}
+                            {cp.currency === "USD" && "$"}
+                            {cp.currency === "EUR" && "€"}
+                            {cp.currency === "GBP" && "£"}
+                            {cp.totalProfit.toLocaleString()}
+                            {cp.currency === "USDT" && " USDT"}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                暂无利润数据
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsProfitDialogOpen(false)}>
               关闭
             </Button>
           </DialogFooter>
