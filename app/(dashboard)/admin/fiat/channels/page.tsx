@@ -13,6 +13,14 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetFooter,
+} from "@/components/ui/sheet"
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -820,12 +828,12 @@ export default function ChannelsPage() {
         )}
       </div>
 
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>添加通道</DialogTitle>
-            <DialogDescription>添加新的支付通道</DialogDescription>
-          </DialogHeader>
+      <Sheet open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>添加通道</SheetTitle>
+            <SheetDescription>添加新的支付通道</SheetDescription>
+          </SheetHeader>
           <div className="space-y-6 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -983,23 +991,23 @@ export default function ChannelsPage() {
               </div>
             </div>
           </div>
-          <DialogFooter>
+          <SheetFooter className="flex gap-2 pt-4 border-t">
             <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
               取消
             </Button>
             <Button onClick={handleAdd} className="bg-custom-green hover:bg-custom-green/90">
               添加
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>编辑通道</DialogTitle>
-            <DialogDescription>修改通道配置信息</DialogDescription>
-          </DialogHeader>
+      <Sheet open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>编辑通道</SheetTitle>
+            <SheetDescription>修改通道配置信息</SheetDescription>
+          </SheetHeader>
           <div className="space-y-6 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -1154,16 +1162,16 @@ export default function ChannelsPage() {
               </div>
             </div>
           </div>
-          <DialogFooter>
+          <SheetFooter className="flex gap-2 pt-4 border-t">
             <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               取消
             </Button>
             <Button onClick={handleEdit} className="bg-custom-green hover:bg-custom-green/90">
               保存
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
