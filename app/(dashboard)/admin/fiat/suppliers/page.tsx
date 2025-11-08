@@ -1,14 +1,32 @@
 "use client"
 
 import React, { useState } from "react"
-import { Eye, Search, RotateCcw } from "lucide-react"
+import { Eye, Search, RotateCcw, Edit, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetFooter,
+} from "@/components/ui/sheet"
+import { Switch } from "@/components/ui/switch"
+
+interface InterfaceFee {
+  interfaceName: string
+  feeRate: string
+  minFee: string
+}
 
 interface Supplier {
   id: number
@@ -16,12 +34,21 @@ interface Supplier {
   name: string
   tgAccount: string
   status: "active" | "inactive" | "suspended"
-  config: string
+  merchantId: string
+  apiKey: string
   supportedInterfaces: string[]
   supportedMerchants: string[]
   balances: Array<{ currency: string; deposit: string; pending: string }>
-  rates: Array<{ currency: string; paymentMethod: string; rate: string }>
+  interfaceFees: InterfaceFee[]
 }
+
+const mockInterfaces = [
+  { id: "IF001", name: "Bitzpay", status: "active" },
+  { id: "IF002", name: "BePayOTC", status: "active" },
+  { id: "IF003", name: "CFpay", status: "active" },
+  { id: "IF004", name: "PayTrust", status: "active" },
+  { id: "IF005", name: "FastPay", status: "active" },
+]
 
 const mockSuppliers: Supplier[] = [
   {
@@ -30,16 +57,19 @@ const mockSuppliers: Supplier[] = [
     name: "供应商A",
     tgAccount: "@supplier_a",
     status: "active",
-    config: "标准配置",
-    supportedInterfaces: ["接口1", "接口2", "接口3"],
-    supportedMerchants: ["商户001", "商户002", "商户003"],
+    merchantId: "MERCHANT_A_001",
+    apiKey: "sk_live_abc123xyz456",
+    supportedInterfaces: ["Bitzpay", "BePayOTC", "CFpay"],
+    supportedMerchants: ["云端收银", "星际支付", "月光商户"],
     balances: [
       { currency: "USDT", deposit: "10,000", pending: "2,500" },
       { currency: "BTC", deposit: "1.5", pending: "0.3" },
+      { currency: "CNY", deposit: "50,000", pending: "12,000" },
     ],
-    rates: [
-      { currency: "USDT", paymentMethod: "银行卡", rate: "0.5%" },
-      { currency: "USDT", paymentMethod: "支付宝", rate: "0.6%" },
+    interfaceFees: [
+      { interfaceName: "Bitzpay", feeRate: "0.5%", minFee: "¥1.00" },
+      { interfaceName: "BePayOTC", feeRate: "0.4%", minFee: "¥0.80" },
+      { interfaceName: "CFpay", feeRate: "0.6%", minFee: "¥1.20" },
     ],
   },
   {
@@ -48,14 +78,17 @@ const mockSuppliers: Supplier[] = [
     name: "供应商B",
     tgAccount: "@supplier_b",
     status: "active",
-    config: "高级配置",
-    supportedInterfaces: ["接口1", "接口4"],
-    supportedMerchants: ["商户004", "商户005"],
+    merchantId: "MERCHANT_B_002",
+    apiKey: "sk_live_def789uvw321",
+    supportedInterfaces: ["Bitzpay", "PayTrust"],
+    supportedMerchants: ["快捷支付", "安全商户"],
     balances: [
       { currency: "USDT", deposit: "25,000", pending: "5,000" },
+      { currency: "ETH", deposit: "10.5", pending: "2.1" },
     ],
-    rates: [
-      { currency: "USDT", paymentMethod: "微信", rate: "0.55%" },
+    interfaceFees: [
+      { interfaceName: "Bitzpay", feeRate: "0.45%", minFee: "¥0.90" },
+      { interfaceName: "PayTrust", feeRate: "0.55%", minFee: "¥1.10" },
     ],
   },
   {
@@ -64,23 +97,33 @@ const mockSuppliers: Supplier[] = [
     name: "供应商C",
     tgAccount: "@supplier_c",
     status: "inactive",
-    config: "基础配置",
-    supportedInterfaces: ["接口2", "接口5"],
-    supportedMerchants: ["商户006"],
+    merchantId: "MERCHANT_C_003",
+    apiKey: "sk_live_ghi012rst654",
+    supportedInterfaces: ["BePayOTC", "FastPay"],
+    supportedMerchants: ["便利商户"],
     balances: [
       { currency: "USDT", deposit: "5,000", pending: "1,000" },
     ],
-    rates: [
-      { currency: "USDT", paymentMethod: "银行卡", rate: "0.7%" },
+    interfaceFees: [
+      { interfaceName: "BePayOTC", feeRate: "0.7%", minFee: "¥1.40" },
+      { interfaceName: "FastPay", feeRate: "0.5%", minFee: "¥1.00" },
     ],
   },
 ]
 
 export default function SuppliersPage() {
+  const [suppliers, setSuppliers] = useState<Supplier[]>(mockSuppliers)
   const [searchInput, setSearchInput] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
-  const [dialogType, setDialogType] = useState<"interfaces" | "merchants" | "balances" | "rates" | null>(null)
+  const [isParamSheetOpen, setIsParamSheetOpen] = useState(false)
+  const [isInterfaceSheetOpen, setIsInterfaceSheetOpen] = useState(false)
+  const [isMerchantSheetOpen, setIsMerchantSheetOpen] = useState(false)
+  const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false)
+  const [isFeeSheetOpen, setIsFeeSheetOpen] = useState(false)
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null)
+  const [tempMerchantId, setTempMerchantId] = useState("")
+  const [tempApiKey, setTempApiKey] = useState("")
+  const [tempInterfaces, setTempInterfaces] = useState<string[]>([])
 
   const handleSearch = () => {
     setSearchTerm(searchInput)
@@ -91,20 +134,68 @@ export default function SuppliersPage() {
     setSearchTerm("")
   }
 
-  const filteredSuppliers = mockSuppliers.filter(supplier =>
+  const filteredSuppliers = suppliers.filter(supplier =>
     supplier.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     supplier.tgid.toLowerCase().includes(searchTerm.toLowerCase()) ||
     supplier.tgAccount.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const openDialog = (type: "interfaces" | "merchants" | "balances" | "rates", supplier: Supplier) => {
-    setDialogType(type)
+  const openParamSheet = (supplier: Supplier) => {
     setSelectedSupplier(supplier)
+    setTempMerchantId(supplier.merchantId)
+    setTempApiKey(supplier.apiKey)
+    setIsParamSheetOpen(true)
   }
 
-  const closeDialog = () => {
-    setDialogType(null)
-    setSelectedSupplier(null)
+  const saveParams = () => {
+    if (selectedSupplier) {
+      setSuppliers(suppliers.map(s =>
+        s.id === selectedSupplier.id
+          ? { ...s, merchantId: tempMerchantId, apiKey: tempApiKey }
+          : s
+      ))
+      setIsParamSheetOpen(false)
+    }
+  }
+
+  const openInterfaceSheet = (supplier: Supplier) => {
+    setSelectedSupplier(supplier)
+    setTempInterfaces([...supplier.supportedInterfaces])
+    setIsInterfaceSheetOpen(true)
+  }
+
+  const toggleInterface = (interfaceName: string) => {
+    setTempInterfaces(prev =>
+      prev.includes(interfaceName)
+        ? prev.filter(i => i !== interfaceName)
+        : [...prev, interfaceName]
+    )
+  }
+
+  const saveInterfaces = () => {
+    if (selectedSupplier) {
+      setSuppliers(suppliers.map(s =>
+        s.id === selectedSupplier.id
+          ? { ...s, supportedInterfaces: tempInterfaces }
+          : s
+      ))
+      setIsInterfaceSheetOpen(false)
+    }
+  }
+
+  const openMerchantSheet = (supplier: Supplier) => {
+    setSelectedSupplier(supplier)
+    setIsMerchantSheetOpen(true)
+  }
+
+  const openBalanceDialog = (supplier: Supplier) => {
+    setSelectedSupplier(supplier)
+    setIsBalanceDialogOpen(true)
+  }
+
+  const openFeeSheet = (supplier: Supplier) => {
+    setSelectedSupplier(supplier)
+    setIsFeeSheetOpen(true)
   }
 
   const getStatusColor = (status: string) => {
@@ -182,7 +273,7 @@ export default function SuppliersPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">支持接口</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">支持商户</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">余额查询</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">费率</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">费率成本</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -205,12 +296,27 @@ export default function SuppliersPage() {
                         {getStatusText(supplier.status)}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                      {supplier.config}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => openParamSheet(supplier)}
+                        className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
+                      >
+                        <Edit className="w-4 h-4" />
+                        <span>编辑</span>
+                      </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
-                        onClick={() => openDialog("interfaces", supplier)}
+                        onClick={() => openInterfaceSheet(supplier)}
+                        className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
+                      >
+                        <Eye className="w-4 h-4" />
+                        <span>管理</span>
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => openMerchantSheet(supplier)}
                         className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
                       >
                         <Eye className="w-4 h-4" />
@@ -219,16 +325,7 @@ export default function SuppliersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
-                        onClick={() => openDialog("merchants", supplier)}
-                        className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>查看</span>
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => openDialog("balances", supplier)}
+                        onClick={() => openBalanceDialog(supplier)}
                         className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
                       >
                         <Eye className="w-4 h-4" />
@@ -237,7 +334,7 @@ export default function SuppliersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
-                        onClick={() => openDialog("rates", supplier)}
+                        onClick={() => openFeeSheet(supplier)}
                         className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
                       >
                         <Eye className="w-4 h-4" />
@@ -258,112 +355,205 @@ export default function SuppliersPage() {
         </div>
       </div>
 
-      <Dialog open={dialogType !== null} onOpenChange={closeDialog}>
+      <Sheet open={isParamSheetOpen} onOpenChange={setIsParamSheetOpen}>
+        <SheetContent className="sm:max-w-lg">
+          <SheetHeader>
+            <SheetTitle>参数配置</SheetTitle>
+            <SheetDescription>
+              编辑供应商 {selectedSupplier?.name} 的参数配置
+            </SheetDescription>
+          </SheetHeader>
+          <div className="py-6 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="merchantId">商户ID</Label>
+              <Input
+                id="merchantId"
+                value={tempMerchantId}
+                onChange={(e) => setTempMerchantId(e.target.value)}
+                placeholder="输入商户ID..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="apiKey">API密钥</Label>
+              <Input
+                id="apiKey"
+                type="password"
+                value={tempApiKey}
+                onChange={(e) => setTempApiKey(e.target.value)}
+                placeholder="输入API密钥..."
+              />
+            </div>
+          </div>
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setIsParamSheetOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={saveParams} className="bg-custom-green hover:bg-custom-green/90">
+              保存
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={isInterfaceSheetOpen} onOpenChange={setIsInterfaceSheetOpen}>
+        <SheetContent className="sm:max-w-lg">
+          <SheetHeader>
+            <SheetTitle>支持接口管理</SheetTitle>
+            <SheetDescription>
+              管理供应商 {selectedSupplier?.name} 支持的接口
+            </SheetDescription>
+          </SheetHeader>
+          <div className="py-6 space-y-3">
+            {mockInterfaces.map((iface) => (
+              <div
+                key={iface.id}
+                className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50"
+              >
+                <div>
+                  <div className="font-medium text-gray-900 dark:text-white">{iface.name}</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">ID: {iface.id}</div>
+                </div>
+                <Switch
+                  checked={tempInterfaces.includes(iface.name)}
+                  onCheckedChange={() => toggleInterface(iface.name)}
+                />
+              </div>
+            ))}
+          </div>
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setIsInterfaceSheetOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={saveInterfaces} className="bg-custom-green hover:bg-custom-green/90">
+              保存
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={isMerchantSheetOpen} onOpenChange={setIsMerchantSheetOpen}>
+        <SheetContent className="sm:max-w-lg">
+          <SheetHeader>
+            <SheetTitle>支持的商户</SheetTitle>
+            <SheetDescription>
+              供应商 {selectedSupplier?.name} 当前支持的商户列表
+            </SheetDescription>
+          </SheetHeader>
+          <div className="py-6">
+            {selectedSupplier && selectedSupplier.supportedMerchants.length > 0 ? (
+              <div className="space-y-2">
+                {selectedSupplier.supportedMerchants.map((merchant, index) => (
+                  <div
+                    key={index}
+                    className="px-4 py-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg border border-gray-200 dark:border-gray-700"
+                  >
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">{merchant}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                暂无支持的商户
+              </div>
+            )}
+          </div>
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setIsMerchantSheetOpen(false)}>
+              关闭
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
+      <Dialog open={isBalanceDialogOpen} onOpenChange={setIsBalanceDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>
-              {dialogType === "interfaces" && "支持的接口"}
-              {dialogType === "merchants" && "支持的商户"}
-              {dialogType === "balances" && "余额查询"}
-              {dialogType === "rates" && "费率配置"}
-            </DialogTitle>
+            <DialogTitle>余额查询</DialogTitle>
+            <DialogDescription>
+              供应商 {selectedSupplier?.name} 的各币种余额详情
+            </DialogDescription>
           </DialogHeader>
-
           <div className="mt-4">
-            {dialogType === "interfaces" && selectedSupplier && (
-              <div className="space-y-2">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                  供应商：<span className="font-medium text-gray-900 dark:text-white">{selectedSupplier.name}</span>
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {selectedSupplier.supportedInterfaces.map((iface, index) => (
-                    <div
-                      key={index}
-                      className="px-4 py-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg border border-gray-200 dark:border-gray-700"
-                    >
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">{iface}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {dialogType === "merchants" && selectedSupplier && (
-              <div className="space-y-2">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                  供应商：<span className="font-medium text-gray-900 dark:text-white">{selectedSupplier.name}</span>
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {selectedSupplier.supportedMerchants.map((merchant, index) => (
-                    <div
-                      key={index}
-                      className="px-4 py-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg border border-gray-200 dark:border-gray-700"
-                    >
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">{merchant}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {dialogType === "balances" && selectedSupplier && (
-              <div className="space-y-2">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                  供应商：<span className="font-medium text-gray-900 dark:text-white">{selectedSupplier.name}</span>
-                </p>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50 dark:bg-gray-900/50">
-                      <tr>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">币种</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">保证金</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">待结算金额</th>
+            {selectedSupplier && selectedSupplier.balances.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-gray-900/50">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">币种</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">保证金</th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">待结算金额</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {selectedSupplier.balances.map((balance, index) => (
+                      <tr key={index} className={index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'}>
+                        <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{balance.currency}</td>
+                        <td className="px-4 py-3 text-sm text-right text-green-600 dark:text-green-400 font-medium">{balance.deposit}</td>
+                        <td className="px-4 py-3 text-sm text-right text-orange-600 dark:text-orange-400 font-medium">{balance.pending}</td>
                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                      {selectedSupplier.balances.map((balance, index) => (
-                        <tr key={index}>
-                          <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{balance.currency}</td>
-                          <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">{balance.deposit}</td>
-                          <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">{balance.pending}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            )}
-
-            {dialogType === "rates" && selectedSupplier && (
-              <div className="space-y-2">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                  供应商：<span className="font-medium text-gray-900 dark:text-white">{selectedSupplier.name}</span>
-                </p>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50 dark:bg-gray-900/50">
-                      <tr>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">币种</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">支付方式</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">费率</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                      {selectedSupplier.rates.map((rate, index) => (
-                        <tr key={index}>
-                          <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{rate.currency}</td>
-                          <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">{rate.paymentMethod}</td>
-                          <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">{rate.rate}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                暂无余额数据
               </div>
             )}
           </div>
         </DialogContent>
       </Dialog>
+
+      <Sheet open={isFeeSheetOpen} onOpenChange={setIsFeeSheetOpen}>
+        <SheetContent className="sm:max-w-2xl">
+          <SheetHeader>
+            <SheetTitle>费率成本</SheetTitle>
+            <SheetDescription>
+              供应商 {selectedSupplier?.name} 各接口的手续费（数据从供应商后台获取，仅供参考）
+            </SheetDescription>
+          </SheetHeader>
+          <div className="py-6">
+            {selectedSupplier && selectedSupplier.interfaceFees.length > 0 ? (
+              <div className="space-y-4">
+                <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                  <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                    <span className="font-semibold">提示：</span>以下费率数据从供应商后台实时同步获取，仅供查看，无法在此处修改。
+                  </p>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 dark:bg-gray-900/50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">接口名称</th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">手续费率</th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">单笔最低手续费</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                      {selectedSupplier.interfaceFees.map((fee, index) => (
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'}>
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{fee.interfaceName}</td>
+                          <td className="px-4 py-3 text-sm text-right text-yellow-600 dark:text-yellow-400 font-medium">{fee.feeRate}</td>
+                          <td className="px-4 py-3 text-sm text-right text-yellow-600 dark:text-yellow-400 font-medium">{fee.minFee}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                暂无费率数据
+              </div>
+            )}
+          </div>
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setIsFeeSheetOpen(false)}>
+              关闭
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }

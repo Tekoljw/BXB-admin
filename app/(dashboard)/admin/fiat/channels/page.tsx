@@ -48,8 +48,6 @@ interface Channel {
   currency: string
   interface: string
   serviceType: "代收" | "代付"
-  costFeeRate: string
-  costFixedFee: string
   feeRates: FeeRate[]
   demoVideo?: string
   status: "active" | "inactive"
@@ -66,8 +64,6 @@ const mockChannels: Channel[] = [
     currency: "CNY",
     interface: "Bitzpay",
     serviceType: "代收",
-    costFeeRate: "0.6%",
-    costFixedFee: "¥1.00",
     feeRates: [
       { minAmount: 0, maxAmount: 10000, feeRate: "0.4%", minFee: "¥0.50" },
       { minAmount: 10000, maxAmount: 100000, feeRate: "0.3%", minFee: "¥0.50" },
@@ -86,8 +82,6 @@ const mockChannels: Channel[] = [
     currency: "CNY",
     interface: "Bitzpay",
     serviceType: "代收",
-    costFeeRate: "0.6%",
-    costFixedFee: "¥1.00",
     feeRates: [
       { minAmount: 0, maxAmount: 10000, feeRate: "0.4%", minFee: "¥0.50" },
       { minAmount: 10000, maxAmount: 100000, feeRate: "0.3%", minFee: "¥0.50" },
@@ -106,8 +100,6 @@ const mockChannels: Channel[] = [
     currency: "CNY",
     interface: "BePayOTC",
     serviceType: "代付",
-    costFeeRate: "0.4%",
-    costFixedFee: "¥0.80",
     feeRates: [
       { minAmount: 0, maxAmount: 10000, feeRate: "0.3%", minFee: "¥0.40" },
       { minAmount: 10000, maxAmount: 100000, feeRate: "0.2%", minFee: "¥0.40" },
@@ -125,8 +117,6 @@ const mockChannels: Channel[] = [
     currency: "BRL",
     interface: "CFpay",
     serviceType: "代收",
-    costFeeRate: "1.0%",
-    costFixedFee: "R$2.00",
     feeRates: [
       { minAmount: 0, maxAmount: 5000, feeRate: "0.6%", minFee: "R$1.00" },
       { minAmount: 5000, maxAmount: 50000, feeRate: "0.5%", minFee: "R$1.00" },
@@ -145,8 +135,6 @@ const mockChannels: Channel[] = [
     currency: "INR",
     interface: "CFpay",
     serviceType: "代付",
-    costFeeRate: "0.8%",
-    costFixedFee: "₹10",
     feeRates: [
       { minAmount: 0, maxAmount: 50000, feeRate: "0.5%", minFee: "₹5" },
       { minAmount: 50000, maxAmount: 500000, feeRate: "0.4%", minFee: "₹5" },
@@ -218,7 +206,7 @@ export default function ChannelsPage() {
   const [editingFee, setEditingFee] = useState<{
     channelId: string
     tier: number
-    field: 'minAmount' | 'maxAmount' | 'costFeeRate' | 'costFixedFee' | 'feeRate' | 'minFee'
+    field: 'minAmount' | 'maxAmount' | 'feeRate' | 'minFee'
     value: string
   } | null>(null)
   const [formData, setFormData] = useState({
@@ -228,8 +216,6 @@ export default function ChannelsPage() {
     logo: "",
     currency: "",
     interface: "",
-    costFeeRate: "",
-    costFixedFee: "",
     demoVideo: "",
     status: "active" as "active" | "inactive"
   })
@@ -292,8 +278,6 @@ export default function ChannelsPage() {
       logo: channel.logo || "",
       currency: channel.currency,
       interface: channel.interface,
-      costFeeRate: channel.costFeeRate,
-      costFixedFee: channel.costFixedFee,
       demoVideo: channel.demoVideo || "",
       status: channel.status
     })
@@ -338,7 +322,7 @@ export default function ChannelsPage() {
     setTempName("")
   }
 
-  const startEditFee = (channelId: string, tier: number, field: 'minAmount' | 'maxAmount' | 'costFeeRate' | 'costFixedFee' | 'feeRate' | 'minFee', currentValue: any) => {
+  const startEditFee = (channelId: string, tier: number, field: 'minAmount' | 'maxAmount' | 'feeRate' | 'minFee', currentValue: any) => {
     setEditingFee({
       channelId,
       tier,
@@ -352,10 +336,6 @@ export default function ChannelsPage() {
     
     setChannels(channels.map(channel => {
       if (channel.id !== editingFee.channelId) return channel
-      
-      if (editingFee.field === 'costFeeRate' || editingFee.field === 'costFixedFee') {
-        return { ...channel, [editingFee.field]: editingFee.value }
-      }
       
       const updatedFeeRates = channel.feeRates.map((rate, index) => {
         if (index !== editingFee.tier) return rate
@@ -405,8 +385,6 @@ export default function ChannelsPage() {
       logo: "",
       currency: "",
       interface: "",
-      costFeeRate: "",
-      costFixedFee: "",
       demoVideo: "",
       status: "active"
     })
@@ -504,12 +482,6 @@ export default function ChannelsPage() {
                 </th>
                 <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   流水
-                </th>
-                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  成本费率
-                </th>
-                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  单笔成本
                 </th>
                 <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   手续费率
@@ -682,68 +654,6 @@ export default function ChannelsPage() {
                         </div>
                       ))}
                     </div>
-                  </td>
-                  <td className="px-2 py-3 text-xs">
-                    {editingFee?.channelId === channel.id && editingFee?.field === 'costFeeRate' ? (
-                      <div className="flex items-center gap-1">
-                        <Input
-                          value={editingFee.value}
-                          onChange={(e) => setEditingFee({ ...editingFee, value: e.target.value })}
-                          className="h-6 text-xs py-1 px-2 w-16"
-                          placeholder="费率"
-                          autoFocus
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') saveFee()
-                            else if (e.key === 'Escape') cancelEditFee()
-                          }}
-                        />
-                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-green-600" onClick={saveFee}>
-                          <Check className="w-3 h-3" />
-                        </Button>
-                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-gray-500" onClick={cancelEditFee}>
-                          <X className="w-3 h-3" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <div 
-                        className="text-yellow-600 dark:text-yellow-400 font-medium cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
-                        onClick={() => startEditFee(channel.id, -1, 'costFeeRate', channel.costFeeRate)}
-                      >
-                        <span>{channel.costFeeRate}</span>
-                        <Edit className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-2 py-3 text-xs">
-                    {editingFee?.channelId === channel.id && editingFee?.field === 'costFixedFee' ? (
-                      <div className="flex items-center gap-1">
-                        <Input
-                          value={editingFee.value}
-                          onChange={(e) => setEditingFee({ ...editingFee, value: e.target.value })}
-                          className="h-6 text-xs py-1 px-2 w-16"
-                          placeholder="单笔"
-                          autoFocus
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') saveFee()
-                            else if (e.key === 'Escape') cancelEditFee()
-                          }}
-                        />
-                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-green-600" onClick={saveFee}>
-                          <Check className="w-3 h-3" />
-                        </Button>
-                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-gray-500" onClick={cancelEditFee}>
-                          <X className="w-3 h-3" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <div 
-                        className="text-yellow-600 dark:text-yellow-400 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
-                        onClick={() => startEditFee(channel.id, -1, 'costFixedFee', channel.costFixedFee)}
-                      >
-                        <span>{channel.costFixedFee}</span>
-                        <Edit className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
-                    )}
                   </td>
                   <td className="px-2 py-3 text-xs">
                     <div className="space-y-1">
@@ -969,33 +879,6 @@ export default function ChannelsPage() {
 
             <div className="space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b">
-                <h3 className="text-lg font-semibold">成本配置</h3>
-              </div>
-              
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-yellow-700 dark:text-yellow-400">成本费率</Label>
-                    <Input
-                      placeholder="例如：0.5%"
-                      value={formData.costFeeRate}
-                      onChange={(e) => setFormData({...formData, costFeeRate: e.target.value})}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-yellow-700 dark:text-yellow-400">单笔成本</Label>
-                    <Input
-                      placeholder="例如：¥1.00"
-                      value={formData.costFixedFee}
-                      onChange={(e) => setFormData({...formData, costFixedFee: e.target.value})}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 pb-2 border-b">
                 <h3 className="text-lg font-semibold">三方费率配置（三档阶梯）</h3>
               </div>
               
@@ -1150,33 +1033,6 @@ export default function ChannelsPage() {
                 >
                   {formData.interface || "选择接口"}
                 </Button>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 pb-2 border-b">
-                <h3 className="text-lg font-semibold">成本配置</h3>
-              </div>
-              
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-yellow-700 dark:text-yellow-400">成本费率</Label>
-                    <Input
-                      placeholder="例如：0.5%"
-                      value={formData.costFeeRate}
-                      onChange={(e) => setFormData({...formData, costFeeRate: e.target.value})}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-yellow-700 dark:text-yellow-400">单笔成本</Label>
-                    <Input
-                      placeholder="例如：¥1.00"
-                      value={formData.costFixedFee}
-                      onChange={(e) => setFormData({...formData, costFixedFee: e.target.value})}
-                    />
-                  </div>
-                </div>
               </div>
             </div>
 
