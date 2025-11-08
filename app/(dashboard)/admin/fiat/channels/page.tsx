@@ -41,7 +41,7 @@ interface Channel {
   logo?: string
   currency: string
   interface: string
-  cost: string
+  serviceType: "代收" | "代付"
   feeRates: FeeRate[]
   demoVideo?: string
   status: "active" | "inactive"
@@ -57,7 +57,7 @@ const mockChannels: Channel[] = [
     logo: "💰",
     currency: "CNY",
     interface: "Bitzpay",
-    cost: "0.38%",
+    serviceType: "代收",
     feeRates: [
       { minAmount: 0, maxAmount: 10000, collectionFeeRate: "0.6%", minCollectionFee: "¥1.00", paymentFeeRate: "0.4%", minPaymentFee: "¥0.50" },
       { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "0.5%", minCollectionFee: "¥1.00", paymentFeeRate: "0.3%", minPaymentFee: "¥0.50" },
@@ -75,7 +75,7 @@ const mockChannels: Channel[] = [
     logo: "💬",
     currency: "CNY",
     interface: "Bitzpay",
-    cost: "0.35%",
+    serviceType: "代收",
     feeRates: [
       { minAmount: 0, maxAmount: 10000, collectionFeeRate: "0.6%", minCollectionFee: "¥1.00", paymentFeeRate: "0.4%", minPaymentFee: "¥0.50" },
       { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "0.5%", minCollectionFee: "¥1.00", paymentFeeRate: "0.3%", minPaymentFee: "¥0.50" },
@@ -93,7 +93,7 @@ const mockChannels: Channel[] = [
     logo: "🏦",
     currency: "CNY",
     interface: "BePayOTC",
-    cost: "0.25%",
+    serviceType: "代付",
     feeRates: [
       { minAmount: 0, maxAmount: 10000, collectionFeeRate: "0.4%", minCollectionFee: "¥0.80", paymentFeeRate: "0.3%", minPaymentFee: "¥0.40" },
       { minAmount: 10000, maxAmount: 100000, collectionFeeRate: "0.3%", minCollectionFee: "¥0.80", paymentFeeRate: "0.2%", minPaymentFee: "¥0.40" },
@@ -110,7 +110,7 @@ const mockChannels: Channel[] = [
     logo: "🇧🇷",
     currency: "BRL",
     interface: "CFpay",
-    cost: "0.68%",
+    serviceType: "代收",
     feeRates: [
       { minAmount: 0, maxAmount: 5000, collectionFeeRate: "1.0%", minCollectionFee: "R$2.00", paymentFeeRate: "0.6%", minPaymentFee: "R$1.00" },
       { minAmount: 5000, maxAmount: 50000, collectionFeeRate: "0.8%", minCollectionFee: "R$2.00", paymentFeeRate: "0.5%", minPaymentFee: "R$1.00" },
@@ -128,7 +128,7 @@ const mockChannels: Channel[] = [
     logo: "🇮🇳",
     currency: "INR",
     interface: "CFpay",
-    cost: "0.55%",
+    serviceType: "代付",
     feeRates: [
       { minAmount: 0, maxAmount: 50000, collectionFeeRate: "0.8%", minCollectionFee: "₹10", paymentFeeRate: "0.5%", minPaymentFee: "₹5" },
       { minAmount: 50000, maxAmount: 500000, collectionFeeRate: "0.6%", minCollectionFee: "₹10", paymentFeeRate: "0.4%", minPaymentFee: "₹5" },
@@ -195,6 +195,7 @@ export default function ChannelsPage() {
     const newChannel: Channel = {
       id: `CH${String(channels.length + 1).padStart(3, '0')}`,
       ...formData,
+      serviceType: "代收",
       feeRates: feeRatesFormData.map(rate => ({...rate})),
       createdAt: new Date().toLocaleString('zh-CN')
     }
@@ -403,6 +404,9 @@ export default function ChannelsPage() {
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  服务类型
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   通道信息
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -414,23 +418,20 @@ export default function ChannelsPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   接口来源
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  通道成本
-                </th>
                 <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   流水
                 </th>
                 <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  代收费率
+                  成本费率
                 </th>
                 <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  代收单笔
+                  单笔成本
                 </th>
                 <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  代付费率
+                  手续费率
                 </th>
                 <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  代付单笔
+                  单笔最低手续费
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   状态
@@ -443,6 +444,15 @@ export default function ChannelsPage() {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredChannels.map((channel) => (
                 <tr key={channel.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      channel.serviceType === "代收" 
+                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" 
+                        : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                    }`}>
+                      {channel.serviceType}
+                    </span>
+                  </td>
                   <td className="px-4 py-3 text-sm">
                     <div className="flex items-center gap-3">
                       <div className="flex-1">
@@ -544,11 +554,6 @@ export default function ChannelsPage() {
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {channel.interface}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <span className="text-orange-600 dark:text-orange-400 font-semibold">
-                      {channel.cost}
-                    </span>
-                  </td>
                   <td className="px-2 py-3 text-xs">
                     <div className="space-y-1">
                       {channel.feeRates.map((rate, index) => (
@@ -612,7 +617,7 @@ export default function ChannelsPage() {
                             </div>
                           ) : (
                             <div 
-                              className="text-gray-900 dark:text-white font-medium cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                              className="text-yellow-600 dark:text-yellow-400 font-medium cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
                               onClick={() => startEditFee(channel.id, index, 'collectionFeeRate', rate.collectionFeeRate)}
                             >
                               <span>{rate.collectionFeeRate}</span>
@@ -649,7 +654,7 @@ export default function ChannelsPage() {
                             </div>
                           ) : (
                             <div 
-                              className="text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                              className="text-yellow-600 dark:text-yellow-400 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
                               onClick={() => startEditFee(channel.id, index, 'minCollectionFee', rate.minCollectionFee)}
                             >
                               <span>{rate.minCollectionFee}</span>
@@ -883,16 +888,16 @@ export default function ChannelsPage() {
 
             <div className="space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b">
-                <h3 className="text-lg font-semibold">通道成本价格</h3>
+                <h3 className="text-lg font-semibold">阶梯费率配置</h3>
               </div>
               
               <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-green-700 dark:text-green-400">代收费用</h4>
+                    <h4 className="text-sm font-medium text-yellow-700 dark:text-yellow-400">成本费用</h4>
                     <div className="space-y-2">
                       <div>
-                        <Label className="text-xs text-gray-600 dark:text-gray-400">代收费率（%）</Label>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">成本费率（%）</Label>
                         <Input
                           placeholder="例如：0.5%"
                           value={feeRatesFormData[0]?.collectionFeeRate || ''}
@@ -906,7 +911,7 @@ export default function ChannelsPage() {
                         />
                       </div>
                       <div>
-                        <Label className="text-xs text-gray-600 dark:text-gray-400">最低代收费</Label>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">单笔成本</Label>
                         <Input
                           placeholder="例如：¥1.00"
                           value={feeRatesFormData[0]?.minCollectionFee || ''}
@@ -922,10 +927,10 @@ export default function ChannelsPage() {
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400">代付费用</h4>
+                    <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400">手续费用</h4>
                     <div className="space-y-2">
                       <div>
-                        <Label className="text-xs text-gray-600 dark:text-gray-400">代付费率（%）</Label>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">手续费率（%）</Label>
                         <Input
                           placeholder="例如：0.3%"
                           value={feeRatesFormData[0]?.paymentFeeRate || ''}
@@ -939,7 +944,7 @@ export default function ChannelsPage() {
                         />
                       </div>
                       <div>
-                        <Label className="text-xs text-gray-600 dark:text-gray-400">最低代付费</Label>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">单笔最低手续费</Label>
                         <Input
                           placeholder="例如：¥0.50"
                           value={feeRatesFormData[0]?.minPaymentFee || ''}
@@ -1054,16 +1059,16 @@ export default function ChannelsPage() {
 
             <div className="space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b">
-                <h3 className="text-lg font-semibold">通道成本价格</h3>
+                <h3 className="text-lg font-semibold">阶梯费率配置</h3>
               </div>
               
               <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-green-700 dark:text-green-400">代收费用</h4>
+                    <h4 className="text-sm font-medium text-yellow-700 dark:text-yellow-400">成本费用</h4>
                     <div className="space-y-2">
                       <div>
-                        <Label className="text-xs text-gray-600 dark:text-gray-400">代收费率（%）</Label>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">成本费率（%）</Label>
                         <Input
                           placeholder="例如：0.5%"
                           value={feeRatesFormData[0]?.collectionFeeRate || ''}
@@ -1077,7 +1082,7 @@ export default function ChannelsPage() {
                         />
                       </div>
                       <div>
-                        <Label className="text-xs text-gray-600 dark:text-gray-400">最低代收费</Label>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">单笔成本</Label>
                         <Input
                           placeholder="例如：¥1.00"
                           value={feeRatesFormData[0]?.minCollectionFee || ''}
@@ -1093,10 +1098,10 @@ export default function ChannelsPage() {
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400">代付费用</h4>
+                    <h4 className="text-sm font-medium text-orange-700 dark:text-orange-400">手续费用</h4>
                     <div className="space-y-2">
                       <div>
-                        <Label className="text-xs text-gray-600 dark:text-gray-400">代付费率（%）</Label>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">手续费率（%）</Label>
                         <Input
                           placeholder="例如：0.3%"
                           value={feeRatesFormData[0]?.paymentFeeRate || ''}
@@ -1110,7 +1115,7 @@ export default function ChannelsPage() {
                         />
                       </div>
                       <div>
-                        <Label className="text-xs text-gray-600 dark:text-gray-400">最低代付费</Label>
+                        <Label className="text-xs text-gray-600 dark:text-gray-400">单笔最低手续费</Label>
                         <Input
                           placeholder="例如：¥0.50"
                           value={feeRatesFormData[0]?.minPaymentFee || ''}
