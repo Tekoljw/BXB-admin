@@ -256,6 +256,8 @@ export default function ChannelsPage() {
   const [tempDisplayName, setTempDisplayName] = useState("")
   const [editingName, setEditingName] = useState<string | null>(null)
   const [tempName, setTempName] = useState("")
+  const [editingWeight, setEditingWeight] = useState<string | null>(null)
+  const [tempWeight, setTempWeight] = useState("")
   const [editingFee, setEditingFee] = useState<{
     channelId: string
     tier: number
@@ -377,6 +379,40 @@ export default function ChannelsPage() {
     const config = mockPaymentMethodConfigs.find(c => c.paymentMethodId === channel.id)
     setCurrentChannelConfig(config || { paymentMethodId: channel.id, channels: [] })
     setIsChannelConfigOpen(true)
+  }
+
+  const startEditWeight = (channelId: string, currentWeight: number) => {
+    setEditingWeight(channelId)
+    setTempWeight(currentWeight.toString())
+  }
+
+  const saveWeight = (channelId: string) => {
+    const newWeight = parseInt(tempWeight)
+    if (!isNaN(newWeight) && newWeight >= 0 && newWeight <= 100) {
+      // Update the weight in the config
+      if (currentChannelConfig) {
+        const updatedChannels = currentChannelConfig.channels.map(c =>
+          c.id === channelId ? { ...c, weight: newWeight } : c
+        )
+        setCurrentChannelConfig({ ...currentChannelConfig, channels: updatedChannels })
+      }
+    }
+    setEditingWeight(null)
+    setTempWeight("")
+  }
+
+  const cancelEditWeight = () => {
+    setEditingWeight(null)
+    setTempWeight("")
+  }
+
+  const togglePaymentChannelStatus = (channelId: string) => {
+    if (currentChannelConfig) {
+      const updatedChannels = currentChannelConfig.channels.map(c =>
+        c.id === channelId ? { ...c, status: c.status === "active" ? "inactive" : "active" } : c
+      )
+      setCurrentChannelConfig({ ...currentChannelConfig, channels: updatedChannels })
+    }
   }
 
   const startEditFee = (channelId: string, tier: number, field: 'minAmount' | 'maxAmount' | 'collectionFeeRate' | 'minCollectionFee' | 'paymentFeeRate' | 'minPaymentFee', currentValue: any) => {
@@ -1384,114 +1420,108 @@ export default function ChannelsPage() {
           <SheetHeader>
             <SheetTitle>支付通道配置 - {currentChannel?.name}</SheetTitle>
             <SheetDescription>
-              查看该支付方式包含的支付通道、权重配置及费率信息
+              共 {currentChannelConfig?.channels?.length || 0} 个支付通道
             </SheetDescription>
           </SheetHeader>
           
-          <div className="mt-6 space-y-4">
+          <div className="mt-6 space-y-2">
             {currentChannelConfig?.channels && currentChannelConfig.channels.length > 0 ? (
               <>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  共 {currentChannelConfig.channels.length} 个支付通道
-                </div>
-                
                 {currentChannelConfig.channels.map((channel, index) => (
                   <div 
                     key={channel.id} 
-                    className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 space-y-3"
+                    className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3"
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 rounded-lg w-10 h-10 flex items-center justify-center text-purple-600 dark:text-purple-300 font-bold text-sm">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 rounded w-7 h-7 flex items-center justify-center text-purple-600 dark:text-purple-300 font-bold text-xs">
                           {index + 1}
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900 dark:text-white">
+                          <div className="font-medium text-sm text-gray-900 dark:text-white">
                             {channel.name}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">
-                            ID: {channel.id}
+                            {channel.id}
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          channel.status === "active"
-                            ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                            : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300"
-                        }`}>
-                          {channel.status === "active" ? "启用" : "禁用"}
-                        </span>
-                      </div>
+                      <Switch
+                        checked={channel.status === "active"}
+                        onCheckedChange={() => togglePaymentChannelStatus(channel.id)}
+                      />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-                      <div className="space-y-2">
-                        <div className="text-xs text-gray-500 dark:text-gray-400">权重配置</div>
-                        <div className="flex items-center gap-2">
-                          <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                            <div 
-                              className="bg-gradient-to-r from-purple-500 to-purple-600 h-full rounded-full"
-                              style={{ width: `${channel.weight}%` }}
+                    <div className="grid grid-cols-3 gap-3 text-xs">
+                      <div>
+                        <div className="text-gray-500 dark:text-gray-400 mb-1">权重</div>
+                        {editingWeight === channel.id ? (
+                          <div className="flex items-center gap-1">
+                            <Input
+                              value={tempWeight}
+                              onChange={(e) => setTempWeight(e.target.value)}
+                              className="h-6 text-xs py-1 px-2 w-14"
+                              placeholder="0-100"
+                              autoFocus
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') saveWeight(channel.id)
+                                else if (e.key === 'Escape') cancelEditWeight()
+                              }}
                             />
+                            <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-green-600" onClick={() => saveWeight(channel.id)}>
+                              <Check className="w-3 h-3" />
+                            </Button>
+                            <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-gray-500" onClick={cancelEditWeight}>
+                              <X className="w-3 h-3" />
+                            </Button>
                           </div>
-                          <div className="text-sm font-semibold text-purple-600 dark:text-purple-400 min-w-[45px] text-right">
-                            {channel.weight}%
+                        ) : (
+                          <div 
+                            className="flex items-center gap-1 cursor-pointer hover:text-purple-600 dark:hover:text-purple-400 group"
+                            onClick={() => startEditWeight(channel.id, channel.weight)}
+                          >
+                            <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
+                              <div 
+                                className="bg-gradient-to-r from-purple-500 to-purple-600 h-full rounded-full"
+                                style={{ width: `${channel.weight}%` }}
+                              />
+                            </div>
+                            <span className="font-semibold text-purple-600 dark:text-purple-400 min-w-[35px]">
+                              {channel.weight}%
+                            </span>
+                            <Edit className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
+                        )}
+                      </div>
+
+                      <div>
+                        <div className="text-gray-500 dark:text-gray-400 mb-1">代收</div>
+                        <div className="font-medium text-green-600 dark:text-green-400">
+                          {channel.collectionFeeRate}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                          单笔 {channel.collectionCost}
                         </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <div className="text-xs text-gray-500 dark:text-gray-400">代收费率</div>
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-sm font-semibold text-green-600 dark:text-green-400">
-                            {channel.collectionFeeRate}
-                          </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            + {channel.collectionCost}
-                          </span>
+                      <div>
+                        <div className="text-gray-500 dark:text-gray-400 mb-1">代付</div>
+                        <div className="font-medium text-blue-600 dark:text-blue-400">
+                          {channel.paymentFeeRate}
                         </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <div className="text-xs text-gray-500 dark:text-gray-400">代付费率</div>
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                            {channel.paymentFeeRate}
-                          </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            + {channel.paymentCost}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <div className="text-xs text-gray-500 dark:text-gray-400">单笔成本</div>
-                        <div className="flex items-center gap-2 text-xs">
-                          <span className="px-2 py-0.5 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded">
-                            代收: {channel.collectionCost}
-                          </span>
-                          <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded">
-                            代付: {channel.paymentCost}
-                          </span>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                          单笔 {channel.paymentCost}
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
 
-                <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <div className="flex items-start gap-2">
-                    <div className="text-blue-600 dark:text-blue-400 mt-0.5">
-                      <Settings className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 text-xs text-blue-800 dark:text-blue-300">
-                      <div className="font-medium mb-1">配置说明</div>
-                      <ul className="space-y-1 list-disc list-inside">
-                        <li>权重决定了订单分配到各通道的比例</li>
-                        <li>所有通道权重总和应为100%</li>
-                        <li>禁用的通道不参与订单分配</li>
-                      </ul>
+                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <div className="text-xs text-blue-800 dark:text-blue-300">
+                    <div className="font-medium mb-1">💡 配置说明</div>
+                    <div className="text-xs opacity-90">
+                      权重决定订单分配比例，总和应为100%。禁用的通道不参与分配。
                     </div>
                   </div>
                 </div>
