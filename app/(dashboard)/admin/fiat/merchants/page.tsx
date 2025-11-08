@@ -215,6 +215,41 @@ export default function MerchantsPage() {
   })
   const [activeCurrency, setActiveCurrency] = useState<string>("")
 
+  const ALL_CURRENCIES = ["CNY", "USD", "USDT", "EUR", "GBP"]
+  const ALL_CHANNELS = ["支付宝", "微信支付", "银行卡", "云闪付", "Stripe", "PayPal", "TRC20", "ERC20"]
+
+  const getAllPaymentMethods = (merchant: Merchant | null) => {
+    if (!merchant) return []
+    
+    const allMethods: FeeConfig[] = []
+    
+    ALL_CURRENCIES.forEach(currency => {
+      ALL_CHANNELS.forEach(channel => {
+        const existingConfig = merchant.feeConfigs.find(
+          fc => fc.currency === currency && fc.channel === channel
+        )
+        
+        if (existingConfig) {
+          allMethods.push(existingConfig)
+        } else {
+          allMethods.push({
+            id: `auto-${currency}-${channel}`,
+            currency,
+            channel,
+            suppliers: [],
+            collectionFee: "",
+            paymentFee: "",
+            minCollectionFee: "",
+            minPaymentFee: "",
+            useSystemTieredFee: true
+          })
+        }
+      })
+    })
+    
+    return allMethods
+  }
+
   const getMerchantCounts = () => {
     return {
       all: merchants.length,
@@ -349,8 +384,7 @@ export default function MerchantsPage() {
 
   const openFeeConfigDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
-    const currencies = Array.from(new Set(merchant.feeConfigs.map(fc => fc.currency)))
-    setActiveCurrency(currencies[0] || "")
+    setActiveCurrency(ALL_CURRENCIES[0])
     setIsFeeConfigDialogOpen(true)
   }
 
@@ -772,56 +806,52 @@ export default function MerchantsPage() {
       <Sheet open={isFeeConfigDialogOpen} onOpenChange={setIsFeeConfigDialogOpen}>
         <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>支付方式配置 - {currentMerchant?.name}</SheetTitle>
-            <SheetDescription>
-              商户ID: {currentMerchant?.id} | 按币种、支付通道和供应商设置不同的手续费率
-            </SheetDescription>
+            <SheetTitle>支付方式配置</SheetTitle>
           </SheetHeader>
 
           <div className="mt-6">
-            {currentMerchant?.feeConfigs && currentMerchant.feeConfigs.length > 0 ? (
-              <Tabs value={activeCurrency} onValueChange={setActiveCurrency}>
-                <TabsList className="grid w-full" style={{ gridTemplateColumns: `repeat(${Array.from(new Set(currentMerchant.feeConfigs.map(fc => fc.currency))).length}, 1fr)` }}>
-                  {Array.from(new Set(currentMerchant.feeConfigs.map(fc => fc.currency))).map(currency => (
-                    <TabsTrigger key={currency} value={currency}>
-                      {currency}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-                {Array.from(new Set(currentMerchant.feeConfigs.map(fc => fc.currency))).map(currency => (
-                  <TabsContent key={currency} value={currency} className="mt-4">
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse">
-                        <thead className="bg-gray-50 dark:bg-gray-700/50">
-                          <tr>
-                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                              支付通道
-                            </th>
-                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                              代收费率
-                            </th>
-                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                              最低代收费
-                            </th>
-                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                              代付费率
-                            </th>
-                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                              最低代付费
-                            </th>
-                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                              系统梯度费率
-                            </th>
-                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                              供应商管理
-                            </th>
-                            <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                              操作
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                          {currentMerchant.feeConfigs.filter(fc => fc.currency === currency).map((config) => (
+            <Tabs value={activeCurrency} onValueChange={setActiveCurrency}>
+              <TabsList className="grid w-full" style={{ gridTemplateColumns: `repeat(${ALL_CURRENCIES.length}, 1fr)` }}>
+                {ALL_CURRENCIES.map(currency => (
+                  <TabsTrigger key={currency} value={currency}>
+                    {currency}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {ALL_CURRENCIES.map(currency => (
+                <TabsContent key={currency} value={currency} className="mt-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <thead className="bg-gray-50 dark:bg-gray-700/50">
+                        <tr>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            支付通道
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            代收费率
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            最低代收费
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            代付费率
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            最低代付费
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            系统梯度费率
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            供应商管理
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            操作
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {getAllPaymentMethods(currentMerchant).filter(fc => fc.currency === currency).map((config) => (
                             <tr key={config.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                               <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300 font-medium">
                                 {config.channel}
@@ -898,45 +928,8 @@ export default function MerchantsPage() {
                     </div>
                   </TabsContent>
                 ))}
-              </Tabs>
-            ) : (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                该商户暂无费率配置
-              </div>
-            )}
-
-            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-              <div className="flex items-start gap-3">
-                <div className="text-blue-600 dark:text-blue-400 mt-0.5">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100">费率说明</h4>
-                  <ul className="mt-2 text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                    <li>• 不同币种和支付通道可以设置不同的费率</li>
-                    <li>• 代收费率：用户向商户支付时收取的手续费（百分比）</li>
-                    <li>• 最低代收费：单笔交易最低收取的手续费（固定金额）</li>
-                    <li>• 代付费率：商户向用户付款时收取的手续费（百分比）</li>
-                    <li>• 最低代付费：单笔交易最低收取的手续费（固定金额）</li>
-                    <li>• 系统梯度费率：开启后将使用系统预设的阶梯式费率，根据交易金额自动调整手续费</li>
-                    <li>• 直接在输入框中修改费率，实时保存</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            </Tabs>
           </div>
-
-          <SheetFooter className="mt-6">
-            <Button variant="outline" onClick={() => setIsFeeConfigDialogOpen(false)}>
-              关闭
-            </Button>
-            <Button className="bg-custom-green hover:bg-custom-green/90" onClick={openAddFeeConfigDialog}>
-              <Plus className="w-4 h-4 mr-1" />
-              添加支付方式
-            </Button>
-          </SheetFooter>
         </SheetContent>
       </Sheet>
 
