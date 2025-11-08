@@ -880,13 +880,13 @@ export default function MerchantsPage() {
                     </button>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="text-gray-900 dark:text-white font-medium">
+                    <div className="text-purple-900 dark:text-purple-100 font-medium">
                       日: ${merchant.dailyVolume.toLocaleString()}
                     </div>
-                    <div className="text-gray-700 dark:text-gray-300 text-xs mt-1">
+                    <div className="text-purple-700 dark:text-purple-300 text-xs mt-1">
                       月: ${merchant.monthlyVolume.toLocaleString()}
                     </div>
-                    <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                    <div className="text-purple-600 dark:text-purple-400 text-xs mt-1 font-medium">
                       总: ${merchant.totalVolume.toLocaleString()}
                     </div>
                   </td>
