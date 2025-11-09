@@ -375,22 +375,22 @@ export default function SuppliersPage() {
           </SheetHeader>
           <div className="py-6 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="merchantId">商户ID</Label>
+              <Label htmlFor="merchantId">供应商ID</Label>
               <Input
                 id="merchantId"
                 value={tempMerchantId}
                 onChange={(e) => setTempMerchantId(e.target.value)}
-                placeholder="输入商户ID..."
+                placeholder="输入供应商ID..."
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="apiKey">API密钥</Label>
+              <Label htmlFor="apiKey">BePay供应商系统API密钥</Label>
               <Input
                 id="apiKey"
                 type="password"
                 value={tempApiKey}
                 onChange={(e) => setTempApiKey(e.target.value)}
-                placeholder="输入API密钥..."
+                placeholder="输入BePay供应商系统API密钥..."
               />
             </div>
           </div>
