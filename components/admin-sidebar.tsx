@@ -43,6 +43,9 @@ import {
   BarChart,
   ClipboardCheck,
   Banknote,
+  ArrowLeftRight,
+  ArrowDownToLine,
+  ArrowUpFromLine,
 } from "lucide-react"
 
 interface AdminSidebarV2Props {
@@ -57,6 +60,10 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/deposit-withdrawal/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/deposit-withdrawal/custodial-wallets", icon: Wallet, label: "托管钱包接口" },
     { path: "/admin/deposit-withdrawal/addresses", icon: Network, label: "地址管理" },
+    { path: "/admin/deposit-withdrawal/fiat-trading-interface", icon: ArrowLeftRight, label: "法币买卖接口" },
+    { path: "/admin/deposit-withdrawal/fiat-trading-orders", icon: List, label: "法币买卖订单" },
+    { path: "/admin/deposit-withdrawal/onchain-deposit-orders", icon: ArrowDownToLine, label: "链上入金订单" },
+    { path: "/admin/deposit-withdrawal/onchain-withdrawal-orders", icon: ArrowUpFromLine, label: "链上提币订单" },
   ],
   permissions: [
     { path: "/admin/permissions/business-lines", icon: BarChart3, label: "业务线" },
