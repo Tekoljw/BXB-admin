@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Eye, Search, RotateCcw, Edit, Check, X } from "lucide-react"
+import { Eye, Search, RotateCcw, Edit, Check, X, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -128,11 +128,22 @@ export default function SuppliersPage() {
   const [isMerchantSheetOpen, setIsMerchantSheetOpen] = useState(false)
   const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false)
   const [isFeeSheetOpen, setIsFeeSheetOpen] = useState(false)
+  const [isAddSheetOpen, setIsAddSheetOpen] = useState(false)
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null)
   const [tempMerchantId, setTempMerchantId] = useState("")
   const [tempApiKey, setTempApiKey] = useState("")
   const [tempInterfaces, setTempInterfaces] = useState<string[]>([])
   const [selectedFeeInterface, setSelectedFeeInterface] = useState("全部")
+  const [editingTgAccount, setEditingTgAccount] = useState<number | null>(null)
+  const [tempTgAccount, setTempTgAccount] = useState("")
+  const [newSupplierForm, setNewSupplierForm] = useState({
+    tgid: "",
+    name: "",
+    tgAccount: "",
+    merchantId: "",
+    apiKey: "",
+    status: "active" as "active" | "inactive" | "suspended"
+  })
 
   const handleSearch = () => {
     setSearchTerm(searchInput)
@@ -234,6 +245,65 @@ export default function SuppliersPage() {
     }
   }
 
+  const startEditTgAccount = (supplierId: number, currentTgAccount: string) => {
+    setEditingTgAccount(supplierId)
+    setTempTgAccount(currentTgAccount)
+  }
+
+  const saveTgAccount = () => {
+    if (editingTgAccount !== null) {
+      setSuppliers(suppliers.map(s =>
+        s.id === editingTgAccount
+          ? { ...s, tgAccount: tempTgAccount }
+          : s
+      ))
+      setEditingTgAccount(null)
+      setTempTgAccount("")
+    }
+  }
+
+  const cancelEditTgAccount = () => {
+    setEditingTgAccount(null)
+    setTempTgAccount("")
+  }
+
+  const openAddSheet = () => {
+    setNewSupplierForm({
+      tgid: "",
+      name: "",
+      tgAccount: "",
+      merchantId: "",
+      apiKey: "",
+      status: "active"
+    })
+    setIsAddSheetOpen(true)
+  }
+
+  const addSupplier = () => {
+    if (!newSupplierForm.tgid || !newSupplierForm.name || !newSupplierForm.tgAccount) {
+      alert("请填写TGID、供应商名称和TG账号")
+      return
+    }
+
+    const maxId = suppliers.length ? Math.max(...suppliers.map(s => s.id)) : 0
+    const newId = maxId + 1
+    const newSupplier: Supplier = {
+      id: newId,
+      tgid: newSupplierForm.tgid,
+      name: newSupplierForm.name,
+      tgAccount: newSupplierForm.tgAccount,
+      status: newSupplierForm.status,
+      merchantId: newSupplierForm.merchantId,
+      apiKey: newSupplierForm.apiKey,
+      supportedInterfaces: [],
+      supportedMerchants: [],
+      balances: [],
+      channelCosts: []
+    }
+    setSuppliers([...suppliers, newSupplier])
+    setIsAddSheetOpen(false)
+  }
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
       <div className="max-w-full mx-auto space-y-6">
@@ -267,6 +337,13 @@ export default function SuppliersPage() {
             <RotateCcw className="w-4 h-4 mr-1" />
             重置
           </Button>
+          <Button
+            onClick={openAddSheet}
+            className="bg-custom-green hover:bg-custom-green/90 text-white"
+          >
+            <Plus className="w-4 h-4 mr-1" />
+            添加供应商
+          </Button>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -298,8 +375,36 @@ export default function SuppliersPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                       {supplier.name}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                      {supplier.tgAccount}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {editingTgAccount === supplier.id ? (
+                        <div className="flex items-center gap-2">
+                          <Input
+                            value={tempTgAccount}
+                            onChange={(e) => setTempTgAccount(e.target.value)}
+                            className="h-8 text-sm py-1 px-2 w-32"
+                            placeholder="TG账号"
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') saveTgAccount()
+                              else if (e.key === 'Escape') cancelEditTgAccount()
+                            }}
+                          />
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-green-600" onClick={saveTgAccount}>
+                            <Check className="w-4 h-4" />
+                          </Button>
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-gray-500" onClick={cancelEditTgAccount}>
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div 
+                          className="text-gray-600 dark:text-gray-400 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
+                          onClick={() => startEditTgAccount(supplier.id, supplier.tgAccount)}
+                        >
+                          <span>{supplier.tgAccount}</span>
+                          <Edit className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(supplier.status)}`}>
@@ -572,6 +677,86 @@ export default function SuppliersPage() {
           <SheetFooter>
             <Button variant="outline" onClick={() => setIsFeeSheetOpen(false)}>
               关闭
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={isAddSheetOpen} onOpenChange={setIsAddSheetOpen}>
+        <SheetContent className="sm:max-w-lg">
+          <SheetHeader>
+            <SheetTitle>添加供应商</SheetTitle>
+            <SheetDescription>
+              填写新供应商的基本信息
+            </SheetDescription>
+          </SheetHeader>
+          <div className="py-6 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="add-tgid">TGID</Label>
+              <Input
+                id="add-tgid"
+                value={newSupplierForm.tgid}
+                onChange={(e) => setNewSupplierForm({...newSupplierForm, tgid: e.target.value})}
+                placeholder="例如：TG004"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="add-name">供应商名称</Label>
+              <Input
+                id="add-name"
+                value={newSupplierForm.name}
+                onChange={(e) => setNewSupplierForm({...newSupplierForm, name: e.target.value})}
+                placeholder="例如：供应商D"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="add-tgAccount">TG账号</Label>
+              <Input
+                id="add-tgAccount"
+                value={newSupplierForm.tgAccount}
+                onChange={(e) => setNewSupplierForm({...newSupplierForm, tgAccount: e.target.value})}
+                placeholder="例如：@supplier_d"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="add-merchantId">供应商ID</Label>
+              <Input
+                id="add-merchantId"
+                value={newSupplierForm.merchantId}
+                onChange={(e) => setNewSupplierForm({...newSupplierForm, merchantId: e.target.value})}
+                placeholder="输入供应商ID..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="add-apiKey">BePay供应商系统API密钥</Label>
+              <Input
+                id="add-apiKey"
+                type="password"
+                value={newSupplierForm.apiKey}
+                onChange={(e) => setNewSupplierForm({...newSupplierForm, apiKey: e.target.value})}
+                placeholder="输入BePay供应商系统API密钥..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="add-status">状态</Label>
+              <select
+                id="add-status"
+                value={newSupplierForm.status}
+                onChange={(e) => setNewSupplierForm({...newSupplierForm, status: e.target.value as "active" | "inactive" | "suspended"})}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-custom-green"
+              >
+                <option value="active">活跃</option>
+                <option value="inactive">停用</option>
+                <option value="suspended">暂停</option>
+              </select>
+            </div>
+          </div>
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setIsAddSheetOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={addSupplier} className="bg-custom-green hover:bg-custom-green/90">
+              添加
             </Button>
           </SheetFooter>
         </SheetContent>
