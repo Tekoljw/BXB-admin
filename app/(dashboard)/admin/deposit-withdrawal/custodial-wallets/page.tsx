@@ -129,7 +129,7 @@ const mockData: CustodialWallet[] = [
 ]
 
 export default function CustodialWalletsPage() {
-  const [wallets] = useState<CustodialWallet[]>(mockData)
+  const [wallets, setWallets] = useState<CustodialWallet[]>(mockData)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all")
   
@@ -204,27 +204,71 @@ export default function CustodialWalletsPage() {
 
   // 保存添加
   const handleAdd = () => {
-    console.log("添加托管钱包接口:", formData)
+    const now = new Date()
+    const createdAt = now.toISOString().slice(0, 19).replace('T', ' ')
+    
+    setWallets(prev => {
+      // 找到最大的数字后缀以生成唯一ID
+      const maxNum = prev.reduce((max, wallet) => {
+        const match = wallet.id.match(/CW(\d+)/)
+        const num = match ? parseInt(match[1]) : 0
+        return Math.max(max, num)
+      }, 0)
+      const newId = `CW${String(maxNum + 1).padStart(3, '0')}`
+      
+      const newWallet: CustodialWallet = {
+        id: newId,
+        providerId: formData.providerId,
+        providerName: formData.providerName,
+        accountNumber: formData.accountNumber,
+        phone: formData.phone,
+        email: formData.email,
+        buyInterfaceCode: formData.buyInterfaceCode,
+        status: formData.status,
+        createdAt: createdAt
+      }
+      
+      return [...prev, newWallet]
+    })
     setIsAddSheetOpen(false)
   }
 
   // 保存编辑
   const handleEdit = () => {
-    console.log("编辑托管钱包接口:", formData)
+    if (!selectedWallet) return
+    
+    setWallets(prev => prev.map(wallet => 
+      wallet.id === selectedWallet.id
+        ? {
+            ...wallet,
+            providerId: formData.providerId,
+            providerName: formData.providerName,
+            accountNumber: formData.accountNumber,
+            phone: formData.phone,
+            email: formData.email,
+            buyInterfaceCode: formData.buyInterfaceCode,
+            status: formData.status
+          }
+        : wallet
+    ))
     setIsEditSheetOpen(false)
   }
 
   // 删除
   const handleDelete = (wallet: CustodialWallet) => {
     if (confirm(`确定要删除提供商 "${wallet.providerName}" 的托管钱包接口吗？`)) {
-      console.log("删除托管钱包接口:", wallet.id)
+      setWallets(prev => prev.filter(w => w.id !== wallet.id))
     }
   }
 
   // 切换状态
   const toggleStatus = (wallet: CustodialWallet) => {
     const newStatus = wallet.status === "active" ? "inactive" : "active"
-    console.log(`切换 ${wallet.providerName} 状态为:`, newStatus)
+    setWallets(prev => prev.map(w => 
+      w.id === wallet.id
+        ? { ...w, status: newStatus }
+        : w
+    ))
   }
 
   return (
