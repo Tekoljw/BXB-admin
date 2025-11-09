@@ -86,7 +86,8 @@ import EscrowCommissionPage from "@/app/(dashboard)/admin/commission/escrow/page
 import PaymentCommissionPage from "@/app/(dashboard)/admin/commission/payment/page"
 import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
 import AddressManagementPage from "@/app/(dashboard)/admin/address/page"
-import OTCManagementPage from "@/app/(dashboard)/admin/otc/page"
+import OTCInterfacesPage from "@/app/(dashboard)/admin/otc/interfaces/page"
+import OTCOrdersPage from "@/app/(dashboard)/admin/otc/orders/page"
 import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
 import PermissionsManagementPage from "@/app/(dashboard)/admin/system/permissions/page"
 import RolesManagementPage from "@/app/(dashboard)/admin/system/roles/page"
@@ -146,7 +147,7 @@ export default function InstantNavigation() {
       finance: '/admin/finance',
       commission: '/admin/commission/futures',
       address: '/admin/address',
-      otc: '/admin/otc',
+      otc: '/admin/otc/interfaces',
       fiat: '/admin/fiat/reports',
       orders: '/admin/orders/funds',
       system: '/admin/system/permissions',
@@ -337,7 +338,8 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/commission/payment") return <PaymentCommissionPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
     if (currentPage === "/admin/address") return <AddressManagementPage />
-    if (currentPage === "/admin/otc") return <OTCManagementPage />
+    if (currentPage === "/admin/otc/interfaces") return <OTCInterfacesPage />
+    if (currentPage === "/admin/otc/orders") return <OTCOrdersPage />
     if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />
     if (currentPage === "/admin/system") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/permissions") return <PermissionsManagementPage />
