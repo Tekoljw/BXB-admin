@@ -833,86 +833,122 @@ export default function CurrenciesPage() {
           </SheetHeader>
           {configCurrency && (
             <div className="py-6 space-y-6">
-              <Tabs
-                value={configCurrency.exchangeRate?.config.source || "exchange"}
-                onValueChange={(value) => {
-                  const newSource = value as "exchange" | "manual"
-                  if (!configCurrency.exchangeRate) {
-                    setConfigCurrency({
-                      ...configCurrency,
-                      exchangeRate: {
-                        buyPrice: 1,
-                        sellPrice: 1,
-                        config: {
-                          source: newSource,
-                          floatType: "percentage",
-                          floatBuy: 0,
-                          floatSell: 0,
-                          ...(newSource === "exchange" ? {
-                            exchangeConfig: {
-                              exchange: "Binance",
-                              priceLevel: "first",
-                              baseBuyPrice: 1,
-                              baseSellPrice: 1,
-                              lastFetched: new Date().toISOString()
+              <div className="space-y-4">
+                <Label>汇率来源</Label>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={(configCurrency.exchangeRate?.config.source || "exchange") === "exchange" ? "default" : "outline"}
+                    onClick={() => {
+                      const newSource = "exchange" as const
+                      if (!configCurrency.exchangeRate) {
+                        setConfigCurrency({
+                          ...configCurrency,
+                          exchangeRate: {
+                            buyPrice: 1,
+                            sellPrice: 1,
+                            config: {
+                              source: newSource,
+                              floatType: "percentage",
+                              floatBuy: 0,
+                              floatSell: 0,
+                              exchangeConfig: {
+                                exchange: "Binance",
+                                priceLevel: "first",
+                                baseBuyPrice: 1,
+                                baseSellPrice: 1,
+                                lastFetched: new Date().toISOString()
+                              }
                             }
-                          } : {
-                            manualConfig: {
-                              validityPeriod: 24,
-                              baseBuyPrice: 1,
-                              baseSellPrice: 1,
-                              lastUpdated: new Date().toISOString(),
-                              expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+                          }
+                        })
+                      } else {
+                        setConfigCurrency({
+                          ...configCurrency,
+                          exchangeRate: {
+                            ...configCurrency.exchangeRate,
+                            config: {
+                              ...configCurrency.exchangeRate.config,
+                              source: newSource,
+                              exchangeConfig: configCurrency.exchangeRate.config.exchangeConfig || {
+                                exchange: "Binance",
+                                priceLevel: "first",
+                                baseBuyPrice: configCurrency.exchangeRate.buyPrice,
+                                baseSellPrice: configCurrency.exchangeRate.sellPrice,
+                                lastFetched: new Date().toISOString()
+                              },
+                              manualConfig: undefined
                             }
-                          })
-                        }
+                          }
+                        })
                       }
-                    })
-                  } else {
-                    setConfigCurrency({
-                      ...configCurrency,
-                      exchangeRate: {
-                        ...configCurrency.exchangeRate,
-                        config: {
-                          ...configCurrency.exchangeRate.config,
-                          source: newSource,
-                          ...(newSource === "exchange" ? {
-                            exchangeConfig: configCurrency.exchangeRate.config.exchangeConfig || {
-                              exchange: "Binance",
-                              priceLevel: "first",
-                              baseBuyPrice: configCurrency.exchangeRate.buyPrice,
-                              baseSellPrice: configCurrency.exchangeRate.sellPrice,
-                              lastFetched: new Date().toISOString()
-                            },
-                            manualConfig: undefined
-                          } : {
-                            manualConfig: configCurrency.exchangeRate.config.manualConfig || {
-                              validityPeriod: 24,
-                              baseBuyPrice: configCurrency.exchangeRate.buyPrice,
-                              baseSellPrice: configCurrency.exchangeRate.sellPrice,
-                              lastUpdated: new Date().toISOString(),
-                              expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-                            },
-                            exchangeConfig: undefined
-                          })
-                        }
+                    }}
+                    className={(configCurrency.exchangeRate?.config.source || "exchange") === "exchange" ? "bg-custom-green hover:bg-custom-green/90" : ""}
+                  >
+                    交易所
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={(configCurrency.exchangeRate?.config.source || "exchange") === "manual" ? "default" : "outline"}
+                    onClick={() => {
+                      const newSource = "manual" as const
+                      if (!configCurrency.exchangeRate) {
+                        setConfigCurrency({
+                          ...configCurrency,
+                          exchangeRate: {
+                            buyPrice: 1,
+                            sellPrice: 1,
+                            config: {
+                              source: newSource,
+                              floatType: "percentage",
+                              floatBuy: 0,
+                              floatSell: 0,
+                              manualConfig: {
+                                validityPeriod: 24,
+                                baseBuyPrice: 1,
+                                baseSellPrice: 1,
+                                lastUpdated: new Date().toISOString(),
+                                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+                              }
+                            }
+                          }
+                        })
+                      } else {
+                        setConfigCurrency({
+                          ...configCurrency,
+                          exchangeRate: {
+                            ...configCurrency.exchangeRate,
+                            config: {
+                              ...configCurrency.exchangeRate.config,
+                              source: newSource,
+                              manualConfig: configCurrency.exchangeRate.config.manualConfig || {
+                                validityPeriod: 24,
+                                baseBuyPrice: configCurrency.exchangeRate.buyPrice,
+                                baseSellPrice: configCurrency.exchangeRate.sellPrice,
+                                lastUpdated: new Date().toISOString(),
+                                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+                              },
+                              exchangeConfig: undefined
+                            }
+                          }
+                        })
                       }
-                    })
-                  }
-                }}
-              >
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="exchange">交易所</TabsTrigger>
-                  <TabsTrigger value="manual">手动更新</TabsTrigger>
-                </TabsList>
+                    }}
+                    className={(configCurrency.exchangeRate?.config.source || "exchange") === "manual" ? "bg-custom-green hover:bg-custom-green/90" : ""}
+                  >
+                    手动更新
+                  </Button>
+                </div>
+              </div>
 
-                <TabsContent value="exchange" className="space-y-4 mt-4">
+              {(configCurrency.exchangeRate?.config.source || "exchange") === "exchange" ? (
+                <div className="space-y-4">
                   <div className="space-y-2">
                     <Label>选择交易所</Label>
-                    <select
+                    <Tabs
                       value={configCurrency.exchangeRate?.config.exchangeConfig?.exchange || "Binance"}
-                      onChange={(e) => {
-                        const newExchange = e.target.value as "Binance" | "OKX"
+                      onValueChange={(value) => {
+                        const newExchange = value as "Binance" | "OKX"
                         setConfigCurrency({
                           ...configCurrency,
                           exchangeRate: {
@@ -927,19 +963,20 @@ export default function CurrenciesPage() {
                           }
                         })
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                     >
-                      <option value="Binance">Binance</option>
-                      <option value="OKX">OKX</option>
-                    </select>
+                      <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="Binance">Binance</TabsTrigger>
+                        <TabsTrigger value="OKX">OKX</TabsTrigger>
+                      </TabsList>
+                    </Tabs>
                   </div>
 
                   <div className="space-y-2">
                     <Label>P2P市场价格档位</Label>
-                    <select
+                    <Tabs
                       value={configCurrency.exchangeRate?.config.exchangeConfig?.priceLevel || "first"}
-                      onChange={(e) => {
-                        const newLevel = e.target.value as "first" | "second" | "third" | "average"
+                      onValueChange={(value) => {
+                        const newLevel = value as "first" | "second" | "third" | "average"
                         setConfigCurrency({
                           ...configCurrency,
                           exchangeRate: {
@@ -954,23 +991,28 @@ export default function CurrenciesPage() {
                           }
                         })
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                     >
-                      <option value="first">第一档实时价</option>
-                      <option value="second">第二档实时价</option>
-                      <option value="third">第三档实时价</option>
-                      <option value="average">前三档平均价</option>
-                    </select>
+                      <TabsList className="grid w-full grid-cols-4">
+                        <TabsTrigger value="first">第一档</TabsTrigger>
+                        <TabsTrigger value="second">第二档</TabsTrigger>
+                        <TabsTrigger value="third">第三档</TabsTrigger>
+                        <TabsTrigger value="average">平均价</TabsTrigger>
+                      </TabsList>
+                    </Tabs>
                   </div>
 
                   <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
                     <p className="text-sm text-blue-800 dark:text-blue-200">
-                      系统将自动从 {configCurrency.exchangeRate?.config.exchangeConfig?.exchange} 获取P2P市场价格作为基准汇率
+                      系统将自动从 {configCurrency.exchangeRate?.config.exchangeConfig?.exchange} 获取P2P市场
+                      {configCurrency.exchangeRate?.config.exchangeConfig?.priceLevel === "average" ? "前三档平均价" : `第${
+                        configCurrency.exchangeRate?.config.exchangeConfig?.priceLevel === "first" ? "一" :
+                        configCurrency.exchangeRate?.config.exchangeConfig?.priceLevel === "second" ? "二" : "三"
+                      }档实时价`}作为基准汇率
                     </p>
                   </div>
-                </TabsContent>
-
-                <TabsContent value="manual" className="space-y-4 mt-4">
+                </div>
+              ) : (
+                <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>买入价 (USDT)</Label>
@@ -1062,8 +1104,8 @@ export default function CurrenciesPage() {
                       </p>
                     </div>
                   )}
-                </TabsContent>
-              </Tabs>
+                </div>
+              )}
 
               <div className="border-t pt-4 space-y-4">
                 <h3 className="font-medium text-gray-900 dark:text-white">浮动配置</h3>
