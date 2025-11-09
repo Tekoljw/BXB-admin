@@ -130,6 +130,7 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/ucard/suppliers", icon: Store, label: "U卡供应商" },
     { path: "/admin/ucard/config", icon: Settings, label: "U卡基础配置" },
     { path: "/admin/ucard/applications", icon: CreditCard, label: "U卡开卡记录" },
+    { path: "/admin/ucard/recharge-records", icon: ArrowDownToLine, label: "U卡充值记录" },
     { path: "/admin/ucard/transactions", icon: ShoppingCart, label: "U卡消费记录" },
   ],
   spot: [
