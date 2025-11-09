@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { ChevronDown, ChevronRight, TrendingUp } from "lucide-react"
+import { ChevronDown, ChevronRight, TrendingUp, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
@@ -146,8 +146,16 @@ const mockMonthlyReports: ReportRow[] = [
 export default function ReportsPage() {
   const [reportType, setReportType] = useState<"daily" | "monthly">("daily")
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
 
   const currentReports = reportType === "daily" ? mockDailyReports : mockMonthlyReports
+
+  const handleLoadMore = () => {
+    setIsLoadingMore(true)
+    setTimeout(() => {
+      setIsLoadingMore(false)
+    }, 1500)
+  }
 
   const toggleRowExpansion = (period: string) => {
     const newExpanded = new Set(expandedRows)
@@ -318,6 +326,24 @@ export default function ReportsPage() {
               ))}
             </TableBody>
           </Table>
+        </div>
+
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-center">
+          <Button
+            onClick={handleLoadMore}
+            disabled={isLoadingMore}
+            variant="outline"
+            className="min-w-[120px]"
+          >
+            {isLoadingMore ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                加载中...
+              </>
+            ) : (
+              "加载更多"
+            )}
+          </Button>
         </div>
       </div>
     </div>

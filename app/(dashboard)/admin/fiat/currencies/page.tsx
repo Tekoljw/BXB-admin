@@ -21,7 +21,8 @@ import {
   X,
   Settings,
   Check,
-  AlertTriangle
+  AlertTriangle,
+  Loader2
 } from "lucide-react"
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -74,8 +75,16 @@ export default function CurrenciesPage() {
   const [editingSellPrice, setEditingSellPrice] = useState<string | null>(null)
   const [tempBuyPrice, setTempBuyPrice] = useState("")
   const [tempSellPrice, setTempSellPrice] = useState("")
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const editFileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleLoadMore = () => {
+    setIsLoadingMore(true)
+    setTimeout(() => {
+      setIsLoadingMore(false)
+    }, 1500)
+  }
   const initialCurrencies: Currency[] = [
     {
       id: "CUR001",
@@ -623,6 +632,26 @@ export default function CurrenciesPage() {
         {filteredCurrencies.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500 dark:text-gray-400">未找到相关币种</p>
+          </div>
+        )}
+
+        {filteredCurrencies.length > 0 && (
+          <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-center">
+            <Button
+              onClick={handleLoadMore}
+              disabled={isLoadingMore}
+              variant="outline"
+              className="min-w-[120px]"
+            >
+              {isLoadingMore ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  加载中...
+                </>
+              ) : (
+                "加载更多"
+              )}
+            </Button>
           </div>
         )}
       </Card>
