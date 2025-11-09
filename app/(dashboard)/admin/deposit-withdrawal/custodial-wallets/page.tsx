@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog"
 import { Switch } from "@/components/ui/switch"
 import { Search, Plus, Eye, Edit, Trash2, Smartphone, Mail, Code } from "lucide-react"
-import LoadMoreButton from "@/components/load-more-button"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 // 数据类型定义
 interface CustodialWallet {
