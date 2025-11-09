@@ -307,8 +307,15 @@ export default function SuppliersPage() {
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
       <div className="max-w-full mx-auto space-y-6">
-        <div>
+        <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">供应商管理</h1>
+          <Button
+            onClick={openAddSheet}
+            className="bg-custom-green hover:bg-custom-green/90 text-white"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            添加供应商
+          </Button>
         </div>
 
         <div className="flex items-center gap-2">
@@ -336,13 +343,6 @@ export default function SuppliersPage() {
           >
             <RotateCcw className="w-4 h-4 mr-1" />
             重置
-          </Button>
-          <Button
-            onClick={openAddSheet}
-            className="bg-custom-green hover:bg-custom-green/90 text-white"
-          >
-            <Plus className="w-4 h-4 mr-1" />
-            添加供应商
           </Button>
         </div>
 
