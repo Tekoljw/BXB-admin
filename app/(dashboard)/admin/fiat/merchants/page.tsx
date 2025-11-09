@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { Search, Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X, RotateCcw } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -1063,6 +1064,8 @@ export default function MerchantsPage() {
             暂无数据
           </div>
         )}
+
+        {filteredMerchants.length > 0 && <LoadMoreButton />}
       </div>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

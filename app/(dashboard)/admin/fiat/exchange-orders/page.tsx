@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { Search, ArrowRightLeft, RotateCcw } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -406,6 +407,8 @@ export default function ExchangeOrdersPage() {
             暂无数据
           </div>
         )}
+
+        {filteredOrders.length > 0 && <LoadMoreButton />}
       </div>
 
       <Dialog open={isRateDialogOpen} onOpenChange={setIsRateDialogOpen}>

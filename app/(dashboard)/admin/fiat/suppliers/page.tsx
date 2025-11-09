@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { Eye, Search, RotateCcw, Edit, Check, X, Plus } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -467,6 +468,8 @@ export default function SuppliersPage() {
               暂无数据
             </div>
           )}
+
+          {filteredSuppliers.length > 0 && <LoadMoreButton />}
         </div>
       </div>
 

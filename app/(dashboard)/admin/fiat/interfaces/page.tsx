@@ -29,6 +29,7 @@ import {
   X,
   RotateCcw
 } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
@@ -609,6 +610,8 @@ export default function InterfacesPage() {
           <p className="text-gray-500 dark:text-gray-400">未找到相关接口</p>
         </div>
       )}
+
+      {filteredInterfaces.length > 0 && <LoadMoreButton />}
 
       <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
         <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">

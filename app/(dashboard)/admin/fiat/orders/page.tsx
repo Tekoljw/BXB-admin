@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { Search, Send, RefreshCw, Lock, RotateCcw, Info } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -515,6 +516,8 @@ export default function OrdersPage() {
             暂无数据
           </div>
         )}
+
+        {filteredOrders.length > 0 && <LoadMoreButton />}
       </div>
 
       <Dialog open={isResendDialogOpen} onOpenChange={setIsResendDialogOpen}>

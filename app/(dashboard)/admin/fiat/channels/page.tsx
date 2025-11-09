@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { Search, Plus, Edit, Trash2, Eye, Check, X, RotateCcw } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -788,6 +789,8 @@ export default function ChannelsPage() {
             暂无数据
           </div>
         )}
+
+        {filteredChannels.length > 0 && <LoadMoreButton />}
       </div>
 
       <Sheet open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>

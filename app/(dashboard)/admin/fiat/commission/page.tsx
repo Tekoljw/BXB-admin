@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react"
 import { Eye, Search, Percent, ChevronLeft, ChevronRight, RotateCcw } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -628,6 +629,8 @@ export default function CommissionPage() {
             暂无数据
           </div>
         )}
+
+        {sortedAgents.length > 0 && <LoadMoreButton />}
       </div>
 
       {/* 佣金比例对话框 */}
