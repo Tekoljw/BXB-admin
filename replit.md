@@ -9,7 +9,7 @@ Preferred communication style: Simple, everyday Chinese language.
 ## System Architecture
 
 ### UI/UX Decisions
-- **全新导航架构**: 采用顶部导航栏（15个一级模块菜单）与左侧边栏（动态二级子菜单）的双层导航体系。
+- **全新导航架构**: 采用顶部导航栏（17个一级模块菜单）与左侧边栏（动态二级子菜单）的双层导航体系。
 - **响应式设计**: 桌面端使用横向滚动菜单，移动端使用汉堡菜单侧边Sheet弹窗。
 - **主题**: 支持动态亮色/暗色主题切换，并持久化用户偏好。
 - **品牌与配色**: 统一的BeDAO品牌设计，采用绿色、黑色、深蓝色、白色作为标准化配色方案。
@@ -56,9 +56,11 @@ Preferred communication style: Simple, everyday Chinese language.
 - **Authentication**: Replit Auth (OpenID Connect), independent admin login with email verification, PostgreSQL-backed session store.
 - **Core Features**:
     - 综合性后台管理面板。
-    - 15个管理模块，涵盖权限管理、运营报表、用户管理、IM管理、社交管理、C2C、担保管理、U卡管理、现货管理、合约管理、跟单管理、理财管理、佣金管理、法币、财务管理、系统管理。
+    - 17个管理模块，涵盖权限管理、运营报表、用户管理、IM管理、社交管理、C2C、担保管理、U卡管理、现货管理、合约管理、跟单管理、理财管理、佣金管理、地址管理、OTC管理、法币、财务管理、系统管理。
     - 登录后访问控制，持久化管理员认证状态。
-    - 法币管理模块（admin/fiat）包含币种、供应商、接口、通道、商户、代理商、代收订单、代付订单、兑换订单9个子页面，通道管理支持三档阶梯费率配置。
+    - 地址管理模块（admin/address）用于管理用户的钱包地址和收款地址。
+    - OTC管理模块（admin/otc）用于场外交易管理和配置。
+    - 法币管理模块（admin/fiat）包含经营报表、币种、供应商、接口、通道、商户、代理商、代收订单、代付订单、兑换订单10个子页面，经营报表作为第一子页面，支持每日/每月报表、可展开查看利润前10的通道和商户。
     - C2C模块（admin/c2c）包含C2C管理、C2C订单、法币快捷配置、法币快捷订单、OTC配置、OTC订单6个子页面。
 
 ### System Design Choices

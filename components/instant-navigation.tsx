@@ -85,6 +85,8 @@ import UCardCommissionPage from "@/app/(dashboard)/admin/commission/ucard/page"
 import EscrowCommissionPage from "@/app/(dashboard)/admin/commission/escrow/page"
 import PaymentCommissionPage from "@/app/(dashboard)/admin/commission/payment/page"
 import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
+import AddressManagementPage from "@/app/(dashboard)/admin/address/page"
+import OTCManagementPage from "@/app/(dashboard)/admin/otc/page"
 import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
 import PermissionsManagementPage from "@/app/(dashboard)/admin/system/permissions/page"
 import RolesManagementPage from "@/app/(dashboard)/admin/system/roles/page"
@@ -119,6 +121,8 @@ export default function InstantNavigation() {
     if (path.startsWith('/admin/copytrade')) return 'copytrade'
     if (path.startsWith('/admin/finance')) return 'finance'
     if (path.startsWith('/admin/commission')) return 'commission'
+    if (path.startsWith('/admin/address')) return 'address'
+    if (path.startsWith('/admin/otc')) return 'otc'
     if (path.startsWith('/admin/fiat')) return 'fiat'
     if (path.startsWith('/admin/orders')) return 'orders'
     if (path.startsWith('/admin/system')) return 'system'
@@ -141,7 +145,9 @@ export default function InstantNavigation() {
       copytrade: '/admin/copytrade',
       finance: '/admin/finance',
       commission: '/admin/commission/futures',
-      fiat: '/admin/fiat/currencies',
+      address: '/admin/address',
+      otc: '/admin/otc',
+      fiat: '/admin/fiat/reports',
       orders: '/admin/orders/funds',
       system: '/admin/system/permissions',
     }
@@ -225,6 +231,8 @@ export default function InstantNavigation() {
       copytrade: '跟单管理',
       finance: '理财管理',
       commission: '佣金管理',
+      address: '地址',
+      otc: 'OTC',
       fiat: '法币',
       orders: '财务管理',
       system: '系统管理',
@@ -328,6 +336,8 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/commission/escrow") return <EscrowCommissionPage />
     if (currentPage === "/admin/commission/payment") return <PaymentCommissionPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
+    if (currentPage === "/admin/address") return <AddressManagementPage />
+    if (currentPage === "/admin/otc") return <OTCManagementPage />
     if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />
     if (currentPage === "/admin/system") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/permissions") return <PermissionsManagementPage />

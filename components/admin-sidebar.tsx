@@ -53,6 +53,12 @@ interface AdminSidebarV2Props {
 
 // 定义每个模块的二级菜单
 const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
+  address: [
+    { path: "/admin/address", icon: Network, label: "地址管理" },
+  ],
+  otc: [
+    { path: "/admin/otc", icon: DollarSign, label: "OTC管理" },
+  ],
   permissions: [
     { path: "/admin/permissions/business-lines", icon: BarChart3, label: "业务线" },
     { path: "/admin/permissions/audit-config", icon: FileCheck, label: "审核配置" },
