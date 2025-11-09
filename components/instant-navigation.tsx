@@ -88,6 +88,10 @@ import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
 import DepositWithdrawalCurrenciesPage from "@/app/(dashboard)/admin/deposit-withdrawal/currencies/page"
 import CustodialWalletsPage from "@/app/(dashboard)/admin/deposit-withdrawal/custodial-wallets/page"
 import AddressesManagementPage from "@/app/(dashboard)/admin/deposit-withdrawal/addresses/page"
+import FiatTradingInterfacePage from "@/app/(dashboard)/admin/deposit-withdrawal/fiat-trading-interface/page"
+import FiatTradingOrdersPage from "@/app/(dashboard)/admin/deposit-withdrawal/fiat-trading-orders/page"
+import OnchainDepositOrdersPage from "@/app/(dashboard)/admin/deposit-withdrawal/onchain-deposit-orders/page"
+import OnchainWithdrawalOrdersPage from "@/app/(dashboard)/admin/deposit-withdrawal/onchain-withdrawal-orders/page"
 import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
 import PermissionsManagementPage from "@/app/(dashboard)/admin/system/permissions/page"
 import RolesManagementPage from "@/app/(dashboard)/admin/system/roles/page"
@@ -337,6 +341,10 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/deposit-withdrawal/currencies") return <DepositWithdrawalCurrenciesPage />
     if (currentPage === "/admin/deposit-withdrawal/custodial-wallets") return <CustodialWalletsPage />
     if (currentPage === "/admin/deposit-withdrawal/addresses") return <AddressesManagementPage />
+    if (currentPage === "/admin/deposit-withdrawal/fiat-trading-interface") return <FiatTradingInterfacePage />
+    if (currentPage === "/admin/deposit-withdrawal/fiat-trading-orders") return <FiatTradingOrdersPage />
+    if (currentPage === "/admin/deposit-withdrawal/onchain-deposit-orders") return <OnchainDepositOrdersPage />
+    if (currentPage === "/admin/deposit-withdrawal/onchain-withdrawal-orders") return <OnchainWithdrawalOrdersPage />
     if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />
     if (currentPage === "/admin/system") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/permissions") return <PermissionsManagementPage />
