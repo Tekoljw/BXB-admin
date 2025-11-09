@@ -53,12 +53,10 @@ interface AdminSidebarV2Props {
 
 // 定义每个模块的二级菜单
 const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
-  address: [
-    { path: "/admin/address", icon: Network, label: "地址管理" },
-  ],
-  otc: [
-    { path: "/admin/otc/interfaces", icon: Network, label: "OTC接口管理" },
-    { path: "/admin/otc/orders", icon: ShoppingCart, label: "OTC订单管理" },
+  "deposit-withdrawal": [
+    { path: "/admin/deposit-withdrawal/currencies", icon: DollarSign, label: "币种管理" },
+    { path: "/admin/deposit-withdrawal/custodial-wallets", icon: Wallet, label: "托管钱包接口" },
+    { path: "/admin/deposit-withdrawal/addresses", icon: Network, label: "地址管理" },
   ],
   permissions: [
     { path: "/admin/permissions/business-lines", icon: BarChart3, label: "业务线" },
