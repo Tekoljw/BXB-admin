@@ -835,10 +835,9 @@ export default function CurrenciesPage() {
             <div className="py-6 space-y-6">
               <div className="space-y-4">
                 <Label>汇率来源</Label>
-                <div className="flex gap-2">
-                  <Button
+                <div className="inline-flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-1 w-full max-w-md">
+                  <button
                     type="button"
-                    variant={(configCurrency.exchangeRate?.config.source || "exchange") === "exchange" ? "default" : "outline"}
                     onClick={() => {
                       const newSource = "exchange" as const
                       if (!configCurrency.exchangeRate) {
@@ -883,13 +882,16 @@ export default function CurrenciesPage() {
                         })
                       }
                     }}
-                    className={(configCurrency.exchangeRate?.config.source || "exchange") === "exchange" ? "bg-custom-green hover:bg-custom-green/90" : ""}
+                    className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                      (configCurrency.exchangeRate?.config.source || "exchange") === "exchange"
+                        ? "bg-custom-green text-white shadow-sm"
+                        : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                    }`}
                   >
                     交易所
-                  </Button>
-                  <Button
+                  </button>
+                  <button
                     type="button"
-                    variant={(configCurrency.exchangeRate?.config.source || "exchange") === "manual" ? "default" : "outline"}
                     onClick={() => {
                       const newSource = "manual" as const
                       if (!configCurrency.exchangeRate) {
@@ -934,10 +936,14 @@ export default function CurrenciesPage() {
                         })
                       }
                     }}
-                    className={(configCurrency.exchangeRate?.config.source || "exchange") === "manual" ? "bg-custom-green hover:bg-custom-green/90" : ""}
+                    className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                      (configCurrency.exchangeRate?.config.source || "exchange") === "manual"
+                        ? "bg-custom-green text-white shadow-sm"
+                        : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                    }`}
                   >
                     手动更新
-                  </Button>
+                  </button>
                 </div>
               </div>
 
