@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import FiatLayout from "@/components/fiat-layout"
 
 // 导入子页面
+import ReportsPage from "./reports/page"
 import CurrenciesPage from "./currencies/page"
 import SuppliersPage from "./suppliers/page"
 import InterfacesPage from "./interfaces/page"
@@ -22,9 +23,9 @@ export default function FiatManagementPage() {
   useEffect(() => {
     setCurrentPath(window.location.pathname)
     
-    // 如果访问的是根路径，重定向到币种管理
+    // 如果访问的是根路径，重定向到经营报表
     if (window.location.pathname === "/admin/fiat") {
-      router.replace("/admin/fiat/currencies")
+      router.replace("/admin/fiat/reports")
     }
     
     // 监听路径变化
@@ -49,6 +50,9 @@ export default function FiatManagementPage() {
 
   // 渲染对应的子页面
   const renderSubPage = () => {
+    if (currentPath === "/admin/fiat/reports") {
+      return <ReportsPage />
+    }
     if (currentPath === "/admin/fiat/currencies") {
       return <CurrenciesPage />
     }
