@@ -46,6 +46,7 @@ import {
   ArrowLeftRight,
   ArrowDownToLine,
   ArrowUpFromLine,
+  Hash,
 } from "lucide-react"
 
 interface AdminSidebarV2Props {
@@ -129,6 +130,7 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/ucard/users", icon: Users, label: "U卡用户列表" },
     { path: "/admin/ucard/suppliers", icon: Store, label: "U卡供应商" },
     { path: "/admin/ucard/config", icon: Settings, label: "U卡基础配置" },
+    { path: "/admin/ucard/number-segments", icon: Hash, label: "号段管理" },
     { path: "/admin/ucard/applications", icon: CreditCard, label: "U卡开卡记录" },
     { path: "/admin/ucard/recharge-records", icon: ArrowDownToLine, label: "U卡充值记录" },
     { path: "/admin/ucard/transactions", icon: ShoppingCart, label: "U卡消费记录" },

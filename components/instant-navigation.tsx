@@ -64,6 +64,7 @@ import ComplaintsPage from "@/app/(dashboard)/admin/escrow/complaints/page"
 import UCardUsersPage from "@/app/(dashboard)/admin/ucard/users/page"
 import UCardSuppliersPage from "@/app/(dashboard)/admin/ucard/suppliers/page"
 import UCardConfigPage from "@/app/(dashboard)/admin/ucard/config/page"
+import NumberSegmentsPage from "@/app/(dashboard)/admin/ucard/number-segments/page"
 import UCardApplicationsPage from "@/app/(dashboard)/admin/ucard/applications/page"
 import UCardRechargeRecordsPage from "@/app/(dashboard)/admin/ucard/recharge-records/page"
 import UCardTransactionsPage from "@/app/(dashboard)/admin/ucard/transactions/page"
@@ -316,6 +317,7 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/ucard/users") return <UCardUsersPage />
     if (currentPage === "/admin/ucard/suppliers") return <UCardSuppliersPage />
     if (currentPage === "/admin/ucard/config") return <UCardConfigPage />
+    if (currentPage === "/admin/ucard/number-segments") return <NumberSegmentsPage />
     if (currentPage === "/admin/ucard/applications") return <UCardApplicationsPage />
     if (currentPage === "/admin/ucard/recharge-records") return <UCardRechargeRecordsPage />
     if (currentPage === "/admin/ucard/transactions") return <UCardTransactionsPage />
