@@ -404,12 +404,35 @@ export default function FiatTradingInterfacePage() {
                     {item.providerId}
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  {getStatusBadge(item.status)}
-                  <Switch
-                    checked={item.status === "active"}
-                    onCheckedChange={(checked) => handleStatusToggle(item, checked)}
-                  />
+                <div className="flex flex-col items-end gap-2">
+                  <div className="flex items-center gap-3">
+                    {getStatusBadge(item.status)}
+                    <Switch
+                      checked={item.status === "active"}
+                      onCheckedChange={(checked) => handleStatusToggle(item, checked)}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-600 dark:text-gray-400">买币</span>
+                    <Switch
+                      checked={item.buyEnabled}
+                      onCheckedChange={(checked) => handleBuyToggle(item, checked)}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-600 dark:text-gray-400">卖币</span>
+                    <Switch
+                      checked={item.sellEnabled}
+                      onCheckedChange={(checked) => handleSellToggle(item, checked)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">默认排序：</span>
+                  <span className="text-xs font-semibold text-gray-900 dark:text-white">第 {item.sortOrder} 位</span>
                 </div>
               </div>
 
@@ -431,23 +454,6 @@ export default function FiatTradingInterfacePage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
-                    <span className="text-sm text-gray-700 dark:text-gray-300">买币</span>
-                    <Switch
-                      checked={item.buyEnabled}
-                      onCheckedChange={(checked) => handleBuyToggle(item, checked)}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
-                    <span className="text-sm text-gray-700 dark:text-gray-300">卖币</span>
-                    <Switch
-                      checked={item.sellEnabled}
-                      onCheckedChange={(checked) => handleSellToggle(item, checked)}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 pt-3">
                   <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
                     <div className="flex items-center gap-2 mb-1">
                       <DollarSign className="w-4 h-4 text-blue-600 dark:text-blue-400" />
