@@ -50,93 +50,93 @@ interface CustodialInterface {
 const initialMockInterfaces: CustodialInterface[] = [
   {
     id: "CI001",
-    providerId: "PRV001",
-    providerName: "BePay托管钱包",
-    accountName: "service_account_001",
+    providerId: "COBO001",
+    providerName: "Cobo钱包",
+    accountName: "cobo_custody_main",
     accountPhone: "+86 138 0000 0001",
-    accountEmail: "account001@bepay.com",
-    buyInterfaceCode: "BEPAY_BUY_USDT_001",
+    accountEmail: "custody@cobo.com",
+    buyInterfaceCode: "COBO_CUSTODY_001",
     status: "active",
     createdAt: "2024-01-15 10:30:00",
-    lastMonthFee: 12580.50,
-    totalFee: 256789.30,
-    appliedAddresses: 500,
-    usedAddresses: 387
+    lastMonthFee: 25680.50,
+    totalFee: 456789.30,
+    appliedAddresses: 1000,
+    usedAddresses: 857
   },
   {
     id: "CI002",
-    providerId: "PRV002",
-    providerName: "快钱包",
-    accountName: "service_account_002",
-    accountPhone: "+86 138 0000 0002",
-    accountEmail: "account002@quickwallet.com",
-    buyInterfaceCode: "QUICK_BUY_USDT_002",
+    providerId: "MATRIX001",
+    providerName: "Matrixport钱包",
+    accountName: "matrixport_custody_01",
+    accountPhone: "+65 9123 4567",
+    accountEmail: "custody@matrixport.com",
+    buyInterfaceCode: "MATRIX_CUSTODY_001",
     status: "active",
     createdAt: "2024-02-20 14:15:00",
-    lastMonthFee: 8960.20,
-    totalFee: 178450.80,
-    appliedAddresses: 300,
-    usedAddresses: 245
+    lastMonthFee: 18960.20,
+    totalFee: 328450.80,
+    appliedAddresses: 800,
+    usedAddresses: 645
   },
   {
     id: "CI003",
-    providerId: "PRV003",
-    providerName: "云端钱包",
-    accountName: "service_account_003",
-    accountPhone: "+86 138 0000 0003",
-    accountEmail: "account003@cloudwallet.com",
-    buyInterfaceCode: "CLOUD_BUY_USDT_003",
-    status: "inactive",
+    providerId: "FIREBLOCKS001",
+    providerName: "Fireblocks",
+    accountName: "fireblocks_main_account",
+    accountPhone: "+1 650 555 0001",
+    accountEmail: "custody@fireblocks.com",
+    buyInterfaceCode: "FIREBLOCKS_001",
+    status: "active",
     createdAt: "2024-03-10 09:45:00",
-    lastMonthFee: 0,
-    totalFee: 95620.40,
-    appliedAddresses: 200,
-    usedAddresses: 200
+    lastMonthFee: 32150.75,
+    totalFee: 595620.40,
+    appliedAddresses: 1500,
+    usedAddresses: 1289
   },
   {
     id: "CI004",
-    providerId: "PRV004",
-    providerName: "极速钱包",
-    accountName: "service_account_004",
-    accountPhone: "+86 138 0000 0004",
-    accountEmail: "account004@speedwallet.com",
-    buyInterfaceCode: "SPEED_BUY_USDT_004",
+    providerId: "CEFFU001",
+    providerName: "Ceffu托管",
+    accountName: "ceffu_custody_account",
+    accountPhone: "+65 8765 4321",
+    accountEmail: "custody@ceffu.com",
+    buyInterfaceCode: "CEFFU_CUSTODY_001",
     status: "active",
     createdAt: "2024-04-05 16:20:00",
-    lastMonthFee: 15420.75,
-    totalFee: 312560.90,
-    appliedAddresses: 800,
-    usedAddresses: 652
+    lastMonthFee: 28420.75,
+    totalFee: 512560.90,
+    appliedAddresses: 1200,
+    usedAddresses: 982
   },
   {
     id: "CI005",
-    providerId: "PRV005",
-    providerName: "安全钱包",
-    accountName: "service_account_005",
-    accountPhone: "+86 138 0000 0005",
-    accountEmail: "account005@securewallet.com",
-    buyInterfaceCode: "SECURE_BUY_USDT_005",
-    status: "suspended",
+    providerId: "BITGO001",
+    providerName: "BitGo钱包",
+    accountName: "bitgo_enterprise_01",
+    accountPhone: "+1 408 555 0002",
+    accountEmail: "enterprise@bitgo.com",
+    buyInterfaceCode: "BITGO_CUSTODY_001",
+    status: "active",
     createdAt: "2024-05-12 11:10:00",
-    lastMonthFee: 3250.00,
-    totalFee: 45870.20,
-    appliedAddresses: 150,
-    usedAddresses: 98
+    lastMonthFee: 21250.00,
+    totalFee: 385870.20,
+    appliedAddresses: 900,
+    usedAddresses: 756
   },
   {
     id: "CI006",
-    providerId: "PRV006",
-    providerName: "智付钱包",
-    accountName: "service_account_006",
-    accountPhone: "+86 138 0000 0006",
-    accountEmail: "account006@smartpay.com",
-    buyInterfaceCode: "SMART_BUY_USDT_006",
-    status: "active",
+    providerId: "GNOSIS001",
+    providerName: "Gnosis Safe",
+    accountName: "gnosis_safe_multisig",
+    accountPhone: "+49 30 1234 5678",
+    accountEmail: "custody@gnosis.io",
+    buyInterfaceCode: "GNOSIS_SAFE_001",
+    status: "inactive",
     createdAt: "2024-06-18 13:25:00",
-    lastMonthFee: 9870.60,
-    totalFee: 198540.30,
-    appliedAddresses: 400,
-    usedAddresses: 321
+    lastMonthFee: 0,
+    totalFee: 128540.30,
+    appliedAddresses: 600,
+    usedAddresses: 600
   }
 ]
 
@@ -501,7 +501,7 @@ export default function CustodialInterfacesPage() {
             <div className="space-y-2">
               <Label>提供商名称 *</Label>
               <Input
-                placeholder="例如: BePay托管钱包"
+                placeholder="例如: Cobo钱包"
                 value={newInterface.providerName}
                 onChange={(e) => setNewInterface({ ...newInterface, providerName: e.target.value })}
               />
@@ -534,7 +534,7 @@ export default function CustodialInterfacesPage() {
             <div className="space-y-2 col-span-2">
               <Label>买币接口代码 *</Label>
               <Input
-                placeholder="例如: BEPAY_BUY_USDT_001"
+                placeholder="例如: COBO_CUSTODY_001"
                 value={newInterface.buyInterfaceCode}
                 onChange={(e) => setNewInterface({ ...newInterface, buyInterfaceCode: e.target.value })}
               />
