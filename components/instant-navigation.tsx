@@ -191,9 +191,14 @@ export default function InstantNavigation() {
   }, [isAdminLoggedIn])
 
   const navigate = (path: string) => {
-    // 只信任 context 中的登录状态，确保安全性
+    // 检查登录状态：优先从 storage 读取（实时），回退到 context 状态
+    // 这样可以处理登录回调中状态还未更新的情况
+    const isLoggedIn = sessionStorage.getItem("isAdminLoggedIn") === "true" || 
+                      localStorage.getItem("isAdminLoggedIn") === "true" ||
+                      isAdminLoggedIn
+    
     // 如果访问管理页面但未登录，跳转到登录页
-    if (path.startsWith('/admin') && path !== '/admin/login' && !isAdminLoggedIn) {
+    if (path.startsWith('/admin') && path !== '/admin/login' && !isLoggedIn) {
       setCurrentPage('/admin/login')
       window.history.pushState({}, "", '/admin/login')
       return
