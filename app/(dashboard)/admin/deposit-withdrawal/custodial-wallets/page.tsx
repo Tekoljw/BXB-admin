@@ -45,6 +45,7 @@ interface CustodialInterface {
   totalFee: number
   appliedAddresses: number
   usedAddresses: number
+  weight: number
 }
 
 const initialMockInterfaces: CustodialInterface[] = [
@@ -61,7 +62,8 @@ const initialMockInterfaces: CustodialInterface[] = [
     lastMonthFee: 25680.50,
     totalFee: 456789.30,
     appliedAddresses: 1000,
-    usedAddresses: 857
+    usedAddresses: 857,
+    weight: 30
   },
   {
     id: "CI002",
@@ -76,7 +78,8 @@ const initialMockInterfaces: CustodialInterface[] = [
     lastMonthFee: 18960.20,
     totalFee: 328450.80,
     appliedAddresses: 800,
-    usedAddresses: 645
+    usedAddresses: 645,
+    weight: 25
   },
   {
     id: "CI003",
@@ -91,7 +94,8 @@ const initialMockInterfaces: CustodialInterface[] = [
     lastMonthFee: 32150.75,
     totalFee: 595620.40,
     appliedAddresses: 1500,
-    usedAddresses: 1289
+    usedAddresses: 1289,
+    weight: 20
   },
   {
     id: "CI004",
@@ -106,7 +110,8 @@ const initialMockInterfaces: CustodialInterface[] = [
     lastMonthFee: 28420.75,
     totalFee: 512560.90,
     appliedAddresses: 1200,
-    usedAddresses: 982
+    usedAddresses: 982,
+    weight: 15
   },
   {
     id: "CI005",
@@ -121,7 +126,8 @@ const initialMockInterfaces: CustodialInterface[] = [
     lastMonthFee: 21250.00,
     totalFee: 385870.20,
     appliedAddresses: 900,
-    usedAddresses: 756
+    usedAddresses: 756,
+    weight: 10
   },
   {
     id: "CI006",
@@ -136,7 +142,8 @@ const initialMockInterfaces: CustodialInterface[] = [
     lastMonthFee: 0,
     totalFee: 128540.30,
     appliedAddresses: 600,
-    usedAddresses: 600
+    usedAddresses: 600,
+    weight: 0
   }
 ]
 
@@ -241,7 +248,8 @@ export default function CustodialInterfacesPage() {
       lastMonthFee: 0,
       totalFee: 0,
       appliedAddresses: 0,
-      usedAddresses: 0
+      usedAddresses: 0,
+      weight: 0
     }
     
     setInterfaces([...interfaces, newInterfaceData])
@@ -298,6 +306,22 @@ export default function CustodialInterfacesPage() {
     
     setShowDisableDialog(false)
     setSelectedInterface(null)
+  }
+
+  const handleStatusToggle = (item: CustodialInterface, checked: boolean) => {
+    const newStatus = checked ? "active" : "suspended"
+    setInterfaces(interfaces.map(i =>
+      i.id === item.id ? { ...i, status: newStatus } : i
+    ))
+  }
+
+  const handleWeightChange = (item: CustodialInterface, newWeight: string) => {
+    const weight = parseInt(newWeight) || 0
+    if (weight < 0 || weight > 100) return
+    
+    setInterfaces(interfaces.map(i =>
+      i.id === item.id ? { ...i, weight } : i
+    ))
   }
 
   return (
@@ -357,7 +381,26 @@ export default function CustodialInterfacesPage() {
                     {item.providerId}
                   </p>
                 </div>
-                {getStatusBadge(item.status)}
+                <div className="flex flex-col items-end gap-2">
+                  <div className="flex items-center gap-3">
+                    {getStatusBadge(item.status)}
+                    <Switch
+                      checked={item.status === "active"}
+                      onCheckedChange={(checked) => handleStatusToggle(item, checked)}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-600 dark:text-gray-400">分配权重：</span>
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={item.weight}
+                      onChange={(e) => handleWeightChange(item, e.target.value)}
+                      className="w-16 h-7 text-xs text-center px-2"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-3">
