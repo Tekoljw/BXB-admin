@@ -9,9 +9,9 @@ export default function OnchainDepositOrdersPage() {
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">链上入金订单</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Crypto入金订单</h1>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              查看和管理链上充值订单
+              查看和管理加密货币充值订单
             </p>
           </div>
           <Button className="bg-custom-green hover:bg-green-600">
@@ -21,7 +21,7 @@ export default function OnchainDepositOrdersPage() {
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <p className="text-gray-600 dark:text-gray-400">链上入金订单功能开发中...</p>
+        <p className="text-gray-600 dark:text-gray-400">Crypto入金订单功能开发中...</p>
       </div>
     </div>
   )
