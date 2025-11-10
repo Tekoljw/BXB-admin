@@ -360,24 +360,8 @@ export default function CustodialInterfacesPage() {
                 {getStatusBadge(item.status)}
               </div>
 
-              <div className="space-y-3 mb-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">账号信息</p>
-                    <p className="text-sm text-gray-900 dark:text-white font-medium">{item.accountName}</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">{item.accountPhone}</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">{item.accountEmail}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">买币接口代码</p>
-                    <p className="text-xs font-mono text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded break-all">
-                      {item.buyInterfaceCode}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
                   <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
                     <div className="flex items-center gap-2 mb-1">
                       <DollarSign className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -420,55 +404,6 @@ export default function CustodialInterfacesPage() {
                     </p>
                   </div>
                 </div>
-
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    创建时间：{item.createdAt}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleEdit(item)}
-                  className="flex-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20"
-                >
-                  <Edit className="w-4 h-4 mr-1" />
-                  编辑
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleConfig(item)}
-                  className="flex-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50 dark:text-purple-400 dark:hover:bg-purple-900/20"
-                >
-                  <Settings className="w-4 h-4 mr-1" />
-                  配置
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleDisable(item)}
-                  className={
-                    item.status === "inactive"
-                      ? "flex-1 text-green-600 hover:text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20"
-                      : "flex-1 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
-                  }
-                >
-                  {item.status === "inactive" ? (
-                    <>
-                      <Eye className="w-4 h-4 mr-1" />
-                      启用
-                    </>
-                  ) : (
-                    <>
-                      <Ban className="w-4 h-4 mr-1" />
-                      停用
-                    </>
-                  )}
-                </Button>
               </div>
             </div>
           </Card>
