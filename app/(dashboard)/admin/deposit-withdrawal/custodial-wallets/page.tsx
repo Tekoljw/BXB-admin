@@ -361,18 +361,20 @@ export default function CustodialInterfacesPage() {
               </div>
 
               <div className="space-y-3 mb-4">
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">账号信息</p>
-                  <p className="text-sm text-gray-900 dark:text-white font-medium">{item.accountName}</p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">{item.accountPhone}</p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">{item.accountEmail}</p>
-                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">账号信息</p>
+                    <p className="text-sm text-gray-900 dark:text-white font-medium">{item.accountName}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">{item.accountPhone}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">{item.accountEmail}</p>
+                  </div>
 
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">买币接口代码</p>
-                  <p className="text-xs font-mono text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-                    {item.buyInterfaceCode}
-                  </p>
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">买币接口代码</p>
+                    <p className="text-xs font-mono text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded break-all">
+                      {item.buyInterfaceCode}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200 dark:border-gray-700">
