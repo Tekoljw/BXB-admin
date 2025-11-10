@@ -156,6 +156,8 @@ export default function CustodialInterfacesPage() {
   const [showConfigSheet, setShowConfigSheet] = useState(false)
   const [showDisableDialog, setShowDisableDialog] = useState(false)
   const [selectedInterface, setSelectedInterface] = useState<CustodialInterface | null>(null)
+  const [editingWeightId, setEditingWeightId] = useState<string | null>(null)
+  const [tempWeight, setTempWeight] = useState<string>("")
   
   const [newInterface, setNewInterface] = useState({
     providerId: "",
@@ -315,13 +317,30 @@ export default function CustodialInterfacesPage() {
     ))
   }
 
-  const handleWeightChange = (item: CustodialInterface, newWeight: string) => {
-    const weight = parseInt(newWeight) || 0
-    if (weight < 0 || weight > 100) return
+  const handleWeightClick = (item: CustodialInterface) => {
+    setEditingWeightId(item.id)
+    setTempWeight(item.weight.toString())
+  }
+
+  const handleWeightBlur = (item: CustodialInterface) => {
+    const weight = parseInt(tempWeight) || 0
+    const validWeight = Math.min(Math.max(weight, 0), 100)
     
     setInterfaces(interfaces.map(i =>
-      i.id === item.id ? { ...i, weight } : i
+      i.id === item.id ? { ...i, weight: validWeight } : i
     ))
+    
+    setEditingWeightId(null)
+    setTempWeight("")
+  }
+
+  const handleWeightKeyDown = (e: React.KeyboardEvent, item: CustodialInterface) => {
+    if (e.key === 'Enter') {
+      handleWeightBlur(item)
+    } else if (e.key === 'Escape') {
+      setEditingWeightId(null)
+      setTempWeight("")
+    }
   }
 
   return (
@@ -391,14 +410,26 @@ export default function CustodialInterfacesPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-gray-600 dark:text-gray-400">分配权重：</span>
-                    <Input
-                      type="number"
-                      min="0"
-                      max="100"
-                      value={item.weight}
-                      onChange={(e) => handleWeightChange(item, e.target.value)}
-                      className="w-16 h-7 text-xs text-center px-2"
-                    />
+                    {editingWeightId === item.id ? (
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={tempWeight}
+                        onChange={(e) => setTempWeight(e.target.value)}
+                        onBlur={() => handleWeightBlur(item)}
+                        onKeyDown={(e) => handleWeightKeyDown(e, item)}
+                        className="w-16 h-7 text-xs text-center px-2"
+                        autoFocus
+                      />
+                    ) : (
+                      <span
+                        onClick={() => handleWeightClick(item)}
+                        className="w-16 h-7 text-xs font-semibold text-gray-900 dark:text-white flex items-center justify-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded border border-gray-300 dark:border-gray-600"
+                      >
+                        {item.weight}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
