@@ -269,16 +269,22 @@ export default function CustodialInterfacesPage() {
 
   return (
     <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">托管钱包接口管理</h1>
+      <div className="mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">托管钱包接口管理</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              管理托管钱包接口和配置
+            </p>
+          </div>
           <Button onClick={() => setShowAddDialog(true)} className="bg-custom-green hover:bg-custom-green/90">
             <Plus className="w-4 h-4 mr-2" />
             添加接口
           </Button>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">接口总数</p>
@@ -462,7 +468,6 @@ export default function CustodialInterfacesPage() {
             </div>
           )}
         </div>
-      </div>
 
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent className="max-w-2xl">
