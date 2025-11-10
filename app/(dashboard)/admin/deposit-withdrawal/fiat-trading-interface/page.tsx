@@ -164,6 +164,7 @@ export default function FiatTradingInterfacePage() {
     accountPhone: "",
     accountEmail: "",
     buyInterfaceCode: "",
+    sortOrder: "1",
   })
 
   const filteredInterfaces = interfaces
@@ -211,6 +212,7 @@ export default function FiatTradingInterfacePage() {
       accountPhone: item.accountPhone,
       accountEmail: item.accountEmail,
       buyInterfaceCode: item.buyInterfaceCode,
+      sortOrder: item.sortOrder.toString(),
     })
     setShowEditDialog(true)
   }
@@ -274,6 +276,9 @@ export default function FiatTradingInterfacePage() {
       hour12: false
     }).replace(/\//g, '-')
     
+    const sortOrder = parseInt(newInterface.sortOrder) || 1
+    const validSortOrder = Math.min(Math.max(sortOrder, 1), 20)
+    
     const newInterfaceData: FiatTradingInterface = {
       id: newId,
       providerId: newInterface.providerId,
@@ -288,7 +293,7 @@ export default function FiatTradingInterfacePage() {
       totalFee: 0,
       buyEnabled: true,
       sellEnabled: true,
-      sortOrder: interfaces.length + 1
+      sortOrder: validSortOrder
     }
     
     setInterfaces([...interfaces, newInterfaceData])
@@ -300,11 +305,15 @@ export default function FiatTradingInterfacePage() {
       accountPhone: "",
       accountEmail: "",
       buyInterfaceCode: "",
+      sortOrder: "1",
     })
   }
 
   const handleSaveEdit = () => {
     if (!selectedInterface) return
+    
+    const sortOrder = parseInt(newInterface.sortOrder) || 1
+    const validSortOrder = Math.min(Math.max(sortOrder, 1), 20)
     
     setInterfaces(interfaces.map(item => 
       item.id === selectedInterface.id 
@@ -316,6 +325,7 @@ export default function FiatTradingInterfacePage() {
             accountPhone: newInterface.accountPhone,
             accountEmail: newInterface.accountEmail,
             buyInterfaceCode: newInterface.buyInterfaceCode,
+            sortOrder: validSortOrder,
           }
         : item
     ))
@@ -329,6 +339,7 @@ export default function FiatTradingInterfacePage() {
       accountPhone: "",
       accountEmail: "",
       buyInterfaceCode: "",
+      sortOrder: "1",
     })
   }
 
@@ -593,6 +604,17 @@ export default function FiatTradingInterfacePage() {
                 onChange={(e) => setNewInterface({ ...newInterface, buyInterfaceCode: e.target.value })}
               />
             </div>
+            <div className="space-y-2">
+              <Label>默认排序 * (1-20)</Label>
+              <Input
+                type="number"
+                min="1"
+                max="20"
+                placeholder="例如: 1"
+                value={newInterface.sortOrder}
+                onChange={(e) => setNewInterface({ ...newInterface, sortOrder: e.target.value })}
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAddDialog(false)}>
@@ -655,6 +677,16 @@ export default function FiatTradingInterfacePage() {
               <Input
                 value={newInterface.buyInterfaceCode}
                 onChange={(e) => setNewInterface({ ...newInterface, buyInterfaceCode: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>默认排序 * (1-20)</Label>
+              <Input
+                type="number"
+                min="1"
+                max="20"
+                value={newInterface.sortOrder}
+                onChange={(e) => setNewInterface({ ...newInterface, sortOrder: e.target.value })}
               />
             </div>
           </div>

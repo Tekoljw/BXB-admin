@@ -162,10 +162,7 @@ export default function CustodialInterfacesPage() {
   const [newInterface, setNewInterface] = useState({
     providerId: "",
     providerName: "",
-    accountName: "",
-    accountPhone: "",
-    accountEmail: "",
-    buyInterfaceCode: "",
+    weight: "0",
   })
 
   const filteredInterfaces = interfaces.filter(item => {
@@ -207,10 +204,7 @@ export default function CustodialInterfacesPage() {
     setNewInterface({
       providerId: item.providerId,
       providerName: item.providerName,
-      accountName: item.accountName,
-      accountPhone: item.accountPhone,
-      accountEmail: item.accountEmail,
-      buyInterfaceCode: item.buyInterfaceCode,
+      weight: item.weight.toString(),
     })
     setShowEditDialog(true)
   }
@@ -237,21 +231,24 @@ export default function CustodialInterfacesPage() {
       hour12: false
     }).replace(/\//g, '-')
     
+    const weight = parseInt(newInterface.weight) || 0
+    const validWeight = Math.min(Math.max(weight, 0), 100)
+    
     const newInterfaceData: CustodialInterface = {
       id: newId,
       providerId: newInterface.providerId,
       providerName: newInterface.providerName,
-      accountName: newInterface.accountName,
-      accountPhone: newInterface.accountPhone,
-      accountEmail: newInterface.accountEmail,
-      buyInterfaceCode: newInterface.buyInterfaceCode,
+      accountName: "",
+      accountPhone: "",
+      accountEmail: "",
+      buyInterfaceCode: "",
       status: "active",
       createdAt: now,
       lastMonthFee: 0,
       totalFee: 0,
       appliedAddresses: 0,
       usedAddresses: 0,
-      weight: 0
+      weight: validWeight
     }
     
     setInterfaces([...interfaces, newInterfaceData])
@@ -259,15 +256,15 @@ export default function CustodialInterfacesPage() {
     setNewInterface({
       providerId: "",
       providerName: "",
-      accountName: "",
-      accountPhone: "",
-      accountEmail: "",
-      buyInterfaceCode: "",
+      weight: "0",
     })
   }
 
   const handleSaveEdit = () => {
     if (!selectedInterface) return
+    
+    const weight = parseInt(newInterface.weight) || 0
+    const validWeight = Math.min(Math.max(weight, 0), 100)
     
     setInterfaces(interfaces.map(item => 
       item.id === selectedInterface.id 
@@ -275,10 +272,7 @@ export default function CustodialInterfacesPage() {
             ...item,
             providerId: newInterface.providerId,
             providerName: newInterface.providerName,
-            accountName: newInterface.accountName,
-            accountPhone: newInterface.accountPhone,
-            accountEmail: newInterface.accountEmail,
-            buyInterfaceCode: newInterface.buyInterfaceCode,
+            weight: validWeight,
           }
         : item
     ))
@@ -288,10 +282,7 @@ export default function CustodialInterfacesPage() {
     setNewInterface({
       providerId: "",
       providerName: "",
-      accountName: "",
-      accountPhone: "",
-      accountEmail: "",
-      buyInterfaceCode: "",
+      weight: "0",
     })
   }
 
@@ -491,18 +482,18 @@ export default function CustodialInterfacesPage() {
       )}
 
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>添加托管钱包接口</DialogTitle>
             <DialogDescription>
               填写以下信息以添加新的托管钱包接口
             </DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 py-4">
+          <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label>提供商编号 *</Label>
               <Input
-                placeholder="例如: PRV001"
+                placeholder="例如: COBO001"
                 value={newInterface.providerId}
                 onChange={(e) => setNewInterface({ ...newInterface, providerId: e.target.value })}
               />
@@ -516,36 +507,14 @@ export default function CustodialInterfacesPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>账号名称 *</Label>
+              <Label>分配权重 * (0-100)</Label>
               <Input
-                placeholder="例如: service_account_001"
-                value={newInterface.accountName}
-                onChange={(e) => setNewInterface({ ...newInterface, accountName: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>账号手机号 *</Label>
-              <Input
-                placeholder="例如: +86 138 0000 0001"
-                value={newInterface.accountPhone}
-                onChange={(e) => setNewInterface({ ...newInterface, accountPhone: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2 col-span-2">
-              <Label>账号邮箱 *</Label>
-              <Input
-                type="email"
-                placeholder="例如: account@example.com"
-                value={newInterface.accountEmail}
-                onChange={(e) => setNewInterface({ ...newInterface, accountEmail: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2 col-span-2">
-              <Label>买币接口代码 *</Label>
-              <Input
-                placeholder="例如: COBO_CUSTODY_001"
-                value={newInterface.buyInterfaceCode}
-                onChange={(e) => setNewInterface({ ...newInterface, buyInterfaceCode: e.target.value })}
+                type="number"
+                min="0"
+                max="100"
+                placeholder="例如: 30"
+                value={newInterface.weight}
+                onChange={(e) => setNewInterface({ ...newInterface, weight: e.target.value })}
               />
             </div>
           </div>
@@ -561,14 +530,14 @@ export default function CustodialInterfacesPage() {
       </Dialog>
 
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>编辑接口信息</DialogTitle>
             <DialogDescription>
               修改托管钱包接口的基本信息
             </DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 py-4">
+          <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label>提供商编号 *</Label>
               <Input
@@ -584,32 +553,13 @@ export default function CustodialInterfacesPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>账号名称 *</Label>
+              <Label>分配权重 * (0-100)</Label>
               <Input
-                value={newInterface.accountName}
-                onChange={(e) => setNewInterface({ ...newInterface, accountName: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>账号手机号 *</Label>
-              <Input
-                value={newInterface.accountPhone}
-                onChange={(e) => setNewInterface({ ...newInterface, accountPhone: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2 col-span-2">
-              <Label>账号邮箱 *</Label>
-              <Input
-                type="email"
-                value={newInterface.accountEmail}
-                onChange={(e) => setNewInterface({ ...newInterface, accountEmail: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2 col-span-2">
-              <Label>买币接口代码 *</Label>
-              <Input
-                value={newInterface.buyInterfaceCode}
-                onChange={(e) => setNewInterface({ ...newInterface, buyInterfaceCode: e.target.value })}
+                type="number"
+                min="0"
+                max="100"
+                value={newInterface.weight}
+                onChange={(e) => setNewInterface({ ...newInterface, weight: e.target.value })}
               />
             </div>
           </div>
