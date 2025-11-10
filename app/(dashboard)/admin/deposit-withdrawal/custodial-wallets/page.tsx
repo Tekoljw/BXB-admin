@@ -1,9 +1,10 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Plus, Edit, Settings, Ban, Check, X, Eye, EyeOff } from "lucide-react"
+import { Search, Plus, Edit, Settings, Ban, Check, Eye, EyeOff, DollarSign, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Card } from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
@@ -40,6 +41,8 @@ interface CustodialInterface {
   buyInterfaceCode: string
   status: "active" | "inactive" | "suspended"
   createdAt: string
+  lastMonthFee: number
+  totalFee: number
 }
 
 const initialMockInterfaces: CustodialInterface[] = [
@@ -52,7 +55,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     accountEmail: "account001@bepay.com",
     buyInterfaceCode: "BEPAY_BUY_USDT_001",
     status: "active",
-    createdAt: "2024-01-15 10:30:00"
+    createdAt: "2024-01-15 10:30:00",
+    lastMonthFee: 12580.50,
+    totalFee: 256789.30
   },
   {
     id: "CI002",
@@ -63,7 +68,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     accountEmail: "account002@quickwallet.com",
     buyInterfaceCode: "QUICK_BUY_USDT_002",
     status: "active",
-    createdAt: "2024-02-20 14:15:00"
+    createdAt: "2024-02-20 14:15:00",
+    lastMonthFee: 8960.20,
+    totalFee: 178450.80
   },
   {
     id: "CI003",
@@ -74,7 +81,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     accountEmail: "account003@cloudwallet.com",
     buyInterfaceCode: "CLOUD_BUY_USDT_003",
     status: "inactive",
-    createdAt: "2024-03-10 09:45:00"
+    createdAt: "2024-03-10 09:45:00",
+    lastMonthFee: 0,
+    totalFee: 95620.40
   },
   {
     id: "CI004",
@@ -85,7 +94,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     accountEmail: "account004@speedwallet.com",
     buyInterfaceCode: "SPEED_BUY_USDT_004",
     status: "active",
-    createdAt: "2024-04-05 16:20:00"
+    createdAt: "2024-04-05 16:20:00",
+    lastMonthFee: 15420.75,
+    totalFee: 312560.90
   },
   {
     id: "CI005",
@@ -96,7 +107,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     accountEmail: "account005@securewallet.com",
     buyInterfaceCode: "SECURE_BUY_USDT_005",
     status: "suspended",
-    createdAt: "2024-05-12 11:10:00"
+    createdAt: "2024-05-12 11:10:00",
+    lastMonthFee: 3250.00,
+    totalFee: 45870.20
   },
   {
     id: "CI006",
@@ -107,7 +120,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     accountEmail: "account006@smartpay.com",
     buyInterfaceCode: "SMART_BUY_USDT_006",
     status: "active",
-    createdAt: "2024-06-18 13:25:00"
+    createdAt: "2024-06-18 13:25:00",
+    lastMonthFee: 9870.60,
+    totalFee: 198540.30
   }
 ]
 
@@ -208,7 +223,9 @@ export default function CustodialInterfacesPage() {
       accountEmail: newInterface.accountEmail,
       buyInterfaceCode: newInterface.buyInterfaceCode,
       status: "active",
-      createdAt: now
+      createdAt: now,
+      lastMonthFee: 0,
+      totalFee: 0
     }
     
     setInterfaces([...interfaces, newInterfaceData])
@@ -284,190 +301,145 @@ export default function CustodialInterfacesPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">接口总数</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{interfaces.length}</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+        <div className="p-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                placeholder="搜索提供商名称、编号、账号或接口代码..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
             </div>
-          </div>
-          
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">正常运行</p>
-              <h3 className="text-2xl font-bold text-green-600 dark:text-green-400">
-                {interfaces.filter(i => i.status === "active").length}
-              </h3>
-            </div>
-          </div>
-          
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">已停用</p>
-              <h3 className="text-2xl font-bold text-gray-600 dark:text-gray-400">
-                {interfaces.filter(i => i.status === "inactive").length}
-              </h3>
-            </div>
-          </div>
-          
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">已暂停</p>
-              <h3 className="text-2xl font-bold text-red-600 dark:text-red-400">
-                {interfaces.filter(i => i.status === "suspended").length}
-              </h3>
-            </div>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full md:w-[180px]">
+                <SelectValue placeholder="状态筛选" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">全部状态</SelectItem>
+                <SelectItem value="active">正常</SelectItem>
+                <SelectItem value="inactive">停用</SelectItem>
+                <SelectItem value="suspended">暂停</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
+      </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="搜索提供商名称、编号、账号或接口代码..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredInterfaces.map((item) => (
+          <Card key={item.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                    {item.providerName}
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {item.providerId}
+                  </p>
+                </div>
+                {getStatusBadge(item.status)}
               </div>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full md:w-[180px]">
-                  <SelectValue placeholder="状态筛选" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">全部状态</SelectItem>
-                  <SelectItem value="active">正常</SelectItem>
-                  <SelectItem value="inactive">停用</SelectItem>
-                  <SelectItem value="suspended">暂停</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-700/50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    提供商编号
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    提供商名称
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    账号
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    手机号
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    邮箱
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    买币接口代码
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    状态
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    创建日期
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    操作
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredInterfaces.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {item.providerId}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {item.providerName}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {item.accountName}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {item.accountPhone}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {item.accountEmail}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-mono text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-                        {item.buyInterfaceCode}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {getStatusBadge(item.status)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {item.createdAt}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEdit(item)}
-                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleConfig(item)}
-                          className="text-purple-600 hover:text-purple-700 hover:bg-purple-50 dark:text-purple-400 dark:hover:bg-purple-900/20"
-                        >
-                          <Settings className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDisable(item)}
-                          className={
-                            item.status === "inactive"
-                              ? "text-green-600 hover:text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20"
-                              : "text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
-                          }
-                        >
-                          {item.status === "inactive" ? (
-                            <Eye className="w-4 h-4" />
-                          ) : (
-                            <Ban className="w-4 h-4" />
-                          )}
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              <div className="space-y-3 mb-4">
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">账号信息</p>
+                  <p className="text-sm text-gray-900 dark:text-white font-medium">{item.accountName}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">{item.accountPhone}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">{item.accountEmail}</p>
+                </div>
 
-          {filteredInterfaces.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400">没有找到符合条件的接口</p>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">买币接口代码</p>
+                  <p className="text-xs font-mono text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                    {item.buyInterfaceCode}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <DollarSign className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      <p className="text-xs text-gray-600 dark:text-gray-400">上月费用</p>
+                    </div>
+                    <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                      ${item.lastMonthFee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </p>
+                  </div>
+
+                  <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400" />
+                      <p className="text-xs text-gray-600 dark:text-gray-400">总费用</p>
+                    </div>
+                    <p className="text-lg font-bold text-green-600 dark:text-green-400">
+                      ${item.totalFee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    创建时间：{item.createdAt}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleEdit(item)}
+                  className="flex-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20"
+                >
+                  <Edit className="w-4 h-4 mr-1" />
+                  编辑
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleConfig(item)}
+                  className="flex-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50 dark:text-purple-400 dark:hover:bg-purple-900/20"
+                >
+                  <Settings className="w-4 h-4 mr-1" />
+                  配置
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleDisable(item)}
+                  className={
+                    item.status === "inactive"
+                      ? "flex-1 text-green-600 hover:text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20"
+                      : "flex-1 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                  }
+                >
+                  {item.status === "inactive" ? (
+                    <>
+                      <Eye className="w-4 h-4 mr-1" />
+                      启用
+                    </>
+                  ) : (
+                    <>
+                      <Ban className="w-4 h-4 mr-1" />
+                      停用
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
-          )}
+          </Card>
+        ))}
+      </div>
+
+      {filteredInterfaces.length === 0 && (
+        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+          <p className="text-gray-500 dark:text-gray-400">没有找到符合条件的接口</p>
         </div>
+      )}
 
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent className="max-w-2xl">
@@ -604,80 +576,92 @@ export default function CustodialInterfacesPage() {
       </Dialog>
 
       <Sheet open={showConfigSheet} onOpenChange={setShowConfigSheet}>
-        <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
+        <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>基础配置</SheetTitle>
+            <SheetTitle>接口基础配置</SheetTitle>
             <SheetDescription>
-              配置 {selectedInterface?.providerName} 的接口参数
+              配置 {selectedInterface?.providerName} 的基本参数
             </SheetDescription>
           </SheetHeader>
-          <div className="space-y-6 py-6">
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">API配置</h3>
-              <div className="space-y-2">
-                <Label>API密钥</Label>
-                <Input type="password" placeholder="••••••••••••••••" />
-              </div>
-              <div className="space-y-2">
-                <Label>API Secret</Label>
-                <Input type="password" placeholder="••••••••••••••••" />
-              </div>
-              <div className="space-y-2">
-                <Label>回调地址</Label>
-                <Input placeholder="https://api.example.com/callback" />
-              </div>
-            </div>
-
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">交易配置</h3>
+          {selectedInterface && (
+            <div className="space-y-4 py-6">
               <div className="space-y-4">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">API配置</h3>
                 <div className="space-y-2">
-                  <Label>单笔最小金额 (USDT)</Label>
-                  <Input type="number" placeholder="10" />
+                  <Label>API密钥</Label>
+                  <Input type="password" placeholder="输入API密钥" />
                 </div>
                 <div className="space-y-2">
-                  <Label>单笔最大金额 (USDT)</Label>
-                  <Input type="number" placeholder="50000" />
+                  <Label>API端点URL</Label>
+                  <Input placeholder="https://api.example.com" />
                 </div>
+                <div className="space-y-2">
+                  <Label>超时时间（秒）</Label>
+                  <Input type="number" placeholder="30" defaultValue="30" />
+                </div>
+              </div>
+
+              <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">费率配置</h3>
                 <div className="space-y-2">
                   <Label>手续费率 (%)</Label>
-                  <Input type="number" step="0.01" placeholder="0.5" />
+                  <Input type="number" step="0.01" placeholder="0.5" defaultValue="0.5" />
+                </div>
+                <div className="space-y-2">
+                  <Label>最低手续费 (USDT)</Label>
+                  <Input type="number" step="0.01" placeholder="1.0" defaultValue="1.0" />
                 </div>
               </div>
-            </div>
 
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">功能开关</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label>启用自动确认</Label>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">自动确认买币订单</p>
+              <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">限额配置</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>单笔最小金额 (USDT)</Label>
+                    <Input type="number" placeholder="10" defaultValue="10" />
                   </div>
-                  <Switch />
+                  <div className="space-y-2">
+                    <Label>单笔最大金额 (USDT)</Label>
+                    <Input type="number" placeholder="50000" defaultValue="50000" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>日累计限额 (USDT)</Label>
+                    <Input type="number" placeholder="100000" defaultValue="100000" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>月累计限额 (USDT)</Label>
+                    <Input type="number" placeholder="1000000" defaultValue="1000000" />
+                  </div>
                 </div>
+              </div>
+
+              <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">通知配置</h3>
                 <div className="flex items-center justify-between">
-                  <div>
-                    <Label>启用风控检测</Label>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">对交易进行风险检测</p>
-                  </div>
+                  <Label>启用订单通知</Label>
                   <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between">
-                  <div>
-                    <Label>启用限额保护</Label>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">超额自动拒绝订单</p>
-                  </div>
+                  <Label>启用异常通知</Label>
                   <Switch defaultChecked />
+                </div>
+                <div className="space-y-2">
+                  <Label>通知邮箱</Label>
+                  <Input type="email" placeholder="notify@example.com" />
                 </div>
               </div>
             </div>
-          </div>
+          )}
           <SheetFooter>
             <Button variant="outline" onClick={() => setShowConfigSheet(false)}>
               取消
             </Button>
-            <Button onClick={() => setShowConfigSheet(false)} className="bg-custom-green hover:bg-custom-green/90">
+            <Button
+              onClick={() => {
+                setShowConfigSheet(false)
+              }}
+              className="bg-custom-green hover:bg-custom-green/90"
+            >
               保存配置
             </Button>
           </SheetFooter>
@@ -691,9 +675,9 @@ export default function CustodialInterfacesPage() {
               {selectedInterface?.status === "inactive" ? "启用接口" : "停用接口"}
             </DialogTitle>
             <DialogDescription>
-              {selectedInterface?.status === "inactive"
-                ? `确定要启用 ${selectedInterface?.providerName} 的接口吗？`
-                : `确定要停用 ${selectedInterface?.providerName} 的接口吗？停用后将无法使用该接口进行交易。`
+              {selectedInterface?.status === "inactive" 
+                ? `确定要启用 ${selectedInterface?.providerName} 吗？启用后该接口将可以正常使用。`
+                : `确定要停用 ${selectedInterface?.providerName} 吗？停用后该接口将无法使用。`
               }
             </DialogDescription>
           </DialogHeader>
@@ -701,7 +685,7 @@ export default function CustodialInterfacesPage() {
             <Button variant="outline" onClick={() => setShowDisableDialog(false)}>
               取消
             </Button>
-            <Button 
+            <Button
               onClick={handleToggleStatus}
               className={
                 selectedInterface?.status === "inactive"
@@ -709,7 +693,7 @@ export default function CustodialInterfacesPage() {
                   : "bg-red-600 hover:bg-red-700"
               }
             >
-              {selectedInterface?.status === "inactive" ? "确认启用" : "确认停用"}
+              确定{selectedInterface?.status === "inactive" ? "启用" : "停用"}
             </Button>
           </DialogFooter>
         </DialogContent>
