@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Plus, Edit, Settings, Ban, Check, Eye, EyeOff, DollarSign, TrendingUp } from "lucide-react"
+import { Search, Plus, Edit, Settings, Ban, Check, Eye, EyeOff, DollarSign, TrendingUp, MapPin, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
@@ -43,6 +43,8 @@ interface CustodialInterface {
   createdAt: string
   lastMonthFee: number
   totalFee: number
+  appliedAddresses: number
+  usedAddresses: number
 }
 
 const initialMockInterfaces: CustodialInterface[] = [
@@ -57,7 +59,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     status: "active",
     createdAt: "2024-01-15 10:30:00",
     lastMonthFee: 12580.50,
-    totalFee: 256789.30
+    totalFee: 256789.30,
+    appliedAddresses: 500,
+    usedAddresses: 387
   },
   {
     id: "CI002",
@@ -70,7 +74,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     status: "active",
     createdAt: "2024-02-20 14:15:00",
     lastMonthFee: 8960.20,
-    totalFee: 178450.80
+    totalFee: 178450.80,
+    appliedAddresses: 300,
+    usedAddresses: 245
   },
   {
     id: "CI003",
@@ -83,7 +89,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     status: "inactive",
     createdAt: "2024-03-10 09:45:00",
     lastMonthFee: 0,
-    totalFee: 95620.40
+    totalFee: 95620.40,
+    appliedAddresses: 200,
+    usedAddresses: 200
   },
   {
     id: "CI004",
@@ -96,7 +104,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     status: "active",
     createdAt: "2024-04-05 16:20:00",
     lastMonthFee: 15420.75,
-    totalFee: 312560.90
+    totalFee: 312560.90,
+    appliedAddresses: 800,
+    usedAddresses: 652
   },
   {
     id: "CI005",
@@ -109,7 +119,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     status: "suspended",
     createdAt: "2024-05-12 11:10:00",
     lastMonthFee: 3250.00,
-    totalFee: 45870.20
+    totalFee: 45870.20,
+    appliedAddresses: 150,
+    usedAddresses: 98
   },
   {
     id: "CI006",
@@ -122,7 +134,9 @@ const initialMockInterfaces: CustodialInterface[] = [
     status: "active",
     createdAt: "2024-06-18 13:25:00",
     lastMonthFee: 9870.60,
-    totalFee: 198540.30
+    totalFee: 198540.30,
+    appliedAddresses: 400,
+    usedAddresses: 321
   }
 ]
 
@@ -225,7 +239,9 @@ export default function CustodialInterfacesPage() {
       status: "active",
       createdAt: now,
       lastMonthFee: 0,
-      totalFee: 0
+      totalFee: 0,
+      appliedAddresses: 0,
+      usedAddresses: 0
     }
     
     setInterfaces([...interfaces, newInterfaceData])
@@ -377,6 +393,28 @@ export default function CustodialInterfacesPage() {
                     </div>
                     <p className="text-lg font-bold text-green-600 dark:text-green-400">
                       ${item.totalFee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-3">
+                  <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <MapPin className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                      <p className="text-xs text-gray-600 dark:text-gray-400">已申请地址</p>
+                    </div>
+                    <p className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                      {item.appliedAddresses.toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CheckCircle2 className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                      <p className="text-xs text-gray-600 dark:text-gray-400">已使用地址</p>
+                    </div>
+                    <p className="text-lg font-bold text-orange-600 dark:text-orange-400">
+                      {item.usedAddresses.toLocaleString()}
                     </p>
                   </div>
                 </div>
