@@ -43,6 +43,9 @@ interface FiatTradingInterface {
   createdAt: string
   lastMonthFee: number
   totalFee: number
+  buyEnabled: boolean
+  sellEnabled: boolean
+  sortOrder: number
 }
 
 const initialMockInterfaces: FiatTradingInterface[] = [
@@ -57,7 +60,10 @@ const initialMockInterfaces: FiatTradingInterface[] = [
     status: "active",
     createdAt: "2024-01-15 10:30:00",
     lastMonthFee: 12580.50,
-    totalFee: 256789.30
+    totalFee: 256789.30,
+    buyEnabled: true,
+    sellEnabled: true,
+    sortOrder: 1
   },
   {
     id: "FI002",
@@ -70,7 +76,10 @@ const initialMockInterfaces: FiatTradingInterface[] = [
     status: "active",
     createdAt: "2024-02-20 14:15:00",
     lastMonthFee: 8960.20,
-    totalFee: 178450.80
+    totalFee: 178450.80,
+    buyEnabled: true,
+    sellEnabled: false,
+    sortOrder: 2
   },
   {
     id: "FI003",
@@ -83,7 +92,10 @@ const initialMockInterfaces: FiatTradingInterface[] = [
     status: "inactive",
     createdAt: "2024-03-10 09:45:00",
     lastMonthFee: 0,
-    totalFee: 95620.40
+    totalFee: 95620.40,
+    buyEnabled: false,
+    sellEnabled: false,
+    sortOrder: 3
   },
   {
     id: "FI004",
@@ -96,7 +108,10 @@ const initialMockInterfaces: FiatTradingInterface[] = [
     status: "active",
     createdAt: "2024-04-05 16:20:00",
     lastMonthFee: 15420.75,
-    totalFee: 312560.90
+    totalFee: 312560.90,
+    buyEnabled: false,
+    sellEnabled: true,
+    sortOrder: 4
   },
   {
     id: "FI005",
@@ -109,7 +124,10 @@ const initialMockInterfaces: FiatTradingInterface[] = [
     status: "suspended",
     createdAt: "2024-05-12 11:10:00",
     lastMonthFee: 3250.00,
-    totalFee: 45870.20
+    totalFee: 45870.20,
+    buyEnabled: true,
+    sellEnabled: true,
+    sortOrder: 5
   },
   {
     id: "FI006",
@@ -122,7 +140,10 @@ const initialMockInterfaces: FiatTradingInterface[] = [
     status: "active",
     createdAt: "2024-06-18 13:25:00",
     lastMonthFee: 9870.60,
-    totalFee: 198540.30
+    totalFee: 198540.30,
+    buyEnabled: true,
+    sellEnabled: true,
+    sortOrder: 6
   }
 ]
 
@@ -145,17 +166,19 @@ export default function FiatTradingInterfacePage() {
     buyInterfaceCode: "",
   })
 
-  const filteredInterfaces = interfaces.filter(item => {
-    const matchesSearch = 
-      item.providerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.providerId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.accountName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.buyInterfaceCode.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    const matchesStatus = statusFilter === "all" || item.status === statusFilter
-    
-    return matchesSearch && matchesStatus
-  })
+  const filteredInterfaces = interfaces
+    .filter(item => {
+      const matchesSearch = 
+        item.providerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.providerId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.accountName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.buyInterfaceCode.toLowerCase().includes(searchTerm.toLowerCase())
+      
+      const matchesStatus = statusFilter === "all" || item.status === statusFilter
+      
+      return matchesSearch && matchesStatus
+    })
+    .sort((a, b) => a.sortOrder - b.sortOrder)
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -202,6 +225,43 @@ export default function FiatTradingInterfacePage() {
     setShowDisableDialog(true)
   }
 
+  const handleStatusToggle = (item: FiatTradingInterface, checked: boolean) => {
+    setInterfaces(interfaces.map(i =>
+      i.id === item.id
+        ? { ...i, status: checked ? "active" : "suspended" }
+        : i
+    ))
+  }
+
+  const handleBuyToggle = (item: FiatTradingInterface, checked: boolean) => {
+    setInterfaces(interfaces.map(i =>
+      i.id === item.id
+        ? { ...i, buyEnabled: checked }
+        : i
+    ))
+  }
+
+  const handleSellToggle = (item: FiatTradingInterface, checked: boolean) => {
+    setInterfaces(interfaces.map(i =>
+      i.id === item.id
+        ? { ...i, sellEnabled: checked }
+        : i
+    ))
+  }
+
+  const handleSortOrderChange = (value: string) => {
+    if (!selectedInterface) return
+    
+    const updatedInterface = { ...selectedInterface, sortOrder: parseInt(value) }
+    setSelectedInterface(updatedInterface)
+    
+    setInterfaces(interfaces.map(item =>
+      item.id === selectedInterface.id
+        ? updatedInterface
+        : item
+    ))
+  }
+
   const handleAddInterface = () => {
     const newId = `FI${String(interfaces.length + 1).padStart(3, '0')}`
     const now = new Date().toLocaleString('zh-CN', {
@@ -225,7 +285,10 @@ export default function FiatTradingInterfacePage() {
       status: "active",
       createdAt: now,
       lastMonthFee: 0,
-      totalFee: 0
+      totalFee: 0,
+      buyEnabled: true,
+      sellEnabled: true,
+      sortOrder: interfaces.length + 1
     }
     
     setInterfaces([...interfaces, newInterfaceData])
@@ -341,7 +404,13 @@ export default function FiatTradingInterfacePage() {
                     {item.providerId}
                   </p>
                 </div>
-                {getStatusBadge(item.status)}
+                <div className="flex items-center gap-3">
+                  {getStatusBadge(item.status)}
+                  <Switch
+                    checked={item.status === "active"}
+                    onCheckedChange={(checked) => handleStatusToggle(item, checked)}
+                  />
+                </div>
               </div>
 
               <div className="space-y-3 mb-4">
@@ -362,6 +431,23 @@ export default function FiatTradingInterfacePage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+                    <span className="text-sm text-gray-700 dark:text-gray-300">买币</span>
+                    <Switch
+                      checked={item.buyEnabled}
+                      onCheckedChange={(checked) => handleBuyToggle(item, checked)}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+                    <span className="text-sm text-gray-700 dark:text-gray-300">卖币</span>
+                    <Switch
+                      checked={item.sellEnabled}
+                      onCheckedChange={(checked) => handleSellToggle(item, checked)}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-3">
                   <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
                     <div className="flex items-center gap-2 mb-1">
                       <DollarSign className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -650,6 +736,31 @@ export default function FiatTradingInterfacePage() {
                 <div className="space-y-2">
                   <Label>通知邮箱</Label>
                   <Input type="email" placeholder="notify@example.com" />
+                </div>
+              </div>
+
+              <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">排序配置</h3>
+                <div className="space-y-2">
+                  <Label>显示排序</Label>
+                  <Select 
+                    value={selectedInterface.sortOrder.toString()} 
+                    onValueChange={handleSortOrderChange}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="选择排序位置" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[...Array(20)].map((_, i) => (
+                        <SelectItem key={i + 1} value={(i + 1).toString()}>
+                          第 {i + 1} 位
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    数字越小排序越靠前，当前排序：第 {selectedInterface.sortOrder} 位
+                  </p>
                 </div>
               </div>
             </div>
