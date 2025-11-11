@@ -88,14 +88,14 @@ import UCardCommissionPage from "@/app/(dashboard)/admin/commission/ucard/page"
 import EscrowCommissionPage from "@/app/(dashboard)/admin/commission/escrow/page"
 import PaymentCommissionPage from "@/app/(dashboard)/admin/commission/payment/page"
 import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
-import DepositWithdrawalCurrenciesPage from "@/app/(dashboard)/admin/deposit-withdrawal/currencies/page"
-import CustodialWalletsPage from "@/app/(dashboard)/admin/deposit-withdrawal/custodial-wallets/page"
-import AddressesManagementPage from "@/app/(dashboard)/admin/deposit-withdrawal/addresses/page"
-import WalletAPIBusinessPage from "@/app/(dashboard)/admin/deposit-withdrawal/wallet-api-business/page"
-import FiatTradingInterfacePage from "@/app/(dashboard)/admin/deposit-withdrawal/fiat-trading-interface/page"
-import FiatTradingOrdersPage from "@/app/(dashboard)/admin/deposit-withdrawal/fiat-trading-orders/page"
-import OnchainDepositOrdersPage from "@/app/(dashboard)/admin/deposit-withdrawal/onchain-deposit-orders/page"
-import OnchainWithdrawalOrdersPage from "@/app/(dashboard)/admin/deposit-withdrawal/onchain-withdrawal-orders/page"
+import CryptoCurrenciesPage from "@/app/(dashboard)/admin/crypto/currencies/page"
+import CustodialWalletsPage from "@/app/(dashboard)/admin/crypto/custodial-wallets/page"
+import AddressesManagementPage from "@/app/(dashboard)/admin/crypto/addresses/page"
+import WalletAPIBusinessPage from "@/app/(dashboard)/admin/crypto/wallet-api-business/page"
+import FiatTradingInterfacePage from "@/app/(dashboard)/admin/crypto/fiat-trading-interface/page"
+import FiatTradingOrdersPage from "@/app/(dashboard)/admin/crypto/fiat-trading-orders/page"
+import OnchainDepositOrdersPage from "@/app/(dashboard)/admin/crypto/onchain-deposit-orders/page"
+import OnchainWithdrawalOrdersPage from "@/app/(dashboard)/admin/crypto/onchain-withdrawal-orders/page"
 import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
 import PermissionsManagementPage from "@/app/(dashboard)/admin/system/permissions/page"
 import RolesManagementPage from "@/app/(dashboard)/admin/system/roles/page"
@@ -130,7 +130,7 @@ export default function InstantNavigation() {
     if (path.startsWith('/admin/copytrade')) return 'copytrade'
     if (path.startsWith('/admin/finance')) return 'finance'
     if (path.startsWith('/admin/commission')) return 'commission'
-    if (path.startsWith('/admin/deposit-withdrawal')) return 'deposit-withdrawal'
+    if (path.startsWith('/admin/crypto')) return 'crypto'
     if (path.startsWith('/admin/fiat')) return 'fiat'
     if (path.startsWith('/admin/orders')) return 'orders'
     if (path.startsWith('/admin/system')) return 'system'
@@ -153,7 +153,7 @@ export default function InstantNavigation() {
       copytrade: '/admin/copytrade',
       finance: '/admin/finance',
       commission: '/admin/commission/futures',
-      'deposit-withdrawal': '/admin/deposit-withdrawal/currencies',
+      'crypto': '/admin/crypto/currencies',
       fiat: '/admin/fiat/reports',
       orders: '/admin/orders/funds',
       system: '/admin/system/permissions',
@@ -243,7 +243,7 @@ export default function InstantNavigation() {
       copytrade: '跟单管理',
       finance: '理财管理',
       commission: '佣金管理',
-      'deposit-withdrawal': '出入金',
+      'crypto': 'Crypto',
       fiat: '法币',
       orders: '财务管理',
       system: '系统管理',
@@ -350,14 +350,14 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/commission/escrow") return <EscrowCommissionPage />
     if (currentPage === "/admin/commission/payment") return <PaymentCommissionPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
-    if (currentPage === "/admin/deposit-withdrawal/currencies") return <DepositWithdrawalCurrenciesPage />
-    if (currentPage === "/admin/deposit-withdrawal/custodial-wallets") return <CustodialWalletsPage />
-    if (currentPage === "/admin/deposit-withdrawal/addresses") return <AddressesManagementPage />
-    if (currentPage === "/admin/deposit-withdrawal/wallet-api-business") return <WalletAPIBusinessPage />
-    if (currentPage === "/admin/deposit-withdrawal/fiat-trading-interface") return <FiatTradingInterfacePage />
-    if (currentPage === "/admin/deposit-withdrawal/fiat-trading-orders") return <FiatTradingOrdersPage />
-    if (currentPage === "/admin/deposit-withdrawal/onchain-deposit-orders") return <OnchainDepositOrdersPage />
-    if (currentPage === "/admin/deposit-withdrawal/onchain-withdrawal-orders") return <OnchainWithdrawalOrdersPage />
+    if (currentPage === "/admin/crypto/currencies") return <CryptoCurrenciesPage />
+    if (currentPage === "/admin/crypto/custodial-wallets") return <CustodialWalletsPage />
+    if (currentPage === "/admin/crypto/addresses") return <AddressesManagementPage />
+    if (currentPage === "/admin/crypto/wallet-api-business") return <WalletAPIBusinessPage />
+    if (currentPage === "/admin/crypto/fiat-trading-interface") return <FiatTradingInterfacePage />
+    if (currentPage === "/admin/crypto/fiat-trading-orders") return <FiatTradingOrdersPage />
+    if (currentPage === "/admin/crypto/onchain-deposit-orders") return <OnchainDepositOrdersPage />
+    if (currentPage === "/admin/crypto/onchain-withdrawal-orders") return <OnchainWithdrawalOrdersPage />
     if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />
     if (currentPage === "/admin/system") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/permissions") return <PermissionsManagementPage />

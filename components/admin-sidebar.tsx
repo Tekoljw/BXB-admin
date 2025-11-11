@@ -58,15 +58,15 @@ interface AdminSidebarV2Props {
 
 // 定义每个模块的二级菜单
 const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
-  "deposit-withdrawal": [
-    { path: "/admin/deposit-withdrawal/currencies", icon: DollarSign, label: "币种管理" },
-    { path: "/admin/deposit-withdrawal/custodial-wallets", icon: Wallet, label: "托管钱包接口" },
-    { path: "/admin/deposit-withdrawal/addresses", icon: Network, label: "地址管理" },
-    { path: "/admin/deposit-withdrawal/wallet-api-business", icon: Code, label: "钱包API业务" },
-    { path: "/admin/deposit-withdrawal/fiat-trading-interface", icon: ArrowLeftRight, label: "法币买卖接口" },
-    { path: "/admin/deposit-withdrawal/fiat-trading-orders", icon: List, label: "法币买卖订单" },
-    { path: "/admin/deposit-withdrawal/onchain-deposit-orders", icon: ArrowDownToLine, label: "Crypto入金订单" },
-    { path: "/admin/deposit-withdrawal/onchain-withdrawal-orders", icon: ArrowUpFromLine, label: "Crypto提币订单" },
+  "crypto": [
+    { path: "/admin/crypto/currencies", icon: DollarSign, label: "币种管理" },
+    { path: "/admin/crypto/custodial-wallets", icon: Wallet, label: "托管钱包接口" },
+    { path: "/admin/crypto/addresses", icon: Network, label: "地址管理" },
+    { path: "/admin/crypto/wallet-api-business", icon: Code, label: "钱包API业务" },
+    { path: "/admin/crypto/fiat-trading-interface", icon: ArrowLeftRight, label: "法币买卖接口" },
+    { path: "/admin/crypto/fiat-trading-orders", icon: List, label: "法币买卖订单" },
+    { path: "/admin/crypto/onchain-deposit-orders", icon: ArrowDownToLine, label: "Crypto入金订单" },
+    { path: "/admin/crypto/onchain-withdrawal-orders", icon: ArrowUpFromLine, label: "Crypto提币订单" },
   ],
   permissions: [
     { path: "/admin/permissions/business-lines", icon: BarChart3, label: "业务线" },
@@ -78,7 +78,7 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
   ],
   operations: [
     { path: "/admin/operations/dashboard", icon: BarChart3, label: "总仪表盘" },
-    { path: "/admin/operations/funds", icon: TrendingUp, label: "出入金分析报表" },
+    { path: "/admin/operations/funds", icon: TrendingUp, label: "Crypto分析报表" },
     { path: "/admin/operations/retention", icon: Activity, label: "留存与活跃分析" },
     { path: "/admin/operations/risk", icon: Shield, label: "风控配置" },
     { path: "/admin/operations/activities", icon: Zap, label: "活动配置" },

@@ -52,7 +52,7 @@ const modules = [
   { id: "ucard", label: "U卡", icon: CreditCard },
   { id: "escrow", label: "担保", icon: Shield },
   { id: "spot", label: "现货", icon: TrendingUp },
-  { id: "deposit-withdrawal", label: "出入金", icon: Repeat },
+  { id: "crypto", label: "Crypto", icon: Repeat },
   { id: "fiat", label: "法币", icon: Store },
   { id: "commission", label: "佣金", icon: Percent },
   { id: "maintenance", label: "运维", icon: Settings },
