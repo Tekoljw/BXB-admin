@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 
 // 用户资产类型定义
 interface UserAsset {
@@ -36,8 +36,6 @@ interface UserAsset {
 }
 
 export default function UserAssetsPage() {
-  const { toast } = useToast()
-  
   // 示例数据
   const [assets, setAssets] = useState<UserAsset[]>([
     {
@@ -141,19 +139,15 @@ export default function UserAssetsPage() {
 
     // 表单验证
     if (isNaN(amount) || amount <= 0) {
-      toast({
-        title: "冻结失败",
+      toast.error("冻结失败", {
         description: "请输入有效的冻结金额",
-        variant: "destructive",
       })
       return
     }
 
     if (amount > available) {
-      toast({
-        title: "冻结失败",
+      toast.error("冻结失败", {
         description: `冻结金额不能超过可用余额 $${selectedAsset.availableBalance}`,
-        variant: "destructive",
       })
       return
     }
@@ -176,8 +170,7 @@ export default function UserAssetsPage() {
       return asset
     }))
 
-    toast({
-      title: "冻结成功",
+    toast.success("冻结成功", {
       description: `已冻结用户 ${selectedAsset.username} 的 $${freezeAmount} ${selectedAsset.currency}`,
     })
 
@@ -204,29 +197,23 @@ export default function UserAssetsPage() {
 
     // 表单验证
     if (isNaN(amount) || amount <= 0) {
-      toast({
-        title: "扣除失败",
+      toast.error("扣除失败", {
         description: "请输入有效的扣除金额",
-        variant: "destructive",
       })
       return
     }
 
     // 基于实际可用总额（可用+留存）校验
     if (amount > actualTotal) {
-      toast({
-        title: "扣除失败",
+      toast.error("扣除失败", {
         description: `扣除金额不能超过实际可用总额 $${actualTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
-        variant: "destructive",
       })
       return
     }
 
     if (deductReason.trim().length < 2) {
-      toast({
-        title: "扣除失败",
+      toast.error("扣除失败", {
         description: "请输入扣除原因（至少2个字符）",
-        variant: "destructive",
       })
       return
     }
@@ -259,8 +246,7 @@ export default function UserAssetsPage() {
       return asset
     }))
 
-    toast({
-      title: "扣除成功",
+    toast.success("扣除成功", {
       description: `已从用户 ${selectedAsset.username} 扣除 $${deductAmount} ${selectedAsset.currency}`,
     })
 
