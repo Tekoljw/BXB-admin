@@ -274,6 +274,36 @@ export default function AddressesManagementPage() {
         </p>
       </div>
 
+      {/* 三级页签过滤系统 */}
+      <Tabs value={networkTab} onValueChange={setNetworkTab} className="mb-6">
+        <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <TabsTrigger value="all">全部网络</TabsTrigger>
+          <TabsTrigger value="ERC">ERC</TabsTrigger>
+          <TabsTrigger value="TRX">TRX</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value={networkTab} className="mt-0">
+          <Tabs value={providerTab} onValueChange={setProviderTab}>
+            <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mt-4">
+              <TabsTrigger value="all">全部供应商</TabsTrigger>
+              <TabsTrigger value="cobo">Cobo</TabsTrigger>
+              <TabsTrigger value="matrixport">Matrixport</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value={providerTab} className="mt-0">
+              <Tabs value={statusTab} onValueChange={setStatusTab}>
+                <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mt-4">
+                  <TabsTrigger value="all">全部状态</TabsTrigger>
+                  <TabsTrigger value="active">正常</TabsTrigger>
+                  <TabsTrigger value="frozen">已冻结</TabsTrigger>
+                  <TabsTrigger value="disabled">已禁用</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </TabsContent>
+          </Tabs>
+        </TabsContent>
+      </Tabs>
+
       {/* 搜索和筛选 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -314,36 +344,6 @@ export default function AddressesManagementPage() {
           </Select>
         </div>
       </div>
-
-      {/* 三级页签过滤系统 */}
-      <Tabs value={networkTab} onValueChange={setNetworkTab} className="mb-6">
-        <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-          <TabsTrigger value="all">全部网络</TabsTrigger>
-          <TabsTrigger value="ERC">ERC</TabsTrigger>
-          <TabsTrigger value="TRX">TRX</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value={networkTab} className="mt-0">
-          <Tabs value={providerTab} onValueChange={setProviderTab}>
-            <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mt-4">
-              <TabsTrigger value="all">全部供应商</TabsTrigger>
-              <TabsTrigger value="cobo">Cobo</TabsTrigger>
-              <TabsTrigger value="matrixport">Matrixport</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value={providerTab} className="mt-0">
-              <Tabs value={statusTab} onValueChange={setStatusTab}>
-                <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mt-4">
-                  <TabsTrigger value="all">全部状态</TabsTrigger>
-                  <TabsTrigger value="active">正常</TabsTrigger>
-                  <TabsTrigger value="frozen">已冻结</TabsTrigger>
-                  <TabsTrigger value="disabled">已禁用</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </TabsContent>
-          </Tabs>
-        </TabsContent>
-      </Tabs>
 
       {/* 地址列表 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">

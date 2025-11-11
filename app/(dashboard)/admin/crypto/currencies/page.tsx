@@ -247,13 +247,6 @@ export default function DepositWithdrawalCurrenciesPage() {
     setNetworkTab("all")
   }
 
-  const stats = {
-    total: currencies.length,
-    depositEnabled: currencies.filter(c => c.depositEnabled).length,
-    withdrawEnabled: currencies.filter(c => c.withdrawEnabled).length,
-    networks: new Set(currencies.flatMap(c => c.networks)).size,
-  }
-
   const toggleDeposit = (id: string) => {
     setCurrencies(prev => prev.map(currency => {
       if (currency.id === id) {
@@ -466,49 +459,6 @@ export default function DepositWithdrawalCurrenciesPage() {
           <Plus className="w-4 h-4 mr-2" />
           添加币种
         </Button>
-      </div>
-
-      {/* 统计卡片 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">总币种数</p>
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{stats.total}</h3>
-            </div>
-            <Activity className="w-8 h-8 text-blue-500" />
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">充值已启用</p>
-              <h3 className="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">{stats.depositEnabled}</h3>
-            </div>
-            <TrendingUp className="w-8 h-8 text-green-500" />
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">提现已启用</p>
-              <h3 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">{stats.withdrawEnabled}</h3>
-            </div>
-            <TrendingUp className="w-8 h-8 text-blue-500" />
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">支持网络</p>
-              <h3 className="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-2">{stats.networks}</h3>
-            </div>
-            <Network className="w-8 h-8 text-purple-500" />
-          </div>
-        </div>
       </div>
 
       {/* 搜索栏 */}
