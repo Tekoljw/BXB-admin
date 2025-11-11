@@ -107,7 +107,7 @@ export default function NumberSegmentsPage() {
       {/* 页面标题 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">号段管理</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">U卡号段管理</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             管理U卡号段的分配和使用情况
           </p>

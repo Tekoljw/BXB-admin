@@ -130,7 +130,7 @@ export default function AssetChangesPage() {
     <div className="p-6 space-y-6">
       {/* 页面标题 */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">用户资产变化列表</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">U卡账户划转记录（原共管资产变动记录）</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           查看和管理所有用户的资产变动记录
         </p>
