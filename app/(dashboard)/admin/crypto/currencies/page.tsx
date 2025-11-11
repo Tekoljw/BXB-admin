@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
-import { Search, Plus, Settings, Activity, TrendingUp, Network } from "lucide-react"
+import React, { useState, useMemo, useRef } from "react"
+import { Search, Plus, Settings, Activity, TrendingUp, Network, Upload, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
@@ -32,13 +32,14 @@ interface CryptoCurrency {
   icon: string
   category: CurrencyCategory
   networks: string[]
-  minDeposit: string
   minWithdraw: string
   withdrawFee: string
   depositEnabled: boolean
   withdrawEnabled: boolean
+  visible: boolean
   precision: number
   sort: number
+  logoUrl?: string
 }
 
 export default function DepositWithdrawalCurrenciesPage() {
@@ -49,6 +50,7 @@ export default function DepositWithdrawalCurrenciesPage() {
   const [editingConfig, setEditingConfig] = useState<Partial<CryptoCurrency>>({})
   const [categoryTab, setCategoryTab] = useState("all")
   const [networkTab, setNetworkTab] = useState("all")
+  const logoInputRef = useRef<HTMLInputElement>(null)
 
   // 示例币种数据
   const [currencies, setCurrencies] = useState<CryptoCurrency[]>([
@@ -59,11 +61,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       icon: '₮',
       category: 'stablecoin',
       networks: ['TRC20', 'ERC20', 'BSC', 'Polygon'],
-      minDeposit: '10.00',
       minWithdraw: '20.00',
       withdrawFee: '1.00',
       depositEnabled: true,
       withdrawEnabled: true,
+      visible: true,
       precision: 6,
       sort: 1,
     },
@@ -74,11 +76,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       icon: '₿',
       category: 'mainstream',
       networks: ['Bitcoin'],
-      minDeposit: '0.0001',
       minWithdraw: '0.001',
       withdrawFee: '0.0005',
       depositEnabled: true,
       withdrawEnabled: true,
+      visible: true,
       precision: 8,
       sort: 2,
     },
@@ -89,11 +91,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       icon: 'Ξ',
       category: 'mainstream',
       networks: ['Ethereum', 'Arbitrum', 'Optimism'],
-      minDeposit: '0.01',
       minWithdraw: '0.02',
       withdrawFee: '0.005',
       depositEnabled: true,
       withdrawEnabled: true,
+      visible: true,
       precision: 8,
       sort: 3,
     },
@@ -104,11 +106,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       icon: 'B',
       category: 'mainstream',
       networks: ['BSC'],
-      minDeposit: '0.01',
       minWithdraw: '0.02',
       withdrawFee: '0.001',
       depositEnabled: true,
       withdrawEnabled: false,
+      visible: true,
       precision: 8,
       sort: 4,
     },
@@ -119,11 +121,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       icon: '$',
       category: 'stablecoin',
       networks: ['ERC20', 'BSC', 'Polygon', 'Solana'],
-      minDeposit: '10.00',
       minWithdraw: '20.00',
       withdrawFee: '1.00',
       depositEnabled: true,
       withdrawEnabled: true,
+      visible: true,
       precision: 6,
       sort: 5,
     },
@@ -134,11 +136,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       icon: 'S',
       category: 'mainstream',
       networks: ['Solana'],
-      minDeposit: '0.1',
       minWithdraw: '0.2',
       withdrawFee: '0.01',
       depositEnabled: false,
       withdrawEnabled: false,
+      visible: false,
       precision: 8,
       sort: 6,
     },
@@ -149,11 +151,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       icon: 'Ð',
       category: 'meme',
       networks: ['Dogecoin'],
-      minDeposit: '10',
       minWithdraw: '20',
       withdrawFee: '5',
       depositEnabled: true,
       withdrawEnabled: true,
+      visible: true,
       precision: 8,
       sort: 7,
     },
@@ -164,11 +166,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       icon: '柴',
       category: 'meme',
       networks: ['ERC20'],
-      minDeposit: '1000000',
       minWithdraw: '2000000',
       withdrawFee: '500000',
       depositEnabled: true,
       withdrawEnabled: true,
+      visible: true,
       precision: 0,
       sort: 8,
     },
@@ -242,6 +244,31 @@ export default function DepositWithdrawalCurrenciesPage() {
     }))
   }
 
+  const toggleVisible = (id: string) => {
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === id) {
+        const newStatus = !currency.visible
+        toast.success(newStatus ? "显示已启用" : "显示已禁用", {
+          description: `${currency.symbol} 已${newStatus ? '显示' : '隐藏'}`,
+        })
+        return { ...currency, visible: newStatus }
+      }
+      return currency
+    }))
+  }
+
+  const updateSort = (id: string, newSort: number) => {
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === id) {
+        toast.success("排序已更新", {
+          description: `${currency.symbol} 排序已更新为 ${newSort}`,
+        })
+        return { ...currency, sort: newSort }
+      }
+      return currency
+    }))
+  }
+
   const handleConfigure = (currency: CryptoCurrency) => {
     setSelectedCurrency(currency)
     setEditingConfig({ ...currency })
@@ -267,6 +294,27 @@ export default function DepositWithdrawalCurrenciesPage() {
   const handleViewNetworks = (currency: CryptoCurrency) => {
     setSelectedCurrency(currency)
     setShowNetworksDialog(true)
+  }
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("文件过大", { description: "图片大小不能超过2MB" })
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const result = reader.result as string
+      setEditingConfig({ ...editingConfig, logoUrl: result })
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleRemoveLogo = () => {
+    setEditingConfig({ ...editingConfig, logoUrl: undefined })
   }
 
   return (
@@ -379,9 +427,6 @@ export default function DepositWithdrawalCurrenciesPage() {
                   支持网络
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  最小充值
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   最小提现
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -394,7 +439,10 @@ export default function DepositWithdrawalCurrenciesPage() {
                   提现
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  操作
+                  显示
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  排序
                 </th>
               </tr>
             </thead>
@@ -430,11 +478,6 @@ export default function DepositWithdrawalCurrenciesPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="text-gray-900 dark:text-white font-medium">
-                      {currency.minDeposit}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-gray-900 dark:text-white font-medium">
                       {currency.minWithdraw}
                     </span>
                   </td>
@@ -456,14 +499,19 @@ export default function DepositWithdrawalCurrenciesPage() {
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleConfigure(currency)}
-                      className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                    >
-                      <Settings className="w-4 h-4" />
-                    </Button>
+                    <Switch
+                      checked={currency.visible}
+                      onCheckedChange={() => toggleVisible(currency.id)}
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Input
+                      type="number"
+                      value={currency.sort}
+                      onChange={(e) => updateSort(currency.id, parseInt(e.target.value) || 0)}
+                      className="w-20 text-center"
+                      min="0"
+                    />
                   </td>
                 </tr>
               ))}
@@ -521,15 +569,6 @@ export default function DepositWithdrawalCurrenciesPage() {
               </div>
 
               <div>
-                <Label>最小充值金额</Label>
-                <Input 
-                  value={editingConfig.minDeposit || ''} 
-                  onChange={(e) => setEditingConfig({ ...editingConfig, minDeposit: e.target.value })}
-                  className="mt-2" 
-                />
-              </div>
-
-              <div>
                 <Label>最小提现金额</Label>
                 <Input 
                   value={editingConfig.minWithdraw || ''} 
@@ -554,6 +593,73 @@ export default function DepositWithdrawalCurrenciesPage() {
                   value={editingConfig.sort || 0} 
                   onChange={(e) => setEditingConfig({ ...editingConfig, sort: parseInt(e.target.value) })}
                   className="mt-2" 
+                />
+              </div>
+
+              <div>
+                <Label>LOGO上传</Label>
+                <div className="mt-2 space-y-2">
+                  <input
+                    ref={logoInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    className="hidden"
+                  />
+                  {editingConfig.logoUrl ? (
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
+                      <img 
+                        src={editingConfig.logoUrl} 
+                        alt="Logo预览" 
+                        className="w-12 h-12 object-contain rounded"
+                      />
+                      <span className="text-sm text-gray-600 dark:text-gray-400 flex-1">已上传LOGO</span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        type="button"
+                        onClick={handleRemoveLogo}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button 
+                      variant="outline" 
+                      type="button"
+                      onClick={() => logoInputRef.current?.click()}
+                      className="w-full"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      上传LOGO
+                    </Button>
+                  )}
+                  <p className="text-xs text-gray-500">支持JPG、PNG格式，最大2MB</p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Label>充值开关</Label>
+                <Switch
+                  checked={editingConfig.depositEnabled || false}
+                  onCheckedChange={(checked) => setEditingConfig({ ...editingConfig, depositEnabled: checked })}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Label>提币开关</Label>
+                <Switch
+                  checked={editingConfig.withdrawEnabled || false}
+                  onCheckedChange={(checked) => setEditingConfig({ ...editingConfig, withdrawEnabled: checked })}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Label>显示开关</Label>
+                <Switch
+                  checked={editingConfig.visible || false}
+                  onCheckedChange={(checked) => setEditingConfig({ ...editingConfig, visible: checked })}
                 />
               </div>
 
