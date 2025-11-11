@@ -134,6 +134,8 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/ucard/applications", icon: CreditCard, label: "U卡开卡记录" },
     { path: "/admin/ucard/recharge-records", icon: ArrowDownToLine, label: "U卡充值记录" },
     { path: "/admin/ucard/transactions", icon: ShoppingCart, label: "U卡消费记录" },
+    { path: "/admin/ucard/asset-changes", icon: Activity, label: "用户资产变化列表" },
+    { path: "/admin/ucard/assets", icon: Wallet, label: "用户资产列表" },
   ],
   spot: [
     { path: "/admin/spot/coins", icon: Coins, label: "币种管理" },
