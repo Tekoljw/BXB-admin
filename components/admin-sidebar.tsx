@@ -47,6 +47,7 @@ import {
   ArrowDownToLine,
   ArrowUpFromLine,
   Hash,
+  Code,
 } from "lucide-react"
 
 interface AdminSidebarV2Props {
@@ -61,6 +62,7 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/deposit-withdrawal/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/deposit-withdrawal/custodial-wallets", icon: Wallet, label: "托管钱包接口" },
     { path: "/admin/deposit-withdrawal/addresses", icon: Network, label: "地址管理" },
+    { path: "/admin/deposit-withdrawal/wallet-api-business", icon: Code, label: "钱包API业务" },
     { path: "/admin/deposit-withdrawal/fiat-trading-interface", icon: ArrowLeftRight, label: "法币买卖接口" },
     { path: "/admin/deposit-withdrawal/fiat-trading-orders", icon: List, label: "法币买卖订单" },
     { path: "/admin/deposit-withdrawal/onchain-deposit-orders", icon: ArrowDownToLine, label: "Crypto入金订单" },
