@@ -181,9 +181,27 @@ export default function AddressesManagementPage() {
       filtered = filtered.filter(a => a.provider === providerTab)
     }
 
-    // 第四步：状态页签过滤
+    // 第四步：状态/分配状态页签过滤
     if (statusTab !== "all") {
-      filtered = filtered.filter(a => a.status === statusTab)
+      filtered = filtered.filter(a => {
+        // 传统状态过滤（active, frozen, disabled）
+        if (statusTab === 'active' || statusTab === 'frozen' || statusTab === 'disabled') {
+          return a.status === statusTab
+        }
+        
+        // 分配状态过滤
+        if (statusTab === 'bound') {
+          // 已绑定用户地址：userId不为空且不是系统标记
+          return a.userId && a.userId !== 'SYSTEM' && a.userId !== 'PLATFORM'
+        }
+        
+        if (statusTab === 'idle') {
+          // 闲置地址：userId为空或是系统标记
+          return !a.userId || a.userId === 'SYSTEM' || a.userId === 'PLATFORM'
+        }
+        
+        return true
+      })
     }
 
     return filtered
@@ -299,6 +317,8 @@ export default function AddressesManagementPage() {
                   <TabsTrigger value="active">正常</TabsTrigger>
                   <TabsTrigger value="frozen">已冻结</TabsTrigger>
                   <TabsTrigger value="disabled">已禁用</TabsTrigger>
+                  <TabsTrigger value="bound">已绑定用户地址</TabsTrigger>
+                  <TabsTrigger value="idle">闲置地址</TabsTrigger>
                 </TabsList>
               </Tabs>
             </TabsContent>
@@ -363,6 +383,9 @@ export default function AddressesManagementPage() {
                   币种/网络
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  供应商
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   类型
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -412,6 +435,15 @@ export default function AddressesManagementPage() {
                     <div className="text-xs text-gray-500 dark:text-gray-400">
                       {address.network}
                     </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      address.provider === 'cobo' 
+                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                        : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
+                    }`}>
+                      {address.provider === 'cobo' ? 'Cobo' : 'Matrixport'}
+                    </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {getTypeBadge(address.addressType)}
