@@ -43,7 +43,8 @@ interface UCardUser {
   cardBalance: string // 卡内总余额
   totalRecharge: string // U卡总充值
   totalConsumption: string // U卡总消费
-  totalProfit: string // 贡献总利润
+  rechargeFeePro: string // 充值手续费利润
+  cardOpeningFeePro: string // 开卡费利润
   status: 'active' | 'frozen' | 'inactive'
   registeredAt: string
   cards: Card[] // 用户持有的卡片列表
@@ -65,7 +66,8 @@ export default function UCardUsersPage() {
       cardBalance: '25,320.00',
       totalRecharge: '50,000.00',
       totalConsumption: '35,678.90',
-      totalProfit: '1,234.56',
+      rechargeFeePro: '1,034.56',
+      cardOpeningFeePro: '200.00',
       status: 'active',
       registeredAt: '2024-01-15 10:30:00',
       cards: [
@@ -111,7 +113,8 @@ export default function UCardUsersPage() {
       cardBalance: '12,500.00',
       totalRecharge: '30,000.00',
       totalConsumption: '28,500.00',
-      totalProfit: '789.00',
+      rechargeFeePro: '689.00',
+      cardOpeningFeePro: '100.00',
       status: 'active',
       registeredAt: '2024-02-20 14:20:00',
       cards: [
@@ -139,7 +142,8 @@ export default function UCardUsersPage() {
       cardBalance: '48,234.56',
       totalRecharge: '100,000.00',
       totalConsumption: '85,234.56',
-      totalProfit: '2,567.89',
+      rechargeFeePro: '2,167.89',
+      cardOpeningFeePro: '400.00',
       status: 'active',
       registeredAt: '2024-01-05 08:00:00',
       cards: [
@@ -194,7 +198,8 @@ export default function UCardUsersPage() {
       cardBalance: '0',
       totalRecharge: '0',
       totalConsumption: '0',
-      totalProfit: '0',
+      rechargeFeePro: '0',
+      cardOpeningFeePro: '0',
       status: 'inactive',
       registeredAt: '2024-03-10 16:00:00',
       cards: [],
@@ -212,7 +217,8 @@ export default function UCardUsersPage() {
       cardBalance: '8,678.00',
       totalRecharge: '20,000.00',
       totalConsumption: '15,678.00',
-      totalProfit: '456.78',
+      rechargeFeePro: '356.78',
+      cardOpeningFeePro: '100.00',
       status: 'frozen',
       registeredAt: '2024-02-15 13:00:00',
       cards: [
@@ -416,27 +422,27 @@ export default function UCardUsersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                        ${user.accountBalance}
+                        {user.accountBalance} USDT
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
-                        ${user.cardBalance}
+                        {user.cardBalance} USDT
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <span className="text-sm font-medium text-green-600 dark:text-green-400">
-                        ${user.totalRecharge}
+                        {user.totalRecharge} USDT
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        ${user.totalConsumption}
+                        {user.totalConsumption} USDT
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <span className="text-sm font-medium text-orange-600 dark:text-orange-400">
-                        ${user.totalProfit}
+                        {(parseFloat(user.rechargeFeePro.replace(/,/g, '')) + parseFloat(user.cardOpeningFeePro.replace(/,/g, ''))).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} USDT
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
@@ -529,24 +535,28 @@ export default function UCardUsersPage() {
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">财务统计</h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-xs text-gray-500 dark:text-gray-400">账户余额(USDT)</div>
-                    <div className="text-xl font-bold text-blue-600 dark:text-blue-400 mt-1">${selectedUser.accountBalance}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">账户余额</div>
+                    <div className="text-xl font-bold text-blue-600 dark:text-blue-400 mt-1">{selectedUser.accountBalance} USDT</div>
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
                     <div className="text-xs text-gray-500 dark:text-gray-400">卡内总余额</div>
-                    <div className="text-xl font-bold text-purple-600 dark:text-purple-400 mt-1">${selectedUser.cardBalance}</div>
+                    <div className="text-xl font-bold text-purple-600 dark:text-purple-400 mt-1">{selectedUser.cardBalance} USDT</div>
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
                     <div className="text-xs text-gray-500 dark:text-gray-400">U卡总充值</div>
-                    <div className="text-xl font-bold text-green-600 dark:text-green-400 mt-1">${selectedUser.totalRecharge}</div>
+                    <div className="text-xl font-bold text-green-600 dark:text-green-400 mt-1">{selectedUser.totalRecharge} USDT</div>
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
                     <div className="text-xs text-gray-500 dark:text-gray-400">U卡总消费</div>
-                    <div className="text-xl font-bold text-gray-900 dark:text-white mt-1">${selectedUser.totalConsumption}</div>
+                    <div className="text-xl font-bold text-gray-900 dark:text-white mt-1">{selectedUser.totalConsumption} USDT</div>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 col-span-2">
-                    <div className="text-xs text-gray-500 dark:text-gray-400">贡献总利润</div>
-                    <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 mt-1">${selectedUser.totalProfit}</div>
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
+                    <div className="text-xs text-gray-500 dark:text-gray-400">充值手续费利润</div>
+                    <div className="text-xl font-bold text-orange-600 dark:text-orange-400 mt-1">{selectedUser.rechargeFeePro} USDT</div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
+                    <div className="text-xs text-gray-500 dark:text-gray-400">开卡费利润</div>
+                    <div className="text-xl font-bold text-pink-600 dark:text-pink-400 mt-1">{selectedUser.cardOpeningFeePro} USDT</div>
                   </div>
                 </div>
               </div>
@@ -586,7 +596,7 @@ export default function UCardUsersPage() {
                           </div>
                           <div className="col-span-2">
                             <div className="text-white/60 text-xs">余额</div>
-                            <div className="text-xl font-bold text-green-400">${card.balance}</div>
+                            <div className="text-xl font-bold text-green-400">{card.balance} USDT</div>
                           </div>
                         </div>
                       </div>
