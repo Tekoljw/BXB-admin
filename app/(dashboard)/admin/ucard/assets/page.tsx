@@ -265,7 +265,7 @@ export default function UserAssetsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       {/* 页面标题 */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">用户资产列表</h1>
