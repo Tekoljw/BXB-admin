@@ -84,22 +84,21 @@ export default function OnchainWithdrawalOrdersPage() {
   }
 
   return (
-    <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Crypto提币订单</h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                查看和管理加密货币提币订单
-              </p>
-            </div>
-            <Button className="bg-custom-green hover:bg-green-600">
-              <Download className="w-4 h-4 mr-2" />
-              导出订单
-            </Button>
+    <div className="p-6">
+      <div className="mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Crypto提币订单</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              查看和管理加密货币提币订单
+            </p>
           </div>
+          <Button className="bg-custom-green hover:bg-green-600">
+            <Download className="w-4 h-4 mr-2" />
+            导出订单
+          </Button>
         </div>
+      </div>
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
@@ -315,7 +314,6 @@ export default function OnchainWithdrawalOrdersPage() {
             </div>
           )}
         </div>
-      </div>
     </div>
   )
 }
