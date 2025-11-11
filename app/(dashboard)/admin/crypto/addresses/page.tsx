@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState } from "react"
-import { Search, Plus, Eye, Copy, Ban, CheckCircle, AlertCircle } from "lucide-react"
+import React, { useState, useMemo } from "react"
+import { Search, Eye, Copy, Ban, CheckCircle, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -18,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
 
 interface WalletAddress {
@@ -27,6 +28,7 @@ interface WalletAddress {
   userName: string
   currency: string
   network: string
+  provider: 'cobo' | 'matrixport'
   addressType: 'deposit' | 'withdraw' | 'hot' | 'cold'
   balance: string
   tag?: string
@@ -39,11 +41,13 @@ interface WalletAddress {
 export default function AddressesManagementPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [currencyFilter, setCurrencyFilter] = useState<string>("all")
-  const [networkFilter, setNetworkFilter] = useState<string>("all")
   const [typeFilter, setTypeFilter] = useState<string>("all")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
   const [selectedAddress, setSelectedAddress] = useState<WalletAddress | null>(null)
   const [showDetailDialog, setShowDetailDialog] = useState(false)
+  const [networkTab, setNetworkTab] = useState("all")
+  const [providerTab, setProviderTab] = useState("all")
+  const [statusTab, setStatusTab] = useState("all")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   // 示例地址数据
   const [addresses, setAddresses] = useState<WalletAddress[]>([
@@ -54,6 +58,7 @@ export default function AddressesManagementPage() {
       userName: '张三',
       currency: 'USDT',
       network: 'TRC20',
+      provider: 'cobo',
       addressType: 'deposit',
       balance: '1250.50',
       status: 'active',
@@ -67,6 +72,7 @@ export default function AddressesManagementPage() {
       userName: '李四',
       currency: 'ETH',
       network: 'Ethereum',
+      provider: 'matrixport',
       addressType: 'withdraw',
       balance: '0.5678',
       status: 'active',
@@ -80,6 +86,7 @@ export default function AddressesManagementPage() {
       userName: '王五',
       currency: 'BTC',
       network: 'Bitcoin',
+      provider: 'cobo',
       addressType: 'deposit',
       balance: '0.0125',
       status: 'active',
@@ -92,6 +99,7 @@ export default function AddressesManagementPage() {
       userName: '赵六',
       currency: 'USDT',
       network: 'ERC20',
+      provider: 'cobo',
       addressType: 'deposit',
       balance: '5000.00',
       status: 'frozen',
@@ -106,6 +114,7 @@ export default function AddressesManagementPage() {
       userName: '系统热钱包',
       currency: 'USDT',
       network: 'TRC20',
+      provider: 'matrixport',
       addressType: 'hot',
       balance: '150000.00',
       status: 'active',
@@ -119,6 +128,7 @@ export default function AddressesManagementPage() {
       userName: '系统冷钱包',
       currency: 'BTC',
       network: 'Bitcoin',
+      provider: 'cobo',
       addressType: 'cold',
       balance: '5.2500',
       status: 'active',
@@ -131,6 +141,7 @@ export default function AddressesManagementPage() {
       userName: '钱七',
       currency: 'BNB',
       network: 'BSC',
+      provider: 'matrixport',
       addressType: 'deposit',
       balance: '2.3400',
       status: 'disabled',
@@ -139,26 +150,45 @@ export default function AddressesManagementPage() {
     },
   ])
 
-  const filteredAddresses = addresses.filter(address => {
-    const matchesSearch = 
-      address.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      address.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      address.userId.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    const matchesCurrency = currencyFilter === "all" || address.currency === currencyFilter
-    const matchesNetwork = networkFilter === "all" || address.network === networkFilter
-    const matchesType = typeFilter === "all" || address.addressType === typeFilter
-    const matchesStatus = statusFilter === "all" || address.status === statusFilter
-    
-    return matchesSearch && matchesCurrency && matchesNetwork && matchesType && matchesStatus
-  })
+  // 三级链式过滤：搜索 → 网络 → 供应商 → 状态
+  const filteredAddresses = useMemo(() => {
+    // 第一步：搜索过滤
+    let filtered = addresses.filter(address => {
+      const matchesSearch = 
+        address.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        address.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        address.userId.toLowerCase().includes(searchTerm.toLowerCase())
+      
+      const matchesCurrency = currencyFilter === "all" || address.currency === currencyFilter
+      const matchesType = typeFilter === "all" || address.addressType === typeFilter
+      
+      return matchesSearch && matchesCurrency && matchesType
+    })
 
-  const stats = {
-    total: addresses.length,
-    active: addresses.filter(a => a.status === 'active').length,
-    frozen: addresses.filter(a => a.status === 'frozen').length,
-    systemWallets: addresses.filter(a => a.userId === 'SYSTEM').length,
-  }
+    // 第二步：网络页签过滤
+    if (networkTab !== "all") {
+      if (networkTab === "ERC") {
+        filtered = filtered.filter(a => a.network === "ERC20" || a.network === "Ethereum")
+      } else if (networkTab === "TRX") {
+        filtered = filtered.filter(a => a.network === "TRC20")
+      }
+    }
+
+    // 第三步：供应商页签过滤
+    if (providerTab !== "all") {
+      filtered = filtered.filter(a => a.provider === providerTab)
+    }
+
+    // 第四步：状态页签过滤
+    if (statusTab !== "all") {
+      filtered = filtered.filter(a => a.status === statusTab)
+    }
+
+    return filtered
+  }, [addresses, searchTerm, currencyFilter, typeFilter, networkTab, providerTab, statusTab])
+
+  // 显示的地址列表（分页）
+  const displayedAddresses = filteredAddresses.slice(0, displayedCount)
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -238,46 +268,15 @@ export default function AddressesManagementPage() {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">地址管理</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              管理用户钱包地址、系统热冷钱包和地址状态
-            </p>
-          </div>
-          <Button className="bg-custom-green hover:bg-green-600">
-            <Plus className="w-4 h-4 mr-2" />
-            添加地址
-          </Button>
-        </div>
-      </div>
-
-      {/* 统计卡片 */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">地址总数</p>
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</h3>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">正常地址</p>
-          <h3 className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.active}</h3>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">冻结地址</p>
-          <h3 className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.frozen}</h3>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">系统钱包</p>
-          <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.systemWallets}</h3>
-        </div>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">地址管理</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          管理用户钱包地址、系统热冷钱包和地址状态
+        </p>
       </div>
 
       {/* 搜索和筛选 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="relative md:col-span-2">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
@@ -301,20 +300,6 @@ export default function AddressesManagementPage() {
             </SelectContent>
           </Select>
 
-          <Select value={networkFilter} onValueChange={setNetworkFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="网络" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全部网络</SelectItem>
-              <SelectItem value="TRC20">TRC20</SelectItem>
-              <SelectItem value="ERC20">ERC20</SelectItem>
-              <SelectItem value="BSC">BSC</SelectItem>
-              <SelectItem value="Bitcoin">Bitcoin</SelectItem>
-              <SelectItem value="Ethereum">Ethereum</SelectItem>
-            </SelectContent>
-          </Select>
-
           <Select value={typeFilter} onValueChange={setTypeFilter}>
             <SelectTrigger>
               <SelectValue placeholder="类型" />
@@ -327,20 +312,38 @@ export default function AddressesManagementPage() {
               <SelectItem value="cold">冷钱包</SelectItem>
             </SelectContent>
           </Select>
-
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="状态" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全部状态</SelectItem>
-              <SelectItem value="active">正常</SelectItem>
-              <SelectItem value="frozen">已冻结</SelectItem>
-              <SelectItem value="disabled">已禁用</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
       </div>
+
+      {/* 三级页签过滤系统 */}
+      <Tabs value={networkTab} onValueChange={setNetworkTab} className="mb-6">
+        <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <TabsTrigger value="all">全部网络</TabsTrigger>
+          <TabsTrigger value="ERC">ERC</TabsTrigger>
+          <TabsTrigger value="TRX">TRX</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value={networkTab} className="mt-0">
+          <Tabs value={providerTab} onValueChange={setProviderTab}>
+            <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mt-4">
+              <TabsTrigger value="all">全部供应商</TabsTrigger>
+              <TabsTrigger value="cobo">Cobo</TabsTrigger>
+              <TabsTrigger value="matrixport">Matrixport</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value={providerTab} className="mt-0">
+              <Tabs value={statusTab} onValueChange={setStatusTab}>
+                <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mt-4">
+                  <TabsTrigger value="all">全部状态</TabsTrigger>
+                  <TabsTrigger value="active">正常</TabsTrigger>
+                  <TabsTrigger value="frozen">已冻结</TabsTrigger>
+                  <TabsTrigger value="disabled">已禁用</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </TabsContent>
+          </Tabs>
+        </TabsContent>
+      </Tabs>
 
       {/* 地址列表 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -375,7 +378,7 @@ export default function AddressesManagementPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredAddresses.map((address) => (
+              {displayedAddresses.map((address) => (
                 <tr key={address.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
@@ -472,6 +475,19 @@ export default function AddressesManagementPage() {
             <AlertCircle className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
             <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">未找到地址</p>
             <p className="text-gray-400 dark:text-gray-500 text-sm">尝试调整筛选条件</p>
+          </div>
+        )}
+
+        {/* 加载更多按钮 */}
+        {filteredAddresses.length > displayedCount && (
+          <div className="border-t border-gray-200 dark:border-gray-700 p-4 flex justify-center">
+            <Button
+              variant="outline"
+              onClick={() => setDisplayedCount(prev => prev + 20)}
+              className="min-w-[200px]"
+            >
+              加载更多 ({displayedCount} / {filteredAddresses.length})
+            </Button>
           </div>
         )}
       </div>
