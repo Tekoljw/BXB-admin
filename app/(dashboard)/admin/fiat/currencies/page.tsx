@@ -406,6 +406,16 @@ export default function CurrenciesPage() {
     }
   }
 
+  const toggleStatus = (id: string) => {
+    setCurrencies(currencies.map(currency => {
+      if (currency.id === id) {
+        const newStatus = currency.status === "active" ? "inactive" : "active"
+        return { ...currency, status: newStatus }
+      }
+      return currency
+    }))
+  }
+
   const openEditDialog = (currency: Currency) => {
     setSelectedCurrency({ ...currency })
     setIsEditDialogOpen(true)
@@ -668,13 +678,19 @@ export default function CurrenciesPage() {
                     )}
                   </td>
                   <td className="py-3 px-4">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      currency.status === 'active' 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
-                    }`}>
-                      {currency.status === 'active' ? '启用' : '禁用'}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        currency.status === 'active' 
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                          : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
+                      }`}>
+                        {currency.status === 'active' ? '启用' : '禁用'}
+                      </span>
+                      <Switch
+                        checked={currency.status === 'active'}
+                        onCheckedChange={() => toggleStatus(currency.id)}
+                      />
+                    </div>
                   </td>
                   <td className="py-3 px-4 text-sm text-gray-500 dark:text-gray-400">
                     {currency.createdAt}
