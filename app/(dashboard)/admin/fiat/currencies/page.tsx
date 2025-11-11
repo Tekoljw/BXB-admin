@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dialog"
 import { Card } from "@/components/ui/card"
 import { 
-  Search, 
   Plus, 
   Trash2, 
   Edit2,
@@ -24,6 +23,8 @@ import {
   AlertTriangle
 } from "lucide-react"
 import { LoadMoreButton } from "@/components/load-more-button"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
@@ -75,7 +76,7 @@ interface Currency {
 }
 
 export default function CurrenciesPage() {
-  const [searchTerm, setSearchTerm] = useState("")
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(null)
@@ -440,13 +441,13 @@ export default function CurrenciesPage() {
       </div>
 
       <Card className="p-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Search className="w-4 h-4 text-gray-400" />
-          <Input
+        <div className="mb-4">
+          <SearchControls
             placeholder="搜索币种代码、名称或简称..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1"
+            value={searchInput}
+            onChange={setSearchInput}
+            onSearch={handleSearch}
+            onReset={handleReset}
           />
         </div>
 

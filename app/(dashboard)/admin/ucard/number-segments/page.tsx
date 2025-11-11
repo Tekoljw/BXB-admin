@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Hash, Plus, Search } from 'lucide-react'
+import { Hash, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -10,6 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 
 // 号段类型定义
 interface NumberSegment {
@@ -73,7 +75,7 @@ export default function NumberSegmentsPage() {
     },
   ])
 
-  const [searchQuery, setSearchQuery] = useState('')
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [filterStatus, setFilterStatus] = useState('all')
 
   // 统计数据
@@ -86,8 +88,8 @@ export default function NumberSegmentsPage() {
 
   // 过滤号段
   const filteredSegments = segments.filter(segment => {
-    const matchesSearch = segment.segmentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         segment.supplier.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesSearch = segment.segmentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         segment.supplier.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = filterStatus === 'all' || segment.status === filterStatus
     return matchesSearch && matchesStatus
   })
@@ -140,16 +142,13 @@ export default function NumberSegmentsPage() {
 
       {/* 搜索和筛选 */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="搜索号段名称、供应商..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-custom-green"
-          />
-        </div>
+        <SearchControls
+          placeholder="搜索号段名称、供应商..."
+          value={searchInput}
+          onChange={setSearchInput}
+          onSearch={handleSearch}
+          onReset={handleReset}
+        />
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="全部状态" />

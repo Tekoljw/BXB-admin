@@ -1,9 +1,10 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Download, Coins } from "lucide-react"
+import { Download, Coins } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import {
   Select,
   SelectContent,
@@ -30,7 +31,7 @@ interface CryptoDepositOrder {
 }
 
 export default function OnchainDepositOrdersPage() {
-  const [searchTerm, setSearchTerm] = useState("")
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [chainFilter, setChainFilter] = useState<string>("all")
   const [currencyFilter, setCurrencyFilter] = useState<string>("all")
@@ -130,15 +131,14 @@ export default function OnchainDepositOrdersPage() {
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
           <div className="p-6 border-b border-gray-200 dark:border-gray-700">
             <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="搜索订单号、用户、币种或交易哈希..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
+              <SearchControls
+                placeholder="搜索订单号、用户、币种或交易哈希..."
+                value={searchInput}
+                onChange={setSearchInput}
+                onSearch={handleSearch}
+                onReset={handleReset}
+                className="flex-1"
+              />
               <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
                 <SelectTrigger className="w-full md:w-[150px]">
                   <SelectValue placeholder="币种筛选" />

@@ -1,9 +1,10 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Download, ShoppingCart, Eye, RefreshCcw, Ban } from "lucide-react"
+import { Download, ShoppingCart, Eye, RefreshCcw, Ban } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import {
   Select,
   SelectContent,
@@ -40,7 +41,7 @@ interface FiatTradingOrder {
 }
 
 export default function FiatTradingOrdersPage() {
-  const [searchTerm, setSearchTerm] = useState("")
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [typeFilter, setTypeFilter] = useState<string>("all")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [currencyFilter, setCurrencyFilter] = useState<string>("all")
@@ -256,15 +257,13 @@ export default function FiatTradingOrdersPage() {
       {/* 搜索和筛选 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="搜索订单ID、用户名..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
+          <SearchControls
+            placeholder="搜索订单ID、用户名..."
+            value={searchInput}
+            onChange={setSearchInput}
+            onSearch={handleSearch}
+            onReset={handleReset}
+          />
           
           <Select value={typeFilter} onValueChange={setTypeFilter}>
             <SelectTrigger>
@@ -307,13 +306,13 @@ export default function FiatTradingOrdersPage() {
           <Button 
             variant="outline" 
             onClick={() => {
-              setSearchTerm("")
+              handleReset()
               setTypeFilter("all")
               setStatusFilter("all")
               setCurrencyFilter("all")
             }}
           >
-            重置
+            重置筛选
           </Button>
         </div>
       </div>

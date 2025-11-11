@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { TrendingUp, Search, ArrowUpRight, ArrowDownRight } from 'lucide-react'
+import { TrendingUp, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -9,6 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 
 // 资产变化记录类型定义
 interface AssetChange {
@@ -101,7 +103,7 @@ export default function AssetChangesPage() {
     },
   ])
 
-  const [searchQuery, setSearchQuery] = useState('')
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [filterAsset, setFilterAsset] = useState('all')
   const [filterType, setFilterType] = useState('all')
 
@@ -118,9 +120,9 @@ export default function AssetChangesPage() {
 
   // 过滤变化记录
   const filteredChanges = changes.filter(change => {
-    const matchesSearch = change.userId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         change.username.includes(searchQuery) ||
-                         change.reason.includes(searchQuery)
+    const matchesSearch = change.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         change.username.includes(searchTerm) ||
+                         change.reason.includes(searchTerm)
     const matchesAsset = filterAsset === 'all' || change.assetName === filterAsset
     const matchesType = filterType === 'all' || change.changeType === filterType
     return matchesSearch && matchesAsset && matchesType
@@ -158,16 +160,13 @@ export default function AssetChangesPage() {
 
       {/* 搜索和筛选 */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="搜索用户ID、用户名、变动原因..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-custom-green"
-          />
-        </div>
+        <SearchControls
+          placeholder="搜索用户ID、用户名、变动原因..."
+          value={searchInput}
+          onChange={setSearchInput}
+          onSearch={handleSearch}
+          onReset={handleReset}
+        />
         <Select value={filterAsset} onValueChange={setFilterAsset}>
           <SelectTrigger className="w-full sm:w-40">
             <SelectValue placeholder="资产类型" />

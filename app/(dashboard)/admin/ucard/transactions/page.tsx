@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ShoppingCart, Search, Download } from 'lucide-react'
+import { ShoppingCart, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -10,6 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 
 // 消费记录类型定义
 interface Transaction {
@@ -90,7 +92,7 @@ export default function UCardTransactionsPage() {
     },
   ])
 
-  const [searchQuery, setSearchQuery] = useState('')
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [filterStatus, setFilterStatus] = useState('all')
 
   // 统计数据
@@ -103,10 +105,10 @@ export default function UCardTransactionsPage() {
 
   // 过滤交易
   const filteredTransactions = transactions.filter(tx => {
-    const matchesSearch = tx.transactionId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         tx.userId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         tx.username.includes(searchQuery) ||
-                         tx.merchant.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesSearch = tx.transactionId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         tx.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         tx.username.includes(searchTerm) ||
+                         tx.merchant.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = filterStatus === 'all' || tx.status === filterStatus
     return matchesSearch && matchesStatus
   })
@@ -159,16 +161,13 @@ export default function UCardTransactionsPage() {
 
       {/* 搜索和筛选 */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="搜索交易ID、用户、商户..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-custom-green"
-          />
-        </div>
+        <SearchControls
+          placeholder="搜索交易ID、用户、商户..."
+          value={searchInput}
+          onChange={setSearchInput}
+          onSearch={handleSearch}
+          onReset={handleReset}
+        />
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="全部状态" />

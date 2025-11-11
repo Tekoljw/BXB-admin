@@ -1,8 +1,10 @@
 "use client"
 
 import React, { useState } from "react"
-import { Search, Send, RefreshCw, Lock, RotateCcw, Info } from "lucide-react"
+import { Send, RefreshCw, Lock, Info } from "lucide-react"
 import { LoadMoreButton } from "@/components/load-more-button"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -152,12 +154,8 @@ const getPaymentInfo = (channel: string) => {
 
 export default function PayoutOrdersPage() {
   const [orders, setOrders] = useState<PayoutOrder[]>(mockPayoutOrders)
-  const [searchInput, setSearchInput] = useState("")
-  const [searchTerm, setSearchTerm] = useState("")
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [selectedCurrency, setSelectedCurrency] = useState("全部")
-  
-  const handleSearch = () => setSearchTerm(searchInput)
-  const handleReset = () => { setSearchInput(""); setSearchTerm("") }
   const [selectedChannel, setSelectedChannel] = useState("全部")
   const [selectedStatus, setSelectedStatus] = useState("全部")
   const [isResendDialogOpen, setIsResendDialogOpen] = useState(false)
@@ -331,30 +329,15 @@ export default function PayoutOrdersPage() {
             </SelectContent>
           </Select>
 
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
+          <div className="flex-1">
+            <SearchControls
               placeholder="搜索订单号、商户ID..."
               value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="pl-10"
+              onChange={setSearchInput}
+              onSearch={handleSearch}
+              onReset={handleReset}
             />
           </div>
-          <Button
-            onClick={handleSearch}
-            className="bg-custom-green hover:bg-custom-green/90 text-white"
-          >
-            <Search className="w-4 h-4 mr-1" />
-            搜索
-          </Button>
-          <Button
-            onClick={handleReset}
-            variant="outline"
-          >
-            <RotateCcw className="w-4 h-4 mr-1" />
-            重置
-          </Button>
         </div>
       </div>
 

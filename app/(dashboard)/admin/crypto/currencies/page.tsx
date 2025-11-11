@@ -1,9 +1,11 @@
 "use client"
 
 import React, { useState, useMemo, useRef } from "react"
-import { Search, Plus, Settings, Activity, TrendingUp, Network, Upload, X, Edit2, Check } from "lucide-react"
+import { Plus, Settings, Activity, TrendingUp, Network, Upload, X, Edit2, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Switch } from "@/components/ui/switch"
 import {
   Select,
@@ -51,7 +53,7 @@ interface CryptoCurrency {
 }
 
 export default function DepositWithdrawalCurrenciesPage() {
-  const [searchTerm, setSearchTerm] = useState("")
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [selectedCurrency, setSelectedCurrency] = useState<CryptoCurrency | null>(null)
   const [showConfigSheet, setShowConfigSheet] = useState(false)
   const [showNetworksDialog, setShowNetworksDialog] = useState(false)
@@ -462,17 +464,14 @@ export default function DepositWithdrawalCurrenciesPage() {
       </div>
 
       {/* 搜索栏 */}
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input
-            placeholder="搜索币种名称或代码..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
+      <SearchControls
+        placeholder="搜索币种名称或代码..."
+        value={searchInput}
+        onChange={setSearchInput}
+        onSearch={handleSearch}
+        onReset={handleReset}
+        className="max-w-2xl"
+      />
 
       {/* 两级页签过滤 */}
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">

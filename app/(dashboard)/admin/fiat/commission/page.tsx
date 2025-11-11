@@ -1,8 +1,10 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Eye, Search, Percent, ChevronLeft, ChevronRight, RotateCcw } from "lucide-react"
+import { Eye, Percent, ChevronLeft, ChevronRight } from "lucide-react"
 import { LoadMoreButton } from "@/components/load-more-button"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -277,12 +279,8 @@ const mockRecords: Record<string, CommissionRecord[]> = {
 
 export default function CommissionPage() {
   const [agents, setAgents] = useState<Agent[]>(mockAgents)
-  const [searchInput, setSearchInput] = useState("")
-  const [searchTerm, setSearchTerm] = useState("")
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [rankingType, setRankingType] = useState("today")
-  
-  const handleSearch = () => setSearchTerm(searchInput)
-  const handleReset = () => { setSearchInput(""); setSearchTerm("") }
   const [isCommissionDialogOpen, setIsCommissionDialogOpen] = useState(false)
   const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
@@ -425,32 +423,13 @@ export default function CommissionPage() {
           </Tabs>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="搜索代理商名称、邮箱、电话、代理商ID、商户ID或UserID..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="pl-10"
-            />
-          </div>
-          <Button
-            onClick={handleSearch}
-            className="bg-custom-green hover:bg-custom-green/90 text-white"
-          >
-            <Search className="w-4 h-4 mr-1" />
-            搜索
-          </Button>
-          <Button
-            onClick={handleReset}
-            variant="outline"
-          >
-            <RotateCcw className="w-4 h-4 mr-1" />
-            重置
-          </Button>
-        </div>
+        <SearchControls
+          placeholder="搜索代理商名称、邮箱、电话、代理商ID、商户ID或UserID..."
+          value={searchInput}
+          onChange={setSearchInput}
+          onSearch={handleSearch}
+          onReset={handleReset}
+        />
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">

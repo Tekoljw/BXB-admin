@@ -1,8 +1,10 @@
 "use client"
 
 import React, { useState } from "react"
-import { Eye, Search, RotateCcw, Edit, Check, X, Plus } from "lucide-react"
+import { Eye, Edit, Check, X, Plus } from "lucide-react"
 import { LoadMoreButton } from "@/components/load-more-button"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -122,8 +124,7 @@ const mockSuppliers: Supplier[] = [
 
 export default function SuppliersPage() {
   const [suppliers, setSuppliers] = useState<Supplier[]>(mockSuppliers)
-  const [searchInput, setSearchInput] = useState("")
-  const [searchTerm, setSearchTerm] = useState("")
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [isParamSheetOpen, setIsParamSheetOpen] = useState(false)
   const [isInterfaceSheetOpen, setIsInterfaceSheetOpen] = useState(false)
   const [isMerchantSheetOpen, setIsMerchantSheetOpen] = useState(false)
@@ -145,15 +146,6 @@ export default function SuppliersPage() {
     apiKey: "",
     status: "active" as "active" | "inactive" | "suspended"
   })
-
-  const handleSearch = () => {
-    setSearchTerm(searchInput)
-  }
-
-  const handleReset = () => {
-    setSearchInput("")
-    setSearchTerm("")
-  }
 
   const filteredSuppliers = suppliers.filter(supplier =>
     supplier.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -319,33 +311,13 @@ export default function SuppliersPage() {
           </Button>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="搜索供应商名称、TGID或TG账号..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-custom-green"
-            />
-          </div>
-          <Button
-            onClick={handleSearch}
-            className="bg-custom-green hover:bg-custom-green/90 text-white"
-          >
-            <Search className="w-4 h-4 mr-1" />
-            搜索
-          </Button>
-          <Button
-            onClick={handleReset}
-            variant="outline"
-          >
-            <RotateCcw className="w-4 h-4 mr-1" />
-            重置
-          </Button>
-        </div>
+        <SearchControls
+          placeholder="搜索供应商名称、TGID或TG账号..."
+          value={searchInput}
+          onChange={setSearchInput}
+          onSearch={handleSearch}
+          onReset={handleReset}
+        />
 
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="overflow-x-auto">

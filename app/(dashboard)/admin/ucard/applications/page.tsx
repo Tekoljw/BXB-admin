@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CreditCard, Search, Eye } from 'lucide-react'
+import { CreditCard, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -10,6 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 
 // 开卡记录类型定义
 interface Application {
@@ -73,7 +75,7 @@ export default function UCardApplicationsPage() {
     },
   ])
 
-  const [searchQuery, setSearchQuery] = useState('')
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [filterStatus, setFilterStatus] = useState('all')
 
   // 统计数据
@@ -86,9 +88,9 @@ export default function UCardApplicationsPage() {
 
   // 过滤申请
   const filteredApplications = applications.filter(app => {
-    const matchesSearch = app.applicationId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         app.userId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         app.username.includes(searchQuery)
+    const matchesSearch = app.applicationId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         app.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         app.username.includes(searchTerm)
     const matchesStatus = filterStatus === 'all' || app.status === filterStatus
     return matchesSearch && matchesStatus
   })
@@ -136,16 +138,13 @@ export default function UCardApplicationsPage() {
 
       {/* 搜索和筛选 */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="搜索申请ID、用户ID、用户名..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-custom-green"
-          />
-        </div>
+        <SearchControls
+          placeholder="搜索申请ID、用户ID、用户名..."
+          value={searchInput}
+          onChange={setSearchInput}
+          onSearch={handleSearch}
+          onReset={handleReset}
+        />
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="全部状态" />

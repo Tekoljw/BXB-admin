@@ -1,9 +1,11 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Search, Eye, Copy, Ban, CheckCircle, AlertCircle } from "lucide-react"
+import { Eye, Copy, Ban, CheckCircle, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import {
   Select,
   SelectContent,
@@ -39,7 +41,7 @@ interface WalletAddress {
 }
 
 export default function AddressesManagementPage() {
-  const [searchTerm, setSearchTerm] = useState("")
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [currencyFilter, setCurrencyFilter] = useState<string>("all")
   const [typeFilter, setTypeFilter] = useState<string>("all")
   const [selectedAddress, setSelectedAddress] = useState<WalletAddress | null>(null)
@@ -307,13 +309,13 @@ export default function AddressesManagementPage() {
       {/* 搜索和筛选 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="relative md:col-span-2">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
+          <div className="md:col-span-2">
+            <SearchControls
               placeholder="搜索地址、用户..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              value={searchInput}
+              onChange={setSearchInput}
+              onSearch={handleSearch}
+              onReset={handleReset}
             />
           </div>
 

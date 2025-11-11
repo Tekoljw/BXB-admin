@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Users, Search, Eye, CreditCard, CheckCircle, XCircle } from 'lucide-react'
+import { Users, Eye, CreditCard, CheckCircle, XCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -17,6 +17,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 
 // 卡片类型定义
 interface Card {
@@ -235,7 +237,7 @@ export default function UCardUsersPage() {
     },
   ])
 
-  const [searchQuery, setSearchQuery] = useState('')
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [filterStatus, setFilterStatus] = useState('all')
   const [selectedUser, setSelectedUser] = useState<UCardUser | null>(null)
   const [showDetailSheet, setShowDetailSheet] = useState(false)
@@ -250,10 +252,10 @@ export default function UCardUsersPage() {
 
   // 过滤用户
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.username.includes(searchQuery) ||
-                         user.userId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         user.phone.includes(searchQuery) ||
-                         user.email.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesSearch = user.username.includes(searchTerm) ||
+                         user.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         user.phone.includes(searchTerm) ||
+                         user.email.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = filterStatus === 'all' || user.status === filterStatus
     return matchesSearch && matchesStatus
   })
@@ -313,16 +315,13 @@ export default function UCardUsersPage() {
 
       {/* 搜索和筛选 */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="搜索用户ID、姓名、手机号、邮箱..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-custom-green"
-          />
-        </div>
+        <SearchControls
+          placeholder="搜索用户ID、姓名、手机号、邮箱..."
+          value={searchInput}
+          onChange={setSearchInput}
+          onSearch={handleSearch}
+          onReset={handleReset}
+        />
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="全部状态" />

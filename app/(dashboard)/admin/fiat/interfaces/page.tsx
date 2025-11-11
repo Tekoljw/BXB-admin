@@ -17,7 +17,6 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { 
-  Search, 
   Network,
   Eye,
   TrendingUp,
@@ -26,10 +25,11 @@ import {
   Plus,
   Trash2,
   Check,
-  X,
-  RotateCcw
+  X
 } from "lucide-react"
 import { LoadMoreButton } from "@/components/load-more-button"
+import { SearchControls } from "@/components/admin/search-controls"
+import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
@@ -72,19 +72,9 @@ const mockSuppliers = [
 ]
 
 export default function InterfacesPage() {
-  const [searchInput, setSearchInput] = useState("")
-  const [searchTerm, setSearchTerm] = useState("")
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [currencyFilter, setCurrencyFilter] = useState<string>("all")
-  
-  const handleSearch = () => {
-    setSearchTerm(searchInput)
-  }
-  
-  const handleReset = () => {
-    setSearchInput("")
-    setSearchTerm("")
-  }
   const [isSupplierConfigDialogOpen, setIsSupplierConfigDialogOpen] = useState(false)
   const [currentConfigInterface, setCurrentConfigInterface] = useState<PaymentInterface | null>(null)
   const [supplierConfigs, setSupplierConfigs] = useState<SupplierConfig[]>([])
@@ -401,32 +391,13 @@ export default function InterfacesPage() {
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input
-            placeholder="搜索接口名称、代码或描述..."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            className="pl-10"
-          />
-        </div>
-        <Button
-          onClick={handleSearch}
-          className="bg-custom-green hover:bg-custom-green/90 text-white"
-        >
-          <Search className="w-4 h-4 mr-1" />
-          搜索
-        </Button>
-        <Button
-          onClick={handleReset}
-          variant="outline"
-        >
-          <RotateCcw className="w-4 h-4 mr-1" />
-          重置
-        </Button>
-      </div>
+      <SearchControls
+        placeholder="搜索接口名称、代码或描述..."
+        value={searchInput}
+        onChange={setSearchInput}
+        onSearch={handleSearch}
+        onReset={handleReset}
+      />
 
       <div className="space-y-4">
         <Tabs value={statusFilter} onValueChange={setStatusFilter}>
