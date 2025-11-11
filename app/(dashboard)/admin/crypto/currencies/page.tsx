@@ -1,10 +1,17 @@
 "use client"
 
 import React, { useState, useMemo, useRef } from "react"
-import { Search, Plus, Settings, Activity, TrendingUp, Network, Upload, X } from "lucide-react"
+import { Search, Plus, Settings, Activity, TrendingUp, Network, Upload, X, Edit2, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   Sheet,
   SheetContent,
@@ -34,6 +41,7 @@ interface CryptoCurrency {
   networks: string[]
   minWithdraw: string
   withdrawFee: string
+  maxWithdrawFee: string
   depositEnabled: boolean
   withdrawEnabled: boolean
   visible: boolean
@@ -47,10 +55,30 @@ export default function DepositWithdrawalCurrenciesPage() {
   const [selectedCurrency, setSelectedCurrency] = useState<CryptoCurrency | null>(null)
   const [showConfigSheet, setShowConfigSheet] = useState(false)
   const [showNetworksDialog, setShowNetworksDialog] = useState(false)
+  const [showAddDialog, setShowAddDialog] = useState(false)
   const [editingConfig, setEditingConfig] = useState<Partial<CryptoCurrency>>({})
   const [categoryTab, setCategoryTab] = useState("all")
   const [networkTab, setNetworkTab] = useState("all")
   const logoInputRef = useRef<HTMLInputElement>(null)
+  const [editingMinWithdraw, setEditingMinWithdraw] = useState<string | null>(null)
+  const [editingWithdrawFee, setEditingWithdrawFee] = useState<string | null>(null)
+  const [tempMinWithdraw, setTempMinWithdraw] = useState("")
+  const [tempWithdrawFee, setTempWithdrawFee] = useState("")
+  const [newCurrency, setNewCurrency] = useState<Partial<CryptoCurrency>>({
+    name: "",
+    symbol: "",
+    icon: "",
+    category: "stablecoin",
+    networks: [],
+    minWithdraw: "",
+    withdrawFee: "",
+    maxWithdrawFee: "",
+    depositEnabled: true,
+    withdrawEnabled: true,
+    visible: true,
+    precision: 6,
+    sort: 0
+  })
 
   // 示例币种数据
   const [currencies, setCurrencies] = useState<CryptoCurrency[]>([
@@ -63,6 +91,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       networks: ['TRC20', 'ERC20', 'BSC', 'Polygon'],
       minWithdraw: '20.00',
       withdrawFee: '1.00',
+      maxWithdrawFee: '50.00',
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -78,6 +107,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       networks: ['Bitcoin'],
       minWithdraw: '0.001',
       withdrawFee: '0.0005',
+      maxWithdrawFee: '0.01',
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -93,6 +123,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       networks: ['Ethereum', 'Arbitrum', 'Optimism'],
       minWithdraw: '0.02',
       withdrawFee: '0.005',
+      maxWithdrawFee: '0.05',
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -108,6 +139,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       networks: ['BSC'],
       minWithdraw: '0.02',
       withdrawFee: '0.001',
+      maxWithdrawFee: '0.01',
       depositEnabled: true,
       withdrawEnabled: false,
       visible: true,
@@ -123,6 +155,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       networks: ['ERC20', 'BSC', 'Polygon', 'Solana'],
       minWithdraw: '20.00',
       withdrawFee: '1.00',
+      maxWithdrawFee: '50.00',
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -138,6 +171,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       networks: ['Solana'],
       minWithdraw: '0.2',
       withdrawFee: '0.01',
+      maxWithdrawFee: '0.1',
       depositEnabled: false,
       withdrawEnabled: false,
       visible: false,
@@ -153,6 +187,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       networks: ['Dogecoin'],
       minWithdraw: '20',
       withdrawFee: '5',
+      maxWithdrawFee: '50',
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -168,6 +203,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       networks: ['ERC20'],
       minWithdraw: '2000000',
       withdrawFee: '500000',
+      maxWithdrawFee: '5000000',
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -317,6 +353,102 @@ export default function DepositWithdrawalCurrenciesPage() {
     setEditingConfig({ ...editingConfig, logoUrl: undefined })
   }
 
+  const handleInlineLogoUpload = (e: React.ChangeEvent<HTMLInputElement>, currencyId: string) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("文件过大", { description: "图片大小不能超过2MB" })
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const result = reader.result as string
+      setCurrencies(prev => prev.map(currency => {
+        if (currency.id === currencyId) {
+          toast.success("LOGO已更新")
+          return { ...currency, logoUrl: result }
+        }
+        return currency
+      }))
+    }
+    reader.readAsDataURL(file)
+    
+    // 重置input值以便重复上传同一文件
+    e.target.value = ''
+  }
+
+  const saveMinWithdraw = (id: string) => {
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === id) {
+        toast.success("最小提现已更新", {
+          description: `${currency.symbol} 最小提现金额已更新为 ${tempMinWithdraw}`,
+        })
+        return { ...currency, minWithdraw: tempMinWithdraw }
+      }
+      return currency
+    }))
+    setEditingMinWithdraw(null)
+  }
+
+  const saveWithdrawFee = (id: string) => {
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === id) {
+        toast.success("提现手续费已更新", {
+          description: `${currency.symbol} 提现手续费已更新为 ${tempWithdrawFee}`,
+        })
+        return { ...currency, withdrawFee: tempWithdrawFee }
+      }
+      return currency
+    }))
+    setEditingWithdrawFee(null)
+  }
+
+  const handleAddCurrency = () => {
+    if (!newCurrency.name || !newCurrency.symbol) {
+      toast.error("请填写完整信息", { description: "币种名称和代码为必填项" })
+      return
+    }
+
+    const currency: CryptoCurrency = {
+      id: `${Date.now()}`,
+      name: newCurrency.name!,
+      symbol: newCurrency.symbol!,
+      icon: newCurrency.icon || newCurrency.symbol![0],
+      category: newCurrency.category!,
+      networks: newCurrency.networks || [],
+      minWithdraw: newCurrency.minWithdraw || "0",
+      withdrawFee: newCurrency.withdrawFee || "0",
+      maxWithdrawFee: newCurrency.maxWithdrawFee || "0",
+      depositEnabled: newCurrency.depositEnabled ?? true,
+      withdrawEnabled: newCurrency.withdrawEnabled ?? true,
+      visible: newCurrency.visible ?? true,
+      precision: newCurrency.precision || 6,
+      sort: newCurrency.sort || currencies.length + 1,
+      logoUrl: newCurrency.logoUrl
+    }
+
+    setCurrencies([...currencies, currency])
+    setNewCurrency({
+      name: "",
+      symbol: "",
+      icon: "",
+      category: "stablecoin",
+      networks: [],
+      minWithdraw: "",
+      withdrawFee: "",
+      maxWithdrawFee: "",
+      depositEnabled: true,
+      withdrawEnabled: true,
+      visible: true,
+      precision: 6,
+      sort: 0
+    })
+    setShowAddDialog(false)
+    toast.success("币种已添加", { description: `${currency.symbol} 已成功添加` })
+  }
+
   return (
     <div className="p-6 space-y-6">
       {/* 页面标题 */}
@@ -327,7 +459,10 @@ export default function DepositWithdrawalCurrenciesPage() {
             管理支持的加密货币币种、网络和配置参数
           </p>
         </div>
-        <Button className="bg-custom-green hover:bg-custom-green-dark text-white">
+        <Button 
+          className="bg-custom-green hover:bg-custom-green-dark text-white"
+          onClick={() => setShowAddDialog(true)}
+        >
           <Plus className="w-4 h-4 mr-2" />
           添加币种
         </Button>
@@ -454,9 +589,29 @@ export default function DepositWithdrawalCurrenciesPage() {
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                        {currency.icon}
+                      <div 
+                        className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold cursor-pointer hover:opacity-80 transition-opacity relative group"
+                        onClick={() => {
+                          const input = document.getElementById(`logo-input-${currency.id}`) as HTMLInputElement
+                          input?.click()
+                        }}
+                      >
+                        {currency.logoUrl ? (
+                          <img src={currency.logoUrl} alt={currency.symbol} className="w-full h-full rounded-full object-cover" />
+                        ) : (
+                          currency.icon
+                        )}
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 rounded-full flex items-center justify-center transition-all">
+                          <Upload className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
                       </div>
+                      <input
+                        id={`logo-input-${currency.id}`}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleInlineLogoUpload(e, currency.id)}
+                        className="hidden"
+                      />
                       <div>
                         <div className="font-semibold text-gray-900 dark:text-white">
                           {currency.symbol}
@@ -477,14 +632,96 @@ export default function DepositWithdrawalCurrenciesPage() {
                     </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-gray-900 dark:text-white font-medium">
-                      {currency.minWithdraw}
-                    </span>
+                    {editingMinWithdraw === currency.id ? (
+                      <div className="flex items-center gap-1">
+                        <Input
+                          type="text"
+                          value={tempMinWithdraw}
+                          onChange={(e) => setTempMinWithdraw(e.target.value)}
+                          className="w-24 h-7 text-sm"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') saveMinWithdraw(currency.id)
+                            if (e.key === 'Escape') setEditingMinWithdraw(null)
+                          }}
+                          autoFocus
+                        />
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+                          onClick={() => saveMinWithdraw(currency.id)}
+                        >
+                          <Check className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 text-gray-600 hover:text-gray-700 hover:bg-gray-50"
+                          onClick={() => setEditingMinWithdraw(null)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div
+                        className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded px-2 py-1 inline-flex items-center gap-1"
+                        onClick={() => {
+                          setEditingMinWithdraw(currency.id)
+                          setTempMinWithdraw(currency.minWithdraw)
+                        }}
+                      >
+                        <span className="text-gray-900 dark:text-white font-medium">
+                          {currency.minWithdraw}
+                        </span>
+                        <Edit2 className="h-3 w-3 text-gray-400" />
+                      </div>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-gray-900 dark:text-white font-medium">
-                      {currency.withdrawFee}
-                    </span>
+                    {editingWithdrawFee === currency.id ? (
+                      <div className="flex items-center gap-1">
+                        <Input
+                          type="text"
+                          value={tempWithdrawFee}
+                          onChange={(e) => setTempWithdrawFee(e.target.value)}
+                          className="w-24 h-7 text-sm"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') saveWithdrawFee(currency.id)
+                            if (e.key === 'Escape') setEditingWithdrawFee(null)
+                          }}
+                          autoFocus
+                        />
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+                          onClick={() => saveWithdrawFee(currency.id)}
+                        >
+                          <Check className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 text-gray-600 hover:text-gray-700 hover:bg-gray-50"
+                          onClick={() => setEditingWithdrawFee(null)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div
+                        className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded px-2 py-1 inline-flex items-center gap-1"
+                        onClick={() => {
+                          setEditingWithdrawFee(currency.id)
+                          setTempWithdrawFee(currency.withdrawFee)
+                        }}
+                      >
+                        <span className="text-gray-900 dark:text-white font-medium">
+                          {currency.withdrawFee}
+                        </span>
+                        <Edit2 className="h-3 w-3 text-gray-400" />
+                      </div>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Switch
@@ -582,6 +819,15 @@ export default function DepositWithdrawalCurrenciesPage() {
                 <Input 
                   value={editingConfig.withdrawFee || ''} 
                   onChange={(e) => setEditingConfig({ ...editingConfig, withdrawFee: e.target.value })}
+                  className="mt-2" 
+                />
+              </div>
+
+              <div>
+                <Label>封顶提现手续费</Label>
+                <Input 
+                  value={editingConfig.maxWithdrawFee || ''} 
+                  onChange={(e) => setEditingConfig({ ...editingConfig, maxWithdrawFee: e.target.value })}
                   className="mt-2" 
                 />
               </div>
@@ -707,6 +953,159 @@ export default function DepositWithdrawalCurrenciesPage() {
               ))}
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* 添加币种弹窗 */}
+      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>添加币种</DialogTitle>
+            <DialogDescription>
+              添加新的加密货币币种
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>币种名称 *</Label>
+                <Input 
+                  value={newCurrency.name || ''} 
+                  onChange={(e) => setNewCurrency({ ...newCurrency, name: e.target.value })}
+                  placeholder="例如：Bitcoin"
+                  className="mt-2" 
+                />
+              </div>
+
+              <div>
+                <Label>币种代码 *</Label>
+                <Input 
+                  value={newCurrency.symbol || ''} 
+                  onChange={(e) => setNewCurrency({ ...newCurrency, symbol: e.target.value })}
+                  placeholder="例如：BTC"
+                  className="mt-2" 
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>分类</Label>
+                <Select 
+                  value={newCurrency.category} 
+                  onValueChange={(value: CurrencyCategory) => setNewCurrency({ ...newCurrency, category: value })}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="stablecoin">稳定币</SelectItem>
+                    <SelectItem value="mainstream">主流币</SelectItem>
+                    <SelectItem value="meme">MEME币</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label>精度</Label>
+                <Input 
+                  type="number" 
+                  value={newCurrency.precision || 0} 
+                  onChange={(e) => setNewCurrency({ ...newCurrency, precision: parseInt(e.target.value) || 0 })}
+                  className="mt-2" 
+                  min="0"
+                  max="18"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <Label>最小提现</Label>
+                <Input 
+                  value={newCurrency.minWithdraw || ''} 
+                  onChange={(e) => setNewCurrency({ ...newCurrency, minWithdraw: e.target.value })}
+                  placeholder="0.01"
+                  className="mt-2" 
+                />
+              </div>
+
+              <div>
+                <Label>提现手续费</Label>
+                <Input 
+                  value={newCurrency.withdrawFee || ''} 
+                  onChange={(e) => setNewCurrency({ ...newCurrency, withdrawFee: e.target.value })}
+                  placeholder="0.0005"
+                  className="mt-2" 
+                />
+              </div>
+
+              <div>
+                <Label>封顶手续费</Label>
+                <Input 
+                  value={newCurrency.maxWithdrawFee || ''} 
+                  onChange={(e) => setNewCurrency({ ...newCurrency, maxWithdrawFee: e.target.value })}
+                  placeholder="0.01"
+                  className="mt-2" 
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label>排序</Label>
+              <Input 
+                type="number" 
+                value={newCurrency.sort || 0} 
+                onChange={(e) => setNewCurrency({ ...newCurrency, sort: parseInt(e.target.value) || 0 })}
+                className="mt-2" 
+                min="0"
+              />
+            </div>
+
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Label>充值</Label>
+                <Switch
+                  checked={newCurrency.depositEnabled || false}
+                  onCheckedChange={(checked) => setNewCurrency({ ...newCurrency, depositEnabled: checked })}
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Label>提现</Label>
+                <Switch
+                  checked={newCurrency.withdrawEnabled || false}
+                  onCheckedChange={(checked) => setNewCurrency({ ...newCurrency, withdrawEnabled: checked })}
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Label>显示</Label>
+                <Switch
+                  checked={newCurrency.visible || false}
+                  onCheckedChange={(checked) => setNewCurrency({ ...newCurrency, visible: checked })}
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <Button 
+                className="flex-1 bg-custom-green hover:bg-custom-green-dark text-white"
+                onClick={handleAddCurrency}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                添加
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex-1" 
+                onClick={() => setShowAddDialog(false)}
+              >
+                取消
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
