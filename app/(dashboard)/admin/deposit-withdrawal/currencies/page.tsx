@@ -4,7 +4,6 @@ import React, { useState } from "react"
 import { Search, Plus, Settings, Activity, TrendingUp, Network } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import {
   Sheet,
@@ -199,59 +198,58 @@ export default function DepositWithdrawalCurrenciesPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">币种管理</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              管理支持的加密货币币种、网络和配置参数
-            </p>
-          </div>
-          <Button className="bg-custom-green hover:bg-green-600">
-            <Plus className="w-4 h-4 mr-2" />
-            添加币种
-          </Button>
+    <div className="p-6 space-y-6">
+      {/* 页面标题 */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">币种管理</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            管理支持的加密货币币种、网络和配置参数
+          </p>
         </div>
+        <Button className="bg-custom-green hover:bg-custom-green-dark text-white">
+          <Plus className="w-4 h-4 mr-2" />
+          添加币种
+        </Button>
       </div>
 
       {/* 统计卡片 */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">总币种数</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">总币种数</p>
+              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{stats.total}</h3>
             </div>
             <Activity className="w-8 h-8 text-blue-500" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">充值已启用</p>
-              <h3 className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.depositEnabled}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">充值已启用</p>
+              <h3 className="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">{stats.depositEnabled}</h3>
             </div>
             <TrendingUp className="w-8 h-8 text-green-500" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">提现已启用</p>
-              <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.withdrawEnabled}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">提现已启用</p>
+              <h3 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">{stats.withdrawEnabled}</h3>
             </div>
             <TrendingUp className="w-8 h-8 text-blue-500" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">支持网络</p>
-              <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.networks}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">支持网络</p>
+              <h3 className="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-2">{stats.networks}</h3>
             </div>
             <Network className="w-8 h-8 text-purple-500" />
           </div>
@@ -259,8 +257,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       </div>
 
       {/* 搜索栏 */}
-      <div className="mb-6">
-        <div className="relative max-w-md">
+      <div className="flex items-center gap-4">
+        <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
             placeholder="搜索币种名称或代码..."
@@ -271,100 +269,119 @@ export default function DepositWithdrawalCurrenciesPage() {
         </div>
       </div>
 
-      {/* 币种卡片列表 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCurrencies.map((currency) => (
-          <Card key={currency.id} className="p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold">
-                  {currency.icon}
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {currency.symbol}
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {currency.name}
-                  </p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleConfigure(currency)}
-              >
-                <Settings className="w-4 h-4" />
-              </Button>
-            </div>
-
-            <div className="space-y-3 mb-4">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500 dark:text-gray-400">支持网络</span>
-                <button
-                  onClick={() => handleViewNetworks(currency)}
-                  className="text-blue-600 dark:text-blue-400 hover:underline"
+      {/* 币种列表表格 */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  币种
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  支持网络
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  最小充值
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  最小提现
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  提现手续费
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  充值
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  提现
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  操作
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              {filteredCurrencies.map((currency) => (
+                <tr 
+                  key={currency.id}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors"
                 >
-                  {currency.networks.length} 个网络
-                </button>
-              </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500 dark:text-gray-400">最小充值</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {currency.minDeposit} {currency.symbol}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500 dark:text-gray-400">最小提现</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {currency.minWithdraw} {currency.symbol}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500 dark:text-gray-400">提现手续费</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {currency.withdrawFee} {currency.symbol}
-                </span>
-              </div>
-            </div>
-
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <Label htmlFor={`deposit-${currency.id}`} className="text-sm">
-                  充值功能
-                </Label>
-                <Switch
-                  id={`deposit-${currency.id}`}
-                  checked={currency.depositEnabled}
-                  onCheckedChange={() => toggleDeposit(currency.id)}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <Label htmlFor={`withdraw-${currency.id}`} className="text-sm">
-                  提现功能
-                </Label>
-                <Switch
-                  id={`withdraw-${currency.id}`}
-                  checked={currency.withdrawEnabled}
-                  onCheckedChange={() => toggleWithdraw(currency.id)}
-                />
-              </div>
-            </div>
-          </Card>
-        ))}
-      </div>
-
-      {filteredCurrencies.length === 0 && (
-        <div className="text-center py-16">
-          <Activity className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">未找到币种</p>
-          <p className="text-gray-400 dark:text-gray-500 text-sm">尝试调整搜索条件</p>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                        {currency.icon}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900 dark:text-white">
+                          {currency.symbol}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {currency.name}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={() => handleViewNetworks(currency)}
+                      className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline"
+                    >
+                      <Network className="w-4 h-4" />
+                      {currency.networks.length} 个网络
+                    </button>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="text-gray-900 dark:text-white font-medium">
+                      {currency.minDeposit}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="text-gray-900 dark:text-white font-medium">
+                      {currency.minWithdraw}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="text-gray-900 dark:text-white font-medium">
+                      {currency.withdrawFee}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Switch
+                      checked={currency.depositEnabled}
+                      onCheckedChange={() => toggleDeposit(currency.id)}
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Switch
+                      checked={currency.withdrawEnabled}
+                      onCheckedChange={() => toggleWithdraw(currency.id)}
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleConfigure(currency)}
+                      className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                    >
+                      <Settings className="w-4 h-4" />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
+
+        {filteredCurrencies.length === 0 && (
+          <div className="text-center py-16">
+            <Activity className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">未找到币种</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm">尝试调整搜索条件</p>
+          </div>
+        )}
+      </div>
 
       {/* 配置侧边栏 */}
       <Sheet open={showConfigSheet} onOpenChange={setShowConfigSheet}>
@@ -445,7 +462,7 @@ export default function DepositWithdrawalCurrenciesPage() {
 
               <div className="pt-4 space-y-4 border-t">
                 <Button 
-                  className="w-full bg-custom-green hover:bg-green-600"
+                  className="w-full bg-custom-green hover:bg-custom-green-dark text-white"
                   onClick={handleSaveConfig}
                 >
                   保存配置
