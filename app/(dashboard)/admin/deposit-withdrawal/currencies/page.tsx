@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { Search, Plus, Settings, Activity, TrendingUp, Network } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,13 +20,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
+
+type CurrencyCategory = "stablecoin" | "mainstream" | "meme"
 
 interface CryptoCurrency {
   id: string
   name: string
   symbol: string
   icon: string
+  category: CurrencyCategory
   networks: string[]
   minDeposit: string
   minWithdraw: string
@@ -43,6 +47,8 @@ export default function DepositWithdrawalCurrenciesPage() {
   const [showConfigSheet, setShowConfigSheet] = useState(false)
   const [showNetworksDialog, setShowNetworksDialog] = useState(false)
   const [editingConfig, setEditingConfig] = useState<Partial<CryptoCurrency>>({})
+  const [categoryTab, setCategoryTab] = useState("all")
+  const [networkTab, setNetworkTab] = useState("all")
 
   // 示例币种数据
   const [currencies, setCurrencies] = useState<CryptoCurrency[]>([
@@ -51,6 +57,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       name: 'Tether',
       symbol: 'USDT',
       icon: '₮',
+      category: 'stablecoin',
       networks: ['TRC20', 'ERC20', 'BSC', 'Polygon'],
       minDeposit: '10.00',
       minWithdraw: '20.00',
@@ -65,6 +72,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       name: 'Bitcoin',
       symbol: 'BTC',
       icon: '₿',
+      category: 'mainstream',
       networks: ['Bitcoin'],
       minDeposit: '0.0001',
       minWithdraw: '0.001',
@@ -79,6 +87,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       name: 'Ethereum',
       symbol: 'ETH',
       icon: 'Ξ',
+      category: 'mainstream',
       networks: ['Ethereum', 'Arbitrum', 'Optimism'],
       minDeposit: '0.01',
       minWithdraw: '0.02',
@@ -93,6 +102,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       name: 'Binance Coin',
       symbol: 'BNB',
       icon: 'B',
+      category: 'mainstream',
       networks: ['BSC'],
       minDeposit: '0.01',
       minWithdraw: '0.02',
@@ -107,6 +117,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       name: 'USD Coin',
       symbol: 'USDC',
       icon: '$',
+      category: 'stablecoin',
       networks: ['ERC20', 'BSC', 'Polygon', 'Solana'],
       minDeposit: '10.00',
       minWithdraw: '20.00',
@@ -121,6 +132,7 @@ export default function DepositWithdrawalCurrenciesPage() {
       name: 'Solana',
       symbol: 'SOL',
       icon: 'S',
+      category: 'mainstream',
       networks: ['Solana'],
       minDeposit: '0.1',
       minWithdraw: '0.2',
@@ -130,12 +142,72 @@ export default function DepositWithdrawalCurrenciesPage() {
       precision: 8,
       sort: 6,
     },
+    {
+      id: '7',
+      name: 'Dogecoin',
+      symbol: 'DOGE',
+      icon: 'Ð',
+      category: 'meme',
+      networks: ['Dogecoin'],
+      minDeposit: '10',
+      minWithdraw: '20',
+      withdrawFee: '5',
+      depositEnabled: true,
+      withdrawEnabled: true,
+      precision: 8,
+      sort: 7,
+    },
+    {
+      id: '8',
+      name: 'Shiba Inu',
+      symbol: 'SHIB',
+      icon: '柴',
+      category: 'meme',
+      networks: ['ERC20'],
+      minDeposit: '1000000',
+      minWithdraw: '2000000',
+      withdrawFee: '500000',
+      depositEnabled: true,
+      withdrawEnabled: true,
+      precision: 0,
+      sort: 8,
+    },
   ])
 
-  const filteredCurrencies = currencies.filter(currency =>
-    currency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    currency.symbol.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // 动态生成可用的网络选项
+  const availableNetworks = useMemo(() => {
+    const networksSet = new Set<string>()
+    currencies.forEach(currency => {
+      if (categoryTab === "all" || currency.category === categoryTab) {
+        currency.networks.forEach(network => networksSet.add(network))
+      }
+    })
+    return Array.from(networksSet).sort()
+  }, [currencies, categoryTab])
+
+  // 链式过滤逻辑
+  const filteredCurrencies = useMemo(() => {
+    return currencies.filter(currency => {
+      // 搜索词过滤
+      const matchesSearch = 
+        currency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        currency.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+      
+      // 一级页签（分类）过滤
+      const matchesCategory = categoryTab === "all" || currency.category === categoryTab
+      
+      // 二级页签（网络）过滤
+      const matchesNetwork = networkTab === "all" || currency.networks.includes(networkTab)
+      
+      return matchesSearch && matchesCategory && matchesNetwork
+    })
+  }, [currencies, searchTerm, categoryTab, networkTab])
+  
+  // 当一级页签改变时，重置二级页签
+  const handleCategoryChange = (value: string) => {
+    setCategoryTab(value)
+    setNetworkTab("all")
+  }
 
   const stats = {
     total: currencies.length,
@@ -267,6 +339,31 @@ export default function DepositWithdrawalCurrenciesPage() {
             className="pl-10"
           />
         </div>
+      </div>
+
+      {/* 两级页签过滤 */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+        {/* 一级页签：币种分类 */}
+        <Tabs value={categoryTab} onValueChange={handleCategoryChange}>
+          <TabsList className="mb-4">
+            <TabsTrigger value="all">全部</TabsTrigger>
+            <TabsTrigger value="stablecoin">稳定币</TabsTrigger>
+            <TabsTrigger value="mainstream">主流币</TabsTrigger>
+            <TabsTrigger value="meme">MEME币</TabsTrigger>
+          </TabsList>
+          
+          {/* 二级页签：网络类型 */}
+          <Tabs value={networkTab} onValueChange={setNetworkTab}>
+            <TabsList className="flex-wrap h-auto">
+              <TabsTrigger value="all">全部</TabsTrigger>
+              {availableNetworks.map(network => (
+                <TabsTrigger key={network} value={network}>
+                  {network}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </Tabs>
       </div>
 
       {/* 币种列表表格 */}

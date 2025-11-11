@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -27,6 +27,15 @@ import { LoadMoreButton } from "@/components/load-more-button"
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+type CurrencyRegion = "asia" | "africa" | "americas" | "europe" | "other"
 
 interface ExchangeRateConfig {
   source: "exchange" | "manual"
@@ -55,6 +64,7 @@ interface Currency {
   name: string
   shortName: string
   icon: string
+  region: CurrencyRegion
   status: "active" | "inactive"
   createdAt: string
   exchangeRate?: {
@@ -75,6 +85,8 @@ export default function CurrenciesPage() {
   const [editingSellPrice, setEditingSellPrice] = useState<string | null>(null)
   const [tempBuyPrice, setTempBuyPrice] = useState("")
   const [tempSellPrice, setTempSellPrice] = useState("")
+  const [statusTab, setStatusTab] = useState("all")
+  const [regionTab, setRegionTab] = useState("all")
   const fileInputRef = useRef<HTMLInputElement>(null)
   const editFileInputRef = useRef<HTMLInputElement>(null)
   const initialCurrencies: Currency[] = [
@@ -84,6 +96,7 @@ export default function CurrenciesPage() {
       name: "人民币",
       shortName: "¥",
       icon: "🇨🇳",
+      region: "asia",
       status: "active",
       createdAt: "2024-01-15 10:30:00",
       exchangeRate: {
@@ -110,6 +123,7 @@ export default function CurrenciesPage() {
       name: "美元",
       shortName: "$",
       icon: "🇺🇸",
+      region: "americas",
       status: "active",
       createdAt: "2024-01-15 10:30:00",
       exchangeRate: {
@@ -136,6 +150,7 @@ export default function CurrenciesPage() {
       name: "巴西雷亚尔",
       shortName: "R$",
       icon: "🇧🇷",
+      region: "americas",
       status: "active",
       createdAt: "2024-01-15 10:30:00",
       exchangeRate: {
@@ -162,6 +177,7 @@ export default function CurrenciesPage() {
       name: "印度卢比",
       shortName: "₹",
       icon: "🇮🇳",
+      region: "asia",
       status: "active",
       createdAt: "2024-01-18 14:20:00"
     },
@@ -171,8 +187,29 @@ export default function CurrenciesPage() {
       name: "欧元",
       shortName: "€",
       icon: "🇪🇺",
+      region: "europe",
       status: "active",
       createdAt: "2024-01-20 09:15:00"
+    },
+    {
+      id: "CUR006",
+      code: "GBP",
+      name: "英镑",
+      shortName: "£",
+      icon: "🇬🇧",
+      region: "europe",
+      status: "inactive",
+      createdAt: "2024-01-22 11:00:00"
+    },
+    {
+      id: "CUR007",
+      code: "NGN",
+      name: "尼日利亚奈拉",
+      shortName: "₦",
+      icon: "🇳🇬",
+      region: "africa",
+      status: "active",
+      createdAt: "2024-01-25 15:30:00"
     }
   ]
 
@@ -186,7 +223,8 @@ export default function CurrenciesPage() {
     code: "",
     name: "",
     shortName: "",
-    icon: ""
+    icon: "",
+    region: "asia" as CurrencyRegion
   })
 
   const checkRateExpiry = (currency: Currency): { isExpired: boolean; isExpiringSoon: boolean; expiresAt?: string } => {
@@ -278,11 +316,33 @@ export default function CurrenciesPage() {
     setIsRateConfigOpen(true)
   }
 
-  const filteredCurrencies = currencies.filter(currency =>
-    currency.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    currency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    currency.shortName.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // 链式过滤逻辑：搜索词 -> 状态 -> 地区
+  const filteredCurrencies = useMemo(() => {
+    return currencies.filter(currency => {
+      // 搜索词过滤
+      const matchesSearch = 
+        currency.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        currency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        currency.shortName.toLowerCase().includes(searchTerm.toLowerCase())
+      
+      // 一级页签（状态）过滤
+      const matchesStatus = 
+        statusTab === "all" || 
+        (statusTab === "active" && currency.status === "active") ||
+        (statusTab === "inactive" && currency.status === "inactive")
+      
+      // 二级页签（地区）过滤
+      const matchesRegion = regionTab === "all" || currency.region === regionTab
+      
+      return matchesSearch && matchesStatus && matchesRegion
+    })
+  }, [currencies, searchTerm, statusTab, regionTab])
+
+  // 当一级页签改变时，重置二级页签
+  const handleStatusChange = (value: string) => {
+    setStatusTab(value)
+    setRegionTab("all")
+  }
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>, isEdit = false) => {
     const file = event.target.files?.[0]
@@ -326,7 +386,7 @@ export default function CurrenciesPage() {
       createdAt: new Date().toLocaleString('zh-CN')
     }
     setCurrencies([...currencies, currency])
-    setNewCurrency({ code: "", name: "", shortName: "", icon: "" })
+    setNewCurrency({ code: "", name: "", shortName: "", icon: "", region: "asia" })
     setIsAddDialogOpen(false)
   }
 
@@ -378,6 +438,30 @@ export default function CurrenciesPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="flex-1"
           />
+        </div>
+
+        {/* 两级页签过滤 */}
+        <div className="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+          {/* 一级页签：状态过滤 */}
+          <Tabs value={statusTab} onValueChange={handleStatusChange}>
+            <TabsList className="mb-4">
+              <TabsTrigger value="all">全部</TabsTrigger>
+              <TabsTrigger value="active">已启用</TabsTrigger>
+              <TabsTrigger value="inactive">已停用</TabsTrigger>
+            </TabsList>
+            
+            {/* 二级页签：地区过滤 */}
+            <Tabs value={regionTab} onValueChange={setRegionTab}>
+              <TabsList className="flex-wrap h-auto">
+                <TabsTrigger value="all">全部</TabsTrigger>
+                <TabsTrigger value="asia">亚洲</TabsTrigger>
+                <TabsTrigger value="africa">非洲</TabsTrigger>
+                <TabsTrigger value="americas">美洲</TabsTrigger>
+                <TabsTrigger value="europe">欧洲</TabsTrigger>
+                <TabsTrigger value="other">其他</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </Tabs>
         </div>
 
         <div className="overflow-x-auto">
@@ -706,13 +790,31 @@ export default function CurrenciesPage() {
               )}
               <p className="text-xs text-gray-500">可以输入emoji（如🇨🇳）或上传图片（最大2MB）</p>
             </div>
+            <div className="space-y-2">
+              <Label>所属地区 *</Label>
+              <Select
+                value={newCurrency.region}
+                onValueChange={(value: CurrencyRegion) => setNewCurrency({ ...newCurrency, region: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="选择地区" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="asia">亚洲</SelectItem>
+                  <SelectItem value="africa">非洲</SelectItem>
+                  <SelectItem value="americas">美洲</SelectItem>
+                  <SelectItem value="europe">欧洲</SelectItem>
+                  <SelectItem value="other">其他</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <div className="flex justify-end gap-2">
             <Button
               variant="outline"
               onClick={() => {
                 setIsAddDialogOpen(false)
-                setNewCurrency({ code: "", name: "", shortName: "", icon: "" })
+                setNewCurrency({ code: "", name: "", shortName: "", icon: "", region: "asia" })
               }}
             >
               取消
@@ -803,6 +905,24 @@ export default function CurrenciesPage() {
                   </div>
                 )}
                 <p className="text-xs text-gray-500">可以输入emoji（如🇨🇳）或上传图片（最大2MB）</p>
+              </div>
+              <div className="space-y-2">
+                <Label>所属地区 *</Label>
+                <Select
+                  value={selectedCurrency.region}
+                  onValueChange={(value: CurrencyRegion) => setSelectedCurrency({ ...selectedCurrency, region: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择地区" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="asia">亚洲</SelectItem>
+                    <SelectItem value="africa">非洲</SelectItem>
+                    <SelectItem value="americas">美洲</SelectItem>
+                    <SelectItem value="europe">欧洲</SelectItem>
+                    <SelectItem value="other">其他</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           )}
