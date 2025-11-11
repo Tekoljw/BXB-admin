@@ -1,12 +1,11 @@
 "use client"
 
-import React, { useState } from "react"
-import { Send, RefreshCw, Lock, Info } from "lucide-react"
+import React, { useState, useMemo } from "react"
+import { Send, RefreshCw, Lock, Info, RotateCcw } from "lucide-react"
 import { LoadMoreButton } from "@/components/load-more-button"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
   Dialog,
   DialogContent,
@@ -29,6 +28,8 @@ interface Order {
   upstreamOrderId: string
   downstreamOrderId: string
   merchantId: string
+  orderType: "buy" | "sell"
+  supplier: string
   currency: string
   paymentChannel: string
   amount: number
@@ -45,6 +46,8 @@ const mockOrders: Order[] = [
     upstreamOrderId: "UP20241106001",
     downstreamOrderId: "DOWN20241106001",
     merchantId: "M001",
+    orderType: "buy",
+    supplier: "币安",
     currency: "CNY",
     paymentChannel: "支付宝",
     amount: 1500.00,
@@ -58,6 +61,8 @@ const mockOrders: Order[] = [
     upstreamOrderId: "UP20241106002",
     downstreamOrderId: "DOWN20241106002",
     merchantId: "M002",
+    orderType: "sell",
+    supplier: "OKX",
     currency: "CNY",
     paymentChannel: "微信支付",
     amount: 2800.00,
@@ -71,6 +76,8 @@ const mockOrders: Order[] = [
     upstreamOrderId: "UP20241106003",
     downstreamOrderId: "DOWN20241106003",
     merchantId: "M001",
+    orderType: "buy",
+    supplier: "币安",
     currency: "CNY",
     paymentChannel: "银行转账",
     amount: 5000.00,
@@ -83,6 +90,8 @@ const mockOrders: Order[] = [
     upstreamOrderId: "UP20241106004",
     downstreamOrderId: "DOWN20241106004",
     merchantId: "M003",
+    orderType: "buy",
+    supplier: "Huobi",
     currency: "BRL",
     paymentChannel: "PIX支付",
     amount: 3200.00,
@@ -96,6 +105,8 @@ const mockOrders: Order[] = [
     upstreamOrderId: "UP20241106005",
     downstreamOrderId: "DOWN20241106005",
     merchantId: "M004",
+    orderType: "sell",
+    supplier: "OKX",
     currency: "INR",
     paymentChannel: "UPI支付",
     amount: 8500.00,
@@ -108,6 +119,8 @@ const mockOrders: Order[] = [
     upstreamOrderId: "UP20241106006",
     downstreamOrderId: "DOWN20241106006",
     merchantId: "M002",
+    orderType: "sell",
+    supplier: "Kraken",
     currency: "CNY",
     paymentChannel: "支付宝",
     amount: 950.00,
@@ -117,16 +130,6 @@ const mockOrders: Order[] = [
     status: "success"
   },
 ]
-
-const currencies = ["全部", "CNY", "BRL", "INR", "USD", "EUR"]
-const paymentChannelsMap: Record<string, string[]> = {
-  "全部": ["全部"],
-  "CNY": ["全部", "支付宝", "微信支付", "银行转账"],
-  "BRL": ["全部", "PIX支付"],
-  "INR": ["全部", "UPI支付"],
-  "USD": ["全部", "信用卡", "银行转账"],
-  "EUR": ["全部", "SEPA转账", "信用卡"],
-}
 
 const getCollectionInfo = (channel: string) => {
   const infoMap: Record<string, { type: string; details: { label: string; value: string }[] }> = {
@@ -181,9 +184,13 @@ const getCollectionInfo = (channel: string) => {
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>(mockOrders)
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
-  const [selectedCurrency, setSelectedCurrency] = useState("全部")
-  const [selectedChannel, setSelectedChannel] = useState("全部")
-  const [selectedStatus, setSelectedStatus] = useState("全部")
+  const [displayedCount, setDisplayedCount] = useState(20)
+  
+  const [orderTypeTab, setOrderTypeTab] = useState("all")
+  const [supplierTab, setSupplierTab] = useState("all")
+  const [statusTab, setStatusTab] = useState("all")
+  const [currencyFilter, setCurrencyFilter] = useState("all")
+  
   const [isResendDialogOpen, setIsResendDialogOpen] = useState(false)
   const [isReverifyDialogOpen, setIsReverifyDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
@@ -192,29 +199,42 @@ export default function OrdersPage() {
   const [currentOrder, setCurrentOrder] = useState<Order | null>(null)
   const [actionMessage, setActionMessage] = useState<string | null>(null)
 
-  const availableChannels = paymentChannelsMap[selectedCurrency] || ["全部"]
-
-  const handleCurrencyChange = (currency: string) => {
-    setSelectedCurrency(currency)
-    setSelectedChannel("全部")
-  }
-
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = 
-      order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.upstreamOrderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.downstreamOrderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.merchantId.toLowerCase().includes(searchTerm.toLowerCase())
+  const allSuppliers = Array.from(new Set(orders.map(o => o.supplier))).sort()
+  
+  const filteredOrders = useMemo(() => {
+    let filtered = orders.filter(order => {
+      const matchesSearch = 
+        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.upstreamOrderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.downstreamOrderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.merchantId.toLowerCase().includes(searchTerm.toLowerCase())
+      
+      const matchesCurrency = currencyFilter === "all" || order.currency === currencyFilter
+      
+      return matchesSearch && matchesCurrency
+    })
     
-    const matchesCurrency = selectedCurrency === "全部" || order.currency === selectedCurrency
-    const matchesChannel = selectedChannel === "全部" || order.paymentChannel === selectedChannel
-    const matchesStatus = selectedStatus === "全部" || 
-      (selectedStatus === "待支付" && order.status === "pending") ||
-      (selectedStatus === "成功" && order.status === "success") ||
-      (selectedStatus === "失败" && order.status === "failed")
+    if (orderTypeTab !== "all") {
+      filtered = filtered.filter(o => o.orderType === orderTypeTab)
+    }
     
-    return matchesSearch && matchesCurrency && matchesChannel && matchesStatus
-  })
+    if (supplierTab !== "all") {
+      filtered = filtered.filter(o => o.supplier === supplierTab)
+    }
+    
+    if (statusTab !== "all") {
+      filtered = filtered.filter(o => {
+        if (statusTab === "pending") return o.status === "pending"
+        if (statusTab === "success") return o.status === "success"
+        if (statusTab === "failed") return o.status === "failed"
+        return true
+      })
+    }
+    
+    return filtered
+  }, [orders, searchTerm, currencyFilter, orderTypeTab, supplierTab, statusTab])
+  
+  const displayedOrders = filteredOrders.slice(0, displayedCount)
 
   const handleResend = () => {
     if (currentOrder) {
@@ -273,7 +293,7 @@ export default function OrdersPage() {
         return order
       })
       setOrders(updatedOrders)
-      setActionMessage(`订单 ${currentOrder.id} 已退款，金额 $${currentOrder.amount.toFixed(2)} 已退回用户账户`)
+      setActionMessage(`订单 ${currentOrder.id} 已退款，金额 ${currentOrder.amount.toFixed(2)} USDT 已退回用户账户`)
       setTimeout(() => setActionMessage(null), 3000)
       setIsRefundDialogOpen(false)
       setCurrentOrder(null)
@@ -313,16 +333,28 @@ export default function OrdersPage() {
         </div>
       )}
 
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">代收订单列表</h2>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">法币买卖订单</h2>
 
       <div className="space-y-4">
         <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">币种筛选</label>
-          <Tabs value={selectedCurrency} onValueChange={handleCurrencyChange}>
-            <TabsList className="grid grid-cols-6 w-full max-w-2xl">
-              {currencies.map(currency => (
-                <TabsTrigger key={currency} value={currency}>
-                  {currency}
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">订单类型</label>
+          <Tabs value={orderTypeTab} onValueChange={setOrderTypeTab}>
+            <TabsList className="grid grid-cols-3 w-full max-w-md">
+              <TabsTrigger value="all">全部</TabsTrigger>
+              <TabsTrigger value="buy">买入</TabsTrigger>
+              <TabsTrigger value="sell">卖出</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">供应商筛选</label>
+          <Tabs value={supplierTab} onValueChange={setSupplierTab}>
+            <TabsList className={`grid w-full max-w-2xl`} style={{ gridTemplateColumns: `repeat(${allSuppliers.length + 1}, minmax(0, 1fr))` }}>
+              <TabsTrigger value="all">全部</TabsTrigger>
+              {allSuppliers.map(supplier => (
+                <TabsTrigger key={supplier} value={supplier}>
+                  {supplier}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -330,28 +362,29 @@ export default function OrdersPage() {
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">支付通道筛选</label>
-          <Tabs value={selectedChannel} onValueChange={setSelectedChannel}>
-            <TabsList className={`grid w-full max-w-3xl`} style={{ gridTemplateColumns: `repeat(${availableChannels.length}, minmax(0, 1fr))` }}>
-              {availableChannels.map(channel => (
-                <TabsTrigger key={channel} value={channel}>
-                  {channel}
-                </TabsTrigger>
-              ))}
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">状态筛选</label>
+          <Tabs value={statusTab} onValueChange={setStatusTab}>
+            <TabsList className="grid grid-cols-4 w-full max-w-xl">
+              <TabsTrigger value="all">全部状态</TabsTrigger>
+              <TabsTrigger value="pending">待支付</TabsTrigger>
+              <TabsTrigger value="success">成功</TabsTrigger>
+              <TabsTrigger value="failed">失败</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
 
         <div className="flex gap-4 items-center">
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+          <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="状态筛选" />
+              <SelectValue placeholder="币种筛选" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="全部">全部</SelectItem>
-              <SelectItem value="待支付">待支付</SelectItem>
-              <SelectItem value="成功">成功</SelectItem>
-              <SelectItem value="失败">失败</SelectItem>
+              <SelectItem value="all">全部币种</SelectItem>
+              <SelectItem value="CNY">CNY</SelectItem>
+              <SelectItem value="BRL">BRL</SelectItem>
+              <SelectItem value="INR">INR</SelectItem>
+              <SelectItem value="USD">USD</SelectItem>
+              <SelectItem value="EUR">EUR</SelectItem>
             </SelectContent>
           </Select>
 
@@ -376,6 +409,12 @@ export default function OrdersPage() {
                   订单信息
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  类型
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  供应商
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   商户
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -396,12 +435,26 @@ export default function OrdersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredOrders.map((order) => (
+              {displayedOrders.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="px-4 py-3 text-sm">
                     <div className="font-medium text-gray-900 dark:text-white">{order.id}</div>
                     <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">上游: {order.upstreamOrderId}</div>
                     <div className="text-gray-500 dark:text-gray-400 text-xs">下游: {order.downstreamOrderId}</div>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      order.orderType === "buy"
+                        ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+                        : "bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300"
+                    }`}>
+                      {order.orderType === "buy" ? "买入" : "卖出"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full text-xs font-medium">
+                      {order.supplier}
+                    </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {order.merchantId}
@@ -415,8 +468,8 @@ export default function OrdersPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="text-gray-900 dark:text-white font-medium">${order.amount.toFixed(2)}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">费: ${order.fee.toFixed(2)}</div>
+                    <div className="text-gray-900 dark:text-white font-medium">{order.amount.toFixed(2)} USDT</div>
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">费: {order.fee.toFixed(2)} USDT</div>
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <div className="text-gray-900 dark:text-gray-300 text-xs">{order.createdAt}</div>
@@ -500,7 +553,11 @@ export default function OrdersPage() {
           </div>
         )}
 
-        {filteredOrders.length > 0 && <LoadMoreButton />}
+        {filteredOrders.length > displayedCount && (
+          <div className="p-4 text-center border-t border-gray-200 dark:border-gray-700">
+            <LoadMoreButton onClick={() => setDisplayedCount(prev => prev + 20)} />
+          </div>
+        )}
       </div>
 
       <Dialog open={isResendDialogOpen} onOpenChange={setIsResendDialogOpen}>
@@ -565,7 +622,7 @@ export default function OrdersPage() {
           <DialogHeader>
             <DialogTitle>订单退款</DialogTitle>
             <DialogDescription>
-              确定要退款订单 "{currentOrder?.id}" 吗？金额 ${currentOrder?.amount.toFixed(2)} 将退回到用户账户。此操作不可撤销。
+              确定要退款订单 "{currentOrder?.id}" 吗？金额 {currentOrder?.amount.toFixed(2)} USDT 将退回到用户账户。此操作不可撤销。
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
