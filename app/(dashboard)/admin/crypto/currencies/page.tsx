@@ -956,17 +956,17 @@ export default function DepositWithdrawalCurrenciesPage() {
         </DialogContent>
       </Dialog>
 
-      {/* 添加币种弹窗 */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>添加币种</DialogTitle>
-            <DialogDescription>
+      {/* 添加币种Sheet */}
+      <Sheet open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <SheetContent className="w-full sm:max-w-[600px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>添加币种</SheetTitle>
+            <SheetDescription>
               添加新的加密货币币种
-            </DialogDescription>
-          </DialogHeader>
+            </SheetDescription>
+          </SheetHeader>
 
-          <div className="space-y-4 py-4">
+          <div className="space-y-4 py-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>币种名称 *</Label>
@@ -1089,7 +1089,7 @@ export default function DepositWithdrawalCurrenciesPage() {
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 pt-4">
               <Button 
                 className="flex-1 bg-custom-green hover:bg-custom-green-dark text-white"
                 onClick={handleAddCurrency}
@@ -1106,8 +1106,8 @@ export default function DepositWithdrawalCurrenciesPage() {
               </Button>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
