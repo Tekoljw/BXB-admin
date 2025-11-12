@@ -61,17 +61,60 @@ export default function CryptoAssetStatisticsPage() {
   ]
 
   const assetDetails = [
-    { currency: "USDT", network: "TRC20", balance: "5,234,567.89", frozen: "234,567.89", pending: "456,789.12", total: "5,926,924.90" },
-    { currency: "USDT", network: "ERC20", balance: "2,123,456.78", frozen: "123,456.78", pending: "234,567.89", total: "2,481,481.45" },
-    { currency: "BTC", network: "Bitcoin", balance: "45.67834521", frozen: "5.67834521", pending: "8.92345678", total: "60.27014720" },
-    { currency: "ETH", network: "Ethereum", balance: "234.56789012", frozen: "34.56789012", pending: "45.67890123", total: "314.81468147" },
-    { currency: "USDC", network: "ERC20", balance: "1,234,567.89", frozen: "134,567.89", pending: "234,567.89", total: "1,603,703.67" },
-    { currency: "BNB", network: "BSC", balance: "567.89012345", frozen: "67.89012345", pending: "89.12345678", total: "724.90370368" },
+    { 
+      currency: "USDT", 
+      network: "TRC20", 
+      totalAssets: "5,926,924.90", 
+      userAssets: "4,500,000.00", 
+      companyNetWorth: "1,426,924.90",
+      custodian: "Fireblocks"
+    },
+    { 
+      currency: "USDT", 
+      network: "ERC20", 
+      totalAssets: "2,481,481.45", 
+      userAssets: "2,000,000.00", 
+      companyNetWorth: "481,481.45",
+      custodian: "Copper"
+    },
+    { 
+      currency: "BTC", 
+      network: "Bitcoin", 
+      totalAssets: "60.27014720", 
+      userAssets: "50.00000000", 
+      companyNetWorth: "10.27014720",
+      custodian: "Fireblocks"
+    },
+    { 
+      currency: "ETH", 
+      network: "Ethereum", 
+      totalAssets: "314.81468147", 
+      userAssets: "250.00000000", 
+      companyNetWorth: "64.81468147",
+      custodian: "Copper"
+    },
+    { 
+      currency: "USDC", 
+      network: "ERC20", 
+      totalAssets: "1,603,703.67", 
+      userAssets: "1,200,000.00", 
+      companyNetWorth: "403,703.67",
+      custodian: "Fireblocks"
+    },
+    { 
+      currency: "BNB", 
+      network: "BSC", 
+      totalAssets: "724.90370368", 
+      userAssets: "600.00000000", 
+      companyNetWorth: "124.90370368",
+      custodian: "BitGo"
+    },
   ]
 
   const filteredAssets = assetDetails.filter(asset =>
     asset.currency.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    asset.network.toLowerCase().includes(searchQuery.toLowerCase())
+    asset.network.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    asset.custodian.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
@@ -135,7 +178,7 @@ export default function CryptoAssetStatisticsPage() {
               <div className="relative w-64">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="搜索币种或网络..."
+                  placeholder="搜索币种、网络或托管供应商..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-8"
@@ -150,10 +193,10 @@ export default function CryptoAssetStatisticsPage() {
               <TableRow>
                 <TableHead>币种</TableHead>
                 <TableHead>网络</TableHead>
-                <TableHead className="text-right">可用余额</TableHead>
-                <TableHead className="text-right">冻结金额</TableHead>
-                <TableHead className="text-right">待结算</TableHead>
-                <TableHead className="text-right">总计</TableHead>
+                <TableHead className="text-right">链上总资产</TableHead>
+                <TableHead className="text-right">用户资产</TableHead>
+                <TableHead className="text-right">公司净值</TableHead>
+                <TableHead>托管供应商</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -165,10 +208,14 @@ export default function CryptoAssetStatisticsPage() {
                       {asset.network}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right font-mono">{asset.balance}</TableCell>
-                  <TableCell className="text-right font-mono text-orange-600">{asset.frozen}</TableCell>
-                  <TableCell className="text-right font-mono text-purple-600">{asset.pending}</TableCell>
-                  <TableCell className="text-right font-mono font-semibold">{asset.total}</TableCell>
+                  <TableCell className="text-right font-mono font-semibold">{asset.totalAssets}</TableCell>
+                  <TableCell className="text-right font-mono text-blue-600">{asset.userAssets}</TableCell>
+                  <TableCell className="text-right font-mono text-green-600">{asset.companyNetWorth}</TableCell>
+                  <TableCell>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">
+                      {asset.custodian}
+                    </span>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
