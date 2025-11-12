@@ -95,7 +95,6 @@ import WalletAPIBusinessPage from "@/app/(dashboard)/admin/crypto/wallet-api-bus
 import OTCSuppliersPage from "@/app/(dashboard)/admin/crypto/otc-suppliers/page"
 import OTCOrdersPage from "@/app/(dashboard)/admin/crypto/otc-orders/page"
 import OnchainDepositOrdersPage from "@/app/(dashboard)/admin/crypto/onchain-deposit-orders/page"
-import OnchainWithdrawalOrdersPage from "@/app/(dashboard)/admin/crypto/onchain-withdrawal-orders/page"
 import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
 import PermissionsManagementPage from "@/app/(dashboard)/admin/system/permissions/page"
 import RolesManagementPage from "@/app/(dashboard)/admin/system/roles/page"
@@ -357,7 +356,6 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/crypto/otc-suppliers") return <OTCSuppliersPage />
     if (currentPage === "/admin/crypto/otc-orders") return <OTCOrdersPage />
     if (currentPage === "/admin/crypto/onchain-deposit-orders") return <OnchainDepositOrdersPage />
-    if (currentPage === "/admin/crypto/onchain-withdrawal-orders") return <OnchainWithdrawalOrdersPage />
     if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />
     if (currentPage === "/admin/system") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/permissions") return <PermissionsManagementPage />

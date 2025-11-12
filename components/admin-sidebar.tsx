@@ -65,8 +65,7 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/crypto/wallet-api-business", icon: Code, label: "钱包API业务" },
     { path: "/admin/crypto/otc-suppliers", icon: ArrowLeftRight, label: "OTC供应商" },
     { path: "/admin/crypto/otc-orders", icon: List, label: "OTC订单" },
-    { path: "/admin/crypto/onchain-deposit-orders", icon: ArrowDownToLine, label: "Crypto入金订单" },
-    { path: "/admin/crypto/onchain-withdrawal-orders", icon: ArrowUpFromLine, label: "Crypto提币订单" },
+    { path: "/admin/crypto/onchain-deposit-orders", icon: ArrowLeftRight, label: "Crypto出入金订单" },
   ],
   permissions: [
     { path: "/admin/permissions/business-lines", icon: BarChart3, label: "业务线" },
