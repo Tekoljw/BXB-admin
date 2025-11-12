@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { 
   Wallet, 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign,
+  Lock,
+  Coins,
+  Layers,
   Search,
   Download,
   RefreshCw
@@ -27,36 +27,36 @@ export default function CryptoAssetStatisticsPage() {
 
   const assetStats = [
     {
-      label: "总资产价值",
-      value: "12,458,932.50",
-      change: "+5.2%",
-      trend: "up" as const,
+      label: "总资产",
+      hotWallet: "8,458,932.50",
+      coldWallet: "4,000,000.00",
       icon: Wallet,
-      color: "text-green-600"
+      hotColor: "text-orange-600",
+      coldColor: "text-blue-600"
     },
     {
-      label: "可用余额",
-      value: "8,234,567.80",
-      change: "+3.1%",
-      trend: "up" as const,
-      icon: DollarSign,
-      color: "text-blue-600"
+      label: "稳定币",
+      hotWallet: "5,234,567.80",
+      coldWallet: "2,500,000.00",
+      icon: Coins,
+      hotColor: "text-orange-600",
+      coldColor: "text-blue-600"
     },
     {
-      label: "冻结资金",
-      value: "1,456,789.20",
-      change: "-2.5%",
-      trend: "down" as const,
-      icon: TrendingDown,
-      color: "text-orange-600"
+      label: "主流币",
+      hotWallet: "2,456,789.20",
+      coldWallet: "1,200,000.00",
+      icon: Lock,
+      hotColor: "text-orange-600",
+      coldColor: "text-blue-600"
     },
     {
-      label: "待结算金额",
-      value: "2,767,575.50",
-      change: "+8.7%",
-      trend: "up" as const,
-      icon: TrendingUp,
-      color: "text-purple-600"
+      label: "其他资产",
+      hotWallet: "767,575.50",
+      coldWallet: "300,000.00",
+      icon: Layers,
+      hotColor: "text-orange-600",
+      coldColor: "text-blue-600"
     }
   ]
 
@@ -104,18 +104,23 @@ export default function CryptoAssetStatisticsPage() {
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   {stat.label}
                 </CardTitle>
-                <Icon className={`h-4 w-4 ${stat.color}`} />
+                <Icon className="h-4 w-4 text-gray-600 dark:text-gray-400" />
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value} USDT</div>
-                <p className={`text-xs ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'} flex items-center gap-1 mt-1`}>
-                  {stat.trend === 'up' ? (
-                    <TrendingUp className="h-3 w-3" />
-                  ) : (
-                    <TrendingDown className="h-3 w-3" />
-                  )}
-                  {stat.change} 较昨日
-                </p>
+              <CardContent className="space-y-3">
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs text-muted-foreground">热钱包</span>
+                    <span className={`text-xs font-medium ${stat.hotColor}`}>HOT</span>
+                  </div>
+                  <div className="text-xl font-bold">{stat.hotWallet} USDT</div>
+                </div>
+                <div className="border-t pt-2">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs text-muted-foreground">冷钱包</span>
+                    <span className={`text-xs font-medium ${stat.coldColor}`}>COLD</span>
+                  </div>
+                  <div className="text-xl font-bold">{stat.coldWallet} USDT</div>
+                </div>
               </CardContent>
             </Card>
           )
