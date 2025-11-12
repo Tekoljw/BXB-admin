@@ -32,7 +32,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
 
-type CurrencyCategory = "stablecoin" | "mainstream" | "meme"
+type CurrencyCategory = "stablecoin" | "mainstream" | "meme" | "other"
 
 interface CryptoCurrency {
   id: string
@@ -81,6 +81,28 @@ export default function DepositWithdrawalCurrenciesPage() {
     precision: 6,
     sort: 0
   })
+
+  // 获取分类的中文显示名称
+  const getCategoryLabel = (category: CurrencyCategory): string => {
+    const labels = {
+      stablecoin: "稳定币",
+      mainstream: "主流币",
+      meme: "MEME币",
+      other: "其他"
+    }
+    return labels[category]
+  }
+
+  // 获取分类标签的颜色
+  const getCategoryColor = (category: CurrencyCategory): string => {
+    const colors = {
+      stablecoin: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+      mainstream: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
+      meme: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
+      other: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
+    }
+    return colors[category]
+  }
 
   // 示例币种数据
   const [currencies, setCurrencies] = useState<CryptoCurrency[]>([
@@ -211,6 +233,22 @@ export default function DepositWithdrawalCurrenciesPage() {
       visible: true,
       precision: 0,
       sort: 8,
+    },
+    {
+      id: '9',
+      name: 'Ripple',
+      symbol: 'XRP',
+      icon: 'X',
+      category: 'other',
+      networks: ['Ripple'],
+      minWithdraw: '20',
+      withdrawFee: '0.5',
+      maxWithdrawFee: '5',
+      depositEnabled: true,
+      withdrawEnabled: true,
+      visible: true,
+      precision: 6,
+      sort: 9,
     },
   ])
 
@@ -482,6 +520,7 @@ export default function DepositWithdrawalCurrenciesPage() {
             <TabsTrigger value="stablecoin">稳定币</TabsTrigger>
             <TabsTrigger value="mainstream">主流币</TabsTrigger>
             <TabsTrigger value="meme">MEME币</TabsTrigger>
+            <TabsTrigger value="other">其他</TabsTrigger>
           </TabsList>
           
           {/* 二级页签：网络类型 */}
@@ -506,6 +545,9 @@ export default function DepositWithdrawalCurrenciesPage() {
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   币种
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  分类
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   支持网络
@@ -570,6 +612,11 @@ export default function DepositWithdrawalCurrenciesPage() {
                         </div>
                       </div>
                     </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(currency.category)}`}>
+                      {getCategoryLabel(currency.category)}
+                    </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
@@ -742,6 +789,24 @@ export default function DepositWithdrawalCurrenciesPage() {
                   onChange={(e) => setEditingConfig({ ...editingConfig, symbol: e.target.value })}
                   className="mt-2" 
                 />
+              </div>
+
+              <div>
+                <Label>分类</Label>
+                <Select 
+                  value={editingConfig.category || 'stablecoin'} 
+                  onValueChange={(value) => setEditingConfig({ ...editingConfig, category: value as CurrencyCategory })}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="stablecoin">稳定币</SelectItem>
+                    <SelectItem value="mainstream">主流币</SelectItem>
+                    <SelectItem value="meme">MEME币</SelectItem>
+                    <SelectItem value="other">其他</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>
@@ -952,6 +1017,7 @@ export default function DepositWithdrawalCurrenciesPage() {
                     <SelectItem value="stablecoin">稳定币</SelectItem>
                     <SelectItem value="mainstream">主流币</SelectItem>
                     <SelectItem value="meme">MEME币</SelectItem>
+                    <SelectItem value="other">其他</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
