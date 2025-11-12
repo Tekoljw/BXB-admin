@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import { Download, ShoppingCart, Eye, RefreshCcw, Ban } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SearchControls } from "@/components/admin/search-controls"
@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
 
 interface FiatTradingOrder {
@@ -41,9 +42,10 @@ interface FiatTradingOrder {
 }
 
 export default function FiatTradingOrdersPage() {
-  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
-  const [typeFilter, setTypeFilter] = useState<string>("all")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset: resetSearch } = useDeferredSearch()
+  const [orderTypeTab, setOrderTypeTab] = useState<string>("all")
+  const [providerTab, setProviderTab] = useState<string>("all")
+  const [statusTab, setStatusTab] = useState<string>("all")
   const [currencyFilter, setCurrencyFilter] = useState<string>("all")
   const [selectedOrder, setSelectedOrder] = useState<FiatTradingOrder | null>(null)
   const [showDetailDialog, setShowDetailDialog] = useState(false)
@@ -116,19 +118,67 @@ export default function FiatTradingOrdersPage() {
     },
   ]
 
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = 
-      order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.currency.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    const matchesType = typeFilter === "all" || order.orderType === typeFilter
-    const matchesStatus = statusFilter === "all" || order.status === statusFilter
-    const matchesCurrency = currencyFilter === "all" || order.currency === currencyFilter
-    
-    return matchesSearch && matchesType && matchesStatus && matchesCurrency
-  })
+  // 链式过滤：搜索 → 订单类型 → 供应商 → 状态 → 币种
+  const filteredOrders = useMemo(() => {
+    // 第一步：搜索过滤
+    let filtered = orders.filter(order => {
+      const matchesSearch = 
+        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.currency.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase())
+      return matchesSearch
+    })
+
+    // 第二步：订单类型页签过滤
+    if (orderTypeTab !== "all") {
+      filtered = filtered.filter(o => o.orderType === orderTypeTab)
+    }
+
+    // 第三步：供应商页签过滤
+    if (providerTab !== "all") {
+      filtered = filtered.filter(o => o.providerName === providerTab)
+    }
+
+    // 第四步：状态页签过滤
+    if (statusTab !== "all") {
+      filtered = filtered.filter(o => o.status === statusTab)
+    }
+
+    // 第五步：币种筛选
+    if (currencyFilter !== "all") {
+      filtered = filtered.filter(o => o.currency === currencyFilter)
+    }
+
+    return filtered
+  }, [orders, searchTerm, orderTypeTab, providerTab, statusTab, currencyFilter])
+
+  // 动态提取供应商列表（基于订单类型过滤后的数据）
+  const providerOptions = useMemo(() => {
+    let filtered = orders.filter(order => {
+      const matchesSearch = 
+        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.currency.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase())
+      return matchesSearch
+    })
+
+    if (orderTypeTab !== "all") {
+      filtered = filtered.filter(o => o.orderType === orderTypeTab)
+    }
+
+    const uniqueProviders = Array.from(new Set(filtered.map(o => o.providerName))).sort()
+    return ["all", ...uniqueProviders]
+  }, [orders, searchTerm, orderTypeTab])
+
+  // 验证并重置失效的页签选择
+  useEffect(() => {
+    if (!providerOptions.includes(providerTab)) {
+      setProviderTab("all")
+      setStatusTab("all")
+    }
+  }, [providerOptions, providerTab])
 
   // 统计数据
   const stats = {
@@ -200,6 +250,28 @@ export default function FiatTradingOrdersPage() {
     })
   }
 
+  // 一级页签切换：重置二级和三级页签
+  const handleOrderTypeChange = (value: string) => {
+    setOrderTypeTab(value)
+    setProviderTab("all")
+    setStatusTab("all")
+  }
+
+  // 二级页签切换：重置三级页签
+  const handleProviderChange = (value: string) => {
+    setProviderTab(value)
+    setStatusTab("all")
+  }
+
+  // 全局重置
+  const handleReset = () => {
+    resetSearch()
+    setOrderTypeTab("all")
+    setProviderTab("all")
+    setStatusTab("all")
+    setCurrencyFilter("all")
+  }
+
   return (
     <div className="p-6">
       <div className="mb-6">
@@ -256,43 +328,18 @@ export default function FiatTradingOrdersPage() {
 
       {/* 搜索和筛选 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           <SearchControls
             placeholder="搜索订单ID、用户名..."
             value={searchInput}
             onChange={setSearchInput}
             onSearch={handleSearch}
             onReset={handleReset}
+            className="flex-1"
           />
           
-          <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="订单类型" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全部类型</SelectItem>
-              <SelectItem value="buy">买入</SelectItem>
-              <SelectItem value="sell">卖出</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="订单状态" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全部状态</SelectItem>
-              <SelectItem value="pending">待支付</SelectItem>
-              <SelectItem value="paid">已支付</SelectItem>
-              <SelectItem value="processing">处理中</SelectItem>
-              <SelectItem value="completed">已完成</SelectItem>
-              <SelectItem value="cancelled">已取消</SelectItem>
-              <SelectItem value="failed">失败</SelectItem>
-            </SelectContent>
-          </Select>
-
           <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full md:w-[180px]">
               <SelectValue placeholder="币种" />
             </SelectTrigger>
             <SelectContent>
@@ -302,19 +349,144 @@ export default function FiatTradingOrdersPage() {
               <SelectItem value="ETH">ETH</SelectItem>
             </SelectContent>
           </Select>
-
-          <Button 
-            variant="outline" 
-            onClick={() => {
-              handleReset()
-              setTypeFilter("all")
-              setStatusFilter("all")
-              setCurrencyFilter("all")
-            }}
-          >
-            重置筛选
-          </Button>
         </div>
+      </div>
+
+      {/* 三级页签过滤 */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
+        <Tabs value={orderTypeTab} onValueChange={handleOrderTypeChange}>
+          <TabsList className="mb-4">
+            <TabsTrigger value="all">全部订单</TabsTrigger>
+            <TabsTrigger value="buy">买入</TabsTrigger>
+            <TabsTrigger value="sell">卖出</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="all" className="mt-0">
+            <Tabs value={providerTab} onValueChange={handleProviderChange}>
+              <TabsList className="mb-4">
+                {providerOptions.map(provider => (
+                  <TabsTrigger key={provider} value={provider}>
+                    {provider === "all" ? "全部供应商" : provider}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+
+              <TabsContent value="all" className="mt-0">
+                <Tabs value={statusTab} onValueChange={setStatusTab}>
+                  <TabsList>
+                    <TabsTrigger value="all">全部状态</TabsTrigger>
+                    <TabsTrigger value="pending">待支付</TabsTrigger>
+                    <TabsTrigger value="paid">已支付</TabsTrigger>
+                    <TabsTrigger value="processing">处理中</TabsTrigger>
+                    <TabsTrigger value="completed">已完成</TabsTrigger>
+                    <TabsTrigger value="cancelled">已取消</TabsTrigger>
+                    <TabsTrigger value="failed">失败</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </TabsContent>
+
+              {providerOptions.filter(p => p !== "all").map(provider => (
+                <TabsContent key={provider} value={provider} className="mt-0">
+                  <Tabs value={statusTab} onValueChange={setStatusTab}>
+                    <TabsList>
+                      <TabsTrigger value="all">全部状态</TabsTrigger>
+                      <TabsTrigger value="pending">待支付</TabsTrigger>
+                      <TabsTrigger value="paid">已支付</TabsTrigger>
+                      <TabsTrigger value="processing">处理中</TabsTrigger>
+                      <TabsTrigger value="completed">已完成</TabsTrigger>
+                      <TabsTrigger value="cancelled">已取消</TabsTrigger>
+                      <TabsTrigger value="failed">失败</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </TabsContent>
+              ))}
+            </Tabs>
+          </TabsContent>
+
+          <TabsContent value="buy" className="mt-0">
+            <Tabs value={providerTab} onValueChange={handleProviderChange}>
+              <TabsList className="mb-4">
+                {providerOptions.map(provider => (
+                  <TabsTrigger key={provider} value={provider}>
+                    {provider === "all" ? "全部供应商" : provider}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+
+              <TabsContent value="all" className="mt-0">
+                <Tabs value={statusTab} onValueChange={setStatusTab}>
+                  <TabsList>
+                    <TabsTrigger value="all">全部状态</TabsTrigger>
+                    <TabsTrigger value="pending">待支付</TabsTrigger>
+                    <TabsTrigger value="paid">已支付</TabsTrigger>
+                    <TabsTrigger value="processing">处理中</TabsTrigger>
+                    <TabsTrigger value="completed">已完成</TabsTrigger>
+                    <TabsTrigger value="cancelled">已取消</TabsTrigger>
+                    <TabsTrigger value="failed">失败</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </TabsContent>
+
+              {providerOptions.filter(p => p !== "all").map(provider => (
+                <TabsContent key={provider} value={provider} className="mt-0">
+                  <Tabs value={statusTab} onValueChange={setStatusTab}>
+                    <TabsList>
+                      <TabsTrigger value="all">全部状态</TabsTrigger>
+                      <TabsTrigger value="pending">待支付</TabsTrigger>
+                      <TabsTrigger value="paid">已支付</TabsTrigger>
+                      <TabsTrigger value="processing">处理中</TabsTrigger>
+                      <TabsTrigger value="completed">已完成</TabsTrigger>
+                      <TabsTrigger value="cancelled">已取消</TabsTrigger>
+                      <TabsTrigger value="failed">失败</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </TabsContent>
+              ))}
+            </Tabs>
+          </TabsContent>
+
+          <TabsContent value="sell" className="mt-0">
+            <Tabs value={providerTab} onValueChange={handleProviderChange}>
+              <TabsList className="mb-4">
+                {providerOptions.map(provider => (
+                  <TabsTrigger key={provider} value={provider}>
+                    {provider === "all" ? "全部供应商" : provider}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+
+              <TabsContent value="all" className="mt-0">
+                <Tabs value={statusTab} onValueChange={setStatusTab}>
+                  <TabsList>
+                    <TabsTrigger value="all">全部状态</TabsTrigger>
+                    <TabsTrigger value="pending">待支付</TabsTrigger>
+                    <TabsTrigger value="paid">已支付</TabsTrigger>
+                    <TabsTrigger value="processing">处理中</TabsTrigger>
+                    <TabsTrigger value="completed">已完成</TabsTrigger>
+                    <TabsTrigger value="cancelled">已取消</TabsTrigger>
+                    <TabsTrigger value="failed">失败</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </TabsContent>
+
+              {providerOptions.filter(p => p !== "all").map(provider => (
+                <TabsContent key={provider} value={provider} className="mt-0">
+                  <Tabs value={statusTab} onValueChange={setStatusTab}>
+                    <TabsList>
+                      <TabsTrigger value="all">全部状态</TabsTrigger>
+                      <TabsTrigger value="pending">待支付</TabsTrigger>
+                      <TabsTrigger value="paid">已支付</TabsTrigger>
+                      <TabsTrigger value="processing">处理中</TabsTrigger>
+                      <TabsTrigger value="completed">已完成</TabsTrigger>
+                      <TabsTrigger value="cancelled">已取消</TabsTrigger>
+                      <TabsTrigger value="failed">失败</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </TabsContent>
+              ))}
+            </Tabs>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* 订单列表 */}
@@ -331,6 +503,9 @@ export default function FiatTradingOrdersPage() {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   类型
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  供应商
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   加密货币金额
@@ -359,9 +534,6 @@ export default function FiatTradingOrdersPage() {
                     <div className="text-sm font-medium text-gray-900 dark:text-white">
                       {order.id}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {order.providerName}
-                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900 dark:text-white">
@@ -373,6 +545,11 @@ export default function FiatTradingOrdersPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {getTypeBadge(order.orderType)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900 dark:text-white">
+                      {order.providerName}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900 dark:text-white">
