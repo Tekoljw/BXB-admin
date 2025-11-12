@@ -205,9 +205,9 @@ export default function FiatTradingOrdersPage() {
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">法币买卖订单</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">OTC订单</h1>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              查看和管理用户通过法币接口买卖加密货币的订单
+              查看和管理用户通过OTC供应商买卖加密货币的订单
             </p>
           </div>
           <Button className="bg-custom-green hover:bg-green-600">
@@ -324,7 +324,7 @@ export default function FiatTradingOrdersPage() {
             <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  订单信息
+                  订单ID
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   用户
@@ -340,6 +340,9 @@ export default function FiatTradingOrdersPage() {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   支付方式
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  供应商
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   状态
@@ -358,9 +361,6 @@ export default function FiatTradingOrdersPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900 dark:text-white">
                       {order.id}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {order.providerName}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -393,6 +393,11 @@ export default function FiatTradingOrdersPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-600 dark:text-gray-400">
                       {order.paymentMethod}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900 dark:text-white">
+                      {order.providerName}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -446,8 +451,8 @@ export default function FiatTradingOrdersPage() {
         {filteredOrders.length === 0 && (
           <div className="text-center py-16">
             <ShoppingCart className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">暂无法币买卖订单</p>
-            <p className="text-gray-400 dark:text-gray-500 text-sm">当用户通过法币接口买卖加密货币时，订单将显示在此处</p>
+            <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">暂无OTC订单</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm">当用户通过OTC供应商买卖加密货币时，订单将显示在此处</p>
           </div>
         )}
       </div>
@@ -458,7 +463,7 @@ export default function FiatTradingOrdersPage() {
           <DialogHeader>
             <DialogTitle>订单详情</DialogTitle>
             <DialogDescription>
-              查看法币买卖订单的详细信息
+              查看OTC订单的详细信息
             </DialogDescription>
           </DialogHeader>
           
