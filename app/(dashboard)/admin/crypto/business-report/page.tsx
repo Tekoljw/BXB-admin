@@ -20,19 +20,36 @@ export default function CryptoBusinessReportPage() {
   const [timeRange, setTimeRange] = useState("today")
   const [customStartDate, setCustomStartDate] = useState("")
   const [customEndDate, setCustomEndDate] = useState("")
+  const [customDays, setCustomDays] = useState(15)
   const [isLoading, setIsLoading] = useState(false)
   const [showCustomDatePicker, setShowCustomDatePicker] = useState(false)
 
+  // 计算日期差（天数）
+  const calculateDaysDifference = (start: string, end: string): number => {
+    if (!start || !end) return 15
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+    const diffTime = Math.abs(endDate.getTime() - startDate.getTime())
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1 // 包含起止日期
+    return diffDays
+  }
+
   // 根据时间范围生成动态数据
   const generateDataByTimeRange = (range: string) => {
-    const multipliers = {
-      today: 1,
-      yesterday: 0.92,
-      week: 7,
-      month: 30,
-      custom: 15,
+    const getMultiplier = () => {
+      const multipliers: Record<string, number> = {
+        today: 1,
+        yesterday: 0.92,
+        week: 7,
+        month: 30,
+      }
+      if (range === "custom") {
+        return customDays
+      }
+      return multipliers[range] || 1
     }
-    const multiplier = multipliers[range as keyof typeof multipliers] || 1
+
+    const multiplier = getMultiplier()
 
     return {
       totalRevenue: (1245678.9 * multiplier).toFixed(2),
@@ -48,7 +65,7 @@ export default function CryptoBusinessReportPage() {
 
   const summaryData = useMemo(() => {
     return generateDataByTimeRange(timeRange)
-  }, [timeRange])
+  }, [timeRange, customDays])
 
   // 币种统计数据
   const currencyStats = useMemo(() => {
@@ -87,14 +104,19 @@ export default function CryptoBusinessReportPage() {
       },
     ]
 
-    const multipliers = {
-      today: 1,
-      yesterday: 0.92,
-      week: 7,
-      month: 30,
-      custom: 15,
+    const getMultiplier = () => {
+      const multipliers: Record<string, number> = {
+        today: 1,
+        yesterday: 0.92,
+        week: 7,
+        month: 30,
+      }
+      if (timeRange === "custom") {
+        return customDays
+      }
+      return multipliers[timeRange] || 1
     }
-    const multiplier = multipliers[timeRange as keyof typeof multipliers] || 1
+    const multiplier = getMultiplier()
 
     return baseData.map((item) => {
       const revenue = (item.depositAmount + item.withdrawalAmount) * 0.01 * multiplier
@@ -109,7 +131,7 @@ export default function CryptoBusinessReportPage() {
         revenueRate: ((revenue / totalAmount) * 100).toFixed(1) + "%",
       }
     })
-  }, [timeRange])
+  }, [timeRange, customDays])
 
   // 网络统计数据
   const networkStats = useMemo(() => {
@@ -156,14 +178,19 @@ export default function CryptoBusinessReportPage() {
       },
     ]
 
-    const multipliers = {
-      today: 1,
-      yesterday: 0.92,
-      week: 7,
-      month: 30,
-      custom: 15,
+    const getMultiplier = () => {
+      const multipliers: Record<string, number> = {
+        today: 1,
+        yesterday: 0.92,
+        week: 7,
+        month: 30,
+      }
+      if (timeRange === "custom") {
+        return customDays
+      }
+      return multipliers[timeRange] || 1
     }
-    const multiplier = multipliers[timeRange as keyof typeof multipliers] || 1
+    const multiplier = getMultiplier()
 
     return baseData.map((item) => {
       const totalGas = item.gasFee * multiplier
@@ -179,7 +206,7 @@ export default function CryptoBusinessReportPage() {
         revenue: totalRevenue.toFixed(2),
       }
     })
-  }, [timeRange])
+  }, [timeRange, customDays])
 
   // OTC统计数据
   const otcStats = useMemo(() => {
@@ -210,14 +237,19 @@ export default function CryptoBusinessReportPage() {
       },
     ]
 
-    const multipliers = {
-      today: 1,
-      yesterday: 0.92,
-      week: 7,
-      month: 30,
-      custom: 15,
+    const getMultiplier = () => {
+      const multipliers: Record<string, number> = {
+        today: 1,
+        yesterday: 0.92,
+        week: 7,
+        month: 30,
+      }
+      if (timeRange === "custom") {
+        return customDays
+      }
+      return multipliers[timeRange] || 1
     }
-    const multiplier = multipliers[timeRange as keyof typeof multipliers] || 1
+    const multiplier = getMultiplier()
 
     return baseData.map((item) => {
       const totalAmount = (item.buyAmount + item.sellAmount) * multiplier
@@ -232,7 +264,7 @@ export default function CryptoBusinessReportPage() {
         commissionRate: (item.commissionRate * 100).toFixed(1) + "%",
       }
     })
-  }, [timeRange])
+  }, [timeRange, customDays])
 
   // 处理时间范围变更
   const handleTimeRangeChange = (value: string) => {
@@ -255,42 +287,108 @@ export default function CryptoBusinessReportPage() {
       toast.error("请选择开始和结束日期")
       return
     }
+    
+    // 验证日期顺序
+    if (new Date(customStartDate) > new Date(customEndDate)) {
+      toast.error("结束日期必须晚于开始日期")
+      return
+    }
+    
+    // 计算天数并更新状态
+    const days = calculateDaysDifference(customStartDate, customEndDate)
+    setCustomDays(days)
+    
     setIsLoading(true)
     setTimeRange("custom")
     setShowCustomDatePicker(false)
+    
     setTimeout(() => {
       setIsLoading(false)
-      toast.success("已应用自定义时间范围")
+      toast.success(`已应用自定义时间范围（${days}天）`)
     }, 500)
   }
 
   // 导出报表为CSV
   const exportToCSV = () => {
-    toast.info("导出功能开发中，即将推出")
-    
-    // 示例：生成CSV内容
-    const csvContent = [
-      ["币种", "网络", "充值笔数", "充值金额", "提现笔数", "提现金额", "总收益", "收益率"],
-      ...currencyStats.map((stat) => [
-        stat.currency,
-        stat.network,
-        stat.depositCount,
-        stat.depositAmount,
-        stat.withdrawalCount,
-        stat.withdrawalAmount,
-        stat.revenue,
-        stat.revenueRate,
-      ]),
-    ]
-      .map((row) => row.join(","))
-      .join("\n")
-
-    // 创建下载链接（示例，实际项目中需要更完善的实现）
-    // const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-    // const link = document.createElement("a")
-    // link.href = URL.createObjectURL(blob)
-    // link.download = `crypto-report-${timeRange}.csv`
-    // link.click()
+    try {
+      // 生成完整的CSV内容，包含所有三个报表
+      const sections = []
+      
+      // 时间范围信息
+      const timeRangeLabel = {
+        today: "今天",
+        yesterday: "昨天",
+        week: "最近7天",
+        month: "最近30天",
+        custom: customStartDate && customEndDate 
+          ? `${customStartDate} 至 ${customEndDate}（${customDays}天）`
+          : "自定义时间"
+      }[timeRange] || timeRange
+      
+      sections.push(`Crypto经营报表 - ${timeRangeLabel}\n`)
+      sections.push(`导出时间: ${new Date().toLocaleString('zh-CN')}\n\n`)
+      
+      // 核心指标
+      sections.push("核心指标\n")
+      sections.push("指标,数值\n")
+      sections.push(`总收益,${summaryData.totalRevenue} USDT\n`)
+      sections.push(`订单总数,${summaryData.totalOrders}\n`)
+      sections.push(`活跃用户,${summaryData.totalUsers}\n`)
+      sections.push(`平均订单额,${summaryData.avgOrderAmount} USDT\n\n`)
+      
+      // 币种收益统计
+      sections.push("币种收益统计\n")
+      sections.push("币种,网络,充值笔数,充值金额(USDT),提现笔数,提现金额(USDT),总收益(USDT),收益率\n")
+      currencyStats.forEach((stat) => {
+        sections.push(
+          `${stat.currency},${stat.network},${stat.depositCount},${stat.depositAmount},${stat.withdrawalCount},${stat.withdrawalAmount},${stat.revenue},${stat.revenueRate}\n`
+        )
+      })
+      sections.push("\n")
+      
+      // 网络收益统计
+      sections.push("网络收益统计\n")
+      sections.push("网络,充值笔数,充值金额(USDT),提现笔数,提现金额(USDT),Gas费用(USDT),净收益(USDT)\n")
+      networkStats.forEach((stat) => {
+        sections.push(
+          `${stat.network},${stat.depositCount},${stat.depositAmount},${stat.withdrawalCount},${stat.withdrawalAmount},${stat.gasFee},${stat.revenue}\n`
+        )
+      })
+      sections.push("\n")
+      
+      // OTC业务统计
+      sections.push("OTC业务统计\n")
+      sections.push("供应商,买入订单,买入金额(USDT),卖出订单,卖出金额(USDT),佣金收益(USDT),佣金率\n")
+      otcStats.forEach((stat) => {
+        sections.push(
+          `${stat.supplier},${stat.buyOrders},${stat.buyAmount},${stat.sellOrders},${stat.sellAmount},${stat.commission},${stat.commissionRate}\n`
+        )
+      })
+      
+      const csvContent = sections.join("")
+      
+      // 添加UTF-8 BOM以确保Excel正确显示中文
+      const bom = "\uFEFF"
+      const blob = new Blob([bom + csvContent], { type: "text/csv;charset=utf-8;" })
+      
+      // 创建下载链接
+      const link = document.createElement("a")
+      const url = URL.createObjectURL(blob)
+      link.href = url
+      link.download = `crypto-business-report-${timeRange}-${new Date().toISOString().split('T')[0]}.csv`
+      link.style.display = "none"
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      
+      // 清理URL对象
+      setTimeout(() => URL.revokeObjectURL(url), 100)
+      
+      toast.success("报表已成功导出")
+    } catch (error) {
+      console.error("导出失败:", error)
+      toast.error("导出失败，请稍后重试")
+    }
   }
 
   return (
