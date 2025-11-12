@@ -8,10 +8,11 @@ interface SearchControlsProps {
   value: string
   onChange: (value: string) => void
   onSearch: () => void
-  onReset: () => void
+  onReset?: () => void
   onKeyDown?: (e: React.KeyboardEvent) => void
   loading?: boolean
   className?: string
+  showReset?: boolean
 }
 
 export function SearchControls({
@@ -23,6 +24,7 @@ export function SearchControls({
   onKeyDown,
   loading = false,
   className = "",
+  showReset = true,
 }: SearchControlsProps) {
   return (
     <div className={`flex items-center gap-2 ${className}`}>
@@ -51,14 +53,16 @@ export function SearchControls({
         <Search className="w-4 h-4 mr-1" />
         搜索
       </Button>
-      <Button
-        onClick={onReset}
-        variant="outline"
-        disabled={loading}
-      >
-        <RotateCcw className="w-4 h-4 mr-1" />
-        重置
-      </Button>
+      {showReset && onReset && (
+        <Button
+          onClick={onReset}
+          variant="outline"
+          disabled={loading}
+        >
+          <RotateCcw className="w-4 h-4 mr-1" />
+          重置
+        </Button>
+      )}
     </div>
   )
 }
