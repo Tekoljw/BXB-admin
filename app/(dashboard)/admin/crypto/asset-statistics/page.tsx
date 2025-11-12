@@ -287,7 +287,7 @@ export default function CryptoAssetStatisticsPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">链上资产统计</h1>
+          <h1 className="text-2xl font-bold">Crypto资产统计</h1>
           <p className="text-sm text-muted-foreground mt-1">
             实时监控平台链上资产分布与状态
           </p>
@@ -338,40 +338,44 @@ export default function CryptoAssetStatisticsPage() {
 
       <Card>
         <CardHeader className="space-y-4">
-          <div className="flex items-center justify-between">
-            <CardTitle>资产明细</CardTitle>
-          </div>
+          <CardTitle>资产明细</CardTitle>
 
-          <Tabs value={categoryTab} onValueChange={handleCategoryChange}>
-            <TabsList>
-              <TabsTrigger value="all">全部</TabsTrigger>
-              <TabsTrigger value="stablecoin">稳定币</TabsTrigger>
-              <TabsTrigger value="mainstream">主流币</TabsTrigger>
-              <TabsTrigger value="meme">MEME币</TabsTrigger>
-              <TabsTrigger value="other">其他</TabsTrigger>
-            </TabsList>
-          </Tabs>
+          <div className="flex flex-wrap items-center gap-4">
+            <Tabs value={categoryTab} onValueChange={handleCategoryChange}>
+              <TabsList>
+                <TabsTrigger value="all">全部</TabsTrigger>
+                <TabsTrigger value="stablecoin">稳定币</TabsTrigger>
+                <TabsTrigger value="mainstream">主流币</TabsTrigger>
+                <TabsTrigger value="meme">MEME币</TabsTrigger>
+                <TabsTrigger value="other">其他</TabsTrigger>
+              </TabsList>
+            </Tabs>
 
-          <Tabs value={custodianTab} onValueChange={handleCustodianChange}>
-            <TabsList>
-              <TabsTrigger value="all">全部供应商</TabsTrigger>
-              {availableCustodians.map(custodian => (
-                <TabsTrigger key={custodian} value={custodian}>
-                  {custodian}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+            <Tabs value={custodianTab} onValueChange={handleCustodianChange}>
+              <TabsList>
+                <TabsTrigger value="all">全部供应商</TabsTrigger>
+                {availableCustodians.map(custodian => (
+                  <TabsTrigger key={custodian} value={custodian}>
+                    {custodian}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
 
-          <div className="flex gap-2">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="搜索币种、网络或托管供应商..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8"
-              />
+            <div className="flex flex-wrap gap-2 ml-auto">
+              <div className="relative min-w-[200px] md:w-64">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="搜索币种、网络或托管供应商..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-8"
+                />
+              </div>
+              <Button variant="outline" size="default">
+                <Search className="h-4 w-4 mr-2" />
+                搜索
+              </Button>
             </div>
           </div>
         </CardHeader>
