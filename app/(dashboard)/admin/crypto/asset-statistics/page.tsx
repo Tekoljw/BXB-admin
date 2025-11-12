@@ -338,8 +338,6 @@ export default function CryptoAssetStatisticsPage() {
 
       <Card>
         <CardHeader className="space-y-4">
-          <CardTitle>资产明细</CardTitle>
-
           <div className="flex flex-wrap items-center gap-4">
             <Tabs value={categoryTab} onValueChange={handleCategoryChange}>
               <TabsList>

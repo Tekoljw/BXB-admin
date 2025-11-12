@@ -379,25 +379,10 @@ export default function ReportsPage() {
             查看法币业务的整体经营数据和利润分析
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Select value={timeRange} onValueChange={handleTimeRangeChange}>
-            <SelectTrigger className="w-40">
-              <Calendar className="w-4 h-4 mr-2" />
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="today">今天</SelectItem>
-              <SelectItem value="yesterday">昨天</SelectItem>
-              <SelectItem value="week">最近7天</SelectItem>
-              <SelectItem value="month">最近30天</SelectItem>
-              <SelectItem value="custom">自定义</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button onClick={handleExportCSV} className="bg-custom-green hover:bg-green-600">
-            <Download className="w-4 h-4 mr-2" />
-            导出CSV
-          </Button>
-        </div>
+        <Button onClick={handleExportCSV} className="bg-custom-green hover:bg-green-600">
+          <Download className="w-4 h-4 mr-2" />
+          导出CSV
+        </Button>
       </div>
 
       {isLoading ? (
@@ -533,12 +518,29 @@ export default function ReportsPage() {
 
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-              <Tabs value={reportType} onValueChange={(value) => setReportType(value as "daily" | "monthly")}>
-                <TabsList className="grid w-full max-w-md grid-cols-2">
-                  <TabsTrigger value="daily">每日报表</TabsTrigger>
-                  <TabsTrigger value="monthly">每月报表</TabsTrigger>
-                </TabsList>
-              </Tabs>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <Tabs value={reportType} onValueChange={(value) => setReportType(value as "daily" | "monthly")}>
+                  <TabsList className="grid w-full max-w-md grid-cols-2">
+                    <TabsTrigger value="daily">每日报表</TabsTrigger>
+                    <TabsTrigger value="monthly">每月报表</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+                <div className="ml-auto">
+                  <Select value={timeRange} onValueChange={handleTimeRangeChange}>
+                    <SelectTrigger className="w-40">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="today">今天</SelectItem>
+                      <SelectItem value="yesterday">昨天</SelectItem>
+                      <SelectItem value="week">最近7天</SelectItem>
+                      <SelectItem value="month">最近30天</SelectItem>
+                      <SelectItem value="custom">自定义</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </div>
 
             <div className="overflow-x-auto">
