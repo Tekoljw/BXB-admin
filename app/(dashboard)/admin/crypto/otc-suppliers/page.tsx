@@ -229,7 +229,7 @@ export default function OTCSuppliersPage() {
     setShowDisableDialog(true)
   }
 
-  const handleStatusToggle = (item: FiatTradingInterface, checked: boolean) => {
+  const handleStatusToggle = (item: OTCSupplier, checked: boolean) => {
     setInterfaces(interfaces.map(i =>
       i.id === item.id
         ? { ...i, status: checked ? "active" : "suspended" }
@@ -237,7 +237,7 @@ export default function OTCSuppliersPage() {
     ))
   }
 
-  const handleBuyToggle = (item: FiatTradingInterface, checked: boolean) => {
+  const handleBuyToggle = (item: OTCSupplier, checked: boolean) => {
     setInterfaces(interfaces.map(i =>
       i.id === item.id
         ? { ...i, buyEnabled: checked }
@@ -245,7 +245,7 @@ export default function OTCSuppliersPage() {
     ))
   }
 
-  const handleSellToggle = (item: FiatTradingInterface, checked: boolean) => {
+  const handleSellToggle = (item: OTCSupplier, checked: boolean) => {
     setInterfaces(interfaces.map(i =>
       i.id === item.id
         ? { ...i, sellEnabled: checked }
@@ -281,7 +281,7 @@ export default function OTCSuppliersPage() {
     const sortOrder = parseInt(newInterface.sortOrder) || 1
     const validSortOrder = Math.min(Math.max(sortOrder, 1), 20)
     
-    const newInterfaceData: FiatTradingInterface = {
+    const newInterfaceData: OTCSupplier = {
       id: newId,
       providerId: newInterface.providerId,
       providerName: newInterface.providerName,
