@@ -40,12 +40,21 @@ Preferred communication style: Simple, everyday Chinese language.
 - **状态管理**: 使用 React Context API 管理全局状态。
 - **安全性**: 安全的会话处理和路由保护，未登录时自动跳转登录页。
 - **部署**: 支持Next.js服务器功能和独立输出的自动扩展部署配置。
-- **两级页签过滤系统**: 
-  - 采用嵌套shadcn Tabs组件实现两级筛选
-  - 使用链式useMemo过滤（搜索→一级分类→二级分类）
-  - 一级页签切换时自动重置二级页签选择
-  - 二级页签选项根据一级分类动态生成（出入金币种）或固定预设（法币币种）
-  - 数据模型扩展：Crypto币种添加category字段（stablecoin/mainstream/meme），法币币种添加region字段（asia/africa/americas/europe/other）
+- **多级页签过滤系统**: 
+  - **两级页签系统**（币种管理、法币买卖接口等）:
+    - 采用嵌套shadcn Tabs组件实现两级筛选
+    - 使用链式useMemo过滤（搜索→一级分类→二级分类）
+    - 一级页签切换时自动重置二级页签选择
+    - 二级页签选项根据一级分类动态生成（出入金币种）或固定预设（法币币种）
+    - 数据模型扩展：Crypto币种添加category字段（stablecoin/mainstream/meme），法币币种添加region字段（asia/africa/americas/europe/other）
+  - **三级页签系统**（OTC订单）:
+    - **一级页签**：位于页面标题行右侧（买入/卖出/全部）
+    - **二级页签**：位于搜索区域上方（供应商筛选，根据一级页签动态生成）
+    - **三级页签**：位于搜索框同一行左侧（状态筛选）
+    - **搜索和筛选行布局**：状态页签 + 搜索框（flex-1） + 币种下拉筛选（固定宽度）
+    - 使用四级链式useMemo过滤（搜索+币种 → 类型 → 供应商 → 状态）
+    - 级联重置：切换一级页签时自动重置二级页签为"全部"
+    - 动态供应商列表：基于一级页签筛选结果生成可用供应商选项
   - 添加/编辑对话框包含完整字段选择确保TypeScript类型完整
 
 ## External Dependencies
