@@ -1,10 +1,9 @@
 "use client"
 
 import React, { useState, useMemo, useRef } from "react"
-import { Plus, Settings, Activity, TrendingUp, Network, Upload, X, Edit2, Check } from "lucide-react"
+import { Plus, Settings, Activity, TrendingUp, Network, Upload, X, Edit2, Check, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Switch } from "@/components/ui/switch"
 import {
@@ -53,7 +52,7 @@ interface CryptoCurrency {
 }
 
 export default function DepositWithdrawalCurrenciesPage() {
-  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
+  const { searchInput, setSearchInput, searchTerm } = useDeferredSearch()
   const [selectedCurrency, setSelectedCurrency] = useState<CryptoCurrency | null>(null)
   const [showConfigSheet, setShowConfigSheet] = useState(false)
   const [showNetworksDialog, setShowNetworksDialog] = useState(false)
@@ -501,40 +500,42 @@ export default function DepositWithdrawalCurrenciesPage() {
         </Button>
       </div>
 
-      {/* 搜索栏 */}
-      <SearchControls
-        placeholder="搜索币种名称或代码..."
-        value={searchInput}
-        onChange={setSearchInput}
-        onSearch={handleSearch}
-        onReset={handleReset}
-        className="max-w-2xl"
-      />
-
       {/* 两级页签过滤 */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-        {/* 一级页签：币种分类 */}
-        <Tabs value={categoryTab} onValueChange={handleCategoryChange}>
-          <TabsList className="mb-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 space-y-4">
+        {/* 一级页签：网络类型 */}
+        <Tabs value={networkTab} onValueChange={setNetworkTab}>
+          <TabsList className="flex-wrap h-auto">
             <TabsTrigger value="all">全部</TabsTrigger>
-            <TabsTrigger value="stablecoin">稳定币</TabsTrigger>
-            <TabsTrigger value="mainstream">主流币</TabsTrigger>
-            <TabsTrigger value="meme">MEME币</TabsTrigger>
-            <TabsTrigger value="other">其他</TabsTrigger>
+            {availableNetworks.map(network => (
+              <TabsTrigger key={network} value={network}>
+                {network}
+              </TabsTrigger>
+            ))}
           </TabsList>
-          
-          {/* 二级页签：网络类型 */}
-          <Tabs value={networkTab} onValueChange={setNetworkTab}>
-            <TabsList className="flex-wrap h-auto">
+        </Tabs>
+        
+        {/* 二级页签：币种分类（与搜索框同一行） */}
+        <div className="flex flex-wrap items-center gap-4">
+          <Tabs value={categoryTab} onValueChange={handleCategoryChange}>
+            <TabsList>
               <TabsTrigger value="all">全部</TabsTrigger>
-              {availableNetworks.map(network => (
-                <TabsTrigger key={network} value={network}>
-                  {network}
-                </TabsTrigger>
-              ))}
+              <TabsTrigger value="stablecoin">稳定币</TabsTrigger>
+              <TabsTrigger value="mainstream">主流币</TabsTrigger>
+              <TabsTrigger value="meme">MEME币</TabsTrigger>
+              <TabsTrigger value="other">其他</TabsTrigger>
             </TabsList>
           </Tabs>
-        </Tabs>
+
+          <div className="relative ml-auto min-w-[200px] md:w-64">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="搜索币种名称或代码..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="pl-8"
+            />
+          </div>
+        </div>
       </div>
 
       {/* 币种列表表格 */}
