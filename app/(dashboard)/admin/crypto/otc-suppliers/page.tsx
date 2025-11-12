@@ -365,9 +365,9 @@ export default function FiatTradingInterfacePage() {
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">法币买卖接口管理</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">OTC供应商</h1>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              管理法币买卖接口和配置
+              管理OTC供应商接口和配置
             </p>
           </div>
           <Button onClick={() => setShowAddDialog(true)} className="bg-custom-green hover:bg-custom-green/90">
@@ -550,9 +550,9 @@ export default function FiatTradingInterfacePage() {
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>添加法币买卖接口</DialogTitle>
+            <DialogTitle>添加OTC供应商</DialogTitle>
             <DialogDescription>
-              填写以下信息以添加新的法币买卖接口
+              填写以下信息以添加新的OTC供应商接口
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 py-4">
@@ -633,7 +633,7 @@ export default function FiatTradingInterfacePage() {
           <DialogHeader>
             <DialogTitle>编辑接口信息</DialogTitle>
             <DialogDescription>
-              修改法币买卖接口的基本信息
+              修改OTC供应商接口的基本信息
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 py-4">
