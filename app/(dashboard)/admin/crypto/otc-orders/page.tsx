@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog"
 import { toast } from "sonner"
 
-interface FiatTradingOrder {
+interface OTCOrder {
   id: string
   userId: string
   userName: string
@@ -40,16 +40,16 @@ interface FiatTradingOrder {
   remark?: string
 }
 
-export default function FiatTradingOrdersPage() {
+export default function OTCOrdersPage() {
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [typeFilter, setTypeFilter] = useState<string>("all")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [currencyFilter, setCurrencyFilter] = useState<string>("all")
-  const [selectedOrder, setSelectedOrder] = useState<FiatTradingOrder | null>(null)
+  const [selectedOrder, setSelectedOrder] = useState<OTCOrder | null>(null)
   const [showDetailDialog, setShowDetailDialog] = useState(false)
 
   // 示例订单数据
-  const orders: FiatTradingOrder[] = [
+  const orders: OTCOrder[] = [
     {
       id: 'FT202411110001',
       userId: 'U123456',
@@ -183,7 +183,7 @@ export default function FiatTradingOrdersPage() {
         </span>
   }
 
-  const handleViewDetail = (order: FiatTradingOrder) => {
+  const handleViewDetail = (order: OTCOrder) => {
     setSelectedOrder(order)
     setShowDetailDialog(true)
   }

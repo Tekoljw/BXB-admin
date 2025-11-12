@@ -92,8 +92,8 @@ import CryptoCurrenciesPage from "@/app/(dashboard)/admin/crypto/currencies/page
 import CustodialWalletsPage from "@/app/(dashboard)/admin/crypto/custodial-wallets/page"
 import AddressesManagementPage from "@/app/(dashboard)/admin/crypto/addresses/page"
 import WalletAPIBusinessPage from "@/app/(dashboard)/admin/crypto/wallet-api-business/page"
-import FiatTradingInterfacePage from "@/app/(dashboard)/admin/crypto/fiat-trading-interface/page"
-import FiatTradingOrdersPage from "@/app/(dashboard)/admin/crypto/fiat-trading-orders/page"
+import OTCSuppliersPage from "@/app/(dashboard)/admin/crypto/otc-suppliers/page"
+import OTCOrdersPage from "@/app/(dashboard)/admin/crypto/otc-orders/page"
 import OnchainDepositOrdersPage from "@/app/(dashboard)/admin/crypto/onchain-deposit-orders/page"
 import OnchainWithdrawalOrdersPage from "@/app/(dashboard)/admin/crypto/onchain-withdrawal-orders/page"
 import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
@@ -354,8 +354,8 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/crypto/custodial-wallets") return <CustodialWalletsPage />
     if (currentPage === "/admin/crypto/addresses") return <AddressesManagementPage />
     if (currentPage === "/admin/crypto/wallet-api-business") return <WalletAPIBusinessPage />
-    if (currentPage === "/admin/crypto/fiat-trading-interface") return <FiatTradingInterfacePage />
-    if (currentPage === "/admin/crypto/fiat-trading-orders") return <FiatTradingOrdersPage />
+    if (currentPage === "/admin/crypto/otc-suppliers") return <OTCSuppliersPage />
+    if (currentPage === "/admin/crypto/otc-orders") return <OTCOrdersPage />
     if (currentPage === "/admin/crypto/onchain-deposit-orders") return <OnchainDepositOrdersPage />
     if (currentPage === "/admin/crypto/onchain-withdrawal-orders") return <OnchainWithdrawalOrdersPage />
     if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />

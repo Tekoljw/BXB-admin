@@ -33,7 +33,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 
-interface FiatTradingInterface {
+interface OTCSupplier {
   id: string
   providerId: string
   providerName: string
@@ -50,7 +50,7 @@ interface FiatTradingInterface {
   sortOrder: number
 }
 
-const initialMockInterfaces: FiatTradingInterface[] = [
+const initialMockInterfaces: OTCSupplier[] = [
   {
     id: "FI001",
     providerId: "PRV001",
@@ -149,15 +149,15 @@ const initialMockInterfaces: FiatTradingInterface[] = [
   }
 ]
 
-export default function FiatTradingInterfacePage() {
-  const [interfaces, setInterfaces] = useState<FiatTradingInterface[]>(initialMockInterfaces)
+export default function OTCSuppliersPage() {
+  const [interfaces, setInterfaces] = useState<OTCSupplier[]>(initialMockInterfaces)
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [showConfigSheet, setShowConfigSheet] = useState(false)
   const [showDisableDialog, setShowDisableDialog] = useState(false)
-  const [selectedInterface, setSelectedInterface] = useState<FiatTradingInterface | null>(null)
+  const [selectedInterface, setSelectedInterface] = useState<OTCSupplier | null>(null)
   
   const [newInterface, setNewInterface] = useState({
     providerId: "",
@@ -205,7 +205,7 @@ export default function FiatTradingInterfacePage() {
     }
   }
 
-  const handleEdit = (item: FiatTradingInterface) => {
+  const handleEdit = (item: OTCSupplier) => {
     setSelectedInterface(item)
     setNewInterface({
       providerId: item.providerId,
@@ -219,12 +219,12 @@ export default function FiatTradingInterfacePage() {
     setShowEditDialog(true)
   }
 
-  const handleConfig = (item: FiatTradingInterface) => {
+  const handleConfig = (item: OTCSupplier) => {
     setSelectedInterface(item)
     setShowConfigSheet(true)
   }
 
-  const handleDisable = (item: FiatTradingInterface) => {
+  const handleDisable = (item: OTCSupplier) => {
     setSelectedInterface(item)
     setShowDisableDialog(true)
   }
