@@ -60,6 +60,7 @@ interface AdminSidebarV2Props {
 const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
   "crypto": [
     { path: "/admin/crypto/business-report", icon: FileBarChart, label: "经营报表" },
+    { path: "/admin/crypto/asset-statistics", icon: BarChart3, label: "链上资产统计" },
     { path: "/admin/crypto/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/crypto/addresses", icon: Network, label: "地址管理" },
     { path: "/admin/crypto/custodial-wallets", icon: Wallet, label: "供应商接口" },
@@ -170,6 +171,7 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
   ],
   fiat: [
     { path: "/admin/fiat/reports", icon: FileBarChart, label: "经营报表" },
+    { path: "/admin/fiat/asset-statistics", icon: BarChart3, label: "法币资产统计" },
     { path: "/admin/fiat/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/fiat/suppliers", icon: Store, label: "供应商管理" },
     { path: "/admin/fiat/interfaces", icon: Network, label: "接口管理" },
