@@ -47,6 +47,17 @@ Preferred communication style: Simple, everyday Chinese language.
     - 一级页签切换时自动重置二级页签选择
     - 二级页签选项根据一级分类动态生成（出入金币种）或固定预设（法币币种）
     - 数据模型扩展：Crypto币种添加category字段（stablecoin/mainstream/meme），法币币种添加region字段（asia/africa/americas/europe/other）
+  - **三级页签系统**（OTC供应商）:
+    - **一级页签**：位于页面标题行右侧（全部/买入/卖出）
+    - **二级页签**：位于搜索区域上方（币种筛选：全部币种/USDT/BTC/ETH）
+    - **三级页签**：位于搜索框同一行左侧（状态筛选：全部状态/正常/停用/暂停）
+    - **搜索行布局**：状态页签 + 搜索框（flex-1）
+    - 使用四级链式useMemo过滤（搜索 → 交易类型 → 币种 → 状态）
+    - 级联重置：一级页签切换时重置二级+三级页签，二级页签切换时重置三级页签
+    - 数据模型扩展：OTCSupplier添加currencies字段（string[]数组，默认["USDT","BTC","ETH"]）
+    - 交易类型过滤：buy检查buyEnabled，sell检查sellEnabled
+    - 币种过滤：支持空数组向后兼容或精确包含匹配
+    - 已删除：状态下拉筛选框
   - **四级页签系统**（OTC订单）:
     - **一级页签**：位于页面标题行右侧（全部/买入/卖出）
     - **二级页签**：位于搜索区域上方（供应商筛选，根据一级页签动态生成）
