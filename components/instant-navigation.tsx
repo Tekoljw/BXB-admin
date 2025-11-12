@@ -88,6 +88,7 @@ import UCardCommissionPage from "@/app/(dashboard)/admin/commission/ucard/page"
 import EscrowCommissionPage from "@/app/(dashboard)/admin/commission/escrow/page"
 import PaymentCommissionPage from "@/app/(dashboard)/admin/commission/payment/page"
 import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
+import CryptoBusinessReportPage from "@/app/(dashboard)/admin/crypto/business-report/page"
 import CryptoCurrenciesPage from "@/app/(dashboard)/admin/crypto/currencies/page"
 import CustodialWalletsPage from "@/app/(dashboard)/admin/crypto/custodial-wallets/page"
 import AddressesManagementPage from "@/app/(dashboard)/admin/crypto/addresses/page"
@@ -349,6 +350,7 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/commission/escrow") return <EscrowCommissionPage />
     if (currentPage === "/admin/commission/payment") return <PaymentCommissionPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
+    if (currentPage === "/admin/crypto/business-report") return <CryptoBusinessReportPage />
     if (currentPage === "/admin/crypto/currencies") return <CryptoCurrenciesPage />
     if (currentPage === "/admin/crypto/custodial-wallets") return <CustodialWalletsPage />
     if (currentPage === "/admin/crypto/addresses") return <AddressesManagementPage />

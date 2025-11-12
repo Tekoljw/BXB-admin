@@ -5,8 +5,8 @@ import InstantNavigation from "@/components/instant-navigation"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    sessionStorage.setItem("isLoggedIn", "true")
-    document.cookie = "isLoggedIn=true; path=/"
+    sessionStorage.setItem("isAdminLoggedIn", "true")
+    document.cookie = "isAdminLoggedIn=true; path=/"
   }, [])
 
   return <InstantNavigation />
