@@ -10,13 +10,11 @@ import { toast } from "sonner"
 
 type OrderType = "deposit" | "withdrawal"
 
-const AddressDisplay = ({ address, label, type = "address" }: { address?: string; label: string; type?: "address" | "hash" }) => {
+const AddressDisplay = ({ address }: { address?: string }) => {
   const [copied, setCopied] = useState(false)
 
   if (!address) return (
-    <div className="text-xs text-gray-400 dark:text-gray-600">
-      {label}: -
-    </div>
+    <div className="text-sm text-gray-400 dark:text-gray-600">-</div>
   )
 
   const truncateAddress = (addr: string) => {
@@ -38,15 +36,14 @@ const AddressDisplay = ({ address, label, type = "address" }: { address?: string
   return (
     <div className="flex items-center gap-2 group">
       <div className="flex-1 min-w-0">
-        <div className="text-xs text-gray-500 dark:text-gray-500">{label}</div>
-        <div className={`text-xs font-mono ${type === "hash" ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-gray-300"} truncate`} title={address}>
+        <div className="text-sm font-mono text-gray-700 dark:text-gray-300 truncate" title={address}>
           {truncateAddress(address)}
         </div>
       </div>
       <button
         onClick={copyToClipboard}
-        className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-        title="复制"
+        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+        title="复制地址"
       >
         {copied ? (
           <Check className="w-3.5 h-3.5 text-green-600" />
@@ -55,6 +52,46 @@ const AddressDisplay = ({ address, label, type = "address" }: { address?: string
         )}
       </button>
     </div>
+  )
+}
+
+const HashCopyButton = ({ txHash }: { txHash?: string }) => {
+  const [copied, setCopied] = useState(false)
+
+  if (!txHash) return (
+    <div className="text-sm text-gray-400 dark:text-gray-600">-</div>
+  )
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(txHash)
+      setCopied(true)
+      toast.success("交易哈希已复制")
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      toast.error("复制失败")
+    }
+  }
+
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={copyToClipboard}
+      className="h-7 text-xs"
+    >
+      {copied ? (
+        <>
+          <Check className="w-3 h-3 mr-1 text-green-600" />
+          已复制
+        </>
+      ) : (
+        <>
+          <Copy className="w-3 h-3 mr-1" />
+          复制交易哈希
+        </>
+      )}
+    </Button>
   )
 }
 
@@ -473,8 +510,16 @@ export default function OnchainOrdersPage() {
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   链
                 </th>
+                {typeTab === "deposit" && (
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    来源地址
+                  </th>
+                )}
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  地址/哈希
+                  {typeTab === "deposit" ? "充值地址" : "目标地址"}
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  交易哈希
                 </th>
                 {typeTab === "deposit" && (
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -529,34 +574,16 @@ export default function OnchainOrdersPage() {
                       {order.chain}
                     </div>
                   </td>
+                  {typeTab === "deposit" && (
+                    <td className="px-6 py-4">
+                      <AddressDisplay address={order.fromAddress} />
+                    </td>
+                  )}
                   <td className="px-6 py-4">
-                    <div className="space-y-2 min-w-[200px]">
-                      {typeTab === "deposit" ? (
-                        <>
-                          <AddressDisplay
-                            address={order.fromAddress}
-                            label="来源"
-                            type="address"
-                          />
-                          <AddressDisplay
-                            address={order.toAddress}
-                            label="充值"
-                            type="address"
-                          />
-                        </>
-                      ) : (
-                        <AddressDisplay
-                          address={order.toAddress}
-                          label="目标"
-                          type="address"
-                        />
-                      )}
-                      <AddressDisplay
-                        address={order.txHash}
-                        label="哈希"
-                        type="hash"
-                      />
-                    </div>
+                    <AddressDisplay address={order.toAddress} />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <HashCopyButton txHash={order.txHash} />
                   </td>
                   {typeTab === "deposit" && (
                     <td className="px-6 py-4 whitespace-nowrap">
