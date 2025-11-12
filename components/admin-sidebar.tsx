@@ -59,13 +59,14 @@ interface AdminSidebarV2Props {
 // 定义每个模块的二级菜单
 const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
   "crypto": [
+    { path: "/admin/crypto/business-report", icon: FileBarChart, label: "经营报表" },
     { path: "/admin/crypto/currencies", icon: DollarSign, label: "币种管理" },
-    { path: "/admin/crypto/custodial-wallets", icon: Wallet, label: "托管钱包接口" },
     { path: "/admin/crypto/addresses", icon: Network, label: "地址管理" },
+    { path: "/admin/crypto/custodial-wallets", icon: Wallet, label: "供应商接口" },
+    { path: "/admin/crypto/onchain-deposit-orders", icon: ArrowLeftRight, label: "Crypto出入金订单" },
     { path: "/admin/crypto/wallet-api-business", icon: Code, label: "钱包API业务" },
     { path: "/admin/crypto/otc-suppliers", icon: ArrowLeftRight, label: "OTC供应商" },
     { path: "/admin/crypto/otc-orders", icon: List, label: "OTC订单" },
-    { path: "/admin/crypto/onchain-deposit-orders", icon: ArrowLeftRight, label: "Crypto出入金订单" },
   ],
   permissions: [
     { path: "/admin/permissions/business-lines", icon: BarChart3, label: "业务线" },
