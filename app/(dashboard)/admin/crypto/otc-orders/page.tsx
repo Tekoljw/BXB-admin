@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { Download, ShoppingCart, Eye, RefreshCcw, Ban } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SearchControls } from "@/components/admin/search-controls"
@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
 
 interface OTCOrder {
@@ -42,8 +43,12 @@ interface OTCOrder {
 
 export default function OTCOrdersPage() {
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
-  const [typeFilter, setTypeFilter] = useState<string>("all")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
+  
+  // 三级页签状态
+  const [typeTab, setTypeTab] = useState<string>("all") // 一级：买入/卖出
+  const [providerTab, setProviderTab] = useState<string>("all") // 二级：供应商
+  const [statusTab, setStatusTab] = useState<string>("all") // 三级：状态
+  
   const [currencyFilter, setCurrencyFilter] = useState<string>("all")
   const [selectedOrder, setSelectedOrder] = useState<OTCOrder | null>(null)
   const [showDetailDialog, setShowDetailDialog] = useState(false)
@@ -116,19 +121,51 @@ export default function OTCOrdersPage() {
     },
   ]
 
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = 
-      order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.currency.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase())
+  // 三级链式过滤：搜索 → 买入/卖出 → 供应商 → 状态
+  const filteredOrders = useMemo(() => {
+    // 第一步：搜索和币种过滤
+    let filtered = orders.filter(order => {
+      const matchesSearch = 
+        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.currency.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase())
+      
+      const matchesCurrency = currencyFilter === "all" || order.currency === currencyFilter
+      
+      return matchesSearch && matchesCurrency
+    })
+
+    // 第二步：类型（买入/卖出）页签过滤
+    if (typeTab !== "all") {
+      filtered = filtered.filter(o => o.orderType === typeTab)
+    }
+
+    // 第三步：供应商页签过滤
+    if (providerTab !== "all") {
+      filtered = filtered.filter(o => o.providerName === providerTab)
+    }
+
+    // 第四步：状态页签过滤
+    if (statusTab !== "all") {
+      filtered = filtered.filter(o => o.status === statusTab)
+    }
+
+    return filtered
+  }, [orders, searchTerm, currencyFilter, typeTab, providerTab, statusTab])
+
+  // 获取当前筛选条件下的唯一供应商列表（用于二级页签）
+  const availableProviders = useMemo(() => {
+    let filtered = orders
     
-    const matchesType = typeFilter === "all" || order.orderType === typeFilter
-    const matchesStatus = statusFilter === "all" || order.status === statusFilter
-    const matchesCurrency = currencyFilter === "all" || order.currency === currencyFilter
+    // 应用一级页签筛选
+    if (typeTab !== "all") {
+      filtered = filtered.filter(o => o.orderType === typeTab)
+    }
     
-    return matchesSearch && matchesType && matchesStatus && matchesCurrency
-  })
+    const providers = Array.from(new Set(filtered.map(o => o.providerName)))
+    return providers.sort()
+  }, [orders, typeTab])
 
   // 统计数据
   const stats = {
@@ -202,6 +239,7 @@ export default function OTCOrdersPage() {
 
   return (
     <div className="p-6">
+      {/* 标题和一级页签 */}
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
@@ -210,10 +248,29 @@ export default function OTCOrdersPage() {
               查看和管理用户通过OTC供应商买卖加密货币的订单
             </p>
           </div>
-          <Button className="bg-custom-green hover:bg-green-600">
-            <Download className="w-4 h-4 mr-2" />
-            导出订单
-          </Button>
+          <div className="flex items-center gap-4">
+            {/* 一级页签：买入/卖出 */}
+            <Tabs value={typeTab} onValueChange={(value) => {
+              setTypeTab(value)
+              setProviderTab("all") // 切换一级页签时重置二级页签
+            }}>
+              <TabsList className="bg-gray-100 dark:bg-gray-700">
+                <TabsTrigger value="all" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  全部
+                </TabsTrigger>
+                <TabsTrigger value="buy" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  买入
+                </TabsTrigger>
+                <TabsTrigger value="sell" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  卖出
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <Button className="bg-custom-green hover:bg-green-600">
+              <Download className="w-4 h-4 mr-2" />
+              导出订单
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -254,66 +311,81 @@ export default function OTCOrdersPage() {
         </div>
       </div>
 
-      {/* 搜索和筛选 */}
+      {/* 二级页签：供应商 */}
+      <div className="mb-4">
+        <Tabs value={providerTab} onValueChange={setProviderTab}>
+          <TabsList className="bg-gray-100 dark:bg-gray-700 h-auto flex-wrap">
+            <TabsTrigger value="all" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+              全部供应商
+            </TabsTrigger>
+            {availableProviders.map(provider => (
+              <TabsTrigger 
+                key={provider} 
+                value={provider}
+                className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600"
+              >
+                {provider}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+
+      {/* 三级页签（状态）+ 搜索和筛选 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <SearchControls
-            placeholder="搜索订单ID、用户名..."
-            value={searchInput}
-            onChange={setSearchInput}
-            onSearch={handleSearch}
-            onReset={handleReset}
-          />
-          
-          <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="订单类型" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全部类型</SelectItem>
-              <SelectItem value="buy">买入</SelectItem>
-              <SelectItem value="sell">卖出</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="订单状态" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全部状态</SelectItem>
-              <SelectItem value="pending">待支付</SelectItem>
-              <SelectItem value="paid">已支付</SelectItem>
-              <SelectItem value="processing">处理中</SelectItem>
-              <SelectItem value="completed">已完成</SelectItem>
-              <SelectItem value="cancelled">已取消</SelectItem>
-              <SelectItem value="failed">失败</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="币种" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全部币种</SelectItem>
-              <SelectItem value="USDT">USDT</SelectItem>
-              <SelectItem value="BTC">BTC</SelectItem>
-              <SelectItem value="ETH">ETH</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Button 
-            variant="outline" 
-            onClick={() => {
-              handleReset()
-              setTypeFilter("all")
-              setStatusFilter("all")
-              setCurrencyFilter("all")
-            }}
-          >
-            重置筛选
-          </Button>
+        <div className="flex flex-col gap-4">
+          {/* 三级页签：状态 + 搜索框 + 币种筛选 */}
+          <div className="flex items-center gap-4">
+            {/* 三级页签：状态 */}
+            <Tabs value={statusTab} onValueChange={setStatusTab} className="flex-shrink-0">
+              <TabsList className="bg-gray-100 dark:bg-gray-700">
+                <TabsTrigger value="all" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  全部状态
+                </TabsTrigger>
+                <TabsTrigger value="pending" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  待支付
+                </TabsTrigger>
+                <TabsTrigger value="paid" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  已支付
+                </TabsTrigger>
+                <TabsTrigger value="processing" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  处理中
+                </TabsTrigger>
+                <TabsTrigger value="completed" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  已完成
+                </TabsTrigger>
+                <TabsTrigger value="cancelled" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  已取消
+                </TabsTrigger>
+                <TabsTrigger value="failed" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  失败
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            
+            {/* 搜索框 */}
+            <SearchControls
+              placeholder="搜索订单ID、用户名、币种..."
+              value={searchInput}
+              onChange={setSearchInput}
+              onSearch={handleSearch}
+              onReset={handleReset}
+              className="flex-1"
+            />
+            
+            {/* 币种筛选 */}
+            <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
+              <SelectTrigger className="w-[160px]">
+                <SelectValue placeholder="币种" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">全部币种</SelectItem>
+                <SelectItem value="USDT">USDT</SelectItem>
+                <SelectItem value="BTC">BTC</SelectItem>
+                <SelectItem value="ETH">ETH</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
