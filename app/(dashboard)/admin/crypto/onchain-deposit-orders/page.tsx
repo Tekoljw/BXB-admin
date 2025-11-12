@@ -1,13 +1,62 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Download, Coins, ArrowDownToLine, ArrowUpFromLine } from "lucide-react"
+import { Download, Coins, ArrowDownToLine, ArrowUpFromLine, Copy, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { toast } from "sonner"
 
 type OrderType = "deposit" | "withdrawal"
+
+const AddressDisplay = ({ address, label, type = "address" }: { address?: string; label: string; type?: "address" | "hash" }) => {
+  const [copied, setCopied] = useState(false)
+
+  if (!address) return (
+    <div className="text-xs text-gray-400 dark:text-gray-600">
+      {label}: -
+    </div>
+  )
+
+  const truncateAddress = (addr: string) => {
+    if (addr.length <= 20) return addr
+    return `${addr.slice(0, 8)}...${addr.slice(-8)}`
+  }
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(address)
+      setCopied(true)
+      toast.success("已复制到剪贴板")
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      toast.error("复制失败")
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-2 group">
+      <div className="flex-1 min-w-0">
+        <div className="text-xs text-gray-500 dark:text-gray-500">{label}</div>
+        <div className={`text-xs font-mono ${type === "hash" ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-gray-300"} truncate`} title={address}>
+          {truncateAddress(address)}
+        </div>
+      </div>
+      <button
+        onClick={copyToClipboard}
+        className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+        title="复制"
+      >
+        {copied ? (
+          <Check className="w-3.5 h-3.5 text-green-600" />
+        ) : (
+          <Copy className="w-3.5 h-3.5 text-gray-400" />
+        )}
+      </button>
+    </div>
+  )
+}
 
 interface CryptoOnchainOrder {
   id: string
@@ -425,10 +474,7 @@ export default function OnchainOrdersPage() {
                   链
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  {typeTab === "deposit" ? "充值地址" : "目标地址"}
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  交易哈希
+                  地址/哈希
                 </th>
                 {typeTab === "deposit" && (
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -484,20 +530,33 @@ export default function OnchainOrdersPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm font-mono text-gray-600 dark:text-gray-400 truncate max-w-xs">
-                      {typeTab === "deposit" ? order.toAddress : order.toAddress}
+                    <div className="space-y-2 min-w-[200px]">
+                      {typeTab === "deposit" ? (
+                        <>
+                          <AddressDisplay
+                            address={order.fromAddress}
+                            label="来源"
+                            type="address"
+                          />
+                          <AddressDisplay
+                            address={order.toAddress}
+                            label="充值"
+                            type="address"
+                          />
+                        </>
+                      ) : (
+                        <AddressDisplay
+                          address={order.toAddress}
+                          label="目标"
+                          type="address"
+                        />
+                      )}
+                      <AddressDisplay
+                        address={order.txHash}
+                        label="哈希"
+                        type="hash"
+                      />
                     </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    {order.txHash ? (
-                      <div className="text-sm font-mono text-blue-600 dark:text-blue-400 truncate max-w-xs">
-                        {order.txHash}
-                      </div>
-                    ) : (
-                      <div className="text-sm text-gray-400 dark:text-gray-600">
-                        -
-                      </div>
-                    )}
                   </td>
                   {typeTab === "deposit" && (
                     <td className="px-6 py-4 whitespace-nowrap">
