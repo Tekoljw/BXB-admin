@@ -1,12 +1,13 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { Plus, Edit, Settings, Ban, Check, Eye, EyeOff, DollarSign, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Card } from "@/components/ui/card"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Dialog,
   DialogContent,
@@ -48,6 +49,7 @@ interface OTCSupplier {
   buyEnabled: boolean
   sellEnabled: boolean
   sortOrder: number
+  currencies: string[]
 }
 
 const initialMockInterfaces: OTCSupplier[] = [
@@ -65,7 +67,8 @@ const initialMockInterfaces: OTCSupplier[] = [
     totalFee: 256789.30,
     buyEnabled: true,
     sellEnabled: true,
-    sortOrder: 1
+    sortOrder: 1,
+    currencies: ["USDT", "BTC", "ETH"]
   },
   {
     id: "FI002",
@@ -81,7 +84,8 @@ const initialMockInterfaces: OTCSupplier[] = [
     totalFee: 178450.80,
     buyEnabled: true,
     sellEnabled: false,
-    sortOrder: 2
+    sortOrder: 2,
+    currencies: ["USDT", "ETH"]
   },
   {
     id: "FI003",
@@ -97,7 +101,8 @@ const initialMockInterfaces: OTCSupplier[] = [
     totalFee: 95620.40,
     buyEnabled: false,
     sellEnabled: false,
-    sortOrder: 3
+    sortOrder: 3,
+    currencies: ["USDT"]
   },
   {
     id: "FI004",
@@ -113,7 +118,8 @@ const initialMockInterfaces: OTCSupplier[] = [
     totalFee: 312560.90,
     buyEnabled: false,
     sellEnabled: true,
-    sortOrder: 4
+    sortOrder: 4,
+    currencies: ["BTC"]
   },
   {
     id: "FI005",
@@ -129,7 +135,8 @@ const initialMockInterfaces: OTCSupplier[] = [
     totalFee: 45870.20,
     buyEnabled: true,
     sellEnabled: true,
-    sortOrder: 5
+    sortOrder: 5,
+    currencies: ["USDT", "BTC"]
   },
   {
     id: "FI006",
@@ -145,14 +152,20 @@ const initialMockInterfaces: OTCSupplier[] = [
     totalFee: 198540.30,
     buyEnabled: true,
     sellEnabled: true,
-    sortOrder: 6
+    sortOrder: 6,
+    currencies: ["USDT", "BTC", "ETH"]
   }
 ]
 
 export default function OTCSuppliersPage() {
   const [interfaces, setInterfaces] = useState<OTCSupplier[]>(initialMockInterfaces)
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
-  const [statusFilter, setStatusFilter] = useState<string>("all")
+  
+  // 三级页签状态
+  const [tradeTab, setTradeTab] = useState<string>("all") // 一级：全部/买入/卖出
+  const [currencyTab, setCurrencyTab] = useState<string>("all") // 二级：币种
+  const [statusTab, setStatusTab] = useState<string>("all") // 三级：状态
+  
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [showConfigSheet, setShowConfigSheet] = useState(false)
@@ -169,19 +182,43 @@ export default function OTCSuppliersPage() {
     sortOrder: "1",
   })
 
-  const filteredInterfaces = interfaces
-    .filter(item => {
+  // 四级链式过滤：搜索 → 买入/卖出 → 币种 → 状态
+  const filteredInterfaces = useMemo(() => {
+    // 第一步：搜索过滤
+    let filtered = interfaces.filter(item => {
       const matchesSearch = 
         item.providerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.providerId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.accountName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.buyInterfaceCode.toLowerCase().includes(searchTerm.toLowerCase())
       
-      const matchesStatus = statusFilter === "all" || item.status === statusFilter
-      
-      return matchesSearch && matchesStatus
+      return matchesSearch
     })
-    .sort((a, b) => a.sortOrder - b.sortOrder)
+
+    // 第二步：交易类型（买入/卖出）页签过滤
+    if (tradeTab !== "all") {
+      filtered = filtered.filter(item => {
+        if (tradeTab === "buy") return item.buyEnabled
+        if (tradeTab === "sell") return item.sellEnabled
+        return true
+      })
+    }
+
+    // 第三步：币种页签过滤
+    if (currencyTab !== "all") {
+      filtered = filtered.filter(item => 
+        item.currencies.length === 0 || item.currencies.includes(currencyTab)
+      )
+    }
+
+    // 第四步：状态页签过滤
+    if (statusTab !== "all") {
+      filtered = filtered.filter(item => item.status === statusTab)
+    }
+
+    // 排序
+    return filtered.sort((a, b) => a.sortOrder - b.sortOrder)
+  }, [interfaces, searchTerm, tradeTab, currencyTab, statusTab])
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -295,7 +332,8 @@ export default function OTCSuppliersPage() {
       totalFee: 0,
       buyEnabled: true,
       sellEnabled: true,
-      sortOrder: validSortOrder
+      sortOrder: validSortOrder,
+      currencies: ["USDT", "BTC", "ETH"]
     }
     
     setInterfaces([...interfaces, newInterfaceData])
@@ -362,6 +400,7 @@ export default function OTCSuppliersPage() {
 
   return (
     <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      {/* 标题和一级页签 */}
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
@@ -370,16 +409,79 @@ export default function OTCSuppliersPage() {
               管理OTC供应商接口和配置
             </p>
           </div>
-          <Button onClick={() => setShowAddDialog(true)} className="bg-custom-green hover:bg-custom-green/90">
-            <Plus className="w-4 h-4 mr-2" />
-            添加接口
-          </Button>
+          <div className="flex items-center gap-4">
+            {/* 一级页签：全部/买入/卖出 */}
+            <Tabs value={tradeTab} onValueChange={(value) => {
+              setTradeTab(value)
+              setCurrencyTab("all") // 切换一级页签时重置二级页签
+              setStatusTab("all") // 重置三级页签
+            }}>
+              <TabsList className="bg-gray-100 dark:bg-gray-700">
+                <TabsTrigger value="all" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  全部
+                </TabsTrigger>
+                <TabsTrigger value="buy" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  买入
+                </TabsTrigger>
+                <TabsTrigger value="sell" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  卖出
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <Button onClick={() => setShowAddDialog(true)} className="bg-custom-green hover:bg-custom-green/90">
+              <Plus className="w-4 h-4 mr-2" />
+              添加接口
+            </Button>
+          </div>
         </div>
       </div>
 
+      {/* 二级页签：币种 */}
+      <div className="mb-4">
+        <Tabs value={currencyTab} onValueChange={(value) => {
+          setCurrencyTab(value)
+          setStatusTab("all") // 切换二级页签时重置三级页签
+        }}>
+          <TabsList className="bg-gray-100 dark:bg-gray-700 h-auto flex-wrap">
+            <TabsTrigger value="all" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+              全部币种
+            </TabsTrigger>
+            <TabsTrigger value="USDT" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+              USDT
+            </TabsTrigger>
+            <TabsTrigger value="BTC" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+              BTC
+            </TabsTrigger>
+            <TabsTrigger value="ETH" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+              ETH
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
+      {/* 三级页签（状态）+ 搜索 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
         <div className="p-6">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex items-center gap-4">
+            {/* 三级页签：状态 */}
+            <Tabs value={statusTab} onValueChange={setStatusTab} className="flex-shrink-0">
+              <TabsList className="bg-gray-100 dark:bg-gray-700">
+                <TabsTrigger value="all" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  全部状态
+                </TabsTrigger>
+                <TabsTrigger value="active" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  正常
+                </TabsTrigger>
+                <TabsTrigger value="inactive" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  停用
+                </TabsTrigger>
+                <TabsTrigger value="suspended" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+                  暂停
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            
+            {/* 搜索框 */}
             <SearchControls
               placeholder="搜索提供商名称、编号、账号或接口代码..."
               value={searchInput}
@@ -388,17 +490,6 @@ export default function OTCSuppliersPage() {
               onReset={handleReset}
               className="flex-1"
             />
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full md:w-[180px]">
-                <SelectValue placeholder="状态筛选" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">全部状态</SelectItem>
-                <SelectItem value="active">正常</SelectItem>
-                <SelectItem value="inactive">停用</SelectItem>
-                <SelectItem value="suspended">暂停</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </div>
       </div>
