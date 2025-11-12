@@ -60,7 +60,7 @@ interface AdminSidebarV2Props {
 const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
   "crypto": [
     { path: "/admin/crypto/business-report", icon: FileBarChart, label: "经营报表" },
-    { path: "/admin/crypto/asset-statistics", icon: BarChart3, label: "链上资产统计" },
+    { path: "/admin/crypto/asset-statistics", icon: BarChart3, label: "Crypto资产统计" },
     { path: "/admin/crypto/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/crypto/addresses", icon: Network, label: "地址管理" },
     { path: "/admin/crypto/custodial-wallets", icon: Wallet, label: "供应商接口" },
