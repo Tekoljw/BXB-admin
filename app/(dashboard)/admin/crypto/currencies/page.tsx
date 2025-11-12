@@ -526,14 +526,20 @@ export default function DepositWithdrawalCurrenciesPage() {
             </TabsList>
           </Tabs>
 
-          <div className="relative ml-auto min-w-[200px] md:w-64">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="搜索币种名称或代码..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className="pl-8"
-            />
+          <div className="flex gap-2 ml-auto flex-1 max-w-md">
+            <div className="relative flex-1">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="搜索币种名称或代码..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="pl-8"
+              />
+            </div>
+            <Button variant="outline">
+              <Search className="h-4 w-4 mr-2" />
+              搜索
+            </Button>
           </div>
         </div>
       </div>
