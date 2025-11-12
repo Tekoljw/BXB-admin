@@ -1,166 +1,186 @@
 "use client"
 
-import React, { useState } from "react"
-import { ChevronDown, ChevronRight, TrendingUp } from "lucide-react"
+import React, { useState, useMemo } from "react"
+import { Card } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { LoadMoreButton } from "@/components/load-more-button"
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Users,
+  ArrowUpDown,
+  Download,
+  Loader2,
+  CalendarIcon,
+  Wallet,
+  PiggyBank,
+  Percent,
+} from "lucide-react"
+import { toast } from "sonner"
 
-interface ChannelProfit {
-  channelName: string
-  collectionRateProfit: number
-  collectionFixedProfit: number
-  payoutRateProfit: number
-  payoutFixedProfit: number
-  totalProfit: number
-}
+export default function FiatBusinessReportPage() {
+  const [timeRange, setTimeRange] = useState("today")
+  const [customStartDate, setCustomStartDate] = useState("")
+  const [customEndDate, setCustomEndDate] = useState("")
+  const [customDays, setCustomDays] = useState(15)
+  const [isLoading, setIsLoading] = useState(false)
+  const [showCustomDatePicker, setShowCustomDatePicker] = useState(false)
 
-interface MerchantProfit {
-  merchantId: string
-  merchantName: string
-  collectionRateProfit: number
-  collectionFixedProfit: number
-  payoutRateProfit: number
-  payoutFixedProfit: number
-  totalProfit: number
-}
-
-interface ReportRow {
-  period: string
-  activeMerchants: number
-  activeAgents: number
-  collectionRateProfit: number
-  collectionFixedProfit: number
-  payoutRateProfit: number
-  payoutFixedProfit: number
-  totalProfit: number
-  topChannels: ChannelProfit[]
-  topMerchants: MerchantProfit[]
-}
-
-const mockDailyReports: ReportRow[] = [
-  {
-    period: "2024-11-09",
-    activeMerchants: 45,
-    activeAgents: 12,
-    collectionRateProfit: 12500.50,
-    collectionFixedProfit: 3200.00,
-    payoutRateProfit: 8900.25,
-    payoutFixedProfit: 2100.50,
-    totalProfit: 26700.25,
-    topChannels: [
-      { channelName: "支付宝", collectionRateProfit: 5200.00, collectionFixedProfit: 1200.00, payoutRateProfit: 3500.00, payoutFixedProfit: 800.00, totalProfit: 10700.00 },
-      { channelName: "微信支付", collectionRateProfit: 4100.00, collectionFixedProfit: 900.00, payoutRateProfit: 2800.00, payoutFixedProfit: 650.00, totalProfit: 8450.00 },
-      { channelName: "银行转账", collectionRateProfit: 2300.00, collectionFixedProfit: 600.00, payoutRateProfit: 1800.00, payoutFixedProfit: 420.00, totalProfit: 5120.00 },
-      { channelName: "PIX支付", collectionRateProfit: 900.50, collectionFixedProfit: 500.00, payoutRateProfit: 800.25, payoutFixedProfit: 230.50, totalProfit: 2430.25 },
-    ],
-    topMerchants: [
-      { merchantId: "M001", merchantName: "云端收银", collectionRateProfit: 6800.00, collectionFixedProfit: 1500.00, payoutRateProfit: 4200.00, payoutFixedProfit: 1000.00, totalProfit: 13500.00 },
-      { merchantId: "M002", merchantName: "星际支付", collectionRateProfit: 3200.50, collectionFixedProfit: 900.00, payoutRateProfit: 2500.25, payoutFixedProfit: 600.50, totalProfit: 7200.25 },
-      { merchantId: "M003", merchantName: "月光商户", collectionRateProfit: 2500.00, collectionFixedProfit: 800.00, payoutRateProfit: 2200.00, payoutFixedProfit: 500.00, totalProfit: 6000.00 },
-    ]
-  },
-  {
-    period: "2024-11-08",
-    activeMerchants: 42,
-    activeAgents: 11,
-    collectionRateProfit: 11200.00,
-    collectionFixedProfit: 2900.00,
-    payoutRateProfit: 8100.50,
-    payoutFixedProfit: 1950.00,
-    totalProfit: 24150.50,
-    topChannels: [
-      { channelName: "支付宝", collectionRateProfit: 4800.00, collectionFixedProfit: 1100.00, payoutRateProfit: 3200.00, payoutFixedProfit: 750.00, totalProfit: 9850.00 },
-      { channelName: "微信支付", collectionRateProfit: 3900.00, collectionFixedProfit: 850.00, payoutRateProfit: 2600.00, payoutFixedProfit: 600.00, totalProfit: 7950.00 },
-    ],
-    topMerchants: [
-      { merchantId: "M001", merchantName: "云端收银", collectionRateProfit: 6200.00, collectionFixedProfit: 1400.00, payoutRateProfit: 3900.00, payoutFixedProfit: 950.00, totalProfit: 12450.00 },
-    ]
-  },
-  {
-    period: "2024-11-07",
-    activeMerchants: 40,
-    activeAgents: 10,
-    collectionRateProfit: 10500.00,
-    collectionFixedProfit: 2700.00,
-    payoutRateProfit: 7500.00,
-    payoutFixedProfit: 1800.00,
-    totalProfit: 22500.00,
-    topChannels: [
-      { channelName: "支付宝", collectionRateProfit: 4500.00, collectionFixedProfit: 1000.00, payoutRateProfit: 3000.00, payoutFixedProfit: 700.00, totalProfit: 9200.00 },
-    ],
-    topMerchants: [
-      { merchantId: "M001", merchantName: "云端收银", collectionRateProfit: 5800.00, collectionFixedProfit: 1300.00, payoutRateProfit: 3600.00, payoutFixedProfit: 900.00, totalProfit: 11600.00 },
-    ]
-  },
-]
-
-const mockMonthlyReports: ReportRow[] = [
-  {
-    period: "2024-11",
-    activeMerchants: 58,
-    activeAgents: 15,
-    collectionRateProfit: 385000.00,
-    collectionFixedProfit: 96000.00,
-    payoutRateProfit: 275000.00,
-    payoutFixedProfit: 65000.00,
-    totalProfit: 821000.00,
-    topChannels: [
-      { channelName: "支付宝", collectionRateProfit: 165000.00, collectionFixedProfit: 38000.00, payoutRateProfit: 110000.00, payoutFixedProfit: 25000.00, totalProfit: 338000.00 },
-      { channelName: "微信支付", collectionRateProfit: 128000.00, collectionFixedProfit: 28000.00, payoutRateProfit: 88000.00, payoutFixedProfit: 20000.00, totalProfit: 264000.00 },
-      { channelName: "银行转账", collectionRateProfit: 72000.00, collectionFixedProfit: 18000.00, payoutRateProfit: 55000.00, payoutFixedProfit: 13000.00, totalProfit: 158000.00 },
-      { channelName: "PIX支付", collectionRateProfit: 20000.00, collectionFixedProfit: 12000.00, payoutRateProfit: 22000.00, payoutFixedProfit: 7000.00, totalProfit: 61000.00 },
-    ],
-    topMerchants: [
-      { merchantId: "M001", merchantName: "云端收银", collectionRateProfit: 210000.00, collectionFixedProfit: 48000.00, payoutRateProfit: 140000.00, payoutFixedProfit: 32000.00, totalProfit: 430000.00 },
-      { merchantId: "M002", merchantName: "星际支付", collectionRateProfit: 96000.00, collectionFixedProfit: 27000.00, payoutRateProfit: 75000.00, payoutFixedProfit: 18000.00, totalProfit: 216000.00 },
-      { merchantId: "M003", merchantName: "月光商户", collectionRateProfit: 79000.00, collectionFixedProfit: 21000.00, payoutRateProfit: 60000.00, payoutFixedProfit: 15000.00, totalProfit: 175000.00 },
-    ]
-  },
-  {
-    period: "2024-10",
-    activeMerchants: 52,
-    activeAgents: 14,
-    collectionRateProfit: 356000.00,
-    collectionFixedProfit: 89000.00,
-    payoutRateProfit: 252000.00,
-    payoutFixedProfit: 60000.00,
-    totalProfit: 757000.00,
-    topChannels: [
-      { channelName: "支付宝", collectionRateProfit: 152000.00, collectionFixedProfit: 35000.00, payoutRateProfit: 101000.00, payoutFixedProfit: 23000.00, totalProfit: 311000.00 },
-      { channelName: "微信支付", collectionRateProfit: 118000.00, collectionFixedProfit: 26000.00, payoutRateProfit: 81000.00, payoutFixedProfit: 18000.00, totalProfit: 243000.00 },
-    ],
-    topMerchants: [
-      { merchantId: "M001", merchantName: "云端收银", collectionRateProfit: 195000.00, collectionFixedProfit: 44000.00, payoutRateProfit: 128000.00, payoutFixedProfit: 29000.00, totalProfit: 396000.00 },
-    ]
-  },
-]
-
-export default function ReportsPage() {
-  const [reportType, setReportType] = useState<"daily" | "monthly">("daily")
-  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
-
-  const currentReports = reportType === "daily" ? mockDailyReports : mockMonthlyReports
-
-  const toggleRowExpansion = (period: string) => {
-    const newExpanded = new Set(expandedRows)
-    if (newExpanded.has(period)) {
-      newExpanded.delete(period)
-    } else {
-      newExpanded.add(period)
-    }
-    setExpandedRows(newExpanded)
+  // 计算日期差（天数）
+  const calculateDaysDifference = (start: string, end: string): number => {
+    if (!start || !end) return 15
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+    const diffTime = Math.abs(endDate.getTime() - startDate.getTime())
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1
+    return diffDays
   }
 
-  const formatCurrency = (value: number) => {
-    return `¥${value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  // 根据时间范围生成动态数据
+  const summaryData = useMemo(() => {
+    const getMultiplier = () => {
+      const multipliers: Record<string, number> = {
+        today: 1,
+        yesterday: 0.92,
+        week: 7,
+        month: 30,
+      }
+      if (timeRange === "custom") {
+        return customDays
+      }
+      return multipliers[timeRange] || 1
+    }
+
+    const multiplier = getMultiplier()
+
+    return {
+      activeMerchants: Math.floor(125 * multiplier * 0.6).toString(),
+      
+      todayCollection: (345678.9 * multiplier).toFixed(2),
+      yesterdayCollection: (345678.9 * multiplier * 0.92).toFixed(2),
+      
+      todayPayout: (289456.78 * multiplier).toFixed(2),
+      yesterdayPayout: (289456.78 * multiplier * 0.92).toFixed(2),
+      
+      todayDisbursement: (178934.56 * multiplier).toFixed(2),
+      yesterdayDisbursement: (178934.56 * multiplier * 0.92).toFixed(2),
+      
+      merchantAssets: (8765432.1).toFixed(2),
+      paymentFunds: (5432109.87).toFixed(2),
+      
+      todayDisbursement2: (178934.56 * multiplier).toFixed(2),
+      yesterdayDisbursement2: (178934.56 * multiplier * 0.92).toFixed(2),
+      
+      todayFeeProfit: (12345.67 * multiplier).toFixed(2),
+      yesterdayFeeProfit: (12345.67 * multiplier * 0.92).toFixed(2),
+      
+      todayExchangeProfit: (8765.43 * multiplier).toFixed(2),
+      yesterdayExchangeProfit: (8765.43 * multiplier * 0.92).toFixed(2),
+      
+      todayTotalProfit: (21111.1 * multiplier).toFixed(2),
+      yesterdayTotalProfit: (21111.1 * multiplier * 0.92).toFixed(2),
+    }
+  }, [timeRange, customDays])
+
+  // 处理时间范围变更
+  const handleTimeRangeChange = (value: string) => {
+    if (value === "custom") {
+      setShowCustomDatePicker(true)
+    } else {
+      setShowCustomDatePicker(false)
+      setIsLoading(true)
+      setTimeRange(value)
+      setTimeout(() => setIsLoading(false), 500)
+    }
+  }
+
+  // 应用自定义时间范围
+  const applyCustomDateRange = () => {
+    if (!customStartDate || !customEndDate) {
+      toast.error("请选择开始和结束日期")
+      return
+    }
+
+    const start = new Date(customStartDate)
+    const end = new Date(customEndDate)
+
+    if (start > end) {
+      toast.error("结束日期必须晚于开始日期")
+      return
+    }
+
+    const days = calculateDaysDifference(customStartDate, customEndDate)
+    setCustomDays(days)
+    setTimeRange("custom")
+    setShowCustomDatePicker(false)
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+      toast.success(`已应用自定义时间范围（${days}天）`)
+    }, 500)
+  }
+
+  // 导出CSV
+  const exportToCSV = () => {
+    try {
+      const timeRangeText = {
+        today: "今天",
+        yesterday: "昨天",
+        week: "最近7天",
+        month: "最近30天",
+        custom: `自定义（${customStartDate} 至 ${customEndDate}）`,
+      }[timeRange] || "今天"
+
+      let csvContent = "\ufeff"
+      csvContent += `法币经营报表\n`
+      csvContent += `导出时间: ${new Date().toLocaleString('zh-CN')}\n`
+      csvContent += `统计范围: ${timeRangeText}\n\n`
+
+      csvContent += "核心业务指标\n"
+      csvContent += "指标名称,数值\n"
+      csvContent += `活跃商户数,${summaryData.activeMerchants}\n`
+      csvContent += `今日代收,${summaryData.todayCollection} USDT\n`
+      csvContent += `昨日代收,${summaryData.yesterdayCollection} USDT\n`
+      csvContent += `今日代付,${summaryData.todayPayout} USDT\n`
+      csvContent += `昨日代付,${summaryData.yesterdayPayout} USDT\n`
+      csvContent += `今日下发,${summaryData.todayDisbursement} USDT\n`
+      csvContent += `昨日下发,${summaryData.yesterdayDisbursement} USDT\n`
+      csvContent += `商户资产,${summaryData.merchantAssets} USDT\n`
+      csvContent += `代付金,${summaryData.paymentFunds} USDT\n`
+      csvContent += `今日手续费利润,${summaryData.todayFeeProfit} USDT\n`
+      csvContent += `昨日手续费利润,${summaryData.yesterdayFeeProfit} USDT\n`
+      csvContent += `今日汇率利润,${summaryData.todayExchangeProfit} USDT\n`
+      csvContent += `昨日汇率利润,${summaryData.yesterdayExchangeProfit} USDT\n`
+      csvContent += `今日总利润,${summaryData.todayTotalProfit} USDT\n`
+      csvContent += `昨日总利润,${summaryData.yesterdayTotalProfit} USDT\n`
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+      const link = document.createElement("a")
+      const url = URL.createObjectURL(blob)
+      link.setAttribute("href", url)
+      link.setAttribute(
+        "download",
+        `法币经营报表_${timeRangeText}_${new Date().getTime()}.csv`
+      )
+      link.style.visibility = "hidden"
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+
+      toast.success("CSV文件已导出")
+    } catch (error) {
+      console.error("CSV导出失败:", error)
+      toast.error("CSV导出失败，请重试")
+    }
+  }
+
+  const calculateChange = (today: string, yesterday: string) => {
+    const todayNum = parseFloat(today)
+    const yesterdayNum = parseFloat(yesterday)
+    if (yesterdayNum === 0) return "+0%"
+    const change = ((todayNum - yesterdayNum) / yesterdayNum) * 100
+    return change >= 0 ? `+${change.toFixed(1)}%` : `${change.toFixed(1)}%`
   }
 
   return (
@@ -172,156 +192,286 @@ export default function ReportsPage() {
             经营报表
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            查看平台整体经营数据和利润分析
+            查看法币业务经营数据和核心指标
           </p>
         </div>
-      </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <Tabs value={reportType} onValueChange={(value) => setReportType(value as "daily" | "monthly")}>
-            <TabsList className="grid w-full max-w-md grid-cols-2">
-              <TabsTrigger value="daily">每日报表</TabsTrigger>
-              <TabsTrigger value="monthly">每月报表</TabsTrigger>
+        <div className="flex items-center gap-3">
+          <Tabs value={timeRange} onValueChange={handleTimeRangeChange}>
+            <TabsList>
+              <TabsTrigger value="today">今天</TabsTrigger>
+              <TabsTrigger value="yesterday">昨天</TabsTrigger>
+              <TabsTrigger value="week">最近7天</TabsTrigger>
+              <TabsTrigger value="month">最近30天</TabsTrigger>
+              <TabsTrigger value="custom">自定义</TabsTrigger>
             </TabsList>
           </Tabs>
+
+          <button
+            onClick={exportToCSV}
+            className="flex items-center gap-2 px-4 py-2 bg-custom-green hover:bg-custom-green/90 text-white rounded-lg transition-colors"
+          >
+            <Download className="h-4 w-4" />
+            导出CSV
+          </button>
         </div>
-
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-12"></TableHead>
-                <TableHead>{reportType === "daily" ? "日期" : "月份"}</TableHead>
-                <TableHead className="text-center">活跃商户数</TableHead>
-                <TableHead className="text-center">活跃代理商数</TableHead>
-                <TableHead className="text-right">代收费率利润</TableHead>
-                <TableHead className="text-right">代收单笔利润</TableHead>
-                <TableHead className="text-right">代付费率利润</TableHead>
-                <TableHead className="text-right">代付单笔利润</TableHead>
-                <TableHead className="text-right">总利润</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {currentReports.map((report) => (
-                <React.Fragment key={report.period}>
-                  <TableRow
-                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50"
-                    onClick={() => toggleRowExpansion(report.period)}
-                  >
-                    <TableCell>
-                      {expandedRows.has(report.period) ? (
-                        <ChevronDown className="h-4 w-4 text-gray-500" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4 text-gray-500" />
-                      )}
-                    </TableCell>
-                    <TableCell className="font-medium">{report.period}</TableCell>
-                    <TableCell className="text-center">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
-                        {report.activeMerchants}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">
-                        {report.activeAgents}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right text-green-600 dark:text-green-400 font-medium">
-                      {formatCurrency(report.collectionRateProfit)}
-                    </TableCell>
-                    <TableCell className="text-right text-green-600 dark:text-green-400 font-medium">
-                      {formatCurrency(report.collectionFixedProfit)}
-                    </TableCell>
-                    <TableCell className="text-right text-green-600 dark:text-green-400 font-medium">
-                      {formatCurrency(report.payoutRateProfit)}
-                    </TableCell>
-                    <TableCell className="text-right text-green-600 dark:text-green-400 font-medium">
-                      {formatCurrency(report.payoutFixedProfit)}
-                    </TableCell>
-                    <TableCell className="text-right font-bold text-green-700 dark:text-green-300">
-                      {formatCurrency(report.totalProfit)}
-                    </TableCell>
-                  </TableRow>
-
-                  {expandedRows.has(report.period) && (
-                    <TableRow>
-                      <TableCell colSpan={9} className="bg-gray-50 dark:bg-gray-900/50 p-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                          <div>
-                            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-                              利润前10支付渠道
-                            </h3>
-                            <div className="space-y-2">
-                              {report.topChannels.slice(0, 10).map((channel, idx) => (
-                                <div
-                                  key={idx}
-                                  className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
-                                >
-                                  <div className="flex items-center justify-between mb-2">
-                                    <span className="font-medium text-gray-900 dark:text-white">
-                                      {idx + 1}. {channel.channelName}
-                                    </span>
-                                    <span className="font-bold text-green-700 dark:text-green-300">
-                                      {formatCurrency(channel.totalProfit)}
-                                    </span>
-                                  </div>
-                                  <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-                                    <div>代收费率: {formatCurrency(channel.collectionRateProfit)}</div>
-                                    <div>代收单笔: {formatCurrency(channel.collectionFixedProfit)}</div>
-                                    <div>代付费率: {formatCurrency(channel.payoutRateProfit)}</div>
-                                    <div>代付单笔: {formatCurrency(channel.payoutFixedProfit)}</div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div>
-                            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-                              利润前10商户
-                            </h3>
-                            <div className="space-y-2">
-                              {report.topMerchants.slice(0, 10).map((merchant, idx) => (
-                                <div
-                                  key={idx}
-                                  className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
-                                >
-                                  <div className="flex items-center justify-between mb-2">
-                                    <div>
-                                      <span className="font-medium text-gray-900 dark:text-white">
-                                        {idx + 1}. {merchant.merchantName}
-                                      </span>
-                                      <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                                        ({merchant.merchantId})
-                                      </span>
-                                    </div>
-                                    <span className="font-bold text-green-700 dark:text-green-300">
-                                      {formatCurrency(merchant.totalProfit)}
-                                    </span>
-                                  </div>
-                                  <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-                                    <div>代收费率: {formatCurrency(merchant.collectionRateProfit)}</div>
-                                    <div>代收单笔: {formatCurrency(merchant.collectionFixedProfit)}</div>
-                                    <div>代付费率: {formatCurrency(merchant.payoutRateProfit)}</div>
-                                    <div>代付单笔: {formatCurrency(merchant.payoutFixedProfit)}</div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </React.Fragment>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        <LoadMoreButton />
       </div>
+
+      {showCustomDatePicker && (
+        <Card className="p-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <CalendarIcon className="h-4 w-4 text-gray-500" />
+              <label className="text-sm font-medium">开始日期:</label>
+              <input
+                type="date"
+                value={customStartDate}
+                onChange={(e) => setCustomStartDate(e.target.value)}
+                className="px-3 py-1.5 border rounded-lg dark:bg-gray-800 dark:border-gray-600"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium">结束日期:</label>
+              <input
+                type="date"
+                value={customEndDate}
+                onChange={(e) => setCustomEndDate(e.target.value)}
+                className="px-3 py-1.5 border rounded-lg dark:bg-gray-800 dark:border-gray-600"
+              />
+            </div>
+            <button
+              onClick={applyCustomDateRange}
+              className="px-4 py-1.5 bg-custom-green hover:bg-custom-green/90 text-white rounded-lg transition-colors"
+            >
+              应用
+            </button>
+            <button
+              onClick={() => setShowCustomDatePicker(false)}
+              className="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors"
+            >
+              取消
+            </button>
+          </div>
+        </Card>
+      )}
+
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center py-20">
+          <Loader2 className="h-12 w-12 animate-spin text-custom-green mb-4" />
+          <p className="text-gray-500 dark:text-gray-400">加载中...</p>
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/50 border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-blue-500 rounded-lg">
+                    <Users className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    活跃商户数
+                  </h3>
+                </div>
+              </div>
+              <div className="mt-2">
+                <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                  {summaryData.activeMerchants}
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/50 dark:to-green-900/50 border-green-200 dark:border-green-800">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-green-500 rounded-lg">
+                    <TrendingUp className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    今日代收/昨日代收
+                  </h3>
+                </div>
+              </div>
+              <div className="mt-2 space-y-1">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {summaryData.todayCollection} USDT
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  昨日: {summaryData.yesterdayCollection} USDT
+                  <span className={`ml-2 ${parseFloat(summaryData.todayCollection) >= parseFloat(summaryData.yesterdayCollection) ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                    {calculateChange(summaryData.todayCollection, summaryData.yesterdayCollection)}
+                  </span>
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/50 dark:to-purple-900/50 border-purple-200 dark:border-purple-800">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-purple-500 rounded-lg">
+                    <ArrowUpDown className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    今日代付/昨日代付
+                  </h3>
+                </div>
+              </div>
+              <div className="mt-2 space-y-1">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {summaryData.todayPayout} USDT
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  昨日: {summaryData.yesterdayPayout} USDT
+                  <span className={`ml-2 ${parseFloat(summaryData.todayPayout) >= parseFloat(summaryData.yesterdayPayout) ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                    {calculateChange(summaryData.todayPayout, summaryData.yesterdayPayout)}
+                  </span>
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/50 dark:to-orange-900/50 border-orange-200 dark:border-orange-800">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-orange-500 rounded-lg">
+                    <TrendingDown className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    今日下发/昨日下发
+                  </h3>
+                </div>
+              </div>
+              <div className="mt-2 space-y-1">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {summaryData.todayDisbursement} USDT
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  昨日: {summaryData.yesterdayDisbursement} USDT
+                  <span className={`ml-2 ${parseFloat(summaryData.todayDisbursement) >= parseFloat(summaryData.yesterdayDisbursement) ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                    {calculateChange(summaryData.todayDisbursement, summaryData.yesterdayDisbursement)}
+                  </span>
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-950/50 dark:to-cyan-900/50 border-cyan-200 dark:border-cyan-800">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-cyan-500 rounded-lg">
+                    <Wallet className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    商户资产/代付金
+                  </h3>
+                </div>
+              </div>
+              <div className="mt-2 space-y-1">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {summaryData.merchantAssets} USDT
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  代付金: {summaryData.paymentFunds} USDT
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-950/50 dark:to-pink-900/50 border-pink-200 dark:border-pink-800">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-pink-500 rounded-lg">
+                    <TrendingDown className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    今日下发/昨日下发
+                  </h3>
+                </div>
+              </div>
+              <div className="mt-2 space-y-1">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {summaryData.todayDisbursement2} USDT
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  昨日: {summaryData.yesterdayDisbursement2} USDT
+                  <span className={`ml-2 ${parseFloat(summaryData.todayDisbursement2) >= parseFloat(summaryData.yesterdayDisbursement2) ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                    {calculateChange(summaryData.todayDisbursement2, summaryData.yesterdayDisbursement2)}
+                  </span>
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-950/50 dark:to-yellow-900/50 border-yellow-200 dark:border-yellow-800">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-yellow-500 rounded-lg">
+                    <Percent className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    今日手续费利润/昨日手续费利润
+                  </h3>
+                </div>
+              </div>
+              <div className="mt-2 space-y-1">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {summaryData.todayFeeProfit} USDT
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  昨日: {summaryData.yesterdayFeeProfit} USDT
+                  <span className={`ml-2 ${parseFloat(summaryData.todayFeeProfit) >= parseFloat(summaryData.yesterdayFeeProfit) ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                    {calculateChange(summaryData.todayFeeProfit, summaryData.yesterdayFeeProfit)}
+                  </span>
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-950/50 dark:to-indigo-900/50 border-indigo-200 dark:border-indigo-800">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-indigo-500 rounded-lg">
+                    <DollarSign className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    今日汇率利润/昨日汇率利润
+                  </h3>
+                </div>
+              </div>
+              <div className="mt-2 space-y-1">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {summaryData.todayExchangeProfit} USDT
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  昨日: {summaryData.yesterdayExchangeProfit} USDT
+                  <span className={`ml-2 ${parseFloat(summaryData.todayExchangeProfit) >= parseFloat(summaryData.yesterdayExchangeProfit) ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                    {calculateChange(summaryData.todayExchangeProfit, summaryData.yesterdayExchangeProfit)}
+                  </span>
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950/50 dark:to-emerald-900/50 border-emerald-200 dark:border-emerald-800">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-emerald-500 rounded-lg">
+                    <PiggyBank className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    今日总利润/昨日总利润
+                  </h3>
+                </div>
+              </div>
+              <div className="mt-2 space-y-1">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {summaryData.todayTotalProfit} USDT
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  昨日: {summaryData.yesterdayTotalProfit} USDT
+                  <span className={`ml-2 ${parseFloat(summaryData.todayTotalProfit) >= parseFloat(summaryData.yesterdayTotalProfit) ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                    {calculateChange(summaryData.todayTotalProfit, summaryData.yesterdayTotalProfit)}
+                  </span>
+                </p>
+              </div>
+            </Card>
+          </div>
+        </>
+      )}
     </div>
   )
 }
