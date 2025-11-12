@@ -6,13 +6,6 @@ import { Button } from "@/components/ui/button"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -44,12 +37,11 @@ interface OTCOrder {
 export default function OTCOrdersPage() {
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   
-  // 三级页签状态
+  // 四级页签状态
   const [typeTab, setTypeTab] = useState<string>("all") // 一级：买入/卖出
   const [providerTab, setProviderTab] = useState<string>("all") // 二级：供应商
-  const [statusTab, setStatusTab] = useState<string>("all") // 三级：状态
-  
-  const [currencyFilter, setCurrencyFilter] = useState<string>("all")
+  const [currencyTab, setCurrencyTab] = useState<string>("all") // 三级：币种
+  const [statusTab, setStatusTab] = useState<string>("all") // 四级：状态
   const [selectedOrder, setSelectedOrder] = useState<OTCOrder | null>(null)
   const [showDetailDialog, setShowDetailDialog] = useState(false)
 
@@ -121,9 +113,9 @@ export default function OTCOrdersPage() {
     },
   ]
 
-  // 三级链式过滤：搜索 → 买入/卖出 → 供应商 → 状态
+  // 四级链式过滤：搜索 → 买入/卖出 → 供应商 → 币种 → 状态
   const filteredOrders = useMemo(() => {
-    // 第一步：搜索和币种过滤
+    // 第一步：搜索过滤
     let filtered = orders.filter(order => {
       const matchesSearch = 
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -131,9 +123,7 @@ export default function OTCOrdersPage() {
         order.currency.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase())
       
-      const matchesCurrency = currencyFilter === "all" || order.currency === currencyFilter
-      
-      return matchesSearch && matchesCurrency
+      return matchesSearch
     })
 
     // 第二步：类型（买入/卖出）页签过滤
@@ -146,13 +136,18 @@ export default function OTCOrdersPage() {
       filtered = filtered.filter(o => o.providerName === providerTab)
     }
 
-    // 第四步：状态页签过滤
+    // 第四步：币种页签过滤
+    if (currencyTab !== "all") {
+      filtered = filtered.filter(o => o.currency === currencyTab)
+    }
+
+    // 第五步：状态页签过滤
     if (statusTab !== "all") {
       filtered = filtered.filter(o => o.status === statusTab)
     }
 
     return filtered
-  }, [orders, searchTerm, currencyFilter, typeTab, providerTab, statusTab])
+  }, [orders, searchTerm, typeTab, providerTab, currencyTab, statusTab])
 
   // 获取当前筛选条件下的唯一供应商列表（用于二级页签）
   const availableProviders = useMemo(() => {
@@ -167,13 +162,6 @@ export default function OTCOrdersPage() {
     return providers.sort()
   }, [orders, typeTab])
 
-  // 统计数据
-  const stats = {
-    total: orders.length,
-    pending: orders.filter(o => o.status === 'pending').length,
-    completed: orders.filter(o => o.status === 'completed').length,
-    cancelled: orders.filter(o => o.status === 'cancelled' || o.status === 'failed').length,
-  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -274,43 +262,6 @@ export default function OTCOrdersPage() {
         </div>
       </div>
 
-      {/* 统计卡片 */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">订单总数</p>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</h3>
-          </div>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">待支付</p>
-            <h3 className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
-              {stats.pending}
-            </h3>
-          </div>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">已完成</p>
-            <h3 className="text-2xl font-bold text-green-600 dark:text-green-400">
-              {stats.completed}
-            </h3>
-          </div>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">失败/取消</p>
-            <h3 className="text-2xl font-bold text-red-600 dark:text-red-400">
-              {stats.cancelled}
-            </h3>
-          </div>
-        </div>
-      </div>
-
       {/* 二级页签：供应商 */}
       <div className="mb-4">
         <Tabs value={providerTab} onValueChange={setProviderTab}>
@@ -331,12 +282,32 @@ export default function OTCOrdersPage() {
         </Tabs>
       </div>
 
-      {/* 三级页签（状态）+ 搜索和筛选 */}
+      {/* 三级页签：币种 */}
+      <div className="mb-4">
+        <Tabs value={currencyTab} onValueChange={setCurrencyTab}>
+          <TabsList className="bg-gray-100 dark:bg-gray-700 h-auto flex-wrap">
+            <TabsTrigger value="all" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+              全部币种
+            </TabsTrigger>
+            <TabsTrigger value="USDT" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+              USDT
+            </TabsTrigger>
+            <TabsTrigger value="BTC" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+              BTC
+            </TabsTrigger>
+            <TabsTrigger value="ETH" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
+              ETH
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
+      {/* 四级页签（状态）+ 搜索 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
         <div className="flex flex-col gap-4">
-          {/* 三级页签：状态 + 搜索框 + 币种筛选 */}
+          {/* 四级页签：状态 + 搜索框 */}
           <div className="flex items-center gap-4">
-            {/* 三级页签：状态 */}
+            {/* 四级页签：状态 */}
             <Tabs value={statusTab} onValueChange={setStatusTab} className="flex-shrink-0">
               <TabsList className="bg-gray-100 dark:bg-gray-700">
                 <TabsTrigger value="all" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-600">
@@ -372,19 +343,6 @@ export default function OTCOrdersPage() {
               onReset={handleReset}
               className="flex-1"
             />
-            
-            {/* 币种筛选 */}
-            <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
-              <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="币种" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">全部币种</SelectItem>
-                <SelectItem value="USDT">USDT</SelectItem>
-                <SelectItem value="BTC">BTC</SelectItem>
-                <SelectItem value="ETH">ETH</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </div>
       </div>
