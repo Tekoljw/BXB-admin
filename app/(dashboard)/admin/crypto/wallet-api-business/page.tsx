@@ -888,7 +888,8 @@ const mockCryptoUsers: CryptoUser[] = [
 export default function CryptoUsersPage() {
   const [cryptoUsers, setCryptoUsers] = useState<CryptoUser[]>(mockCryptoUsers)
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
-  const [userFilter, setUserFilter] = useState<"all" | "pending" | "hasApi" | "profitRanking" | "volumeRanking">("all")
+  const [userFilter, setUserFilter] = useState<"normal" | "hasApi" | "pending" | "all">("all")
+  const [sortBy, setSortBy] = useState<"none" | "profit" | "volume">("none")
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
@@ -967,23 +968,24 @@ export default function CryptoUsersPage() {
   const getUserCounts = () => {
     return {
       all: cryptoUsers.length,
-      pending: cryptoUsers.filter(m => m.hasPendingDomain).length,
-      hasApi: cryptoUsers.filter(m => m.apiKeys.length > 0).length
+      normal: cryptoUsers.filter(u => u.apiKeys.length === 0 && !u.hasPendingDomain).length,
+      hasApi: cryptoUsers.filter(u => u.apiKeys.length > 0 && !u.hasPendingDomain).length,
+      pending: cryptoUsers.filter(u => u.hasPendingDomain).length
     }
   }
 
   const counts = getUserCounts()
 
   const filteredUsers = cryptoUsers.filter(user => {
-    // 先按页签筛选
+    // 先按页签筛选（互斥逻辑：pending优先级最高）
+    if (userFilter === "normal" && (user.apiKeys.length > 0 || user.hasPendingDomain)) {
+      return false
+    }
+    if (userFilter === "hasApi" && (user.apiKeys.length === 0 || user.hasPendingDomain)) {
+      return false
+    }
     if (userFilter === "pending" && !user.hasPendingDomain) {
       return false
-    }
-    if (userFilter === "hasApi" && user.apiKeys.length === 0) {
-      return false
-    }
-    if (userFilter === "profitRanking" || userFilter === "volumeRanking") {
-      // 利润排序和交易量排序显示所有用户
     }
     
     // 再按搜索词筛选
@@ -996,14 +998,14 @@ export default function CryptoUsersPage() {
     
     return true
   }).sort((a, b) => {
-    // 根据页签进行排序
-    if (userFilter === "profitRanking") {
-      return b.profitContribution.totalWithdrawProfit - a.profitContribution.totalWithdrawProfit // 按总利润降序排序
+    // 根据排序按钮进行排序
+    if (sortBy === "profit") {
+      return b.profitContribution.totalWithdrawProfit - a.profitContribution.totalWithdrawProfit
     }
-    if (userFilter === "volumeRanking") {
-      return b.addressStats.total - a.addressStats.total // 按地址数量降序排序
+    if (sortBy === "volume") {
+      return b.totalVolume - a.totalVolume
     }
-    return 0 // 其他页签不排序
+    return 0
   })
 
   const openBalanceDialog = (user: CryptoUser) => {
@@ -1345,32 +1347,34 @@ export default function CryptoUsersPage() {
     <div className="p-6 space-y-6">
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Crypto用户列表</h2>
 
-      <Tabs value={userFilter} onValueChange={(value) => setUserFilter(value as "all" | "pending" | "hasApi" | "profitRanking" | "volumeRanking")}>
+      <Tabs value={userFilter} onValueChange={(value) => setUserFilter(value as "normal" | "hasApi" | "pending" | "all")}>
         <TabsList>
-          <TabsTrigger value="pending">
-            API申请中的用户
-            {counts.pending > 0 && (
-              <span className="ml-2 px-2 py-0.5 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full">
-                {counts.pending}
+          <TabsTrigger value="normal">
+            普通用户
+            {counts.normal > 0 && (
+              <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full">
+                {counts.normal}
               </span>
             )}
           </TabsTrigger>
           <TabsTrigger value="hasApi">
-            已有API用户
+            API商户
             {counts.hasApi > 0 && (
               <span className="ml-2 px-2 py-0.5 text-xs bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full">
                 {counts.hasApi}
               </span>
             )}
           </TabsTrigger>
-          <TabsTrigger value="profitRanking">
-            利润贡献排序
-          </TabsTrigger>
-          <TabsTrigger value="volumeRanking">
-            交易量排名
+          <TabsTrigger value="pending">
+            正在申请API
+            {counts.pending > 0 && (
+              <span className="ml-2 px-2 py-0.5 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full">
+                {counts.pending}
+              </span>
+            )}
           </TabsTrigger>
           <TabsTrigger value="all">
-            全部
+            全部用户
             <span className="ml-2 px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">
               {counts.all}
             </span>
@@ -1378,13 +1382,31 @@ export default function CryptoUsersPage() {
         </TabsList>
       </Tabs>
 
-      <SearchControls
-        placeholder="搜索用户名称、邮箱、用户ID或UserID..."
-        value={searchInput}
-        onChange={setSearchInput}
-        onSearch={handleSearch}
-        onReset={handleReset}
-      />
+      <div className="flex items-center gap-3">
+        <Button 
+          variant={sortBy === "profit" ? "default" : "outline"}
+          size="sm"
+          onClick={() => setSortBy(sortBy === "profit" ? "none" : "profit")}
+        >
+          利润贡献排名
+        </Button>
+        <Button 
+          variant={sortBy === "volume" ? "default" : "outline"}
+          size="sm"
+          onClick={() => setSortBy(sortBy === "volume" ? "none" : "volume")}
+        >
+          交易量排名
+        </Button>
+        <div className="flex-1">
+          <SearchControls
+            placeholder="搜索用户名称、邮箱、用户ID或UserID..."
+            value={searchInput}
+            onChange={setSearchInput}
+            onSearch={handleSearch}
+            onReset={handleReset}
+          />
+        </div>
+      </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="overflow-x-auto">

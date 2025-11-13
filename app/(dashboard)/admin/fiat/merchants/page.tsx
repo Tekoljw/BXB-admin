@@ -679,7 +679,8 @@ const mockMerchants: Merchant[] = [
 export default function MerchantsPage() {
   const [merchants, setMerchants] = useState<Merchant[]>(mockMerchants)
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
-  const [merchantFilter, setMerchantFilter] = useState<"all" | "pending" | "hasApi" | "profitRanking" | "volumeRanking">("all")
+  const [merchantFilter, setMerchantFilter] = useState<"normal" | "hasApi" | "pending" | "all">("all")
+  const [sortBy, setSortBy] = useState<"none" | "profit" | "volume">("none")
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
@@ -759,23 +760,24 @@ export default function MerchantsPage() {
   const getMerchantCounts = () => {
     return {
       all: merchants.length,
-      pending: merchants.filter(m => m.hasPendingDomain).length,
-      hasApi: merchants.filter(m => m.apiKeys.length > 0).length
+      normal: merchants.filter(m => m.apiKeys.length === 0 && !m.hasPendingDomain).length,
+      hasApi: merchants.filter(m => m.apiKeys.length > 0 && !m.hasPendingDomain).length,
+      pending: merchants.filter(m => m.hasPendingDomain).length
     }
   }
 
   const counts = getMerchantCounts()
 
   const filteredMerchants = merchants.filter(merchant => {
-    // 先按页签筛选
+    // 先按页签筛选（互斥逻辑：pending优先级最高）
+    if (merchantFilter === "normal" && (merchant.apiKeys.length > 0 || merchant.hasPendingDomain)) {
+      return false
+    }
+    if (merchantFilter === "hasApi" && (merchant.apiKeys.length === 0 || merchant.hasPendingDomain)) {
+      return false
+    }
     if (merchantFilter === "pending" && !merchant.hasPendingDomain) {
       return false
-    }
-    if (merchantFilter === "hasApi" && merchant.apiKeys.length === 0) {
-      return false
-    }
-    if (merchantFilter === "profitRanking" || merchantFilter === "volumeRanking") {
-      // 利润排序和交易量排序显示所有商户
     }
     
     // 再按搜索词筛选
@@ -788,14 +790,14 @@ export default function MerchantsPage() {
     
     return true
   }).sort((a, b) => {
-    // 根据页签进行排序
-    if (merchantFilter === "profitRanking") {
-      return b.totalProfit - a.totalProfit // 按总利润降序排序
+    // 根据排序按钮进行排序
+    if (sortBy === "profit") {
+      return b.totalProfit - a.totalProfit
     }
-    if (merchantFilter === "volumeRanking") {
-      return b.totalVolume - a.totalVolume // 按总交易量降序排序
+    if (sortBy === "volume") {
+      return b.totalVolume - a.totalVolume
     }
-    return 0 // 其他页签不排序
+    return 0
   })
 
   const openBalanceDialog = (merchant: Merchant) => {
@@ -1134,32 +1136,34 @@ export default function MerchantsPage() {
     <div className="p-6 space-y-6">
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white">商户列表</h2>
 
-      <Tabs value={merchantFilter} onValueChange={(value) => setMerchantFilter(value as "all" | "pending" | "hasApi" | "profitRanking" | "volumeRanking")}>
+      <Tabs value={merchantFilter} onValueChange={(value) => setMerchantFilter(value as "normal" | "hasApi" | "pending" | "all")}>
         <TabsList>
-          <TabsTrigger value="pending">
-            API申请中的商户
-            {counts.pending > 0 && (
-              <span className="ml-2 px-2 py-0.5 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full">
-                {counts.pending}
+          <TabsTrigger value="normal">
+            普通用户
+            {counts.normal > 0 && (
+              <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full">
+                {counts.normal}
               </span>
             )}
           </TabsTrigger>
           <TabsTrigger value="hasApi">
-            已有API商户
+            API商户
             {counts.hasApi > 0 && (
               <span className="ml-2 px-2 py-0.5 text-xs bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full">
                 {counts.hasApi}
               </span>
             )}
           </TabsTrigger>
-          <TabsTrigger value="profitRanking">
-            利润贡献排序
-          </TabsTrigger>
-          <TabsTrigger value="volumeRanking">
-            交易量排名
+          <TabsTrigger value="pending">
+            正在申请API
+            {counts.pending > 0 && (
+              <span className="ml-2 px-2 py-0.5 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full">
+                {counts.pending}
+              </span>
+            )}
           </TabsTrigger>
           <TabsTrigger value="all">
-            全部
+            全部用户
             <span className="ml-2 px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">
               {counts.all}
             </span>
@@ -1167,13 +1171,31 @@ export default function MerchantsPage() {
         </TabsList>
       </Tabs>
 
-      <SearchControls
-        placeholder="搜索商户名称、邮箱、商户ID或UserID..."
-        value={searchInput}
-        onChange={setSearchInput}
-        onSearch={handleSearch}
-        onReset={handleReset}
-      />
+      <div className="flex items-center gap-3">
+        <Button 
+          variant={sortBy === "profit" ? "default" : "outline"}
+          size="sm"
+          onClick={() => setSortBy(sortBy === "profit" ? "none" : "profit")}
+        >
+          利润贡献排名
+        </Button>
+        <Button 
+          variant={sortBy === "volume" ? "default" : "outline"}
+          size="sm"
+          onClick={() => setSortBy(sortBy === "volume" ? "none" : "volume")}
+        >
+          交易量排名
+        </Button>
+        <div className="flex-1">
+          <SearchControls
+            placeholder="搜索商户名称、邮箱、商户ID或UserID..."
+            value={searchInput}
+            onChange={setSearchInput}
+            onSearch={handleSearch}
+            onReset={handleReset}
+          />
+        </div>
+      </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="overflow-x-auto">
