@@ -6,7 +6,7 @@ import { useAdmin } from "@/contexts/admin-context"
 import { toast } from "sonner"
 
 export default function AdminLoginPage() {
-  const { login } = useAdmin()
+  const { login, loadUser } = useAdmin()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [verificationCode, setVerificationCode] = useState("")
@@ -62,6 +62,21 @@ export default function AdminLoginPage() {
     setTimeout(() => {
       if (username === "123123" && password === "123123" && verificationCode === "123123") {
         localStorage.setItem("adminEmail", username)
+        
+        // 加载模拟用户信息
+        loadUser({
+          id: "admin001",
+          username: "admin",
+          email: "admin@bedao.com",
+          fullName: "系统管理员",
+          role: "超级管理员",
+          avatarUrl: "",
+          locale: "zh-CN",
+          lastLoginAt: new Date().toLocaleString('zh-CN'),
+          permissions: ["all"],
+          requires2FAReset: false,
+          passwordLastUpdated: "2024-11-01 10:30:00"
+        })
         
         // 显示登录成功提示
         toast.success("登录成功", {
