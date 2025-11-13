@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
 import { useAdmin } from "@/contexts/admin-context"
+import AccountMenu from "@/components/account-menu"
 import { 
   BarChart3, 
   Users, 
@@ -22,7 +23,6 @@ import {
   Settings,
   Sun,
   Moon,
-  LogOut,
   Menu,
   ChevronLeft,
   ChevronRight,
@@ -60,12 +60,16 @@ const modules = [
 
 export default function AdminTopNav({ currentModule, onModuleChange, onToggleSidebar }: AdminTopNavProps) {
   const { theme, setTheme } = useTheme()
-  const { logout } = useAdmin()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [showLeftScroll, setShowLeftScroll] = useState(false)
   const [showRightScroll, setShowRightScroll] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  const handleNavigate = (path: string) => {
+    window.history.pushState(null, '', path)
+    window.dispatchEvent(new PopStateEvent('popstate'))
+  }
 
   useEffect(() => {
     setMounted(true)
@@ -244,18 +248,10 @@ export default function AdminTopNav({ currentModule, onModuleChange, onToggleSid
           {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
 
-        {/* 桌面端：退出登录 */}
-        <button
-          onClick={logout}
-          className={`hidden md:block p-2 rounded-md transition-colors ${
-            theme === 'dark' 
-              ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-          }`}
-          title="退出登录"
-        >
-          <LogOut className="w-5 h-5" />
-        </button>
+        {/* 桌面端：用户账户菜单 */}
+        <div className="hidden md:block">
+          <AccountMenu onNavigate={handleNavigate} />
+        </div>
       </div>
 
       {/* 移动端一级菜单遮罩层 */}
