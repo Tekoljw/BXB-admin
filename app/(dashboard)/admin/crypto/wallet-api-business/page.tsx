@@ -79,17 +79,12 @@ interface CurrencyBalance {
 interface NetworkAddressCount {
   network: string
   count: number
-}
-
-interface MonthlyAddressFee {
-  month: string
-  addressFees: number
+  monthlyFee: number
 }
 
 interface AddressStats {
   total: number
   networks: NetworkAddressCount[]
-  monthlyFees: MonthlyAddressFee[]
 }
 
 interface NetworkProfitData {
@@ -205,19 +200,11 @@ const mockCryptoUsers: CryptoUser[] = [
     addressStats: {
       total: 156,
       networks: [
-        { network: "TRC20", count: 58 },
-        { network: "ERC20", count: 42 },
-        { network: "BSC", count: 28 },
-        { network: "Polygon", count: 18 },
-        { network: "Solana", count: 10 }
-      ],
-      monthlyFees: [
-        { month: "2024-01", addressFees: 1200 },
-        { month: "2024-02", addressFees: 1350 },
-        { month: "2024-03", addressFees: 1500 },
-        { month: "2024-04", addressFees: 1680 },
-        { month: "2024-05", addressFees: 1820 },
-        { month: "2024-06", addressFees: 1950 }
+        { network: "TRC20", count: 58, monthlyFee: 3480 },
+        { network: "ERC20", count: 42, monthlyFee: 2520 },
+        { network: "BSC", count: 28, monthlyFee: 1680 },
+        { network: "Polygon", count: 18, monthlyFee: 1080 },
+        { network: "Solana", count: 10, monthlyFee: 740 }
       ]
     },
     profitContribution: {
@@ -349,19 +336,11 @@ const mockCryptoUsers: CryptoUser[] = [
     addressStats: {
       total: 425,
       networks: [
-        { network: "TRC20", count: 165 },
-        { network: "ERC20", count: 125 },
-        { network: "BSC", count: 85 },
-        { network: "Polygon", count: 35 },
-        { network: "Solana", count: 15 }
-      ],
-      monthlyFees: [
-        { month: "2024-01", addressFees: 3200 },
-        { month: "2024-02", addressFees: 3500 },
-        { month: "2024-03", addressFees: 3850 },
-        { month: "2024-04", addressFees: 4200 },
-        { month: "2024-05", addressFees: 4650 },
-        { month: "2024-06", addressFees: 5100 }
+        { network: "TRC20", count: 165, monthlyFee: 9900 },
+        { network: "ERC20", count: 125, monthlyFee: 7500 },
+        { network: "BSC", count: 85, monthlyFee: 5100 },
+        { network: "Polygon", count: 35, monthlyFee: 2100 },
+        { network: "Solana", count: 15, monthlyFee: 900 }
       ]
     },
     profitContribution: {
@@ -1713,13 +1692,14 @@ export default function CryptoUsersPage() {
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">各网络地址分布</h4>
+              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">各网络地址分布及月费</h4>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
                       <th className="text-left py-3 px-4 text-sm font-semibold">网络</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold">地址数量</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-blue-600 dark:text-blue-400">地址数量</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-green-600 dark:text-green-400">月费 ({currentUser?.primaryCurrency})</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1727,28 +1707,7 @@ export default function CryptoUsersPage() {
                       <tr key={net.network} className={idx % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'}>
                         <td className="py-3 px-4 font-medium">{net.network}</td>
                         <td className="py-3 px-4 text-right text-blue-600 dark:text-blue-400 font-semibold">{net.count}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">月度地址费用</h4>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                      <th className="text-left py-3 px-4 text-sm font-semibold">月份</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold">地址费用 ({currentUser?.primaryCurrency})</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentUser?.addressStats.monthlyFees.map((fee, idx) => (
-                      <tr key={fee.month} className={idx % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'}>
-                        <td className="py-3 px-4">{fee.month}</td>
-                        <td className="py-3 px-4 text-right text-green-600 dark:text-green-400 font-semibold">{fee.addressFees.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right text-green-600 dark:text-green-400 font-semibold">{net.monthlyFee.toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>
