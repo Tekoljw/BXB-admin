@@ -287,49 +287,62 @@ export default function AddressesManagementPage() {
 
   return (
     <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">地址管理</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          管理用户钱包地址、系统热冷钱包和地址状态
-        </p>
+      {/* 标题行和供应商页签 */}
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">地址管理</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            管理用户钱包地址、系统热冷钱包和地址状态
+          </p>
+        </div>
+        
+        {/* 供应商页签 - 右上角 */}
+        <Tabs value={providerTab} onValueChange={setProviderTab}>
+          <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <TabsTrigger value="all">全部供应商</TabsTrigger>
+            <TabsTrigger value="cobo">Cobo</TabsTrigger>
+            <TabsTrigger value="matrixport">Matrixport</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
-      {/* 三级页签过滤系统 */}
-      <Tabs value={networkTab} onValueChange={setNetworkTab} className="mb-6">
+      {/* 类型页签 */}
+      <Tabs value={typeFilter} onValueChange={setTypeFilter} className="mb-4">
+        <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <TabsTrigger value="all">全部类型</TabsTrigger>
+          <TabsTrigger value="deposit">充值地址</TabsTrigger>
+          <TabsTrigger value="withdraw">提现地址</TabsTrigger>
+          <TabsTrigger value="hot">热钱包</TabsTrigger>
+          <TabsTrigger value="cold">冷钱包</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
+      {/* 网络页签 */}
+      <Tabs value={networkTab} onValueChange={setNetworkTab} className="mb-4">
         <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <TabsTrigger value="all">全部网络</TabsTrigger>
           <TabsTrigger value="ERC">ERC</TabsTrigger>
           <TabsTrigger value="TRX">TRX</TabsTrigger>
         </TabsList>
-
-        <TabsContent value={networkTab} className="mt-0">
-          <Tabs value={providerTab} onValueChange={setProviderTab}>
-            <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mt-4">
-              <TabsTrigger value="all">全部供应商</TabsTrigger>
-              <TabsTrigger value="cobo">Cobo</TabsTrigger>
-              <TabsTrigger value="matrixport">Matrixport</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value={providerTab} className="mt-0">
-              <Tabs value={statusTab} onValueChange={setStatusTab}>
-                <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mt-4">
-                  <TabsTrigger value="all">全部状态</TabsTrigger>
-                  <TabsTrigger value="active">正常</TabsTrigger>
-                  <TabsTrigger value="frozen">已冻结</TabsTrigger>
-                  <TabsTrigger value="disabled">已禁用</TabsTrigger>
-                  <TabsTrigger value="bound">已绑定用户地址</TabsTrigger>
-                  <TabsTrigger value="idle">闲置地址</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </TabsContent>
-          </Tabs>
-        </TabsContent>
       </Tabs>
 
-      {/* 搜索和筛选 */}
+      {/* 搜索行：状态页签 + 搜索框 + 币种筛选 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="md:col-span-2">
+        <div className="flex flex-wrap items-center gap-4">
+          {/* 状态页签 */}
+          <Tabs value={statusTab} onValueChange={setStatusTab}>
+            <TabsList className="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600">
+              <TabsTrigger value="all">全部状态</TabsTrigger>
+              <TabsTrigger value="active">正常</TabsTrigger>
+              <TabsTrigger value="frozen">已冻结</TabsTrigger>
+              <TabsTrigger value="disabled">已禁用</TabsTrigger>
+              <TabsTrigger value="bound">已绑定</TabsTrigger>
+              <TabsTrigger value="idle">闲置</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          {/* 搜索框 */}
+          <div className="flex-1 min-w-[200px]">
             <SearchControls
               placeholder="搜索地址、用户..."
               value={searchInput}
@@ -339,8 +352,9 @@ export default function AddressesManagementPage() {
             />
           </div>
 
+          {/* 币种筛选 */}
           <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
-            <SelectTrigger>
+            <SelectTrigger className="w-[150px]">
               <SelectValue placeholder="币种" />
             </SelectTrigger>
             <SelectContent>
@@ -349,19 +363,6 @@ export default function AddressesManagementPage() {
               <SelectItem value="BTC">BTC</SelectItem>
               <SelectItem value="ETH">ETH</SelectItem>
               <SelectItem value="BNB">BNB</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="类型" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全部类型</SelectItem>
-              <SelectItem value="deposit">充值地址</SelectItem>
-              <SelectItem value="withdraw">提现地址</SelectItem>
-              <SelectItem value="hot">热钱包</SelectItem>
-              <SelectItem value="cold">冷钱包</SelectItem>
             </SelectContent>
           </Select>
         </div>
