@@ -1027,7 +1027,7 @@ export default function CryptoUsersPage() {
                         {user.addressStats.networks.slice(0, 2).map(n => `${n.network}: ${n.count}`).join(', ')}
                       </div>
                       <div className="text-green-600 dark:text-green-400 text-xs mt-1 font-medium">
-                        月费: {user.primaryCurrency} {user.addressStats.monthlyFees[user.addressStats.monthlyFees.length - 1]?.addressFees.toLocaleString() || 0}
+                        月费: {user.primaryCurrency} {user.addressStats.networks.reduce((sum, n) => sum + n.monthlyFee, 0).toLocaleString()}
                       </div>
                     </button>
                   </td>
