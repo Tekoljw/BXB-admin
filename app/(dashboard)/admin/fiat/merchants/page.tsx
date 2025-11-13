@@ -377,6 +377,303 @@ const mockMerchants: Merchant[] = [
     hasPendingDomain: false,
     createdAt: "2024-01-08 16:45:00"
   },
+  {
+    id: "M005",
+    name: "快捷支付",
+    userId: "U100005",
+    bxbUserId: "BXB005",
+    email: "quickpay@example.com",
+    phone: "+86 138 0000 0005",
+    apiKeys: [],
+    balance: 0,
+    paymentBalance: 0,
+    frozenBalance: 0,
+    currencyBalances: [
+      { currency: "CNY", balance: 0, paymentBalance: 0, frozenBalance: 0 },
+      { currency: "USD", balance: 0, paymentBalance: 0, frozenBalance: 0 },
+      { currency: "USDT", balance: 0, paymentBalance: 0, frozenBalance: 0 },
+      { currency: "EUR", balance: 0, paymentBalance: 0, frozenBalance: 0 },
+      { currency: "GBP", balance: 0, paymentBalance: 0, frozenBalance: 0 }
+    ],
+    dailyProfit: 0,
+    monthlyProfit: 0,
+    totalProfit: 0,
+    currencyProfits: [],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 0,
+    monthlyVolume: 0,
+    totalVolume: 0,
+    currencyVolumes: [],
+    totalOrders: 0,
+    feeConfigs: [],
+    status: "active",
+    hasPendingDomain: false,
+    createdAt: "2024-06-18 14:30:00"
+  },
+  {
+    id: "M006",
+    name: "聚合支付平台",
+    userId: "U100006",
+    bxbUserId: "BXB006",
+    email: "aggregate@example.com",
+    phone: "+86 138 0000 0006",
+    apiKeys: [
+      {
+        keyId: "KEY008",
+        key: "sk_live_h7g6f5d4s3a2p1o0i9u8y7t6r5e4w3q2",
+        callbackDomain: "https://api-beta.aggregate.com",
+        domainStatus: "pending",
+        createdAt: "2024-06-10 10:25:00"
+      }
+    ],
+    balance: 28000,
+    paymentBalance: 12000,
+    frozenBalance: 5000,
+    currencyBalances: [
+      { currency: "CNY", balance: 128000, paymentBalance: 58000, frozenBalance: 18000 },
+      { currency: "USD", balance: 18000, paymentBalance: 8000, frozenBalance: 3000 },
+      { currency: "USDT", balance: 22000, paymentBalance: 9500, frozenBalance: 4000 },
+      { currency: "EUR", balance: 15000, paymentBalance: 6500, frozenBalance: 2500 },
+      { currency: "GBP", balance: 12000, paymentBalance: 5000, frozenBalance: 1800 }
+    ],
+    dailyProfit: 450,
+    monthlyProfit: 11500,
+    totalProfit: 58000,
+    currencyProfits: [
+      { currency: "CNY", collectionProfit: 4200, paymentProfit: 1800, exchangeRateProfit: 900, totalProfit: 6900 },
+      { currency: "USD", collectionProfit: 1500, paymentProfit: 680, exchangeRateProfit: 420, totalProfit: 2600 }
+    ],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 45000,
+    monthlyVolume: 1150000,
+    totalVolume: 5800000,
+    currencyVolumes: [],
+    totalOrders: 2350,
+    feeConfigs: [
+      { 
+        id: "FC021", currency: "CNY", channel: "支付宝", channelType: "代收",
+        interfaces: [
+          { name: "FastPay", enabled: true, collectionFeeRate: "0.6%", collectionFeeFixed: "0.5", paymentFeeRate: "0.9%", paymentFeeFixed: "0.3", suppliers: [{ name: "支付宝直连", enabled: true }] }
+        ], 
+        collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.60", useSystemTieredFee: false 
+      },
+    ],
+    status: "active",
+    hasPendingDomain: true,
+    createdAt: "2024-03-15 09:00:00"
+  },
+  {
+    id: "M007",
+    name: "国际支付网关",
+    userId: "U100007",
+    bxbUserId: "BXB007",
+    email: "intlpay@example.com",
+    phone: "+86 138 0000 0007",
+    apiKeys: [
+      {
+        keyId: "KEY009",
+        key: "sk_live_q2w3e4r5t6y7u8i9o0p1a2s3d4f5g6h7",
+        callbackDomain: "https://api.intlpay.net",
+        domainStatus: "approved",
+        createdAt: "2024-02-18 16:30:00"
+      },
+      {
+        keyId: "KEY010",
+        key: "sk_live_j8k9l0m1n2b3v4c5x6z7a8s9d0f1g2h3",
+        callbackDomain: "https://webhook.intlpay.net",
+        domainStatus: "approved",
+        createdAt: "2024-05-22 11:45:00"
+      }
+    ],
+    balance: 98000,
+    paymentBalance: 42000,
+    frozenBalance: 15000,
+    currencyBalances: [
+      { currency: "CNY", balance: 450000, paymentBalance: 195000, frozenBalance: 68000 },
+      { currency: "USD", balance: 98000, paymentBalance: 42000, frozenBalance: 15000 },
+      { currency: "USDT", balance: 125000, paymentBalance: 55000, frozenBalance: 22000 },
+      { currency: "EUR", balance: 72000, paymentBalance: 31000, frozenBalance: 12000 },
+      { currency: "GBP", balance: 58000, paymentBalance: 25000, frozenBalance: 9500 }
+    ],
+    dailyProfit: 3250,
+    monthlyProfit: 82000,
+    totalProfit: 560000,
+    currencyProfits: [
+      { currency: "CNY", collectionProfit: 38000, paymentProfit: 16500, exchangeRateProfit: 9200, totalProfit: 63700 },
+      { currency: "USD", collectionProfit: 12500, paymentProfit: 5800, exchangeRateProfit: 3100, totalProfit: 21400 },
+      { currency: "EUR", collectionProfit: 8500, paymentProfit: 3800, exchangeRateProfit: 2200, totalProfit: 14500 }
+    ],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 325000,
+    monthlyVolume: 8200000,
+    totalVolume: 56000000,
+    currencyVolumes: [],
+    totalOrders: 15680,
+    feeConfigs: [
+      { 
+        id: "FC022", currency: "CNY", channel: "微信支付", channelType: "代收",
+        interfaces: [
+          { name: "WechatPay", enabled: true, collectionFeeRate: "0.5%", collectionFeeFixed: "0.3", paymentFeeRate: "0.7%", paymentFeeFixed: "0.2", suppliers: [{ name: "微信官方", enabled: true }] }
+        ], 
+        collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "¥0.50", minPaymentFee: "¥0.30", useSystemTieredFee: true 
+      },
+      { 
+        id: "FC023", currency: "USD", channel: "Stripe", channelType: "代收",
+        interfaces: [
+          { name: "StripeAPI", enabled: true, collectionFeeRate: "2.9%", collectionFeeFixed: "0.30", paymentFeeRate: "3.2%", paymentFeeFixed: "0.25", suppliers: [{ name: "Stripe", enabled: true }] }
+        ], 
+        collectionFee: "2.9%", paymentFee: "2.5%", minCollectionFee: "$0.30", minPaymentFee: "$0.25", useSystemTieredFee: false 
+      },
+    ],
+    status: "active",
+    hasPendingDomain: false,
+    createdAt: "2024-02-18 16:30:00"
+  },
+  {
+    id: "M008",
+    name: "移动支付",
+    userId: "U100008",
+    bxbUserId: "BXB008",
+    email: "mobilepay@example.com",
+    phone: "+86 138 0000 0008",
+    apiKeys: [],
+    balance: 8500,
+    paymentBalance: 3200,
+    frozenBalance: 0,
+    currencyBalances: [
+      { currency: "CNY", balance: 32000, paymentBalance: 14500, frozenBalance: 0 },
+      { currency: "USD", balance: 8500, paymentBalance: 3200, frozenBalance: 0 },
+      { currency: "USDT", balance: 0, paymentBalance: 0, frozenBalance: 0 },
+      { currency: "EUR", balance: 0, paymentBalance: 0, frozenBalance: 0 },
+      { currency: "GBP", balance: 0, paymentBalance: 0, frozenBalance: 0 }
+    ],
+    dailyProfit: 85,
+    monthlyProfit: 2180,
+    totalProfit: 6850,
+    currencyProfits: [],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 8500,
+    monthlyVolume: 218000,
+    totalVolume: 685000,
+    currencyVolumes: [],
+    totalOrders: 485,
+    feeConfigs: [],
+    status: "active",
+    hasPendingDomain: false,
+    createdAt: "2024-05-28 13:20:00"
+  },
+  {
+    id: "M009",
+    name: "跨境电商支付",
+    userId: "U100009",
+    bxbUserId: "BXB009",
+    email: "ecompay@example.com",
+    phone: "+86 138 0000 0009",
+    apiKeys: [
+      {
+        keyId: "KEY011",
+        key: "sk_live_p9o8i7u6y5t4r3e2w1q0a9s8d7f6g5h4",
+        callbackDomain: "https://api.ecompay.io",
+        domainStatus: "approved",
+        createdAt: "2024-04-12 08:15:00"
+      }
+    ],
+    balance: 0,
+    paymentBalance: 0,
+    frozenBalance: 235000,
+    currencyBalances: [
+      { currency: "CNY", balance: 0, paymentBalance: 0, frozenBalance: 580000 },
+      { currency: "USD", balance: 0, paymentBalance: 0, frozenBalance: 135000 },
+      { currency: "USDT", balance: 0, paymentBalance: 0, frozenBalance: 95000 },
+      { currency: "EUR", balance: 0, paymentBalance: 0, frozenBalance: 68000 },
+      { currency: "GBP", balance: 0, paymentBalance: 0, frozenBalance: 52000 }
+    ],
+    dailyProfit: 0,
+    monthlyProfit: 0,
+    totalProfit: 168000,
+    currencyProfits: [],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 0,
+    monthlyVolume: 0,
+    totalVolume: 16800000,
+    currencyVolumes: [],
+    totalOrders: 6850,
+    feeConfigs: [
+      { 
+        id: "FC024", currency: "CNY", channel: "支付宝", channelType: "代收",
+        interfaces: [
+          { name: "AlipayGlobal", enabled: false, collectionFeeRate: "0.8%", collectionFeeFixed: "0.8", paymentFeeRate: "1.1%", paymentFeeFixed: "0.6", suppliers: [{ name: "已停用", enabled: false }] }
+        ], 
+        collectionFee: "0.8%", paymentFee: "0.6%", minCollectionFee: "¥1.00", minPaymentFee: "¥0.80", useSystemTieredFee: false 
+      },
+    ],
+    status: "frozen",
+    hasPendingDomain: false,
+    createdAt: "2024-04-12 08:15:00"
+  },
+  {
+    id: "M010",
+    name: "便捷付",
+    userId: "U100010",
+    bxbUserId: "BXB010",
+    email: "easypay@example.com",
+    phone: "+86 138 0000 0010",
+    apiKeys: [],
+    balance: 0,
+    paymentBalance: 0,
+    frozenBalance: 0,
+    currencyBalances: [
+      { currency: "CNY", balance: 0, paymentBalance: 0, frozenBalance: 0 },
+      { currency: "USD", balance: 0, paymentBalance: 0, frozenBalance: 0 },
+      { currency: "USDT", balance: 0, paymentBalance: 0, frozenBalance: 0 },
+      { currency: "EUR", balance: 0, paymentBalance: 0, frozenBalance: 0 },
+      { currency: "GBP", balance: 0, paymentBalance: 0, frozenBalance: 0 }
+    ],
+    dailyProfit: 0,
+    monthlyProfit: 0,
+    totalProfit: 0,
+    currencyProfits: [],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 0,
+    monthlyVolume: 0,
+    totalVolume: 0,
+    currencyVolumes: [],
+    totalOrders: 0,
+    feeConfigs: [],
+    status: "disabled",
+    hasPendingDomain: false,
+    createdAt: "2024-06-22 15:40:00"
+  },
 ]
 
 export default function MerchantsPage() {

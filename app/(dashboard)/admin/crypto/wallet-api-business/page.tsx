@@ -452,6 +452,437 @@ const mockCryptoUsers: CryptoUser[] = [
     hasPendingDomain: false,
     createdAt: "2024-01-08 16:45:00"
   },
+  {
+    id: "M005",
+    name: "快付科技",
+    userId: "U100005",
+    bxbUserId: "BXB005",
+    email: "kuaifu@example.com",
+    phone: "+86 138 0000 0005",
+    apiKeys: [],
+    primaryCurrency: "USDT",
+    balance: 0,
+    frozenBalance: 0,
+    currencyBalances: [
+      { currency: "USDT", balance: 0, frozenBalance: 0 },
+      { currency: "BTC", balance: 0, frozenBalance: 0 },
+      { currency: "TRX", balance: 0, frozenBalance: 0 },
+      { currency: "ETH", balance: 0, frozenBalance: 0 },
+      { currency: "USDC", balance: 0, frozenBalance: 0 }
+    ],
+    addressStats: {
+      total: 0,
+      networks: [
+        { network: "TRC20", count: 0, monthlyFee: 0 },
+        { network: "ERC20", count: 0, monthlyFee: 0 },
+        { network: "BSC", count: 0, monthlyFee: 0 },
+        { network: "Polygon", count: 0, monthlyFee: 0 },
+        { network: "Solana", count: 0, monthlyFee: 0 }
+      ]
+    },
+    profitContribution: {
+      totalAddressMonthlyFee: 0,
+      totalWithdrawFee: 0,
+      totalWithdrawCost: 0,
+      totalWithdrawProfit: 0,
+      networks: [
+        { network: "TRC20", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 },
+        { network: "ERC20", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 },
+        { network: "BSC", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 },
+        { network: "Polygon", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 },
+        { network: "Solana", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 }
+      ]
+    },
+    dailyProfit: 0,
+    monthlyProfit: 0,
+    totalProfit: 0,
+    currencyProfits: [],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 0,
+    monthlyVolume: 0,
+    totalVolume: 0,
+    currencyVolumes: [],
+    totalOrders: 0,
+    feeConfigs: [],
+    status: "active",
+    hasPendingDomain: false,
+    createdAt: "2024-06-20 10:30:00"
+  },
+  {
+    id: "M006",
+    name: "数字钱包Pro",
+    userId: "U100006",
+    bxbUserId: "BXB006",
+    email: "digitalwallet@example.com",
+    phone: "+86 138 0000 0006",
+    apiKeys: [
+      {
+        keyId: "KEY008",
+        key: "sk_live_a1s2d3f4g5h6j7k8l9z0x1c2v3b4n5m6",
+        callbackDomain: "https://api-test.digitalwallet.com",
+        domainStatus: "pending",
+        createdAt: "2024-06-15 14:20:00"
+      }
+    ],
+    primaryCurrency: "USDT",
+    balance: 85000,
+    frozenBalance: 15000,
+    currencyBalances: [
+      { currency: "USDT", balance: 85000, frozenBalance: 15000 },
+      { currency: "BTC", balance: 12500, frozenBalance: 2500 },
+      { currency: "TRX", balance: 28000, frozenBalance: 5000 },
+      { currency: "ETH", balance: 18000, frozenBalance: 3000 },
+      { currency: "USDC", balance: 15000, frozenBalance: 2000 }
+    ],
+    addressStats: {
+      total: 48,
+      networks: [
+        { network: "TRC20", count: 20, monthlyFee: 1200 },
+        { network: "ERC20", count: 15, monthlyFee: 900 },
+        { network: "BSC", count: 8, monthlyFee: 480 },
+        { network: "Polygon", count: 3, monthlyFee: 180 },
+        { network: "Solana", count: 2, monthlyFee: 120 }
+      ]
+    },
+    profitContribution: {
+      totalAddressMonthlyFee: 2880,
+      totalWithdrawFee: 12500,
+      totalWithdrawCost: 5200,
+      totalWithdrawProfit: 7300,
+      networks: [
+        { network: "TRC20", currency: "USDT", addressMonthlyFee: 1200, withdrawFee: 5000, withdrawCost: 2000, withdrawProfit: 3000 },
+        { network: "ERC20", currency: "USDT", addressMonthlyFee: 900, withdrawFee: 4000, withdrawCost: 1800, withdrawProfit: 2200 },
+        { network: "BSC", currency: "USDT", addressMonthlyFee: 480, withdrawFee: 2500, withdrawCost: 1000, withdrawProfit: 1500 },
+        { network: "Polygon", currency: "USDT", addressMonthlyFee: 180, withdrawFee: 800, withdrawCost: 300, withdrawProfit: 500 },
+        { network: "Solana", currency: "USDT", addressMonthlyFee: 120, withdrawFee: 200, withdrawCost: 100, withdrawProfit: 100 }
+      ]
+    },
+    dailyProfit: 350,
+    monthlyProfit: 8500,
+    totalProfit: 42000,
+    currencyProfits: [
+      { currency: "USDT", collectionProfit: 3200, paymentProfit: 1500, exchangeRateProfit: 800, totalProfit: 5500 },
+      { currency: "BTC", collectionProfit: 1200, paymentProfit: 600, exchangeRateProfit: 400, totalProfit: 2200 }
+    ],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 35000,
+    monthlyVolume: 850000,
+    totalVolume: 4200000,
+    currencyVolumes: [],
+    totalOrders: 1250,
+    feeConfigs: [
+      { 
+        id: "FC017", currency: "USDT", channel: "TRC20", channelType: "代收",
+        interfaces: [
+          { name: "PayGate", enabled: true, collectionFeeRate: "0.6%", collectionFeeFixed: "1", paymentFeeRate: "0.9%", paymentFeeFixed: "0.5", suppliers: [{ name: "快速通道", enabled: true }] }
+        ], 
+        collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "USDT 1.00", minPaymentFee: "USDT 0.60", useSystemTieredFee: false 
+      },
+    ],
+    status: "active",
+    hasPendingDomain: true,
+    createdAt: "2024-03-12 11:45:00"
+  },
+  {
+    id: "M007",
+    name: "链上交易所",
+    userId: "U100007",
+    bxbUserId: "BXB007",
+    email: "chainex@example.com",
+    phone: "+86 138 0000 0007",
+    apiKeys: [
+      {
+        keyId: "KEY009",
+        key: "sk_live_p0o9i8u7y6t5r4e3w2q1a2s3d4f5g6h7",
+        callbackDomain: "https://api.chainex.io",
+        domainStatus: "approved",
+        createdAt: "2024-02-20 08:30:00"
+      },
+      {
+        keyId: "KEY010",
+        key: "sk_live_m6n5b4v3c2x1z0l9k8j7h6g5f4d3s2a1",
+        callbackDomain: "https://webhook.chainex.io",
+        domainStatus: "approved",
+        createdAt: "2024-05-10 15:20:00"
+      }
+    ],
+    primaryCurrency: "USDT",
+    balance: 580000,
+    frozenBalance: 45000,
+    currencyBalances: [
+      { currency: "USDT", balance: 580000, frozenBalance: 45000 },
+      { currency: "BTC", balance: 98000, frozenBalance: 12000 },
+      { currency: "TRX", balance: 125000, frozenBalance: 18000 },
+      { currency: "ETH", balance: 75000, frozenBalance: 8000 },
+      { currency: "USDC", balance: 52000, frozenBalance: 6000 }
+    ],
+    addressStats: {
+      total: 285,
+      networks: [
+        { network: "TRC20", count: 110, monthlyFee: 6600 },
+        { network: "ERC20", count: 85, monthlyFee: 5100 },
+        { network: "BSC", count: 55, monthlyFee: 3300 },
+        { network: "Polygon", count: 25, monthlyFee: 1500 },
+        { network: "Solana", count: 10, monthlyFee: 600 }
+      ]
+    },
+    profitContribution: {
+      totalAddressMonthlyFee: 17100,
+      totalWithdrawFee: 89000,
+      totalWithdrawCost: 35000,
+      totalWithdrawProfit: 54000,
+      networks: [
+        { network: "TRC20", currency: "USDT", addressMonthlyFee: 6600, withdrawFee: 38000, withdrawCost: 14000, withdrawProfit: 24000 },
+        { network: "ERC20", currency: "USDT", addressMonthlyFee: 5100, withdrawFee: 28000, withdrawCost: 12000, withdrawProfit: 16000 },
+        { network: "BSC", currency: "USDT", addressMonthlyFee: 3300, withdrawFee: 18000, withdrawCost: 7000, withdrawProfit: 11000 },
+        { network: "Polygon", currency: "USDT", addressMonthlyFee: 1500, withdrawFee: 4000, withdrawCost: 1500, withdrawProfit: 2500 },
+        { network: "Solana", currency: "USDT", addressMonthlyFee: 600, withdrawFee: 1000, withdrawCost: 500, withdrawProfit: 500 }
+      ]
+    },
+    dailyProfit: 2850,
+    monthlyProfit: 68000,
+    totalProfit: 425000,
+    currencyProfits: [],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 285000,
+    monthlyVolume: 6800000,
+    totalVolume: 42500000,
+    currencyVolumes: [],
+    totalOrders: 8950,
+    feeConfigs: [
+      { 
+        id: "FC018", currency: "USDT", channel: "TRC20", channelType: "代收",
+        interfaces: [
+          { name: "Bitzpay", enabled: true, collectionFeeRate: "0.5%", collectionFeeFixed: "0.8", paymentFeeRate: "0.8%", paymentFeeFixed: "0.6", suppliers: [{ name: "主力通道", enabled: true }] }
+        ], 
+        collectionFee: "0.5%", paymentFee: "0.3%", minCollectionFee: "USDT 0.80", minPaymentFee: "USDT 0.50", useSystemTieredFee: true 
+      },
+      { 
+        id: "FC019", currency: "USDT", channel: "ERC20", channelType: "代付",
+        interfaces: [
+          { name: "CFpay", enabled: true, collectionFeeRate: "0.7%", collectionFeeFixed: "1", paymentFeeRate: "1%", paymentFeeFixed: "0.8", suppliers: [{ name: "以太通道", enabled: true }] }
+        ], 
+        collectionFee: "0.7%", paymentFee: "0.5%", minCollectionFee: "USDT 1.00", minPaymentFee: "USDT 0.80", useSystemTieredFee: false 
+      },
+    ],
+    status: "active",
+    hasPendingDomain: false,
+    createdAt: "2024-02-20 08:30:00"
+  },
+  {
+    id: "M008",
+    name: "跨境支付",
+    userId: "U100008",
+    bxbUserId: "BXB008",
+    email: "crosspay@example.com",
+    phone: "+86 138 0000 0008",
+    apiKeys: [],
+    primaryCurrency: "USDT",
+    balance: 5000,
+    frozenBalance: 0,
+    currencyBalances: [
+      { currency: "USDT", balance: 5000, frozenBalance: 0 },
+      { currency: "BTC", balance: 0, frozenBalance: 0 },
+      { currency: "TRX", balance: 0, frozenBalance: 0 },
+      { currency: "ETH", balance: 0, frozenBalance: 0 },
+      { currency: "USDC", balance: 0, frozenBalance: 0 }
+    ],
+    addressStats: {
+      total: 5,
+      networks: [
+        { network: "TRC20", count: 3, monthlyFee: 180 },
+        { network: "ERC20", count: 2, monthlyFee: 120 },
+        { network: "BSC", count: 0, monthlyFee: 0 },
+        { network: "Polygon", count: 0, monthlyFee: 0 },
+        { network: "Solana", count: 0, monthlyFee: 0 }
+      ]
+    },
+    profitContribution: {
+      totalAddressMonthlyFee: 300,
+      totalWithdrawFee: 850,
+      totalWithdrawCost: 380,
+      totalWithdrawProfit: 470,
+      networks: [
+        { network: "TRC20", currency: "USDT", addressMonthlyFee: 180, withdrawFee: 500, withdrawCost: 220, withdrawProfit: 280 },
+        { network: "ERC20", currency: "USDT", addressMonthlyFee: 120, withdrawFee: 350, withdrawCost: 160, withdrawProfit: 190 },
+        { network: "BSC", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 },
+        { network: "Polygon", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 },
+        { network: "Solana", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 }
+      ]
+    },
+    dailyProfit: 15.50,
+    monthlyProfit: 470,
+    totalProfit: 1250,
+    currencyProfits: [],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 1500,
+    monthlyVolume: 47000,
+    totalVolume: 125000,
+    currencyVolumes: [],
+    totalOrders: 85,
+    feeConfigs: [],
+    status: "active",
+    hasPendingDomain: false,
+    createdAt: "2024-06-01 09:00:00"
+  },
+  {
+    id: "M009",
+    name: "区块支付",
+    userId: "U100009",
+    bxbUserId: "BXB009",
+    email: "blockpay@example.com",
+    phone: "+86 138 0000 0009",
+    apiKeys: [
+      {
+        keyId: "KEY011",
+        key: "sk_live_q9w8e7r6t5y4u3i2o1p0a9s8d7f6g5h4",
+        callbackDomain: "https://api.blockpay.net",
+        domainStatus: "approved",
+        createdAt: "2024-04-05 13:15:00"
+      }
+    ],
+    primaryCurrency: "USDT",
+    balance: 0,
+    frozenBalance: 180000,
+    currencyBalances: [
+      { currency: "USDT", balance: 0, frozenBalance: 180000 },
+      { currency: "BTC", balance: 0, frozenBalance: 28000 },
+      { currency: "TRX", balance: 0, frozenBalance: 45000 },
+      { currency: "ETH", balance: 0, frozenBalance: 22000 },
+      { currency: "USDC", balance: 0, frozenBalance: 18000 }
+    ],
+    addressStats: {
+      total: 95,
+      networks: [
+        { network: "TRC20", count: 38, monthlyFee: 2280 },
+        { network: "ERC20", count: 28, monthlyFee: 1680 },
+        { network: "BSC", count: 18, monthlyFee: 1080 },
+        { network: "Polygon", count: 8, monthlyFee: 480 },
+        { network: "Solana", count: 3, monthlyFee: 180 }
+      ]
+    },
+    profitContribution: {
+      totalAddressMonthlyFee: 5700,
+      totalWithdrawFee: 28500,
+      totalWithdrawCost: 11500,
+      totalWithdrawProfit: 17000,
+      networks: [
+        { network: "TRC20", currency: "USDT", addressMonthlyFee: 2280, withdrawFee: 12000, withdrawCost: 4500, withdrawProfit: 7500 },
+        { network: "ERC20", currency: "USDT", addressMonthlyFee: 1680, withdrawFee: 9500, withdrawCost: 4200, withdrawProfit: 5300 },
+        { network: "BSC", currency: "USDT", addressMonthlyFee: 1080, withdrawFee: 5000, withdrawCost: 2000, withdrawProfit: 3000 },
+        { network: "Polygon", currency: "USDT", addressMonthlyFee: 480, withdrawFee: 1500, withdrawCost: 600, withdrawProfit: 900 },
+        { network: "Solana", currency: "USDT", addressMonthlyFee: 180, withdrawFee: 500, withdrawCost: 200, withdrawProfit: 300 }
+      ]
+    },
+    dailyProfit: 0,
+    monthlyProfit: 0,
+    totalProfit: 85000,
+    currencyProfits: [],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 0,
+    monthlyVolume: 0,
+    totalVolume: 8500000,
+    currencyVolumes: [],
+    totalOrders: 3250,
+    feeConfigs: [
+      { 
+        id: "FC020", currency: "USDT", channel: "TRC20", channelType: "代收",
+        interfaces: [
+          { name: "PayGate", enabled: false, collectionFeeRate: "0.8%", collectionFeeFixed: "1.2", paymentFeeRate: "1.1%", paymentFeeFixed: "0.9", suppliers: [{ name: "已停用", enabled: false }] }
+        ], 
+        collectionFee: "0.8%", paymentFee: "0.6%", minCollectionFee: "USDT 1.20", minPaymentFee: "USDT 0.90", useSystemTieredFee: false 
+      },
+    ],
+    status: "frozen",
+    hasPendingDomain: false,
+    createdAt: "2024-04-05 13:15:00"
+  },
+  {
+    id: "M010",
+    name: "闪电网络",
+    userId: "U100010",
+    bxbUserId: "BXB010",
+    email: "lightning@example.com",
+    phone: "+86 138 0000 0010",
+    apiKeys: [],
+    primaryCurrency: "USDT",
+    balance: 0,
+    frozenBalance: 0,
+    currencyBalances: [
+      { currency: "USDT", balance: 0, frozenBalance: 0 },
+      { currency: "BTC", balance: 0, frozenBalance: 0 },
+      { currency: "TRX", balance: 0, frozenBalance: 0 },
+      { currency: "ETH", balance: 0, frozenBalance: 0 },
+      { currency: "USDC", balance: 0, frozenBalance: 0 }
+    ],
+    addressStats: {
+      total: 0,
+      networks: [
+        { network: "TRC20", count: 0, monthlyFee: 0 },
+        { network: "ERC20", count: 0, monthlyFee: 0 },
+        { network: "BSC", count: 0, monthlyFee: 0 },
+        { network: "Polygon", count: 0, monthlyFee: 0 },
+        { network: "Solana", count: 0, monthlyFee: 0 }
+      ]
+    },
+    profitContribution: {
+      totalAddressMonthlyFee: 0,
+      totalWithdrawFee: 0,
+      totalWithdrawCost: 0,
+      totalWithdrawProfit: 0,
+      networks: [
+        { network: "TRC20", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 },
+        { network: "ERC20", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 },
+        { network: "BSC", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 },
+        { network: "Polygon", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 },
+        { network: "Solana", currency: "USDT", addressMonthlyFee: 0, withdrawFee: 0, withdrawCost: 0, withdrawProfit: 0 }
+      ]
+    },
+    dailyProfit: 0,
+    monthlyProfit: 0,
+    totalProfit: 0,
+    currencyProfits: [],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 0,
+    monthlyVolume: 0,
+    totalVolume: 0,
+    currencyVolumes: [],
+    totalOrders: 0,
+    feeConfigs: [],
+    status: "disabled",
+    hasPendingDomain: false,
+    createdAt: "2024-06-25 16:00:00"
+  },
 ]
 
 export default function CryptoUsersPage() {
