@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 import { Eye, EyeOff } from "lucide-react"
 
 interface ChangePasswordDialogProps {
@@ -16,7 +16,6 @@ interface ChangePasswordDialogProps {
 
 export default function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialogProps) {
   const { theme } = useTheme()
-  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
@@ -32,29 +31,17 @@ export default function ChangePasswordDialog({ open, onOpenChange }: ChangePassw
     
     // 验证
     if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
-      toast({
-        title: "错误",
-        description: "请填写所有字段",
-        variant: "destructive"
-      })
+      toast.error("请填写所有字段")
       return
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
-      toast({
-        title: "错误",
-        description: "两次输入的新密码不一致",
-        variant: "destructive"
-      })
+      toast.error("两次输入的新密码不一致")
       return
     }
 
     if (formData.newPassword.length < 8) {
-      toast({
-        title: "错误",
-        description: "新密码长度至少为8位",
-        variant: "destructive"
-      })
+      toast.error("新密码长度至少为8位")
       return
     }
 
@@ -71,9 +58,8 @@ export default function ChangePasswordDialog({ open, onOpenChange }: ChangePassw
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000))
 
-      toast({
-        title: "成功",
-        description: "密码修改成功，请使用新密码重新登录",
+      toast.success("密码修改成功", {
+        description: "请使用新密码重新登录"
       })
 
       // 清空表单并关闭
@@ -85,11 +71,7 @@ export default function ChangePasswordDialog({ open, onOpenChange }: ChangePassw
       onOpenChange(false)
 
     } catch (error) {
-      toast({
-        title: "错误",
-        description: "密码修改失败，请稍后重试",
-        variant: "destructive"
-      })
+      toast.error("密码修改失败，请稍后重试")
     } finally {
       setLoading(false)
     }

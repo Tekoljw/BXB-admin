@@ -64,8 +64,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const loadUser = (user: AdminUser) => {
     setAdminUser(user)
-    // 只存储非敏感字段到localStorage
-    const { permissions, ...nonSensitiveData } = user
+    // 只存储基本非敏感字段到localStorage（不包括敏感元数据）
+    const { permissions, lastLoginAt, passwordLastUpdated, requires2FAReset, ...nonSensitiveData } = user
     localStorage.setItem("adminUser", JSON.stringify(nonSensitiveData))
   }
 
@@ -73,7 +73,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     setAdminUser(prev => {
       if (!prev) return null
       const updated = { ...prev, ...updates }
-      const { permissions, ...nonSensitiveData } = updated
+      // 只存储基本非敏感字段到localStorage
+      const { permissions, lastLoginAt, passwordLastUpdated, requires2FAReset, ...nonSensitiveData } = updated
       localStorage.setItem("adminUser", JSON.stringify(nonSensitiveData))
       return updated
     })

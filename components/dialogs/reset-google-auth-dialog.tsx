@@ -5,7 +5,7 @@ import { useTheme } from "@/contexts/theme-context"
 import { useAdmin } from "@/contexts/admin-context"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 import { AlertCircle, Smartphone, Copy, Check } from "lucide-react"
 
 interface ResetGoogleAuthDialogProps {
@@ -15,7 +15,6 @@ interface ResetGoogleAuthDialogProps {
 
 export default function ResetGoogleAuthDialog({ open, onOpenChange }: ResetGoogleAuthDialogProps) {
   const { theme } = useTheme()
-  const { toast } = useToast()
   const { updateUser } = useAdmin()
   const [loading, setLoading] = useState(false)
   const [step, setStep] = useState<'confirm' | 'setup'>('confirm')
@@ -42,17 +41,12 @@ export default function ResetGoogleAuthDialog({ open, onOpenChange }: ResetGoogl
       setQrCodeUrl(mockQrCodeUrl)
       setStep('setup')
 
-      toast({
-        title: "重置成功",
-        description: "请使用Google Authenticator扫描二维码重新绑定",
+      toast.success("重置成功", {
+        description: "请使用Google Authenticator扫描二维码重新绑定"
       })
 
     } catch (error) {
-      toast({
-        title: "错误",
-        description: "重置失败，请稍后重试",
-        variant: "destructive"
-      })
+      toast.error("重置失败，请稍后重试")
     } finally {
       setLoading(false)
     }
@@ -61,10 +55,7 @@ export default function ResetGoogleAuthDialog({ open, onOpenChange }: ResetGoogl
   const handleCopySecret = () => {
     navigator.clipboard.writeText(secretKey)
     setCopied(true)
-    toast({
-      title: "已复制",
-      description: "密钥已复制到剪贴板",
-    })
+    toast.success("密钥已复制到剪贴板")
     setTimeout(() => setCopied(false), 2000)
   }
 
@@ -72,10 +63,7 @@ export default function ResetGoogleAuthDialog({ open, onOpenChange }: ResetGoogl
     // 更新用户状态，标记2FA已重置
     updateUser({ requires2FAReset: false })
     handleClose()
-    toast({
-      title: "绑定完成",
-      description: "Google验证码已成功重新绑定",
-    })
+    toast.success("Google验证码已成功重新绑定")
   }
 
   const handleClose = () => {
