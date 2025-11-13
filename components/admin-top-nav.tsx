@@ -27,8 +27,18 @@ import {
   ChevronLeft,
   ChevronRight,
   Repeat,
-  Activity
+  Activity,
+  User
 } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 interface AdminTopNavProps {
   currentModule: string
@@ -244,18 +254,41 @@ export default function AdminTopNav({ currentModule, onModuleChange, onToggleSid
           {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
 
-        {/* 桌面端：退出登录 */}
-        <button
-          onClick={logout}
-          className={`hidden md:block p-2 rounded-md transition-colors ${
-            theme === 'dark' 
-              ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-          }`}
-          title="退出登录"
-        >
-          <LogOut className="w-5 h-5" />
-        </button>
+        {/* 桌面端：用户头像菜单 */}
+        <DropdownMenu>
+          <DropdownMenuTrigger className="hidden md:block focus:outline-none">
+            <Avatar className="h-8 w-8 cursor-pointer ring-2 ring-transparent hover:ring-custom-green transition-all">
+              <AvatarImage src="" />
+              <AvatarFallback className="bg-custom-green text-white text-sm">
+                管
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuLabel>
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium">管理员</p>
+                <p className="text-xs text-muted-foreground">admin@bedao.com</p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                window.history.pushState({}, "", "/admin/profile")
+                window.dispatchEvent(new PopStateEvent("popstate"))
+              }}
+              className="cursor-pointer"
+            >
+              <User className="mr-2 h-4 w-4" />
+              <span>个人中心</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={logout} className="cursor-pointer text-red-600 focus:text-red-600">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>退出登录</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* 移动端一级菜单遮罩层 */}
