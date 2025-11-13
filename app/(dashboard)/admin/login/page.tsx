@@ -1,9 +1,21 @@
 "use client"
 
-import React, { useState } from "react"
-import { Shield, Lock, User, Eye, EyeOff, AlertCircle, Mail } from "lucide-react"
+import React, { useState, useEffect } from "react"
+import { Shield, Lock, User, Eye, EyeOff, AlertCircle, Mail, Smartphone } from "lucide-react"
 import { useAdmin } from "@/contexts/admin-context"
 import { toast } from "sonner"
+import { authenticator } from 'otplib'
+import QRCode from 'qrcode'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 export default function AdminLoginPage() {
   const { login } = useAdmin()
@@ -16,6 +28,78 @@ export default function AdminLoginPage() {
   const [isSendingCode, setIsSendingCode] = useState(false)
   const [codeSent, setCodeSent] = useState(false)
   const [countdown, setCountdown] = useState(0)
+  
+  // 谷歌验证码绑定相关状态
+  const [showBindDialog, setShowBindDialog] = useState(false)
+  const [googleSecret, setGoogleSecret] = useState("")
+  const [qrcodeUrl, setQrcodeUrl] = useState("")
+  const [googleCode, setGoogleCode] = useState("")
+  const [isBinding, setIsBinding] = useState(false)
+
+  // 生成谷歌验证码二维码
+  const generateGoogleAuthQR = async () => {
+    const secret = authenticator.generateSecret()
+    setGoogleSecret(secret)
+    
+    // 生成TOTP URI
+    const otpauthUrl = authenticator.keyuri(
+      username || 'admin@bedao.com',
+      'BeDAO Admin',
+      secret
+    )
+    
+    // 生成二维码
+    try {
+      const qrCodeDataUrl = await QRCode.toDataURL(otpauthUrl)
+      setQrcodeUrl(qrCodeDataUrl)
+    } catch (err) {
+      console.error('生成二维码失败', err)
+      toast.error('生成二维码失败')
+    }
+  }
+  
+  // 打开绑定弹窗
+  const handleOpenBindDialog = () => {
+    if (!username) {
+      setError("请先输入管理员账号")
+      return
+    }
+    setShowBindDialog(true)
+    generateGoogleAuthQR()
+  }
+  
+  // 验证并绑定谷歌验证码
+  const handleBindGoogleAuth = () => {
+    if (!googleCode || googleCode.length !== 6) {
+      toast.error('请输入6位验证码')
+      return
+    }
+    
+    setIsBinding(true)
+    
+    // 验证谷歌验证码
+    const isValid = authenticator.verify({
+      token: googleCode,
+      secret: googleSecret
+    })
+    
+    setTimeout(() => {
+      if (isValid) {
+        // 保存到localStorage（实际应该保存到后端数据库）
+        localStorage.setItem(`google_secret_${username}`, googleSecret)
+        toast.success('绑定成功', {
+          description: '谷歌验证码已成功绑定'
+        })
+        setShowBindDialog(false)
+        setGoogleCode("")
+      } else {
+        toast.error('验证码错误', {
+          description: '请检查验证码是否正确'
+        })
+      }
+      setIsBinding(false)
+    }, 800)
+  }
 
   const handleSendCode = async () => {
     if (!username) {
@@ -210,6 +294,18 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
+          {/* 绑定谷歌验证码按钮 */}
+          <div className="mt-6">
+            <button
+              type="button"
+              onClick={handleOpenBindDialog}
+              className="w-full py-3 bg-gray-700/50 border border-gray-600 text-gray-300 font-medium rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all flex items-center justify-center gap-2"
+            >
+              <Smartphone className="w-5 h-5" />
+              绑定谷歌验证码
+            </button>
+          </div>
+
           {/* 提示信息 */}
           <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
             <p className="text-blue-400 text-sm text-center">
@@ -217,6 +313,87 @@ export default function AdminLoginPage() {
             </p>
           </div>
         </div>
+        
+        {/* 绑定谷歌验证码弹窗 */}
+        <Dialog open={showBindDialog} onOpenChange={setShowBindDialog}>
+          <DialogContent className="sm:max-w-md bg-gray-800 border-gray-700 text-white">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-xl">
+                <Smartphone className="w-6 h-6 text-custom-green" />
+                绑定谷歌验证码
+              </DialogTitle>
+              <DialogDescription className="text-gray-400">
+                请使用Google Authenticator或其他TOTP应用扫描二维码
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-6 py-4">
+              {/* 二维码显示 */}
+              <div className="flex flex-col items-center gap-4">
+                {qrcodeUrl && (
+                  <div className="bg-white p-4 rounded-lg">
+                    <img src={qrcodeUrl} alt="Google Auth QR Code" className="w-48 h-48" />
+                  </div>
+                )}
+                
+                {/* 密钥显示 */}
+                <div className="w-full">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    手动输入密钥（备用）
+                  </label>
+                  <div className="p-3 bg-gray-900/50 border border-gray-700 rounded-lg">
+                    <code className="text-sm text-custom-green break-all font-mono">
+                      {googleSecret}
+                    </code>
+                  </div>
+                </div>
+              </div>
+              
+              {/* 验证码输入 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  请输入6位验证码
+                </label>
+                <Input
+                  type="text"
+                  value={googleCode}
+                  onChange={(e) => setGoogleCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  placeholder="输入验证码"
+                  maxLength={6}
+                  className="bg-gray-900/50 border-gray-700 text-white placeholder-gray-500 focus:border-custom-green focus:ring-custom-green"
+                />
+              </div>
+              
+              {/* 说明 */}
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                <p className="text-blue-400 text-xs leading-relaxed">
+                  1. 打开Google Authenticator应用<br/>
+                  2. 扫描上方二维码或手动输入密钥<br/>
+                  3. 输入应用中显示的6位验证码完成绑定
+                </p>
+              </div>
+            </div>
+            
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowBindDialog(false)}
+                className="bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 hover:text-white"
+              >
+                取消
+              </Button>
+              <Button
+                type="button"
+                onClick={handleBindGoogleAuth}
+                disabled={isBinding || googleCode.length !== 6}
+                className="bg-custom-green text-white hover:bg-custom-green/90 disabled:opacity-50"
+              >
+                {isBinding ? "验证中..." : "确认绑定"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* 底部版权 */}
         <p className="text-center text-gray-500 text-sm mt-6">
