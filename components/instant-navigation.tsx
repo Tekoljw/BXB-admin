@@ -88,6 +88,7 @@ import UCardCommissionPage from "@/app/(dashboard)/admin/commission/ucard/page"
 import EscrowCommissionPage from "@/app/(dashboard)/admin/commission/escrow/page"
 import PaymentCommissionPage from "@/app/(dashboard)/admin/commission/payment/page"
 import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
+import ProfilePage from "@/app/(dashboard)/admin/profile/page"
 import CryptoBusinessReportPage from "@/app/(dashboard)/admin/crypto/business-report/page"
 import CryptoAssetStatisticsPage from "@/app/(dashboard)/admin/orders/crypto-assets/page"
 import CryptoCurrenciesPage from "@/app/(dashboard)/admin/crypto/currencies/page"
@@ -352,6 +353,7 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/commission/escrow") return <EscrowCommissionPage />
     if (currentPage === "/admin/commission/payment") return <PaymentCommissionPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
+    if (currentPage === "/admin/profile") return <ProfilePage />
     if (currentPage === "/admin/crypto/business-report") return <CryptoBusinessReportPage />
     if (currentPage === "/admin/orders/crypto-assets") return <CryptoAssetStatisticsPage />
     if (currentPage === "/admin/crypto/currencies") return <CryptoCurrenciesPage />
@@ -382,6 +384,21 @@ export default function InstantNavigation() {
     return (
       <div className={`h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-auto`}>
         {renderCurrentPage()}
+      </div>
+    )
+  }
+
+  // 个人中心页面：只显示顶部导航，不显示左侧边栏
+  if (currentPage === "/admin/profile") {
+    return (
+      <div className={`flex flex-col h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <AdminTopNav 
+          currentModule={currentModule}
+          onModuleChange={handleModuleChange}
+        />
+        <div className={`flex-1 overflow-auto ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
+          {renderCurrentPage()}
+        </div>
       </div>
     )
   }
