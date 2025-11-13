@@ -1244,16 +1244,16 @@ export default function CryptoUsersPage() {
                               </td>
                               <td className="px-3 py-2">
                                 <Input
-                                  value={config.paymentFee}
-                                  onChange={(e) => handleUpdateFeeConfig(config.id, 'paymentFee', e.target.value)}
+                                  value={config.channelType === "代收" ? config.collectionFee : config.paymentFee}
+                                  onChange={(e) => handleUpdateFeeConfig(config.id, config.channelType === "代收" ? 'collectionFee' : 'paymentFee', e.target.value)}
                                   className="h-8 text-sm w-24 text-orange-600 dark:text-orange-400 font-semibold"
                                   placeholder="0.3%"
                                 />
                               </td>
                               <td className="px-3 py-2">
                                 <Input
-                                  value={config.minPaymentFee}
-                                  onChange={(e) => handleUpdateFeeConfig(config.id, 'minPaymentFee', e.target.value)}
+                                  value={config.channelType === "代收" ? config.minCollectionFee : config.minPaymentFee}
+                                  onChange={(e) => handleUpdateFeeConfig(config.id, config.channelType === "代收" ? 'minCollectionFee' : 'minPaymentFee', e.target.value)}
                                   className="h-8 text-sm w-28 text-orange-600 dark:text-orange-400"
                                   placeholder="USDT 0.50"
                                 />
