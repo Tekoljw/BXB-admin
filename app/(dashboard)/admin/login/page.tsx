@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
         login(() => {
           window.dispatchEvent(new CustomEvent('navigate', { 
             detail: { 
-              path: "/admin/operations/dashboard"
+              path: "/admin/profile"
             } 
           }))
         })
