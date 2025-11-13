@@ -43,6 +43,7 @@ interface WalletAddress {
 export default function AddressesManagementPage() {
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [typeFilter, setTypeFilter] = useState<string>("all")
+  const [currencyFilter, setCurrencyFilter] = useState<string>("all")
   const [selectedAddress, setSelectedAddress] = useState<WalletAddress | null>(null)
   const [showDetailDialog, setShowDetailDialog] = useState(false)
   const [networkTab, setNetworkTab] = useState("all")
@@ -151,7 +152,7 @@ export default function AddressesManagementPage() {
     },
   ])
 
-  // 链式过滤：搜索 → 类型 → 网络 → 供应商 → 状态
+  // 链式过滤：搜索 → 币种 → 类型 → 网络 → 供应商 → 状态
   const filteredAddresses = useMemo(() => {
     // 第一步：搜索过滤
     let filtered = addresses.filter(address => {
@@ -160,9 +161,10 @@ export default function AddressesManagementPage() {
         address.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         address.userId.toLowerCase().includes(searchTerm.toLowerCase())
       
+      const matchesCurrency = currencyFilter === "all" || address.currency === currencyFilter
       const matchesType = typeFilter === "all" || address.addressType === typeFilter
       
-      return matchesSearch && matchesType
+      return matchesSearch && matchesCurrency && matchesType
     })
 
     // 第二步：网络页签过滤
@@ -203,7 +205,7 @@ export default function AddressesManagementPage() {
     }
 
     return filtered
-  }, [addresses, searchTerm, typeFilter, networkTab, providerTab, statusTab])
+  }, [addresses, searchTerm, currencyFilter, typeFilter, networkTab, providerTab, statusTab])
 
   // 显示的地址列表（分页）
   const displayedAddresses = filteredAddresses.slice(0, displayedCount)
@@ -324,7 +326,7 @@ export default function AddressesManagementPage() {
         </TabsList>
       </Tabs>
 
-      {/* 搜索行：状态页签 + 搜索框 */}
+      {/* 搜索行：状态页签 + 币种下拉框 + 搜索框 */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
         <div className="flex flex-wrap items-center gap-4">
           {/* 状态页签 */}
@@ -338,6 +340,20 @@ export default function AddressesManagementPage() {
               <TabsTrigger value="idle">闲置</TabsTrigger>
             </TabsList>
           </Tabs>
+
+          {/* 币种筛选 - 显示在搜索框前面 */}
+          <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
+            <SelectTrigger className="w-[150px]">
+              <SelectValue placeholder="币种" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">全部币种</SelectItem>
+              <SelectItem value="USDT">USDT</SelectItem>
+              <SelectItem value="BTC">BTC</SelectItem>
+              <SelectItem value="ETH">ETH</SelectItem>
+              <SelectItem value="BNB">BNB</SelectItem>
+            </SelectContent>
+          </Select>
 
           {/* 搜索框 - 不显示重置按钮 */}
           <div className="flex-1 min-w-[200px]">
