@@ -160,8 +160,6 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
   ],
   finance: [
     { path: "/admin/finance", icon: PiggyBank, label: "理财管理" },
-    { path: "/admin/crypto/asset-statistics", icon: BarChart3, label: "Crypto资产管理" },
-    { path: "/admin/fiat/asset-statistics", icon: BarChart3, label: "法币资产管理" },
   ],
   commission: [
     { path: "/admin/commission/futures", icon: Percent, label: "合约佣金" },
@@ -183,6 +181,8 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/fiat/exchange-orders", icon: Globe, label: "兑换订单" },
   ],
   orders: [
+    { path: "/admin/crypto/asset-statistics", icon: BarChart3, label: "Crypto资产管理" },
+    { path: "/admin/fiat/asset-statistics", icon: BarChart3, label: "法币资产管理" },
     { path: "/admin/orders/funds", icon: Wallet, label: "资金记录" },
     { path: "/admin/orders/usdt", icon: DollarSign, label: "USDT买卖记录" },
     { path: "/admin/orders/spot", icon: TrendingUp, label: "现货订单" },
