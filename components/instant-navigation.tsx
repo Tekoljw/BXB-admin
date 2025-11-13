@@ -11,7 +11,6 @@ import MaintenancePage from "@/components/maintenance-page"
 // 只导入管理后台页面组件
 import AdminPage from "@/app/(dashboard)/admin/page"
 import AdminLoginPage from "@/app/(dashboard)/admin/login/page"
-import AccountPage from "@/app/(dashboard)/admin/account/page"
 import BusinessLinesPage from "@/app/(dashboard)/admin/permissions/business-lines/page"
 import PermissionsAuditConfigPage from "@/app/(dashboard)/admin/permissions/audit-config/page"
 import StaffManagementPage from "@/app/(dashboard)/admin/permissions/staff-management/page"
@@ -364,7 +363,6 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/crypto/onchain-deposit-orders") return <OnchainDepositOrdersPage />
     if (currentPage === "/admin/orders/fiat-assets") return <FiatAssetStatisticsPage />
     if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />
-    if (currentPage === "/admin/account") return <AccountPage />
     if (currentPage === "/admin/system") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/permissions") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/roles") return <RolesManagementPage />

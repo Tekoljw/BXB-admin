@@ -10,12 +10,11 @@ Preferred communication style: Simple, everyday Chinese language.
 
 ### UI/UX Decisions
 - **导航架构**: 采用顶部导航栏（16个一级模块菜单）与左侧边栏（动态二级子菜单）的双层导航体系。
-- **个人账号系统**: 右上角用户头像下拉菜单，提供个人中心、安全设置和退出登录功能。个人中心页面（`/admin/account`）包含账户信息卡片、登录记录表格、安全设置（修改密码、重置Google验证码）。
 - **财务模块**: Crypto资产管理和法币资产管理已从各自的业务模块（Crypto/法币）移至财务模块（orders），路径分别为 `/admin/orders/crypto-assets` 和 `/admin/orders/fiat-assets`，确保点击时一级菜单保持在财务模块。
 - **响应式设计**: 支持桌面端横向滚动菜单和移动端汉堡菜单侧边Sheet弹窗。
 - **主题**: 支持动态亮色/暗色主题切换，并持久化用户偏好。
 - **品牌与配色**: 统一的BeDAO品牌设计，采用绿色、黑色、深蓝色、白色作为标准化配色方案。
-- **登录页面**: 独立的登录页面布局，登录成功后加载用户信息到AdminContext。
+- **登录页面**: 独立的登录页面布局。
 - **功能优化**:
     - **通道管理**: 提供通道配置和费率管理，支持两级页签筛选、右侧滑出弹窗进行添加/编辑、Inline编辑通道名称、外显名称及费率数据，并支持状态快速开关。
     - **接口管理**: 采用紧凑卡片设计展示支付接口，支持Inline编辑接口名称和描述、状态快速开关、停用视觉反馈，以及通过右侧滑出面板进行供应商配置。
@@ -33,12 +32,10 @@ Preferred communication style: Simple, everyday Chinese language.
 - **Backend**: Express.js with session management.
 - **Database**: PostgreSQL with Drizzle ORM.
 - **Authentication**: Replit Auth (OpenID Connect), independent admin login with email verification, PostgreSQL-backed session store.
-- **用户管理**: AdminContext管理用户状态（AdminUser接口包含id、username、email、fullName、role、permissions等），提供loadUser、updateUser、clearUser方法。敏感字段（permissions、lastLoginAt、passwordLastUpdated、requires2FAReset）不存储在localStorage。
 - **Core Features**:
     - 综合性后台管理面板，包含16个管理模块。
     - 登录后访问控制和管理员认证状态持久化。
     - 客户端路由使用 `instant-navigation` 实现即时页面切换和加载动画。
-    - 个人账号管理系统（账户信息、登录记录、修改密码、重置Google验证码）。
 
 ### System Design Choices
 - **客户端路由**: 采用 `instant-navigation` 组件和 `window.history.pushState`/`popstate` 实现即时页面切换，避免页面重载。
