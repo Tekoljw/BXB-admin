@@ -73,8 +73,40 @@ interface FeeConfig {
 interface CurrencyBalance {
   currency: string
   balance: number
-  paymentBalance: number
   frozenBalance: number
+}
+
+interface NetworkAddressCount {
+  network: string
+  count: number
+}
+
+interface MonthlyAddressFee {
+  month: string
+  addressFees: number
+}
+
+interface AddressStats {
+  total: number
+  networks: NetworkAddressCount[]
+  monthlyFees: MonthlyAddressFee[]
+}
+
+interface NetworkProfitData {
+  network: string
+  currency: string
+  addressMonthlyFee: number
+  withdrawFee: number
+  withdrawCost: number
+  withdrawProfit: number
+}
+
+interface ProfitContribution {
+  totalAddressMonthlyFee: number
+  totalWithdrawFee: number
+  totalWithdrawCost: number
+  totalWithdrawProfit: number
+  networks: NetworkProfitData[]
 }
 
 interface CurrencyProfit {
@@ -107,10 +139,12 @@ interface CryptoUser {
   email: string
   phone: string
   apiKeys: ApiKey[]
+  primaryCurrency: string
   balance: number
-  paymentBalance: number
   frozenBalance: number
   currencyBalances: CurrencyBalance[]
+  addressStats: AddressStats
+  profitContribution: ProfitContribution
   dailyProfit: number
   monthlyProfit: number
   totalProfit: number
@@ -158,16 +192,47 @@ const mockCryptoUsers: CryptoUser[] = [
         createdAt: "2024-04-10 16:45:00"
       }
     ],
-    balance: 45200.00,
-    paymentBalance: 20000.00,
-    frozenBalance: 10000,
+    primaryCurrency: "USDT",
+    balance: 320000,
+    frozenBalance: 25000,
     currencyBalances: [
-      { currency: "USDT", balance: 320000, paymentBalance: 140000, frozenBalance: 25000 },
-      { currency: "BTC", balance: 45200.00, paymentBalance: 20000.00, frozenBalance: 10000 },
-      { currency: "TRX", balance: 58000, paymentBalance: 22000, frozenBalance: 8000 },
-      { currency: "ETH", balance: 35000, paymentBalance: 15000, frozenBalance: 5000 },
-      { currency: "USDC", balance: 28000, paymentBalance: 12000, frozenBalance: 3000 }
+      { currency: "USDT", balance: 320000, frozenBalance: 25000 },
+      { currency: "BTC", balance: 45200.00, frozenBalance: 10000 },
+      { currency: "TRX", balance: 58000, frozenBalance: 8000 },
+      { currency: "ETH", balance: 35000, frozenBalance: 5000 },
+      { currency: "USDC", balance: 28000, frozenBalance: 3000 }
     ],
+    addressStats: {
+      total: 156,
+      networks: [
+        { network: "TRC20", count: 58 },
+        { network: "ERC20", count: 42 },
+        { network: "BSC", count: 28 },
+        { network: "Polygon", count: 18 },
+        { network: "Solana", count: 10 }
+      ],
+      monthlyFees: [
+        { month: "2024-01", addressFees: 1200 },
+        { month: "2024-02", addressFees: 1350 },
+        { month: "2024-03", addressFees: 1500 },
+        { month: "2024-04", addressFees: 1680 },
+        { month: "2024-05", addressFees: 1820 },
+        { month: "2024-06", addressFees: 1950 }
+      ]
+    },
+    profitContribution: {
+      totalAddressMonthlyFee: 9500,
+      totalWithdrawFee: 45800,
+      totalWithdrawCost: 18200,
+      totalWithdrawProfit: 27600,
+      networks: [
+        { network: "TRC20", currency: "USDT", addressMonthlyFee: 3480, withdrawFee: 18500, withdrawCost: 6200, withdrawProfit: 12300 },
+        { network: "ERC20", currency: "USDT", addressMonthlyFee: 2520, withdrawFee: 14200, withdrawCost: 6800, withdrawProfit: 7400 },
+        { network: "BSC", currency: "USDT", addressMonthlyFee: 1680, withdrawFee: 8500, withdrawCost: 3200, withdrawProfit: 5300 },
+        { network: "Polygon", currency: "USDT", addressMonthlyFee: 1080, withdrawFee: 3200, withdrawCost: 1400, withdrawProfit: 1800 },
+        { network: "Solana", currency: "USDT", addressMonthlyFee: 740, withdrawFee: 1400, withdrawCost: 600, withdrawProfit: 800 }
+      ]
+    },
     dailyProfit: 1250.50,
     monthlyProfit: 28500.00,
     totalProfit: 156000.00,
@@ -271,16 +336,47 @@ const mockCryptoUsers: CryptoUser[] = [
         createdAt: "2024-01-08 16:45:00"
       }
     ],
-    balance: 210000.75,
-    paymentBalance: 80000.00,
+    primaryCurrency: "USDT",
+    balance: 1250000,
     frozenBalance: 0,
     currencyBalances: [
-      { currency: "USDT", balance: 1250000, paymentBalance: 580000, frozenBalance: 0 },
-      { currency: "BTC", balance: 210000.75, paymentBalance: 80000.00, frozenBalance: 0 },
-      { currency: "TRX", balance: 165000, paymentBalance: 70000, frozenBalance: 0 },
-      { currency: "ETH", balance: 120000, paymentBalance: 55000, frozenBalance: 0 },
-      { currency: "USDC", balance: 95000, paymentBalance: 42000, frozenBalance: 0 }
+      { currency: "USDT", balance: 1250000, frozenBalance: 0 },
+      { currency: "BTC", balance: 210000.75, frozenBalance: 0 },
+      { currency: "TRX", balance: 165000, frozenBalance: 0 },
+      { currency: "ETH", balance: 120000, frozenBalance: 0 },
+      { currency: "USDC", balance: 95000, frozenBalance: 0 }
     ],
+    addressStats: {
+      total: 425,
+      networks: [
+        { network: "TRC20", count: 165 },
+        { network: "ERC20", count: 125 },
+        { network: "BSC", count: 85 },
+        { network: "Polygon", count: 35 },
+        { network: "Solana", count: 15 }
+      ],
+      monthlyFees: [
+        { month: "2024-01", addressFees: 3200 },
+        { month: "2024-02", addressFees: 3500 },
+        { month: "2024-03", addressFees: 3850 },
+        { month: "2024-04", addressFees: 4200 },
+        { month: "2024-05", addressFees: 4650 },
+        { month: "2024-06", addressFees: 5100 }
+      ]
+    },
+    profitContribution: {
+      totalAddressMonthlyFee: 25500,
+      totalWithdrawFee: 158000,
+      totalWithdrawCost: 62000,
+      totalWithdrawProfit: 96000,
+      networks: [
+        { network: "TRC20", currency: "USDT", addressMonthlyFee: 9900, withdrawFee: 65000, withdrawCost: 22000, withdrawProfit: 43000 },
+        { network: "ERC20", currency: "USDT", addressMonthlyFee: 7500, withdrawFee: 48000, withdrawCost: 22000, withdrawProfit: 26000 },
+        { network: "BSC", currency: "USDT", addressMonthlyFee: 5100, withdrawFee: 32000, withdrawCost: 12000, withdrawProfit: 20000 },
+        { network: "Polygon", currency: "USDT", addressMonthlyFee: 2100, withdrawFee: 9500, withdrawCost: 4200, withdrawProfit: 5300 },
+        { network: "Solana", currency: "USDT", addressMonthlyFee: 900, withdrawFee: 3500, withdrawCost: 1800, withdrawProfit: 1700 }
+      ]
+    },
     dailyProfit: 5800.25,
     monthlyProfit: 158000.00,
     totalProfit: 980000.00,
@@ -391,9 +487,8 @@ export default function CryptoUsersPage() {
   const [isAddFeeConfigDialogOpen, setIsAddFeeConfigDialogOpen] = useState(false)
   const [isApiKeysDialogOpen, setIsApiKeysDialogOpen] = useState(false)
   const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false)
-  const [isProfitDialogOpen, setIsProfitDialogOpen] = useState(false)
-  const [isVolumeDialogOpen, setIsVolumeDialogOpen] = useState(false)
-  const [profitTimeRange, setProfitTimeRange] = useState<"today" | "yesterday" | "thisMonth" | "total">("total")
+  const [isAddressStatsDialogOpen, setIsAddressStatsDialogOpen] = useState(false)
+  const [isProfitContributionDialogOpen, setIsProfitContributionDialogOpen] = useState(false)
   const [isInterfaceManageDialogOpen, setIsInterfaceManageDialogOpen] = useState(false)
   const [isSupplierManageDialogOpen, setIsSupplierManageDialogOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState<CryptoUser | null>(null)
@@ -493,10 +588,10 @@ export default function CryptoUsersPage() {
   }).sort((a, b) => {
     // 根据页签进行排序
     if (userFilter === "profitRanking") {
-      return b.totalProfit - a.totalProfit // 按总利润降序排序
+      return b.profitContribution.totalWithdrawProfit - a.profitContribution.totalWithdrawProfit // 按总利润降序排序
     }
     if (userFilter === "volumeRanking") {
-      return b.totalVolume - a.totalVolume // 按总交易量降序排序
+      return b.addressStats.total - a.addressStats.total // 按地址数量降序排序
     }
     return 0 // 其他页签不排序
   })
@@ -506,15 +601,14 @@ export default function CryptoUsersPage() {
     setIsBalanceDialogOpen(true)
   }
 
-  const openProfitDialog = (user: CryptoUser) => {
+  const openAddressStatsDialog = (user: CryptoUser) => {
     setCurrentUser(user)
-    setProfitTimeRange("total")
-    setIsProfitDialogOpen(true)
+    setIsAddressStatsDialogOpen(true)
   }
 
-  const openVolumeDialog = (user: CryptoUser) => {
+  const openProfitContributionDialog = (user: CryptoUser) => {
     setCurrentUser(user)
-    setIsVolumeDialogOpen(true)
+    setIsProfitContributionDialogOpen(true)
   }
 
   const openApiKeysDialog = (user: CryptoUser) => {
@@ -897,10 +991,10 @@ export default function CryptoUsersPage() {
                   账户余额
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  利润贡献
+                  申请地址数量
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  交易量
+                  利润贡献
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   密钥
@@ -935,45 +1029,42 @@ export default function CryptoUsersPage() {
                       className="text-left hover:opacity-70 transition-opacity cursor-pointer"
                     >
                       <div className="text-gray-900 dark:text-white font-medium">
-                        可用: BTC {user.balance.toLocaleString()}
-                      </div>
-                      <div className="text-blue-600 dark:text-blue-400 text-xs mt-1 font-medium">
-                        代付金: BTC {user.paymentBalance.toLocaleString()}
+                        可用: {user.primaryCurrency} {user.balance.toLocaleString()}
                       </div>
                       <div className="text-orange-600 dark:text-orange-400 text-xs mt-1 font-medium">
-                        冻结: BTC {user.frozenBalance.toLocaleString()}
+                        冻结: {user.primaryCurrency} {user.frozenBalance.toLocaleString()}
                       </div>
                     </button>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <button
-                      onClick={() => openProfitDialog(user)}
+                      onClick={() => openAddressStatsDialog(user)}
+                      className="text-left hover:opacity-70 transition-opacity cursor-pointer"
+                    >
+                      <div className="text-blue-600 dark:text-blue-400 font-medium">
+                        总地址: {user.addressStats.total}
+                      </div>
+                      <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                        {user.addressStats.networks.slice(0, 2).map(n => `${n.network}: ${n.count}`).join(', ')}
+                      </div>
+                      <div className="text-green-600 dark:text-green-400 text-xs mt-1 font-medium">
+                        月费: {user.primaryCurrency} {user.addressStats.monthlyFees[user.addressStats.monthlyFees.length - 1]?.addressFees.toLocaleString() || 0}
+                      </div>
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    <button
+                      onClick={() => openProfitContributionDialog(user)}
                       className="text-left hover:opacity-70 transition-opacity cursor-pointer"
                     >
                       <div className="text-green-600 dark:text-green-400 font-medium">
-                        日: BTC {user.dailyProfit.toLocaleString()}
+                        地址月费: {user.primaryCurrency} {user.profitContribution.totalAddressMonthlyFee.toLocaleString()}
                       </div>
                       <div className="text-emerald-600 dark:text-emerald-400 text-xs mt-1 font-medium">
-                        月: BTC {user.monthlyProfit.toLocaleString()}
+                        提币手续费: {user.primaryCurrency} {user.profitContribution.totalWithdrawFee.toLocaleString()}
                       </div>
                       <div className="text-teal-600 dark:text-teal-400 text-xs mt-1 font-medium">
-                        总: BTC {user.totalProfit.toLocaleString()}
-                      </div>
-                    </button>
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <button
-                      onClick={() => openVolumeDialog(user)}
-                      className="text-left hover:opacity-70 transition-opacity cursor-pointer"
-                    >
-                      <div className="text-purple-900 dark:text-purple-100 font-medium">
-                        日: BTC {user.dailyVolume.toLocaleString()}
-                      </div>
-                      <div className="text-purple-700 dark:text-purple-300 text-xs mt-1">
-                        月: BTC {user.monthlyVolume.toLocaleString()}
-                      </div>
-                      <div className="text-purple-600 dark:text-purple-400 text-xs mt-1 font-medium">
-                        总: BTC {user.totalVolume.toLocaleString()}
+                        利润: {user.primaryCurrency} {user.profitContribution.totalWithdrawProfit.toLocaleString()}
                       </div>
                     </button>
                   </td>
@@ -1350,7 +1441,7 @@ export default function CryptoUsersPage() {
           <DialogHeader>
             <DialogTitle>冻结资金 - {currentUser?.name}</DialogTitle>
             <DialogDescription>
-              可用余额: BTC {currentUser?.balance.toLocaleString()} | 代付金余额: BTC {currentUser?.paymentBalance.toLocaleString()}
+              可用余额: {currentUser?.primaryCurrency} {currentUser?.balance.toLocaleString()} | 冻结余额: {currentUser?.primaryCurrency} {currentUser?.frozenBalance.toLocaleString()}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
@@ -1551,10 +1642,8 @@ export default function CryptoUsersPage() {
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
                       <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">币种</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">法币余额</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-blue-600 dark:text-blue-400">代付金余额</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">可用余额</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-orange-600 dark:text-orange-400">冻结金额</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">总余额</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1579,42 +1668,12 @@ export default function CryptoUsersPage() {
                         </td>
                         <td className="py-3 px-4 text-right">
                           <div className="font-medium text-gray-900 dark:text-white">
-                            {cb.currency === "USDT" && "USDT "}
-                            {cb.currency === "BTC" && "BTC "}
-                            {cb.currency === "ETH" && "€"}
-                            {cb.currency === "USDC" && "£"}
                             {cb.balance.toLocaleString()}
-                            {cb.currency === "USDT" && " USDT"}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="font-medium text-blue-600 dark:text-blue-400">
-                            {cb.currency === "USDT" && "USDT "}
-                            {cb.currency === "BTC" && "BTC "}
-                            {cb.currency === "ETH" && "€"}
-                            {cb.currency === "USDC" && "£"}
-                            {cb.paymentBalance.toLocaleString()}
-                            {cb.currency === "USDT" && " USDT"}
                           </div>
                         </td>
                         <td className="py-3 px-4 text-right">
                           <div className="font-medium text-orange-600 dark:text-orange-400">
-                            {cb.currency === "USDT" && "USDT "}
-                            {cb.currency === "BTC" && "BTC "}
-                            {cb.currency === "ETH" && "€"}
-                            {cb.currency === "USDC" && "£"}
                             {cb.frozenBalance.toLocaleString()}
-                            {cb.currency === "USDT" && " USDT"}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="font-semibold text-gray-900 dark:text-white">
-                            {cb.currency === "USDT" && "USDT "}
-                            {cb.currency === "BTC" && "BTC "}
-                            {cb.currency === "ETH" && "€"}
-                            {cb.currency === "USDC" && "£"}
-                            {(cb.balance + cb.paymentBalance).toLocaleString()}
-                            {cb.currency === "USDT" && " USDT"}
                           </div>
                         </td>
                       </tr>
@@ -1637,203 +1696,130 @@ export default function CryptoUsersPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={isProfitDialogOpen} onOpenChange={setIsProfitDialogOpen}>
+      <Dialog open={isAddressStatsDialogOpen} onOpenChange={setIsAddressStatsDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[75vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>利润贡献详情</DialogTitle>
+            <DialogTitle>申请地址数量详情</DialogTitle>
             <DialogDescription>
-              用户 {currentUser?.name} 的各币种利润明细
+              用户 {currentUser?.name} 的地址统计信息
             </DialogDescription>
           </DialogHeader>
-          
-          <Tabs value={profitTimeRange} onValueChange={(value) => setProfitTimeRange(value as "today" | "yesterday" | "thisMonth" | "total")} className="mt-4">
-            <TabsList>
-              <TabsTrigger value="today">今日</TabsTrigger>
-              <TabsTrigger value="yesterday">昨日</TabsTrigger>
-              <TabsTrigger value="thisMonth">本月</TabsTrigger>
-              <TabsTrigger value="total">累计</TabsTrigger>
-            </TabsList>
-          </Tabs>
+          <div className="space-y-6 py-4">
+            <div className="grid grid-cols-1 gap-4">
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400">总地址数</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{currentUser?.addressStats.total}</p>
+              </div>
+            </div>
 
-          <div className="py-4">
-            {currentUser && currentUser.profitDataByTimeRange && currentUser.profitDataByTimeRange[profitTimeRange] && currentUser.profitDataByTimeRange[profitTimeRange].length > 0 ? (
+            <div>
+              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">各网络地址分布</h4>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">币种</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-green-600 dark:text-green-400">代收利润</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-blue-600 dark:text-blue-400">代付利润</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-purple-600 dark:text-purple-400">汇率利润</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-teal-600 dark:text-teal-400">总利润</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold">网络</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold">地址数量</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentUser.profitDataByTimeRange[profitTimeRange].map((cp, index) => (
-                      <tr 
-                        key={cp.currency}
-                        className={`border-b border-gray-100 dark:border-gray-800 BTC {
-                          index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'
-                        }`}
-                      >
-                        <td className="py-3 px-4">
-                          <div className="flex items-center gap-2">
-                            <span className="text-lg">
-                              {cp.currency === "USDT" && "USDT "}
-                              {cp.currency === "BTC" && "BTC "}
-                              {cp.currency === "ETH" && "€"}
-                              {cp.currency === "USDC" && "£"}
-                              {cp.currency === "USDT" && "₮"}
-                            </span>
-                            <span className="font-medium text-gray-900 dark:text-white">{cp.currency}</span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="font-medium text-green-600 dark:text-green-400">
-                            {cp.currency === "USDT" && "USDT "}
-                            {cp.currency === "BTC" && "BTC "}
-                            {cp.currency === "ETH" && "€"}
-                            {cp.currency === "USDC" && "£"}
-                            {cp.collectionProfit.toLocaleString()}
-                            {cp.currency === "USDT" && " USDT"}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="font-medium text-blue-600 dark:text-blue-400">
-                            {cp.currency === "USDT" && "USDT "}
-                            {cp.currency === "BTC" && "BTC "}
-                            {cp.currency === "ETH" && "€"}
-                            {cp.currency === "USDC" && "£"}
-                            {cp.paymentProfit.toLocaleString()}
-                            {cp.currency === "USDT" && " USDT"}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="font-medium text-purple-600 dark:text-purple-400">
-                            {cp.currency === "USDT" && "USDT "}
-                            {cp.currency === "BTC" && "BTC "}
-                            {cp.currency === "ETH" && "€"}
-                            {cp.currency === "USDC" && "£"}
-                            {cp.exchangeRateProfit.toLocaleString()}
-                            {cp.currency === "USDT" && " USDT"}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="font-semibold text-teal-600 dark:text-teal-400">
-                            {cp.currency === "USDT" && "USDT "}
-                            {cp.currency === "BTC" && "BTC "}
-                            {cp.currency === "ETH" && "€"}
-                            {cp.currency === "USDC" && "£"}
-                            {cp.totalProfit.toLocaleString()}
-                            {cp.currency === "USDT" && " USDT"}
-                          </div>
-                        </td>
+                    {currentUser?.addressStats.networks.map((net, idx) => (
+                      <tr key={net.network} className={idx % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'}>
+                        <td className="py-3 px-4 font-medium">{net.network}</td>
+                        <td className="py-3 px-4 text-right text-blue-600 dark:text-blue-400 font-semibold">{net.count}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                暂无利润数据
-              </div>
-            )}
-          </div>
+            </div>
 
+            <div>
+              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">月度地址费用</h4>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                      <th className="text-left py-3 px-4 text-sm font-semibold">月份</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold">地址费用 ({currentUser?.primaryCurrency})</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentUser?.addressStats.monthlyFees.map((fee, idx) => (
+                      <tr key={fee.month} className={idx % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'}>
+                        <td className="py-3 px-4">{fee.month}</td>
+                        <td className="py-3 px-4 text-right text-green-600 dark:text-green-400 font-semibold">{fee.addressFees.toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsProfitDialogOpen(false)}>
-              关闭
-            </Button>
+            <Button variant="outline" onClick={() => setIsAddressStatsDialogOpen(false)}>关闭</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <Dialog open={isVolumeDialogOpen} onOpenChange={setIsVolumeDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[75vh] overflow-y-auto">
+      <Dialog open={isProfitContributionDialogOpen} onOpenChange={setIsProfitContributionDialogOpen}>
+        <DialogContent className="max-w-5xl max-h-[75vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>交易量详情</DialogTitle>
+            <DialogTitle>利润贡献详情</DialogTitle>
             <DialogDescription>
-              用户 {currentUser?.name} 的各币种交易量明细
+              用户 {currentUser?.name} 的利润贡献明细
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4">
-            {currentUser && currentUser.currencyVolumes && currentUser.currencyVolumes.length > 0 ? (
+          <div className="space-y-6 py-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                <p className="text-xs text-gray-600 dark:text-gray-400">地址月费</p>
+                <p className="text-lg font-bold text-green-600 dark:text-green-400">{currentUser?.profitContribution.totalAddressMonthlyFee.toLocaleString()}</p>
+              </div>
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                <p className="text-xs text-gray-600 dark:text-gray-400">提币手续费</p>
+                <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{currentUser?.profitContribution.totalWithdrawFee.toLocaleString()}</p>
+              </div>
+              <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
+                <p className="text-xs text-gray-600 dark:text-gray-400">成本</p>
+                <p className="text-lg font-bold text-orange-600 dark:text-orange-400">{currentUser?.profitContribution.totalWithdrawCost.toLocaleString()}</p>
+              </div>
+              <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                <p className="text-xs text-gray-600 dark:text-gray-400">利润</p>
+                <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{currentUser?.profitContribution.totalWithdrawProfit.toLocaleString()}</p>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">各网络利润详情</h4>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">币种</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-green-600 dark:text-green-400">代收交易量</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-blue-600 dark:text-blue-400">代付交易量</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-purple-600 dark:text-purple-400">总交易量</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold">网络</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-green-600 dark:text-green-400">地址月费</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-blue-600 dark:text-blue-400">提币手续费</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-orange-600 dark:text-orange-400">成本</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-purple-600 dark:text-purple-400">利润</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentUser.currencyVolumes.map((cv, index) => (
-                      <tr 
-                        key={cv.currency}
-                        className={`border-b border-gray-100 dark:border-gray-800 BTC {
-                          index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'
-                        }`}
-                      >
-                        <td className="py-3 px-4">
-                          <div className="flex items-center gap-2">
-                            <span className="text-lg">
-                              {cv.currency === "USDT" && "USDT "}
-                              {cv.currency === "BTC" && "BTC "}
-                              {cv.currency === "ETH" && "€"}
-                              {cv.currency === "USDC" && "£"}
-                              {cv.currency === "USDT" && "₮"}
-                            </span>
-                            <span className="font-medium text-gray-900 dark:text-white">{cv.currency}</span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="font-medium text-green-600 dark:text-green-400">
-                            {cv.currency === "USDT" && "USDT "}
-                            {cv.currency === "BTC" && "BTC "}
-                            {cv.currency === "ETH" && "€"}
-                            {cv.currency === "USDC" && "£"}
-                            {cv.collectionVolume.toLocaleString()}
-                            {cv.currency === "USDT" && " USDT"}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="font-medium text-blue-600 dark:text-blue-400">
-                            {cv.currency === "USDT" && "USDT "}
-                            {cv.currency === "BTC" && "BTC "}
-                            {cv.currency === "ETH" && "€"}
-                            {cv.currency === "USDC" && "£"}
-                            {cv.paymentVolume.toLocaleString()}
-                            {cv.currency === "USDT" && " USDT"}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="font-semibold text-purple-600 dark:text-purple-400">
-                            {cv.currency === "USDT" && "USDT "}
-                            {cv.currency === "BTC" && "BTC "}
-                            {cv.currency === "ETH" && "€"}
-                            {cv.currency === "USDC" && "£"}
-                            {cv.totalVolume.toLocaleString()}
-                            {cv.currency === "USDT" && " USDT"}
-                          </div>
-                        </td>
+                    {currentUser?.profitContribution.networks.map((net, idx) => (
+                      <tr key={net.network} className={idx % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'}>
+                        <td className="py-3 px-4 font-medium">{net.network}</td>
+                        <td className="py-3 px-4 text-right text-green-600 dark:text-green-400">{net.addressMonthlyFee.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right text-blue-600 dark:text-blue-400">{net.withdrawFee.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right text-orange-600 dark:text-orange-400">{net.withdrawCost.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right text-purple-600 dark:text-purple-400 font-semibold">{net.withdrawProfit.toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                暂无交易量数据
-              </div>
-            )}
+            </div>
           </div>
-
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsVolumeDialogOpen(false)}>
-              关闭
-            </Button>
+            <Button variant="outline" onClick={() => setIsProfitContributionDialogOpen(false)}>关闭</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
