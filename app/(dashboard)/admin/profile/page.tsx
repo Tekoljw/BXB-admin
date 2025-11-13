@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useAdmin } from "@/contexts/admin-context"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,6 +15,7 @@ import { toast } from "sonner"
 import { User, Mail, Shield, MapPin, Clock, Monitor, Key, Smartphone, LogOut, Eye, EyeOff } from "lucide-react"
 
 export default function ProfilePage() {
+  const { logout, userInfo: contextUserInfo, isAdminLoggedIn } = useAdmin()
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
   const [showGoogleAuthDialog, setShowGoogleAuthDialog] = useState(false)
   const [oldPassword, setOldPassword] = useState("")
@@ -23,11 +25,22 @@ export default function ProfilePage() {
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+  // 认证守卫：如果未登录，跳转到登录页
+  useEffect(() => {
+    if (!isAdminLoggedIn) {
+      window.dispatchEvent(new CustomEvent('navigate', { 
+        detail: { 
+          path: "/admin/login"
+        } 
+      }))
+    }
+  }, [isAdminLoggedIn])
+
   const userInfo = {
-    name: "管理员",
-    email: "admin@bedao.com",
-    role: "超级管理员",
-    avatar: "",
+    name: contextUserInfo?.name || "管理员",
+    email: contextUserInfo?.email || "admin@bedao.com",
+    role: contextUserInfo?.role || "超级管理员",
+    avatar: contextUserInfo?.avatar || "",
     lastLogin: "2024-11-13 16:30:25",
     lastLoginIP: "192.168.1.100",
     lastLoginLocation: "中国 广东省 深圳市"
@@ -72,8 +85,7 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     toast.success("已退出登录")
-    window.history.pushState({}, "", "/admin/login")
-    window.dispatchEvent(new PopStateEvent("popstate"))
+    logout()
   }
 
   return (

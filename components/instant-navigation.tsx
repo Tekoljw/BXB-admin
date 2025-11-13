@@ -115,7 +115,7 @@ export default function InstantNavigation() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { theme } = useTheme()
-  const { isAdminLoggedIn } = useAdmin()
+  const { isAdminLoggedIn, isLoggingOut } = useAdmin()
   const { isModuleUnderMaintenance } = useMaintenance()
 
   // 根据路径确定当前模块
@@ -181,8 +181,15 @@ export default function InstantNavigation() {
     const handleNavigate = (e: any) => {
       const newPath = e.detail?.path
       if (newPath) {
-        // 使用常规导航（会检查登录状态，包括实时检查 storage）
-        navigate(newPath)
+        // 如果是跳转到登录页（通常是logout触发），立即清除当前页面状态
+        if (newPath === "/admin/login") {
+          setCurrentPage("/admin/login")
+          setCurrentModule("operations")
+          window.history.pushState({}, "", "/admin/login")
+        } else {
+          // 其他导航使用常规流程（会检查登录状态，包括实时检查 storage）
+          navigate(newPath)
+        }
       }
     }
 
@@ -379,8 +386,8 @@ export default function InstantNavigation() {
     return <AdminLoginPage />
   }
 
-  // 登录页面不显示导航栏
-  if (currentPage === "/admin/login") {
+  // 登出中或登录页面不显示导航栏
+  if (isLoggingOut || currentPage === "/admin/login") {
     return (
       <div className={`h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-auto`}>
         {renderCurrentPage()}

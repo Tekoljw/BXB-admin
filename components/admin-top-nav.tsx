@@ -70,7 +70,7 @@ const modules = [
 
 export default function AdminTopNav({ currentModule, onModuleChange, onToggleSidebar }: AdminTopNavProps) {
   const { theme, setTheme } = useTheme()
-  const { logout } = useAdmin()
+  const { logout, userInfo } = useAdmin()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [showLeftScroll, setShowLeftScroll] = useState(false)
@@ -258,17 +258,17 @@ export default function AdminTopNav({ currentModule, onModuleChange, onToggleSid
         <DropdownMenu>
           <DropdownMenuTrigger className="hidden md:block focus:outline-none">
             <Avatar className="h-8 w-8 cursor-pointer ring-2 ring-transparent hover:ring-custom-green transition-all">
-              <AvatarImage src="" />
+              <AvatarImage src={userInfo?.avatar || ""} />
               <AvatarFallback className="bg-custom-green text-white text-sm">
-                管
+                {userInfo?.name?.charAt(0) || "管"}
               </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium">管理员</p>
-                <p className="text-xs text-muted-foreground">admin@bedao.com</p>
+                <p className="text-sm font-medium">{userInfo?.name || "管理员"}</p>
+                <p className="text-xs text-muted-foreground">{userInfo?.email || "admin@bedao.com"}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

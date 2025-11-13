@@ -69,9 +69,17 @@ export default function AdminLoginPage() {
           duration: 2000,
         })
         
-        // 调用 context 的 login 方法，并在回调中触发导航
+        // 模拟从API获取的用户数据（实际应该从登录API响应中获取）
+        const userData = {
+          name: "管理员",
+          email: "admin@bedao.com",
+          role: "超级管理员",
+          avatar: ""
+        }
+        
+        // 调用 context 的 login 方法，传入用户数据，并在回调中触发导航
         // 确保 context 状态更新后再导航，避免认证检查失败
-        login(() => {
+        login(userData, () => {
           window.dispatchEvent(new CustomEvent('navigate', { 
             detail: { 
               path: "/admin/profile"
