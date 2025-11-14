@@ -278,7 +278,7 @@ export default function CurrencyManagementPage() {
                       <Label>链名称</Label>
                       <Select>
                         <SelectTrigger className="mt-2">
-                          <SelectValue placeholder="选择链" />
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="TRC20">TRC20 (Tron)</SelectItem>
@@ -353,7 +353,7 @@ export default function CurrencyManagementPage() {
         </div>
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="w-full sm:w-48">
-            <SelectValue placeholder="全部状态" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">全部状态</SelectItem>

@@ -816,7 +816,7 @@ export default function CurrenciesPage() {
                 onValueChange={(value: CurrencyRegion) => setNewCurrency({ ...newCurrency, region: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="选择地区" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="asia">亚洲</SelectItem>
@@ -932,7 +932,7 @@ export default function CurrenciesPage() {
                   onValueChange={(value: CurrencyRegion) => setSelectedCurrency({ ...selectedCurrency, region: value })}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="选择地区" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="asia">亚洲</SelectItem>

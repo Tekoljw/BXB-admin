@@ -1570,7 +1570,7 @@ export default function MerchantsPage() {
                 <Label htmlFor="add-currency">币种 *</Label>
                 <Select value={feeFormData.currency} onValueChange={(value) => setFeeFormData({...feeFormData, currency: value})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="选择币种" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="CNY">CNY</SelectItem>
@@ -1585,7 +1585,7 @@ export default function MerchantsPage() {
                 <Label htmlFor="add-channel">支付通道 *</Label>
                 <Select value={feeFormData.channel} onValueChange={(value) => setFeeFormData({...feeFormData, channel: value})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="选择通道" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="支付宝">支付宝</SelectItem>
@@ -1603,7 +1603,7 @@ export default function MerchantsPage() {
                 <Label htmlFor="add-channel-type">通道类型 *</Label>
                 <Select value={feeFormData.channelType} onValueChange={(value: "代收" | "代付") => setFeeFormData({...feeFormData, channelType: value})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="选择类型" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="代收">代收</SelectItem>
@@ -1717,7 +1717,7 @@ export default function MerchantsPage() {
                 onValueChange={(value) => setFreezeFormData({...freezeFormData, currency: value})}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="选择币种" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="CNY">CNY (人民币)</SelectItem>

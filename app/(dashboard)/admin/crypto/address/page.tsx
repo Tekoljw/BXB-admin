@@ -236,7 +236,7 @@ export default function AddressManagementPage() {
                   <Label>选择币种</Label>
                   <Select>
                     <SelectTrigger className="mt-2">
-                      <SelectValue placeholder="选择币种" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="USDT">USDT</SelectItem>
@@ -249,7 +249,7 @@ export default function AddressManagementPage() {
                   <Label>选择链</Label>
                   <Select>
                     <SelectTrigger className="mt-2">
-                      <SelectValue placeholder="选择链" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="TRC20">TRC20</SelectItem>
@@ -314,7 +314,7 @@ export default function AddressManagementPage() {
         <div className="flex flex-wrap gap-4">
           <Select value={filterCurrency} onValueChange={setFilterCurrency}>
             <SelectTrigger className="w-full sm:w-32">
-              <SelectValue placeholder="全部币种" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">全部币种</SelectItem>
@@ -325,7 +325,7 @@ export default function AddressManagementPage() {
           </Select>
           <Select value={filterChain} onValueChange={setFilterChain}>
             <SelectTrigger className="w-full sm:w-32">
-              <SelectValue placeholder="全部链" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">全部链</SelectItem>
@@ -336,7 +336,7 @@ export default function AddressManagementPage() {
           </Select>
           <Select value={filterAssigned} onValueChange={setFilterAssigned}>
             <SelectTrigger className="w-full sm:w-32">
-              <SelectValue placeholder="分配状态" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">全部</SelectItem>
@@ -346,7 +346,7 @@ export default function AddressManagementPage() {
           </Select>
           <Select value={filterStatus} onValueChange={setFilterStatus}>
             <SelectTrigger className="w-full sm:w-32">
-              <SelectValue placeholder="全部状态" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">全部状态</SelectItem>

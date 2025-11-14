@@ -319,7 +319,7 @@ export default function PayoutOrdersPage() {
         <div className="flex gap-4 items-center">
           <Select value={selectedStatus} onValueChange={setSelectedStatus}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="状态筛选" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="全部">全部</SelectItem>

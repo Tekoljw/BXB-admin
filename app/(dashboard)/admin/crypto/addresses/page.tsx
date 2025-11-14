@@ -345,7 +345,7 @@ export default function AddressesManagementPage() {
           {/* 币种筛选 - 显示在搜索框前面 */}
           <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="币种" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">全部币种</SelectItem>

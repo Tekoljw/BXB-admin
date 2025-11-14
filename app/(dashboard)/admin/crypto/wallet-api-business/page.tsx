@@ -1778,7 +1778,7 @@ export default function CryptoUsersPage() {
                 <Label htmlFor="add-currency">币种 *</Label>
                 <Select value={feeFormData.currency} onValueChange={(value) => setFeeFormData({...feeFormData, currency: value})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="选择币种" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="USDT">CNY</SelectItem>
@@ -1793,7 +1793,7 @@ export default function CryptoUsersPage() {
                 <Label htmlFor="add-channel">支付通道 *</Label>
                 <Select value={feeFormData.channel} onValueChange={(value) => setFeeFormData({...feeFormData, channel: value})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="选择通道" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="TRC20">TRC20</SelectItem>
@@ -1811,7 +1811,7 @@ export default function CryptoUsersPage() {
                 <Label htmlFor="add-channel-type">通道类型 *</Label>
                 <Select value={feeFormData.channelType} onValueChange={(value: "代收" | "代付") => setFeeFormData({...feeFormData, channelType: value})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="选择类型" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="代收">代收</SelectItem>
@@ -1925,7 +1925,7 @@ export default function CryptoUsersPage() {
                 onValueChange={(value) => setFreezeFormData({...freezeFormData, currency: value})}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="选择币种" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="USDT">CNY (人民币)</SelectItem>

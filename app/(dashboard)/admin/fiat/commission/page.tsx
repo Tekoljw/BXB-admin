@@ -879,7 +879,7 @@ export default function CommissionPage() {
                 onValueChange={(value) => setFreezeFormData({...freezeFormData, currency: value})}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="选择币种" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="CNY">CNY (人民币)</SelectItem>

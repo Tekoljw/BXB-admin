@@ -813,7 +813,7 @@ export default function ChannelsPage() {
                 <Label htmlFor="currency">币种</Label>
                 <Select value={formData.currency} onValueChange={(value) => setFormData({...formData, currency: value})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="选择币种" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="CNY">CNY</SelectItem>

@@ -328,7 +328,7 @@ export default function CustodialInterfacesPage() {
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-full md:w-[180px]">
-                  <SelectValue placeholder="状态筛选" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">全部状态</SelectItem>

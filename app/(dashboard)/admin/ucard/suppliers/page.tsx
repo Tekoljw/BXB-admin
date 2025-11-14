@@ -163,7 +163,7 @@ export default function UCardSuppliersPage() {
         />
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="w-full sm:w-48">
-            <SelectValue placeholder="全部状态" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">全部状态</SelectItem>

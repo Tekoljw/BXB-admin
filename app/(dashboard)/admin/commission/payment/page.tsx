@@ -295,7 +295,7 @@ export default function PaymentCommissionPage() {
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <Select value={dateRange} onValueChange={setDateRange}>
                 <SelectTrigger>
-                  <SelectValue placeholder="选择时间范围" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="today">今日</SelectItem>
@@ -308,7 +308,7 @@ export default function PaymentCommissionPage() {
 
               <Select value={typeFilter} onValueChange={setTypeFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="订单类型" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">全部类型</SelectItem>
@@ -320,7 +320,7 @@ export default function PaymentCommissionPage() {
 
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="状态" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">全部状态</SelectItem>
@@ -332,7 +332,7 @@ export default function PaymentCommissionPage() {
 
               <Select value={channelFilter} onValueChange={setChannelFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="渠道" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">全部渠道</SelectItem>

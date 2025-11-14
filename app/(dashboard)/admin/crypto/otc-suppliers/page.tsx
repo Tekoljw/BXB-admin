@@ -885,7 +885,7 @@ export default function OTCSuppliersPage() {
                     onValueChange={handleSortOrderChange}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="选择排序位置" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {[...Array(20)].map((_, i) => (

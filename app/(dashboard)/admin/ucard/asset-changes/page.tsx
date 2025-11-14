@@ -169,7 +169,7 @@ export default function AssetChangesPage() {
         />
         <Select value={filterAsset} onValueChange={setFilterAsset}>
           <SelectTrigger className="w-full sm:w-40">
-            <SelectValue placeholder="资产类型" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">全部资产</SelectItem>
@@ -180,7 +180,7 @@ export default function AssetChangesPage() {
         </Select>
         <Select value={filterType} onValueChange={setFilterType}>
           <SelectTrigger className="w-full sm:w-40">
-            <SelectValue placeholder="变动类型" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">全部类型</SelectItem>

@@ -245,7 +245,7 @@ export default function ExchangeOrdersPage() {
         <div className="flex gap-4 items-center">
           <Select value={selectedBehaviorType} onValueChange={setSelectedBehaviorType}>
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="用户行为分类" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {behaviorTypes.map(type => (
@@ -258,7 +258,7 @@ export default function ExchangeOrdersPage() {
 
           <Select value={selectedStatus} onValueChange={setSelectedStatus}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="状态筛选" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {statuses.map(status => (
