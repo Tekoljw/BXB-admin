@@ -10,7 +10,7 @@ export default function Loading() {
             加载中...
           </h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            正在为您准备最佳的交易体验
+            正在进入BXB后台管理系统···
           </p>
         </div>
       </div>
