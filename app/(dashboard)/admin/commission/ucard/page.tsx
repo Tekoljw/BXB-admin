@@ -176,21 +176,24 @@ export default function UCardCommissionPage() {
 
   return (
     <CommissionLayout>
-      <div className="p-6 space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">U卡佣金</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">U卡开卡、充值、消费佣金统计与管理</p>
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div className="max-w-7xl mx-auto">
+          {/* 页面标题 */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">U卡佣金</h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">U卡开卡、充值、消费佣金统计与管理</p>
+            </div>
+            <Button className="bg-custom-green hover:bg-custom-green/90">
+              <Download className="w-4 h-4 mr-2" />
+              导出数据
+            </Button>
           </div>
-          <Button className="bg-custom-green hover:bg-custom-green/90">
-            <Download className="w-4 h-4 mr-2" />
-            导出数据
-          </Button>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">今日数据</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          
+          {/* 统计卡片 - 今日数据 */}
+          <div className="mb-4">
+            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">今日数据</h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
                   <div>
