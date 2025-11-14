@@ -676,7 +676,10 @@ export default function ReportsPage() {
               </Table>
             </div>
 
-            <LoadMoreButton />
+            <LoadMoreButton 
+              totalCount={reportType === "daily" ? mockDailyReports.length : mockMonthlyReports.length}
+              currentCount={currentReports.length}
+            />
           </div>
         </>
       )}

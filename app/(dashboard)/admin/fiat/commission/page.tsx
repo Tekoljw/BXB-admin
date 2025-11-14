@@ -609,7 +609,11 @@ export default function CommissionPage() {
           </div>
         )}
 
-        {sortedAgents.length > 0 && <LoadMoreButton />}
+        {sortedAgents.length > 0 && (
+          <LoadMoreButton 
+            totalCount={sortedAgents.length}
+          />
+        )}
       </div>
 
       {/* 佣金比例对话框 */}

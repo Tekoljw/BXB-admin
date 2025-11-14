@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react"
 import { Plus, Edit, Settings, Ban, Check, Eye, EyeOff, DollarSign, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Card } from "@/components/ui/card"
@@ -635,6 +636,14 @@ export default function OTCSuppliersPage() {
       {filteredInterfaces.length === 0 && (
         <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
           <p className="text-gray-500 dark:text-gray-400">没有找到符合条件的接口</p>
+        </div>
+      )}
+
+      {filteredInterfaces.length > 0 && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+          <LoadMoreButton 
+            totalCount={filteredInterfaces.length}
+          />
         </div>
       )}
 

@@ -1577,7 +1577,11 @@ export default function CryptoUsersPage() {
           </div>
         )}
 
-        {filteredUsers.length > 0 && <LoadMoreButton />}
+        {filteredUsers.length > 0 && (
+          <LoadMoreButton 
+            totalCount={filteredUsers.length}
+          />
+        )}
       </div>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

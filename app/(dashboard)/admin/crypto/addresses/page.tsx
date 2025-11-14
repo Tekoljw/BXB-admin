@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react"
 import { Eye, Copy, Ban, CheckCircle, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import {
@@ -513,17 +514,13 @@ export default function AddressesManagementPage() {
           </div>
         )}
 
-        {/* 加载更多按钮 */}
-        {filteredAddresses.length > displayedCount && (
-          <div className="border-t border-gray-200 dark:border-gray-700 p-4 flex justify-center">
-            <Button
-              variant="outline"
-              onClick={() => setDisplayedCount(prev => prev + 20)}
-              className="min-w-[200px]"
-            >
-              加载更多 ({displayedCount} / {filteredAddresses.length})
-            </Button>
-          </div>
+        {filteredAddresses.length > 0 && (
+          <LoadMoreButton 
+            totalCount={filteredAddresses.length}
+            currentCount={displayedAddresses.length}
+            onLoadMore={() => setDisplayedCount(prev => prev + 20)}
+            disabled={displayedCount >= filteredAddresses.length}
+          />
         )}
       </div>
 

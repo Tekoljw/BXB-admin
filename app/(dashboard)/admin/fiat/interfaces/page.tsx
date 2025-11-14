@@ -582,7 +582,11 @@ export default function InterfacesPage() {
         </div>
       )}
 
-      {filteredInterfaces.length > 0 && <LoadMoreButton />}
+      {filteredInterfaces.length > 0 && (
+        <LoadMoreButton 
+          totalCount={filteredInterfaces.length}
+        />
+      )}
 
       <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
         <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">

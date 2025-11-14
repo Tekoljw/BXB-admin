@@ -1369,7 +1369,11 @@ export default function MerchantsPage() {
           </div>
         )}
 
-        {filteredMerchants.length > 0 && <LoadMoreButton />}
+        {filteredMerchants.length > 0 && (
+          <LoadMoreButton 
+            totalCount={filteredMerchants.length}
+          />
+        )}
       </div>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

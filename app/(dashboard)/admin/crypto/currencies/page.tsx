@@ -4,6 +4,7 @@ import React, { useState, useMemo, useRef } from "react"
 import { Plus, Settings, Activity, TrendingUp, Network, Upload, X, Edit2, Check, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Switch } from "@/components/ui/switch"
 import {
@@ -765,6 +766,12 @@ export default function DepositWithdrawalCurrenciesPage() {
             <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">未找到币种</p>
             <p className="text-gray-400 dark:text-gray-500 text-sm">尝试调整搜索条件</p>
           </div>
+        )}
+
+        {filteredCurrencies.length > 0 && (
+          <LoadMoreButton 
+            totalCount={filteredCurrencies.length}
+          />
         )}
       </div>
 

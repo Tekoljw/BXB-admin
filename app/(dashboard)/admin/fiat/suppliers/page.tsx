@@ -441,7 +441,11 @@ export default function SuppliersPage() {
             </div>
           )}
 
-          {filteredSuppliers.length > 0 && <LoadMoreButton />}
+          {filteredSuppliers.length > 0 && (
+            <LoadMoreButton 
+              totalCount={filteredSuppliers.length}
+            />
+          )}
         </div>
       </div>
 

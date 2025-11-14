@@ -391,7 +391,11 @@ export default function ExchangeOrdersPage() {
           </div>
         )}
 
-        {filteredOrders.length > 0 && <LoadMoreButton />}
+        {filteredOrders.length > 0 && (
+          <LoadMoreButton 
+            totalCount={filteredOrders.length}
+          />
+        )}
       </div>
 
       <Dialog open={isRateDialogOpen} onOpenChange={setIsRateDialogOpen}>

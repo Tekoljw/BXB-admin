@@ -728,7 +728,11 @@ export default function CurrenciesPage() {
           </div>
         )}
 
-        {filteredCurrencies.length > 0 && <LoadMoreButton />}
+        {filteredCurrencies.length > 0 && (
+          <LoadMoreButton 
+            totalCount={filteredCurrencies.length}
+          />
+        )}
       </Card>
 
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>

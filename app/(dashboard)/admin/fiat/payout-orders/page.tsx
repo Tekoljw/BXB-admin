@@ -474,7 +474,11 @@ export default function PayoutOrdersPage() {
           </div>
         )}
 
-        {filteredOrders.length > 0 && <LoadMoreButton />}
+        {filteredOrders.length > 0 && (
+          <LoadMoreButton 
+            totalCount={filteredOrders.length}
+          />
+        )}
       </div>
 
       <Dialog open={isResendDialogOpen} onOpenChange={setIsResendDialogOpen}>

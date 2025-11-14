@@ -747,7 +747,10 @@ export default function CryptoBusinessReportPage() {
               </Table>
             </div>
 
-            <LoadMoreButton />
+            <LoadMoreButton 
+              totalCount={reportType === "daily" ? mockDailyReports.length : mockMonthlyReports.length}
+              currentCount={currentReports.length}
+            />
           </div>
         </>
       )}

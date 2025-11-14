@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react"
 import { Download, Coins, ArrowDownToLine, ArrowUpFromLine, Copy, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -626,6 +627,12 @@ export default function OnchainOrdersPage() {
               当用户进行加密货币{typeTab === "deposit" ? "充值" : "提币"}时，订单将显示在此处
             </p>
           </div>
+        )}
+
+        {filteredOrders.length > 0 && (
+          <LoadMoreButton 
+            totalCount={filteredOrders.length}
+          />
         )}
       </div>
     </div>

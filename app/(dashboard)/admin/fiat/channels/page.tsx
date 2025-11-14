@@ -769,7 +769,11 @@ export default function ChannelsPage() {
           </div>
         )}
 
-        {filteredChannels.length > 0 && <LoadMoreButton />}
+        {filteredChannels.length > 0 && (
+          <LoadMoreButton 
+            totalCount={filteredChannels.length}
+          />
+        )}
       </div>
 
       <Sheet open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>

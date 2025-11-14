@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react"
 import { Download, ShoppingCart, Eye, RefreshCcw, Ban } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import {
@@ -484,6 +485,12 @@ export default function OTCOrdersPage() {
             <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">暂无OTC订单</p>
             <p className="text-gray-400 dark:text-gray-500 text-sm">当用户通过OTC供应商买卖加密货币时，订单将显示在此处</p>
           </div>
+        )}
+
+        {filteredOrders.length > 0 && (
+          <LoadMoreButton 
+            totalCount={filteredOrders.length}
+          />
         )}
       </div>
 
