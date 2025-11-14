@@ -136,6 +136,7 @@ export default function InstantNavigation() {
     if (path.startsWith('/admin/crypto')) return 'crypto'
     if (path.startsWith('/admin/fiat')) return 'fiat'
     if (path.startsWith('/admin/orders')) return 'orders'
+    if (path.startsWith('/admin/options')) return 'options'
     if (path.startsWith('/admin/system')) return 'system'
     return 'permissions'
   }
@@ -159,6 +160,7 @@ export default function InstantNavigation() {
       'crypto': '/admin/crypto/currencies',
       fiat: '/admin/fiat/reports',
       orders: '/admin/orders/funds',
+      options: '/admin/options',
       system: '/admin/system/permissions',
     }
     return defaults[module] || '/admin/permissions/business-lines'
@@ -256,6 +258,7 @@ export default function InstantNavigation() {
       'crypto': 'Crypto',
       fiat: '法币',
       orders: '财务管理',
+      options: '期权管理',
       system: '系统管理',
     }
     return names[moduleId] || '此模块'
