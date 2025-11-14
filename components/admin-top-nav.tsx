@@ -60,13 +60,13 @@ const modules = [
   { id: "spot", label: "现货", icon: TrendingUp },
   { id: "futures", label: "合约", icon: TrendingUp },
   { id: "copytrade", label: "跟单", icon: Copy },
+  { id: "options", label: "期权", icon: LineChart },
   { id: "c2c", label: "C2C", icon: DollarSign },
   { id: "escrow", label: "担保", icon: Shield },
   { id: "finance", label: "理财", icon: PiggyBank },
   { id: "ucard", label: "U卡", icon: CreditCard },
   { id: "social", label: "社交", icon: Share2 },
   { id: "im", label: "IM", icon: MessageSquare },
-  { id: "options", label: "期权", icon: LineChart },
   { id: "maintenance", label: "运维", icon: Settings },
 ]
 
