@@ -1293,21 +1293,27 @@ export default function MerchantsPage() {
                     </button>
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => openApiKeysDialog(merchant)}
-                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
-                    >
-                      <Key className="w-4 h-4 mr-1" />
-                      查看密钥 ({merchant.apiKeys.length})
-                    </Button>
-                    {merchant.hasPendingDomain && (
-                      <div className="mt-1">
-                        <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded-full text-xs font-medium">
-                          新域名待审核
-                        </span>
-                      </div>
+                    {merchant.apiKeys.length === 0 && !merchant.hasPendingDomain ? (
+                      <span className="text-gray-400 dark:text-gray-500 text-sm">无API</span>
+                    ) : (
+                      <>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => openApiKeysDialog(merchant)}
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                        >
+                          <Key className="w-4 h-4 mr-1" />
+                          查看密钥 ({merchant.apiKeys.length})
+                        </Button>
+                        {merchant.hasPendingDomain && (
+                          <div className="mt-1">
+                            <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded-full text-xs font-medium">
+                              新域名待审核
+                            </span>
+                          </div>
+                        )}
+                      </>
                     )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
