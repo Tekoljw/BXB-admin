@@ -181,10 +181,9 @@ export default function PaymentCommissionPage() {
 
   return (
     <CommissionLayout>
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div className="max-w-7xl mx-auto">
-          {/* 页面标题 */}
-          <div className="flex items-center justify-between mb-6">
+      <div className="p-6 space-y-6">
+        {/* 页面标题 */}
+        <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">支付佣金</h1>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">代收、代付、兑换订单佣金统计与管理</p>
@@ -195,9 +194,9 @@ export default function PaymentCommissionPage() {
             </Button>
           </div>
           
-          {/* 统计卡片 - 今日数据 */}
-          <div className="mb-4">
-            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">今日数据</h3>
+        {/* 统计卡片 - 今日数据 */}
+        <div>
+          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">今日数据</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
@@ -242,11 +241,11 @@ export default function PaymentCommissionPage() {
                   <DollarSign className="w-10 h-10 text-custom-green" />
                 </div>
               </div>
-            </div>
           </div>
+        </div>
 
-          {/* 统计卡片 - 本月数据 */}
-          <div className="mb-6">
+        {/* 统计卡片 - 本月数据 */}
+        <div>
             <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">本月数据</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
@@ -288,11 +287,11 @@ export default function PaymentCommissionPage() {
                   <Activity className="w-10 h-10 text-purple-500" />
                 </div>
               </div>
-            </div>
           </div>
+        </div>
 
-          {/* 筛选工具栏 */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 border border-gray-200 dark:border-gray-700 mb-6">
+        {/* 筛选工具栏 */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 border border-gray-200 dark:border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <Select value={dateRange} onValueChange={setDateRange}>
                 <SelectTrigger>
@@ -352,11 +351,11 @@ export default function PaymentCommissionPage() {
                   className="pl-9"
                 />
               </div>
-            </div>
           </div>
+        </div>
 
-          {/* 佣金记录表格 */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+        {/* 佣金记录表格 */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">佣金记录</h2>
@@ -436,7 +435,6 @@ export default function PaymentCommissionPage() {
                 </TableBody>
               </Table>
             </div>
-          </div>
         </div>
       </div>
 
