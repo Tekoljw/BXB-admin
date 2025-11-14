@@ -1134,7 +1134,7 @@ export default function MerchantsPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">商户列表</h2>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">法币用户列表</h2>
 
       <Tabs value={merchantFilter} onValueChange={(value) => setMerchantFilter(value as "normal" | "hasApi" | "pending" | "all")}>
         <TabsList>
@@ -1188,7 +1188,7 @@ export default function MerchantsPage() {
         </Button>
         <div className="flex-1">
           <SearchControls
-            placeholder="搜索商户名称、邮箱、商户ID或UserID..."
+            placeholder="搜索用户名称、邮箱、用户ID或UserID..."
             value={searchInput}
             onChange={setSearchInput}
             onSearch={handleSearch}
@@ -1203,7 +1203,7 @@ export default function MerchantsPage() {
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  商户信息
+                  用户信息
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   联系方式
