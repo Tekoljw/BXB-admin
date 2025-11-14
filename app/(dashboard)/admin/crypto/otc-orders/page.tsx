@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react"
 import { Download, ShoppingCart, Eye, RefreshCcw, Ban } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { LoadMoreButton } from "@/components/load-more-button"
+import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import {
@@ -28,6 +28,7 @@ interface OTCOrder {
   fiatAmount: string
   paymentMethod: string
   providerName: string
+  depositAddress?: string
   status: 'pending' | 'paid' | 'processing' | 'completed' | 'cancelled' | 'failed'
   createdAt: string
   paidAt?: string
@@ -45,6 +46,8 @@ export default function OTCOrdersPage() {
   const [statusTab, setStatusTab] = useState<string>("all") // 四级：状态
   const [selectedOrder, setSelectedOrder] = useState<OTCOrder | null>(null)
   const [showDetailDialog, setShowDetailDialog] = useState(false)
+  const [showAddressDialog, setShowAddressDialog] = useState(false)
+  const [selectedAddress, setSelectedAddress] = useState<string>("")
 
   // 示例订单数据
   const orders: OTCOrder[] = [
@@ -60,6 +63,7 @@ export default function OTCOrdersPage() {
       fiatAmount: '7250.00',
       paymentMethod: '支付宝',
       providerName: 'OKPay',
+      depositAddress: 'TQn8T9RbKVjcm4G3XhL5Np2DFz4Wx9xVp3',
       status: 'completed',
       createdAt: '2024-11-11 10:15:30',
       paidAt: '2024-11-11 10:16:45',
@@ -77,6 +81,7 @@ export default function OTCOrdersPage() {
       fiatAmount: '3615.00',
       paymentMethod: '银行卡',
       providerName: 'AlchemyPay',
+      depositAddress: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb9',
       status: 'processing',
       createdAt: '2024-11-11 11:20:15',
       paidAt: '2024-11-11 11:21:30',
@@ -93,6 +98,7 @@ export default function OTCOrdersPage() {
       fiatAmount: '6500.00',
       paymentMethod: '微信支付',
       providerName: 'MoonPay',
+      depositAddress: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
       status: 'pending',
       createdAt: '2024-11-11 12:30:00',
     },
@@ -108,6 +114,7 @@ export default function OTCOrdersPage() {
       fiatAmount: '14480.00',
       paymentMethod: '支付宝',
       providerName: 'OKPay',
+      depositAddress: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
       status: 'failed',
       createdAt: '2024-11-11 09:45:00',
       remark: '支付超时，订单自动取消',
@@ -207,6 +214,18 @@ export default function OTCOrdersPage() {
       : <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
           卖出
         </span>
+  }
+
+  // 地址脱敏显示（前8位...***...后8位）
+  const maskAddress = (address: string) => {
+    if (!address || address.length <= 16) return address
+    return `${address.slice(0, 8)}...***...${address.slice(-8)}`
+  }
+
+  const handleViewAddress = (address: string) => {
+    if (!address) return
+    setSelectedAddress(address)
+    setShowAddressDialog(true)
   }
 
   const handleViewDetail = (order: OTCOrder) => {
@@ -376,6 +395,9 @@ export default function OTCOrdersPage() {
                   供应商
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  入金地址
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   状态
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -430,6 +452,18 @@ export default function OTCOrdersPage() {
                     <div className="text-sm text-gray-900 dark:text-white">
                       {order.providerName}
                     </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {order.depositAddress ? (
+                      <button
+                        onClick={() => handleViewAddress(order.depositAddress!)}
+                        className="text-sm text-custom-green hover:text-green-600 dark:text-green-400 dark:hover:text-green-300 underline cursor-pointer"
+                      >
+                        {maskAddress(order.depositAddress)}
+                      </button>
+                    ) : (
+                      <span className="text-sm text-gray-400 dark:text-gray-500">-</span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {getStatusBadge(order.status)}
@@ -488,9 +522,7 @@ export default function OTCOrdersPage() {
         )}
 
         {filteredOrders.length > 0 && (
-          <LoadMoreButton 
-            totalCount={filteredOrders.length}
-          />
+          <DataTotal total={filteredOrders.length} />
         )}
       </div>
 
@@ -549,6 +581,14 @@ export default function OTCOrdersPage() {
                   <label className="text-sm font-medium text-gray-500 dark:text-gray-400">服务商</label>
                   <p className="text-sm text-gray-900 dark:text-white mt-1">{selectedOrder.providerName}</p>
                 </div>
+                {selectedOrder.depositAddress && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">入金地址</label>
+                    <p className="text-sm text-gray-900 dark:text-white mt-1 font-mono break-all">
+                      {selectedOrder.depositAddress}
+                    </p>
+                  </div>
+                )}
                 <div>
                   <label className="text-sm font-medium text-gray-500 dark:text-gray-400">创建时间</label>
                   <p className="text-sm text-gray-900 dark:text-white mt-1">{selectedOrder.createdAt}</p>
@@ -577,6 +617,37 @@ export default function OTCOrdersPage() {
               )}
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* 查看完整地址对话框 */}
+      <Dialog open={showAddressDialog} onOpenChange={setShowAddressDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>完整入金地址</DialogTitle>
+            <DialogDescription>
+              点击地址可复制到剪贴板
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div 
+              className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              onClick={() => {
+                navigator.clipboard.writeText(selectedAddress)
+                toast.success("地址已复制", {
+                  description: "入金地址已复制到剪贴板"
+                })
+              }}
+            >
+              <p className="text-sm text-gray-900 dark:text-white font-mono break-all">
+                {selectedAddress}
+              </p>
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+              点击上方地址即可复制
+            </p>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { Eye, Edit, Check, X, Plus } from "lucide-react"
-import { LoadMoreButton } from "@/components/load-more-button"
+import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Button } from "@/components/ui/button"
@@ -442,9 +442,7 @@ export default function SuppliersPage() {
           )}
 
           {filteredSuppliers.length > 0 && (
-            <LoadMoreButton 
-              totalCount={filteredSuppliers.length}
-            />
+            <DataTotal total={filteredSuppliers.length} />
           )}
         </div>
       </div>

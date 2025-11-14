@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { ArrowRightLeft } from "lucide-react"
-import { LoadMoreButton } from "@/components/load-more-button"
+import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Input } from "@/components/ui/input"
@@ -392,9 +392,7 @@ export default function ExchangeOrdersPage() {
         )}
 
         {filteredOrders.length > 0 && (
-          <LoadMoreButton 
-            totalCount={filteredOrders.length}
-          />
+          <DataTotal total={filteredOrders.length} />
         )}
       </div>
 

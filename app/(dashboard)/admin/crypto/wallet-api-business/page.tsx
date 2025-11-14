@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X } from "lucide-react"
-import { LoadMoreButton } from "@/components/load-more-button"
+import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Button } from "@/components/ui/button"
@@ -1578,9 +1578,7 @@ export default function CryptoUsersPage() {
         )}
 
         {filteredUsers.length > 0 && (
-          <LoadMoreButton 
-            totalCount={filteredUsers.length}
-          />
+          <DataTotal total={filteredUsers.length} />
         )}
       </div>
 

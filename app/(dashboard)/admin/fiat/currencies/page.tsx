@@ -22,7 +22,7 @@ import {
   Check,
   AlertTriangle
 } from "lucide-react"
-import { LoadMoreButton } from "@/components/load-more-button"
+import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet"
@@ -729,9 +729,7 @@ export default function CurrenciesPage() {
         )}
 
         {filteredCurrencies.length > 0 && (
-          <LoadMoreButton 
-            totalCount={filteredCurrencies.length}
-          />
+          <DataTotal total={filteredCurrencies.length} />
         )}
       </Card>
 

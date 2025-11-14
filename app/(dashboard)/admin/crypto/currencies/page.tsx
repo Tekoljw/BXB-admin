@@ -4,7 +4,7 @@ import React, { useState, useMemo, useRef } from "react"
 import { Plus, Settings, Activity, TrendingUp, Network, Upload, X, Edit2, Check, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { LoadMoreButton } from "@/components/load-more-button"
+import { DataTotal } from "@/components/data-total"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Switch } from "@/components/ui/switch"
 import {
@@ -769,9 +769,7 @@ export default function DepositWithdrawalCurrenciesPage() {
         )}
 
         {filteredCurrencies.length > 0 && (
-          <LoadMoreButton 
-            totalCount={filteredCurrencies.length}
-          />
+          <DataTotal total={filteredCurrencies.length} />
         )}
       </div>
 

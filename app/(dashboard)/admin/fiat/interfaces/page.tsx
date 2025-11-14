@@ -27,7 +27,7 @@ import {
   Check,
   X
 } from "lucide-react"
-import { LoadMoreButton } from "@/components/load-more-button"
+import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Label } from "@/components/ui/label"
@@ -583,9 +583,7 @@ export default function InterfacesPage() {
       )}
 
       {filteredInterfaces.length > 0 && (
-        <LoadMoreButton 
-          totalCount={filteredInterfaces.length}
-        />
+        <DataTotal total={filteredInterfaces.length} />
       )}
 
       <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>

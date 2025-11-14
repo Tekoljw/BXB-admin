@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { LoadMoreButton } from "@/components/load-more-button"
+import { DataTotal } from "@/components/data-total"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -747,10 +747,7 @@ export default function CryptoBusinessReportPage() {
               </Table>
             </div>
 
-            <LoadMoreButton 
-              totalCount={reportType === "daily" ? mockDailyReports.length : mockMonthlyReports.length}
-              currentCount={currentReports.length}
-            />
+            <DataTotal total={currentReports.length} />
           </div>
         </>
       )}

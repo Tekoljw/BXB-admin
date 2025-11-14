@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { Send, RefreshCw, Lock, Info } from "lucide-react"
-import { LoadMoreButton } from "@/components/load-more-button"
+import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Button } from "@/components/ui/button"
@@ -501,9 +501,7 @@ export default function OrdersPage() {
         )}
 
         {filteredOrders.length > 0 && (
-          <LoadMoreButton 
-            totalCount={filteredOrders.length}
-          />
+          <DataTotal total={filteredOrders.length} />
         )}
       </div>
 

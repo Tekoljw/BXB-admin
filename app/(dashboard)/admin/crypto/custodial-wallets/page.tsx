@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { Plus, Edit, Settings, Ban, Check, Eye, EyeOff, DollarSign, TrendingUp, MapPin, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { LoadMoreButton } from "@/components/load-more-button"
+import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Card } from "@/components/ui/card"
@@ -485,9 +485,7 @@ export default function CustodialInterfacesPage() {
 
       {filteredInterfaces.length > 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-          <LoadMoreButton 
-            totalCount={filteredInterfaces.length}
-          />
+          <DataTotal total={filteredInterfaces.length} />
         </div>
       )}
 
