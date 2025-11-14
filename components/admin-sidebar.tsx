@@ -60,11 +60,11 @@ interface AdminSidebarV2Props {
 const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
   "crypto": [
     { path: "/admin/crypto/business-report", icon: FileBarChart, label: "经营报表" },
+    { path: "/admin/crypto/wallet-api-business", icon: Code, label: "Crypto用户管理" },
     { path: "/admin/crypto/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/crypto/addresses", icon: Network, label: "地址管理" },
     { path: "/admin/crypto/custodial-wallets", icon: Wallet, label: "供应商接口" },
     { path: "/admin/crypto/onchain-deposit-orders", icon: ArrowLeftRight, label: "Crypto出入金订单" },
-    { path: "/admin/crypto/wallet-api-business", icon: Code, label: "Crypto用户管理" },
     { path: "/admin/crypto/otc-suppliers", icon: ArrowLeftRight, label: "OTC供应商" },
     { path: "/admin/crypto/otc-orders", icon: List, label: "OTC订单" },
   ],
@@ -170,11 +170,11 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
   ],
   fiat: [
     { path: "/admin/fiat/reports", icon: FileBarChart, label: "经营报表" },
+    { path: "/admin/fiat/merchants", icon: Users, label: "法币用户管理" },
     { path: "/admin/fiat/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/fiat/suppliers", icon: Store, label: "供应商管理" },
     { path: "/admin/fiat/interfaces", icon: Network, label: "接口管理" },
     { path: "/admin/fiat/channels", icon: Network, label: "通道管理" },
-    { path: "/admin/fiat/merchants", icon: Users, label: "法币用户管理" },
     { path: "/admin/fiat/commission", icon: Percent, label: "代理商管理" },
     { path: "/admin/fiat/orders", icon: ShoppingCart, label: "代收订单" },
     { path: "/admin/fiat/payout-orders", icon: TrendingDown, label: "代付订单" },
