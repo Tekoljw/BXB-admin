@@ -104,16 +104,6 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/permissions/system-management", icon: Settings, label: "系统管理" },
     { path: "/admin/permissions/system-logs", icon: FileText, label: "系统日志" },
   ],
-  operations: [
-    { path: "/admin/operations/dashboard", icon: BarChart3, label: "运营报表" },
-    { path: "/admin/operations/activities", icon: Activity, label: "运营活动" },
-    { path: "/admin/operations/audit", icon: FileCheck, label: "审核监控" },
-    { path: "/admin/operations/funds", icon: Wallet, label: "资金流水" },
-    { path: "/admin/operations/orders", icon: ShoppingCart, label: "订单监控" },
-    { path: "/admin/operations/retention", icon: Users, label: "留存分析" },
-    { path: "/admin/operations/risk", icon: AlertCircle, label: "风控预警" },
-    { path: "/admin/operations/market-config", icon: TrendingUp, label: "行情配置" },
-  ],
   marketing: [
     {
       group: "用户管理",
@@ -140,6 +130,7 @@ const moduleMenus: Record<string, MenuConfig> = {
         { path: "/admin/marketing/push-notifications", icon: Bell, label: "Push通知" },
         { path: "/admin/marketing/banner-management", icon: Image, label: "Banner管理" },
         { path: "/admin/marketing/in-app-messages", icon: MessageSquare, label: "站内配置" },
+        { path: "/admin/operations/market-config", icon: TrendingUp, label: "行情配置" },
       ]
     },
     {
@@ -164,6 +155,19 @@ const moduleMenus: Record<string, MenuConfig> = {
         { path: "/admin/marketing/user-deduction", icon: DollarSign, label: "用户抵扣金" },
         { path: "/admin/marketing/user-trial", icon: Gift, label: "用户体验金" },
         { path: "/admin/marketing/coupon-config", icon: Ticket, label: "卡券配置" },
+      ]
+    },
+    {
+      group: "运营报表",
+      icon: BarChart3,
+      items: [
+        { path: "/admin/operations/dashboard", icon: BarChart3, label: "运营报表" },
+        { path: "/admin/operations/activities", icon: Activity, label: "运营活动" },
+        { path: "/admin/operations/audit", icon: FileCheck, label: "审核监控" },
+        { path: "/admin/operations/funds", icon: Wallet, label: "资金流水" },
+        { path: "/admin/operations/orders", icon: ShoppingCart, label: "订单监控" },
+        { path: "/admin/operations/retention", icon: Users, label: "留存分析" },
+        { path: "/admin/operations/risk", icon: AlertCircle, label: "风控预警" },
       ]
     },
     {
