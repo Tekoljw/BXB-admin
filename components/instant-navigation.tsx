@@ -125,8 +125,8 @@ export default function InstantNavigation() {
   const getModuleFromPath = (path: string): string => {
     if (path.startsWith('/admin/permissions')) return 'permissions'
     if (path.startsWith('/admin/marketing')) return 'marketing'
-    // operations和system页面现在属于marketing模块
-    if (path.startsWith('/admin/operations')) return 'marketing'
+    if (path.startsWith('/admin/operations')) return 'operations'
+    // system页面属于marketing模块
     if (path.startsWith('/admin/system')) return 'marketing'
     if (path.startsWith('/admin/users')) return 'users'
     if (path.startsWith('/admin/im')) return 'im'
