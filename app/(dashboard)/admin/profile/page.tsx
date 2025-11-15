@@ -90,70 +90,66 @@ export default function ProfilePage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">个人中心</h1>
-          <p className="text-muted-foreground mt-1">管理您的账号信息和安全设置</p>
-        </div>
-        <Button variant="destructive" onClick={handleLogout}>
-          <LogOut className="h-4 w-4 mr-2" />
-          退出登录
-        </Button>
-      </div>
-
       <div className="grid gap-6 md:grid-cols-3">
-        <Card className="md:col-span-1">
-          <CardHeader>
-            <CardTitle>个人信息</CardTitle>
-            <CardDescription>您的基本账号信息</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <Avatar className="h-20 w-20">
-                  <AvatarImage src={userInfo.avatar} />
-                  <AvatarFallback className="text-2xl bg-custom-green text-white">
-                    {userInfo.name.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>个人信息</CardTitle>
+              <CardDescription>您的基本账号信息</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-6">
+                <div className="flex-shrink-0">
+                  <Avatar className="h-20 w-20">
+                    <AvatarImage src={userInfo.avatar} />
+                    <AvatarFallback className="text-2xl bg-custom-green text-white">
+                      {userInfo.name.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+                
+                <div className="flex-1 grid grid-cols-2 gap-x-8 gap-y-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">账号</p>
+                    </div>
+                    <p className="font-medium truncate">{userInfo.email}</p>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">最近登录</p>
+                    </div>
+                    <p className="font-medium text-sm truncate">{userInfo.lastLogin}</p>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <Shield className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">角色</p>
+                    </div>
+                    <Badge>{userInfo.role}</Badge>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">登录位置</p>
+                    </div>
+                    <p className="font-medium text-sm truncate">{userInfo.lastLoginLocation}</p>
+                  </div>
+                </div>
               </div>
-              
-              <div className="flex-1 grid grid-cols-2 gap-x-8 gap-y-4">
-                <div className="space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">账号</p>
-                  </div>
-                  <p className="font-medium truncate">{userInfo.email}</p>
-                </div>
-                
-                <div className="space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">最近登录</p>
-                  </div>
-                  <p className="font-medium text-sm truncate">{userInfo.lastLogin}</p>
-                </div>
-                
-                <div className="space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <Shield className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">角色</p>
-                  </div>
-                  <Badge>{userInfo.role}</Badge>
-                </div>
-                
-                <div className="space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">登录位置</p>
-                  </div>
-                  <p className="font-medium text-sm truncate">{userInfo.lastLoginLocation}</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+          
+          <Button variant="destructive" onClick={handleLogout} className="w-full">
+            <LogOut className="h-4 w-4 mr-2" />
+            退出登录
+          </Button>
+        </div>
 
         <Card className="md:col-span-2">
           <CardHeader>
