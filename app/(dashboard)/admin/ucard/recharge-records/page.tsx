@@ -115,9 +115,9 @@ export default function UCardRechargeRecordsPage() {
       {/* 页面标题 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">U卡充值记录</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">U卡划转兑换</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            查看和管理所有U卡的充值记录
+            查看和管理所有U卡的划转兑换记录
           </p>
         </div>
         <Button variant="outline">
@@ -141,7 +141,7 @@ export default function UCardRechargeRecordsPage() {
           <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mt-2">{stats.pending}</div>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <div className="text-sm text-gray-500 dark:text-gray-400">充值总额</div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">兑换总额</div>
           <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">${stats.totalAmount}</div>
         </div>
       </div>
@@ -168,7 +168,7 @@ export default function UCardRechargeRecordsPage() {
         </Select>
       </div>
 
-      {/* 充值记录列表 */}
+      {/* 划转兑换记录列表 */}
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
         {filteredRecords.length > 0 ? (
           <div className="overflow-x-auto">
@@ -185,10 +185,10 @@ export default function UCardRechargeRecordsPage() {
                     卡号
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    充值金额
+                    兑换金额
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    充值方式
+                    兑换方式
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     状态
@@ -250,8 +250,8 @@ export default function UCardRechargeRecordsPage() {
         ) : (
           <div className="text-center py-16">
             <ArrowDownToLine className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">暂无充值记录</p>
-            <p className="text-gray-400 dark:text-gray-500 text-sm">用户的充值记录将显示在此处</p>
+            <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">暂无划转兑换记录</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm">用户的划转兑换记录将显示在此处</p>
           </div>
         )}
       </div>

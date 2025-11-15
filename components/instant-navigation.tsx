@@ -68,7 +68,6 @@ import NumberSegmentsPage from "@/app/(dashboard)/admin/ucard/number-segments/pa
 import UCardApplicationsPage from "@/app/(dashboard)/admin/ucard/applications/page"
 import UCardRechargeRecordsPage from "@/app/(dashboard)/admin/ucard/recharge-records/page"
 import UCardTransactionsPage from "@/app/(dashboard)/admin/ucard/transactions/page"
-import AssetChangesPage from "@/app/(dashboard)/admin/ucard/asset-changes/page"
 import SpotCoinsPage from "@/app/(dashboard)/admin/spot/coins/page"
 import SpotNetworksPage from "@/app/(dashboard)/admin/spot/networks/page"
 import SpotMarketsPage from "@/app/(dashboard)/admin/spot/markets/page"
@@ -350,7 +349,6 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/ucard/applications") return <UCardApplicationsPage />
     if (currentPage === "/admin/ucard/recharge-records") return <UCardRechargeRecordsPage />
     if (currentPage === "/admin/ucard/transactions") return <UCardTransactionsPage />
-    if (currentPage === "/admin/ucard/asset-changes") return <AssetChangesPage />
     if (currentPage === "/admin/spot") return <SpotCoinsPage />
     if (currentPage === "/admin/spot/coins") return <SpotCoinsPage />
     if (currentPage === "/admin/spot/networks") return <SpotNetworksPage />
