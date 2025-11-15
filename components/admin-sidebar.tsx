@@ -323,16 +323,19 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
   
   // 当切换模块时，重新初始化展开状态
   useEffect(() => {
-    if (isGroupedMenu) {
+    const config = moduleMenus[currentModule] || []
+    const isGrouped = config.length > 0 && 'group' in config[0]
+    
+    if (isGrouped) {
       const initialState: Record<string, boolean> = {}
-      ;(menuConfig as MenuGroup[]).forEach(group => {
+      ;(config as MenuGroup[]).forEach(group => {
         initialState[group.group] = false // 默认全部折叠
       })
       setExpandedGroups(initialState)
     } else {
       setExpandedGroups({})
     }
-  }, [currentModule, isGroupedMenu, menuConfig])
+  }, [currentModule])
   
   // 切换分组展开/收起
   const toggleGroup = (groupName: string) => {
