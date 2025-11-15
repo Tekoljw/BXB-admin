@@ -24,6 +24,7 @@ interface Card {
   currency: string
   balance: string
   status: 'active' | 'frozen'
+  isPriority: boolean
 }
 
 interface UCardUser {
@@ -88,6 +89,7 @@ export default function UCardUsersPage() {
           currency: 'USDT',
           balance: '10,500.00',
           status: 'active',
+          isPriority: true,
         },
         {
           id: 'c2',
@@ -98,6 +100,7 @@ export default function UCardUsersPage() {
           currency: 'USDT',
           balance: '8,820.00',
           status: 'active',
+          isPriority: false,
         },
         {
           id: 'c3',
@@ -108,6 +111,7 @@ export default function UCardUsersPage() {
           currency: 'USDT',
           balance: '6,000.00',
           status: 'active',
+          isPriority: true,
         },
       ],
     },
@@ -139,6 +143,7 @@ export default function UCardUsersPage() {
           currency: 'USDT',
           balance: '12,500.00',
           status: 'active',
+          isPriority: true,
         },
       ],
     },
@@ -170,6 +175,7 @@ export default function UCardUsersPage() {
           currency: 'USDT',
           balance: '15,000.00',
           status: 'active',
+          isPriority: true,
         },
         {
           id: 'c6',
@@ -180,6 +186,7 @@ export default function UCardUsersPage() {
           currency: 'USDT',
           balance: '12,234.56',
           status: 'frozen',
+          isPriority: false,
         },
         {
           id: 'c7',
@@ -190,6 +197,7 @@ export default function UCardUsersPage() {
           currency: 'USDT',
           balance: '11,000.00',
           status: 'active',
+          isPriority: true,
         },
         {
           id: 'c8',
@@ -200,6 +208,7 @@ export default function UCardUsersPage() {
           currency: 'USDT',
           balance: '10,000.00',
           status: 'active',
+          isPriority: false,
         },
       ],
     },
@@ -231,6 +240,7 @@ export default function UCardUsersPage() {
           currency: 'USDT',
           balance: '3,500.00',
           status: 'active',
+          isPriority: false,
         },
       ],
     },
@@ -262,6 +272,7 @@ export default function UCardUsersPage() {
           currency: 'USDT',
           balance: '8,678.00',
           status: 'active',
+          isPriority: true,
         },
       ],
     },
