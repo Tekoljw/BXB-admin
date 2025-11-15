@@ -17,12 +17,7 @@ import StaffManagementPage from "@/app/(dashboard)/admin/permissions/staff-manag
 import UserPermissionsPage from "@/app/(dashboard)/admin/permissions/user-permissions/page"
 import PermissionsSystemManagementPage from "@/app/(dashboard)/admin/permissions/system-management/page"
 import SystemLogsPage from "@/app/(dashboard)/admin/permissions/system-logs/page"
-import DashboardPage from "@/app/(dashboard)/admin/operations/dashboard/page"
-import FundsAnalysisPage from "@/app/(dashboard)/admin/operations/funds/page"
-import RetentionAnalysisPage from "@/app/(dashboard)/admin/operations/retention/page"
-import RiskConfigPage from "@/app/(dashboard)/admin/operations/risk/page"
-import ActivitiesConfigPage from "@/app/(dashboard)/admin/operations/activities/page"
-import AuditPage from "@/app/(dashboard)/admin/operations/audit/page"
+import RegistrationWhitelistPage from "@/app/(dashboard)/admin/operations/registration-whitelist/page"
 import FundsRecordsPage from "@/app/(dashboard)/admin/orders/funds/page"
 import USDTRecordsPage from "@/app/(dashboard)/admin/orders/usdt/page"
 import AdminSpotOrdersPage from "@/app/(dashboard)/admin/orders/spot/page"
@@ -145,7 +140,7 @@ export default function InstantNavigation() {
   const getModuleDefaultPath = (module: string): string => {
     const defaults: Record<string, string> = {
       permissions: '/admin/permissions/business-lines',
-      operations: '/admin/operations/dashboard',
+      operations: '/admin/operations/registration-whitelist',
       users: '/admin/users/all',
       im: '/admin/im/accounts',
       social: '/admin/social',
@@ -284,13 +279,8 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/permissions/user-permissions") return <UserPermissionsPage />
     if (currentPage === "/admin/permissions/system-management") return <PermissionsSystemManagementPage />
     if (currentPage === "/admin/permissions/system-logs") return <SystemLogsPage />
-    if (currentPage === "/admin/operations") return <DashboardPage />
-    if (currentPage === "/admin/operations/dashboard") return <DashboardPage />
-    if (currentPage === "/admin/operations/funds") return <FundsAnalysisPage />
-    if (currentPage === "/admin/operations/retention") return <RetentionAnalysisPage />
-    if (currentPage === "/admin/operations/risk") return <RiskConfigPage />
-    if (currentPage === "/admin/operations/activities") return <ActivitiesConfigPage />
-    if (currentPage === "/admin/operations/audit") return <AuditPage />
+    if (currentPage === "/admin/operations") return <RegistrationWhitelistPage />
+    if (currentPage.startsWith("/admin/operations/")) return <RegistrationWhitelistPage />
     if (currentPage === "/admin/orders") return <FundsRecordsPage />
     if (currentPage === "/admin/orders/funds") return <FundsRecordsPage />
     if (currentPage === "/admin/orders/usdt") return <USDTRecordsPage />
