@@ -29,6 +29,7 @@ import OperationsOrdersPage from "@/app/(dashboard)/admin/operations/orders/page
 import OperationsRetentionPage from "@/app/(dashboard)/admin/operations/retention/page"
 import OperationsRiskPage from "@/app/(dashboard)/admin/operations/risk/page"
 import MarketConfigPage from "@/app/(dashboard)/admin/operations/market-config/page"
+import BusinessOverviewPage from "@/app/(dashboard)/admin/orders/business-overview/page"
 import IMAccountsPage from "@/app/(dashboard)/admin/im/accounts/page"
 import IMGroupsPage from "@/app/(dashboard)/admin/im/groups/page"
 import IMMessagesPage from "@/app/(dashboard)/admin/im/messages/page"
@@ -304,6 +305,8 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/operations/market-config") return <MarketConfigPage />
     // 后备路由：处理未来可能添加的operations子页面
     if (currentPage.startsWith("/admin/operations/")) return <OperationsDashboardPage />
+    if (currentPage === "/admin/orders") return <BusinessOverviewPage />
+    if (currentPage === "/admin/orders/business-overview") return <BusinessOverviewPage />
     if (currentPage === "/admin/users") return <AllUsersPage />
     if (currentPage === "/admin/users/all") return <AllUsersPage />
     if (currentPage === "/admin/users/blacklist") return <BlacklistPage />

@@ -286,6 +286,7 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/fiat/exchange-orders", icon: Globe, label: "兑换订单" },
   ],
   orders: [
+    { path: "/admin/orders/business-overview", icon: FileBarChart, label: "财务经营报表" },
     { path: "/admin/orders/crypto-assets", icon: BarChart3, label: "Crypto资产管理" },
     { path: "/admin/orders/fiat-assets", icon: BarChart3, label: "法币资产管理" },
   ],
