@@ -130,6 +130,7 @@ const moduleMenus: Record<string, MenuConfig> = {
         { path: "/admin/marketing/push-notifications", icon: Bell, label: "Push通知" },
         { path: "/admin/marketing/banner-management", icon: Image, label: "Banner管理" },
         { path: "/admin/marketing/in-app-messages", icon: MessageSquare, label: "站内配置" },
+        { path: "/admin/operations/market-config", icon: TrendingUp, label: "行情配置" },
       ]
     },
     {
@@ -154,6 +155,33 @@ const moduleMenus: Record<string, MenuConfig> = {
         { path: "/admin/marketing/user-deduction", icon: DollarSign, label: "用户抵扣金" },
         { path: "/admin/marketing/user-trial", icon: Gift, label: "用户体验金" },
         { path: "/admin/marketing/coupon-config", icon: Ticket, label: "卡券配置" },
+      ]
+    },
+    {
+      group: "运营报表",
+      icon: BarChart3,
+      items: [
+        { path: "/admin/operations/dashboard", icon: BarChart3, label: "运营报表" },
+        { path: "/admin/operations/activities", icon: Activity, label: "运营活动" },
+        { path: "/admin/operations/audit", icon: FileCheck, label: "审核监控" },
+        { path: "/admin/operations/funds", icon: Wallet, label: "资金流水" },
+        { path: "/admin/operations/orders", icon: ShoppingCart, label: "订单监控" },
+        { path: "/admin/operations/retention", icon: Users, label: "留存分析" },
+        { path: "/admin/operations/risk", icon: AlertCircle, label: "风控预警" },
+      ]
+    },
+    {
+      group: "运维管理",
+      icon: Settings,
+      items: [
+        { path: "/admin/system/permissions", icon: Key, label: "权限管理" },
+        { path: "/admin/system/roles", icon: UserCog, label: "角色管理" },
+        { path: "/admin/system/users", icon: Users, label: "用户管理" },
+        { path: "/admin/system/audit-config", icon: Settings, label: "审核配置" },
+        { path: "/admin/system/app", icon: Settings, label: "APP管理" },
+        { path: "/admin/system/operations", icon: Settings, label: "运维管理" },
+        { path: "/admin/system/maintenance-plan", icon: Timer, label: "维护计划配置" },
+        { path: "/admin/system/maintenance-whitelist", icon: ClipboardCheck, label: "维护白名单管理" },
       ]
     },
   ],

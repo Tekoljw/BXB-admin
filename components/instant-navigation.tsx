@@ -19,6 +19,13 @@ import PermissionsSystemManagementPage from "@/app/(dashboard)/admin/permissions
 import SystemLogsPage from "@/app/(dashboard)/admin/permissions/system-logs/page"
 import RegistrationWhitelistPage from "@/app/(dashboard)/admin/marketing/registration-whitelist/page"
 import OperationsDashboardPage from "@/app/(dashboard)/admin/operations/dashboard/page"
+import OperationsActivitiesPage from "@/app/(dashboard)/admin/operations/activities/page"
+import OperationsAuditPage from "@/app/(dashboard)/admin/operations/audit/page"
+import OperationsFundsPage from "@/app/(dashboard)/admin/operations/funds/page"
+import OperationsOrdersPage from "@/app/(dashboard)/admin/operations/orders/page"
+import OperationsRetentionPage from "@/app/(dashboard)/admin/operations/retention/page"
+import OperationsRiskPage from "@/app/(dashboard)/admin/operations/risk/page"
+import MarketConfigPage from "@/app/(dashboard)/admin/operations/market-config/page"
 import FundsRecordsPage from "@/app/(dashboard)/admin/orders/funds/page"
 import USDTRecordsPage from "@/app/(dashboard)/admin/orders/usdt/page"
 import AdminSpotOrdersPage from "@/app/(dashboard)/admin/orders/spot/page"
@@ -118,7 +125,9 @@ export default function InstantNavigation() {
   const getModuleFromPath = (path: string): string => {
     if (path.startsWith('/admin/permissions')) return 'permissions'
     if (path.startsWith('/admin/marketing')) return 'marketing'
-    if (path.startsWith('/admin/operations')) return 'operations'
+    // operations和system页面现在属于marketing模块
+    if (path.startsWith('/admin/operations')) return 'marketing'
+    if (path.startsWith('/admin/system')) return 'marketing'
     if (path.startsWith('/admin/users')) return 'users'
     if (path.startsWith('/admin/im')) return 'im'
     if (path.startsWith('/admin/social')) return 'social'
@@ -134,7 +143,6 @@ export default function InstantNavigation() {
     if (path.startsWith('/admin/fiat')) return 'fiat'
     if (path.startsWith('/admin/orders')) return 'orders'
     if (path.startsWith('/admin/options')) return 'options'
-    if (path.startsWith('/admin/system')) return 'system'
     if (path.startsWith('/admin/maintenance')) return 'maintenance'
     return 'permissions'
   }
@@ -289,6 +297,14 @@ export default function InstantNavigation() {
     if (currentPage.startsWith("/admin/marketing/")) return <RegistrationWhitelistPage />
     if (currentPage === "/admin/operations") return <OperationsDashboardPage />
     if (currentPage === "/admin/operations/dashboard") return <OperationsDashboardPage />
+    if (currentPage === "/admin/operations/activities") return <OperationsActivitiesPage />
+    if (currentPage === "/admin/operations/audit") return <OperationsAuditPage />
+    if (currentPage === "/admin/operations/funds") return <OperationsFundsPage />
+    if (currentPage === "/admin/operations/orders") return <OperationsOrdersPage />
+    if (currentPage === "/admin/operations/retention") return <OperationsRetentionPage />
+    if (currentPage === "/admin/operations/risk") return <OperationsRiskPage />
+    if (currentPage === "/admin/operations/market-config") return <MarketConfigPage />
+    // 后备路由：处理未来可能添加的operations子页面
     if (currentPage.startsWith("/admin/operations/")) return <OperationsDashboardPage />
     if (currentPage === "/admin/orders") return <FundsRecordsPage />
     if (currentPage === "/admin/orders/funds") return <FundsRecordsPage />
