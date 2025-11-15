@@ -84,7 +84,9 @@ import CopyTradeManagementPage from "@/app/(dashboard)/admin/copytrade/page"
 import FinanceManagementPage from "@/app/(dashboard)/admin/finance/page"
 import FuturesCommissionPage from "@/app/(dashboard)/admin/commission/futures/page"
 import FinanceCommissionPage from "@/app/(dashboard)/admin/commission/finance/page"
+import UCardCommissionPage from "@/app/(dashboard)/admin/commission/ucard/page"
 import EscrowCommissionPage from "@/app/(dashboard)/admin/commission/escrow/page"
+import PaymentCommissionPage from "@/app/(dashboard)/admin/commission/payment/page"
 import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
 import ProfilePage from "@/app/(dashboard)/admin/profile/page"
 import CryptoBusinessReportPage from "@/app/(dashboard)/admin/crypto/business-report/page"
@@ -357,7 +359,9 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/commission") return <FuturesCommissionPage />
     if (currentPage === "/admin/commission/futures") return <FuturesCommissionPage />
     if (currentPage === "/admin/commission/finance") return <FinanceCommissionPage />
+    if (currentPage === "/admin/commission/ucard") return <UCardCommissionPage />
     if (currentPage === "/admin/commission/escrow") return <EscrowCommissionPage />
+    if (currentPage === "/admin/commission/payment") return <PaymentCommissionPage />
     if (currentPage === "/admin/wallet") return <WalletManagementPage />
     if (currentPage === "/admin/profile") return <ProfilePage />
     if (currentPage === "/admin/crypto/business-report") return <CryptoBusinessReportPage />
