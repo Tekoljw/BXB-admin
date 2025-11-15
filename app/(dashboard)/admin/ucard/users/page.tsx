@@ -373,10 +373,7 @@ export default function UCardUsersPage() {
                     KYC
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    虚拟卡数量
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    实体卡数量
+                    卡片数量
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     卡内余额
@@ -431,14 +428,12 @@ export default function UCardUsersPage() {
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        {user.virtualCardCount}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        {user.physicalCardCount}
-                      </span>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        实体卡：{user.physicalCardCount}
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        虚拟卡：{user.virtualCardCount}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
