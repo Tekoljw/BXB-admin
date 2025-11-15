@@ -77,8 +77,13 @@ interface AdminSidebarV2Props {
   onNavigate: (path: string) => void
 }
 
+// 定义菜单项类型
+type MenuItem = { path: string; icon: any; label: string }
+type MenuGroup = { group: string; items: MenuItem[] }
+type MenuConfig = MenuItem[] | MenuGroup[]
+
 // 定义每个模块的二级菜单
-const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string }>> = {
+const moduleMenus: Record<string, MenuConfig> = {
   "crypto": [
     { path: "/admin/crypto/business-report", icon: FileBarChart, label: "经营报表" },
     { path: "/admin/crypto/wallet-api-business", icon: Code, label: "Crypto用户管理" },
@@ -98,33 +103,53 @@ const moduleMenus: Record<string, Array<{ path: string; icon: any; label: string
     { path: "/admin/permissions/system-logs", icon: FileText, label: "系统日志" },
   ],
   marketing: [
-    { path: "/admin/marketing/registration-whitelist", icon: UserCheck, label: "注册白名单" },
-    { path: "/admin/marketing/kyc-limits", icon: Lock, label: "KYC限额管理" },
-    { path: "/admin/marketing/spot-rates", icon: Percent, label: "现货费率管理" },
-    { path: "/admin/marketing/web-registration-ads", icon: Image, label: "WEB注册页广告" },
-    { path: "/admin/marketing/country-region", icon: MapPin, label: "国家/地区管理" },
-    { path: "/admin/marketing/2fa-scenarios", icon: SmartphoneNfc, label: "2FA场景配置" },
-    { path: "/admin/marketing/prompt-config", icon: AlertCircle, label: "提示语配置" },
-    { path: "/admin/marketing/diamond-zone", icon: Grid3x3, label: "金刚区管理" },
-    { path: "/admin/marketing/official-channels", icon: Radio, label: "官方渠道配置" },
-    { path: "/admin/marketing/ad-placement", icon: Megaphone, label: "广告位管理" },
-    { path: "/admin/marketing/ranking-config", icon: LayoutGrid, label: "榜单配置" },
-    { path: "/admin/marketing/homepage-popup", icon: Award, label: "首页弹窗" },
-    { path: "/admin/marketing/push-notifications", icon: Bell, label: "Push通知" },
-    { path: "/admin/marketing/banner-management", icon: Image, label: "Banner管理" },
-    { path: "/admin/marketing/in-app-messages", icon: MessageSquare, label: "站内消息配置" },
-    { path: "/admin/marketing/email-content", icon: MailOpen, label: "邮件内容" },
-    { path: "/admin/marketing/email-send", icon: Send, label: "邮件发送" },
-    { path: "/admin/marketing/honor-management", icon: Award, label: "荣誉管理" },
-    { path: "/admin/marketing/schedule-management", icon: Calendar, label: "日程安排管理" },
-    { path: "/admin/marketing/voice-materials", icon: Mic, label: "语音发料" },
-    { path: "/admin/marketing/message-send", icon: Send, label: "消息发送" },
-    { path: "/admin/marketing/create-email", icon: FileEdit, label: "创建邮件" },
-    { path: "/admin/marketing/deduction-details", icon: Minus, label: "抵扣金明细" },
-    { path: "/admin/marketing/trial-details", icon: Plus, label: "体验金明细" },
-    { path: "/admin/marketing/user-deduction", icon: DollarSign, label: "用户抵扣金" },
-    { path: "/admin/marketing/user-trial", icon: Gift, label: "用户体验金" },
-    { path: "/admin/marketing/coupon-config", icon: Ticket, label: "卡券配置" },
+    {
+      group: "用户管理",
+      items: [
+        { path: "/admin/marketing/registration-whitelist", icon: UserCheck, label: "注册白名单" },
+        { path: "/admin/marketing/kyc-limits", icon: Lock, label: "KYC限额管理" },
+        { path: "/admin/marketing/spot-rates", icon: Percent, label: "现货费率管理" },
+      ]
+    },
+    {
+      group: "运营配置",
+      items: [
+        { path: "/admin/marketing/web-registration-ads", icon: Image, label: "WEB注册页广告" },
+        { path: "/admin/marketing/country-region", icon: MapPin, label: "国家/地区管理" },
+        { path: "/admin/marketing/2fa-scenarios", icon: SmartphoneNfc, label: "2FA场景配置" },
+        { path: "/admin/marketing/prompt-config", icon: AlertCircle, label: "提示语配置" },
+        { path: "/admin/marketing/diamond-zone", icon: Grid3x3, label: "金刚区管理" },
+        { path: "/admin/marketing/official-channels", icon: Radio, label: "官方渠道配置" },
+        { path: "/admin/marketing/ad-placement", icon: Megaphone, label: "广告位管理" },
+        { path: "/admin/marketing/ranking-config", icon: LayoutGrid, label: "榜单配置" },
+        { path: "/admin/marketing/homepage-popup", icon: Award, label: "首页弹窗" },
+        { path: "/admin/marketing/push-notifications", icon: Bell, label: "Push通知" },
+        { path: "/admin/marketing/banner-management", icon: Image, label: "Banner管理" },
+        { path: "/admin/marketing/in-app-messages", icon: MessageSquare, label: "站内配置" },
+      ]
+    },
+    {
+      group: "内容管理",
+      items: [
+        { path: "/admin/marketing/email-content", icon: MailOpen, label: "邮件内容" },
+        { path: "/admin/marketing/email-send", icon: Send, label: "邮件发送" },
+        { path: "/admin/marketing/honor-management", icon: Award, label: "荣誉管理" },
+        { path: "/admin/marketing/schedule-management", icon: Calendar, label: "日程安排管理" },
+        { path: "/admin/marketing/voice-materials", icon: Mic, label: "语音发料" },
+        { path: "/admin/marketing/message-send", icon: Send, label: "消息发送" },
+        { path: "/admin/marketing/create-email", icon: FileEdit, label: "创建邮件" },
+      ]
+    },
+    {
+      group: "运营活动",
+      items: [
+        { path: "/admin/marketing/deduction-details", icon: Minus, label: "抵扣金明细" },
+        { path: "/admin/marketing/trial-details", icon: Plus, label: "体验金明细" },
+        { path: "/admin/marketing/user-deduction", icon: DollarSign, label: "用户抵扣金" },
+        { path: "/admin/marketing/user-trial", icon: Gift, label: "用户体验金" },
+        { path: "/admin/marketing/coupon-config", icon: Ticket, label: "卡券配置" },
+      ]
+    },
   ],
   users: [
     { path: "/admin/users/all", icon: Users, label: "用户总表" },
@@ -254,7 +279,10 @@ interface AdminSidebarV2PropsExtended extends AdminSidebarV2Props {
 export default function AdminSidebarV2({ currentModule, currentPage, onNavigate, isOpen = false, onToggle }: AdminSidebarV2PropsExtended) {
   const { theme } = useTheme()
   
-  const menuItems = moduleMenus[currentModule] || []
+  const menuConfig = moduleMenus[currentModule] || []
+  
+  // 检查是否为分组菜单
+  const isGroupedMenu = menuConfig.length > 0 && 'group' in menuConfig[0]
 
   const handleNavigate = (path: string) => {
     onNavigate(path)
@@ -267,6 +295,31 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
     if (onToggle) {
       onToggle()
     }
+  }
+  
+  // 渲染菜单项
+  const renderMenuItem = (item: MenuItem) => {
+    const Icon = item.icon
+    const isActive = currentPage === item.path
+    
+    return (
+      <button
+        key={item.path}
+        onClick={() => handleNavigate(item.path)}
+        className={`
+          w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors
+          ${isActive 
+            ? 'bg-custom-green text-white'
+            : theme === 'dark'
+              ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+          }
+        `}
+      >
+        <Icon className="w-4 h-4 flex-shrink-0" />
+        <span className="truncate">{item.label}</span>
+      </button>
+    )
   }
 
   return (
@@ -308,31 +361,30 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
 
         {/* 二级菜单列表 */}
         <div className="flex-1 overflow-y-auto py-4">
-          <nav className="space-y-1 px-3">
-            {menuItems.map((item) => {
-              const Icon = item.icon
-              const isActive = currentPage === item.path
-              
-              return (
-                <button
-                  key={item.path}
-                  onClick={() => handleNavigate(item.path)}
-                  className={`
-                    w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors
-                    ${isActive 
-                      ? 'bg-custom-green text-white'
-                      : theme === 'dark'
-                        ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                    }
-                  `}
-                >
-                  <Icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="truncate">{item.label}</span>
-                </button>
-              )
-            })}
-          </nav>
+          {isGroupedMenu ? (
+            // 分组菜单渲染
+            <nav className="space-y-4 px-3">
+              {(menuConfig as MenuGroup[]).map((group, index) => (
+                <div key={group.group}>
+                  {/* 分组标题 */}
+                  <div className={`px-3 py-2 text-xs font-bold uppercase tracking-wider ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    【{group.group}】
+                  </div>
+                  {/* 分组菜单项 */}
+                  <div className="space-y-1 mt-2">
+                    {group.items.map(item => renderMenuItem(item))}
+                  </div>
+                </div>
+              ))}
+            </nav>
+          ) : (
+            // 平面菜单渲染
+            <nav className="space-y-1 px-3">
+              {(menuConfig as MenuItem[]).map(item => renderMenuItem(item))}
+            </nav>
+          )}
         </div>
       </div>
     </>
