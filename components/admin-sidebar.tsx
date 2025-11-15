@@ -298,7 +298,7 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
     if (isGroupedMenu) {
       const initialState: Record<string, boolean> = {}
       ;(menuConfig as MenuGroup[]).forEach(group => {
-        initialState[group.group] = true // 默认全部展开
+        initialState[group.group] = false // 默认全部折叠
       })
       setExpandedGroups(initialState)
     } else {
@@ -416,11 +416,15 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
                     </button>
                     
                     {/* 分组菜单项 - 可折叠 */}
-                    {isExpanded && (
-                      <div className="space-y-1 mt-2 animate-in slide-in-from-top-2 duration-200">
+                    <div 
+                      className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                        isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                    >
+                      <div className="space-y-1 mt-2">
                         {group.items.map(item => renderMenuItem(item))}
                       </div>
-                    )}
+                    </div>
                   </div>
                 )
               })}
