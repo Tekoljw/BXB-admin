@@ -417,14 +417,13 @@ export default function UCardUsersPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">U卡用户管理</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          管理平台所有U卡用户的基本信息和使用情况
-        </p>
-      </div>
-
-      <div className="space-y-4">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">U卡用户管理</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            管理平台所有U卡用户的基本信息和使用情况
+          </p>
+        </div>
         <Tabs value={cardTypeTab} onValueChange={handleCardTypeChange}>
           <TabsList>
             <TabsTrigger value="all">全部</TabsTrigger>
@@ -432,18 +431,20 @@ export default function UCardUsersPage() {
             <TabsTrigger value="physical">实体卡用户</TabsTrigger>
           </TabsList>
         </Tabs>
+      </div>
+
+      <div className="space-y-4">
+        <Tabs value={activityTab} onValueChange={handleActivityChange}>
+          <TabsList>
+            <TabsTrigger value="all">全部</TabsTrigger>
+            <TabsTrigger value="today">今日活跃</TabsTrigger>
+            <TabsTrigger value="7days">7日活跃</TabsTrigger>
+            <TabsTrigger value="15days">15日活跃</TabsTrigger>
+            <TabsTrigger value="30days">30日活跃</TabsTrigger>
+          </TabsList>
+        </Tabs>
 
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-          <Tabs value={activityTab} onValueChange={handleActivityChange} className="flex-shrink-0">
-            <TabsList>
-              <TabsTrigger value="all">全部</TabsTrigger>
-              <TabsTrigger value="today">今日活跃</TabsTrigger>
-              <TabsTrigger value="7days">7日活跃</TabsTrigger>
-              <TabsTrigger value="15days">15日活跃</TabsTrigger>
-              <TabsTrigger value="30days">30日活跃</TabsTrigger>
-            </TabsList>
-          </Tabs>
-
           <Tabs value={sortTab} onValueChange={(value) => setSortTab(value)} className="flex-shrink-0">
             <TabsList>
               <TabsTrigger value="default">默认排序</TabsTrigger>
@@ -458,7 +459,7 @@ export default function UCardUsersPage() {
               value={searchInput}
               onChange={setSearchInput}
               onSearch={handleSearch}
-              onReset={handleReset}
+              showReset={false}
             />
           </div>
         </div>
