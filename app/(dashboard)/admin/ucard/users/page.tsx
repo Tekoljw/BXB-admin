@@ -1,15 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Users, Eye, CreditCard, CheckCircle, XCircle } from 'lucide-react'
+import { Users, Eye, CheckCircle, XCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Sheet,
   SheetContent,
@@ -20,7 +14,6 @@ import {
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 
-// 卡片类型定义
 interface Card {
   id: string
   cardNumber: string
@@ -31,7 +24,6 @@ interface Card {
   balance: string
 }
 
-// 用户类型定义
 interface UCardUser {
   id: string
   userId: string
@@ -41,19 +33,30 @@ interface UCardUser {
   isKYC: boolean
   virtualCardCount: number
   physicalCardCount: number
-  accountBalance: string // 账户总余额(USDT)
-  cardBalance: string // 卡内总余额
-  totalRecharge: string // U卡总充值
-  totalConsumption: string // U卡总消费
-  rechargeFeePro: string // 充值手续费利润
-  cardOpeningFeePro: string // 开卡费利润
-  status: 'active' | 'frozen' | 'inactive'
+  cardBalance: string
+  monthlyRecharge: string
+  totalRecharge: string
+  monthlyConsumption: string
+  totalConsumption: string
+  cardOpeningFeeProfit: string
+  transferFeeProfit: string
+  lastActiveDate: string
   registeredAt: string
-  cards: Card[] // 用户持有的卡片列表
+  cards: Card[]
 }
 
 export default function UCardUsersPage() {
-  // 示例数据
+  const getTodayDate = () => {
+    const today = new Date()
+    return today.toISOString().split('T')[0]
+  }
+
+  const getDaysAgo = (days: number) => {
+    const date = new Date()
+    date.setDate(date.getDate() - days)
+    return date.toISOString().split('T')[0]
+  }
+
   const [users] = useState<UCardUser[]>([
     {
       id: '1',
@@ -64,13 +67,14 @@ export default function UCardUsersPage() {
       isKYC: true,
       virtualCardCount: 2,
       physicalCardCount: 1,
-      accountBalance: '10,500.00',
       cardBalance: '25,320.00',
+      monthlyRecharge: '15,000.00',
       totalRecharge: '50,000.00',
+      monthlyConsumption: '12,345.67',
       totalConsumption: '35,678.90',
-      rechargeFeePro: '1,034.56',
-      cardOpeningFeePro: '200.00',
-      status: 'active',
+      cardOpeningFeeProfit: '200.00',
+      transferFeeProfit: '834.56',
+      lastActiveDate: getTodayDate(),
       registeredAt: '2024-01-15 10:30:00',
       cards: [
         {
@@ -111,13 +115,14 @@ export default function UCardUsersPage() {
       isKYC: true,
       virtualCardCount: 1,
       physicalCardCount: 0,
-      accountBalance: '5,500.00',
       cardBalance: '12,500.00',
+      monthlyRecharge: '10,000.00',
       totalRecharge: '30,000.00',
+      monthlyConsumption: '8,500.00',
       totalConsumption: '28,500.00',
-      rechargeFeePro: '689.00',
-      cardOpeningFeePro: '100.00',
-      status: 'active',
+      cardOpeningFeeProfit: '100.00',
+      transferFeeProfit: '589.00',
+      lastActiveDate: getDaysAgo(1),
       registeredAt: '2024-02-20 14:20:00',
       cards: [
         {
@@ -140,13 +145,14 @@ export default function UCardUsersPage() {
       isKYC: false,
       virtualCardCount: 2,
       physicalCardCount: 2,
-      accountBalance: '22,000.00',
       cardBalance: '48,234.56',
+      monthlyRecharge: '25,000.00',
       totalRecharge: '100,000.00',
+      monthlyConsumption: '18,234.56',
       totalConsumption: '85,234.56',
-      rechargeFeePro: '2,167.89',
-      cardOpeningFeePro: '400.00',
-      status: 'active',
+      cardOpeningFeeProfit: '400.00',
+      transferFeeProfit: '1,767.89',
+      lastActiveDate: getTodayDate(),
       registeredAt: '2024-01-05 08:00:00',
       cards: [
         {
@@ -195,16 +201,27 @@ export default function UCardUsersPage() {
       email: 'zhao***@gmail.com',
       isKYC: false,
       virtualCardCount: 0,
-      physicalCardCount: 0,
-      accountBalance: '0',
-      cardBalance: '0',
-      totalRecharge: '0',
-      totalConsumption: '0',
-      rechargeFeePro: '0',
-      cardOpeningFeePro: '0',
-      status: 'inactive',
+      physicalCardCount: 1,
+      cardBalance: '3,500.00',
+      monthlyRecharge: '2,000.00',
+      totalRecharge: '5,000.00',
+      monthlyConsumption: '1,500.00',
+      totalConsumption: '1,500.00',
+      cardOpeningFeeProfit: '100.00',
+      transferFeeProfit: '120.00',
+      lastActiveDate: getDaysAgo(5),
       registeredAt: '2024-03-10 16:00:00',
-      cards: [],
+      cards: [
+        {
+          id: 'c9',
+          cardNumber: '4532 **** **** 7890',
+          cardType: 'physical',
+          supplier: 'GlobalCard',
+          network: 'VISA',
+          currency: 'USDT',
+          balance: '3,500.00',
+        },
+      ],
     },
     {
       id: '5',
@@ -215,17 +232,18 @@ export default function UCardUsersPage() {
       isKYC: true,
       virtualCardCount: 1,
       physicalCardCount: 0,
-      accountBalance: '4,322.00',
       cardBalance: '8,678.00',
+      monthlyRecharge: '5,000.00',
       totalRecharge: '20,000.00',
+      monthlyConsumption: '4,322.00',
       totalConsumption: '15,678.00',
-      rechargeFeePro: '356.78',
-      cardOpeningFeePro: '100.00',
-      status: 'frozen',
+      cardOpeningFeeProfit: '100.00',
+      transferFeeProfit: '256.78',
+      lastActiveDate: getDaysAgo(13),
       registeredAt: '2024-02-15 13:00:00',
       cards: [
         {
-          id: 'c9',
+          id: 'c10',
           cardNumber: '4532 **** **** 7890',
           cardType: 'virtual',
           supplier: 'GlobalCard',
@@ -238,46 +256,61 @@ export default function UCardUsersPage() {
   ])
 
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
-  const [filterStatus, setFilterStatus] = useState('all')
+  const [cardTypeTab, setCardTypeTab] = useState('all')
+  const [activityTab, setActivityTab] = useState('all')
   const [selectedUser, setSelectedUser] = useState<UCardUser | null>(null)
   const [showDetailSheet, setShowDetailSheet] = useState(false)
 
-  // 统计数据
-  const stats = {
-    total: users.length,
-    active: users.filter(u => u.status === 'active').length,
-    withCards: users.filter(u => u.virtualCardCount + u.physicalCardCount > 0).length,
-    frozen: users.filter(u => u.status === 'frozen').length,
+  const isWithinDays = (dateStr: string, days: number) => {
+    const date = new Date(dateStr)
+    const now = new Date()
+    const diffTime = now.getTime() - date.getTime()
+    const diffDays = diffTime / (1000 * 60 * 60 * 24)
+    return diffDays <= days
   }
 
-  // 过滤用户
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.username.includes(searchTerm) ||
-                         user.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const searchLower = searchTerm.toLowerCase()
+    const matchesSearch = user.username.toLowerCase().includes(searchLower) ||
+                         user.userId.toLowerCase().includes(searchLower) ||
                          user.phone.includes(searchTerm) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = filterStatus === 'all' || user.status === filterStatus
-    return matchesSearch && matchesStatus
+                         user.email.toLowerCase().includes(searchLower)
+    
+    let matchesCardType = true
+    if (cardTypeTab === 'virtual') {
+      matchesCardType = user.virtualCardCount > 0
+    } else if (cardTypeTab === 'physical') {
+      matchesCardType = user.physicalCardCount > 0
+    }
+
+    let matchesActivity = true
+    if (activityTab === 'today') {
+      matchesActivity = isWithinDays(user.lastActiveDate, 1)
+    } else if (activityTab === '7days') {
+      matchesActivity = isWithinDays(user.lastActiveDate, 7)
+    } else if (activityTab === '15days') {
+      matchesActivity = isWithinDays(user.lastActiveDate, 15)
+    } else if (activityTab === '30days') {
+      matchesActivity = isWithinDays(user.lastActiveDate, 30)
+    }
+
+    return matchesSearch && matchesCardType && matchesActivity
   })
 
-  // 获取状态徽章
-  const getStatusBadge = (status: string) => {
-    const badges = {
-      active: <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full">活跃</span>,
-      frozen: <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 rounded-full">冻结</span>,
-      inactive: <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400 rounded-full">未激活</span>,
-    }
-    return badges[status as keyof typeof badges]
+  const handleCardTypeChange = (value: string) => {
+    setCardTypeTab(value)
   }
 
-  // 获取卡片类型徽章
+  const handleActivityChange = (value: string) => {
+    setActivityTab(value)
+  }
+
   const getCardTypeBadge = (cardType: string) => {
     return cardType === 'virtual' 
       ? <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded-full">虚拟卡</span>
       : <span className="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 rounded-full">实体卡</span>
   }
 
-  // 查看用户详情
   const viewUserDetail = (user: UCardUser) => {
     setSelectedUser(user)
     setShowDetailSheet(true)
@@ -285,7 +318,6 @@ export default function UCardUsersPage() {
 
   return (
     <div className="p-6 space-y-6">
-      {/* 页面标题 */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">U卡用户列表</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -293,49 +325,38 @@ export default function UCardUsersPage() {
         </p>
       </div>
 
-      {/* 统计卡片 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <div className="text-sm text-gray-500 dark:text-gray-400">总用户数</div>
-          <div className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{stats.total}</div>
-        </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <div className="text-sm text-gray-500 dark:text-gray-400">活跃用户</div>
-          <div className="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">{stats.active}</div>
-        </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <div className="text-sm text-gray-500 dark:text-gray-400">持卡用户</div>
-          <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">{stats.withCards}</div>
-        </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <div className="text-sm text-gray-500 dark:text-gray-400">冻结用户</div>
-          <div className="text-3xl font-bold text-red-600 dark:text-red-400 mt-2">{stats.frozen}</div>
+      <div className="space-y-4">
+        <Tabs value={cardTypeTab} onValueChange={handleCardTypeChange}>
+          <TabsList>
+            <TabsTrigger value="all">全部</TabsTrigger>
+            <TabsTrigger value="virtual">虚拟卡用户</TabsTrigger>
+            <TabsTrigger value="physical">实体卡用户</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <Tabs value={activityTab} onValueChange={handleActivityChange} className="flex-shrink-0">
+            <TabsList>
+              <TabsTrigger value="all">全部</TabsTrigger>
+              <TabsTrigger value="today">今日活跃</TabsTrigger>
+              <TabsTrigger value="7days">7日活跃</TabsTrigger>
+              <TabsTrigger value="15days">15日活跃</TabsTrigger>
+              <TabsTrigger value="30days">30日活跃</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          <div className="flex-1 w-full sm:w-auto">
+            <SearchControls
+              placeholder="搜索用户ID、姓名、手机号、邮箱..."
+              value={searchInput}
+              onChange={setSearchInput}
+              onSearch={handleSearch}
+              onReset={handleReset}
+            />
+          </div>
         </div>
       </div>
 
-      {/* 搜索和筛选 */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <SearchControls
-          placeholder="搜索用户ID、姓名、手机号、邮箱..."
-          value={searchInput}
-          onChange={setSearchInput}
-          onSearch={handleSearch}
-          onReset={handleReset}
-        />
-        <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-full sm:w-48">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部状态</SelectItem>
-            <SelectItem value="active">活跃</SelectItem>
-            <SelectItem value="inactive">未激活</SelectItem>
-            <SelectItem value="frozen">冻结</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* 用户列表 */}
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
         {filteredUsers.length > 0 ? (
           <div className="overflow-x-auto">
@@ -352,31 +373,31 @@ export default function UCardUsersPage() {
                     KYC
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    虚拟卡
+                    虚拟卡数量
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    实体卡
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    账户余额
+                    实体卡数量
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     卡内余额
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    总充值
+                    本月充值转入
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    总消费
+                    累计充值转入
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    总利润
+                    本月消费
                   </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    状态
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    累计消费
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    注册时间
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    贡献开卡费利润
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    贡献划转费利润
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     操作
@@ -420,13 +441,13 @@ export default function UCardUsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                        {user.accountBalance} USDT
+                      <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
+                        {user.cardBalance} USDT
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
-                        {user.cardBalance} USDT
+                      <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                        {user.monthlyRecharge} USDT
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
@@ -435,22 +456,24 @@ export default function UCardUsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <span className="text-sm font-medium text-orange-600 dark:text-orange-400">
+                        {user.monthlyConsumption} USDT
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
                       <span className="text-sm font-medium text-gray-900 dark:text-white">
                         {user.totalConsumption} USDT
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className="text-sm font-medium text-orange-600 dark:text-orange-400">
-                        {(parseFloat(user.rechargeFeePro.replace(/,/g, '')) + parseFloat(user.cardOpeningFeePro.replace(/,/g, ''))).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} USDT
+                      <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                        {user.cardOpeningFeeProfit} USDT
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      {getStatusBadge(user.status)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {user.registeredAt}
-                      </div>
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <span className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                        {user.transferFeeProfit} USDT
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <Button
@@ -476,7 +499,6 @@ export default function UCardUsersPage() {
         )}
       </div>
 
-      {/* 用户详情侧边栏 */}
       <Sheet open={showDetailSheet} onOpenChange={setShowDetailSheet}>
         <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
           <SheetHeader>
@@ -487,7 +509,6 @@ export default function UCardUsersPage() {
           </SheetHeader>
           {selectedUser && (
             <div className="mt-6 space-y-6">
-              {/* 基本信息 */}
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">基本信息</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
@@ -518,10 +539,6 @@ export default function UCardUsersPage() {
                       <span className="text-gray-500 dark:text-gray-400">未认证</span>
                     )}
                   </div>
-                  <div>
-                    <span className="text-gray-500 dark:text-gray-400">状态：</span>
-                    {getStatusBadge(selectedUser.status)}
-                  </div>
                   <div className="col-span-2">
                     <span className="text-gray-500 dark:text-gray-400">注册时间：</span>
                     <span className="font-medium text-gray-900 dark:text-white">{selectedUser.registeredAt}</span>
@@ -529,80 +546,75 @@ export default function UCardUsersPage() {
                 </div>
               </div>
 
-              {/* 财务统计 */}
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">财务统计</h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-xs text-gray-500 dark:text-gray-400">账户余额</div>
-                    <div className="text-xl font-bold text-blue-600 dark:text-blue-400 mt-1">{selectedUser.accountBalance} USDT</div>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-xs text-gray-500 dark:text-gray-400">卡内总余额</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">卡内余额</div>
                     <div className="text-xl font-bold text-purple-600 dark:text-purple-400 mt-1">{selectedUser.cardBalance} USDT</div>
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-xs text-gray-500 dark:text-gray-400">U卡总充值</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">本月充值转入</div>
+                    <div className="text-xl font-bold text-blue-600 dark:text-blue-400 mt-1">{selectedUser.monthlyRecharge} USDT</div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
+                    <div className="text-xs text-gray-500 dark:text-gray-400">累计充值转入</div>
                     <div className="text-xl font-bold text-green-600 dark:text-green-400 mt-1">{selectedUser.totalRecharge} USDT</div>
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-xs text-gray-500 dark:text-gray-400">U卡总消费</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">本月消费</div>
+                    <div className="text-xl font-bold text-orange-600 dark:text-orange-400 mt-1">{selectedUser.monthlyConsumption} USDT</div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
+                    <div className="text-xs text-gray-500 dark:text-gray-400">累计消费</div>
                     <div className="text-xl font-bold text-gray-900 dark:text-white mt-1">{selectedUser.totalConsumption} USDT</div>
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-xs text-gray-500 dark:text-gray-400">充值手续费利润</div>
-                    <div className="text-xl font-bold text-orange-600 dark:text-orange-400 mt-1">{selectedUser.rechargeFeePro} USDT</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">开卡费利润</div>
+                    <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">{selectedUser.cardOpeningFeeProfit} USDT</div>
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-xs text-gray-500 dark:text-gray-400">开卡费利润</div>
-                    <div className="text-xl font-bold text-pink-600 dark:text-pink-400 mt-1">{selectedUser.cardOpeningFeePro} USDT</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">划转费利润</div>
+                    <div className="text-xl font-bold text-amber-600 dark:text-amber-400 mt-1">{selectedUser.transferFeeProfit} USDT</div>
                   </div>
                 </div>
               </div>
 
-              {/* U卡列表 */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-                  持有U卡 ({selectedUser.cards.length} 张)
-                </h3>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">持有卡片 ({selectedUser.cards.length})</h3>
                 {selectedUser.cards.length > 0 ? (
                   <div className="space-y-3">
                     {selectedUser.cards.map((card) => (
-                      <div 
-                        key={card.id}
-                        className="bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-900 dark:to-black rounded-lg p-4 text-white"
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            {getCardTypeBadge(card.cardType)}
-                            <span className="px-2 py-1 text-xs font-medium bg-white/10 rounded-full">
-                              {card.network}
-                            </span>
-                          </div>
-                          <CreditCard className="w-5 h-5 text-white/50" />
+                      <div key={card.id} className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-mono text-sm font-medium text-gray-900 dark:text-white">
+                            {card.cardNumber}
+                          </span>
+                          {getCardTypeBadge(card.cardType)}
                         </div>
-                        <div className="text-lg font-mono font-semibold tracking-wider mb-4">
-                          {card.cardNumber}
-                        </div>
-                        <div className="grid grid-cols-2 gap-3 text-sm">
+                        <div className="grid grid-cols-2 gap-2 text-xs">
                           <div>
-                            <div className="text-white/60 text-xs">供应商</div>
-                            <div className="font-medium">{card.supplier}</div>
+                            <span className="text-gray-500 dark:text-gray-400">供应商：</span>
+                            <span className="text-gray-900 dark:text-white">{card.supplier}</span>
                           </div>
                           <div>
-                            <div className="text-white/60 text-xs">币种</div>
-                            <div className="font-medium">{card.currency}</div>
+                            <span className="text-gray-500 dark:text-gray-400">卡组织：</span>
+                            <span className="text-gray-900 dark:text-white">{card.network}</span>
                           </div>
-                          <div className="col-span-2">
-                            <div className="text-white/60 text-xs">余额</div>
-                            <div className="text-xl font-bold text-green-400">{card.balance} USDT</div>
+                          <div>
+                            <span className="text-gray-500 dark:text-gray-400">币种：</span>
+                            <span className="text-gray-900 dark:text-white">{card.currency}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-500 dark:text-gray-400">余额：</span>
+                            <span className="font-semibold text-purple-600 dark:text-purple-400">{card.balance} USDT</span>
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-400 dark:text-gray-600 text-center py-8">该用户暂无U卡</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">暂无卡片</p>
                 )}
               </div>
             </div>
