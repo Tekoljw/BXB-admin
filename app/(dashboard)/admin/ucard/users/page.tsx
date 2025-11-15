@@ -14,6 +14,7 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
+import { UserDetailDrawer } from "@/components/admin/user-detail-drawer"
 
 interface Card {
   id: string
@@ -52,6 +53,7 @@ interface UCardUser {
   lastLoginLocation?: string
   lastLoginTime?: string
   registeredAt: string
+  registeredLocation?: string
   cards: Card[]
 }
 
@@ -93,6 +95,7 @@ export default function UCardUsersPage() {
       lastLoginLocation: '上海市浦东新区',
       lastLoginTime: '2024-11-15 10:30:00',
       registeredAt: '2024-01-15 10:30:00',
+      registeredLocation: '北京市朝阳区',
       cards: [
         {
           id: 'c1',
@@ -149,6 +152,7 @@ export default function UCardUsersPage() {
       lastLoginLocation: '北京市朝阳区',
       lastLoginTime: '2024-11-14 18:45:00',
       registeredAt: '2024-02-20 14:20:00',
+      registeredLocation: '上海市徐汇区',
       cards: [
         {
           id: 'c4',
@@ -183,6 +187,7 @@ export default function UCardUsersPage() {
       lastLoginLocation: '深圳市南山区',
       lastLoginTime: '2024-11-15 09:20:00',
       registeredAt: '2024-01-05 08:00:00',
+      registeredLocation: '广州市天河区',
       cards: [
         {
           id: 'c5',
@@ -250,6 +255,7 @@ export default function UCardUsersPage() {
       lastLoginLocation: '广州市天河区',
       lastLoginTime: '2024-11-10 14:15:00',
       registeredAt: '2024-03-10 16:00:00',
+      registeredLocation: '深圳市福田区',
       cards: [
         {
           id: 'c9',
@@ -284,6 +290,7 @@ export default function UCardUsersPage() {
       lastLoginLocation: '杭州市西湖区',
       lastLoginTime: '2024-11-02 16:30:00',
       registeredAt: '2024-02-15 13:00:00',
+      registeredLocation: '杭州市上城区',
       cards: [
         {
           id: 'c10',
@@ -310,6 +317,8 @@ export default function UCardUsersPage() {
   const [selectedKYCUser, setSelectedKYCUser] = useState<UCardUser | null>(null)
   const [cardTypeTabInDetail, setCardTypeTabInDetail] = useState<'virtual' | 'physical'>('virtual')
   const [cardsToShow, setCardsToShow] = useState(6)
+  const [showUserDetailDrawer, setShowUserDetailDrawer] = useState(false)
+  const [selectedUserForDetail, setSelectedUserForDetail] = useState<UCardUser | null>(null)
 
   const isWithinDays = (dateStr: string, days: number) => {
     const date = new Date(dateStr)
@@ -382,6 +391,11 @@ export default function UCardUsersPage() {
   const viewKYCDetail = (user: UCardUser) => {
     setSelectedKYCUser(user)
     setShowKYCSheet(true)
+  }
+
+  const openUserDetailDrawer = (user: UCardUser) => {
+    setSelectedUserForDetail(user)
+    setShowUserDetailDrawer(true)
   }
 
   const loadMoreCards = () => {
@@ -518,12 +532,17 @@ export default function UCardUsersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {user.phone}
-                      </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">
-                        {user.email}
-                      </div>
+                      <button
+                        onClick={() => openUserDetailDrawer(user)}
+                        className="text-left hover:bg-gray-100 dark:hover:bg-gray-800 rounded px-2 py-1 -mx-2 -my-1 transition-colors"
+                      >
+                        <div className="text-sm text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
+                          {user.phone}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                          {user.email}
+                        </div>
+                      </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       {user.isKYC ? (
@@ -771,6 +790,75 @@ export default function UCardUsersPage() {
           )}
         </SheetContent>
       </Sheet>
+
+      <UserDetailDrawer
+        open={showUserDetailDrawer}
+        onClose={() => setShowUserDetailDrawer(false)}
+        user={selectedUserForDetail}
+        moduleSpecificContent={
+          selectedUserForDetail && (
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 space-y-4">
+              <h3 className="font-semibold text-gray-900 dark:text-white">U卡信息</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">虚拟卡数量</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                    {selectedUserForDetail.virtualCardCount}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">实体卡数量</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                    {selectedUserForDetail.physicalCardCount}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">卡内余额</p>
+                  <p className="text-sm font-medium text-purple-600 dark:text-purple-400 mt-1">
+                    {selectedUserForDetail.cardBalance} USDT
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">本月充值</p>
+                  <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mt-1">
+                    {selectedUserForDetail.monthlyRecharge} USDT
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">累计充值</p>
+                  <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mt-1">
+                    {selectedUserForDetail.totalRecharge} USDT
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">本月消费</p>
+                  <p className="text-sm font-medium text-green-600 dark:text-green-400 mt-1">
+                    {selectedUserForDetail.monthlyConsumption} USDT
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">累计消费</p>
+                  <p className="text-sm font-medium text-green-600 dark:text-green-400 mt-1">
+                    {selectedUserForDetail.totalConsumption} USDT
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">开卡费利润</p>
+                  <p className="text-sm font-medium text-amber-600 dark:text-amber-400 mt-1">
+                    {selectedUserForDetail.cardOpeningFeeProfit} USDT
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">划转费利润</p>
+                  <p className="text-sm font-medium text-amber-600 dark:text-amber-400 mt-1">
+                    {selectedUserForDetail.transferFeeProfit} USDT
+                  </p>
+                </div>
+              </div>
+            </div>
+          )
+        }
+      />
     </div>
   )
 }
