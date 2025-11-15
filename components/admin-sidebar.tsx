@@ -292,6 +292,9 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/orders/ucard", icon: CreditCard, label: "U卡订单" },
     { path: "/admin/orders/escrow", icon: Shield, label: "担保记录" },
     { path: "/admin/orders/payment", icon: Banknote, label: "支付订单" },
+    { path: "/admin/orders/manual-credit", icon: FileEdit, label: "手动开分" },
+    { path: "/admin/orders/manual-transfer", icon: ArrowLeftRight, label: "手动转账" },
+    { path: "/admin/orders/large-withdrawal-audit", icon: CheckCircle, label: "大额提币审核" },
   ],
   system: [
     {

@@ -34,6 +34,9 @@ import FinanceOrdersPage from "@/app/(dashboard)/admin/orders/finance/page"
 import UCardOrdersPage from "@/app/(dashboard)/admin/orders/ucard/page"
 import OrdersEscrowRecordsPage from "@/app/(dashboard)/admin/orders/escrow/page"
 import PaymentOrdersPage from "@/app/(dashboard)/admin/orders/payment/page"
+import ManualCreditPage from "@/app/(dashboard)/admin/orders/manual-credit/page"
+import ManualTransferPage from "@/app/(dashboard)/admin/orders/manual-transfer/page"
+import LargeWithdrawalAuditPage from "@/app/(dashboard)/admin/orders/large-withdrawal-audit/page"
 import IMAccountsPage from "@/app/(dashboard)/admin/im/accounts/page"
 import IMGroupsPage from "@/app/(dashboard)/admin/im/groups/page"
 import IMMessagesPage from "@/app/(dashboard)/admin/im/messages/page"
@@ -315,6 +318,9 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/orders/ucard") return <UCardOrdersPage />
     if (currentPage === "/admin/orders/escrow") return <OrdersEscrowRecordsPage />
     if (currentPage === "/admin/orders/payment") return <PaymentOrdersPage />
+    if (currentPage === "/admin/orders/manual-credit") return <ManualCreditPage />
+    if (currentPage === "/admin/orders/manual-transfer") return <ManualTransferPage />
+    if (currentPage === "/admin/orders/large-withdrawal-audit") return <LargeWithdrawalAuditPage />
     if (currentPage === "/admin/users") return <AllUsersPage />
     if (currentPage === "/admin/users/all") return <AllUsersPage />
     if (currentPage === "/admin/users/blacklist") return <BlacklistPage />
