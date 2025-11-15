@@ -379,16 +379,10 @@ export default function UCardUsersPage() {
                     卡内余额
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    本月充值转入
+                    充值划款
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    累计充值转入
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    本月消费
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    累计消费
+                    刷卡消费
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     贡献开卡费利润
@@ -441,24 +435,20 @@ export default function UCardUsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                        {user.monthlyRecharge} USDT
-                      </span>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        本月：{user.monthlyRecharge} USDT
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        累计：{user.totalRecharge} USDT
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className="text-sm font-medium text-green-600 dark:text-green-400">
-                        {user.totalRecharge} USDT
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className="text-sm font-medium text-orange-600 dark:text-orange-400">
-                        {user.monthlyConsumption} USDT
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        {user.totalConsumption} USDT
-                      </span>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        本月：{user.monthlyConsumption} USDT
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        累计：{user.totalConsumption} USDT
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
