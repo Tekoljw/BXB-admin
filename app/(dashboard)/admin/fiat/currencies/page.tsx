@@ -68,6 +68,7 @@ interface Currency {
   region: CurrencyRegion
   status: "active" | "inactive"
   createdAt: string
+  sortOrder: number
   exchangeRate?: {
     buyPrice: number
     sellPrice: number
@@ -90,6 +91,8 @@ export default function CurrenciesPage() {
   const [regionTab, setRegionTab] = useState("all")
   const fileInputRef = useRef<HTMLInputElement>(null)
   const editFileInputRef = useRef<HTMLInputElement>(null)
+  const [editingSortOrder, setEditingSortOrder] = useState<string | null>(null)
+  const [tempSortOrder, setTempSortOrder] = useState("")
   const initialCurrencies: Currency[] = [
     {
       id: "CUR001",
@@ -99,6 +102,7 @@ export default function CurrenciesPage() {
       icon: "🇨🇳",
       region: "asia",
       status: "active",
+      sortOrder: 1,
       createdAt: "2024-01-15 10:30:00",
       exchangeRate: {
         buyPrice: 7.2456,
@@ -126,6 +130,7 @@ export default function CurrenciesPage() {
       icon: "🇺🇸",
       region: "americas",
       status: "active",
+      sortOrder: 2,
       createdAt: "2024-01-15 10:30:00",
       exchangeRate: {
         buyPrice: 1.0000,
@@ -153,6 +158,7 @@ export default function CurrenciesPage() {
       icon: "🇧🇷",
       region: "americas",
       status: "active",
+      sortOrder: 3,
       createdAt: "2024-01-15 10:30:00",
       exchangeRate: {
         buyPrice: 5.8234,
@@ -180,6 +186,7 @@ export default function CurrenciesPage() {
       icon: "🇮🇳",
       region: "asia",
       status: "active",
+      sortOrder: 4,
       createdAt: "2024-01-18 14:20:00"
     },
     {
@@ -190,6 +197,7 @@ export default function CurrenciesPage() {
       icon: "🇪🇺",
       region: "europe",
       status: "active",
+      sortOrder: 5,
       createdAt: "2024-01-20 09:15:00"
     },
     {
@@ -200,6 +208,7 @@ export default function CurrenciesPage() {
       icon: "🇬🇧",
       region: "europe",
       status: "inactive",
+      sortOrder: 6,
       createdAt: "2024-01-22 11:00:00"
     },
     {
@@ -210,6 +219,7 @@ export default function CurrenciesPage() {
       icon: "🇳🇬",
       region: "africa",
       status: "active",
+      sortOrder: 7,
       createdAt: "2024-01-25 15:30:00"
     }
   ]
@@ -312,12 +322,32 @@ export default function CurrenciesPage() {
     setEditingSellPrice(null)
   }
 
+  const saveSortOrder = (currencyId: string) => {
+    if (!tempSortOrder || tempSortOrder.trim() === '') {
+      setEditingSortOrder(null)
+      setTempSortOrder("")
+      return
+    }
+    
+    const value = parseInt(tempSortOrder)
+    if (isNaN(value) || value <= 0) {
+      alert("请输入有效的排序值")
+      return
+    }
+    
+    setCurrencies(currencies.map(c => 
+      c.id === currencyId ? { ...c, sortOrder: value } : c
+    ))
+    setEditingSortOrder(null)
+    setTempSortOrder("")
+  }
+
   const openRateConfig = (currency: Currency) => {
     setConfigCurrency(currency)
     setIsRateConfigOpen(true)
   }
 
-  // 链式过滤逻辑：搜索词 -> 状态 -> 地区
+  // 链式过滤逻辑：搜索词 -> 状态 -> 地区 -> 排序
   const filteredCurrencies = useMemo(() => {
     return currencies.filter(currency => {
       // 搜索词过滤
@@ -336,7 +366,7 @@ export default function CurrenciesPage() {
       const matchesRegion = regionTab === "all" || currency.region === regionTab
       
       return matchesSearch && matchesStatus && matchesRegion
-    })
+    }).sort((a, b) => a.sortOrder - b.sortOrder)
   }, [currencies, searchTerm, statusTab, regionTab])
 
   // 当一级页签改变时，重置二级页签
@@ -380,10 +410,12 @@ export default function CurrenciesPage() {
   }
 
   const handleAddCurrency = () => {
+    const maxSortOrder = currencies.length > 0 ? Math.max(...currencies.map(c => c.sortOrder)) : 0
     const currency: Currency = {
       id: `CUR${String(currencies.length + 1).padStart(3, '0')}`,
       ...newCurrency,
       status: "active",
+      sortOrder: maxSortOrder + 1,
       createdAt: new Date().toLocaleString('zh-CN')
     }
     setCurrencies([...currencies, currency])
@@ -479,6 +511,7 @@ export default function CurrenciesPage() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-700">
+                <th className="text-left py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300">排序</th>
                 <th className="text-left py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300">币种ID</th>
                 <th className="text-left py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300">图标</th>
                 <th className="text-left py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300">币种代码</th>
@@ -495,6 +528,57 @@ export default function CurrenciesPage() {
             <tbody>
               {filteredCurrencies.map((currency) => (
                 <tr key={currency.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                  <td className="py-3 px-4 text-sm">
+                    {editingSortOrder === currency.id ? (
+                      <div className="flex items-center gap-2">
+                        <Input
+                          value={tempSortOrder}
+                          onChange={(e) => setTempSortOrder(e.target.value.replace(/\D/g, ''))}
+                          className="h-8 text-sm py-1 px-2 w-20"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') saveSortOrder(currency.id)
+                            if (e.key === 'Escape') {
+                              setEditingSortOrder(null)
+                              setTempSortOrder("")
+                            }
+                          }}
+                          autoFocus
+                        />
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+                          onClick={() => saveSortOrder(currency.id)}
+                        >
+                          <Check className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 text-gray-600 hover:text-gray-700 hover:bg-gray-50"
+                          onClick={() => {
+                            setEditingSortOrder(null)
+                            setTempSortOrder("")
+                          }}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div
+                        className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded px-2 py-1 inline-flex items-center gap-1"
+                        onClick={() => {
+                          setEditingSortOrder(currency.id)
+                          setTempSortOrder(currency.sortOrder.toString())
+                        }}
+                      >
+                        <span className="text-gray-900 dark:text-gray-100 font-medium">
+                          {currency.sortOrder}
+                        </span>
+                        <Edit2 className="h-3 w-3 text-gray-400" />
+                      </div>
+                    )}
+                  </td>
                   <td className="py-3 px-4 text-sm text-gray-900 dark:text-gray-100">
                     {currency.id}
                   </td>

@@ -317,13 +317,6 @@ export default function AdminLoginPage() {
               绑定谷歌验证码
             </button>
           </div>
-
-          {/* 提示信息 */}
-          <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <p className="text-blue-400 text-sm text-center">
-              演示账号：123123 / 123123 / 验证码：123123
-            </p>
-          </div>
         </div>
         
         {/* 绑定谷歌验证码弹窗 */}
