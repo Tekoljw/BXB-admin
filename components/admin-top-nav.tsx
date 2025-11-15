@@ -50,7 +50,6 @@ interface AdminTopNavProps {
 const modules = [
   { id: "permissions", label: "权限", icon: Shield },
   { id: "orders", label: "财务", icon: Wallet },
-  { id: "operations", label: "报表", icon: BarChart3 },
   { id: "system", label: "审核", icon: FileCheck },
   { id: "marketing", label: "运营", icon: Activity },
   { id: "users", label: "用户", icon: Users },
@@ -67,7 +66,6 @@ const modules = [
   { id: "ucard", label: "U卡", icon: CreditCard },
   { id: "social", label: "社交", icon: Share2 },
   { id: "im", label: "IM", icon: MessageSquare },
-  { id: "maintenance", label: "运维", icon: Settings },
 ]
 
 export default function AdminTopNav({ currentModule, onModuleChange, onToggleSidebar }: AdminTopNavProps) {

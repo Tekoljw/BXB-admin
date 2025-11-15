@@ -9,7 +9,7 @@ Preferred communication style: Simple, everyday Chinese language.
 ## System Architecture
 
 ### UI/UX Decisions
-- **导航架构**: 采用顶部导航栏（20个一级模块菜单）与左侧边栏（动态二级子菜单）的双层导航体系。顶部一级菜单顺序：权限、财务、报表、审核、运营、用户、Crypto、法币、佣金、现货、合约、跟单、期权、C2C、担保、理财、U卡、社交、IM、运维。
+- **导航架构**: 采用顶部导航栏（18个一级模块菜单）与左侧边栏（动态二级子菜单）的双层导航体系。顶部一级菜单顺序：权限、财务、审核、运营、用户、Crypto、法币、佣金、现货、合约、跟单、期权、C2C、担保、理财、U卡、社交、IM。
 - **财务模块**: Crypto资产管理和法币资产管理已从各自的业务模块（Crypto/法币）移至财务模块（orders），路径分别为 `/admin/orders/crypto-assets` 和 `/admin/orders/fiat-assets`，确保点击时一级菜单保持在财务模块。
 - **响应式设计**: 支持桌面端横向滚动菜单和移动端汉堡菜单侧边Sheet弹窗。
 - **主题**: 支持动态亮色/暗色主题切换，并持久化用户偏好。
