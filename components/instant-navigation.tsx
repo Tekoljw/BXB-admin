@@ -162,7 +162,7 @@ export default function InstantNavigation() {
       commission: '/admin/commission/futures',
       'crypto': '/admin/crypto/currencies',
       fiat: '/admin/fiat/reports',
-      orders: '/admin/orders/funds',
+      orders: '/admin/orders/business-overview',
       options: '/admin/options',
       system: '/admin/system/users',
       maintenance: '/admin/maintenance/plan',
