@@ -34,6 +34,11 @@ interface UCardUser {
   phone: string
   email: string
   isKYC: boolean
+  kycRealName?: string
+  kycIdNumber?: string
+  kycCountry?: string
+  kycIdType?: string
+  kycVerifiedAt?: string
   virtualCardCount: number
   physicalCardCount: number
   cardBalance: string
@@ -44,6 +49,8 @@ interface UCardUser {
   cardOpeningFeeProfit: string
   transferFeeProfit: string
   lastActiveDate: string
+  lastLoginLocation?: string
+  lastLoginTime?: string
   registeredAt: string
   cards: Card[]
 }
@@ -68,6 +75,11 @@ export default function UCardUsersPage() {
       phone: '138****8888',
       email: 'zhang***@gmail.com',
       isKYC: true,
+      kycRealName: '张三',
+      kycIdNumber: '110101199001011234',
+      kycCountry: '中国',
+      kycIdType: '身份证',
+      kycVerifiedAt: '2024-01-16 14:30:00',
       virtualCardCount: 2,
       physicalCardCount: 1,
       cardBalance: '25,320.00',
@@ -78,6 +90,8 @@ export default function UCardUsersPage() {
       cardOpeningFeeProfit: '200.00',
       transferFeeProfit: '834.56',
       lastActiveDate: getTodayDate(),
+      lastLoginLocation: '上海市浦东新区',
+      lastLoginTime: '2024-11-15 10:30:00',
       registeredAt: '2024-01-15 10:30:00',
       cards: [
         {
@@ -132,6 +146,8 @@ export default function UCardUsersPage() {
       cardOpeningFeeProfit: '100.00',
       transferFeeProfit: '589.00',
       lastActiveDate: getDaysAgo(1),
+      lastLoginLocation: '北京市朝阳区',
+      lastLoginTime: '2024-11-14 18:45:00',
       registeredAt: '2024-02-20 14:20:00',
       cards: [
         {
@@ -164,6 +180,8 @@ export default function UCardUsersPage() {
       cardOpeningFeeProfit: '400.00',
       transferFeeProfit: '1,767.89',
       lastActiveDate: getTodayDate(),
+      lastLoginLocation: '深圳市南山区',
+      lastLoginTime: '2024-11-15 09:20:00',
       registeredAt: '2024-01-05 08:00:00',
       cards: [
         {
@@ -229,6 +247,8 @@ export default function UCardUsersPage() {
       cardOpeningFeeProfit: '100.00',
       transferFeeProfit: '120.00',
       lastActiveDate: getDaysAgo(5),
+      lastLoginLocation: '广州市天河区',
+      lastLoginTime: '2024-11-10 14:15:00',
       registeredAt: '2024-03-10 16:00:00',
       cards: [
         {
@@ -261,6 +281,8 @@ export default function UCardUsersPage() {
       cardOpeningFeeProfit: '100.00',
       transferFeeProfit: '256.78',
       lastActiveDate: getDaysAgo(13),
+      lastLoginLocation: '杭州市西湖区',
+      lastLoginTime: '2024-11-02 16:30:00',
       registeredAt: '2024-02-15 13:00:00',
       cards: [
         {
@@ -281,8 +303,11 @@ export default function UCardUsersPage() {
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [cardTypeTab, setCardTypeTab] = useState('all')
   const [activityTab, setActivityTab] = useState('all')
+  const [sortTab, setSortTab] = useState('default')
   const [selectedUser, setSelectedUser] = useState<UCardUser | null>(null)
   const [showDetailSheet, setShowDetailSheet] = useState(false)
+  const [showKYCSheet, setShowKYCSheet] = useState(false)
+  const [selectedKYCUser, setSelectedKYCUser] = useState<UCardUser | null>(null)
   const [cardTypeTabInDetail, setCardTypeTabInDetail] = useState<'virtual' | 'physical'>('virtual')
   const [cardsToShow, setCardsToShow] = useState(6)
 
@@ -294,7 +319,7 @@ export default function UCardUsersPage() {
     return diffDays <= days
   }
 
-  const filteredUsers = users.filter(user => {
+  const filteredAndSortedUsers = users.filter(user => {
     const searchLower = searchTerm.toLowerCase()
     const matchesSearch = user.username.toLowerCase().includes(searchLower) ||
                          user.userId.toLowerCase().includes(searchLower) ||
@@ -320,6 +345,17 @@ export default function UCardUsersPage() {
     }
 
     return matchesSearch && matchesCardType && matchesActivity
+  }).sort((a, b) => {
+    if (sortTab === 'profit') {
+      const aTotalProfit = parseFloat(a.cardOpeningFeeProfit.replace(/,/g, '')) + parseFloat(a.transferFeeProfit.replace(/,/g, ''))
+      const bTotalProfit = parseFloat(b.cardOpeningFeeProfit.replace(/,/g, '')) + parseFloat(b.transferFeeProfit.replace(/,/g, ''))
+      return bTotalProfit - aTotalProfit
+    } else if (sortTab === 'time') {
+      const aTime = a.registeredAt.replace(' ', 'T')
+      const bTime = b.registeredAt.replace(' ', 'T')
+      return new Date(bTime).getTime() - new Date(aTime).getTime()
+    }
+    return 0
   })
 
   const handleCardTypeChange = (value: string) => {
@@ -341,6 +377,11 @@ export default function UCardUsersPage() {
     setCardTypeTabInDetail(user.virtualCardCount > 0 ? 'virtual' : 'physical')
     setCardsToShow(6)
     setShowDetailSheet(true)
+  }
+
+  const viewKYCDetail = (user: UCardUser) => {
+    setSelectedKYCUser(user)
+    setShowKYCSheet(true)
   }
 
   const loadMoreCards = () => {
@@ -403,6 +444,14 @@ export default function UCardUsersPage() {
             </TabsList>
           </Tabs>
 
+          <Tabs value={sortTab} onValueChange={(value) => setSortTab(value)} className="flex-shrink-0">
+            <TabsList>
+              <TabsTrigger value="default">默认排序</TabsTrigger>
+              <TabsTrigger value="profit">利润贡献排名</TabsTrigger>
+              <TabsTrigger value="time">时间排序</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
           <div className="flex-1 w-full sm:w-auto">
             <SearchControls
               placeholder="搜索用户ID、姓名、手机号、邮箱..."
@@ -416,7 +465,7 @@ export default function UCardUsersPage() {
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-        {filteredUsers.length > 0 ? (
+        {filteredAndSortedUsers.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
@@ -429,6 +478,9 @@ export default function UCardUsersPage() {
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     KYC
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    最近登录
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     卡片数量
@@ -454,7 +506,7 @@ export default function UCardUsersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredUsers.map((user) => (
+                {filteredAndSortedUsers.map((user) => (
                   <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
@@ -474,10 +526,23 @@ export default function UCardUsersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       {user.isKYC ? (
-                        <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
+                        <button 
+                          onClick={() => viewKYCDetail(user)}
+                          className="inline-block hover:scale-110 transition-transform cursor-pointer"
+                        >
+                          <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
+                        </button>
                       ) : (
                         <XCircle className="w-5 h-5 text-gray-300 dark:text-gray-600 mx-auto" />
                       )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-xs text-gray-900 dark:text-white">
+                        {user.lastLoginLocation || '-'}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        {user.lastLoginTime || '-'}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <div className="text-xs text-gray-600 dark:text-gray-400">
@@ -627,6 +692,80 @@ export default function UCardUsersPage() {
                   <p className="text-sm text-gray-500 dark:text-gray-400">暂无{cardTypeTabInDetail === 'virtual' ? '虚拟' : '实体'}卡</p>
                 </div>
               )}
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={showKYCSheet} onOpenChange={setShowKYCSheet}>
+        <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>KYC认证信息</SheetTitle>
+            <SheetDescription>
+              查看用户的实名认证详细信息
+            </SheetDescription>
+          </SheetHeader>
+          {selectedKYCUser && (
+            <div className="mt-6 space-y-6">
+              <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+                <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                  <CheckCircle className="w-5 h-5" />
+                  <span className="font-semibold">已通过KYC认证</span>
+                </div>
+                {selectedKYCUser.kycVerifiedAt && (
+                  <div className="text-sm text-green-600 dark:text-green-500 mt-1">
+                    认证时间：{selectedKYCUser.kycVerifiedAt}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">基本信息</h3>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="space-y-1">
+                    <span className="text-gray-500 dark:text-gray-400">真实姓名</span>
+                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.kycRealName || '-'}</div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-gray-500 dark:text-gray-400">证件类型</span>
+                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.kycIdType || '-'}</div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-gray-500 dark:text-gray-400">证件号码</span>
+                    <div className="font-medium text-gray-900 dark:text-white font-mono">{selectedKYCUser.kycIdNumber || '-'}</div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-gray-500 dark:text-gray-400">国家/地区</span>
+                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.kycCountry || '-'}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">账户信息</h3>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="space-y-1">
+                    <span className="text-gray-500 dark:text-gray-400">用户ID</span>
+                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.userId}</div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-gray-500 dark:text-gray-400">用户名</span>
+                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.username}</div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-gray-500 dark:text-gray-400">手机号</span>
+                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.phone}</div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-gray-500 dark:text-gray-400">邮箱</span>
+                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.email}</div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-gray-500 dark:text-gray-400">注册时间</span>
+                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.registeredAt}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </SheetContent>
