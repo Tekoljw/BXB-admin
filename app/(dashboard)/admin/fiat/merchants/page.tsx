@@ -125,6 +125,8 @@ interface Merchant {
   status: "active" | "frozen" | "disabled"
   hasPendingDomain: boolean
   createdAt: string
+  lastLoginLocation?: string
+  lastLoginTime?: string
 }
 
 const mockMerchants: Merchant[] = [
