@@ -284,6 +284,7 @@ export default function UCardUsersPage() {
   const [selectedUser, setSelectedUser] = useState<UCardUser | null>(null)
   const [showDetailSheet, setShowDetailSheet] = useState(false)
   const [cardTypeTabInDetail, setCardTypeTabInDetail] = useState<'virtual' | 'physical'>('virtual')
+  const [cardsToShow, setCardsToShow] = useState(6)
 
   const isWithinDays = (dateStr: string, days: number) => {
     const date = new Date(dateStr)
@@ -338,7 +339,12 @@ export default function UCardUsersPage() {
   const viewUserDetail = (user: UCardUser) => {
     setSelectedUser(user)
     setCardTypeTabInDetail(user.virtualCardCount > 0 ? 'virtual' : 'physical')
+    setCardsToShow(6)
     setShowDetailSheet(true)
+  }
+
+  const loadMoreCards = () => {
+    setCardsToShow(prev => prev + 6)
   }
 
   const toggleCardStatus = (userId: string, cardId: string) => {
@@ -554,46 +560,68 @@ export default function UCardUsersPage() {
               </Tabs>
 
               {selectedUser.cards.filter(c => c.cardType === cardTypeTabInDetail).length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {selectedUser.cards
-                    .filter(card => card.cardType === cardTypeTabInDetail)
-                    .map((card) => (
-                      <div key={card.id} className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="font-mono text-sm font-bold text-gray-900 dark:text-white">
-                            {card.cardNumber}
-                          </span>
-                          <div className="flex items-center gap-2">
-                            <span className={`text-xs font-medium ${card.status === 'active' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                              {card.status === 'active' ? '激活' : '冻结'}
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {selectedUser.cards
+                      .filter(card => card.cardType === cardTypeTabInDetail)
+                      .slice(0, cardsToShow)
+                      .map((card) => (
+                        <div key={card.id} className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="font-mono text-sm font-bold text-gray-900 dark:text-white">
+                              {card.cardNumber}
                             </span>
-                            <Switch 
-                              checked={card.status === 'active'} 
-                              onCheckedChange={() => toggleCardStatus(selectedUser.id, card.id)}
-                            />
+                            <div className="flex items-center gap-2">
+                              <span className={`text-xs font-medium ${card.status === 'active' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                {card.status === 'active' ? '激活' : '冻结'}
+                              </span>
+                              <Switch 
+                                checked={card.status === 'active'} 
+                                onCheckedChange={() => toggleCardStatus(selectedUser.id, card.id)}
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-3">
+                            <div className="flex flex-wrap gap-2">
+                              <span className="px-2.5 py-1 text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded-md">
+                                {card.supplier}
+                              </span>
+                              <span className="px-2.5 py-1 text-xs font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 rounded-md">
+                                {card.network}
+                              </span>
+                              <span className="px-2.5 py-1 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-md">
+                                {card.currency}
+                              </span>
+                              {card.isPriority ? (
+                                <span className="px-2.5 py-1 text-xs font-medium bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 rounded-md">
+                                  优选卡
+                                </span>
+                              ) : (
+                                <span className="px-2.5 py-1 text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400 rounded-md">
+                                  非优选卡
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
+                              <span className="text-sm text-gray-500 dark:text-gray-400">余额</span>
+                              <span className="text-sm font-bold text-purple-600 dark:text-purple-400">{card.balance} USDT</span>
+                            </div>
                           </div>
                         </div>
-                        <div className="space-y-2 text-sm">
-                          <div className="flex items-center justify-between">
-                            <span className="text-gray-500 dark:text-gray-400">供应商</span>
-                            <span className="text-gray-900 dark:text-white font-medium">{card.supplier}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-gray-500 dark:text-gray-400">卡组织</span>
-                            <span className="text-gray-900 dark:text-white font-medium">{card.network}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-gray-500 dark:text-gray-400">币种</span>
-                            <span className="text-gray-900 dark:text-white font-medium">{card.currency}</span>
-                          </div>
-                          <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-                            <span className="text-gray-500 dark:text-gray-400">余额</span>
-                            <span className="font-bold text-purple-600 dark:text-purple-400">{card.balance} USDT</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                </div>
+                      ))}
+                  </div>
+                  {selectedUser.cards.filter(c => c.cardType === cardTypeTabInDetail).length > cardsToShow && (
+                    <div className="flex justify-center mt-4">
+                      <Button 
+                        variant="outline" 
+                        onClick={loadMoreCards}
+                        className="w-full max-w-md"
+                      >
+                        加载更多
+                      </Button>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="text-center py-12">
                   <p className="text-sm text-gray-500 dark:text-gray-400">暂无{cardTypeTabInDetail === 'virtual' ? '虚拟' : '实体'}卡</p>
