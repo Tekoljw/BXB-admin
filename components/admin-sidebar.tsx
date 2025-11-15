@@ -294,14 +294,55 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/orders/payment", icon: Banknote, label: "支付订单" },
   ],
   system: [
-    { path: "/admin/system/permissions", icon: Key, label: "权限管理" },
-    { path: "/admin/system/roles", icon: UserCog, label: "角色管理" },
-    { path: "/admin/system/users", icon: Users, label: "用户管理" },
-    { path: "/admin/system/audit-config", icon: Settings, label: "审核配置" },
-    { path: "/admin/system/app", icon: Settings, label: "APP管理" },
-    { path: "/admin/system/operations", icon: Settings, label: "运维管理" },
-    { path: "/admin/system/maintenance-plan", icon: Timer, label: "维护计划配置" },
-    { path: "/admin/system/maintenance-whitelist", icon: ClipboardCheck, label: "维护白名单管理" },
+    {
+      group: "用户管理",
+      icon: Users,
+      items: [
+        { path: "/admin/system/users", icon: Users, label: "用户管理" },
+        { path: "/admin/system/blacklist", icon: Ban, label: "黑名单管理" },
+        { path: "/admin/system/deleted-accounts", icon: Trash2, label: "已删除账户" },
+        { path: "/admin/system/user-behavior", icon: Activity, label: "用户行为" },
+        { path: "/admin/system/api-audit", icon: CheckCircle, label: "API审核" },
+        { path: "/admin/system/api-management", icon: Code, label: "API管理" },
+        { path: "/admin/system/sms-logs", icon: Phone, label: "短信日志" },
+        { path: "/admin/system/email-logs", icon: Mail, label: "邮箱日志" },
+        { path: "/admin/system/2fa-reset-audit", icon: Shield, label: "重置2FA审核" },
+        { path: "/admin/system/voice-logs", icon: Mic, label: "语音日志" },
+      ]
+    },
+    {
+      group: "特殊账户管理",
+      icon: UserCog,
+      items: [
+        { path: "/admin/system/account-types", icon: UserCog, label: "账户类型管理" },
+        { path: "/admin/system/special-accounts", icon: UserCheck, label: "特殊账户管理" },
+      ]
+    },
+    {
+      group: "实名认证",
+      icon: FileCheck,
+      items: [
+        { path: "/admin/system/kyc-audit", icon: FileCheck, label: "KYC审核" },
+        { path: "/admin/system/audit-history", icon: FileText, label: "审核历史" },
+      ]
+    },
+    {
+      group: "资金管理",
+      icon: Wallet,
+      items: [
+        { path: "/admin/system/user-assets", icon: Wallet, label: "用户资产" },
+        { path: "/admin/system/fund-records", icon: List, label: "资金记录" },
+        { path: "/admin/system/deposit-fast-track", icon: ArrowDownToLine, label: "充值速进" },
+        { path: "/admin/system/withdraw-fast-track", icon: ArrowUpFromLine, label: "提现速进" },
+        { path: "/admin/system/small-withdraw", icon: Coins, label: "小额快速提现" },
+        { path: "/admin/system/fund-freeze", icon: Lock, label: "资金冻结" },
+        { path: "/admin/system/deposit-records", icon: ArrowDownToLine, label: "充值记录" },
+        { path: "/admin/system/hot-wallet-balance", icon: Wallet, label: "热钱包余额" },
+        { path: "/admin/system/withdraw-records", icon: ArrowUpFromLine, label: "提现记录" },
+        { path: "/admin/system/deposit-credit-application", icon: FileCheck, label: "充值入账申请" },
+        { path: "/admin/system/withdraw-audit", icon: CheckCircle, label: "提现审核" },
+      ]
+    },
   ],
 }
 
