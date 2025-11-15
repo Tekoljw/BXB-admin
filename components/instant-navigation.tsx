@@ -17,6 +17,9 @@ import StaffManagementPage from "@/app/(dashboard)/admin/permissions/staff-manag
 import UserPermissionsPage from "@/app/(dashboard)/admin/permissions/user-permissions/page"
 import PermissionsSystemManagementPage from "@/app/(dashboard)/admin/permissions/system-management/page"
 import SystemLogsPage from "@/app/(dashboard)/admin/permissions/system-logs/page"
+import ManualCreditPage from "@/app/(dashboard)/admin/permissions/manual-credit/page"
+import ManualTransferPage from "@/app/(dashboard)/admin/permissions/manual-transfer/page"
+import LargeWithdrawalAuditPage from "@/app/(dashboard)/admin/permissions/large-withdrawal-audit/page"
 import RegistrationWhitelistPage from "@/app/(dashboard)/admin/marketing/registration-whitelist/page"
 import OperationsDashboardPage from "@/app/(dashboard)/admin/operations/dashboard/page"
 import OperationsActivitiesPage from "@/app/(dashboard)/admin/operations/activities/page"
@@ -34,9 +37,6 @@ import FinanceOrdersPage from "@/app/(dashboard)/admin/orders/finance/page"
 import UCardOrdersPage from "@/app/(dashboard)/admin/orders/ucard/page"
 import OrdersEscrowRecordsPage from "@/app/(dashboard)/admin/orders/escrow/page"
 import PaymentOrdersPage from "@/app/(dashboard)/admin/orders/payment/page"
-import ManualCreditPage from "@/app/(dashboard)/admin/orders/manual-credit/page"
-import ManualTransferPage from "@/app/(dashboard)/admin/orders/manual-transfer/page"
-import LargeWithdrawalAuditPage from "@/app/(dashboard)/admin/orders/large-withdrawal-audit/page"
 import IMAccountsPage from "@/app/(dashboard)/admin/im/accounts/page"
 import IMGroupsPage from "@/app/(dashboard)/admin/im/groups/page"
 import IMMessagesPage from "@/app/(dashboard)/admin/im/messages/page"
@@ -296,6 +296,9 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/permissions/user-permissions") return <UserPermissionsPage />
     if (currentPage === "/admin/permissions/system-management") return <PermissionsSystemManagementPage />
     if (currentPage === "/admin/permissions/system-logs") return <SystemLogsPage />
+    if (currentPage === "/admin/permissions/manual-credit") return <ManualCreditPage />
+    if (currentPage === "/admin/permissions/manual-transfer") return <ManualTransferPage />
+    if (currentPage === "/admin/permissions/large-withdrawal-audit") return <LargeWithdrawalAuditPage />
     if (currentPage === "/admin/marketing") return <RegistrationWhitelistPage />
     if (currentPage.startsWith("/admin/marketing/")) return <RegistrationWhitelistPage />
     if (currentPage === "/admin/operations") return <OperationsDashboardPage />
@@ -318,9 +321,6 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/orders/ucard") return <UCardOrdersPage />
     if (currentPage === "/admin/orders/escrow") return <OrdersEscrowRecordsPage />
     if (currentPage === "/admin/orders/payment") return <PaymentOrdersPage />
-    if (currentPage === "/admin/orders/manual-credit") return <ManualCreditPage />
-    if (currentPage === "/admin/orders/manual-transfer") return <ManualTransferPage />
-    if (currentPage === "/admin/orders/large-withdrawal-audit") return <LargeWithdrawalAuditPage />
     if (currentPage === "/admin/users") return <AllUsersPage />
     if (currentPage === "/admin/users/all") return <AllUsersPage />
     if (currentPage === "/admin/users/blacklist") return <BlacklistPage />
