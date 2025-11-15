@@ -81,7 +81,7 @@ interface AdminSidebarV2Props {
 
 // 定义菜单项类型
 type MenuItem = { path: string; icon: any; label: string }
-type MenuGroup = { group: string; items: MenuItem[] }
+type MenuGroup = { group: string; icon?: any; items: MenuItem[] }
 type MenuConfig = MenuItem[] | MenuGroup[]
 
 // 定义每个模块的二级菜单
@@ -107,6 +107,7 @@ const moduleMenus: Record<string, MenuConfig> = {
   marketing: [
     {
       group: "用户管理",
+      icon: Users,
       items: [
         { path: "/admin/marketing/registration-whitelist", icon: UserCheck, label: "注册白名单" },
         { path: "/admin/marketing/kyc-limits", icon: Lock, label: "KYC限额管理" },
@@ -115,6 +116,7 @@ const moduleMenus: Record<string, MenuConfig> = {
     },
     {
       group: "运营配置",
+      icon: Settings,
       items: [
         { path: "/admin/marketing/web-registration-ads", icon: Image, label: "WEB注册页广告" },
         { path: "/admin/marketing/country-region", icon: MapPin, label: "国家/地区管理" },
@@ -132,6 +134,7 @@ const moduleMenus: Record<string, MenuConfig> = {
     },
     {
       group: "内容管理",
+      icon: FileText,
       items: [
         { path: "/admin/marketing/email-content", icon: MailOpen, label: "邮件内容" },
         { path: "/admin/marketing/email-send", icon: Send, label: "邮件发送" },
@@ -144,6 +147,7 @@ const moduleMenus: Record<string, MenuConfig> = {
     },
     {
       group: "运营活动",
+      icon: Activity,
       items: [
         { path: "/admin/marketing/deduction-details", icon: Minus, label: "抵扣金明细" },
         { path: "/admin/marketing/trial-details", icon: Plus, label: "体验金明细" },
@@ -393,19 +397,21 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
               {(menuConfig as MenuGroup[]).map((group, index) => {
                 const isExpanded = expandedGroups[group.group]
                 const ChevronIcon = isExpanded ? ChevronDown : ChevronRight
+                const GroupIcon = group.icon
                 
                 return (
                   <div key={group.group}>
                     {/* 可点击的分组标题 */}
                     <button
                       onClick={() => toggleGroup(group.group)}
-                      className={`w-full flex items-center justify-between px-3 py-2 text-xs font-bold uppercase tracking-wider rounded-md transition-colors ${
+                      className={`w-full flex items-center gap-2 px-3 py-2.5 text-sm font-semibold rounded-md transition-colors ${
                         theme === 'dark' 
-                          ? 'text-gray-400 hover:bg-gray-700 hover:text-gray-300' 
-                          : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+                          ? 'text-gray-200 hover:bg-gray-700 hover:text-white' 
+                          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                       }`}
                     >
-                      <span>【{group.group}】</span>
+                      {GroupIcon && <GroupIcon className="w-4 h-4 flex-shrink-0" />}
+                      <span className="flex-1 text-left">{group.group}</span>
                       <ChevronIcon className="w-4 h-4 flex-shrink-0" />
                     </button>
                     
