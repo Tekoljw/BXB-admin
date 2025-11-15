@@ -154,8 +154,6 @@ interface CryptoUser {
   status: "active" | "frozen" | "disabled"
   hasPendingDomain: boolean
   createdAt: string
-  lastLoginLocation?: string
-  lastLoginTime?: string
 }
 
 const mockCryptoUsers: CryptoUser[] = [
@@ -307,9 +305,7 @@ const mockCryptoUsers: CryptoUser[] = [
     ],
     status: "frozen",
     hasPendingDomain: false,
-    createdAt: "2024-01-15 09:15:00",
-    lastLoginLocation: "北京市朝阳区",
-    lastLoginTime: "2024-11-15 09:30:00"
+    createdAt: "2024-01-15 09:15:00"
   },
   {
     id: "M004",
@@ -454,9 +450,7 @@ const mockCryptoUsers: CryptoUser[] = [
     ],
     status: "active",
     hasPendingDomain: false,
-    createdAt: "2024-01-08 16:45:00",
-    lastLoginLocation: "深圳市福田区",
-    lastLoginTime: "2024-11-14 14:25:00"
+    createdAt: "2024-01-08 16:45:00"
   },
   {
     id: "M005",
@@ -517,9 +511,7 @@ const mockCryptoUsers: CryptoUser[] = [
     feeConfigs: [],
     status: "active",
     hasPendingDomain: false,
-    createdAt: "2024-06-20 10:30:00",
-    lastLoginLocation: "广州市天河区",
-    lastLoginTime: "2024-11-13 16:45:00"
+    createdAt: "2024-06-20 10:30:00"
   },
   {
     id: "M006",
@@ -599,9 +591,7 @@ const mockCryptoUsers: CryptoUser[] = [
     ],
     status: "active",
     hasPendingDomain: true,
-    createdAt: "2024-03-12 11:45:00",
-    lastLoginLocation: "杭州市西湖区",
-    lastLoginTime: "2024-11-12 10:15:00"
+    createdAt: "2024-03-12 11:45:00"
   },
   {
     id: "M007",
@@ -692,9 +682,7 @@ const mockCryptoUsers: CryptoUser[] = [
     ],
     status: "active",
     hasPendingDomain: false,
-    createdAt: "2024-02-20 08:30:00",
-    lastLoginLocation: "上海市浦东新区",
-    lastLoginTime: "2024-11-11 08:50:00"
+    createdAt: "2024-02-20 08:30:00"
   },
   {
     id: "M008",
@@ -755,9 +743,7 @@ const mockCryptoUsers: CryptoUser[] = [
     feeConfigs: [],
     status: "active",
     hasPendingDomain: false,
-    createdAt: "2024-06-01 09:00:00",
-    lastLoginLocation: "成都市高新区",
-    lastLoginTime: "2024-11-10 13:30:00"
+    createdAt: "2024-06-01 09:00:00"
   },
   {
     id: "M009",
@@ -834,9 +820,7 @@ const mockCryptoUsers: CryptoUser[] = [
     ],
     status: "frozen",
     hasPendingDomain: false,
-    createdAt: "2024-04-05 13:15:00",
-    lastLoginLocation: "南京市鼓楼区",
-    lastLoginTime: "2024-11-14 17:20:00"
+    createdAt: "2024-04-05 13:15:00"
   },
   {
     id: "M010",
@@ -897,9 +881,7 @@ const mockCryptoUsers: CryptoUser[] = [
     feeConfigs: [],
     status: "disabled",
     hasPendingDomain: false,
-    createdAt: "2024-06-25 16:00:00",
-    lastLoginLocation: "武汉市江汉区",
-    lastLoginTime: "2024-11-15 11:05:00"
+    createdAt: "2024-06-25 16:00:00"
   },
 ]
 
@@ -1438,9 +1420,6 @@ export default function CryptoUsersPage() {
                   联系方式
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  最近登录
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   账户余额
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -1475,14 +1454,6 @@ export default function CryptoUsersPage() {
                   <td className="px-4 py-3 text-sm">
                     <div className="text-gray-900 dark:text-gray-300">{user.email}</div>
                     <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{user.phone}</div>
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="text-gray-900 dark:text-white text-xs">
-                      {user.lastLoginLocation || '-'}
-                    </div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">
-                      {user.lastLoginTime || '-'}
-                    </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <button
