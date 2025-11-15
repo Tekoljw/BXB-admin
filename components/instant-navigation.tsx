@@ -17,7 +17,7 @@ import StaffManagementPage from "@/app/(dashboard)/admin/permissions/staff-manag
 import UserPermissionsPage from "@/app/(dashboard)/admin/permissions/user-permissions/page"
 import PermissionsSystemManagementPage from "@/app/(dashboard)/admin/permissions/system-management/page"
 import SystemLogsPage from "@/app/(dashboard)/admin/permissions/system-logs/page"
-import RegistrationWhitelistPage from "@/app/(dashboard)/admin/operations/registration-whitelist/page"
+import RegistrationWhitelistPage from "@/app/(dashboard)/admin/marketing/registration-whitelist/page"
 import FundsRecordsPage from "@/app/(dashboard)/admin/orders/funds/page"
 import USDTRecordsPage from "@/app/(dashboard)/admin/orders/usdt/page"
 import AdminSpotOrdersPage from "@/app/(dashboard)/admin/orders/spot/page"
@@ -116,6 +116,7 @@ export default function InstantNavigation() {
   // 根据路径确定当前模块
   const getModuleFromPath = (path: string): string => {
     if (path.startsWith('/admin/permissions')) return 'permissions'
+    if (path.startsWith('/admin/marketing')) return 'marketing'
     if (path.startsWith('/admin/operations')) return 'operations'
     if (path.startsWith('/admin/users')) return 'users'
     if (path.startsWith('/admin/im')) return 'im'
@@ -133,6 +134,7 @@ export default function InstantNavigation() {
     if (path.startsWith('/admin/orders')) return 'orders'
     if (path.startsWith('/admin/options')) return 'options'
     if (path.startsWith('/admin/system')) return 'system'
+    if (path.startsWith('/admin/maintenance')) return 'maintenance'
     return 'permissions'
   }
 
@@ -140,7 +142,8 @@ export default function InstantNavigation() {
   const getModuleDefaultPath = (module: string): string => {
     const defaults: Record<string, string> = {
       permissions: '/admin/permissions/business-lines',
-      operations: '/admin/operations/registration-whitelist',
+      marketing: '/admin/marketing/registration-whitelist',
+      operations: '/admin/operations/dashboard',
       users: '/admin/users/all',
       im: '/admin/im/accounts',
       social: '/admin/social',
@@ -157,6 +160,7 @@ export default function InstantNavigation() {
       orders: '/admin/orders/funds',
       options: '/admin/options',
       system: '/admin/system/permissions',
+      maintenance: '/admin/maintenance/plan',
     }
     return defaults[module] || '/admin/permissions/business-lines'
   }
@@ -238,6 +242,7 @@ export default function InstantNavigation() {
   const getModuleName = (moduleId: string): string => {
     const names: Record<string, string> = {
       permissions: '权限管理',
+      marketing: '运营管理',
       operations: '运营报表',
       users: '用户管理',
       im: 'IM管理',
@@ -279,8 +284,8 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/permissions/user-permissions") return <UserPermissionsPage />
     if (currentPage === "/admin/permissions/system-management") return <PermissionsSystemManagementPage />
     if (currentPage === "/admin/permissions/system-logs") return <SystemLogsPage />
-    if (currentPage === "/admin/operations") return <RegistrationWhitelistPage />
-    if (currentPage.startsWith("/admin/operations/")) return <RegistrationWhitelistPage />
+    if (currentPage === "/admin/marketing") return <RegistrationWhitelistPage />
+    if (currentPage.startsWith("/admin/marketing/")) return <RegistrationWhitelistPage />
     if (currentPage === "/admin/orders") return <FundsRecordsPage />
     if (currentPage === "/admin/orders/funds") return <FundsRecordsPage />
     if (currentPage === "/admin/orders/usdt") return <USDTRecordsPage />
