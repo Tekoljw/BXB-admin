@@ -18,6 +18,7 @@ import UserPermissionsPage from "@/app/(dashboard)/admin/permissions/user-permis
 import PermissionsSystemManagementPage from "@/app/(dashboard)/admin/permissions/system-management/page"
 import SystemLogsPage from "@/app/(dashboard)/admin/permissions/system-logs/page"
 import RegistrationWhitelistPage from "@/app/(dashboard)/admin/marketing/registration-whitelist/page"
+import OperationsDashboardPage from "@/app/(dashboard)/admin/operations/dashboard/page"
 import FundsRecordsPage from "@/app/(dashboard)/admin/orders/funds/page"
 import USDTRecordsPage from "@/app/(dashboard)/admin/orders/usdt/page"
 import AdminSpotOrdersPage from "@/app/(dashboard)/admin/orders/spot/page"
@@ -286,6 +287,9 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/permissions/system-logs") return <SystemLogsPage />
     if (currentPage === "/admin/marketing") return <RegistrationWhitelistPage />
     if (currentPage.startsWith("/admin/marketing/")) return <RegistrationWhitelistPage />
+    if (currentPage === "/admin/operations") return <OperationsDashboardPage />
+    if (currentPage === "/admin/operations/dashboard") return <OperationsDashboardPage />
+    if (currentPage.startsWith("/admin/operations/")) return <OperationsDashboardPage />
     if (currentPage === "/admin/orders") return <FundsRecordsPage />
     if (currentPage === "/admin/orders/funds") return <FundsRecordsPage />
     if (currentPage === "/admin/orders/usdt") return <USDTRecordsPage />
