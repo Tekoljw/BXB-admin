@@ -30,6 +30,7 @@ import OperationsRetentionPage from "@/app/(dashboard)/admin/operations/retentio
 import OperationsRiskPage from "@/app/(dashboard)/admin/operations/risk/page"
 import MarketConfigPage from "@/app/(dashboard)/admin/operations/market-config/page"
 import BusinessOverviewPage from "@/app/(dashboard)/admin/orders/business-overview/page"
+import UCardAssetsPage from "@/app/(dashboard)/admin/orders/ucard-assets/page"
 import IMAccountsPage from "@/app/(dashboard)/admin/im/accounts/page"
 import IMGroupsPage from "@/app/(dashboard)/admin/im/groups/page"
 import IMMessagesPage from "@/app/(dashboard)/admin/im/messages/page"
@@ -307,6 +308,7 @@ export default function InstantNavigation() {
     if (currentPage.startsWith("/admin/operations/")) return <OperationsDashboardPage />
     if (currentPage === "/admin/orders") return <BusinessOverviewPage />
     if (currentPage === "/admin/orders/business-overview") return <BusinessOverviewPage />
+    if (currentPage === "/admin/orders/ucard-assets") return <UCardAssetsPage />
     if (currentPage === "/admin/users") return <AllUsersPage />
     if (currentPage === "/admin/users/all") return <AllUsersPage />
     if (currentPage === "/admin/users/blacklist") return <BlacklistPage />
