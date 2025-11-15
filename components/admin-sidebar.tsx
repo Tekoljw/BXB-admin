@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
 import {
   BarChart3,
@@ -69,6 +69,8 @@ import {
   Plus,
   Gift,
   Ticket,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react"
 
 interface AdminSidebarV2Props {
@@ -283,6 +285,30 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
   
   // 检查是否为分组菜单
   const isGroupedMenu = menuConfig.length > 0 && 'group' in menuConfig[0]
+  
+  // 管理分组的展开/收起状态，默认全部展开
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
+  
+  // 当切换模块时，重新初始化展开状态
+  useEffect(() => {
+    if (isGroupedMenu) {
+      const initialState: Record<string, boolean> = {}
+      ;(menuConfig as MenuGroup[]).forEach(group => {
+        initialState[group.group] = true // 默认全部展开
+      })
+      setExpandedGroups(initialState)
+    } else {
+      setExpandedGroups({})
+    }
+  }, [currentModule, isGroupedMenu, menuConfig])
+  
+  // 切换分组展开/收起
+  const toggleGroup = (groupName: string) => {
+    setExpandedGroups(prev => ({
+      ...prev,
+      [groupName]: !prev[groupName]
+    }))
+  }
 
   const handleNavigate = (path: string) => {
     onNavigate(path)
@@ -363,21 +389,35 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
         <div className="flex-1 overflow-y-auto py-4">
           {isGroupedMenu ? (
             // 分组菜单渲染
-            <nav className="space-y-4 px-3">
-              {(menuConfig as MenuGroup[]).map((group, index) => (
-                <div key={group.group}>
-                  {/* 分组标题 */}
-                  <div className={`px-3 py-2 text-xs font-bold uppercase tracking-wider ${
-                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                  }`}>
-                    【{group.group}】
+            <nav className="space-y-3 px-3">
+              {(menuConfig as MenuGroup[]).map((group, index) => {
+                const isExpanded = expandedGroups[group.group]
+                const ChevronIcon = isExpanded ? ChevronDown : ChevronRight
+                
+                return (
+                  <div key={group.group}>
+                    {/* 可点击的分组标题 */}
+                    <button
+                      onClick={() => toggleGroup(group.group)}
+                      className={`w-full flex items-center justify-between px-3 py-2 text-xs font-bold uppercase tracking-wider rounded-md transition-colors ${
+                        theme === 'dark' 
+                          ? 'text-gray-400 hover:bg-gray-700 hover:text-gray-300' 
+                          : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+                      }`}
+                    >
+                      <span>【{group.group}】</span>
+                      <ChevronIcon className="w-4 h-4 flex-shrink-0" />
+                    </button>
+                    
+                    {/* 分组菜单项 - 可折叠 */}
+                    {isExpanded && (
+                      <div className="space-y-1 mt-2 animate-in slide-in-from-top-2 duration-200">
+                        {group.items.map(item => renderMenuItem(item))}
+                      </div>
+                    )}
                   </div>
-                  {/* 分组菜单项 */}
-                  <div className="space-y-1 mt-2">
-                    {group.items.map(item => renderMenuItem(item))}
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </nav>
           ) : (
             // 平面菜单渲染
