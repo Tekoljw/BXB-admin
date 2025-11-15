@@ -288,14 +288,6 @@ const moduleMenus: Record<string, MenuConfig> = {
   orders: [
     { path: "/admin/orders/crypto-assets", icon: BarChart3, label: "Crypto资产管理" },
     { path: "/admin/orders/fiat-assets", icon: BarChart3, label: "法币资产管理" },
-    { path: "/admin/orders/funds", icon: Wallet, label: "资金记录" },
-    { path: "/admin/orders/usdt", icon: DollarSign, label: "USDT买卖记录" },
-    { path: "/admin/orders/spot", icon: TrendingUp, label: "现货订单" },
-    { path: "/admin/orders/futures", icon: TrendingDown, label: "合约订单" },
-    { path: "/admin/orders/finance", icon: PiggyBank, label: "理财订单" },
-    { path: "/admin/orders/ucard", icon: CreditCard, label: "U卡订单" },
-    { path: "/admin/orders/escrow", icon: Shield, label: "担保记录" },
-    { path: "/admin/orders/payment", icon: Banknote, label: "支付订单" },
   ],
   system: [
     {

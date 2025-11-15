@@ -29,14 +29,6 @@ import OperationsOrdersPage from "@/app/(dashboard)/admin/operations/orders/page
 import OperationsRetentionPage from "@/app/(dashboard)/admin/operations/retention/page"
 import OperationsRiskPage from "@/app/(dashboard)/admin/operations/risk/page"
 import MarketConfigPage from "@/app/(dashboard)/admin/operations/market-config/page"
-import FundsRecordsPage from "@/app/(dashboard)/admin/orders/funds/page"
-import USDTRecordsPage from "@/app/(dashboard)/admin/orders/usdt/page"
-import AdminSpotOrdersPage from "@/app/(dashboard)/admin/orders/spot/page"
-import FuturesOrdersPage from "@/app/(dashboard)/admin/orders/futures/page"
-import FinanceOrdersPage from "@/app/(dashboard)/admin/orders/finance/page"
-import UCardOrdersPage from "@/app/(dashboard)/admin/orders/ucard/page"
-import OrdersEscrowRecordsPage from "@/app/(dashboard)/admin/orders/escrow/page"
-import PaymentOrdersPage from "@/app/(dashboard)/admin/orders/payment/page"
 import IMAccountsPage from "@/app/(dashboard)/admin/im/accounts/page"
 import IMGroupsPage from "@/app/(dashboard)/admin/im/groups/page"
 import IMMessagesPage from "@/app/(dashboard)/admin/im/messages/page"
@@ -312,15 +304,6 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/operations/market-config") return <MarketConfigPage />
     // 后备路由：处理未来可能添加的operations子页面
     if (currentPage.startsWith("/admin/operations/")) return <OperationsDashboardPage />
-    if (currentPage === "/admin/orders") return <FundsRecordsPage />
-    if (currentPage === "/admin/orders/funds") return <FundsRecordsPage />
-    if (currentPage === "/admin/orders/usdt") return <USDTRecordsPage />
-    if (currentPage === "/admin/orders/spot") return <AdminSpotOrdersPage />
-    if (currentPage === "/admin/orders/futures") return <FuturesOrdersPage />
-    if (currentPage === "/admin/orders/finance") return <FinanceOrdersPage />
-    if (currentPage === "/admin/orders/ucard") return <UCardOrdersPage />
-    if (currentPage === "/admin/orders/escrow") return <OrdersEscrowRecordsPage />
-    if (currentPage === "/admin/orders/payment") return <PaymentOrdersPage />
     if (currentPage === "/admin/users") return <AllUsersPage />
     if (currentPage === "/admin/users/all") return <AllUsersPage />
     if (currentPage === "/admin/users/blacklist") return <BlacklistPage />
