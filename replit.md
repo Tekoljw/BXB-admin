@@ -25,8 +25,19 @@ Preferred communication style: Simple, everyday Chinese language.
     - **财务模块（orders）**: 包含财务经营报表（路径：`/admin/orders/business-overview`，展示各业务模块收入、成本、利润汇总）、Crypto资产管理（路径：`/admin/orders/crypto-assets`）、法币资产管理（路径：`/admin/orders/fiat-assets`）和U卡资产管理（路径：`/admin/orders/ucard-assets`，展示U卡总资产、供应商资产分布、卡片统计）四个子页面。点击顶部财务按钮默认打开财务经营报表。
     - **U卡管理**: 包含用户、供应商、基础配置、号段、开卡记录、U卡划转兑换（路径：`/admin/ucard/recharge-records`）、消费记录等功能。注：U卡账户划转记录已删除。
     - **C2C模块**: 包含C2C管理、C2C订单、法币快捷配置、法币快捷订单、OTC配置、OTC订单等子页面。
-    - **法币模块**: 包含经营报表、法币用户管理、币种管理、供应商管理、接口管理、通道管理、代理商管理、代收订单、代付订单、兑换订单等子模块。
+    - **法币模块**: 包含经营报表、法币用户管理、币种管理（支持inline编辑排序）、供应商管理、接口管理、通道管理、代理商管理、代收订单、代付订单、兑换订单等子模块。
     - **佣金模块**: 包含支付佣金和U卡佣金，采用推广员排行榜设计，支持多维度排名和法币币种筛选。
+
+## Recent Changes
+
+### 2025-11-15: 法币币种管理排序功能
+- **币种管理排序**: 在法币币种管理页面添加了"排序"列，支持inline编辑排序值，点击数字即可进入编辑模式
+- **排序功能特性**: 
+  - 支持点击编辑、Enter保存、Escape取消
+  - 新增币种自动分配下一个排序值
+  - 列表自动按sortOrder升序排列
+  - 编辑时预填充当前值，取消时正确清理状态
+- **登录界面优化**: 删除了演示账号提示信息，提升专业性
 
 ### Technical Implementations
 - **Frontend**: Next.js 15 (App Router), Tailwind CSS, shadcn/ui, React Context API, Recharts, Lucide React, internationalization。
