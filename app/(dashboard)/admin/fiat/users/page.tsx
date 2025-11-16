@@ -7,6 +7,15 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { UserDetailDrawer } from "@/components/admin/user-detail-drawer"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 interface FiatUser {
   id: string
@@ -35,6 +44,15 @@ interface FiatUser {
   monthlyProfit: string
   totalProfit: string
   complianceStatus: 'normal' | 'warning' | 'restricted'
+  cnyMerchantBalance: string
+  usdMerchantBalance: string
+  eurMerchantBalance: string
+  cnyPayoutBalance: string
+  usdPayoutBalance: string
+  eurPayoutBalance: string
+  cnyFrozenAmount: string
+  usdFrozenAmount: string
+  eurFrozenAmount: string
 }
 
 export default function FiatUsersPage() {
@@ -77,6 +95,15 @@ export default function FiatUsersPage() {
       monthlyProfit: '3,456.78',
       totalProfit: '25,678.90',
       complianceStatus: 'normal',
+      cnyMerchantBalance: '500,000.00',
+      usdMerchantBalance: '50,000.00',
+      eurMerchantBalance: '20,000.00',
+      cnyPayoutBalance: '200,000.00',
+      usdPayoutBalance: '20,000.00',
+      eurPayoutBalance: '8,000.00',
+      cnyFrozenAmount: '10,000.00',
+      usdFrozenAmount: '1,000.00',
+      eurFrozenAmount: '500.00',
     },
     {
       id: '2',
@@ -100,6 +127,15 @@ export default function FiatUsersPage() {
       monthlyProfit: '2,123.45',
       totalProfit: '15,678.90',
       complianceStatus: 'normal',
+      cnyMerchantBalance: '300,000.00',
+      usdMerchantBalance: '30,000.00',
+      eurMerchantBalance: '12,000.00',
+      cnyPayoutBalance: '150,000.00',
+      usdPayoutBalance: '15,000.00',
+      eurPayoutBalance: '6,000.00',
+      cnyFrozenAmount: '5,000.00',
+      usdFrozenAmount: '500.00',
+      eurFrozenAmount: '200.00',
     },
     {
       id: '3',
@@ -123,6 +159,15 @@ export default function FiatUsersPage() {
       monthlyProfit: '6,789.01',
       totalProfit: '45,678.90',
       complianceStatus: 'warning',
+      cnyMerchantBalance: '800,000.00',
+      usdMerchantBalance: '80,000.00',
+      eurMerchantBalance: '30,000.00',
+      cnyPayoutBalance: '400,000.00',
+      usdPayoutBalance: '40,000.00',
+      eurPayoutBalance: '15,000.00',
+      cnyFrozenAmount: '20,000.00',
+      usdFrozenAmount: '2,000.00',
+      eurFrozenAmount: '1,000.00',
     },
     {
       id: '4',
@@ -146,6 +191,15 @@ export default function FiatUsersPage() {
       monthlyProfit: '567.89',
       totalProfit: '2,345.67',
       complianceStatus: 'normal',
+      cnyMerchantBalance: '100,000.00',
+      usdMerchantBalance: '10,000.00',
+      eurMerchantBalance: '4,000.00',
+      cnyPayoutBalance: '50,000.00',
+      usdPayoutBalance: '5,000.00',
+      eurPayoutBalance: '2,000.00',
+      cnyFrozenAmount: '0.00',
+      usdFrozenAmount: '0.00',
+      eurFrozenAmount: '0.00',
     },
     {
       id: '5',
@@ -169,6 +223,15 @@ export default function FiatUsersPage() {
       monthlyProfit: '1,234.56',
       totalProfit: '8,900.00',
       complianceStatus: 'normal',
+      cnyMerchantBalance: '250,000.00',
+      usdMerchantBalance: '25,000.00',
+      eurMerchantBalance: '10,000.00',
+      cnyPayoutBalance: '100,000.00',
+      usdPayoutBalance: '10,000.00',
+      eurPayoutBalance: '4,000.00',
+      cnyFrozenAmount: '2,000.00',
+      usdFrozenAmount: '200.00',
+      eurFrozenAmount: '100.00',
     },
   ])
 
@@ -179,6 +242,13 @@ export default function FiatUsersPage() {
   const [selectedUserForDetail, setSelectedUserForDetail] = useState<FiatUser | null>(null)
   const [showKYCSheet, setShowKYCSheet] = useState(false)
   const [selectedKYCUser, setSelectedKYCUser] = useState<FiatUser | null>(null)
+  const [showFreezeDialog, setShowFreezeDialog] = useState(false)
+  const [selectedFreezeUser, setSelectedFreezeUser] = useState<FiatUser | null>(null)
+  const [freezeAmounts, setFreezeAmounts] = useState({
+    cny: '',
+    usd: '',
+    eur: ''
+  })
 
   const isWithinDays = (dateStr: string, days: number) => {
     const date = new Date(dateStr)
@@ -240,6 +310,32 @@ export default function FiatUsersPage() {
         return <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 rounded-full">限制</span>
       default:
         return null
+    }
+  }
+
+  const openFreezeDialog = (user: FiatUser) => {
+    setSelectedFreezeUser(user)
+    setFreezeAmounts({
+      cny: user.cnyFrozenAmount,
+      usd: user.usdFrozenAmount,
+      eur: user.eurFrozenAmount
+    })
+    setShowFreezeDialog(true)
+  }
+
+  const handleFreezeSubmit = () => {
+    if (selectedFreezeUser) {
+      setUsers(users.map(u => 
+        u.id === selectedFreezeUser.id
+          ? {
+              ...u,
+              cnyFrozenAmount: freezeAmounts.cny,
+              usdFrozenAmount: freezeAmounts.usd,
+              eurFrozenAmount: freezeAmounts.eur
+            }
+          : u
+      ))
+      setShowFreezeDialog(false)
     }
   }
 
@@ -397,14 +493,24 @@ export default function FiatUsersPage() {
                       {getComplianceStatusBadge(user.complianceStatus)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <Button
-                        onClick={() => openUserDetailDrawer(user)}
-                        variant="ghost"
-                        size="sm"
-                        className="text-custom-green hover:text-custom-green/80"
-                      >
-                        查看
-                      </Button>
+                      <div className="flex gap-2 justify-center">
+                        <Button
+                          onClick={() => openUserDetailDrawer(user)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-custom-green hover:text-custom-green/80"
+                        >
+                          查看
+                        </Button>
+                        <Button
+                          onClick={() => openFreezeDialog(user)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-500"
+                        >
+                          冻结
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -498,6 +604,131 @@ export default function FiatUsersPage() {
           )
         }
       />
+
+      <Dialog open={showFreezeDialog} onOpenChange={setShowFreezeDialog}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl">资金冻结管理</DialogTitle>
+            <DialogDescription>
+              用户：{selectedFreezeUser?.username} ({selectedFreezeUser?.userId})
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedFreezeUser && (
+            <div className="space-y-6 py-4">
+              <div className="space-y-4">
+                <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                  <h3 className="text-base font-semibold text-red-900 dark:text-red-100 mb-3 flex items-center gap-2">
+                    <span className="text-lg">CNY</span>
+                    <span className="text-sm font-normal text-red-600 dark:text-red-400">人民币</span>
+                  </h3>
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div>
+                      <Label className="text-xs text-red-700 dark:text-red-300">商户资产余额</Label>
+                      <div className="text-lg font-semibold text-red-900 dark:text-red-100 mt-1">
+                        {selectedFreezeUser.cnyMerchantBalance}
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-red-700 dark:text-red-300">代付金余额</Label>
+                      <div className="text-lg font-semibold text-red-900 dark:text-red-100 mt-1">
+                        {selectedFreezeUser.cnyPayoutBalance}
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-red-700 dark:text-red-300">当前冻结金额</Label>
+                      <Input
+                        type="text"
+                        value={freezeAmounts.cny}
+                        onChange={(e) => setFreezeAmounts({...freezeAmounts, cny: e.target.value})}
+                        className="mt-1 font-semibold"
+                        placeholder="0.00"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                  <h3 className="text-base font-semibold text-green-900 dark:text-green-100 mb-3 flex items-center gap-2">
+                    <span className="text-lg">USD</span>
+                    <span className="text-sm font-normal text-green-600 dark:text-green-400">美元</span>
+                  </h3>
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div>
+                      <Label className="text-xs text-green-700 dark:text-green-300">商户资产余额</Label>
+                      <div className="text-lg font-semibold text-green-900 dark:text-green-100 mt-1">
+                        {selectedFreezeUser.usdMerchantBalance}
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-green-700 dark:text-green-300">代付金余额</Label>
+                      <div className="text-lg font-semibold text-green-900 dark:text-green-100 mt-1">
+                        {selectedFreezeUser.usdPayoutBalance}
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-green-700 dark:text-green-300">当前冻结金额</Label>
+                      <Input
+                        type="text"
+                        value={freezeAmounts.usd}
+                        onChange={(e) => setFreezeAmounts({...freezeAmounts, usd: e.target.value})}
+                        className="mt-1 font-semibold"
+                        placeholder="0.00"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <h3 className="text-base font-semibold text-blue-900 dark:text-blue-100 mb-3 flex items-center gap-2">
+                    <span className="text-lg">EUR</span>
+                    <span className="text-sm font-normal text-blue-600 dark:text-blue-400">欧元</span>
+                  </h3>
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div>
+                      <Label className="text-xs text-blue-700 dark:text-blue-300">商户资产余额</Label>
+                      <div className="text-lg font-semibold text-blue-900 dark:text-blue-100 mt-1">
+                        {selectedFreezeUser.eurMerchantBalance}
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-blue-700 dark:text-blue-300">代付金余额</Label>
+                      <div className="text-lg font-semibold text-blue-900 dark:text-blue-100 mt-1">
+                        {selectedFreezeUser.eurPayoutBalance}
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-blue-700 dark:text-blue-300">当前冻结金额</Label>
+                      <Input
+                        type="text"
+                        value={freezeAmounts.eur}
+                        onChange={(e) => setFreezeAmounts({...freezeAmounts, eur: e.target.value})}
+                        className="mt-1 font-semibold"
+                        placeholder="0.00"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t dark:border-gray-700">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowFreezeDialog(false)}
+                >
+                  取消
+                </Button>
+                <Button
+                  onClick={handleFreezeSubmit}
+                  className="bg-custom-green hover:bg-custom-green/90"
+                >
+                  确认冻结
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
