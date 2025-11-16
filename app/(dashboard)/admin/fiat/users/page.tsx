@@ -536,26 +536,55 @@ export default function FiatUsersPage() {
         moduleSpecificContent={
           selectedUserForDetail && (
             <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 space-y-4">
-              <h3 className="font-semibold text-gray-900 dark:text-white">法币账户信息</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-gray-900 dark:text-white">法币账户信息</h3>
+                <button
+                  onClick={() => {
+                    setShowUserDetailDrawer(false)
+                    openFreezeDialog(selectedUserForDetail)
+                  }}
+                  className="text-xs text-custom-green hover:text-custom-green/80 hover:underline"
+                >
+                  管理冻结金额
+                </button>
+              </div>
               <div className="grid grid-cols-2 gap-4">
-                <div>
+                <button
+                  onClick={() => {
+                    setShowUserDetailDrawer(false)
+                    openFreezeDialog(selectedUserForDetail)
+                  }}
+                  className="text-left hover:bg-gray-100 dark:hover:bg-gray-800 rounded p-2 transition-colors"
+                >
                   <p className="text-xs text-gray-500 dark:text-gray-400">CNY余额</p>
-                  <p className="text-sm font-medium text-red-600 dark:text-red-400 mt-1">
+                  <p className="text-sm font-medium text-red-600 dark:text-red-400 mt-1 hover:underline">
                     {selectedUserForDetail.cnyBalance}
                   </p>
-                </div>
-                <div>
+                </button>
+                <button
+                  onClick={() => {
+                    setShowUserDetailDrawer(false)
+                    openFreezeDialog(selectedUserForDetail)
+                  }}
+                  className="text-left hover:bg-gray-100 dark:hover:bg-gray-800 rounded p-2 transition-colors"
+                >
                   <p className="text-xs text-gray-500 dark:text-gray-400">USD余额</p>
-                  <p className="text-sm font-medium text-green-600 dark:text-green-400 mt-1">
+                  <p className="text-sm font-medium text-green-600 dark:text-green-400 mt-1 hover:underline">
                     {selectedUserForDetail.usdBalance}
                   </p>
-                </div>
-                <div>
+                </button>
+                <button
+                  onClick={() => {
+                    setShowUserDetailDrawer(false)
+                    openFreezeDialog(selectedUserForDetail)
+                  }}
+                  className="text-left hover:bg-gray-100 dark:hover:bg-gray-800 rounded p-2 transition-colors"
+                >
                   <p className="text-xs text-gray-500 dark:text-gray-400">EUR余额</p>
-                  <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mt-1">
+                  <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mt-1 hover:underline">
                     {selectedUserForDetail.eurBalance}
                   </p>
-                </div>
+                </button>
                 <div>
                   <p className="text-xs text-gray-500 dark:text-gray-400">结算币种</p>
                   <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
