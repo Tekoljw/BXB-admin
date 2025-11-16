@@ -460,15 +460,20 @@ export default function FiatUsersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <div className="text-xs font-medium text-red-600 dark:text-red-400">
-                        CNY: {user.cnyBalance}
-                      </div>
-                      <div className="text-xs font-medium text-green-600 dark:text-green-400">
-                        USD: {user.usdBalance}
-                      </div>
-                      <div className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                        EUR: {user.eurBalance}
-                      </div>
+                      <button
+                        onClick={() => openFreezeDialog(user)}
+                        className="text-right hover:bg-gray-100 dark:hover:bg-gray-800 rounded px-2 py-1 -mx-2 -my-1 transition-colors w-full"
+                      >
+                        <div className="text-xs font-medium text-red-600 dark:text-red-400 hover:underline cursor-pointer">
+                          CNY: {user.cnyBalance}
+                        </div>
+                        <div className="text-xs font-medium text-green-600 dark:text-green-400 hover:underline cursor-pointer">
+                          USD: {user.usdBalance}
+                        </div>
+                        <div className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
+                          EUR: {user.eurBalance}
+                        </div>
+                      </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <div className="text-xs text-green-600 dark:text-green-400">
