@@ -339,12 +339,19 @@ export default function FiatUsersPage() {
     }
   }
 
+  console.log('法币用户管理页面渲染', { 
+    usersCount: users.length, 
+    filteredCount: filteredAndSortedUsers.length,
+    activityTab,
+    searchTerm 
+  })
+
   return (
     <div className="p-6 space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">法币用户管理</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          管理平台所有法币用户的基本信息和交易情况
+          管理平台所有法币用户的基本信息和交易情况（共{users.length}个用户，显示{filteredAndSortedUsers.length}个）
         </p>
       </div>
 
