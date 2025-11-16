@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCircle, XCircle } from 'lucide-react'
+import { CheckCircle, XCircle, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { UserDetailDrawer } from "@/components/admin/user-detail-drawer"
+import { AuthorizationDrawer } from "@/components/admin/authorization-drawer"
 
 interface FiatUser {
   id: string
@@ -35,6 +36,17 @@ interface FiatUser {
   monthlyProfit: string
   totalProfit: string
   complianceStatus: 'normal' | 'warning' | 'restricted'
+}
+
+interface AuthorizedUser {
+  id: string
+  userId: string
+  username: string
+  phone: string
+  email: string
+  authorizedAt: string
+  authorizedLocation?: string
+  permissions: string[]
 }
 
 export default function FiatUsersPage() {
@@ -179,6 +191,51 @@ export default function FiatUsersPage() {
   const [selectedUserForDetail, setSelectedUserForDetail] = useState<FiatUser | null>(null)
   const [showKYCSheet, setShowKYCSheet] = useState(false)
   const [selectedKYCUser, setSelectedKYCUser] = useState<FiatUser | null>(null)
+  const [showAuthorizationDrawer, setShowAuthorizationDrawer] = useState(false)
+  const [selectedAuthUser, setSelectedAuthUser] = useState<FiatUser | null>(null)
+
+  // 模拟授权用户数据 - 实际应从后端API获取
+  const getAuthorizedUsers = (userId: string): AuthorizedUser[] => {
+    // 为第一个用户添加授权数据
+    if (userId === 'F123456') {
+      return [
+        {
+          id: 'auth1',
+          userId: 'F789012',
+          username: '李四',
+          phone: '139****9999',
+          email: 'lisi***@gmail.com',
+          authorizedAt: '2024-10-15 14:30:00',
+          authorizedLocation: '北京市朝阳区',
+          permissions: ['查看余额', '发起代收', '发起代付', '查看订单']
+        },
+        {
+          id: 'auth2',
+          userId: 'F345678',
+          username: '王五',
+          phone: '136****7777',
+          email: 'wangwu***@gmail.com',
+          authorizedAt: '2024-09-20 10:15:00',
+          authorizedLocation: '上海市浦东新区',
+          permissions: ['查看余额', '查看订单']
+        }
+      ]
+    } else if (userId === 'F234567') {
+      return [
+        {
+          id: 'auth3',
+          userId: 'F456789',
+          username: '赵六',
+          phone: '137****6666',
+          email: 'zhaoliu***@gmail.com',
+          authorizedAt: '2024-11-01 16:20:00',
+          authorizedLocation: '深圳市福田区',
+          permissions: ['查看余额', '发起代收']
+        }
+      ]
+    }
+    return []
+  }
 
   const isWithinDays = (dateStr: string, days: number) => {
     const date = new Date(dateStr)
@@ -228,6 +285,11 @@ export default function FiatUsersPage() {
   const viewKYCDetail = (user: FiatUser) => {
     setSelectedKYCUser(user)
     setShowKYCSheet(true)
+  }
+
+  const openAuthorizationDrawer = (user: FiatUser) => {
+    setSelectedAuthUser(user)
+    setShowAuthorizationDrawer(true)
   }
 
   const getComplianceStatusBadge = (status: string) => {
@@ -397,14 +459,24 @@ export default function FiatUsersPage() {
                       {getComplianceStatusBadge(user.complianceStatus)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <Button
-                        onClick={() => openUserDetailDrawer(user)}
-                        variant="ghost"
-                        size="sm"
-                        className="text-custom-green hover:text-custom-green/80"
-                      >
-                        查看
-                      </Button>
+                      <div className="flex items-center justify-center gap-2">
+                        <Button
+                          onClick={() => openUserDetailDrawer(user)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-custom-green hover:text-custom-green/80"
+                        >
+                          查看
+                        </Button>
+                        <Button
+                          onClick={() => openAuthorizationDrawer(user)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                        >
+                          <Shield className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -497,6 +569,14 @@ export default function FiatUsersPage() {
             </div>
           )
         }
+      />
+
+      <AuthorizationDrawer
+        open={showAuthorizationDrawer}
+        onClose={() => setShowAuthorizationDrawer(false)}
+        ownerUserId={selectedAuthUser?.userId || ''}
+        ownerUsername={selectedAuthUser?.username || ''}
+        authorizedUsers={selectedAuthUser ? getAuthorizedUsers(selectedAuthUser.userId) : []}
       />
     </div>
   )
