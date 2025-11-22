@@ -431,14 +431,14 @@ export default function FiatUsersPage() {
                         <button
                           type="button"
                           onClick={() => openUserDetailDrawer(user)}
-                          className="block w-full text-left text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer transition-colors"
+                          className="contact-phone block w-full text-left text-sm"
                         >
                           {user.phone}
                         </button>
                         <button
                           type="button"
                           onClick={() => openUserDetailDrawer(user)}
-                          className="block w-full text-left text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition-colors"
+                          className="contact-email block w-full text-left text-xs"
                         >
                           {user.email}
                         </button>
