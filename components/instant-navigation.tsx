@@ -375,17 +375,7 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/profile") return <ProfilePage />
     if (currentPage === "/admin/crypto/business-report") return <CryptoBusinessReportPage />
     if (currentPage === "/admin/orders/crypto-assets") return <CryptoAssetStatisticsPage />
-    if (currentPage === "/admin/crypto/users") {
-      return (
-        <div className="p-6">
-          <h1 className="text-3xl font-bold text-red-600">🔴 诊断测试：这是内联组件</h1>
-          <p className="mt-4 text-xl">如果您能看到这段红色文字，说明instant-navigation正常工作</p>
-          <button className="mt-4 px-6 py-3 bg-green-500 text-white rounded-lg text-xl font-bold">
-            诊断测试按钮
-          </button>
-        </div>
-      )
-    }
+    if (currentPage === "/admin/crypto/users") return <CryptoUsersPage />
     if (currentPage === "/admin/crypto/currencies") return <CryptoCurrenciesPage />
     if (currentPage === "/admin/crypto/custodial-wallets") return <CustodialWalletsPage />
     if (currentPage === "/admin/crypto/addresses") return <AddressesManagementPage />
