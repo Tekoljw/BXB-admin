@@ -35,6 +35,17 @@ interface CryptoUser {
 }
 
 export default function CryptoUsersPage() {
+  const getTodayDate = () => {
+    const today = new Date()
+    return today.toISOString().split('T')[0]
+  }
+
+  const getDaysAgo = (days: number) => {
+    const date = new Date()
+    date.setDate(date.getDate() - days)
+    return date.toISOString().split('T')[0]
+  }
+
   const [users] = useState<CryptoUser[]>([
     {
       id: '1',
@@ -52,7 +63,7 @@ export default function CryptoUsersPage() {
       registeredLocation: '北京市朝阳区',
       lastLoginLocation: '上海市浦东新区',
       lastLoginTime: '2024-11-15 10:30:00',
-      lastActiveDate: '2024-11-22',
+      lastActiveDate: getTodayDate(),
       btcBalance: '0.5432',
       ethBalance: '12.3456',
       usdtBalance: '50,000.00',
@@ -72,7 +83,7 @@ export default function CryptoUsersPage() {
       registeredLocation: '上海市徐汇区',
       lastLoginLocation: '北京市朝阳区',
       lastLoginTime: '2024-11-14 18:45:00',
-      lastActiveDate: '2024-11-21',
+      lastActiveDate: getDaysAgo(1),
       btcBalance: '0.2100',
       ethBalance: '5.6789',
       usdtBalance: '25,000.00',
@@ -92,7 +103,7 @@ export default function CryptoUsersPage() {
       registeredLocation: '广州市天河区',
       lastLoginLocation: '深圳市南山区',
       lastLoginTime: '2024-11-15 09:20:00',
-      lastActiveDate: '2024-11-22',
+      lastActiveDate: getTodayDate(),
       btcBalance: '1.2345',
       ethBalance: '25.4321',
       usdtBalance: '100,000.00',
@@ -103,12 +114,11 @@ export default function CryptoUsersPage() {
     },
   ])
 
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [activityTab, setActivityTab] = useState('all')
   const [sortTab, setSortTab] = useState('default')
   const [showUserDetailDrawer, setShowUserDetailDrawer] = useState(false)
   const [selectedUserForDetail, setSelectedUserForDetail] = useState<CryptoUser | null>(null)
-
-  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
 
   const isWithinDays = (dateStr: string, days: number) => {
     const targetDate = new Date(dateStr)
@@ -150,6 +160,7 @@ export default function CryptoUsersPage() {
   })
 
   const openUserDetailDrawer = (user: CryptoUser) => {
+    console.log('Opening drawer for user:', user.userId)
     setSelectedUserForDetail(user)
     setShowUserDetailDrawer(true)
   }
@@ -241,47 +252,14 @@ export default function CryptoUsersPage() {
                         <button
                           type="button"
                           onClick={() => openUserDetailDrawer(user)}
-                          className="contact-phone block w-full text-left text-sm"
-                          style={{
-                            color: '#2563eb',
-                            fontWeight: 500,
-                            cursor: 'pointer',
-                            textDecoration: 'none',
-                            transition: 'all 0.2s ease',
-                            background: 'none',
-                            border: 'none',
-                            padding: 0
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.color = '#1d4ed8'
-                            e.currentTarget.style.textDecoration = 'underline'
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.color = '#2563eb'
-                            e.currentTarget.style.textDecoration = 'none'
-                          }}
+                          className="contact-phone block w-full text-left text-sm text-blue-600 hover:text-blue-800 hover:underline cursor-pointer font-medium"
                         >
                           {user.phone}
                         </button>
                         <button
                           type="button"
                           onClick={() => openUserDetailDrawer(user)}
-                          className="contact-email block w-full text-left text-xs"
-                          style={{
-                            color: '#6b7280',
-                            cursor: 'pointer',
-                            textDecoration: 'none',
-                            transition: 'all 0.2s ease',
-                            background: 'none',
-                            border: 'none',
-                            padding: 0
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.color = '#2563eb'
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.color = '#6b7280'
-                          }}
+                          className="contact-email block w-full text-left text-xs text-gray-600 hover:text-blue-600 cursor-pointer"
                         >
                           {user.email}
                         </button>
