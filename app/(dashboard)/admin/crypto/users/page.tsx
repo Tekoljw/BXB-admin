@@ -165,13 +165,26 @@ export default function CryptoUsersPage() {
     setShowUserDetailDrawer(true)
   }
 
+  const handleTestClick = () => {
+    alert('测试按钮被点击了！✅')
+    console.log('测试按钮点击成功')
+  }
+
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Crypto用户管理</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          管理平台所有Crypto用户的基本信息和交易情况
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Crypto用户管理</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            管理平台所有Crypto用户的基本信息和交易情况
+          </p>
+        </div>
+        <Button
+          onClick={handleTestClick}
+          className="bg-custom-green hover:bg-custom-green/90 text-white"
+        >
+          测试
+        </Button>
       </div>
 
       <div className="space-y-4">
