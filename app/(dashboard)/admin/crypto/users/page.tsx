@@ -35,7 +35,7 @@ interface CryptoUser {
 }
 
 export default function CryptoUsersPage() {
-  const [users, setUsers] = useState<CryptoUser[]>([
+  const [users] = useState<CryptoUser[]>([
     {
       id: '1',
       userId: 'C123456',
@@ -58,8 +58,8 @@ export default function CryptoUsersPage() {
       usdtBalance: '50,000.00',
       totalDeposits: 156,
       totalWithdrawals: 89,
-      monthlyProfit: '2,345.67',
-      totalProfit: '15,678.90',
+      monthlyProfit: '2,345.67 USDT',
+      totalProfit: '15,678.90 USDT',
     },
     {
       id: '2',
@@ -78,8 +78,8 @@ export default function CryptoUsersPage() {
       usdtBalance: '25,000.00',
       totalDeposits: 78,
       totalWithdrawals: 45,
-      monthlyProfit: '1,234.56',
-      totalProfit: '8,900.00',
+      monthlyProfit: '1,234.56 USDT',
+      totalProfit: '8,900.00 USDT',
     },
     {
       id: '3',
@@ -98,70 +98,32 @@ export default function CryptoUsersPage() {
       usdtBalance: '100,000.00',
       totalDeposits: 234,
       totalWithdrawals: 156,
-      monthlyProfit: '5,678.90',
-      totalProfit: '35,678.90',
-    },
-    {
-      id: '4',
-      userId: 'C456789',
-      username: '赵六',
-      phone: '137****7777',
-      email: 'zhao***@gmail.com',
-      isKYC: false,
-      registeredAt: '2024-03-10 16:00:00',
-      registeredLocation: '深圳市福田区',
-      lastLoginLocation: '广州市天河区',
-      lastLoginTime: '2024-11-10 14:15:00',
-      lastActiveDate: '2024-11-17',
-      btcBalance: '0.0500',
-      ethBalance: '1.2345',
-      usdtBalance: '5,000.00',
-      totalDeposits: 12,
-      totalWithdrawals: 8,
-      monthlyProfit: '234.56',
-      totalProfit: '1,234.56',
-    },
-    {
-      id: '5',
-      userId: 'C567890',
-      username: '孙七',
-      phone: '135****5555',
-      email: 'sun***@gmail.com',
-      isKYC: true,
-      registeredAt: '2024-02-15 13:00:00',
-      registeredLocation: '杭州市上城区',
-      lastLoginLocation: '杭州市西湖区',
-      lastLoginTime: '2024-11-02 16:30:00',
-      lastActiveDate: '2024-11-09',
-      btcBalance: '0.3200',
-      ethBalance: '8.9012',
-      usdtBalance: '30,000.00',
-      totalDeposits: 56,
-      totalWithdrawals: 34,
-      monthlyProfit: '1,000.00',
-      totalProfit: '6,500.00',
+      monthlyProfit: '5,678.90 USDT',
+      totalProfit: '35,678.90 USDT',
     },
   ])
 
-  const { searchInput, setSearchInput, searchTerm, handleSearch } = useDeferredSearch()
   const [activityTab, setActivityTab] = useState('all')
   const [sortTab, setSortTab] = useState('default')
   const [showUserDetailDrawer, setShowUserDetailDrawer] = useState(false)
   const [selectedUserForDetail, setSelectedUserForDetail] = useState<CryptoUser | null>(null)
 
+  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
+
   const isWithinDays = (dateStr: string, days: number) => {
-    const date = new Date(dateStr)
-    const now = new Date()
-    const diffTime = now.getTime() - date.getTime()
+    const targetDate = new Date(dateStr)
+    const today = new Date()
+    const diffTime = today.getTime() - targetDate.getTime()
     const diffDays = diffTime / (1000 * 60 * 60 * 24)
     return diffDays <= days
   }
 
-  const filteredAndSortedUsers = users.filter(user => {
+  const filteredAndSortedUsers = users.filter((user) => {
     const searchLower = searchTerm.toLowerCase()
-    const matchesSearch = user.username.toLowerCase().includes(searchLower) ||
+    const matchesSearch = !searchTerm ||
                          user.userId.toLowerCase().includes(searchLower) ||
-                         user.phone.includes(searchTerm) ||
+                         user.username.toLowerCase().includes(searchLower) ||
+                         user.phone.toLowerCase().includes(searchLower) ||
                          user.email.toLowerCase().includes(searchLower)
     
     let matchesActivity = true
@@ -178,13 +140,11 @@ export default function CryptoUsersPage() {
     return matchesSearch && matchesActivity
   }).sort((a, b) => {
     if (sortTab === 'profit') {
-      const aTotalProfit = parseFloat(a.totalProfit.replace(/,/g, ''))
-      const bTotalProfit = parseFloat(b.totalProfit.replace(/,/g, ''))
+      const aTotalProfit = parseFloat(a.totalProfit.replace(/[^0-9.]/g, ''))
+      const bTotalProfit = parseFloat(b.totalProfit.replace(/[^0-9.]/g, ''))
       return bTotalProfit - aTotalProfit
     } else if (sortTab === 'time') {
-      const aTime = a.registeredAt.replace(' ', 'T')
-      const bTime = b.registeredAt.replace(' ', 'T')
-      return new Date(bTime).getTime() - new Date(aTime).getTime()
+      return new Date(b.registeredAt).getTime() - new Date(a.registeredAt).getTime()
     }
     return 0
   })
@@ -223,23 +183,21 @@ export default function CryptoUsersPage() {
             </TabsList>
           </Tabs>
 
-          <div className="flex-1 w-full sm:w-auto">
-            <SearchControls
-              placeholder="搜索用户ID、姓名、手机号、邮箱..."
-              value={searchInput}
-              onChange={setSearchInput}
-              onSearch={handleSearch}
-              showReset={false}
-            />
-          </div>
+          <SearchControls
+            value={searchInput}
+            onChange={setSearchInput}
+            onSearch={handleSearch}
+            onReset={handleReset}
+            placeholder="搜索用户ID、姓名、手机号、邮箱..."
+          />
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         {filteredAndSortedUsers.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-gray-900/50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     用户ID
@@ -332,18 +290,17 @@ export default function CryptoUsersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="text-xs font-medium text-amber-600 dark:text-amber-400">
-                        本月：{user.monthlyProfit} USDT
+                        本月：{user.monthlyProfit}
                       </div>
                       <div className="text-xs font-medium text-amber-700 dark:text-amber-500">
-                        累计：{user.totalProfit} USDT
+                        累计：{user.totalProfit}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <Button
-                        onClick={() => openUserDetailDrawer(user)}
                         variant="ghost"
                         size="sm"
-                        className="text-custom-green hover:text-custom-green/80"
+                        onClick={() => openUserDetailDrawer(user)}
                       >
                         查看
                       </Button>
@@ -402,13 +359,13 @@ export default function CryptoUsersPage() {
                 <div>
                   <p className="text-xs text-gray-500 dark:text-gray-400">本月贡献利润</p>
                   <p className="text-sm font-medium text-amber-600 dark:text-amber-400 mt-1">
-                    {selectedUserForDetail.monthlyProfit} USDT
+                    {selectedUserForDetail.monthlyProfit}
                   </p>
                 </div>
                 <div className="col-span-2">
                   <p className="text-xs text-gray-500 dark:text-gray-400">累计贡献利润</p>
                   <p className="text-sm font-medium text-amber-700 dark:text-amber-500 mt-1">
-                    {selectedUserForDetail.totalProfit} USDT
+                    {selectedUserForDetail.totalProfit}
                   </p>
                 </div>
               </div>
