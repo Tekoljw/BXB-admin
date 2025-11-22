@@ -5,6 +5,7 @@ import { Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X } from "
 import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
+import { UserDetailDrawer } from "@/components/admin/user-detail-drawer"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -905,6 +906,8 @@ export default function CryptoUsersPage() {
   const [currentUser, setCurrentUser] = useState<CryptoUser | null>(null)
   const [currentFeeConfig, setCurrentFeeConfig] = useState<FeeConfig | null>(null)
   const [currentInterface, setCurrentInterface] = useState<PaymentInterface | null>(null)
+  const [showUserDetailDrawer, setShowUserDetailDrawer] = useState(false)
+  const [selectedUserForDetail, setSelectedUserForDetail] = useState<CryptoUser | null>(null)
   const [freezeAmount, setFreezeAmount] = useState("")
   const [freezeFormData, setFreezeFormData] = useState({
     currency: "",
@@ -1026,6 +1029,11 @@ export default function CryptoUsersPage() {
   const openApiKeysDialog = (user: CryptoUser) => {
     setCurrentUser(user)
     setIsApiKeysDialogOpen(true)
+  }
+
+  const openUserDetailDrawer = (user: CryptoUser) => {
+    setSelectedUserForDetail(user)
+    setShowUserDetailDrawer(true)
   }
 
   const handleEdit = () => {
@@ -1452,8 +1460,22 @@ export default function CryptoUsersPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    <div className="text-gray-900 dark:text-gray-300">{user.email}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{user.phone}</div>
+                    <div className="space-y-0.5">
+                      <button
+                        type="button"
+                        onClick={() => openUserDetailDrawer(user)}
+                        className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer text-left"
+                      >
+                        {user.email}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => openUserDetailDrawer(user)}
+                        className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer text-xs block mt-1"
+                      >
+                        {user.phone}
+                      </button>
+                    </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <button
@@ -2417,6 +2439,27 @@ export default function CryptoUsersPage() {
           </SheetFooter>
         </SheetContent>
       </Sheet>
+
+      <UserDetailDrawer
+        isOpen={showUserDetailDrawer}
+        onClose={() => setShowUserDetailDrawer(false)}
+        user={selectedUserForDetail ? {
+          userId: selectedUserForDetail.userId,
+          username: selectedUserForDetail.name,
+          phone: selectedUserForDetail.phone,
+          email: selectedUserForDetail.email,
+          isKYC: false,
+          registeredAt: selectedUserForDetail.createdAt,
+          lastActiveDate: selectedUserForDetail.createdAt,
+          btcBalance: selectedUserForDetail.currencyBalances.find(c => c.currency === "BTC")?.balance.toString() || "0",
+          ethBalance: selectedUserForDetail.currencyBalances.find(c => c.currency === "ETH")?.balance.toString() || "0",
+          usdtBalance: selectedUserForDetail.currencyBalances.find(c => c.currency === "USDT")?.balance.toString() || "0",
+          totalDeposits: 0,
+          totalWithdrawals: 0,
+          monthlyProfit: `${selectedUserForDetail.monthlyProfit} ${selectedUserForDetail.primaryCurrency}`,
+          totalProfit: `${selectedUserForDetail.totalProfit} ${selectedUserForDetail.primaryCurrency}`,
+        } : null}
+      />
     </div>
   )
 }
