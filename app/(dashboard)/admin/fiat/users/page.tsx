@@ -56,17 +56,6 @@ interface FiatUser {
 }
 
 export default function FiatUsersPage() {
-  const getTodayDate = () => {
-    const today = new Date()
-    return today.toISOString().split('T')[0]
-  }
-
-  const getDaysAgo = (days: number) => {
-    const date = new Date()
-    date.setDate(date.getDate() - days)
-    return date.toISOString().split('T')[0]
-  }
-
   const [users, setUsers] = useState<FiatUser[]>([
     {
       id: '1',
@@ -84,7 +73,7 @@ export default function FiatUsersPage() {
       registeredLocation: '北京市朝阳区',
       lastLoginLocation: '上海市浦东新区',
       lastLoginTime: '2024-11-15 10:30:00',
-      lastActiveDate: getTodayDate(),
+      lastActiveDate: '2024-11-22',
       cnyBalance: '125,320.00',
       usdBalance: '15,000.00',
       eurBalance: '5,000.00',
@@ -116,7 +105,7 @@ export default function FiatUsersPage() {
       registeredLocation: '上海市徐汇区',
       lastLoginLocation: '北京市朝阳区',
       lastLoginTime: '2024-11-14 18:45:00',
-      lastActiveDate: getDaysAgo(1),
+      lastActiveDate: '2024-11-21',
       cnyBalance: '68,900.00',
       usdBalance: '8,500.00',
       eurBalance: '2,000.00',
@@ -148,7 +137,7 @@ export default function FiatUsersPage() {
       registeredLocation: '广州市天河区',
       lastLoginLocation: '深圳市南山区',
       lastLoginTime: '2024-11-15 09:20:00',
-      lastActiveDate: getTodayDate(),
+      lastActiveDate: '2024-11-22',
       cnyBalance: '256,789.00',
       usdBalance: '32,000.00',
       eurBalance: '10,000.00',
@@ -180,7 +169,7 @@ export default function FiatUsersPage() {
       registeredLocation: '深圳市福田区',
       lastLoginLocation: '广州市天河区',
       lastLoginTime: '2024-11-10 14:15:00',
-      lastActiveDate: getDaysAgo(5),
+      lastActiveDate: '2024-11-17',
       cnyBalance: '12,500.00',
       usdBalance: '1,500.00',
       eurBalance: '500.00',
@@ -212,7 +201,7 @@ export default function FiatUsersPage() {
       registeredLocation: '杭州市上城区',
       lastLoginLocation: '杭州市西湖区',
       lastLoginTime: '2024-11-02 16:30:00',
-      lastActiveDate: getDaysAgo(13),
+      lastActiveDate: '2024-11-09',
       cnyBalance: '45,678.00',
       usdBalance: '5,500.00',
       eurBalance: '1,800.00',

@@ -35,17 +35,6 @@ interface CryptoUser {
 }
 
 export default function CryptoUsersPage() {
-  const getTodayDate = () => {
-    const today = new Date()
-    return today.toISOString().split('T')[0]
-  }
-
-  const getDaysAgo = (days: number) => {
-    const date = new Date()
-    date.setDate(date.getDate() - days)
-    return date.toISOString().split('T')[0]
-  }
-
   const [users, setUsers] = useState<CryptoUser[]>([
     {
       id: '1',
@@ -63,7 +52,7 @@ export default function CryptoUsersPage() {
       registeredLocation: '北京市朝阳区',
       lastLoginLocation: '上海市浦东新区',
       lastLoginTime: '2024-11-15 10:30:00',
-      lastActiveDate: getTodayDate(),
+      lastActiveDate: '2024-11-22',
       btcBalance: '0.5432',
       ethBalance: '12.3456',
       usdtBalance: '50,000.00',
@@ -83,7 +72,7 @@ export default function CryptoUsersPage() {
       registeredLocation: '上海市徐汇区',
       lastLoginLocation: '北京市朝阳区',
       lastLoginTime: '2024-11-14 18:45:00',
-      lastActiveDate: getDaysAgo(1),
+      lastActiveDate: '2024-11-21',
       btcBalance: '0.2100',
       ethBalance: '5.6789',
       usdtBalance: '25,000.00',
@@ -103,7 +92,7 @@ export default function CryptoUsersPage() {
       registeredLocation: '广州市天河区',
       lastLoginLocation: '深圳市南山区',
       lastLoginTime: '2024-11-15 09:20:00',
-      lastActiveDate: getTodayDate(),
+      lastActiveDate: '2024-11-22',
       btcBalance: '1.2345',
       ethBalance: '25.4321',
       usdtBalance: '100,000.00',
@@ -123,7 +112,7 @@ export default function CryptoUsersPage() {
       registeredLocation: '深圳市福田区',
       lastLoginLocation: '广州市天河区',
       lastLoginTime: '2024-11-10 14:15:00',
-      lastActiveDate: getDaysAgo(5),
+      lastActiveDate: '2024-11-17',
       btcBalance: '0.0500',
       ethBalance: '1.2345',
       usdtBalance: '5,000.00',
@@ -143,7 +132,7 @@ export default function CryptoUsersPage() {
       registeredLocation: '杭州市上城区',
       lastLoginLocation: '杭州市西湖区',
       lastLoginTime: '2024-11-02 16:30:00',
-      lastActiveDate: getDaysAgo(13),
+      lastActiveDate: '2024-11-09',
       btcBalance: '0.3200',
       ethBalance: '8.9012',
       usdtBalance: '30,000.00',
