@@ -297,21 +297,21 @@ export default function CryptoUsersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div 
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          openUserDetailDrawer(user)
-                        }}
-                        className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded px-2 py-1 -mx-2 -my-1 transition-colors"
-                        role="button"
-                        tabIndex={0}
-                      >
-                        <div className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                      <div className="space-y-0.5">
+                        <button
+                          type="button"
+                          onClick={() => openUserDetailDrawer(user)}
+                          className="block w-full text-left text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer transition-colors"
+                        >
                           {user.phone}
-                        </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400">
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => openUserDetailDrawer(user)}
+                          className="block w-full text-left text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition-colors"
+                        >
                           {user.email}
-                        </div>
+                        </button>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
