@@ -2441,7 +2441,7 @@ export default function CryptoUsersPage() {
       </Sheet>
 
       <UserDetailDrawer
-        isOpen={showUserDetailDrawer}
+        open={showUserDetailDrawer}
         onClose={() => setShowUserDetailDrawer(false)}
         user={selectedUserForDetail ? {
           userId: selectedUserForDetail.userId,
