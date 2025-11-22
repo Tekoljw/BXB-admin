@@ -414,6 +414,24 @@ export default function FiatUsersPage() {
                           type="button"
                           onClick={() => openUserDetailDrawer(user)}
                           className="contact-phone block w-full text-left text-sm"
+                          style={{
+                            color: '#2563eb',
+                            fontWeight: 500,
+                            cursor: 'pointer',
+                            textDecoration: 'none',
+                            transition: 'all 0.2s ease',
+                            background: 'none',
+                            border: 'none',
+                            padding: 0
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = '#1d4ed8'
+                            e.currentTarget.style.textDecoration = 'underline'
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = '#2563eb'
+                            e.currentTarget.style.textDecoration = 'none'
+                          }}
                         >
                           {user.phone}
                         </button>
@@ -421,6 +439,21 @@ export default function FiatUsersPage() {
                           type="button"
                           onClick={() => openUserDetailDrawer(user)}
                           className="contact-email block w-full text-left text-xs"
+                          style={{
+                            color: '#6b7280',
+                            cursor: 'pointer',
+                            textDecoration: 'none',
+                            transition: 'all 0.2s ease',
+                            background: 'none',
+                            border: 'none',
+                            padding: 0
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = '#2563eb'
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = '#6b7280'
+                          }}
                         >
                           {user.email}
                         </button>
