@@ -339,19 +339,12 @@ export default function FiatUsersPage() {
     }
   }
 
-  console.log('法币用户管理页面渲染', { 
-    usersCount: users.length, 
-    filteredCount: filteredAndSortedUsers.length,
-    activityTab,
-    searchTerm 
-  })
-
   return (
     <div className="p-6 space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">法币用户管理</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          管理平台所有法币用户的基本信息和交易情况（共{users.length}个用户，显示{filteredAndSortedUsers.length}个）
+          管理平台所有法币用户的基本信息和交易情况
         </p>
       </div>
 
@@ -434,17 +427,22 @@ export default function FiatUsersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => openUserDetailDrawer(user)}
-                        className="text-left hover:bg-gray-100 dark:hover:bg-gray-800 rounded px-2 py-1 -mx-2 -my-1 transition-colors"
+                      <div 
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          openUserDetailDrawer(user)
+                        }}
+                        className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded px-2 py-1 -mx-2 -my-1 transition-colors"
+                        role="button"
+                        tabIndex={0}
                       >
-                        <div className="text-sm text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
+                        <div className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
                           {user.phone}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400">
                           {user.email}
                         </div>
-                      </button>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       {user.isKYC ? (

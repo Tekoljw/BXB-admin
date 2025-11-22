@@ -297,17 +297,22 @@ export default function CryptoUsersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => openUserDetailDrawer(user)}
-                        className="text-left hover:bg-gray-100 dark:hover:bg-gray-800 rounded px-2 py-1 -mx-2 -my-1 transition-colors"
+                      <div 
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          openUserDetailDrawer(user)
+                        }}
+                        className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded px-2 py-1 -mx-2 -my-1 transition-colors"
+                        role="button"
+                        tabIndex={0}
                       >
-                        <div className="text-sm text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
+                        <div className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
                           {user.phone}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400">
                           {user.email}
                         </div>
-                      </button>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       {user.isKYC ? (
