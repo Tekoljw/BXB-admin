@@ -90,6 +90,7 @@ import WalletManagementPage from "@/app/(dashboard)/admin/wallet/page"
 import ProfilePage from "@/app/(dashboard)/admin/profile/page"
 import CryptoBusinessReportPage from "@/app/(dashboard)/admin/crypto/business-report/page"
 import CryptoAssetStatisticsPage from "@/app/(dashboard)/admin/orders/crypto-assets/page"
+import CryptoUsersPage from "@/app/(dashboard)/admin/crypto/users/page"
 import CryptoCurrenciesPage from "@/app/(dashboard)/admin/crypto/currencies/page"
 import CustodialWalletsPage from "@/app/(dashboard)/admin/crypto/custodial-wallets/page"
 import AddressesManagementPage from "@/app/(dashboard)/admin/crypto/addresses/page"
@@ -98,6 +99,7 @@ import OTCSuppliersPage from "@/app/(dashboard)/admin/crypto/otc-suppliers/page"
 import OTCOrdersPage from "@/app/(dashboard)/admin/crypto/otc-orders/page"
 import OnchainDepositOrdersPage from "@/app/(dashboard)/admin/crypto/onchain-deposit-orders/page"
 import FiatAssetStatisticsPage from "@/app/(dashboard)/admin/orders/fiat-assets/page"
+import FiatUsersPage from "@/app/(dashboard)/admin/fiat/users/page"
 import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
 import PermissionsManagementPage from "@/app/(dashboard)/admin/system/permissions/page"
 import RolesManagementPage from "@/app/(dashboard)/admin/system/roles/page"
@@ -373,6 +375,7 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/profile") return <ProfilePage />
     if (currentPage === "/admin/crypto/business-report") return <CryptoBusinessReportPage />
     if (currentPage === "/admin/orders/crypto-assets") return <CryptoAssetStatisticsPage />
+    if (currentPage === "/admin/crypto/users") return <CryptoUsersPage />
     if (currentPage === "/admin/crypto/currencies") return <CryptoCurrenciesPage />
     if (currentPage === "/admin/crypto/custodial-wallets") return <CustodialWalletsPage />
     if (currentPage === "/admin/crypto/addresses") return <AddressesManagementPage />
@@ -381,6 +384,7 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/crypto/otc-orders") return <OTCOrdersPage />
     if (currentPage === "/admin/crypto/onchain-deposit-orders") return <OnchainDepositOrdersPage />
     if (currentPage === "/admin/orders/fiat-assets") return <FiatAssetStatisticsPage />
+    if (currentPage === "/admin/fiat/users") return <FiatUsersPage />
     if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />
     if (currentPage === "/admin/system") return <PermissionsManagementPage />
     if (currentPage === "/admin/system/permissions") return <PermissionsManagementPage />

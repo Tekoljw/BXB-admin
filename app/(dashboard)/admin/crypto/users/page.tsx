@@ -148,8 +148,6 @@ export default function CryptoUsersPage() {
   const [sortTab, setSortTab] = useState('default')
   const [showUserDetailDrawer, setShowUserDetailDrawer] = useState(false)
   const [selectedUserForDetail, setSelectedUserForDetail] = useState<CryptoUser | null>(null)
-  const [showKYCSheet, setShowKYCSheet] = useState(false)
-  const [selectedKYCUser, setSelectedKYCUser] = useState<CryptoUser | null>(null)
 
   const isWithinDays = (dateStr: string, days: number) => {
     const date = new Date(dateStr)
@@ -194,11 +192,6 @@ export default function CryptoUsersPage() {
   const openUserDetailDrawer = (user: CryptoUser) => {
     setSelectedUserForDetail(user)
     setShowUserDetailDrawer(true)
-  }
-
-  const viewKYCDetail = (user: CryptoUser) => {
-    setSelectedKYCUser(user)
-    setShowKYCSheet(true)
   }
 
   return (
@@ -305,12 +298,7 @@ export default function CryptoUsersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       {user.isKYC ? (
-                        <button 
-                          onClick={() => viewKYCDetail(user)}
-                          className="inline-block hover:scale-110 transition-transform cursor-pointer"
-                        >
-                          <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
-                        </button>
+                        <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
                       ) : (
                         <XCircle className="w-5 h-5 text-gray-300 dark:text-gray-600 mx-auto" />
                       )}

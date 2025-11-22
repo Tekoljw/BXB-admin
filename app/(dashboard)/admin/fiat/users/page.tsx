@@ -229,8 +229,6 @@ export default function FiatUsersPage() {
   const [sortTab, setSortTab] = useState('default')
   const [showUserDetailDrawer, setShowUserDetailDrawer] = useState(false)
   const [selectedUserForDetail, setSelectedUserForDetail] = useState<FiatUser | null>(null)
-  const [showKYCSheet, setShowKYCSheet] = useState(false)
-  const [selectedKYCUser, setSelectedKYCUser] = useState<FiatUser | null>(null)
   const [showFreezeDialog, setShowFreezeDialog] = useState(false)
   const [selectedFreezeUser, setSelectedFreezeUser] = useState<FiatUser | null>(null)
   const [freezeAmounts, setFreezeAmounts] = useState({
@@ -282,11 +280,6 @@ export default function FiatUsersPage() {
   const openUserDetailDrawer = (user: FiatUser) => {
     setSelectedUserForDetail(user)
     setShowUserDetailDrawer(true)
-  }
-
-  const viewKYCDetail = (user: FiatUser) => {
-    setSelectedKYCUser(user)
-    setShowKYCSheet(true)
   }
 
   const getComplianceStatusBadge = (status: string) => {
@@ -435,12 +428,7 @@ export default function FiatUsersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       {user.isKYC ? (
-                        <button 
-                          onClick={() => viewKYCDetail(user)}
-                          className="inline-block hover:scale-110 transition-transform cursor-pointer"
-                        >
-                          <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
-                        </button>
+                        <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
                       ) : (
                         <XCircle className="w-5 h-5 text-gray-300 dark:text-gray-600 mx-auto" />
                       )}
