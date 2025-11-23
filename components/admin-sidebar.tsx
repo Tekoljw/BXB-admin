@@ -89,7 +89,7 @@ type MenuConfig = MenuItem[] | MenuGroup[]
 const moduleMenus: Record<string, MenuConfig> = {
   "crypto": [
     { path: "/admin/crypto/business-report", icon: FileBarChart, label: "经营报表" },
-    { path: "/admin/crypto/users", icon: Users, label: "Crypto用户管理" },
+    { path: "/admin/crypto/wallet-api-business", icon: Users, label: "Crypto用户管理" },
     { path: "/admin/crypto/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/crypto/addresses", icon: Network, label: "地址管理" },
     { path: "/admin/crypto/custodial-wallets", icon: Wallet, label: "供应商接口" },
