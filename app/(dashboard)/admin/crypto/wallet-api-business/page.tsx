@@ -135,6 +135,11 @@ interface CryptoUser {
   email: string
   phone: string
   isKYC: boolean
+  kycRealName?: string
+  kycIdType?: string
+  kycIdNumber?: string
+  kycCountry?: string
+  kycVerifiedAt?: string
   apiKeys: ApiKey[]
   primaryCurrency: string
   balance: number
@@ -167,6 +172,11 @@ const mockCryptoUsers: CryptoUser[] = [
     email: "yunduan@example.com",
     phone: "+86 138 0000 0003",
     isKYC: true,
+    kycRealName: "张伟",
+    kycIdType: "身份证",
+    kycIdNumber: "110101199001011234",
+    kycCountry: "中国",
+    kycVerifiedAt: "2024-01-20 14:30:00",
     apiKeys: [
       {
         keyId: "KEY004",
@@ -464,6 +474,11 @@ const mockCryptoUsers: CryptoUser[] = [
     email: "kuaifu@example.com",
     phone: "+86 138 0000 0005",
     isKYC: true,
+    kycRealName: "李娜",
+    kycIdType: "护照",
+    kycIdNumber: "E12345678",
+    kycCountry: "中国香港",
+    kycVerifiedAt: "2024-06-22 10:15:00",
     apiKeys: [],
     primaryCurrency: "USDT",
     balance: 0,
@@ -607,6 +622,11 @@ const mockCryptoUsers: CryptoUser[] = [
     email: "chainex@example.com",
     phone: "+86 138 0000 0007",
     isKYC: true,
+    kycRealName: "王强",
+    kycIdType: "身份证",
+    kycIdNumber: "310101198505052345",
+    kycCountry: "中国",
+    kycVerifiedAt: "2024-02-25 16:45:00",
     apiKeys: [
       {
         keyId: "KEY009",
@@ -839,6 +859,11 @@ const mockCryptoUsers: CryptoUser[] = [
     email: "lightning@example.com",
     phone: "+86 138 0000 0010",
     isKYC: true,
+    kycRealName: "刘芳",
+    kycIdType: "身份证",
+    kycIdNumber: "440101199203153456",
+    kycCountry: "中国",
+    kycVerifiedAt: "2024-07-15 09:30:00",
     apiKeys: [],
     primaryCurrency: "USDT",
     balance: 0,
@@ -2468,6 +2493,11 @@ export default function CryptoUsersPage() {
           phone: selectedUserForDetail.phone,
           email: selectedUserForDetail.email,
           isKYC: selectedUserForDetail.isKYC,
+          kycRealName: selectedUserForDetail.kycRealName,
+          kycIdType: selectedUserForDetail.kycIdType,
+          kycIdNumber: selectedUserForDetail.kycIdNumber,
+          kycCountry: selectedUserForDetail.kycCountry,
+          kycVerifiedAt: selectedUserForDetail.kycVerifiedAt,
           registeredAt: selectedUserForDetail.createdAt,
           lastActiveDate: selectedUserForDetail.createdAt,
           btcBalance: selectedUserForDetail.currencyBalances.find(c => c.currency === "BTC")?.balance.toString() || "0",
