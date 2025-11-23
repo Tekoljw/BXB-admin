@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X } from "lucide-react"
+import { Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X, CheckCircle, XCircle } from "lucide-react"
 import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
@@ -134,6 +134,7 @@ interface CryptoUser {
   bxbUserId: string
   email: string
   phone: string
+  isKYC: boolean
   apiKeys: ApiKey[]
   primaryCurrency: string
   balance: number
@@ -165,6 +166,7 @@ const mockCryptoUsers: CryptoUser[] = [
     bxbUserId: "BXB003",
     email: "yunduan@example.com",
     phone: "+86 138 0000 0003",
+    isKYC: true,
     apiKeys: [
       {
         keyId: "KEY004",
@@ -315,6 +317,7 @@ const mockCryptoUsers: CryptoUser[] = [
     bxbUserId: "BXB004",
     email: "xingji@example.com",
     phone: "+86 138 0000 0004",
+    isKYC: false,
     apiKeys: [
       {
         keyId: "KEY007",
@@ -460,6 +463,7 @@ const mockCryptoUsers: CryptoUser[] = [
     bxbUserId: "BXB005",
     email: "kuaifu@example.com",
     phone: "+86 138 0000 0005",
+    isKYC: true,
     apiKeys: [],
     primaryCurrency: "USDT",
     balance: 0,
@@ -521,6 +525,7 @@ const mockCryptoUsers: CryptoUser[] = [
     bxbUserId: "BXB006",
     email: "digitalwallet@example.com",
     phone: "+86 138 0000 0006",
+    isKYC: false,
     apiKeys: [
       {
         keyId: "KEY008",
@@ -601,6 +606,7 @@ const mockCryptoUsers: CryptoUser[] = [
     bxbUserId: "BXB007",
     email: "chainex@example.com",
     phone: "+86 138 0000 0007",
+    isKYC: true,
     apiKeys: [
       {
         keyId: "KEY009",
@@ -692,6 +698,7 @@ const mockCryptoUsers: CryptoUser[] = [
     bxbUserId: "BXB008",
     email: "crosspay@example.com",
     phone: "+86 138 0000 0008",
+    isKYC: false,
     apiKeys: [],
     primaryCurrency: "USDT",
     balance: 5000,
@@ -753,6 +760,7 @@ const mockCryptoUsers: CryptoUser[] = [
     bxbUserId: "BXB009",
     email: "blockpay@example.com",
     phone: "+86 138 0000 0009",
+    isKYC: false,
     apiKeys: [
       {
         keyId: "KEY011",
@@ -830,6 +838,7 @@ const mockCryptoUsers: CryptoUser[] = [
     bxbUserId: "BXB010",
     email: "lightning@example.com",
     phone: "+86 138 0000 0010",
+    isKYC: true,
     apiKeys: [],
     primaryCurrency: "USDT",
     balance: 0,
@@ -1427,6 +1436,9 @@ export default function CryptoUsersPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   联系方式
                 </th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  是否KYC
+                </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   账户余额
                 </th>
@@ -1476,6 +1488,13 @@ export default function CryptoUsersPage() {
                         {user.phone}
                       </button>
                     </div>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-center">
+                    {user.isKYC ? (
+                      <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
+                    ) : (
+                      <XCircle className="w-5 h-5 text-gray-300 dark:text-gray-600 mx-auto" />
+                    )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <button
@@ -2448,7 +2467,7 @@ export default function CryptoUsersPage() {
           username: selectedUserForDetail.name,
           phone: selectedUserForDetail.phone,
           email: selectedUserForDetail.email,
-          isKYC: false,
+          isKYC: selectedUserForDetail.isKYC,
           registeredAt: selectedUserForDetail.createdAt,
           lastActiveDate: selectedUserForDetail.createdAt,
           btcBalance: selectedUserForDetail.currencyBalances.find(c => c.currency === "BTC")?.balance.toString() || "0",
