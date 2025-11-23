@@ -345,57 +345,6 @@ export default function CryptoUsersPage() {
         open={showUserDetailDrawer}
         onClose={() => setShowUserDetailDrawer(false)}
         user={selectedUserForDetail}
-        moduleSpecificContent={
-          selectedUserForDetail && (
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 space-y-4">
-              <h3 className="font-semibold text-gray-900 dark:text-white">Crypto资产信息</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">BTC余额</p>
-                  <p className="text-sm font-medium text-orange-600 dark:text-orange-400 mt-1">
-                    {selectedUserForDetail.btcBalance}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">ETH余额</p>
-                  <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mt-1">
-                    {selectedUserForDetail.ethBalance}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">USDT余额</p>
-                  <p className="text-sm font-medium text-green-600 dark:text-green-400 mt-1">
-                    {selectedUserForDetail.usdtBalance}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">总入金次数</p>
-                  <p className="text-sm font-medium text-green-600 dark:text-green-400 mt-1">
-                    {selectedUserForDetail.totalDeposits}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">总出金次数</p>
-                  <p className="text-sm font-medium text-red-600 dark:text-red-400 mt-1">
-                    {selectedUserForDetail.totalWithdrawals}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">本月贡献利润</p>
-                  <p className="text-sm font-medium text-amber-600 dark:text-amber-400 mt-1">
-                    {selectedUserForDetail.monthlyProfit}
-                  </p>
-                </div>
-                <div className="col-span-2">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">累计贡献利润</p>
-                  <p className="text-sm font-medium text-amber-700 dark:text-amber-500 mt-1">
-                    {selectedUserForDetail.totalProfit}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )
-        }
       />
     </div>
   )

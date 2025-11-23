@@ -5,7 +5,7 @@ import { Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X, CheckCi
 import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
-import { UserDetailDrawer } from "@/components/admin/user-detail-drawer"
+import { UserDetailDrawer, type KYCAddress } from "@/components/admin/user-detail-drawer"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -140,6 +140,9 @@ interface CryptoUser {
   kycIdNumber?: string
   kycCountry?: string
   kycVerifiedAt?: string
+  kycAddresses?: KYCAddress[]
+  kycDateOfBirth?: string
+  kycNationality?: string
   apiKeys: ApiKey[]
   primaryCurrency: string
   balance: number
@@ -177,6 +180,30 @@ const mockCryptoUsers: CryptoUser[] = [
     kycIdNumber: "110101199001011234",
     kycCountry: "中国",
     kycVerifiedAt: "2024-01-20 14:30:00",
+    kycDateOfBirth: "1990-01-01",
+    kycNationality: "中国",
+    kycAddresses: [
+      {
+        type: 'residential',
+        country: '中国',
+        province: '北京市',
+        city: '北京市',
+        district: '朝阳区',
+        street: '建国路88号SOHO现代城A座1501室',
+        postalCode: '100022',
+        isPrimary: true
+      },
+      {
+        type: 'billing',
+        country: '中国',
+        province: '北京市',
+        city: '北京市',
+        district: '海淀区',
+        street: '中关村大街1号海龙大厦2208室',
+        postalCode: '100080',
+        isPrimary: false
+      }
+    ],
     apiKeys: [
       {
         keyId: "KEY004",
@@ -479,6 +506,19 @@ const mockCryptoUsers: CryptoUser[] = [
     kycIdNumber: "E12345678",
     kycCountry: "中国香港",
     kycVerifiedAt: "2024-06-22 10:15:00",
+    kycDateOfBirth: "1988-05-15",
+    kycNationality: "中国",
+    kycAddresses: [
+      {
+        type: 'residential',
+        country: '中国香港',
+        city: '香港',
+        district: '中环',
+        street: '德辅道中199号无限极广场30楼',
+        postalCode: '',
+        isPrimary: true
+      }
+    ],
     apiKeys: [],
     primaryCurrency: "USDT",
     balance: 0,
@@ -627,6 +667,40 @@ const mockCryptoUsers: CryptoUser[] = [
     kycIdNumber: "310101198505052345",
     kycCountry: "中国",
     kycVerifiedAt: "2024-02-25 16:45:00",
+    kycDateOfBirth: "1985-05-05",
+    kycNationality: "中国",
+    kycAddresses: [
+      {
+        type: 'residential',
+        country: '中国',
+        province: '上海市',
+        city: '上海市',
+        district: '浦东新区',
+        street: '陆家嘴环路1000号恒生银行大厦28楼',
+        postalCode: '200120',
+        isPrimary: true
+      },
+      {
+        type: 'mailing',
+        country: '中国',
+        province: '江苏省',
+        city: '苏州市',
+        district: '工业园区',
+        street: '苏州大道东158号凤凰广场B座901室',
+        postalCode: '215021',
+        isPrimary: false
+      },
+      {
+        type: 'billing',
+        country: '中国',
+        province: '上海市',
+        city: '上海市',
+        district: '黄浦区',
+        street: '南京东路299号宏伊广场1506室',
+        postalCode: '200001',
+        isPrimary: false
+      }
+    ],
     apiKeys: [
       {
         keyId: "KEY009",
@@ -864,6 +938,20 @@ const mockCryptoUsers: CryptoUser[] = [
     kycIdNumber: "440101199203153456",
     kycCountry: "中国",
     kycVerifiedAt: "2024-07-15 09:30:00",
+    kycDateOfBirth: "1992-03-15",
+    kycNationality: "中国",
+    kycAddresses: [
+      {
+        type: 'residential',
+        country: '中国',
+        province: '广东省',
+        city: '深圳市',
+        district: '福田区',
+        street: '深南大道7888号东海国际中心A座3201室',
+        postalCode: '518040',
+        isPrimary: true
+      }
+    ],
     apiKeys: [],
     primaryCurrency: "USDT",
     balance: 0,
@@ -2498,15 +2586,10 @@ export default function CryptoUsersPage() {
           kycIdNumber: selectedUserForDetail.kycIdNumber,
           kycCountry: selectedUserForDetail.kycCountry,
           kycVerifiedAt: selectedUserForDetail.kycVerifiedAt,
+          kycAddresses: selectedUserForDetail.kycAddresses,
+          kycDateOfBirth: selectedUserForDetail.kycDateOfBirth,
+          kycNationality: selectedUserForDetail.kycNationality,
           registeredAt: selectedUserForDetail.createdAt,
-          lastActiveDate: selectedUserForDetail.createdAt,
-          btcBalance: selectedUserForDetail.currencyBalances.find(c => c.currency === "BTC")?.balance.toString() || "0",
-          ethBalance: selectedUserForDetail.currencyBalances.find(c => c.currency === "ETH")?.balance.toString() || "0",
-          usdtBalance: selectedUserForDetail.currencyBalances.find(c => c.currency === "USDT")?.balance.toString() || "0",
-          totalDeposits: 0,
-          totalWithdrawals: 0,
-          monthlyProfit: `${selectedUserForDetail.monthlyProfit} ${selectedUserForDetail.primaryCurrency}`,
-          totalProfit: `${selectedUserForDetail.totalProfit} ${selectedUserForDetail.primaryCurrency}`,
         } : null}
       />
     </div>
