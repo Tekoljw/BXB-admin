@@ -94,7 +94,6 @@ import CryptoUsersPage from "@/app/(dashboard)/admin/crypto/users/page"
 import CryptoCurrenciesPage from "@/app/(dashboard)/admin/crypto/currencies/page"
 import CustodialWalletsPage from "@/app/(dashboard)/admin/crypto/custodial-wallets/page"
 import AddressesManagementPage from "@/app/(dashboard)/admin/crypto/addresses/page"
-import WalletAPIBusinessPage from "@/app/(dashboard)/admin/crypto/wallet-api-business/page"
 import OTCSuppliersPage from "@/app/(dashboard)/admin/crypto/otc-suppliers/page"
 import OTCOrdersPage from "@/app/(dashboard)/admin/crypto/otc-orders/page"
 import OnchainDepositOrdersPage from "@/app/(dashboard)/admin/crypto/onchain-deposit-orders/page"
@@ -162,7 +161,7 @@ export default function InstantNavigation() {
       copytrade: '/admin/copytrade',
       finance: '/admin/finance',
       commission: '/admin/commission/futures',
-      'crypto': '/admin/crypto/currencies',
+      'crypto': '/admin/crypto/business-report',
       fiat: '/admin/fiat/reports',
       orders: '/admin/orders/business-overview',
       options: '/admin/options',
@@ -379,7 +378,6 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/crypto/currencies") return <CryptoCurrenciesPage />
     if (currentPage === "/admin/crypto/custodial-wallets") return <CustodialWalletsPage />
     if (currentPage === "/admin/crypto/addresses") return <AddressesManagementPage />
-    if (currentPage === "/admin/crypto/wallet-api-business") return <WalletAPIBusinessPage />
     if (currentPage === "/admin/crypto/otc-suppliers") return <OTCSuppliersPage />
     if (currentPage === "/admin/crypto/otc-orders") return <OTCOrdersPage />
     if (currentPage === "/admin/crypto/onchain-deposit-orders") return <OnchainDepositOrdersPage />
