@@ -1241,8 +1241,12 @@ export default function MerchantsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    <div className="text-gray-900 dark:text-gray-300">{merchant.email}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{merchant.phone}</div>
+                    <a href={`mailto:${merchant.email}`} className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer block">
+                      {merchant.email || '-'}
+                    </a>
+                    <a href={`tel:${merchant.phone}`} className="text-gray-500 dark:text-gray-400 text-xs mt-1 hover:underline cursor-pointer block">
+                      {merchant.phone || '-'}
+                    </a>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <button
