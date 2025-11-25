@@ -71,6 +71,28 @@ interface FeeConfig {
   useSystemTieredFee: boolean
 }
 
+interface CryptoNetworkFee {
+  network: string
+  currency: string
+  withdrawFeeRate: string
+  withdrawFeeFixed: string
+  minWithdrawFee: string
+  maxWithdrawFee: string
+  depositFeeRate: string
+  depositFeeFixed: string
+  addressMonthlyFee: string
+  useSystemFee: boolean
+  enabled: boolean
+}
+
+interface CryptoFeeConfig {
+  userId: string
+  networks: CryptoNetworkFee[]
+  globalWithdrawFeeRate: string
+  globalDepositFeeRate: string
+  addressFeeDiscount: string
+}
+
 interface CurrencyBalance {
   currency: string
   balance: number
@@ -173,10 +195,25 @@ interface CryptoUser {
   currencyVolumes: CurrencyVolume[]
   totalOrders: number
   feeConfigs: FeeConfig[]
+  cryptoFeeConfig: CryptoFeeConfig
   status: "active" | "frozen" | "disabled"
   hasPendingDomain: boolean
   createdAt: string
 }
+
+const createDefaultCryptoFeeConfig = (userId: string): CryptoFeeConfig => ({
+  userId,
+  networks: [
+    { network: "TRC20", currency: "USDT", withdrawFeeRate: "0.1%", withdrawFeeFixed: "1", minWithdrawFee: "1 USDT", maxWithdrawFee: "100 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "60 USDT", useSystemFee: false, enabled: true },
+    { network: "ERC20", currency: "USDT", withdrawFeeRate: "0.15%", withdrawFeeFixed: "5", minWithdrawFee: "5 USDT", maxWithdrawFee: "200 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "80 USDT", useSystemFee: false, enabled: true },
+    { network: "BSC", currency: "USDT", withdrawFeeRate: "0.08%", withdrawFeeFixed: "0.5", minWithdrawFee: "0.5 USDT", maxWithdrawFee: "50 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "40 USDT", useSystemFee: true, enabled: true },
+    { network: "Polygon", currency: "USDT", withdrawFeeRate: "0.05%", withdrawFeeFixed: "0.2", minWithdrawFee: "0.2 USDT", maxWithdrawFee: "30 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "30 USDT", useSystemFee: true, enabled: true },
+    { network: "Solana", currency: "USDT", withdrawFeeRate: "0.06%", withdrawFeeFixed: "0.3", minWithdrawFee: "0.3 USDT", maxWithdrawFee: "40 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "35 USDT", useSystemFee: true, enabled: false }
+  ],
+  globalWithdrawFeeRate: "0.1%",
+  globalDepositFeeRate: "0%",
+  addressFeeDiscount: "0%"
+})
 
 const mockCryptoUsers: CryptoUser[] = [
   {
@@ -356,6 +393,19 @@ const mockCryptoUsers: CryptoUser[] = [
         collectionFee: "1.5%", paymentFee: "1.3%", minCollectionFee: "2.0 USDT", minPaymentFee: "1.5 USDT", useSystemTieredFee: false 
       },
     ],
+    cryptoFeeConfig: {
+      userId: "U100003",
+      networks: [
+        { network: "TRC20", currency: "USDT", withdrawFeeRate: "0.1%", withdrawFeeFixed: "1", minWithdrawFee: "1 USDT", maxWithdrawFee: "100 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "60 USDT", useSystemFee: false, enabled: true },
+        { network: "ERC20", currency: "USDT", withdrawFeeRate: "0.15%", withdrawFeeFixed: "5", minWithdrawFee: "5 USDT", maxWithdrawFee: "200 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "80 USDT", useSystemFee: false, enabled: true },
+        { network: "BSC", currency: "USDT", withdrawFeeRate: "0.08%", withdrawFeeFixed: "0.5", minWithdrawFee: "0.5 USDT", maxWithdrawFee: "50 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "40 USDT", useSystemFee: true, enabled: true },
+        { network: "Polygon", currency: "USDT", withdrawFeeRate: "0.05%", withdrawFeeFixed: "0.2", minWithdrawFee: "0.2 USDT", maxWithdrawFee: "30 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "30 USDT", useSystemFee: true, enabled: true },
+        { network: "Solana", currency: "USDT", withdrawFeeRate: "0.06%", withdrawFeeFixed: "0.3", minWithdrawFee: "0.3 USDT", maxWithdrawFee: "40 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "35 USDT", useSystemFee: true, enabled: false }
+      ],
+      globalWithdrawFeeRate: "0.1%",
+      globalDepositFeeRate: "0%",
+      addressFeeDiscount: "0%"
+    },
     status: "frozen",
     hasPendingDomain: false,
     createdAt: "2024-01-15 09:15:00"
@@ -502,6 +552,7 @@ const mockCryptoUsers: CryptoUser[] = [
         collectionFee: "0.9%", paymentFee: "0.7%", minCollectionFee: "0.9 USDT", minPaymentFee: "0.7 USDT", useSystemTieredFee: true 
       },
     ],
+    cryptoFeeConfig: createDefaultCryptoFeeConfig("U100004"),
     status: "active",
     hasPendingDomain: false,
     createdAt: "2024-01-08 16:45:00"
@@ -584,6 +635,7 @@ const mockCryptoUsers: CryptoUser[] = [
     currencyVolumes: [],
     totalOrders: 0,
     feeConfigs: [],
+    cryptoFeeConfig: createDefaultCryptoFeeConfig("U100005"),
     status: "active",
     hasPendingDomain: false,
     createdAt: "2024-06-20 10:30:00"
@@ -665,6 +717,7 @@ const mockCryptoUsers: CryptoUser[] = [
         collectionFee: "0.6%", paymentFee: "0.4%", minCollectionFee: "USDT 1.00", minPaymentFee: "USDT 0.60", useSystemTieredFee: false 
       },
     ],
+    cryptoFeeConfig: createDefaultCryptoFeeConfig("U100006"),
     status: "active",
     hasPendingDomain: true,
     createdAt: "2024-03-12 11:45:00"
@@ -797,6 +850,7 @@ const mockCryptoUsers: CryptoUser[] = [
         collectionFee: "0.7%", paymentFee: "0.5%", minCollectionFee: "USDT 1.00", minPaymentFee: "USDT 0.80", useSystemTieredFee: false 
       },
     ],
+    cryptoFeeConfig: createDefaultCryptoFeeConfig("U100007"),
     status: "active",
     hasPendingDomain: false,
     createdAt: "2024-02-20 08:30:00"
@@ -859,6 +913,7 @@ const mockCryptoUsers: CryptoUser[] = [
     currencyVolumes: [],
     totalOrders: 85,
     feeConfigs: [],
+    cryptoFeeConfig: createDefaultCryptoFeeConfig("U100008"),
     status: "active",
     hasPendingDomain: false,
     createdAt: "2024-06-01 09:00:00"
@@ -937,6 +992,7 @@ const mockCryptoUsers: CryptoUser[] = [
         collectionFee: "0.8%", paymentFee: "0.6%", minCollectionFee: "USDT 1.20", minPaymentFee: "USDT 0.90", useSystemTieredFee: false 
       },
     ],
+    cryptoFeeConfig: createDefaultCryptoFeeConfig("U100009"),
     status: "frozen",
     hasPendingDomain: false,
     createdAt: "2024-04-05 13:15:00"
@@ -1029,6 +1085,7 @@ const mockCryptoUsers: CryptoUser[] = [
     currencyVolumes: [],
     totalOrders: 0,
     feeConfigs: [],
+    cryptoFeeConfig: createDefaultCryptoFeeConfig("U100010"),
     status: "disabled",
     hasPendingDomain: false,
     createdAt: "2024-06-25 16:00:00"
@@ -1052,6 +1109,8 @@ export default function CryptoUsersPage() {
   const [isProfitContributionDialogOpen, setIsProfitContributionDialogOpen] = useState(false)
   const [isInterfaceManageDialogOpen, setIsInterfaceManageDialogOpen] = useState(false)
   const [isSupplierManageDialogOpen, setIsSupplierManageDialogOpen] = useState(false)
+  const [isCryptoFeeDialogOpen, setIsCryptoFeeDialogOpen] = useState(false)
+  const [editingCryptoFee, setEditingCryptoFee] = useState<CryptoNetworkFee | null>(null)
   const [currentUser, setCurrentUser] = useState<CryptoUser | null>(null)
   const [currentFeeConfig, setCurrentFeeConfig] = useState<FeeConfig | null>(null)
   const [currentInterface, setCurrentInterface] = useState<PaymentInterface | null>(null)
@@ -1281,6 +1340,40 @@ export default function CryptoUsersPage() {
     setCurrentUser(user)
     setActiveCurrency(ALL_CRYPTOS[0])
     setIsFeeConfigDialogOpen(true)
+  }
+
+  const openCryptoFeeDialog = (user: CryptoUser) => {
+    setCurrentUser(user)
+    setEditingCryptoFee(null)
+    setIsCryptoFeeDialogOpen(true)
+  }
+
+  const handleCryptoFeeChange = (network: string, field: keyof CryptoNetworkFee, value: string | boolean) => {
+    if (!currentUser) return
+    
+    const updatedNetworks = currentUser.cryptoFeeConfig.networks.map(n => 
+      n.network === network ? { ...n, [field]: value } : n
+    )
+    
+    const updatedCryptoFeeConfig = { ...currentUser.cryptoFeeConfig, networks: updatedNetworks }
+    
+    setCryptoUsers(cryptoUsers.map(u => 
+      u.id === currentUser.id ? { ...u, cryptoFeeConfig: updatedCryptoFeeConfig } : u
+    ))
+    
+    setCurrentUser({ ...currentUser, cryptoFeeConfig: updatedCryptoFeeConfig })
+  }
+
+  const handleGlobalCryptoFeeChange = (field: keyof CryptoFeeConfig, value: string) => {
+    if (!currentUser) return
+    
+    const updatedCryptoFeeConfig = { ...currentUser.cryptoFeeConfig, [field]: value }
+    
+    setCryptoUsers(cryptoUsers.map(u => 
+      u.id === currentUser.id ? { ...u, cryptoFeeConfig: updatedCryptoFeeConfig } : u
+    ))
+    
+    setCurrentUser({ ...currentUser, cryptoFeeConfig: updatedCryptoFeeConfig })
   }
 
   const openAddFeeConfigDialog = () => {
@@ -1729,9 +1822,9 @@ export default function CryptoUsersPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => openFeeConfigDialog(user)}
+                        onClick={() => openCryptoFeeDialog(user)}
                         className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
-                        title="用户通道配置"
+                        title="Crypto手续费配置"
                       >
                         <Settings className="w-4 h-4" />
                       </Button>
@@ -1941,6 +2034,162 @@ export default function CryptoUsersPage() {
                   </TabsContent>
                 ))}
             </Tabs>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={isCryptoFeeDialogOpen} onOpenChange={setIsCryptoFeeDialogOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Crypto手续费配置 - {currentUser?.name}</SheetTitle>
+          </SheetHeader>
+
+          <div className="mt-6 space-y-6">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">全局设置</h4>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>全局提币费率</Label>
+                  <Input
+                    value={currentUser?.cryptoFeeConfig.globalWithdrawFeeRate || ""}
+                    onChange={(e) => handleGlobalCryptoFeeChange('globalWithdrawFeeRate', e.target.value)}
+                    placeholder="0.1%"
+                    className="h-9"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>全局充币费率</Label>
+                  <Input
+                    value={currentUser?.cryptoFeeConfig.globalDepositFeeRate || ""}
+                    onChange={(e) => handleGlobalCryptoFeeChange('globalDepositFeeRate', e.target.value)}
+                    placeholder="0%"
+                    className="h-9"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>地址费折扣</Label>
+                  <Input
+                    value={currentUser?.cryptoFeeConfig.addressFeeDiscount || ""}
+                    onChange={(e) => handleGlobalCryptoFeeChange('addressFeeDiscount', e.target.value)}
+                    placeholder="0%"
+                    className="h-9"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">网络手续费配置</h4>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead className="bg-gray-50 dark:bg-gray-700/50">
+                    <tr>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        网络
+                      </th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        币种
+                      </th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        提币费率
+                      </th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        提币固定费
+                      </th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        最低提币费
+                      </th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        地址月租费
+                      </th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        系统费率
+                      </th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        状态
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {currentUser?.cryptoFeeConfig.networks.map((network) => (
+                      <tr key={network.network} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <td className="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                          {network.network}
+                        </td>
+                        <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                          {network.currency}
+                        </td>
+                        <td className="px-3 py-2">
+                          <Input
+                            value={network.withdrawFeeRate}
+                            onChange={(e) => handleCryptoFeeChange(network.network, 'withdrawFeeRate', e.target.value)}
+                            className="h-8 text-sm w-20 text-orange-600 dark:text-orange-400 font-semibold"
+                            placeholder="0.1%"
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Input
+                            value={network.withdrawFeeFixed}
+                            onChange={(e) => handleCryptoFeeChange(network.network, 'withdrawFeeFixed', e.target.value)}
+                            className="h-8 text-sm w-16 text-orange-600 dark:text-orange-400"
+                            placeholder="1"
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Input
+                            value={network.minWithdrawFee}
+                            onChange={(e) => handleCryptoFeeChange(network.network, 'minWithdrawFee', e.target.value)}
+                            className="h-8 text-sm w-24 text-orange-600 dark:text-orange-400"
+                            placeholder="1 USDT"
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Input
+                            value={network.addressMonthlyFee}
+                            onChange={(e) => handleCryptoFeeChange(network.network, 'addressMonthlyFee', e.target.value)}
+                            className="h-8 text-sm w-24 text-purple-600 dark:text-purple-400 font-semibold"
+                            placeholder="60 USDT"
+                          />
+                        </td>
+                        <td className="px-3 py-3 whitespace-nowrap text-sm">
+                          <div className="flex items-center gap-2">
+                            <Switch
+                              checked={network.useSystemFee}
+                              onCheckedChange={(checked) => handleCryptoFeeChange(network.network, 'useSystemFee', checked)}
+                            />
+                            <span className={`text-xs ${network.useSystemFee ? "text-green-600 dark:text-green-400" : "text-gray-400 dark:text-gray-500"}`}>
+                              {network.useSystemFee ? "使用" : "自定义"}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-3 py-3 whitespace-nowrap text-sm">
+                          <div className="flex items-center gap-2">
+                            <Switch
+                              checked={network.enabled}
+                              onCheckedChange={(checked) => handleCryptoFeeChange(network.network, 'enabled', checked)}
+                            />
+                            <span className={`text-xs ${network.enabled ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400"}`}>
+                              {network.enabled ? "启用" : "禁用"}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+              <h4 className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">说明</h4>
+              <ul className="text-xs text-blue-600 dark:text-blue-400 space-y-1">
+                <li>• 提币费率：用户提币时按金额百分比收取的手续费</li>
+                <li>• 提币固定费：每笔提币收取的固定费用</li>
+                <li>• 最低提币费：单笔提币的最低手续费</li>
+                <li>• 地址月租费：每个地址每月收取的租用费用</li>
+                <li>• 系统费率：启用后将使用系统默认费率配置</li>
+              </ul>
+            </div>
           </div>
         </SheetContent>
       </Sheet>
