@@ -206,6 +206,14 @@ const createDefaultCryptoFeeConfig = (userId: string): CryptoFeeConfig => ({
   ]
 })
 
+const defaultSystemCryptoFeeConfig: CryptoNetworkFee[] = [
+  { network: "TRC20", withdrawFeeRate: "0.1%", withdrawFeeMax: "100 USDT", minWithdrawFee: "1 USDT", addressMonthlyFee: "60 USDT", freeAddressCount: 5, useSystemFee: true, enabled: true },
+  { network: "ERC20", withdrawFeeRate: "0.15%", withdrawFeeMax: "200 USDT", minWithdrawFee: "5 USDT", addressMonthlyFee: "80 USDT", freeAddressCount: 3, useSystemFee: true, enabled: true },
+  { network: "BSC", withdrawFeeRate: "0.08%", withdrawFeeMax: "50 USDT", minWithdrawFee: "0.5 USDT", addressMonthlyFee: "40 USDT", freeAddressCount: 5, useSystemFee: true, enabled: true },
+  { network: "Polygon", withdrawFeeRate: "0.05%", withdrawFeeMax: "30 USDT", minWithdrawFee: "0.2 USDT", addressMonthlyFee: "30 USDT", freeAddressCount: 10, useSystemFee: true, enabled: true },
+  { network: "Solana", withdrawFeeRate: "0.06%", withdrawFeeMax: "40 USDT", minWithdrawFee: "0.3 USDT", addressMonthlyFee: "35 USDT", freeAddressCount: 5, useSystemFee: true, enabled: false }
+]
+
 const mockCryptoUsers: CryptoUser[] = [
   {
     id: "M003",
@@ -1090,6 +1098,8 @@ export default function CryptoUsersPage() {
   const [isSupplierManageDialogOpen, setIsSupplierManageDialogOpen] = useState(false)
   const [isCryptoFeeDialogOpen, setIsCryptoFeeDialogOpen] = useState(false)
   const [editingCryptoFee, setEditingCryptoFee] = useState<CryptoNetworkFee | null>(null)
+  const [cryptoFeeConfigTab, setCryptoFeeConfigTab] = useState<"user" | "system">("user")
+  const [systemCryptoFeeConfig, setSystemCryptoFeeConfig] = useState<CryptoNetworkFee[]>(defaultSystemCryptoFeeConfig)
   const [currentUser, setCurrentUser] = useState<CryptoUser | null>(null)
   const [currentFeeConfig, setCurrentFeeConfig] = useState<FeeConfig | null>(null)
   const [currentInterface, setCurrentInterface] = useState<PaymentInterface | null>(null)
@@ -1324,6 +1334,7 @@ export default function CryptoUsersPage() {
   const openCryptoFeeDialog = (user: CryptoUser) => {
     setCurrentUser(user)
     setEditingCryptoFee(null)
+    setCryptoFeeConfigTab("user")
     setIsCryptoFeeDialogOpen(true)
   }
 
@@ -1341,6 +1352,12 @@ export default function CryptoUsersPage() {
     ))
     
     setCurrentUser({ ...currentUser, cryptoFeeConfig: updatedCryptoFeeConfig })
+  }
+
+  const handleSystemCryptoFeeChange = (network: string, field: keyof CryptoNetworkFee, value: string | boolean | number) => {
+    setSystemCryptoFeeConfig(systemCryptoFeeConfig.map(n => 
+      n.network === network ? { ...n, [field]: value } : n
+    ))
   }
 
   const openAddFeeConfigDialog = () => {
@@ -2008,130 +2025,254 @@ export default function CryptoUsersPage() {
       <Sheet open={isCryptoFeeDialogOpen} onOpenChange={setIsCryptoFeeDialogOpen}>
         <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>Crypto手续费配置 - {currentUser?.name}</SheetTitle>
+            <SheetTitle>Crypto手续费配置 {cryptoFeeConfigTab === "user" ? `- ${currentUser?.name}` : ""}</SheetTitle>
           </SheetHeader>
 
-          <div className="mt-6 space-y-6">
-            <div>
-              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">网络手续费配置</h4>
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead className="bg-gray-50 dark:bg-gray-700/50">
-                    <tr>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        网络
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        提币费率
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        提币费上限
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        最低提币费
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        地址月租费
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        免费地址数
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        系统费率
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        状态
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {currentUser?.cryptoFeeConfig.networks.map((network) => (
-                      <tr key={network.network} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                        <td className="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {network.network}
-                        </td>
-                        <td className="px-3 py-2">
-                          <Input
-                            value={network.withdrawFeeRate}
-                            onChange={(e) => handleCryptoFeeChange(network.network, 'withdrawFeeRate', e.target.value)}
-                            className="h-8 text-sm w-20 text-orange-600 dark:text-orange-400 font-semibold"
-                            placeholder="0.1%"
-                          />
-                        </td>
-                        <td className="px-3 py-2">
-                          <Input
-                            value={network.withdrawFeeMax}
-                            onChange={(e) => handleCryptoFeeChange(network.network, 'withdrawFeeMax', e.target.value)}
-                            className="h-8 text-sm w-24 text-orange-600 dark:text-orange-400"
-                            placeholder="100 USDT"
-                          />
-                        </td>
-                        <td className="px-3 py-2">
-                          <Input
-                            value={network.minWithdrawFee}
-                            onChange={(e) => handleCryptoFeeChange(network.network, 'minWithdrawFee', e.target.value)}
-                            className="h-8 text-sm w-24 text-orange-600 dark:text-orange-400"
-                            placeholder="1 USDT"
-                          />
-                        </td>
-                        <td className="px-3 py-2">
-                          <Input
-                            value={network.addressMonthlyFee}
-                            onChange={(e) => handleCryptoFeeChange(network.network, 'addressMonthlyFee', e.target.value)}
-                            className="h-8 text-sm w-24 text-purple-600 dark:text-purple-400 font-semibold"
-                            placeholder="60 USDT"
-                          />
-                        </td>
-                        <td className="px-3 py-2">
-                          <Input
-                            type="number"
-                            value={network.freeAddressCount}
-                            onChange={(e) => handleCryptoFeeChange(network.network, 'freeAddressCount', parseInt(e.target.value) || 0)}
-                            className="h-8 text-sm w-16 text-blue-600 dark:text-blue-400 font-semibold"
-                            placeholder="5"
-                            min="0"
-                          />
-                        </td>
-                        <td className="px-3 py-3 whitespace-nowrap text-sm">
-                          <div className="flex items-center gap-2">
-                            <Switch
-                              checked={network.useSystemFee}
-                              onCheckedChange={(checked) => handleCryptoFeeChange(network.network, 'useSystemFee', checked)}
-                            />
-                            <span className={`text-xs ${network.useSystemFee ? "text-green-600 dark:text-green-400" : "text-gray-400 dark:text-gray-500"}`}>
-                              {network.useSystemFee ? "使用" : "自定义"}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-3 py-3 whitespace-nowrap text-sm">
-                          <div className="flex items-center gap-2">
-                            <Switch
-                              checked={network.enabled}
-                              onCheckedChange={(checked) => handleCryptoFeeChange(network.network, 'enabled', checked)}
-                            />
-                            <span className={`text-xs ${network.enabled ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400"}`}>
-                              {network.enabled ? "启用" : "禁用"}
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div className="mt-4">
+            <Tabs value={cryptoFeeConfigTab} onValueChange={(value) => setCryptoFeeConfigTab(value as "user" | "system")}>
+              <TabsList className="grid w-full grid-cols-2 mb-4">
+                <TabsTrigger value="user">用户单独配置</TabsTrigger>
+                <TabsTrigger value="system">系统统一配置</TabsTrigger>
+              </TabsList>
 
-            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-              <h4 className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">说明</h4>
-              <ul className="text-xs text-blue-600 dark:text-blue-400 space-y-1">
-                <li>• 提币费率：用户提币时按金额百分比收取的手续费</li>
-                <li>• 提币费上限：单笔提币手续费的最高限额</li>
-                <li>• 最低提币费：单笔提币的最低手续费</li>
-                <li>• 地址月租费：每个地址每月收取的租用费用</li>
-                <li>• 免费地址数：用户可免费使用的地址数量</li>
-                <li>• 系统费率：启用后将使用系统默认费率配置</li>
-              </ul>
-            </div>
+              <TabsContent value="user" className="space-y-6">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    用户 <span className="text-emerald-600 dark:text-emerald-400">{currentUser?.name}</span> 的网络手续费配置
+                  </h4>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <thead className="bg-gray-50 dark:bg-gray-700/50">
+                        <tr>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            网络
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            提币费率
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            提币费上限
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            最低提币费
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            地址月租费
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            免费地址数
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            系统费率
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            状态
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {currentUser?.cryptoFeeConfig.networks.map((network) => (
+                          <tr key={network.network} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                            <td className="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                              {network.network}
+                            </td>
+                            <td className="px-3 py-2">
+                              <Input
+                                value={network.withdrawFeeRate}
+                                onChange={(e) => handleCryptoFeeChange(network.network, 'withdrawFeeRate', e.target.value)}
+                                className="h-8 text-sm w-20 text-orange-600 dark:text-orange-400 font-semibold"
+                                placeholder="0.1%"
+                                disabled={network.useSystemFee}
+                              />
+                            </td>
+                            <td className="px-3 py-2">
+                              <Input
+                                value={network.withdrawFeeMax}
+                                onChange={(e) => handleCryptoFeeChange(network.network, 'withdrawFeeMax', e.target.value)}
+                                className="h-8 text-sm w-24 text-orange-600 dark:text-orange-400"
+                                placeholder="100 USDT"
+                                disabled={network.useSystemFee}
+                              />
+                            </td>
+                            <td className="px-3 py-2">
+                              <Input
+                                value={network.minWithdrawFee}
+                                onChange={(e) => handleCryptoFeeChange(network.network, 'minWithdrawFee', e.target.value)}
+                                className="h-8 text-sm w-24 text-orange-600 dark:text-orange-400"
+                                placeholder="1 USDT"
+                                disabled={network.useSystemFee}
+                              />
+                            </td>
+                            <td className="px-3 py-2">
+                              <Input
+                                value={network.addressMonthlyFee}
+                                onChange={(e) => handleCryptoFeeChange(network.network, 'addressMonthlyFee', e.target.value)}
+                                className="h-8 text-sm w-24 text-purple-600 dark:text-purple-400 font-semibold"
+                                placeholder="60 USDT"
+                                disabled={network.useSystemFee}
+                              />
+                            </td>
+                            <td className="px-3 py-2">
+                              <Input
+                                type="number"
+                                value={network.freeAddressCount}
+                                onChange={(e) => handleCryptoFeeChange(network.network, 'freeAddressCount', parseInt(e.target.value) || 0)}
+                                className="h-8 text-sm w-16 text-blue-600 dark:text-blue-400 font-semibold"
+                                placeholder="5"
+                                min="0"
+                                disabled={network.useSystemFee}
+                              />
+                            </td>
+                            <td className="px-3 py-3 whitespace-nowrap text-sm">
+                              <div className="flex items-center gap-2">
+                                <Switch
+                                  checked={network.useSystemFee}
+                                  onCheckedChange={(checked) => handleCryptoFeeChange(network.network, 'useSystemFee', checked)}
+                                />
+                                <span className={`text-xs ${network.useSystemFee ? "text-green-600 dark:text-green-400" : "text-gray-400 dark:text-gray-500"}`}>
+                                  {network.useSystemFee ? "使用" : "自定义"}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-3 py-3 whitespace-nowrap text-sm">
+                              <div className="flex items-center gap-2">
+                                <Switch
+                                  checked={network.enabled}
+                                  onCheckedChange={(checked) => handleCryptoFeeChange(network.network, 'enabled', checked)}
+                                />
+                                <span className={`text-xs ${network.enabled ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400"}`}>
+                                  {network.enabled ? "启用" : "禁用"}
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                  <h4 className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">说明</h4>
+                  <ul className="text-xs text-blue-600 dark:text-blue-400 space-y-1">
+                    <li>• 提币费率：用户提币时按金额百分比收取的手续费</li>
+                    <li>• 提币费上限：单笔提币手续费的最高限额</li>
+                    <li>• 最低提币费：单笔提币的最低手续费</li>
+                    <li>• 地址月租费：每个地址每月收取的租用费用</li>
+                    <li>• 免费地址数：用户可免费使用的地址数量</li>
+                    <li>• 系统费率：启用后将使用系统统一配置中的费率</li>
+                  </ul>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="system" className="space-y-6">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    系统统一手续费配置 <span className="text-xs text-gray-500 dark:text-gray-400">（适用于所有启用"系统费率"的用户）</span>
+                  </h4>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <thead className="bg-gray-50 dark:bg-gray-700/50">
+                        <tr>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            网络
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            提币费率
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            提币费上限
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            最低提币费
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            地址月租费
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            免费地址数
+                          </th>
+                          <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                            状态
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {systemCryptoFeeConfig.map((network) => (
+                          <tr key={network.network} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                            <td className="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                              {network.network}
+                            </td>
+                            <td className="px-3 py-2">
+                              <Input
+                                value={network.withdrawFeeRate}
+                                onChange={(e) => handleSystemCryptoFeeChange(network.network, 'withdrawFeeRate', e.target.value)}
+                                className="h-8 text-sm w-20 text-orange-600 dark:text-orange-400 font-semibold"
+                                placeholder="0.1%"
+                              />
+                            </td>
+                            <td className="px-3 py-2">
+                              <Input
+                                value={network.withdrawFeeMax}
+                                onChange={(e) => handleSystemCryptoFeeChange(network.network, 'withdrawFeeMax', e.target.value)}
+                                className="h-8 text-sm w-24 text-orange-600 dark:text-orange-400"
+                                placeholder="100 USDT"
+                              />
+                            </td>
+                            <td className="px-3 py-2">
+                              <Input
+                                value={network.minWithdrawFee}
+                                onChange={(e) => handleSystemCryptoFeeChange(network.network, 'minWithdrawFee', e.target.value)}
+                                className="h-8 text-sm w-24 text-orange-600 dark:text-orange-400"
+                                placeholder="1 USDT"
+                              />
+                            </td>
+                            <td className="px-3 py-2">
+                              <Input
+                                value={network.addressMonthlyFee}
+                                onChange={(e) => handleSystemCryptoFeeChange(network.network, 'addressMonthlyFee', e.target.value)}
+                                className="h-8 text-sm w-24 text-purple-600 dark:text-purple-400 font-semibold"
+                                placeholder="60 USDT"
+                              />
+                            </td>
+                            <td className="px-3 py-2">
+                              <Input
+                                type="number"
+                                value={network.freeAddressCount}
+                                onChange={(e) => handleSystemCryptoFeeChange(network.network, 'freeAddressCount', parseInt(e.target.value) || 0)}
+                                className="h-8 text-sm w-16 text-blue-600 dark:text-blue-400 font-semibold"
+                                placeholder="5"
+                                min="0"
+                              />
+                            </td>
+                            <td className="px-3 py-3 whitespace-nowrap text-sm">
+                              <div className="flex items-center gap-2">
+                                <Switch
+                                  checked={network.enabled}
+                                  onCheckedChange={(checked) => handleSystemCryptoFeeChange(network.network, 'enabled', checked)}
+                                />
+                                <span className={`text-xs ${network.enabled ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400"}`}>
+                                  {network.enabled ? "启用" : "禁用"}
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4">
+                  <h4 className="text-sm font-medium text-amber-700 dark:text-amber-300 mb-2">系统配置说明</h4>
+                  <ul className="text-xs text-amber-600 dark:text-amber-400 space-y-1">
+                    <li>• 此处配置的费率将应用于所有启用"系统费率"开关的用户</li>
+                    <li>• 修改此配置会立即影响所有使用系统费率的用户</li>
+                    <li>• 建议谨慎修改，确保费率设置合理</li>
+                  </ul>
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         </SheetContent>
       </Sheet>

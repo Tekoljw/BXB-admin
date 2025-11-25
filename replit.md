@@ -36,11 +36,16 @@ Preferred communication style: Simple, everyday Chinese language.
   - `CryptoNetworkFee`: 定义每个网络的手续费配置（提币费率、提币费上限、最低提币费、地址月租费、免费地址数）
   - `CryptoFeeConfig`: 定义用户的Crypto手续费配置列表
   - `createDefaultCryptoFeeConfig`: 工厂函数，生成默认手续费配置
+  - `defaultSystemCryptoFeeConfig`: 系统统一手续费配置
 - **弹窗功能**: 
+  - **双页签设计**: 顶部两个页签切换
+    - 用户单独配置：为当前用户配置独立的手续费
+    - 系统统一配置：配置所有启用"系统费率"用户的统一费率
   - 网络配置表格：按网络(TRC20/ERC20/BSC/Polygon/Solana)配置
   - 配置项：提币费率、提币费上限、最低提币费、地址月租费、免费地址数
   - 支持启用/禁用网络、使用系统费率开关
   - Inline编辑，实时更新状态
+  - 用户启用"系统费率"后，对应网络的输入框自动禁用
 - **UI设计**: 采用Sheet侧边栏弹窗，与页面既有风格保持一致
 
 ### 2025-11-15: 法币币种管理排序功能
