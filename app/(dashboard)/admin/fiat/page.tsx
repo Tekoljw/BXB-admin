@@ -13,6 +13,7 @@ import ChannelsPage from "./channels/page"
 import MerchantsPage from "./users/page"
 import CommissionPage from "./commission/page"
 import OrdersPage from "./orders/page"
+import FreezeRecordsPage from "./freeze-records/page"
 import ExchangeOrdersPage from "./exchange-orders/page"
 
 export default function FiatManagementPage() {
@@ -72,6 +73,9 @@ export default function FiatManagementPage() {
     }
     if (currentPath === "/admin/fiat/orders") {
       return <OrdersPage />
+    }
+    if (currentPath === "/admin/fiat/freeze-records") {
+      return <FreezeRecordsPage />
     }
     if (currentPath === "/admin/fiat/exchange-orders") {
       return <ExchangeOrdersPage />
