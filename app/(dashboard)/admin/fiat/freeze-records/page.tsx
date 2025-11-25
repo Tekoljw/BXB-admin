@@ -223,23 +223,23 @@ export default function FreezeRecordsPage() {
     <div className="p-6 space-y-6">
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white">冻解记录</h2>
 
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="flex items-start gap-6">
+        <div className="flex-shrink-0">
           <Tabs value={recordType} onValueChange={(value) => setRecordType(value as "all" | "freeze" | "unfreeze")}>
-            <TabsList>
-              <TabsTrigger value="all">
+            <TabsList className="flex-col h-auto space-y-1">
+              <TabsTrigger value="all" className="w-full justify-start">
                 全部记录
                 <span className="ml-2 px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">
                   {records.length}
                 </span>
               </TabsTrigger>
-              <TabsTrigger value="freeze">
+              <TabsTrigger value="freeze" className="w-full justify-start">
                 冻结记录
                 <span className="ml-2 px-2 py-0.5 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full">
                   {freezeCount}
                 </span>
               </TabsTrigger>
-              <TabsTrigger value="unfreeze">
+              <TabsTrigger value="unfreeze" className="w-full justify-start">
                 解冻记录
                 <span className="ml-2 px-2 py-0.5 text-xs bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full">
                   {unfreezeCount}
@@ -249,7 +249,7 @@ export default function FreezeRecordsPage() {
           </Tabs>
         </div>
 
-        <div className="space-y-4">
+        <div className="flex-1 space-y-4">
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
               <Input
