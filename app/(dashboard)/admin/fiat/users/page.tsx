@@ -100,6 +100,17 @@ interface TimeRangeProfitData {
   total: CurrencyProfit[]
 }
 
+interface KYCAddress {
+  label: string
+  country: string
+  province: string
+  city: string
+  district?: string
+  street: string
+  postalCode?: string
+  fullAddress: string
+}
+
 interface Merchant {
   id: string
   name: string
@@ -113,6 +124,10 @@ interface Merchant {
   kycCountry?: string
   kycIdType?: string
   kycVerifiedAt?: string
+  kycBirthday?: string
+  kycGender?: string
+  kycNationality?: string
+  kycAddresses?: KYCAddress[]
   registeredAt: string
   registeredLocation?: string
   lastLoginLocation?: string
@@ -152,6 +167,31 @@ const mockMerchants: Merchant[] = [
     kycCountry: "中国",
     kycIdType: "身份证",
     kycVerifiedAt: "2024-01-20 14:30:00",
+    kycBirthday: "1990-01-01",
+    kycGender: "男",
+    kycNationality: "中国",
+    kycAddresses: [
+      {
+        label: "居住地址",
+        country: "中国",
+        province: "北京市",
+        city: "北京市",
+        district: "朝阳区",
+        street: "建国路88号SOHO现代城A座1208室",
+        postalCode: "100022",
+        fullAddress: "中国北京市朝阳区建国路88号SOHO现代城A座1208室"
+      },
+      {
+        label: "公司地址",
+        country: "中国",
+        province: "上海市",
+        city: "上海市",
+        district: "浦东新区",
+        street: "陆家嘴环路1000号恒生银行大厦25楼",
+        postalCode: "200120",
+        fullAddress: "中国上海市浦东新区陆家嘴环路1000号恒生银行大厦25楼"
+      }
+    ],
     registeredAt: "2024-01-15 09:15:00",
     registeredLocation: "北京市朝阳区",
     lastLoginLocation: "上海市浦东新区",
@@ -289,6 +329,21 @@ const mockMerchants: Merchant[] = [
     kycCountry: "中国",
     kycIdType: "身份证",
     kycVerifiedAt: "2024-01-10 10:00:00",
+    kycBirthday: "1985-05-05",
+    kycGender: "男",
+    kycNationality: "中国",
+    kycAddresses: [
+      {
+        label: "居住地址",
+        country: "中国",
+        province: "上海市",
+        city: "上海市",
+        district: "浦东新区",
+        street: "世纪大道100号上海环球金融中心68楼",
+        postalCode: "200120",
+        fullAddress: "中国上海市浦东新区世纪大道100号上海环球金融中心68楼"
+      }
+    ],
     registeredAt: "2024-01-08 16:45:00",
     registeredLocation: "上海市浦东新区",
     lastLoginLocation: "深圳市南山区",
@@ -464,6 +519,21 @@ const mockMerchants: Merchant[] = [
     kycCountry: "中国",
     kycIdType: "身份证",
     kycVerifiedAt: "2024-02-25 16:00:00",
+    kycBirthday: "1992-08-08",
+    kycGender: "男",
+    kycNationality: "中国",
+    kycAddresses: [
+      {
+        label: "居住地址",
+        country: "中国",
+        province: "浙江省",
+        city: "杭州市",
+        district: "西湖区",
+        street: "文三路478号华星时代广场B座1506室",
+        postalCode: "310012",
+        fullAddress: "中国浙江省杭州市西湖区文三路478号华星时代广场B座1506室"
+      }
+    ],
     registeredAt: "2024-02-20 09:30:00",
     registeredLocation: "杭州市西湖区",
     lastLoginLocation: "杭州市余杭区",
@@ -900,6 +970,10 @@ export default function MerchantsPage() {
       kycCountry: merchant.kycCountry,
       kycIdType: merchant.kycIdType,
       kycVerifiedAt: merchant.kycVerifiedAt,
+      kycBirthday: merchant.kycBirthday,
+      kycGender: merchant.kycGender,
+      kycNationality: merchant.kycNationality,
+      kycAddresses: merchant.kycAddresses,
       registeredAt: merchant.registeredAt,
       registeredLocation: merchant.registeredLocation,
       lastLoginLocation: merchant.lastLoginLocation,
