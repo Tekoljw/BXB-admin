@@ -280,8 +280,7 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/fiat/interfaces", icon: Network, label: "接口管理" },
     { path: "/admin/fiat/channels", icon: Network, label: "通道管理" },
     { path: "/admin/fiat/commission", icon: Percent, label: "代理商管理" },
-    { path: "/admin/fiat/orders", icon: ShoppingCart, label: "代收订单" },
-    { path: "/admin/fiat/payout-orders", icon: TrendingDown, label: "代付订单" },
+    { path: "/admin/fiat/orders", icon: ShoppingCart, label: "法币订单管理" },
     { path: "/admin/fiat/exchange-orders", icon: Globe, label: "兑换订单" },
   ],
   orders: [

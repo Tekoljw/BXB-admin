@@ -6,7 +6,6 @@ import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
   Dialog,
   DialogContent,
@@ -37,9 +36,10 @@ interface Order {
   paidAt?: string
   lastResent?: string
   status: "pending" | "success" | "failed"
+  orderType: "collection" | "payout"
 }
 
-const mockOrders: Order[] = [
+const mockCollectionOrders: Order[] = [
   {
     id: "ORD2024110601",
     upstreamOrderId: "UP20241106001",
@@ -51,7 +51,8 @@ const mockOrders: Order[] = [
     fee: 7.50,
     createdAt: "2024-11-06 10:30:00",
     paidAt: "2024-11-06 10:32:15",
-    status: "success"
+    status: "success",
+    orderType: "collection"
   },
   {
     id: "ORD2024110602",
@@ -64,7 +65,8 @@ const mockOrders: Order[] = [
     fee: 14.00,
     createdAt: "2024-11-06 10:45:00",
     paidAt: "2024-11-06 10:46:30",
-    status: "success"
+    status: "success",
+    orderType: "collection"
   },
   {
     id: "ORD2024110603",
@@ -76,7 +78,8 @@ const mockOrders: Order[] = [
     amount: 5000.00,
     fee: 15.00,
     createdAt: "2024-11-06 11:00:00",
-    status: "pending"
+    status: "pending",
+    orderType: "collection"
   },
   {
     id: "ORD2024110604",
@@ -89,7 +92,8 @@ const mockOrders: Order[] = [
     fee: 25.60,
     createdAt: "2024-11-06 11:15:00",
     paidAt: "2024-11-06 11:16:05",
-    status: "success"
+    status: "success",
+    orderType: "collection"
   },
   {
     id: "ORD2024110605",
@@ -101,7 +105,8 @@ const mockOrders: Order[] = [
     amount: 8500.00,
     fee: 51.00,
     createdAt: "2024-11-06 11:30:00",
-    status: "failed"
+    status: "failed",
+    orderType: "collection"
   },
   {
     id: "ORD2024110606",
@@ -114,7 +119,65 @@ const mockOrders: Order[] = [
     fee: 4.75,
     createdAt: "2024-11-06 11:45:00",
     paidAt: "2024-11-06 11:47:20",
-    status: "success"
+    status: "success",
+    orderType: "collection"
+  },
+]
+
+const mockPayoutOrders: Order[] = [
+  {
+    id: "PAYOUT2024110601",
+    upstreamOrderId: "UP20241106101",
+    downstreamOrderId: "DOWN20241106101",
+    merchantId: "M001",
+    currency: "CNY",
+    paymentChannel: "支付宝",
+    amount: 3500.00,
+    fee: 17.50,
+    createdAt: "2024-11-06 14:30:00",
+    paidAt: "2024-11-06 14:32:15",
+    status: "success",
+    orderType: "payout"
+  },
+  {
+    id: "PAYOUT2024110602",
+    upstreamOrderId: "UP20241106102",
+    downstreamOrderId: "DOWN20241106102",
+    merchantId: "M002",
+    currency: "CNY",
+    paymentChannel: "微信支付",
+    amount: 5800.00,
+    fee: 29.00,
+    createdAt: "2024-11-06 14:45:00",
+    paidAt: "2024-11-06 14:46:30",
+    status: "success",
+    orderType: "payout"
+  },
+  {
+    id: "PAYOUT2024110603",
+    upstreamOrderId: "UP20241106103",
+    downstreamOrderId: "DOWN20241106103",
+    merchantId: "M001",
+    currency: "CNY",
+    paymentChannel: "银行转账",
+    amount: 12000.00,
+    fee: 36.00,
+    createdAt: "2024-11-06 15:00:00",
+    status: "pending",
+    orderType: "payout"
+  },
+  {
+    id: "PAYOUT2024110604",
+    upstreamOrderId: "UP20241106104",
+    downstreamOrderId: "DOWN20241106104",
+    merchantId: "M003",
+    currency: "BRL",
+    paymentChannel: "PIX支付",
+    amount: 8200.00,
+    fee: 65.60,
+    createdAt: "2024-11-06 15:15:00",
+    status: "failed",
+    orderType: "payout"
   },
 ]
 
@@ -178,8 +241,60 @@ const getCollectionInfo = (channel: string) => {
   }
 }
 
-export default function OrdersPage() {
-  const [orders, setOrders] = useState<Order[]>(mockOrders)
+const getPaymentInfo = (channel: string) => {
+  const infoMap: Record<string, { type: string; details: { label: string; value: string }[] }> = {
+    "支付宝": {
+      type: "支付宝付款",
+      details: [
+        { label: "付款账号", value: "user_12345@alipay.com" },
+        { label: "付款姓名", value: "张三" },
+        { label: "备注信息", value: "BeDAO代付订单" }
+      ]
+    },
+    "微信支付": {
+      type: "微信付款",
+      details: [
+        { label: "付款账号", value: "微信号: wxid_abc123" },
+        { label: "付款姓名", value: "李四" },
+        { label: "备注信息", value: "BeDAO代付订单" }
+      ]
+    },
+    "银行转账": {
+      type: "银行转账付款",
+      details: [
+        { label: "收款银行", value: "中国建设银行" },
+        { label: "收款账号", value: "6217 0012 3456 7890 123" },
+        { label: "收款户名", value: "王五" },
+        { label: "开户行", value: "建设银行上海分行" }
+      ]
+    },
+    "PIX支付": {
+      type: "PIX付款",
+      details: [
+        { label: "收款PIX Key", value: "user@pix.com.br" },
+        { label: "收款人", value: "João Silva" },
+        { label: "付款备注", value: "BeDAO Payout" }
+      ]
+    },
+    "UPI支付": {
+      type: "UPI付款",
+      details: [
+        { label: "收款UPI ID", value: "user@upi" },
+        { label: "收款人", value: "Rahul Kumar" },
+        { label: "付款备注", value: "BeDAO Payout" }
+      ]
+    }
+  }
+  return infoMap[channel] || {
+    type: "其他付款方式",
+    details: [{ label: "付款信息", value: "暂无详细信息" }]
+  }
+}
+
+export default function FiatOrdersPage() {
+  const [orderTypeTab, setOrderTypeTab] = useState<"collection" | "payout">("collection")
+  const [collectionOrders, setCollectionOrders] = useState<Order[]>(mockCollectionOrders)
+  const [payoutOrders, setPayoutOrders] = useState<Order[]>(mockPayoutOrders)
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
   const [selectedCurrency, setSelectedCurrency] = useState("全部")
   const [selectedChannel, setSelectedChannel] = useState("全部")
@@ -188,15 +303,26 @@ export default function OrdersPage() {
   const [isReverifyDialogOpen, setIsReverifyDialogOpen] = useState(false)
   const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
   const [isRefundDialogOpen, setIsRefundDialogOpen] = useState(false)
-  const [isCollectionInfoDialogOpen, setIsCollectionInfoDialogOpen] = useState(false)
+  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false)
   const [currentOrder, setCurrentOrder] = useState<Order | null>(null)
   const [actionMessage, setActionMessage] = useState<string | null>(null)
+
+  const orders = orderTypeTab === "collection" ? collectionOrders : payoutOrders
+  const setOrders = orderTypeTab === "collection" ? setCollectionOrders : setPayoutOrders
 
   const availableChannels = paymentChannelsMap[selectedCurrency] || ["全部"]
 
   const handleCurrencyChange = (currency: string) => {
     setSelectedCurrency(currency)
     setSelectedChannel("全部")
+  }
+
+  const handleOrderTypeChange = (value: string) => {
+    setOrderTypeTab(value as "collection" | "payout")
+    setSelectedCurrency("全部")
+    setSelectedChannel("全部")
+    setSelectedStatus("全部")
+    handleReset()
   }
 
   const filteredOrders = orders.filter(order => {
@@ -300,9 +426,16 @@ export default function OrdersPage() {
     setIsRefundDialogOpen(true)
   }
 
-  const openCollectionInfoDialog = (order: Order) => {
+  const openInfoDialog = (order: Order) => {
     setCurrentOrder(order)
-    setIsCollectionInfoDialogOpen(true)
+    setIsInfoDialogOpen(true)
+  }
+
+  const getInfoDetails = () => {
+    if (!currentOrder) return { type: "", details: [] }
+    return orderTypeTab === "collection" 
+      ? getCollectionInfo(currentOrder.paymentChannel)
+      : getPaymentInfo(currentOrder.paymentChannel)
   }
 
   return (
@@ -313,7 +446,20 @@ export default function OrdersPage() {
         </div>
       )}
 
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">代收订单列表</h2>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">法币订单管理</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            管理平台的代收订单和代付订单
+          </p>
+        </div>
+        <Tabs value={orderTypeTab} onValueChange={handleOrderTypeChange}>
+          <TabsList>
+            <TabsTrigger value="collection">代收订单</TabsTrigger>
+            <TabsTrigger value="payout">代付订单</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
 
       <div className="space-y-4">
         <div>
@@ -440,9 +586,9 @@ export default function OrdersPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => openCollectionInfoDialog(order)}
+                        onClick={() => openInfoDialog(order)}
                         className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
-                        title="收款信息"
+                        title={orderTypeTab === "collection" ? "收款信息" : "付款信息"}
                       >
                         <Info className="w-4 h-4" />
                       </Button>
@@ -581,21 +727,21 @@ export default function OrdersPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={isCollectionInfoDialogOpen} onOpenChange={setIsCollectionInfoDialogOpen}>
+      <Dialog open={isInfoDialogOpen} onOpenChange={setIsInfoDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>收款信息</DialogTitle>
+            <DialogTitle>{orderTypeTab === "collection" ? "收款信息" : "付款信息"}</DialogTitle>
             <DialogDescription>
-              订单 "{currentOrder?.id}" 的收款账户详情
+              订单 "{currentOrder?.id}" 的{orderTypeTab === "collection" ? "收款" : "付款"}账户详情
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
               <div className="text-sm font-medium text-purple-900 dark:text-purple-300 mb-3">
-                {currentOrder && getCollectionInfo(currentOrder.paymentChannel).type}
+                {getInfoDetails().type}
               </div>
               <div className="space-y-3">
-                {currentOrder && getCollectionInfo(currentOrder.paymentChannel).details.map((detail, index) => (
+                {getInfoDetails().details.map((detail, index) => (
                   <div key={index} className="flex flex-col">
                     <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">{detail.label}</span>
                     <span className="text-sm font-medium text-gray-900 dark:text-white break-all">{detail.value}</span>
@@ -603,21 +749,7 @@ export default function OrdersPage() {
                 ))}
               </div>
             </div>
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
-              <div className="flex items-start gap-2">
-                <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                <div className="text-xs text-blue-800 dark:text-blue-300">
-                  <div className="font-medium mb-1">收款说明</div>
-                  <div>请确保用户使用正确的收款信息进行支付。如有疑问，请联系技术支持。</div>
-                </div>
-              </div>
-            </div>
           </div>
-          <DialogFooter>
-            <Button onClick={() => setIsCollectionInfoDialogOpen(false)}>
-              关闭
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
