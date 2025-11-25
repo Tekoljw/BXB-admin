@@ -73,14 +73,11 @@ interface FeeConfig {
 
 interface CryptoNetworkFee {
   network: string
-  currency: string
   withdrawFeeRate: string
-  withdrawFeeFixed: string
+  withdrawFeeMax: string
   minWithdrawFee: string
-  maxWithdrawFee: string
-  depositFeeRate: string
-  depositFeeFixed: string
   addressMonthlyFee: string
+  freeAddressCount: number
   useSystemFee: boolean
   enabled: boolean
 }
@@ -88,9 +85,6 @@ interface CryptoNetworkFee {
 interface CryptoFeeConfig {
   userId: string
   networks: CryptoNetworkFee[]
-  globalWithdrawFeeRate: string
-  globalDepositFeeRate: string
-  addressFeeDiscount: string
 }
 
 interface CurrencyBalance {
@@ -204,15 +198,12 @@ interface CryptoUser {
 const createDefaultCryptoFeeConfig = (userId: string): CryptoFeeConfig => ({
   userId,
   networks: [
-    { network: "TRC20", currency: "USDT", withdrawFeeRate: "0.1%", withdrawFeeFixed: "1", minWithdrawFee: "1 USDT", maxWithdrawFee: "100 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "60 USDT", useSystemFee: false, enabled: true },
-    { network: "ERC20", currency: "USDT", withdrawFeeRate: "0.15%", withdrawFeeFixed: "5", minWithdrawFee: "5 USDT", maxWithdrawFee: "200 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "80 USDT", useSystemFee: false, enabled: true },
-    { network: "BSC", currency: "USDT", withdrawFeeRate: "0.08%", withdrawFeeFixed: "0.5", minWithdrawFee: "0.5 USDT", maxWithdrawFee: "50 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "40 USDT", useSystemFee: true, enabled: true },
-    { network: "Polygon", currency: "USDT", withdrawFeeRate: "0.05%", withdrawFeeFixed: "0.2", minWithdrawFee: "0.2 USDT", maxWithdrawFee: "30 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "30 USDT", useSystemFee: true, enabled: true },
-    { network: "Solana", currency: "USDT", withdrawFeeRate: "0.06%", withdrawFeeFixed: "0.3", minWithdrawFee: "0.3 USDT", maxWithdrawFee: "40 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "35 USDT", useSystemFee: true, enabled: false }
-  ],
-  globalWithdrawFeeRate: "0.1%",
-  globalDepositFeeRate: "0%",
-  addressFeeDiscount: "0%"
+    { network: "TRC20", withdrawFeeRate: "0.1%", withdrawFeeMax: "100 USDT", minWithdrawFee: "1 USDT", addressMonthlyFee: "60 USDT", freeAddressCount: 5, useSystemFee: false, enabled: true },
+    { network: "ERC20", withdrawFeeRate: "0.15%", withdrawFeeMax: "200 USDT", minWithdrawFee: "5 USDT", addressMonthlyFee: "80 USDT", freeAddressCount: 3, useSystemFee: false, enabled: true },
+    { network: "BSC", withdrawFeeRate: "0.08%", withdrawFeeMax: "50 USDT", minWithdrawFee: "0.5 USDT", addressMonthlyFee: "40 USDT", freeAddressCount: 5, useSystemFee: true, enabled: true },
+    { network: "Polygon", withdrawFeeRate: "0.05%", withdrawFeeMax: "30 USDT", minWithdrawFee: "0.2 USDT", addressMonthlyFee: "30 USDT", freeAddressCount: 10, useSystemFee: true, enabled: true },
+    { network: "Solana", withdrawFeeRate: "0.06%", withdrawFeeMax: "40 USDT", minWithdrawFee: "0.3 USDT", addressMonthlyFee: "35 USDT", freeAddressCount: 5, useSystemFee: true, enabled: false }
+  ]
 })
 
 const mockCryptoUsers: CryptoUser[] = [
@@ -393,19 +384,7 @@ const mockCryptoUsers: CryptoUser[] = [
         collectionFee: "1.5%", paymentFee: "1.3%", minCollectionFee: "2.0 USDT", minPaymentFee: "1.5 USDT", useSystemTieredFee: false 
       },
     ],
-    cryptoFeeConfig: {
-      userId: "U100003",
-      networks: [
-        { network: "TRC20", currency: "USDT", withdrawFeeRate: "0.1%", withdrawFeeFixed: "1", minWithdrawFee: "1 USDT", maxWithdrawFee: "100 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "60 USDT", useSystemFee: false, enabled: true },
-        { network: "ERC20", currency: "USDT", withdrawFeeRate: "0.15%", withdrawFeeFixed: "5", minWithdrawFee: "5 USDT", maxWithdrawFee: "200 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "80 USDT", useSystemFee: false, enabled: true },
-        { network: "BSC", currency: "USDT", withdrawFeeRate: "0.08%", withdrawFeeFixed: "0.5", minWithdrawFee: "0.5 USDT", maxWithdrawFee: "50 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "40 USDT", useSystemFee: true, enabled: true },
-        { network: "Polygon", currency: "USDT", withdrawFeeRate: "0.05%", withdrawFeeFixed: "0.2", minWithdrawFee: "0.2 USDT", maxWithdrawFee: "30 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "30 USDT", useSystemFee: true, enabled: true },
-        { network: "Solana", currency: "USDT", withdrawFeeRate: "0.06%", withdrawFeeFixed: "0.3", minWithdrawFee: "0.3 USDT", maxWithdrawFee: "40 USDT", depositFeeRate: "0%", depositFeeFixed: "0", addressMonthlyFee: "35 USDT", useSystemFee: true, enabled: false }
-      ],
-      globalWithdrawFeeRate: "0.1%",
-      globalDepositFeeRate: "0%",
-      addressFeeDiscount: "0%"
-    },
+    cryptoFeeConfig: createDefaultCryptoFeeConfig("U100003"),
     status: "frozen",
     hasPendingDomain: false,
     createdAt: "2024-01-15 09:15:00"
@@ -1348,7 +1327,7 @@ export default function CryptoUsersPage() {
     setIsCryptoFeeDialogOpen(true)
   }
 
-  const handleCryptoFeeChange = (network: string, field: keyof CryptoNetworkFee, value: string | boolean) => {
+  const handleCryptoFeeChange = (network: string, field: keyof CryptoNetworkFee, value: string | boolean | number) => {
     if (!currentUser) return
     
     const updatedNetworks = currentUser.cryptoFeeConfig.networks.map(n => 
@@ -1356,18 +1335,6 @@ export default function CryptoUsersPage() {
     )
     
     const updatedCryptoFeeConfig = { ...currentUser.cryptoFeeConfig, networks: updatedNetworks }
-    
-    setCryptoUsers(cryptoUsers.map(u => 
-      u.id === currentUser.id ? { ...u, cryptoFeeConfig: updatedCryptoFeeConfig } : u
-    ))
-    
-    setCurrentUser({ ...currentUser, cryptoFeeConfig: updatedCryptoFeeConfig })
-  }
-
-  const handleGlobalCryptoFeeChange = (field: keyof CryptoFeeConfig, value: string) => {
-    if (!currentUser) return
-    
-    const updatedCryptoFeeConfig = { ...currentUser.cryptoFeeConfig, [field]: value }
     
     setCryptoUsers(cryptoUsers.map(u => 
       u.id === currentUser.id ? { ...u, cryptoFeeConfig: updatedCryptoFeeConfig } : u
@@ -2045,39 +2012,6 @@ export default function CryptoUsersPage() {
           </SheetHeader>
 
           <div className="mt-6 space-y-6">
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">全局设置</h4>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label>全局提币费率</Label>
-                  <Input
-                    value={currentUser?.cryptoFeeConfig.globalWithdrawFeeRate || ""}
-                    onChange={(e) => handleGlobalCryptoFeeChange('globalWithdrawFeeRate', e.target.value)}
-                    placeholder="0.1%"
-                    className="h-9"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>全局充币费率</Label>
-                  <Input
-                    value={currentUser?.cryptoFeeConfig.globalDepositFeeRate || ""}
-                    onChange={(e) => handleGlobalCryptoFeeChange('globalDepositFeeRate', e.target.value)}
-                    placeholder="0%"
-                    className="h-9"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>地址费折扣</Label>
-                  <Input
-                    value={currentUser?.cryptoFeeConfig.addressFeeDiscount || ""}
-                    onChange={(e) => handleGlobalCryptoFeeChange('addressFeeDiscount', e.target.value)}
-                    placeholder="0%"
-                    className="h-9"
-                  />
-                </div>
-              </div>
-            </div>
-
             <div>
               <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">网络手续费配置</h4>
               <div className="overflow-x-auto">
@@ -2088,19 +2022,19 @@ export default function CryptoUsersPage() {
                         网络
                       </th>
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        币种
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                         提币费率
                       </th>
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
-                        提币固定费
+                        提币费上限
                       </th>
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                         最低提币费
                       </th>
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                         地址月租费
+                      </th>
+                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        免费地址数
                       </th>
                       <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                         系统费率
@@ -2116,9 +2050,6 @@ export default function CryptoUsersPage() {
                         <td className="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                           {network.network}
                         </td>
-                        <td className="px-3 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                          {network.currency}
-                        </td>
                         <td className="px-3 py-2">
                           <Input
                             value={network.withdrawFeeRate}
@@ -2129,10 +2060,10 @@ export default function CryptoUsersPage() {
                         </td>
                         <td className="px-3 py-2">
                           <Input
-                            value={network.withdrawFeeFixed}
-                            onChange={(e) => handleCryptoFeeChange(network.network, 'withdrawFeeFixed', e.target.value)}
-                            className="h-8 text-sm w-16 text-orange-600 dark:text-orange-400"
-                            placeholder="1"
+                            value={network.withdrawFeeMax}
+                            onChange={(e) => handleCryptoFeeChange(network.network, 'withdrawFeeMax', e.target.value)}
+                            className="h-8 text-sm w-24 text-orange-600 dark:text-orange-400"
+                            placeholder="100 USDT"
                           />
                         </td>
                         <td className="px-3 py-2">
@@ -2149,6 +2080,16 @@ export default function CryptoUsersPage() {
                             onChange={(e) => handleCryptoFeeChange(network.network, 'addressMonthlyFee', e.target.value)}
                             className="h-8 text-sm w-24 text-purple-600 dark:text-purple-400 font-semibold"
                             placeholder="60 USDT"
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Input
+                            type="number"
+                            value={network.freeAddressCount}
+                            onChange={(e) => handleCryptoFeeChange(network.network, 'freeAddressCount', parseInt(e.target.value) || 0)}
+                            className="h-8 text-sm w-16 text-blue-600 dark:text-blue-400 font-semibold"
+                            placeholder="5"
+                            min="0"
                           />
                         </td>
                         <td className="px-3 py-3 whitespace-nowrap text-sm">
@@ -2184,9 +2125,10 @@ export default function CryptoUsersPage() {
               <h4 className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">说明</h4>
               <ul className="text-xs text-blue-600 dark:text-blue-400 space-y-1">
                 <li>• 提币费率：用户提币时按金额百分比收取的手续费</li>
-                <li>• 提币固定费：每笔提币收取的固定费用</li>
+                <li>• 提币费上限：单笔提币手续费的最高限额</li>
                 <li>• 最低提币费：单笔提币的最低手续费</li>
                 <li>• 地址月租费：每个地址每月收取的租用费用</li>
+                <li>• 免费地址数：用户可免费使用的地址数量</li>
                 <li>• 系统费率：启用后将使用系统默认费率配置</li>
               </ul>
             </div>
