@@ -1,10 +1,11 @@
 "use client"
 
 import React, { useState } from "react"
-import { Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X } from "lucide-react"
+import { Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X, CheckCircle, XCircle } from "lucide-react"
 import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
+import { UserDetailDrawer, AdminUserProfile } from "@/components/admin/user-detail-drawer"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -106,6 +107,16 @@ interface Merchant {
   bxbUserId: string
   email: string
   phone: string
+  isKYC: boolean
+  kycRealName?: string
+  kycIdNumber?: string
+  kycCountry?: string
+  kycIdType?: string
+  kycVerifiedAt?: string
+  registeredAt: string
+  registeredLocation?: string
+  lastLoginLocation?: string
+  lastLoginTime?: string
   apiKeys: ApiKey[]
   balance: number
   paymentBalance: number
@@ -135,6 +146,16 @@ const mockMerchants: Merchant[] = [
     bxbUserId: "BXB003",
     email: "yunduan@example.com",
     phone: "+86 138 0000 0003",
+    isKYC: true,
+    kycRealName: "李云端",
+    kycIdNumber: "110101199001010003",
+    kycCountry: "中国",
+    kycIdType: "身份证",
+    kycVerifiedAt: "2024-01-20 14:30:00",
+    registeredAt: "2024-01-15 09:15:00",
+    registeredLocation: "北京市朝阳区",
+    lastLoginLocation: "上海市浦东新区",
+    lastLoginTime: "2024-11-15 10:30:00",
     apiKeys: [
       {
         keyId: "KEY004",
@@ -262,6 +283,16 @@ const mockMerchants: Merchant[] = [
     bxbUserId: "BXB004",
     email: "xingji@example.com",
     phone: "+86 138 0000 0004",
+    isKYC: true,
+    kycRealName: "王星际",
+    kycIdNumber: "310101198505050004",
+    kycCountry: "中国",
+    kycIdType: "身份证",
+    kycVerifiedAt: "2024-01-10 10:00:00",
+    registeredAt: "2024-01-08 16:45:00",
+    registeredLocation: "上海市浦东新区",
+    lastLoginLocation: "深圳市南山区",
+    lastLoginTime: "2024-11-14 18:20:00",
     apiKeys: [
       {
         keyId: "KEY007",
@@ -384,6 +415,11 @@ const mockMerchants: Merchant[] = [
     bxbUserId: "BXB005",
     email: "quickpay@example.com",
     phone: "+86 138 0000 0005",
+    isKYC: false,
+    registeredAt: "2024-06-18 14:30:00",
+    registeredLocation: "广州市天河区",
+    lastLoginLocation: "广州市天河区",
+    lastLoginTime: "2024-11-10 09:00:00",
     apiKeys: [],
     balance: 0,
     paymentBalance: 0,
@@ -422,6 +458,16 @@ const mockMerchants: Merchant[] = [
     bxbUserId: "BXB006",
     email: "aggregate@example.com",
     phone: "+86 138 0000 0006",
+    isKYC: true,
+    kycRealName: "赵聚合",
+    kycIdNumber: "440101199208080006",
+    kycCountry: "中国",
+    kycIdType: "身份证",
+    kycVerifiedAt: "2024-02-25 16:00:00",
+    registeredAt: "2024-02-20 09:30:00",
+    registeredLocation: "杭州市西湖区",
+    lastLoginLocation: "杭州市余杭区",
+    lastLoginTime: "2024-11-15 14:30:00",
     apiKeys: [
       {
         keyId: "KEY008",
@@ -479,6 +525,16 @@ const mockMerchants: Merchant[] = [
     bxbUserId: "BXB007",
     email: "intlpay@example.com",
     phone: "+86 138 0000 0007",
+    isKYC: true,
+    kycRealName: "钱国际",
+    kycIdNumber: "330101199106060007",
+    kycCountry: "中国",
+    kycIdType: "护照",
+    kycVerifiedAt: "2024-03-15 11:00:00",
+    registeredAt: "2024-03-10 15:00:00",
+    registeredLocation: "成都市高新区",
+    lastLoginLocation: "新加坡",
+    lastLoginTime: "2024-11-14 22:00:00",
     apiKeys: [
       {
         keyId: "KEY009",
@@ -551,6 +607,16 @@ const mockMerchants: Merchant[] = [
     bxbUserId: "BXB008",
     email: "mobilepay@example.com",
     phone: "+86 138 0000 0008",
+    isKYC: true,
+    kycRealName: "孙移动",
+    kycIdNumber: "510101199404040008",
+    kycCountry: "中国",
+    kycIdType: "身份证",
+    kycVerifiedAt: "2024-04-20 10:00:00",
+    registeredAt: "2024-04-15 11:20:00",
+    registeredLocation: "武汉市洪山区",
+    lastLoginLocation: "武汉市江汉区",
+    lastLoginTime: "2024-11-13 16:45:00",
     apiKeys: [],
     balance: 8500,
     paymentBalance: 3200,
@@ -589,6 +655,16 @@ const mockMerchants: Merchant[] = [
     bxbUserId: "BXB009",
     email: "ecompay@example.com",
     phone: "+86 138 0000 0009",
+    isKYC: true,
+    kycRealName: "周电商",
+    kycIdNumber: "320101199702020009",
+    kycCountry: "中国",
+    kycIdType: "身份证",
+    kycVerifiedAt: "2024-05-10 14:30:00",
+    registeredAt: "2024-05-05 08:45:00",
+    registeredLocation: "南京市鼓楼区",
+    lastLoginLocation: "南京市建邺区",
+    lastLoginTime: "2024-11-15 11:30:00",
     apiKeys: [
       {
         keyId: "KEY011",
@@ -643,6 +719,11 @@ const mockMerchants: Merchant[] = [
     bxbUserId: "BXB010",
     email: "easypay@example.com",
     phone: "+86 138 0000 0010",
+    isKYC: false,
+    registeredAt: "2024-07-01 13:00:00",
+    registeredLocation: "西安市雁塔区",
+    lastLoginLocation: "西安市雁塔区",
+    lastLoginTime: "2024-11-12 20:00:00",
     apiKeys: [],
     balance: 0,
     paymentBalance: 0,
@@ -720,6 +801,8 @@ export default function MerchantsPage() {
     useSystemTieredFee: false
   })
   const [activeCurrency, setActiveCurrency] = useState<string>("")
+  const [showUserDetailDrawer, setShowUserDetailDrawer] = useState(false)
+  const [currentUserProfile, setCurrentUserProfile] = useState<AdminUserProfile | null>(null)
 
   const ALL_CURRENCIES = ["CNY", "USD", "USDT", "EUR", "GBP"]
   const ALL_CHANNELS = ["支付宝", "微信支付", "银行卡", "云闪付", "Stripe", "PayPal", "TRC20", "ERC20"]
@@ -803,6 +886,26 @@ export default function MerchantsPage() {
   const openBalanceDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
     setIsBalanceDialogOpen(true)
+  }
+
+  const openUserDetailDrawer = (merchant: Merchant) => {
+    setCurrentUserProfile({
+      userId: merchant.userId,
+      username: merchant.name,
+      phone: merchant.phone,
+      email: merchant.email,
+      isKYC: merchant.isKYC,
+      kycRealName: merchant.kycRealName,
+      kycIdNumber: merchant.kycIdNumber,
+      kycCountry: merchant.kycCountry,
+      kycIdType: merchant.kycIdType,
+      kycVerifiedAt: merchant.kycVerifiedAt,
+      registeredAt: merchant.registeredAt,
+      registeredLocation: merchant.registeredLocation,
+      lastLoginLocation: merchant.lastLoginLocation,
+      lastLoginTime: merchant.lastLoginTime,
+    })
+    setShowUserDetailDrawer(true)
   }
 
   const openProfitDialog = (merchant: Merchant) => {
@@ -1209,6 +1312,9 @@ export default function MerchantsPage() {
                   联系方式
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  KYC
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   账户余额
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -1241,12 +1347,30 @@ export default function MerchantsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    <a href={`mailto:${merchant.email}`} className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer block">
-                      {merchant.email || '-'}
-                    </a>
-                    <a href={`tel:${merchant.phone}`} className="text-gray-500 dark:text-gray-400 text-xs mt-1 hover:underline cursor-pointer block">
-                      {merchant.phone || '-'}
-                    </a>
+                    <button
+                      onClick={() => openUserDetailDrawer(merchant)}
+                      className="text-left hover:opacity-70 transition-opacity cursor-pointer"
+                    >
+                      <div className="text-blue-600 dark:text-blue-400 hover:underline">
+                        {merchant.email || '-'}
+                      </div>
+                      <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">
+                        {merchant.phone || '-'}
+                      </div>
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                    {merchant.isKYC ? (
+                      <div className="flex items-center gap-1">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span className="text-green-600 dark:text-green-400 text-xs">已认证</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        <XCircle className="w-4 h-4 text-gray-400" />
+                        <span className="text-gray-500 text-xs">未认证</span>
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <button
@@ -2338,6 +2462,12 @@ export default function MerchantsPage() {
           </SheetFooter>
         </SheetContent>
       </Sheet>
+
+      <UserDetailDrawer
+        open={showUserDetailDrawer}
+        onClose={() => setShowUserDetailDrawer(false)}
+        user={currentUserProfile}
+      />
     </div>
   )
 }
