@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Eye, Percent, ChevronLeft, ChevronRight } from "lucide-react"
+import { Eye, Percent, ChevronLeft, ChevronRight, Search } from "lucide-react"
 import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
