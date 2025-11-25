@@ -234,7 +234,7 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/escrow/complaints", icon: FileCheck, label: "仲裁投诉记录" },
   ],
   ucard: [
-    { path: "/admin/ucard/users", icon: Users, label: "U卡用户列表" },
+    { path: "/admin/ucard/users", icon: Users, label: "U卡用户管理" },
     { path: "/admin/ucard/suppliers", icon: Store, label: "U卡供应商" },
     { path: "/admin/ucard/config", icon: Settings, label: "U卡基础配置" },
     { path: "/admin/ucard/number-segments", icon: Hash, label: "U卡号段管理" },

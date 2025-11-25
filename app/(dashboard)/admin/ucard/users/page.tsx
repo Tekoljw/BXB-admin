@@ -28,6 +28,17 @@ interface Card {
   isPriority: boolean
 }
 
+interface KYCAddress {
+  label: string
+  country: string
+  province: string
+  city: string
+  district?: string
+  street: string
+  postalCode?: string
+  fullAddress: string
+}
+
 interface UCardUser {
   id: string
   userId: string
@@ -40,6 +51,10 @@ interface UCardUser {
   kycCountry?: string
   kycIdType?: string
   kycVerifiedAt?: string
+  kycBirthday?: string
+  kycGender?: string
+  kycNationality?: string
+  kycAddresses?: KYCAddress[]
   virtualCardCount: number
   physicalCardCount: number
   cardBalance: string
@@ -82,6 +97,31 @@ export default function UCardUsersPage() {
       kycCountry: '中国',
       kycIdType: '身份证',
       kycVerifiedAt: '2024-01-16 14:30:00',
+      kycBirthday: '1990-01-01',
+      kycGender: '男',
+      kycNationality: '中国',
+      kycAddresses: [
+        {
+          label: '居住地址',
+          country: '中国',
+          province: '北京市',
+          city: '北京市',
+          district: '朝阳区',
+          street: '建国门外大街1号国贸中心A座1502室',
+          postalCode: '100004',
+          fullAddress: '中国北京市朝阳区建国门外大街1号国贸中心A座1502室'
+        },
+        {
+          label: '公司地址',
+          country: '中国',
+          province: '上海市',
+          city: '上海市',
+          district: '浦东新区',
+          street: '陆家嘴环路1000号恒生银行大厦18楼',
+          postalCode: '200120',
+          fullAddress: '中国上海市浦东新区陆家嘴环路1000号恒生银行大厦18楼'
+        }
+      ],
       virtualCardCount: 2,
       physicalCardCount: 1,
       cardBalance: '25,320.00',
@@ -139,6 +179,26 @@ export default function UCardUsersPage() {
       phone: '139****6666',
       email: 'li***@gmail.com',
       isKYC: true,
+      kycRealName: '李四',
+      kycIdNumber: '310101198808081234',
+      kycCountry: '中国',
+      kycIdType: '身份证',
+      kycVerifiedAt: '2024-02-22 10:00:00',
+      kycBirthday: '1988-08-08',
+      kycGender: '男',
+      kycNationality: '中国',
+      kycAddresses: [
+        {
+          label: '居住地址',
+          country: '中国',
+          province: '上海市',
+          city: '上海市',
+          district: '徐汇区',
+          street: '淮海中路1555号嘉华中心2201室',
+          postalCode: '200031',
+          fullAddress: '中国上海市徐汇区淮海中路1555号嘉华中心2201室'
+        }
+      ],
       virtualCardCount: 1,
       physicalCardCount: 0,
       cardBalance: '12,500.00',
@@ -277,6 +337,26 @@ export default function UCardUsersPage() {
       phone: '135****5555',
       email: 'sun***@gmail.com',
       isKYC: true,
+      kycRealName: '孙七',
+      kycIdNumber: '330101199505051234',
+      kycCountry: '中国',
+      kycIdType: '身份证',
+      kycVerifiedAt: '2024-02-18 11:30:00',
+      kycBirthday: '1995-05-05',
+      kycGender: '女',
+      kycNationality: '中国',
+      kycAddresses: [
+        {
+          label: '居住地址',
+          country: '中国',
+          province: '浙江省',
+          city: '杭州市',
+          district: '上城区',
+          street: '解放路138号银泰中心A座1808室',
+          postalCode: '310009',
+          fullAddress: '中国浙江省杭州市上城区解放路138号银泰中心A座1808室'
+        }
+      ],
       virtualCardCount: 1,
       physicalCardCount: 0,
       cardBalance: '8,678.00',
@@ -313,8 +393,6 @@ export default function UCardUsersPage() {
   const [sortTab, setSortTab] = useState('default')
   const [selectedUser, setSelectedUser] = useState<UCardUser | null>(null)
   const [showDetailSheet, setShowDetailSheet] = useState(false)
-  const [showKYCSheet, setShowKYCSheet] = useState(false)
-  const [selectedKYCUser, setSelectedKYCUser] = useState<UCardUser | null>(null)
   const [cardTypeTabInDetail, setCardTypeTabInDetail] = useState<'virtual' | 'physical'>('virtual')
   const [cardsToShow, setCardsToShow] = useState(6)
   const [showUserDetailDrawer, setShowUserDetailDrawer] = useState(false)
@@ -389,8 +467,7 @@ export default function UCardUsersPage() {
   }
 
   const viewKYCDetail = (user: UCardUser) => {
-    setSelectedKYCUser(user)
-    setShowKYCSheet(true)
+    openUserDetailDrawer(user)
   }
 
   const openUserDetailDrawer = (user: UCardUser) => {
@@ -717,80 +794,6 @@ export default function UCardUsersPage() {
                   <p className="text-sm text-gray-500 dark:text-gray-400">暂无{cardTypeTabInDetail === 'virtual' ? '虚拟' : '实体'}卡</p>
                 </div>
               )}
-            </div>
-          )}
-        </SheetContent>
-      </Sheet>
-
-      <Sheet open={showKYCSheet} onOpenChange={setShowKYCSheet}>
-        <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>KYC认证信息</SheetTitle>
-            <SheetDescription>
-              查看用户的实名认证详细信息
-            </SheetDescription>
-          </SheetHeader>
-          {selectedKYCUser && (
-            <div className="mt-6 space-y-6">
-              <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
-                <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
-                  <CheckCircle className="w-5 h-5" />
-                  <span className="font-semibold">已通过KYC认证</span>
-                </div>
-                {selectedKYCUser.kycVerifiedAt && (
-                  <div className="text-sm text-green-600 dark:text-green-500 mt-1">
-                    认证时间：{selectedKYCUser.kycVerifiedAt}
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">基本信息</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="space-y-1">
-                    <span className="text-gray-500 dark:text-gray-400">真实姓名</span>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.kycRealName || '-'}</div>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-gray-500 dark:text-gray-400">证件类型</span>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.kycIdType || '-'}</div>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-gray-500 dark:text-gray-400">证件号码</span>
-                    <div className="font-medium text-gray-900 dark:text-white font-mono">{selectedKYCUser.kycIdNumber || '-'}</div>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-gray-500 dark:text-gray-400">国家/地区</span>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.kycCountry || '-'}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">账户信息</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="space-y-1">
-                    <span className="text-gray-500 dark:text-gray-400">用户ID</span>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.userId}</div>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-gray-500 dark:text-gray-400">用户名</span>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.username}</div>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-gray-500 dark:text-gray-400">手机号</span>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.phone}</div>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-gray-500 dark:text-gray-400">邮箱</span>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.email}</div>
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-gray-500 dark:text-gray-400">注册时间</span>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedKYCUser.registeredAt}</div>
-                  </div>
-                </div>
-              </div>
             </div>
           )}
         </SheetContent>
