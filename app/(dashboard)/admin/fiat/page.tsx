@@ -10,7 +10,7 @@ import CurrenciesPage from "./currencies/page"
 import SuppliersPage from "./suppliers/page"
 import InterfacesPage from "./interfaces/page"
 import ChannelsPage from "./channels/page"
-import MerchantsPage from "./merchants/page"
+import MerchantsPage from "./users/page"
 import CommissionPage from "./commission/page"
 import OrdersPage from "./orders/page"
 import PayoutOrdersPage from "./payout-orders/page"
@@ -65,7 +65,7 @@ export default function FiatManagementPage() {
     if (currentPath === "/admin/fiat/channels") {
       return <ChannelsPage />
     }
-    if (currentPath === "/admin/fiat/merchants") {
+    if (currentPath === "/admin/fiat/users") {
       return <MerchantsPage />
     }
     if (currentPath === "/admin/fiat/commission") {
