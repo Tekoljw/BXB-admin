@@ -1,6 +1,6 @@
 'use client'
 
-import { X } from 'lucide-react'
+import { X, MapPin } from 'lucide-react'
 import {
   Sheet,
   SheetContent,
@@ -9,6 +9,17 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { CheckCircle, XCircle } from 'lucide-react'
+
+export interface KYCAddress {
+  label: string
+  country: string
+  province: string
+  city: string
+  district?: string
+  street: string
+  postalCode?: string
+  fullAddress: string
+}
 
 export interface AdminUserProfile {
   userId: string
@@ -21,6 +32,10 @@ export interface AdminUserProfile {
   kycCountry?: string
   kycIdType?: string
   kycVerifiedAt?: string
+  kycBirthday?: string
+  kycGender?: string
+  kycNationality?: string
+  kycAddresses?: KYCAddress[]
   registeredAt: string
   registeredLocation?: string
   lastLoginLocation?: string
@@ -112,11 +127,27 @@ export function UserDetailDrawer({ open, onClose, user, moduleSpecificContent }:
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">国家/地区</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">国籍</p>
                       <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
-                        {user.kycCountry || '-'}
+                        {user.kycNationality || user.kycCountry || '-'}
                       </p>
                     </div>
+                    {user.kycBirthday && (
+                      <div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">出生日期</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                          {user.kycBirthday}
+                        </p>
+                      </div>
+                    )}
+                    {user.kycGender && (
+                      <div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">性别</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                          {user.kycGender}
+                        </p>
+                      </div>
+                    )}
                   </div>
                   {user.kycVerifiedAt && (
                     <div>
@@ -124,6 +155,39 @@ export function UserDetailDrawer({ open, onClose, user, moduleSpecificContent }:
                       <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
                         {user.kycVerifiedAt}
                       </p>
+                    </div>
+                  )}
+                  
+                  {user.kycAddresses && user.kycAddresses.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                        <MapPin className="w-4 h-4" />
+                        地址信息
+                      </h4>
+                      <div className="space-y-3">
+                        {user.kycAddresses.map((address, index) => (
+                          <div 
+                            key={index}
+                            className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-600"
+                          >
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded">
+                                {address.label}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-900 dark:text-white">
+                              {address.fullAddress}
+                            </p>
+                            <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-gray-500 dark:text-gray-400">
+                              <span>国家: {address.country}</span>
+                              <span>省/州: {address.province}</span>
+                              <span>城市: {address.city}</span>
+                              {address.district && <span>区/县: {address.district}</span>}
+                              {address.postalCode && <span>邮编: {address.postalCode}</span>}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </>

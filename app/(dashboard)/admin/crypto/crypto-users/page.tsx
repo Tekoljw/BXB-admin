@@ -127,6 +127,17 @@ interface TimeRangeProfitData {
   total: CurrencyProfit[]
 }
 
+interface KYCAddress {
+  label: string
+  country: string
+  province: string
+  city: string
+  district?: string
+  street: string
+  postalCode?: string
+  fullAddress: string
+}
+
 interface CryptoUser {
   id: string
   name: string
@@ -140,6 +151,10 @@ interface CryptoUser {
   kycIdNumber?: string
   kycCountry?: string
   kycVerifiedAt?: string
+  kycBirthday?: string
+  kycGender?: string
+  kycNationality?: string
+  kycAddresses?: KYCAddress[]
   apiKeys: ApiKey[]
   primaryCurrency: string
   balance: number
@@ -177,6 +192,31 @@ const mockCryptoUsers: CryptoUser[] = [
     kycIdNumber: "110101199001011234",
     kycCountry: "中国",
     kycVerifiedAt: "2024-01-20 14:30:00",
+    kycBirthday: "1990-01-01",
+    kycGender: "男",
+    kycNationality: "中国",
+    kycAddresses: [
+      {
+        label: "地址1 - 居住地址",
+        country: "中国",
+        province: "北京市",
+        city: "北京市",
+        district: "朝阳区",
+        street: "建国路88号SOHO现代城A座1501室",
+        postalCode: "100022",
+        fullAddress: "中国 北京市 朝阳区 建国路88号SOHO现代城A座1501室"
+      },
+      {
+        label: "地址2 - 公司地址",
+        country: "中国",
+        province: "北京市",
+        city: "北京市",
+        district: "海淀区",
+        street: "中关村大街1号海龙大厦12层",
+        postalCode: "100080",
+        fullAddress: "中国 北京市 海淀区 中关村大街1号海龙大厦12层"
+      }
+    ],
     apiKeys: [
       {
         keyId: "KEY004",
@@ -479,6 +519,21 @@ const mockCryptoUsers: CryptoUser[] = [
     kycIdNumber: "E12345678",
     kycCountry: "中国香港",
     kycVerifiedAt: "2024-06-22 10:15:00",
+    kycBirthday: "1988-05-15",
+    kycGender: "女",
+    kycNationality: "中国香港",
+    kycAddresses: [
+      {
+        label: "地址1 - 居住地址",
+        country: "中国香港",
+        province: "香港特别行政区",
+        city: "香港",
+        district: "中西区",
+        street: "德辅道中88号中环广场35楼",
+        postalCode: "",
+        fullAddress: "中国香港 中西区 德辅道中88号中环广场35楼"
+      }
+    ],
     apiKeys: [],
     primaryCurrency: "USDT",
     balance: 0,
@@ -627,6 +682,41 @@ const mockCryptoUsers: CryptoUser[] = [
     kycIdNumber: "310101198505052345",
     kycCountry: "中国",
     kycVerifiedAt: "2024-02-25 16:45:00",
+    kycBirthday: "1985-05-05",
+    kycGender: "男",
+    kycNationality: "中国",
+    kycAddresses: [
+      {
+        label: "地址1 - 居住地址",
+        country: "中国",
+        province: "上海市",
+        city: "上海市",
+        district: "浦东新区",
+        street: "陆家嘴环路1000号恒生银行大厦28层",
+        postalCode: "200120",
+        fullAddress: "中国 上海市 浦东新区 陆家嘴环路1000号恒生银行大厦28层"
+      },
+      {
+        label: "地址2 - 户籍地址",
+        country: "中国",
+        province: "上海市",
+        city: "上海市",
+        district: "黄浦区",
+        street: "南京东路100号",
+        postalCode: "200001",
+        fullAddress: "中国 上海市 黄浦区 南京东路100号"
+      },
+      {
+        label: "地址3 - 邮寄地址",
+        country: "中国",
+        province: "上海市",
+        city: "上海市",
+        district: "静安区",
+        street: "南京西路1266号恒隆广场1座2001室",
+        postalCode: "200040",
+        fullAddress: "中国 上海市 静安区 南京西路1266号恒隆广场1座2001室"
+      }
+    ],
     apiKeys: [
       {
         keyId: "KEY009",
@@ -864,6 +954,31 @@ const mockCryptoUsers: CryptoUser[] = [
     kycIdNumber: "440101199203153456",
     kycCountry: "中国",
     kycVerifiedAt: "2024-07-15 09:30:00",
+    kycBirthday: "1992-03-15",
+    kycGender: "女",
+    kycNationality: "中国",
+    kycAddresses: [
+      {
+        label: "地址1 - 居住地址",
+        country: "中国",
+        province: "广东省",
+        city: "广州市",
+        district: "天河区",
+        street: "珠江新城花城大道68号环球金融中心18层",
+        postalCode: "510623",
+        fullAddress: "中国 广东省 广州市 天河区 珠江新城花城大道68号环球金融中心18层"
+      },
+      {
+        label: "地址2 - 户籍地址",
+        country: "中国",
+        province: "广东省",
+        city: "广州市",
+        district: "越秀区",
+        street: "中山五路219号",
+        postalCode: "510030",
+        fullAddress: "中国 广东省 广州市 越秀区 中山五路219号"
+      }
+    ],
     apiKeys: [],
     primaryCurrency: "USDT",
     balance: 0,
@@ -2498,6 +2613,10 @@ export default function CryptoUsersPage() {
           kycIdNumber: selectedUserForDetail.kycIdNumber,
           kycCountry: selectedUserForDetail.kycCountry,
           kycVerifiedAt: selectedUserForDetail.kycVerifiedAt,
+          kycBirthday: selectedUserForDetail.kycBirthday,
+          kycGender: selectedUserForDetail.kycGender,
+          kycNationality: selectedUserForDetail.kycNationality,
+          kycAddresses: selectedUserForDetail.kycAddresses,
           registeredAt: selectedUserForDetail.createdAt,
           lastActiveDate: selectedUserForDetail.createdAt,
           btcBalance: selectedUserForDetail.currencyBalances.find(c => c.currency === "BTC")?.balance.toString() || "0",
