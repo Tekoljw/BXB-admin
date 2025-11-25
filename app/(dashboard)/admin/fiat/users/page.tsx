@@ -873,6 +873,11 @@ export default function MerchantsPage() {
   const [activeCurrency, setActiveCurrency] = useState<string>("")
   const [showUserDetailDrawer, setShowUserDetailDrawer] = useState(false)
   const [currentUserProfile, setCurrentUserProfile] = useState<AdminUserProfile | null>(null)
+  const [isUnfreezeFundsDialogOpen, setIsUnfreezeFundsDialogOpen] = useState(false)
+  const [unfreezeCurrency, setUnfreezeCurrency] = useState("")
+  const [unfreezeAmount, setUnfreezeAmount] = useState("")
+  const [freezeFundsCurrency, setFreezeFundsCurrency] = useState("")
+  const [editingFrozenBalance, setEditingFrozenBalance] = useState<{currency: string, value: string} | null>(null)
 
   const ALL_CURRENCIES = ["CNY", "USD", "USDT", "EUR", "GBP"]
   const ALL_CHANNELS = ["支付宝", "微信支付", "银行卡", "云闪付", "Stripe", "PayPal", "TRC20", "ERC20"]
@@ -1035,20 +1040,27 @@ export default function MerchantsPage() {
   }
 
   const handleFreezeFunds = () => {
-    if (currentMerchant && freezeAmount) {
+    if (currentMerchant && freezeAmount && freezeFundsCurrency) {
       const amount = parseFloat(freezeAmount)
+      const updatedBalances = currentMerchant.currencyBalances.map(cb => {
+        if (cb.currency === freezeFundsCurrency) {
+          return {
+            ...cb,
+            frozenBalance: cb.frozenBalance + amount,
+            balance: Math.max(0, cb.balance - amount)
+          }
+        }
+        return cb
+      })
       setMerchants(merchants.map(m => 
         m.id === currentMerchant.id 
-          ? { 
-              ...m, 
-              frozenBalance: m.frozenBalance + amount,
-              balance: m.balance - amount
-            } 
+          ? { ...m, currencyBalances: updatedBalances } 
           : m
       ))
       setIsFreezeFundsDialogOpen(false)
       setCurrentMerchant(null)
       setFreezeAmount("")
+      setFreezeFundsCurrency("")
     }
   }
 
@@ -1087,7 +1099,64 @@ export default function MerchantsPage() {
 
   const openFreezeFundsDialog = (merchant: Merchant) => {
     setCurrentMerchant(merchant)
+    setFreezeFundsCurrency("")
+    setFreezeAmount("")
     setIsFreezeFundsDialogOpen(true)
+  }
+
+  const openUnfreezeFundsDialog = (merchant: Merchant) => {
+    setCurrentMerchant(merchant)
+    setUnfreezeCurrency("")
+    setUnfreezeAmount("")
+    setIsUnfreezeFundsDialogOpen(true)
+  }
+
+  const getCurrentFrozenBalance = (currency: string) => {
+    if (!currentMerchant) return 0
+    const cb = currentMerchant.currencyBalances.find(b => b.currency === currency)
+    return cb?.frozenBalance || 0
+  }
+
+  const handleUnfreezeFunds = () => {
+    if (currentMerchant && unfreezeCurrency && unfreezeAmount) {
+      const amount = parseFloat(unfreezeAmount)
+      const updatedBalances = currentMerchant.currencyBalances.map(cb => {
+        if (cb.currency === unfreezeCurrency) {
+          return {
+            ...cb,
+            frozenBalance: Math.max(0, cb.frozenBalance - amount),
+            balance: cb.balance + amount
+          }
+        }
+        return cb
+      })
+      setMerchants(merchants.map(m => 
+        m.id === currentMerchant.id 
+          ? { ...m, currencyBalances: updatedBalances } 
+          : m
+      ))
+      setIsUnfreezeFundsDialogOpen(false)
+      setCurrentMerchant(null)
+      setUnfreezeCurrency("")
+      setUnfreezeAmount("")
+    }
+  }
+
+  const handleUpdateFrozenBalance = (currency: string, newValue: number) => {
+    if (currentMerchant) {
+      const updatedBalances = currentMerchant.currencyBalances.map(cb => {
+        if (cb.currency === currency) {
+          return { ...cb, frozenBalance: newValue }
+        }
+        return cb
+      })
+      const updatedMerchant = { ...currentMerchant, currencyBalances: updatedBalances }
+      setMerchants(merchants.map(m => 
+        m.id === currentMerchant.id ? updatedMerchant : m
+      ))
+      setCurrentMerchant(updatedMerchant)
+      setEditingFrozenBalance(null)
+    }
   }
 
   const openFeeConfigDialog = (merchant: Merchant) => {
@@ -1551,11 +1620,20 @@ export default function MerchantsPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => openFreezeDialog(merchant)}
-                        className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400"
-                        title={merchant.status === "frozen" ? "解冻资金" : "冻结资金"}
+                        onClick={() => openFreezeFundsDialog(merchant)}
+                        className="text-orange-600 hover:text-orange-800 dark:text-orange-400"
+                        title="冻结资金"
                       >
-                        {merchant.status === "frozen" ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                        <Lock className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openUnfreezeFundsDialog(merchant)}
+                        className="text-green-600 hover:text-green-800 dark:text-green-400"
+                        title="解冻资金"
+                      >
+                        <Unlock className="w-4 h-4" />
                       </Button>
                     </div>
                   </td>
@@ -1875,12 +1953,44 @@ export default function MerchantsPage() {
           <DialogHeader>
             <DialogTitle>冻结资金 - {currentMerchant?.name}</DialogTitle>
             <DialogDescription>
-              可用余额: ${currentMerchant?.balance.toLocaleString()} | 代付金余额: ${currentMerchant?.paymentBalance.toLocaleString()}
+              从用户可用余额中冻结指定金额的资金
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="freeze-amount">冻结金额</Label>
+              <Label htmlFor="freeze-funds-currency">币种 *</Label>
+              <Select 
+                value={freezeFundsCurrency} 
+                onValueChange={setFreezeFundsCurrency}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="请选择币种" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="CNY">CNY (人民币)</SelectItem>
+                  <SelectItem value="USD">USD (美元)</SelectItem>
+                  <SelectItem value="USDT">USDT</SelectItem>
+                  <SelectItem value="EUR">EUR (欧元)</SelectItem>
+                  <SelectItem value="GBP">GBP (英镑)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {freezeFundsCurrency && currentMerchant && (
+              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  当前可用余额: <span className="font-medium text-gray-900 dark:text-white">
+                    {currentMerchant.currencyBalances.find(cb => cb.currency === freezeFundsCurrency)?.balance.toLocaleString() || 0}
+                  </span>
+                </div>
+                <div className="text-sm text-orange-600 dark:text-orange-400 mt-1">
+                  当前冻结金额: <span className="font-medium">
+                    {currentMerchant.currencyBalances.find(cb => cb.currency === freezeFundsCurrency)?.frozenBalance.toLocaleString() || 0}
+                  </span>
+                </div>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="freeze-amount">冻结金额 *</Label>
               <Input
                 id="freeze-amount"
                 type="number"
@@ -1894,8 +2004,75 @@ export default function MerchantsPage() {
             <Button variant="outline" onClick={() => setIsFreezeFundsDialogOpen(false)}>
               取消
             </Button>
-            <Button onClick={handleFreezeFunds} className="bg-orange-600 hover:bg-orange-700">
+            <Button 
+              onClick={handleFreezeFunds} 
+              className="bg-orange-600 hover:bg-orange-700"
+              disabled={!freezeFundsCurrency || !freezeAmount}
+            >
               冻结
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isUnfreezeFundsDialogOpen} onOpenChange={setIsUnfreezeFundsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>解冻资金 - {currentMerchant?.name}</DialogTitle>
+            <DialogDescription>
+              将已冻结的资金解冻回可用余额
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="unfreeze-currency">币种 *</Label>
+              <Select 
+                value={unfreezeCurrency} 
+                onValueChange={setUnfreezeCurrency}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="请选择币种" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="CNY">CNY (人民币)</SelectItem>
+                  <SelectItem value="USD">USD (美元)</SelectItem>
+                  <SelectItem value="USDT">USDT</SelectItem>
+                  <SelectItem value="EUR">EUR (欧元)</SelectItem>
+                  <SelectItem value="GBP">GBP (英镑)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {unfreezeCurrency && (
+              <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                <div className="text-sm text-orange-800 dark:text-orange-200">
+                  当前冻结金额: <span className="font-semibold text-lg">{getCurrentFrozenBalance(unfreezeCurrency).toLocaleString()}</span>
+                </div>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="unfreeze-amount">解冻金额 *</Label>
+              <Input
+                id="unfreeze-amount"
+                type="number"
+                placeholder="请输入解冻金额"
+                value={unfreezeAmount}
+                onChange={(e) => setUnfreezeAmount(e.target.value)}
+              />
+              {unfreezeCurrency && unfreezeAmount && parseFloat(unfreezeAmount) > getCurrentFrozenBalance(unfreezeCurrency) && (
+                <p className="text-xs text-red-500">解冻金额不能超过当前冻结金额</p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsUnfreezeFundsDialogOpen(false)}>
+              取消
+            </Button>
+            <Button 
+              onClick={handleUnfreezeFunds} 
+              className="bg-green-600 hover:bg-green-700"
+              disabled={!unfreezeCurrency || !unfreezeAmount || parseFloat(unfreezeAmount) > getCurrentFrozenBalance(unfreezeCurrency)}
+            >
+              解冻
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -2123,14 +2300,59 @@ export default function MerchantsPage() {
                           </div>
                         </td>
                         <td className="py-3 px-4 text-right">
-                          <div className="font-medium text-orange-600 dark:text-orange-400">
-                            {cb.currency === "CNY" && "¥"}
-                            {cb.currency === "USD" && "$"}
-                            {cb.currency === "EUR" && "€"}
-                            {cb.currency === "GBP" && "£"}
-                            {cb.frozenBalance.toLocaleString()}
-                            {cb.currency === "USDT" && " USDT"}
-                          </div>
+                          {editingFrozenBalance?.currency === cb.currency ? (
+                            <div className="flex items-center justify-end gap-2">
+                              <Input
+                                type="number"
+                                value={editingFrozenBalance.value}
+                                onChange={(e) => setEditingFrozenBalance({ 
+                                  currency: cb.currency, 
+                                  value: e.target.value 
+                                })}
+                                className="h-8 w-32 text-right text-orange-600 dark:text-orange-400"
+                                autoFocus
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    handleUpdateFrozenBalance(cb.currency, parseFloat(editingFrozenBalance.value) || 0)
+                                  } else if (e.key === 'Escape') {
+                                    setEditingFrozenBalance(null)
+                                  }
+                                }}
+                              />
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-8 w-8 p-0 text-green-600 hover:text-green-800"
+                                onClick={() => handleUpdateFrozenBalance(cb.currency, parseFloat(editingFrozenBalance.value) || 0)}
+                              >
+                                <Check className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600"
+                                onClick={() => setEditingFrozenBalance(null)}
+                              >
+                                <X className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => setEditingFrozenBalance({ 
+                                currency: cb.currency, 
+                                value: cb.frozenBalance.toString() 
+                              })}
+                              className="font-medium text-orange-600 dark:text-orange-400 hover:underline cursor-pointer"
+                              title="点击编辑冻结金额"
+                            >
+                              {cb.currency === "CNY" && "¥"}
+                              {cb.currency === "USD" && "$"}
+                              {cb.currency === "EUR" && "€"}
+                              {cb.currency === "GBP" && "£"}
+                              {cb.frozenBalance.toLocaleString()}
+                              {cb.currency === "USDT" && " USDT"}
+                            </button>
+                          )}
                         </td>
                         <td className="py-3 px-4 text-right">
                           <div className="font-semibold text-gray-900 dark:text-white">
