@@ -97,6 +97,7 @@ import AddressesManagementPage from "@/app/(dashboard)/admin/crypto/addresses/pa
 import OTCSuppliersPage from "@/app/(dashboard)/admin/crypto/otc-suppliers/page"
 import OTCOrdersPage from "@/app/(dashboard)/admin/crypto/otc-orders/page"
 import OnchainDepositOrdersPage from "@/app/(dashboard)/admin/crypto/onchain-deposit-orders/page"
+import CryptoFreezeRecordsPage from "@/app/(dashboard)/admin/crypto/freeze-records/page"
 import FiatAssetStatisticsPage from "@/app/(dashboard)/admin/orders/fiat-assets/page"
 import FiatUsersPage from "@/app/(dashboard)/admin/fiat/users/page"
 import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
@@ -381,6 +382,7 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/crypto/otc-suppliers") return <OTCSuppliersPage />
     if (currentPage === "/admin/crypto/otc-orders") return <OTCOrdersPage />
     if (currentPage === "/admin/crypto/onchain-deposit-orders") return <OnchainDepositOrdersPage />
+    if (currentPage === "/admin/crypto/freeze-records") return <CryptoFreezeRecordsPage />
     if (currentPage === "/admin/orders/fiat-assets") return <FiatAssetStatisticsPage />
     if (currentPage === "/admin/fiat/users") return <FiatUsersPage />
     if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />
