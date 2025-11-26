@@ -72,6 +72,7 @@ import {
   ChevronDown,
   ChevronRight,
   ShieldCheck,
+  Truck,
 } from "lucide-react"
 
 interface AdminSidebarV2Props {
@@ -240,6 +241,7 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/ucard/config", icon: Settings, label: "U卡基础配置" },
     { path: "/admin/ucard/number-segments", icon: Hash, label: "U卡号段管理" },
     { path: "/admin/ucard/applications", icon: CreditCard, label: "U卡开卡记录" },
+    { path: "/admin/ucard/shipping-orders", icon: Truck, label: "实体卡寄送订单" },
     { path: "/admin/ucard/recharge-records", icon: ArrowDownToLine, label: "U卡划转兑换" },
     { path: "/admin/ucard/transactions", icon: ShoppingCart, label: "U卡消费记录" },
   ],
