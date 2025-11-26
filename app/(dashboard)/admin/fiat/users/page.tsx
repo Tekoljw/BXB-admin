@@ -849,6 +849,7 @@ export default function MerchantsPage() {
   const [currentFeeConfig, setCurrentFeeConfig] = useState<FeeConfig | null>(null)
   const [currentInterface, setCurrentInterface] = useState<PaymentInterface | null>(null)
   const [freezeAmount, setFreezeAmount] = useState("")
+  const [freezeReason, setFreezeReason] = useState("")
   const [freezeFormData, setFreezeFormData] = useState({
     currency: "",
     amount: ""
@@ -1060,6 +1061,7 @@ export default function MerchantsPage() {
       setIsFreezeFundsDialogOpen(false)
       setCurrentMerchant(null)
       setFreezeAmount("")
+      setFreezeReason("")
       setFreezeFundsCurrency("")
     }
   }
@@ -1999,6 +2001,15 @@ export default function MerchantsPage() {
                 onChange={(e) => setFreezeAmount(e.target.value)}
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="freeze-reason">冻结理由 *</Label>
+              <Input
+                id="freeze-reason"
+                placeholder="请输入冻结理由"
+                value={freezeReason}
+                onChange={(e) => setFreezeReason(e.target.value)}
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsFreezeFundsDialogOpen(false)}>
@@ -2007,7 +2018,7 @@ export default function MerchantsPage() {
             <Button 
               onClick={handleFreezeFunds} 
               className="bg-orange-600 hover:bg-orange-700"
-              disabled={!freezeFundsCurrency || !freezeAmount}
+              disabled={!freezeFundsCurrency || !freezeAmount || !freezeReason}
             >
               冻结
             </Button>
