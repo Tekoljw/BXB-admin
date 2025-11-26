@@ -1106,6 +1106,12 @@ export default function CryptoUsersPage() {
   const [showUserDetailDrawer, setShowUserDetailDrawer] = useState(false)
   const [selectedUserForDetail, setSelectedUserForDetail] = useState<CryptoUser | null>(null)
   const [freezeAmount, setFreezeAmount] = useState("")
+  const [freezeReason, setFreezeReason] = useState("")
+  const [freezeFundsCurrency, setFreezeFundsCurrency] = useState("")
+  const [isUnfreezeFundsDialogOpen, setIsUnfreezeFundsDialogOpen] = useState(false)
+  const [unfreezeCurrency, setUnfreezeCurrency] = useState("")
+  const [unfreezeAmount, setUnfreezeAmount] = useState("")
+  const [editingFrozenBalance, setEditingFrozenBalance] = useState<{currency: string, value: string} | null>(null)
   const [freezeFormData, setFreezeFormData] = useState({
     currency: "",
     amount: ""
@@ -1270,21 +1276,97 @@ export default function CryptoUsersPage() {
   }
 
   const handleFreezeFunds = () => {
-    if (currentUser && freezeAmount) {
+    if (currentUser && freezeAmount && freezeFundsCurrency && freezeReason) {
       const amount = parseFloat(freezeAmount)
+      const updatedBalances = currentUser.currencyBalances.map(cb => {
+        if (cb.currency === freezeFundsCurrency) {
+          return {
+            ...cb,
+            frozenBalance: cb.frozenBalance + amount,
+            balance: Math.max(0, cb.balance - amount)
+          }
+        }
+        return cb
+      })
       setCryptoUsers(cryptoUsers.map(m => 
         m.id === currentUser.id 
-          ? { 
-              ...m, 
-              frozenBalance: m.frozenBalance + amount,
-              balance: m.balance - amount
-            } 
+          ? { ...m, currencyBalances: updatedBalances } 
           : m
       ))
       setIsFreezeFundsDialogOpen(false)
       setCurrentUser(null)
       setFreezeAmount("")
+      setFreezeReason("")
+      setFreezeFundsCurrency("")
     }
+  }
+
+  const handleUnfreezeFunds = () => {
+    if (currentUser && unfreezeCurrency && unfreezeAmount) {
+      const amount = parseFloat(unfreezeAmount)
+      const currentFrozen = getCurrentFrozenBalance(unfreezeCurrency)
+      if (amount > currentFrozen) return
+      
+      const updatedBalances = currentUser.currencyBalances.map(cb => {
+        if (cb.currency === unfreezeCurrency) {
+          return {
+            ...cb,
+            frozenBalance: Math.max(0, cb.frozenBalance - amount),
+            balance: cb.balance + amount
+          }
+        }
+        return cb
+      })
+      setCryptoUsers(cryptoUsers.map(m => 
+        m.id === currentUser.id 
+          ? { ...m, currencyBalances: updatedBalances } 
+          : m
+      ))
+      setIsUnfreezeFundsDialogOpen(false)
+      setCurrentUser(null)
+      setUnfreezeAmount("")
+      setUnfreezeCurrency("")
+    }
+  }
+
+  const getCurrentFrozenBalance = (currency: string) => {
+    if (!currentUser) return 0
+    const cb = currentUser.currencyBalances.find(c => c.currency === currency)
+    return cb?.frozenBalance || 0
+  }
+
+  const openFreezeFundsDialog = (user: CryptoUser) => {
+    setCurrentUser(user)
+    setFreezeAmount("")
+    setFreezeReason("")
+    setFreezeFundsCurrency("")
+    setIsFreezeFundsDialogOpen(true)
+  }
+
+  const openUnfreezeFundsDialog = (user: CryptoUser) => {
+    setCurrentUser(user)
+    setUnfreezeAmount("")
+    setUnfreezeCurrency("")
+    setIsUnfreezeFundsDialogOpen(true)
+  }
+
+  const handleSaveFrozenBalance = (currency: string, newValue: string) => {
+    if (!currentUser) return
+    const numValue = parseFloat(newValue)
+    if (isNaN(numValue) || numValue < 0) return
+    
+    const updatedBalances = currentUser.currencyBalances.map(cb => {
+      if (cb.currency === currency) {
+        return { ...cb, frozenBalance: numValue }
+      }
+      return cb
+    })
+    setCryptoUsers(cryptoUsers.map(m => 
+      m.id === currentUser.id 
+        ? { ...m, currencyBalances: updatedBalances } 
+        : m
+    ))
+    setEditingFrozenBalance(null)
   }
 
   const handleUserStatusToggle = (user: CryptoUser, checked: boolean) => {
@@ -1318,11 +1400,6 @@ export default function CryptoUsersPage() {
     setCurrentUser(user)
     setFreezeFormData({ currency: "", amount: "" })
     setIsFreezeDialogOpen(true)
-  }
-
-  const openFreezeFundsDialog = (user: CryptoUser) => {
-    setCurrentUser(user)
-    setIsFreezeFundsDialogOpen(true)
   }
 
   const openFeeConfigDialog = (user: CryptoUser) => {
@@ -1815,11 +1892,20 @@ export default function CryptoUsersPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => openFreezeDialog(user)}
-                        className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400"
-                        title={user.status === "frozen" ? "解冻资金" : "冻结资金"}
+                        onClick={() => openFreezeFundsDialog(user)}
+                        className="text-orange-600 hover:text-orange-800 dark:text-orange-400"
+                        title="冻结资金"
                       >
-                        {user.status === "frozen" ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                        <Lock className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openUnfreezeFundsDialog(user)}
+                        className="text-green-600 hover:text-green-800 dark:text-green-400"
+                        title="解冻资金"
+                      >
+                        <Unlock className="w-4 h-4" />
                       </Button>
                     </div>
                   </td>
@@ -2394,12 +2480,44 @@ export default function CryptoUsersPage() {
           <DialogHeader>
             <DialogTitle>冻结资金 - {currentUser?.name}</DialogTitle>
             <DialogDescription>
-              可用余额: {currentUser?.primaryCurrency} {currentUser?.balance.toLocaleString()} | 冻结余额: {currentUser?.primaryCurrency} {currentUser?.frozenBalance.toLocaleString()}
+              从用户可用余额中冻结指定金额的资金
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="freeze-amount">冻结金额</Label>
+              <Label htmlFor="freeze-funds-currency">币种 *</Label>
+              <Select 
+                value={freezeFundsCurrency} 
+                onValueChange={setFreezeFundsCurrency}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="请选择币种" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="USDT">USDT</SelectItem>
+                  <SelectItem value="BTC">BTC</SelectItem>
+                  <SelectItem value="ETH">ETH</SelectItem>
+                  <SelectItem value="TRX">TRX</SelectItem>
+                  <SelectItem value="USDC">USDC</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {freezeFundsCurrency && currentUser && (
+              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  当前可用余额: <span className="font-medium text-gray-900 dark:text-white">
+                    {currentUser.currencyBalances.find(cb => cb.currency === freezeFundsCurrency)?.balance.toLocaleString() || 0}
+                  </span>
+                </div>
+                <div className="text-sm text-orange-600 dark:text-orange-400 mt-1">
+                  当前冻结金额: <span className="font-medium">
+                    {currentUser.currencyBalances.find(cb => cb.currency === freezeFundsCurrency)?.frozenBalance.toLocaleString() || 0}
+                  </span>
+                </div>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="freeze-amount">冻结金额 *</Label>
               <Input
                 id="freeze-amount"
                 type="number"
@@ -2408,13 +2526,91 @@ export default function CryptoUsersPage() {
                 onChange={(e) => setFreezeAmount(e.target.value)}
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="freeze-reason">冻结理由 *</Label>
+              <Input
+                id="freeze-reason"
+                placeholder="请输入冻结理由"
+                value={freezeReason}
+                onChange={(e) => setFreezeReason(e.target.value)}
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsFreezeFundsDialogOpen(false)}>
               取消
             </Button>
-            <Button onClick={handleFreezeFunds} className="bg-orange-600 hover:bg-orange-700">
+            <Button 
+              onClick={handleFreezeFunds} 
+              className="bg-orange-600 hover:bg-orange-700"
+              disabled={!freezeFundsCurrency || !freezeAmount || !freezeReason}
+            >
               冻结
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isUnfreezeFundsDialogOpen} onOpenChange={setIsUnfreezeFundsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>解冻资金 - {currentUser?.name}</DialogTitle>
+            <DialogDescription>
+              将已冻结的资金解冻回可用余额
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="unfreeze-currency">币种 *</Label>
+              <Select 
+                value={unfreezeCurrency} 
+                onValueChange={setUnfreezeCurrency}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="请选择币种" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="USDT">USDT</SelectItem>
+                  <SelectItem value="BTC">BTC</SelectItem>
+                  <SelectItem value="ETH">ETH</SelectItem>
+                  <SelectItem value="TRX">TRX</SelectItem>
+                  <SelectItem value="USDC">USDC</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {unfreezeCurrency && currentUser && (
+              <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                <div className="text-sm text-orange-700 dark:text-orange-300">
+                  当前冻结金额: <span className="font-bold text-orange-600 dark:text-orange-400">
+                    {getCurrentFrozenBalance(unfreezeCurrency).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="unfreeze-amount">解冻金额 *</Label>
+              <Input
+                id="unfreeze-amount"
+                type="number"
+                placeholder="请输入解冻金额"
+                value={unfreezeAmount}
+                onChange={(e) => setUnfreezeAmount(e.target.value)}
+              />
+              {unfreezeCurrency && unfreezeAmount && parseFloat(unfreezeAmount) > getCurrentFrozenBalance(unfreezeCurrency) && (
+                <p className="text-xs text-red-500">解冻金额不能超过当前冻结金额</p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsUnfreezeFundsDialogOpen(false)}>
+              取消
+            </Button>
+            <Button 
+              onClick={handleUnfreezeFunds} 
+              className="bg-green-600 hover:bg-green-700"
+              disabled={!unfreezeCurrency || !unfreezeAmount || parseFloat(unfreezeAmount) > getCurrentFrozenBalance(unfreezeCurrency)}
+            >
+              解冻
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -2441,11 +2637,11 @@ export default function CryptoUsersPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="USDT">CNY (人民币)</SelectItem>
-                  <SelectItem value="BTC">USD (美元)</SelectItem>
                   <SelectItem value="USDT">USDT</SelectItem>
-                  <SelectItem value="ETH">EUR (欧元)</SelectItem>
-                  <SelectItem value="USDC">GBP (英镑)</SelectItem>
+                  <SelectItem value="BTC">BTC</SelectItem>
+                  <SelectItem value="ETH">ETH</SelectItem>
+                  <SelectItem value="TRX">TRX</SelectItem>
+                  <SelectItem value="USDC">USDC</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -2625,9 +2821,54 @@ export default function CryptoUsersPage() {
                           </div>
                         </td>
                         <td className="py-3 px-4 text-right">
-                          <div className="font-medium text-orange-600 dark:text-orange-400">
-                            {cb.frozenBalance.toLocaleString()}
-                          </div>
+                          {editingFrozenBalance?.currency === cb.currency ? (
+                            <div className="flex items-center justify-end gap-2">
+                              <Input
+                                type="number"
+                                value={editingFrozenBalance.value}
+                                onChange={(e) => setEditingFrozenBalance({
+                                  currency: cb.currency,
+                                  value: e.target.value
+                                })}
+                                className="w-32 text-right"
+                                autoFocus
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    handleSaveFrozenBalance(cb.currency, editingFrozenBalance.value)
+                                  } else if (e.key === 'Escape') {
+                                    setEditingFrozenBalance(null)
+                                  }
+                                }}
+                              />
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handleSaveFrozenBalance(cb.currency, editingFrozenBalance.value)}
+                                className="text-green-600 hover:text-green-700 p-1"
+                              >
+                                <Check className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => setEditingFrozenBalance(null)}
+                                className="text-gray-500 hover:text-gray-700 p-1"
+                              >
+                                <X className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div 
+                              className="font-medium text-orange-600 dark:text-orange-400 cursor-pointer hover:underline"
+                              onClick={() => setEditingFrozenBalance({
+                                currency: cb.currency,
+                                value: cb.frozenBalance.toString()
+                              })}
+                              title="点击编辑冻结金额"
+                            >
+                              {cb.frozenBalance.toLocaleString()}
+                            </div>
+                          )}
                         </td>
                       </tr>
                     ))}
