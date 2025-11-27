@@ -4,14 +4,6 @@ import { useState } from 'react'
 import { Store, Plus, Settings, CreditCard, ChevronDown, ChevronUp, Hash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import {
   Sheet,
@@ -486,24 +478,52 @@ export default function UCardSuppliersPage() {
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4">
-        <SearchControls
-          placeholder="搜索供应商名称、联系人..."
-          value={searchInput}
-          onChange={setSearchInput}
-          onSearch={handleSearch}
-          onReset={handleReset}
-        />
-        <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-full sm:w-48">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部状态</SelectItem>
-            <SelectItem value="active">合作中</SelectItem>
-            <SelectItem value="inactive">已停用</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden shrink-0">
+          <button
+            onClick={() => setFilterStatus('all')}
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
+              filterStatus === 'all'
+                ? 'bg-custom-green text-white'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+            }`}
+          >
+            全部
+          </button>
+          <button
+            onClick={() => setFilterStatus('active')}
+            className={`px-4 py-2 text-sm font-medium transition-colors border-l border-gray-200 dark:border-gray-700 ${
+              filterStatus === 'active'
+                ? 'bg-custom-green text-white'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+            }`}
+          >
+            合作中
+          </button>
+          <button
+            onClick={() => setFilterStatus('inactive')}
+            className={`px-4 py-2 text-sm font-medium transition-colors border-l border-gray-200 dark:border-gray-700 ${
+              filterStatus === 'inactive'
+                ? 'bg-custom-green text-white'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+            }`}
+          >
+            已停用
+          </button>
+        </div>
+        <div className="flex-1 w-full flex gap-2">
+          <input
+            type="text"
+            placeholder="搜索供应商名称、联系人..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="flex-1 h-10 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-custom-green focus:border-transparent"
+          />
+          <Button onClick={handleSearch} className="bg-custom-green hover:bg-custom-green-dark text-white shrink-0">
+            搜索
+          </Button>
+        </div>
       </div>
 
       {filteredSuppliers.length > 0 ? (
