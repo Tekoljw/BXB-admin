@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Store, Plus, Settings, CreditCard, ChevronDown, ChevronUp, Hash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
 import {
   Sheet,
@@ -479,38 +480,13 @@ export default function UCardSuppliersPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden shrink-0">
-          <button
-            onClick={() => setFilterStatus('all')}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              filterStatus === 'all'
-                ? 'bg-custom-green text-white'
-                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-            }`}
-          >
-            全部
-          </button>
-          <button
-            onClick={() => setFilterStatus('active')}
-            className={`px-4 py-2 text-sm font-medium transition-colors border-l border-gray-200 dark:border-gray-700 ${
-              filterStatus === 'active'
-                ? 'bg-custom-green text-white'
-                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-            }`}
-          >
-            合作中
-          </button>
-          <button
-            onClick={() => setFilterStatus('inactive')}
-            className={`px-4 py-2 text-sm font-medium transition-colors border-l border-gray-200 dark:border-gray-700 ${
-              filterStatus === 'inactive'
-                ? 'bg-custom-green text-white'
-                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-            }`}
-          >
-            已停用
-          </button>
-        </div>
+        <Tabs value={filterStatus} onValueChange={setFilterStatus} className="shrink-0">
+          <TabsList>
+            <TabsTrigger value="all">全部</TabsTrigger>
+            <TabsTrigger value="active">合作中</TabsTrigger>
+            <TabsTrigger value="inactive">已停用</TabsTrigger>
+          </TabsList>
+        </Tabs>
         <div className="flex-1 w-full flex gap-2">
           <input
             type="text"

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Select,
   SelectContent,
@@ -160,28 +161,6 @@ export default function UCardConfigPage() {
     ))
   }
 
-  const getCardTypeStyle = (cardId: string, isSelected: boolean) => {
-    if (primaryTab === 'virtual') {
-      return isSelected 
-        ? 'bg-blue-500 text-white border-blue-500' 
-        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600'
-    } else {
-      if (cardId === 'physical_black') {
-        return isSelected 
-          ? 'bg-gradient-to-r from-gray-900 to-black text-yellow-400 border-gray-900' 
-          : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400'
-      } else if (cardId === 'physical_white') {
-        return isSelected 
-          ? 'bg-gradient-to-r from-gray-200 to-gray-400 text-gray-800 border-gray-400' 
-          : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400'
-      } else {
-        return isSelected 
-          ? 'bg-gray-500 text-white border-gray-500' 
-          : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400'
-      }
-    }
-  }
-
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -197,47 +176,27 @@ export default function UCardConfigPage() {
         </Button>
       </div>
 
-      <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden w-fit">
-        <button
-          onClick={() => setPrimaryTab('virtual')}
-          className={`flex items-center gap-2 px-6 py-3 text-sm font-medium transition-colors ${
-            primaryTab === 'virtual'
-              ? 'bg-blue-500 text-white'
-              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
-        >
-          <Smartphone className="w-4 h-4" />
-          虚拟卡
-        </button>
-        <button
-          onClick={() => setPrimaryTab('physical')}
-          className={`flex items-center gap-2 px-6 py-3 text-sm font-medium transition-colors border-l border-gray-200 dark:border-gray-700 ${
-            primaryTab === 'physical'
-              ? 'bg-gradient-to-r from-gray-700 to-gray-900 text-white'
-              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
-        >
-          <CreditCard className="w-4 h-4" />
-          实体卡
-        </button>
-      </div>
+      <Tabs value={primaryTab} onValueChange={(value) => setPrimaryTab(value as 'virtual' | 'physical')}>
+        <TabsList>
+          <TabsTrigger value="virtual">虚拟卡</TabsTrigger>
+          <TabsTrigger value="physical">实体卡</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
-      <div className="flex gap-3 flex-wrap">
-        {currentCards.map((card) => (
-          <button
-            key={card.id}
-            onClick={() => setSelectedCardId(card.id)}
-            className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${getCardTypeStyle(card.id, selectedCardId === card.id)}`}
-          >
-            {card.name}
-            {!card.isEnabled && (
-              <span className="ml-2 px-1.5 py-0.5 text-xs bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">
-                已停用
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
+      <Tabs value={selectedCardId} onValueChange={setSelectedCardId}>
+        <TabsList>
+          {currentCards.map((card) => (
+            <TabsTrigger key={card.id} value={card.id}>
+              {card.name}
+              {!card.isEnabled && (
+                <span className="ml-2 px-1.5 py-0.5 text-xs bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">
+                  停用
+                </span>
+              )}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
