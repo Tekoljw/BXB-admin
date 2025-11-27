@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Store, Plus, Settings, CreditCard, ChevronDown, ChevronUp } from 'lucide-react'
+import { Store, Plus, Settings, CreditCard, ChevronDown, ChevronUp, Hash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import {
@@ -19,6 +19,23 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+
+interface NumberSegment {
+  id: string
+  segmentName: string
+  startNumber: string
+  endNumber: string
+  totalCards: number
+  usedCards: number
+  status: 'active' | 'exhausted' | 'reserved'
+  createdAt: string
+}
 
 interface CardType {
   id: string
@@ -41,6 +58,7 @@ interface Supplier {
   cooperationStartDate: string
   settlementCycle: string
   cardTypes: CardType[]
+  numberSegments: NumberSegment[]
 }
 
 const getCardTypeStyle = (type: CardType['type']) => {
@@ -84,6 +102,19 @@ const getCurrencyColor = (currency: string) => {
     'SGD': 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
   }
   return colors[currency] || 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+}
+
+const getSegmentStatusBadge = (status: string) => {
+  switch (status) {
+    case 'active':
+      return <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full">使用中</span>
+    case 'exhausted':
+      return <span className="px-2 py-0.5 text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 rounded-full">已用完</span>
+    case 'reserved':
+      return <span className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400 rounded-full">保留中</span>
+    default:
+      return null
+  }
 }
 
 export default function UCardSuppliersPage() {
@@ -139,6 +170,38 @@ export default function UCardSuppliersPage() {
           status: 'inactive',
         },
       ],
+      numberSegments: [
+        {
+          id: 'seg-1-1',
+          segmentName: 'CP-2024-001',
+          startNumber: '5200 0001 0000 0000',
+          endNumber: '5200 0001 9999 9999',
+          totalCards: 10000,
+          usedCards: 8765,
+          status: 'active',
+          createdAt: '2024-01-15',
+        },
+        {
+          id: 'seg-1-2',
+          segmentName: 'CP-2024-002',
+          startNumber: '5200 0010 0000 0000',
+          endNumber: '5200 0010 9999 9999',
+          totalCards: 10000,
+          usedCards: 4320,
+          status: 'active',
+          createdAt: '2024-03-20',
+        },
+        {
+          id: 'seg-1-3',
+          segmentName: 'CP-2025-001',
+          startNumber: '5200 0020 0000 0000',
+          endNumber: '5200 0020 9999 9999',
+          totalCards: 10000,
+          usedCards: 0,
+          status: 'reserved',
+          createdAt: '2024-11-01',
+        },
+      ],
     },
     {
       id: '2',
@@ -181,6 +244,28 @@ export default function UCardSuppliersPage() {
           status: 'active',
         },
       ],
+      numberSegments: [
+        {
+          id: 'seg-2-1',
+          segmentName: 'GC-2024-001',
+          startNumber: '5200 0002 0000 0000',
+          endNumber: '5200 0002 9999 9999',
+          totalCards: 10000,
+          usedCards: 6543,
+          status: 'active',
+          createdAt: '2024-02-20',
+        },
+        {
+          id: 'seg-2-2',
+          segmentName: 'GC-2024-002',
+          startNumber: '5200 0012 0000 0000',
+          endNumber: '5200 0012 9999 9999',
+          totalCards: 10000,
+          usedCards: 2890,
+          status: 'active',
+          createdAt: '2024-06-15',
+        },
+      ],
     },
     {
       id: '3',
@@ -211,6 +296,28 @@ export default function UCardSuppliersPage() {
           monthlyIssued: 230,
           fee: '$3.00',
           status: 'active',
+        },
+      ],
+      numberSegments: [
+        {
+          id: 'seg-3-1',
+          segmentName: 'VC-2024-001',
+          startNumber: '5200 0003 0000 0000',
+          endNumber: '5200 0003 9999 9999',
+          totalCards: 10000,
+          usedCards: 10000,
+          status: 'exhausted',
+          createdAt: '2024-01-10',
+        },
+        {
+          id: 'seg-3-2',
+          segmentName: 'VC-2024-002',
+          startNumber: '5200 0013 0000 0000',
+          endNumber: '5200 0013 9999 9999',
+          totalCards: 10000,
+          usedCards: 7230,
+          status: 'active',
+          createdAt: '2024-05-01',
         },
       ],
     },
@@ -245,6 +352,18 @@ export default function UCardSuppliersPage() {
           status: 'inactive',
         },
       ],
+      numberSegments: [
+        {
+          id: 'seg-4-1',
+          segmentName: 'SC-2024-001',
+          startNumber: '5200 0004 0000 0000',
+          endNumber: '5200 0004 9999 9999',
+          totalCards: 10000,
+          usedCards: 3200,
+          status: 'reserved',
+          createdAt: '2024-10-01',
+        },
+      ],
     },
   ])
 
@@ -253,6 +372,8 @@ export default function UCardSuppliersPage() {
   const [expandedSuppliers, setExpandedSuppliers] = useState<Set<string>>(new Set(['1', '2', '3']))
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null)
   const [showDetailSheet, setShowDetailSheet] = useState(false)
+  const [showSegmentsDialog, setShowSegmentsDialog] = useState(false)
+  const [segmentsDialogSupplier, setSegmentsDialogSupplier] = useState<Supplier | null>(null)
 
   const stats = {
     total: suppliers.length,
@@ -295,6 +416,12 @@ export default function UCardSuppliersPage() {
   const openSupplierDetail = (supplier: Supplier) => {
     setSelectedSupplier(supplier)
     setShowDetailSheet(true)
+  }
+
+  const openSegmentsDialog = (supplier: Supplier, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setSegmentsDialogSupplier(supplier)
+    setShowSegmentsDialog(true)
   }
 
   return (
@@ -366,6 +493,7 @@ export default function UCardSuppliersPage() {
             const totalIssued = supplier.cardTypes.reduce((sum, c) => sum + c.issuedCount, 0)
             const monthlyIssued = supplier.cardTypes.reduce((sum, c) => sum + c.monthlyIssued, 0)
             const activeCardTypes = supplier.cardTypes.filter(c => c.status === 'active').length
+            const activeSegments = supplier.numberSegments.filter(s => s.status === 'active').length
             
             return (
               <div
@@ -400,10 +528,18 @@ export default function UCardSuppliersPage() {
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center gap-4 mt-1 text-sm text-gray-500 dark:text-gray-400 flex-wrap">
                           <span>卡种: <span className="font-medium text-gray-700 dark:text-gray-300">{supplier.cardTypes.length}种</span> ({activeCardTypes}启用)</span>
                           <span>本月: <span className="font-medium text-blue-600 dark:text-blue-400">{monthlyIssued.toLocaleString()}</span></span>
                           <span>累计: <span className="font-medium text-purple-600 dark:text-purple-400">{totalIssued.toLocaleString()}</span></span>
+                          <button
+                            onClick={(e) => openSegmentsDialog(supplier, e)}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors"
+                          >
+                            <Hash className="w-3 h-3" />
+                            <span>号段: {supplier.numberSegments.length}个</span>
+                            <span className="text-xs">({activeSegments}使用中)</span>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -510,6 +646,93 @@ export default function UCardSuppliersPage() {
         </div>
       )}
 
+      <Dialog open={showSegmentsDialog} onOpenChange={setShowSegmentsDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Hash className="w-5 h-5 text-indigo-600" />
+              {segmentsDialogSupplier?.name} - 号段列表
+            </DialogTitle>
+          </DialogHeader>
+          {segmentsDialogSupplier && (
+            <div className="mt-4 space-y-4">
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+                  <div className="text-xs text-gray-500 dark:text-gray-400">号段总数</div>
+                  <div className="text-xl font-bold text-gray-900 dark:text-white mt-1">
+                    {segmentsDialogSupplier.numberSegments.length}
+                  </div>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
+                  <div className="text-xs text-green-600 dark:text-green-400">使用中</div>
+                  <div className="text-xl font-bold text-green-700 dark:text-green-300 mt-1">
+                    {segmentsDialogSupplier.numberSegments.filter(s => s.status === 'active').length}
+                  </div>
+                </div>
+                <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3">
+                  <div className="text-xs text-purple-600 dark:text-purple-400">总容量</div>
+                  <div className="text-xl font-bold text-purple-700 dark:text-purple-300 mt-1">
+                    {segmentsDialogSupplier.numberSegments.reduce((sum, s) => sum + s.totalCards, 0).toLocaleString()}
+                  </div>
+                </div>
+              </div>
+
+              <div className="border rounded-lg overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 dark:bg-gray-800">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">号段名称</th>
+                      <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">卡号范围</th>
+                      <th className="px-4 py-3 text-center font-medium text-gray-500 dark:text-gray-400">使用率</th>
+                      <th className="px-4 py-3 text-center font-medium text-gray-500 dark:text-gray-400">状态</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {segmentsDialogSupplier.numberSegments.map((segment) => {
+                      const usagePercent = Math.round((segment.usedCards / segment.totalCards) * 100)
+                      return (
+                        <tr key={segment.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                          <td className="px-4 py-3">
+                            <div className="font-medium text-gray-900 dark:text-white">{segment.segmentName}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">{segment.createdAt}</div>
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="text-xs font-mono text-gray-600 dark:text-gray-300">
+                              <div>{segment.startNumber}</div>
+                              <div className="text-gray-400">至</div>
+                              <div>{segment.endNumber}</div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="text-center">
+                              <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                {segment.usedCards.toLocaleString()} / {segment.totalCards.toLocaleString()}
+                              </div>
+                              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-1">
+                                <div
+                                  className={`h-1.5 rounded-full ${
+                                    usagePercent >= 90 ? 'bg-red-500' : usagePercent >= 70 ? 'bg-yellow-500' : 'bg-green-500'
+                                  }`}
+                                  style={{ width: `${usagePercent}%` }}
+                                />
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{usagePercent}%</div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            {getSegmentStatusBadge(segment.status)}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <Sheet open={showDetailSheet} onOpenChange={setShowDetailSheet}>
         <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
           <SheetHeader>
@@ -589,6 +812,42 @@ export default function UCardSuppliersPage() {
                       {selectedSupplier.cardTypes.reduce((sum, c) => sum + c.issuedCount, 0).toLocaleString()}
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="font-medium text-gray-900 dark:text-white">号段信息</h4>
+                <div className="space-y-2">
+                  {selectedSupplier.numberSegments.map((segment) => {
+                    const usagePercent = Math.round((segment.usedCards / segment.totalCards) * 100)
+                    return (
+                      <div key={segment.id} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-medium text-gray-900 dark:text-white">{segment.segmentName}</span>
+                          {getSegmentStatusBadge(segment.status)}
+                        </div>
+                        <div className="text-xs font-mono text-gray-500 dark:text-gray-400 mb-2">
+                          {segment.startNumber} - {segment.endNumber}
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-gray-500 dark:text-gray-400">
+                            使用: {segment.usedCards.toLocaleString()} / {segment.totalCards.toLocaleString()}
+                          </span>
+                          <span className={`font-medium ${usagePercent >= 90 ? 'text-red-600' : usagePercent >= 70 ? 'text-yellow-600' : 'text-green-600'}`}>
+                            {usagePercent}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1 mt-1">
+                          <div
+                            className={`h-1 rounded-full ${
+                              usagePercent >= 90 ? 'bg-red-500' : usagePercent >= 70 ? 'bg-yellow-500' : 'bg-green-500'
+                            }`}
+                            style={{ width: `${usagePercent}%` }}
+                          />
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
 
