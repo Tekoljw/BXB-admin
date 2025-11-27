@@ -54,6 +54,8 @@ interface Supplier {
   cooperationStartDate: string
   settlementCycle: string
   totalUsdtBalance: number
+  hasFundPool: boolean
+  fundPoolBalance?: number
   cardTypes: CardType[]
   numberSegments: NumberSegment[]
 }
@@ -126,6 +128,8 @@ export default function UCardSuppliersPage() {
       cooperationStartDate: '2023-06-15',
       settlementCycle: '每周',
       totalUsdtBalance: 2580000,
+      hasFundPool: true,
+      fundPoolBalance: 1250000,
       cardTypes: [
         {
           id: '1-1',
@@ -215,6 +219,7 @@ export default function UCardSuppliersPage() {
       cooperationStartDate: '2023-08-20',
       settlementCycle: '每月',
       totalUsdtBalance: 1850000,
+      hasFundPool: false,
       cardTypes: [
         {
           id: '2-1',
@@ -283,6 +288,8 @@ export default function UCardSuppliersPage() {
       cooperationStartDate: '2023-09-10',
       settlementCycle: '每两周',
       totalUsdtBalance: 920000,
+      hasFundPool: true,
+      fundPoolBalance: 580000,
       cardTypes: [
         {
           id: '3-1',
@@ -340,6 +347,7 @@ export default function UCardSuppliersPage() {
       cooperationStartDate: '2023-05-01',
       settlementCycle: '每月',
       totalUsdtBalance: 180000,
+      hasFundPool: false,
       cardTypes: [
         {
           id: '4-1',
@@ -526,10 +534,21 @@ export default function UCardSuppliersPage() {
                         {supplier.logo}
                       </div>
                       <div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 flex-wrap">
                           <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                             {supplier.name}
                           </h3>
+                          {supplier.hasFundPool ? (
+                            <div className="flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-sm">
+                              <span className="text-xs text-white/80">资金池</span>
+                              <span className="text-sm font-bold text-white">{supplier.fundPoolBalance?.toLocaleString()}</span>
+                              <span className="text-xs font-semibold text-yellow-300">USDT</span>
+                            </div>
+                          ) : (
+                            <span className="px-2.5 py-1 text-xs font-medium bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400 rounded-full">
+                              无资金池
+                            </span>
+                          )}
                           <div className="flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full shadow-sm">
                             <span className="text-xs text-white/80">存入</span>
                             <span className="text-sm font-bold text-white">{supplier.totalUsdtBalance.toLocaleString()}</span>
@@ -812,14 +831,34 @@ export default function UCardSuppliersPage() {
               </div>
 
               <div className="space-y-3">
-                <h4 className="font-medium text-gray-900 dark:text-white">存入余额</h4>
-                <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg p-4 text-center">
-                  <div className="text-sm text-white/80 mb-1">存入总额</div>
-                  <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-3xl font-bold text-white">
-                      {selectedSupplier.totalUsdtBalance.toLocaleString()}
-                    </span>
-                    <span className="text-lg font-semibold text-yellow-300">USDT</span>
+                <h4 className="font-medium text-gray-900 dark:text-white">资金信息</h4>
+                <div className="grid grid-cols-1 gap-3">
+                  {selectedSupplier.hasFundPool ? (
+                    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg p-4 text-center">
+                      <div className="text-sm text-white/80 mb-1">资金池余额</div>
+                      <div className="flex items-baseline justify-center gap-2">
+                        <span className="text-3xl font-bold text-white">
+                          {selectedSupplier.fundPoolBalance?.toLocaleString()}
+                        </span>
+                        <span className="text-lg font-semibold text-yellow-300">USDT</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 text-center">
+                      <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">资金池状态</div>
+                      <div className="text-lg font-medium text-gray-600 dark:text-gray-300">
+                        无资金池
+                      </div>
+                    </div>
+                  )}
+                  <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg p-4 text-center">
+                    <div className="text-sm text-white/80 mb-1">存入总额</div>
+                    <div className="flex items-baseline justify-center gap-2">
+                      <span className="text-3xl font-bold text-white">
+                        {selectedSupplier.totalUsdtBalance.toLocaleString()}
+                      </span>
+                      <span className="text-lg font-semibold text-yellow-300">USDT</span>
+                    </div>
                   </div>
                 </div>
               </div>
