@@ -18,13 +18,8 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 
 interface NumberSegment {
   id: string
@@ -646,16 +641,19 @@ export default function UCardSuppliersPage() {
         </div>
       )}
 
-      <Dialog open={showSegmentsDialog} onOpenChange={setShowSegmentsDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+      <Sheet open={showSegmentsDialog} onOpenChange={setShowSegmentsDialog}>
+        <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2">
               <Hash className="w-5 h-5 text-indigo-600" />
               {segmentsDialogSupplier?.name} - 号段列表
-            </DialogTitle>
-          </DialogHeader>
+            </SheetTitle>
+            <SheetDescription>
+              查看该供应商提供的所有卡号段信息
+            </SheetDescription>
+          </SheetHeader>
           {segmentsDialogSupplier && (
-            <div className="mt-4 space-y-4">
+            <div className="mt-6 space-y-4">
               <div className="grid grid-cols-3 gap-3">
                 <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
                   <div className="text-xs text-gray-500 dark:text-gray-400">号段总数</div>
@@ -677,61 +675,49 @@ export default function UCardSuppliersPage() {
                 </div>
               </div>
 
-              <div className="border rounded-lg overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead className="bg-gray-50 dark:bg-gray-800">
-                    <tr>
-                      <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">号段名称</th>
-                      <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">卡号范围</th>
-                      <th className="px-4 py-3 text-center font-medium text-gray-500 dark:text-gray-400">使用率</th>
-                      <th className="px-4 py-3 text-center font-medium text-gray-500 dark:text-gray-400">状态</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {segmentsDialogSupplier.numberSegments.map((segment) => {
-                      const usagePercent = Math.round((segment.usedCards / segment.totalCards) * 100)
-                      return (
-                        <tr key={segment.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                          <td className="px-4 py-3">
-                            <div className="font-medium text-gray-900 dark:text-white">{segment.segmentName}</div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">{segment.createdAt}</div>
-                          </td>
-                          <td className="px-4 py-3">
-                            <div className="text-xs font-mono text-gray-600 dark:text-gray-300">
-                              <div>{segment.startNumber}</div>
-                              <div className="text-gray-400">至</div>
-                              <div>{segment.endNumber}</div>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3">
-                            <div className="text-center">
-                              <div className="text-sm font-medium text-gray-900 dark:text-white">
-                                {segment.usedCards.toLocaleString()} / {segment.totalCards.toLocaleString()}
-                              </div>
-                              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-1">
-                                <div
-                                  className={`h-1.5 rounded-full ${
-                                    usagePercent >= 90 ? 'bg-red-500' : usagePercent >= 70 ? 'bg-yellow-500' : 'bg-green-500'
-                                  }`}
-                                  style={{ width: `${usagePercent}%` }}
-                                />
-                              </div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{usagePercent}%</div>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3 text-center">
-                            {getSegmentStatusBadge(segment.status)}
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
+              <div className="space-y-3">
+                {segmentsDialogSupplier.numberSegments.map((segment) => {
+                  const usagePercent = Math.round((segment.usedCards / segment.totalCards) * 100)
+                  return (
+                    <div key={segment.id} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <div className="font-medium text-gray-900 dark:text-white">{segment.segmentName}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">创建于 {segment.createdAt}</div>
+                        </div>
+                        {getSegmentStatusBadge(segment.status)}
+                      </div>
+                      <div className="text-xs font-mono text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-900 rounded p-2 mb-3">
+                        <div className="flex items-center justify-between">
+                          <span>{segment.startNumber}</span>
+                          <span className="text-gray-400 mx-2">→</span>
+                          <span>{segment.endNumber}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-sm mb-1">
+                        <span className="text-gray-500 dark:text-gray-400">
+                          使用量: {segment.usedCards.toLocaleString()} / {segment.totalCards.toLocaleString()}
+                        </span>
+                        <span className={`font-medium ${usagePercent >= 90 ? 'text-red-600' : usagePercent >= 70 ? 'text-yellow-600' : 'text-green-600'}`}>
+                          {usagePercent}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div
+                          className={`h-2 rounded-full ${
+                            usagePercent >= 90 ? 'bg-red-500' : usagePercent >= 70 ? 'bg-yellow-500' : 'bg-green-500'
+                          }`}
+                          style={{ width: `${usagePercent}%` }}
+                        />
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
 
       <Sheet open={showDetailSheet} onOpenChange={setShowDetailSheet}>
         <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
@@ -744,6 +730,9 @@ export default function UCardSuppliersPage() {
                 </>
               )}
             </SheetTitle>
+            <SheetDescription>
+              供应商详情信息和卡种配置
+            </SheetDescription>
           </SheetHeader>
           {selectedSupplier && (
             <div className="mt-6 space-y-6">
