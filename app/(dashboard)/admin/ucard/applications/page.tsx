@@ -1,17 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { CreditCard, Eye } from 'lucide-react'
+import { CreditCard, Eye, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { SearchControls } from "@/components/admin/search-controls"
-import { useDeferredSearch } from "@/hooks/use-deferred-search"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // 开卡记录类型定义
 interface Application {
@@ -27,7 +19,6 @@ interface Application {
 }
 
 export default function UCardApplicationsPage() {
-  // 示例数据
   const [applications] = useState<Application[]>([
     {
       id: '1',
@@ -73,10 +64,48 @@ export default function UCardApplicationsPage() {
       appliedAt: '2024-11-09 14:30:00',
       processedAt: '2024-11-09 14:45:00',
     },
+    {
+      id: '5',
+      applicationId: 'APP-20241109-016',
+      userId: 'U567890',
+      username: '钱七',
+      cardType: '实体卡',
+      supplier: 'Global Card Solutions',
+      status: 'completed',
+      appliedAt: '2024-11-09 11:20:00',
+      processedAt: '2024-11-09 11:30:00',
+    },
+    {
+      id: '6',
+      applicationId: 'APP-20241108-008',
+      userId: 'U678901',
+      username: '孙八',
+      cardType: '虚拟卡',
+      supplier: 'VirtualCard Plus',
+      status: 'completed',
+      appliedAt: '2024-11-08 16:45:00',
+      processedAt: '2024-11-08 16:50:00',
+    },
   ])
 
-  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
+  const [searchInput, setSearchInput] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
+  const [displayCount, setDisplayCount] = useState(5)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+
+  const handleSearch = () => {
+    setSearchTerm(searchInput)
+    setDisplayCount(5)
+  }
+
+  const handleLoadMore = () => {
+    setIsLoadingMore(true)
+    setTimeout(() => {
+      setDisplayCount(prev => prev + 5)
+      setIsLoadingMore(false)
+    }, 500)
+  }
 
   // 统计数据
   const stats = {
@@ -137,108 +166,132 @@ export default function UCardApplicationsPage() {
       </div>
 
       {/* 搜索和筛选 */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <SearchControls
-          placeholder="搜索申请ID、用户ID、用户名..."
-          value={searchInput}
-          onChange={setSearchInput}
-          onSearch={handleSearch}
-          onReset={handleReset}
-        />
-        <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-full sm:w-48">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部状态</SelectItem>
-            <SelectItem value="pending">待审核</SelectItem>
-            <SelectItem value="approved">已批准</SelectItem>
-            <SelectItem value="completed">已完成</SelectItem>
-            <SelectItem value="rejected">已拒绝</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <Tabs value={filterStatus} onValueChange={setFilterStatus} className="shrink-0">
+          <TabsList>
+            <TabsTrigger value="all">全部</TabsTrigger>
+            <TabsTrigger value="pending">待审核</TabsTrigger>
+            <TabsTrigger value="approved">已批准</TabsTrigger>
+            <TabsTrigger value="completed">已完成</TabsTrigger>
+            <TabsTrigger value="rejected">已拒绝</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <div className="flex-1 w-full flex gap-2">
+          <input
+            type="text"
+            placeholder="搜索申请ID、用户ID、用户名..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="flex-1 h-10 px-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-custom-green focus:border-transparent"
+          />
+          <Button onClick={handleSearch} className="bg-custom-green hover:bg-custom-green-dark text-white shrink-0">
+            搜索
+          </Button>
+        </div>
       </div>
 
       {/* 申请列表 */}
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
         {filteredApplications.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    申请ID
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    用户信息
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    卡类型
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    供应商
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    状态
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    申请时间
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    操作
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredApplications.map((app) => (
-                  <tr key={app.id} className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white">
-                        {app.applicationId}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {app.username}
-                      </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">
-                        ID: {app.userId}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {app.cardType}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {app.supplier}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {getStatusBadge(app.status)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {app.appliedAt}
-                      </div>
-                      {app.processedAt && (
-                        <div className="text-xs text-gray-500 dark:text-gray-500">
-                          处理: {app.processedAt}
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <Button variant="ghost" size="sm">
-                        <Eye className="w-4 h-4 mr-1" />
-                        详情
-                      </Button>
-                    </td>
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      申请ID
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      用户信息
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      卡类型
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      供应商
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      状态
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      申请时间
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      操作
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {filteredApplications.slice(0, displayCount).map((app) => (
+                    <tr key={app.id} className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          {app.applicationId}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {app.username}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                          ID: {app.userId}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {app.cardType}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {app.supplier}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {getStatusBadge(app.status)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          {app.appliedAt}
+                        </div>
+                        {app.processedAt && (
+                          <div className="text-xs text-gray-500 dark:text-gray-500">
+                            处理: {app.processedAt}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <Button variant="ghost" size="sm">
+                          <Eye className="w-4 h-4 mr-1" />
+                          详情
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {displayCount < filteredApplications.length && (
+              <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-center">
+                <Button
+                  variant="outline"
+                  onClick={handleLoadMore}
+                  disabled={isLoadingMore}
+                  className="min-w-32"
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      加载中...
+                    </>
+                  ) : (
+                    <>加载更多 ({filteredApplications.length - displayCount} 条)</>
+                  )}
+                </Button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-16">
             <CreditCard className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
