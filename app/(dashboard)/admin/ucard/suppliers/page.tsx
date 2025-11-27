@@ -36,7 +36,8 @@ interface CardType {
   id: string
   name: string
   type: 'virtual' | 'physical_black' | 'physical_white' | 'physical_standard'
-  currencies: string[]
+  currency: string
+  balance: number
   issuedCount: number
   monthlyIssued: number
   fee: string
@@ -52,6 +53,7 @@ interface Supplier {
   contactPhone: string
   cooperationStartDate: string
   settlementCycle: string
+  totalUsdtBalance: number
   cardTypes: CardType[]
   numberSegments: NumberSegment[]
 }
@@ -123,12 +125,14 @@ export default function UCardSuppliersPage() {
       contactPhone: '138****8888',
       cooperationStartDate: '2023-06-15',
       settlementCycle: '每周',
+      totalUsdtBalance: 2580000,
       cardTypes: [
         {
           id: '1-1',
           name: 'CardPro虚拟卡',
           type: 'virtual',
-          currencies: ['USD', 'EUR', 'GBP'],
+          currency: 'USD',
+          balance: 856000,
           issuedCount: 8500,
           monthlyIssued: 680,
           fee: '$2.00',
@@ -138,7 +142,8 @@ export default function UCardSuppliersPage() {
           id: '1-2',
           name: 'CardPro黑金卡',
           type: 'physical_black',
-          currencies: ['USD', 'EUR'],
+          currency: 'EUR',
+          balance: 425000,
           issuedCount: 3200,
           monthlyIssued: 280,
           fee: '$15.00',
@@ -148,7 +153,8 @@ export default function UCardSuppliersPage() {
           id: '1-3',
           name: 'CardPro白金卡',
           type: 'physical_white',
-          currencies: ['USD'],
+          currency: 'GBP',
+          balance: 318000,
           issuedCount: 1980,
           monthlyIssued: 150,
           fee: '$10.00',
@@ -158,7 +164,8 @@ export default function UCardSuppliersPage() {
           id: '1-4',
           name: 'CardPro标准卡',
           type: 'physical_standard',
-          currencies: ['USD', 'EUR', 'GBP', 'CNY'],
+          currency: 'CNY',
+          balance: 128000,
           issuedCount: 2000,
           monthlyIssued: 90,
           fee: '$5.00',
@@ -207,12 +214,14 @@ export default function UCardSuppliersPage() {
       contactPhone: '139****6666',
       cooperationStartDate: '2023-08-20',
       settlementCycle: '每月',
+      totalUsdtBalance: 1850000,
       cardTypes: [
         {
           id: '2-1',
           name: 'GCS虚拟卡',
           type: 'virtual',
-          currencies: ['USD', 'EUR', 'HKD', 'SGD'],
+          currency: 'USD',
+          balance: 682000,
           issuedCount: 5800,
           monthlyIssued: 520,
           fee: '$1.50',
@@ -222,7 +231,8 @@ export default function UCardSuppliersPage() {
           id: '2-2',
           name: 'GCS黑金卡',
           type: 'physical_black',
-          currencies: ['USD', 'HKD'],
+          currency: 'HKD',
+          balance: 356000,
           issuedCount: 2100,
           monthlyIssued: 180,
           fee: '$18.00',
@@ -232,7 +242,8 @@ export default function UCardSuppliersPage() {
           id: '2-3',
           name: 'GCS标准卡',
           type: 'physical_standard',
-          currencies: ['USD', 'EUR', 'HKD'],
+          currency: 'EUR',
+          balance: 245000,
           issuedCount: 1550,
           monthlyIssued: 150,
           fee: '$6.00',
@@ -271,12 +282,14 @@ export default function UCardSuppliersPage() {
       contactPhone: '136****9999',
       cooperationStartDate: '2023-09-10',
       settlementCycle: '每两周',
+      totalUsdtBalance: 920000,
       cardTypes: [
         {
           id: '3-1',
           name: 'VCP虚拟卡标准版',
           type: 'virtual',
-          currencies: ['USD', 'EUR'],
+          currency: 'USD',
+          balance: 523000,
           issuedCount: 4500,
           monthlyIssued: 420,
           fee: '$1.00',
@@ -286,7 +299,8 @@ export default function UCardSuppliersPage() {
           id: '3-2',
           name: 'VCP虚拟卡高级版',
           type: 'virtual',
-          currencies: ['USD', 'EUR', 'GBP', 'JPY'],
+          currency: 'EUR',
+          balance: 397000,
           issuedCount: 2730,
           monthlyIssued: 230,
           fee: '$3.00',
@@ -325,12 +339,14 @@ export default function UCardSuppliersPage() {
       contactPhone: '137****7777',
       cooperationStartDate: '2023-05-01',
       settlementCycle: '每月',
+      totalUsdtBalance: 180000,
       cardTypes: [
         {
           id: '4-1',
           name: 'SCN虚拟卡',
           type: 'virtual',
-          currencies: ['USD'],
+          currency: 'USD',
+          balance: 120000,
           issuedCount: 2200,
           monthlyIssued: 0,
           fee: '$2.50',
@@ -340,7 +356,8 @@ export default function UCardSuppliersPage() {
           id: '4-2',
           name: 'SCN白金卡',
           type: 'physical_white',
-          currencies: ['USD', 'EUR'],
+          currency: 'EUR',
+          balance: 60000,
           issuedCount: 1000,
           monthlyIssued: 0,
           fee: '$12.00',
@@ -509,10 +526,15 @@ export default function UCardSuppliersPage() {
                         {supplier.logo}
                       </div>
                       <div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                           <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                             {supplier.name}
                           </h3>
+                          <div className="flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full shadow-sm">
+                            <span className="text-xs text-white/80">存入</span>
+                            <span className="text-sm font-bold text-white">{supplier.totalUsdtBalance.toLocaleString()}</span>
+                            <span className="text-xs font-semibold text-yellow-300">USDT</span>
+                          </div>
                           {supplier.status === 'active' ? (
                             <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full">
                               合作中
@@ -584,24 +606,27 @@ export default function UCardSuppliersPage() {
                                   <CreditCard className="w-4 h-4" />
                                   <span className="font-medium text-sm">{getCardTypeName(cardType.type)}</span>
                                 </div>
-                                {cardType.status === 'inactive' && (
-                                  <span className="text-xs px-1.5 py-0.5 bg-black/20 rounded">停用</span>
-                                )}
+                                <div className="flex items-center gap-2">
+                                  <span className={`text-xs px-2 py-0.5 rounded font-bold ${getCurrencyColor(cardType.currency)}`}>
+                                    {cardType.currency}
+                                  </span>
+                                  {cardType.status === 'inactive' && (
+                                    <span className="text-xs px-1.5 py-0.5 bg-black/20 rounded">停用</span>
+                                  )}
+                                </div>
                               </div>
                               <div className="text-xs mt-1 opacity-80">{cardType.name}</div>
                             </div>
                             <div className="p-3 bg-gray-50 dark:bg-gray-900/50">
-                              <div className="mb-2">
-                                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">支持币种</div>
-                                <div className="flex flex-wrap gap-1">
-                                  {cardType.currencies.map((currency) => (
-                                    <span
-                                      key={currency}
-                                      className={`text-xs px-1.5 py-0.5 rounded ${getCurrencyColor(currency)}`}
-                                    >
-                                      {currency}
-                                    </span>
-                                  ))}
+                              <div className="mb-3 p-2.5 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-lg border border-amber-200 dark:border-amber-700/50">
+                                <div className="text-xs text-amber-600 dark:text-amber-400 mb-0.5">卡种余额</div>
+                                <div className="flex items-baseline gap-1">
+                                  <span className="text-xl font-bold text-amber-700 dark:text-amber-300">
+                                    {cardType.balance.toLocaleString()}
+                                  </span>
+                                  <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
+                                    {cardType.currency}
+                                  </span>
                                 </div>
                               </div>
                               <div className="grid grid-cols-2 gap-2 text-xs">
@@ -787,6 +812,19 @@ export default function UCardSuppliersPage() {
               </div>
 
               <div className="space-y-3">
+                <h4 className="font-medium text-gray-900 dark:text-white">存入余额</h4>
+                <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg p-4 text-center">
+                  <div className="text-sm text-white/80 mb-1">存入总额</div>
+                  <div className="flex items-baseline justify-center gap-2">
+                    <span className="text-3xl font-bold text-white">
+                      {selectedSupplier.totalUsdtBalance.toLocaleString()}
+                    </span>
+                    <span className="text-lg font-semibold text-yellow-300">USDT</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
                 <h4 className="font-medium text-gray-900 dark:text-white">发卡统计</h4>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
@@ -858,19 +896,25 @@ export default function UCardSuppliersPage() {
                             <CreditCard className="w-4 h-4" />
                             <span className="font-medium text-sm">{cardType.name}</span>
                           </div>
-                          <span className="text-xs">{getCardTypeName(cardType.type)}</span>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-xs px-2 py-0.5 rounded font-bold ${getCurrencyColor(cardType.currency)}`}>
+                              {cardType.currency}
+                            </span>
+                            <span className="text-xs">{getCardTypeName(cardType.type)}</span>
+                          </div>
                         </div>
                       </div>
                       <div className="p-3 text-sm">
-                        <div className="flex flex-wrap gap-1 mb-2">
-                          {cardType.currencies.map((currency) => (
-                            <span
-                              key={currency}
-                              className={`text-xs px-1.5 py-0.5 rounded ${getCurrencyColor(currency)}`}
-                            >
-                              {currency}
+                        <div className="mb-3 p-2 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-lg border border-amber-200 dark:border-amber-700/50">
+                          <div className="text-xs text-amber-600 dark:text-amber-400">卡种余额</div>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-lg font-bold text-amber-700 dark:text-amber-300">
+                              {cardType.balance.toLocaleString()}
                             </span>
-                          ))}
+                            <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
+                              {cardType.currency}
+                            </span>
+                          </div>
                         </div>
                         <div className="grid grid-cols-3 gap-2 text-xs">
                           <div>
