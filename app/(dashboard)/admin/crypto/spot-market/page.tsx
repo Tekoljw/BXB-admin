@@ -127,34 +127,76 @@ export default function SpotMarketManagementPage() {
     displayLevel: "full",
   })
   const [showCountryRestrictionSheet, setShowCountryRestrictionSheet] = useState(false)
+  const [showMarketSelectSheet, setShowMarketSelectSheet] = useState(false)
+  const [showCountrySelectSheet, setShowCountrySelectSheet] = useState(false)
   const [countryRestrictions, setCountryRestrictions] = useState<{ marketId: string; marketName: string; restrictedCountries: string[] }[]>([
-    { marketId: "9425", marketName: "btc_usdt", restrictedCountries: ["CN", "US"] },
-    { marketId: "9424", marketName: "eth_usdt", restrictedCountries: ["CN"] },
+    { marketId: "9425", marketName: "btc_usdt", restrictedCountries: ["+86", "+1"] },
+    { marketId: "9424", marketName: "eth_usdt", restrictedCountries: ["+86"] },
     { marketId: "9423", marketName: "bnb_usdt", restrictedCountries: [] },
   ])
   const [selectedRestrictionMarket, setSelectedRestrictionMarket] = useState<string>("")
+  const [marketSearchQuery, setMarketSearchQuery] = useState("")
   const [countrySearchQuery, setCountrySearchQuery] = useState("")
   const allCountries = [
-    { code: "CN", name: "中国" },
-    { code: "US", name: "美国" },
-    { code: "JP", name: "日本" },
-    { code: "KR", name: "韩国" },
-    { code: "GB", name: "英国" },
-    { code: "DE", name: "德国" },
-    { code: "FR", name: "法国" },
-    { code: "SG", name: "新加坡" },
-    { code: "HK", name: "香港" },
-    { code: "TW", name: "台湾" },
-    { code: "RU", name: "俄罗斯" },
-    { code: "IN", name: "印度" },
-    { code: "AU", name: "澳大利亚" },
-    { code: "CA", name: "加拿大" },
-    { code: "BR", name: "巴西" },
-    { code: "AE", name: "阿联酋" },
-    { code: "TH", name: "泰国" },
-    { code: "VN", name: "越南" },
-    { code: "ID", name: "印度尼西亚" },
-    { code: "MY", name: "马来西亚" },
+    { code: "+86", name: "中国", flag: "🇨🇳" },
+    { code: "+1", name: "美国", flag: "🇺🇸" },
+    { code: "+1", name: "加拿大", flag: "🇨🇦" },
+    { code: "+81", name: "日本", flag: "🇯🇵" },
+    { code: "+82", name: "韩国", flag: "🇰🇷" },
+    { code: "+44", name: "英国", flag: "🇬🇧" },
+    { code: "+49", name: "德国", flag: "🇩🇪" },
+    { code: "+33", name: "法国", flag: "🇫🇷" },
+    { code: "+39", name: "意大利", flag: "🇮🇹" },
+    { code: "+34", name: "西班牙", flag: "🇪🇸" },
+    { code: "+65", name: "新加坡", flag: "🇸🇬" },
+    { code: "+852", name: "香港", flag: "🇭🇰" },
+    { code: "+853", name: "澳门", flag: "🇲🇴" },
+    { code: "+886", name: "台湾", flag: "🇹🇼" },
+    { code: "+7", name: "俄罗斯", flag: "🇷🇺" },
+    { code: "+91", name: "印度", flag: "🇮🇳" },
+    { code: "+61", name: "澳大利亚", flag: "🇦🇺" },
+    { code: "+55", name: "巴西", flag: "🇧🇷" },
+    { code: "+971", name: "阿联酋", flag: "🇦🇪" },
+    { code: "+966", name: "沙特阿拉伯", flag: "🇸🇦" },
+    { code: "+66", name: "泰国", flag: "🇹🇭" },
+    { code: "+84", name: "越南", flag: "🇻🇳" },
+    { code: "+62", name: "印度尼西亚", flag: "🇮🇩" },
+    { code: "+60", name: "马来西亚", flag: "🇲🇾" },
+    { code: "+63", name: "菲律宾", flag: "🇵🇭" },
+    { code: "+27", name: "南非", flag: "🇿🇦" },
+    { code: "+234", name: "尼日利亚", flag: "🇳🇬" },
+    { code: "+20", name: "埃及", flag: "🇪🇬" },
+    { code: "+90", name: "土耳其", flag: "🇹🇷" },
+    { code: "+48", name: "波兰", flag: "🇵🇱" },
+    { code: "+31", name: "荷兰", flag: "🇳🇱" },
+    { code: "+46", name: "瑞典", flag: "🇸🇪" },
+    { code: "+41", name: "瑞士", flag: "🇨🇭" },
+    { code: "+43", name: "奥地利", flag: "🇦🇹" },
+    { code: "+32", name: "比利时", flag: "🇧🇪" },
+    { code: "+351", name: "葡萄牙", flag: "🇵🇹" },
+    { code: "+30", name: "希腊", flag: "🇬🇷" },
+    { code: "+47", name: "挪威", flag: "🇳🇴" },
+    { code: "+45", name: "丹麦", flag: "🇩🇰" },
+    { code: "+358", name: "芬兰", flag: "🇫🇮" },
+    { code: "+353", name: "爱尔兰", flag: "🇮🇪" },
+    { code: "+64", name: "新西兰", flag: "🇳🇿" },
+    { code: "+52", name: "墨西哥", flag: "🇲🇽" },
+    { code: "+54", name: "阿根廷", flag: "🇦🇷" },
+    { code: "+56", name: "智利", flag: "🇨🇱" },
+    { code: "+57", name: "哥伦比亚", flag: "🇨🇴" },
+    { code: "+51", name: "秘鲁", flag: "🇵🇪" },
+    { code: "+92", name: "巴基斯坦", flag: "🇵🇰" },
+    { code: "+880", name: "孟加拉国", flag: "🇧🇩" },
+    { code: "+94", name: "斯里兰卡", flag: "🇱🇰" },
+    { code: "+95", name: "缅甸", flag: "🇲🇲" },
+    { code: "+855", name: "柬埔寨", flag: "🇰🇭" },
+    { code: "+856", name: "老挝", flag: "🇱🇦" },
+    { code: "+977", name: "尼泊尔", flag: "🇳🇵" },
+    { code: "+372", name: "爱沙尼亚", flag: "🇪🇪" },
+    { code: "+370", name: "立陶宛", flag: "🇱🇹" },
+    { code: "+371", name: "拉脱维亚", flag: "🇱🇻" },
+    { code: "+380", name: "乌克兰", flag: "🇺🇦" },
+    { code: "+972", name: "以色列", flag: "🇮🇱" },
   ]
 
   const quoteCurrencies = useMemo(() => {
@@ -921,7 +963,7 @@ export default function SpotMarketManagementPage() {
 
       {/* 限制交易国家 Sheet */}
       <Sheet open={showCountryRestrictionSheet} onOpenChange={setShowCountryRestrictionSheet}>
-        <SheetContent className="w-[700px] sm:max-w-[700px] overflow-y-auto">
+        <SheetContent className="w-[600px] sm:max-w-[600px] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>限制交易国家</SheetTitle>
             <SheetDescription>
@@ -933,28 +975,34 @@ export default function SpotMarketManagementPage() {
             <div className="flex gap-4">
               <div className="flex-1">
                 <Label className="mb-2 block">选择市场</Label>
-                <Select value={selectedRestrictionMarket} onValueChange={setSelectedRestrictionMarket}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="选择要配置的市场" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {markets.map(market => (
-                      <SelectItem key={market.id} value={market.id}>{market.name.toUpperCase()}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-between"
+                  onClick={() => setShowMarketSelectSheet(true)}
+                >
+                  {selectedRestrictionMarket 
+                    ? markets.find(m => m.id === selectedRestrictionMarket)?.name.toUpperCase() 
+                    : "点击选择市场"}
+                  <TrendingUp className="w-4 h-4 ml-2" />
+                </Button>
               </div>
               <div className="flex-1">
-                <Label className="mb-2 block">搜索国家</Label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input 
-                    placeholder="搜索国家名称或代码..." 
-                    value={countrySearchQuery}
-                    onChange={(e) => setCountrySearchQuery(e.target.value)}
-                    className="pl-9"
-                  />
-                </div>
+                <Label className="mb-2 block">添加限制国家</Label>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-between"
+                  onClick={() => {
+                    if (!selectedRestrictionMarket) {
+                      toast.error("请先选择一个市场")
+                      return
+                    }
+                    setShowCountrySelectSheet(true)
+                  }}
+                  disabled={!selectedRestrictionMarket}
+                >
+                  点击选择国家
+                  <Globe className="w-4 h-4 ml-2" />
+                </Button>
               </div>
             </div>
 
@@ -963,87 +1011,49 @@ export default function SpotMarketManagementPage() {
                 <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="font-medium text-gray-900 dark:text-white">
-                      {markets.find(m => m.id === selectedRestrictionMarket)?.name.toUpperCase()} - 禁止交易国家
+                      {markets.find(m => m.id === selectedRestrictionMarket)?.name.toUpperCase()} - 已限制国家
                     </h4>
                     <span className="text-sm text-gray-500">
-                      已选 {countryRestrictions.find(r => r.marketId === selectedRestrictionMarket)?.restrictedCountries.length || 0} 个国家
+                      共 {countryRestrictions.find(r => r.marketId === selectedRestrictionMarket)?.restrictedCountries.length || 0} 个
                     </span>
                   </div>
                   
-                  <div className="grid grid-cols-4 gap-2 max-h-[400px] overflow-y-auto">
-                    {allCountries
-                      .filter(c => 
-                        !countrySearchQuery || 
-                        c.name.includes(countrySearchQuery) || 
-                        c.code.toLowerCase().includes(countrySearchQuery.toLowerCase())
-                      )
-                      .map(country => {
-                        const restriction = countryRestrictions.find(r => r.marketId === selectedRestrictionMarket)
-                        const isRestricted = restriction?.restrictedCountries.includes(country.code) || false
-                        
+                  {(countryRestrictions.find(r => r.marketId === selectedRestrictionMarket)?.restrictedCountries.length || 0) > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {countryRestrictions.find(r => r.marketId === selectedRestrictionMarket)?.restrictedCountries.map(code => {
+                        const country = allCountries.find(c => c.code === code)
                         return (
-                          <label
-                            key={country.code}
-                            className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-colors ${
-                              isRestricted 
-                                ? "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800" 
-                                : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
-                            }`}
+                          <div 
+                            key={code}
+                            className="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
                           >
-                            <Checkbox
-                              checked={isRestricted}
-                              onCheckedChange={(checked) => {
-                                setCountryRestrictions(prev => {
-                                  const existing = prev.find(r => r.marketId === selectedRestrictionMarket)
-                                  if (existing) {
-                                    return prev.map(r => {
-                                      if (r.marketId === selectedRestrictionMarket) {
-                                        return {
-                                          ...r,
-                                          restrictedCountries: checked 
-                                            ? [...r.restrictedCountries, country.code]
-                                            : r.restrictedCountries.filter(c => c !== country.code)
-                                        }
-                                      }
-                                      return r
-                                    })
-                                  } else {
-                                    const market = markets.find(m => m.id === selectedRestrictionMarket)
-                                    return [...prev, {
-                                      marketId: selectedRestrictionMarket,
-                                      marketName: market?.name || "",
-                                      restrictedCountries: checked ? [country.code] : []
-                                    }]
+                            <span>{country?.flag}</span>
+                            <span className="text-sm font-medium text-red-700 dark:text-red-400">{code}</span>
+                            <span className="text-sm text-red-600 dark:text-red-400">{country?.name}</span>
+                            <button
+                              className="ml-1 text-red-500 hover:text-red-700"
+                              onClick={() => {
+                                setCountryRestrictions(prev => prev.map(r => {
+                                  if (r.marketId === selectedRestrictionMarket) {
+                                    return { ...r, restrictedCountries: r.restrictedCountries.filter(c => c !== code) }
                                   }
-                                })
+                                  return r
+                                }))
+                                toast.success(`已移除 ${country?.name}`)
                               }}
-                            />
-                            <span className="text-sm">
-                              <span className="font-medium">{country.code}</span>
-                              <span className="text-gray-500 dark:text-gray-400 ml-1">{country.name}</span>
-                            </span>
-                          </label>
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         )
                       })}
-                  </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">暂无限制国家，点击上方按钮添加</p>
+                  )}
                 </div>
 
                 <div className="flex gap-2">
-                  <Button 
-                    variant="outline" 
-                    className="flex-1"
-                    onClick={() => {
-                      setCountryRestrictions(prev => prev.map(r => {
-                        if (r.marketId === selectedRestrictionMarket) {
-                          return { ...r, restrictedCountries: allCountries.map(c => c.code) }
-                        }
-                        return r
-                      }))
-                      toast.success("已选择全部国家")
-                    }}
-                  >
-                    全选
-                  </Button>
                   <Button 
                     variant="outline" 
                     className="flex-1"
@@ -1093,11 +1103,14 @@ export default function SpotMarketManagementPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="flex flex-wrap gap-1">
-                        {restriction.restrictedCountries.slice(0, 5).map(code => (
-                          <span key={code} className="text-xs px-2 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded">
-                            {code}
-                          </span>
-                        ))}
+                        {restriction.restrictedCountries.slice(0, 5).map(code => {
+                          const country = allCountries.find(c => c.code === code)
+                          return (
+                            <span key={code} className="text-xs px-2 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded">
+                              {country?.flag} {code}
+                            </span>
+                          )
+                        })}
                         {restriction.restrictedCountries.length > 5 && (
                           <span className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
                             +{restriction.restrictedCountries.length - 5}
@@ -1120,6 +1133,156 @@ export default function SpotMarketManagementPage() {
                 )}
               </div>
             </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* 选择市场 Sheet */}
+      <Sheet open={showMarketSelectSheet} onOpenChange={setShowMarketSelectSheet}>
+        <SheetContent className="w-[450px] sm:max-w-[450px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>选择市场</SheetTitle>
+            <SheetDescription>
+              选择要配置限制国家的市场
+            </SheetDescription>
+          </SheetHeader>
+          
+          <div className="mt-6 space-y-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input 
+                placeholder="搜索市场名称..." 
+                value={marketSearchQuery}
+                onChange={(e) => setMarketSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+
+            <div className="space-y-2 max-h-[500px] overflow-y-auto">
+              {markets
+                .filter(m => !marketSearchQuery || m.name.toLowerCase().includes(marketSearchQuery.toLowerCase()))
+                .map(market => (
+                  <div 
+                    key={market.id}
+                    className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                      selectedRestrictionMarket === market.id
+                        ? "bg-custom-green/10 border-custom-green"
+                        : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                    }`}
+                    onClick={() => {
+                      setSelectedRestrictionMarket(market.id)
+                      const existing = countryRestrictions.find(r => r.marketId === market.id)
+                      if (!existing) {
+                        setCountryRestrictions(prev => [...prev, {
+                          marketId: market.id,
+                          marketName: market.name,
+                          restrictedCountries: []
+                        }])
+                      }
+                      setShowMarketSelectSheet(false)
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-custom-green/10 flex items-center justify-center">
+                        <TrendingUp className="w-5 h-5 text-custom-green" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">{market.name.toUpperCase()}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{market.baseCurrency}/{market.quoteCurrency}</p>
+                      </div>
+                    </div>
+                    {selectedRestrictionMarket === market.id && (
+                      <Check className="w-5 h-5 text-custom-green" />
+                    )}
+                  </div>
+                ))}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* 选择国家 Sheet */}
+      <Sheet open={showCountrySelectSheet} onOpenChange={setShowCountrySelectSheet}>
+        <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>选择限制国家</SheetTitle>
+            <SheetDescription>
+              选择要限制交易的国家/地区（按手机区号）
+            </SheetDescription>
+          </SheetHeader>
+          
+          <div className="mt-6 space-y-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input 
+                placeholder="搜索国家名称或区号..." 
+                value={countrySearchQuery}
+                onChange={(e) => setCountrySearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+
+            <div className="space-y-2 max-h-[500px] overflow-y-auto">
+              {allCountries
+                .filter(c => 
+                  !countrySearchQuery || 
+                  c.name.includes(countrySearchQuery) || 
+                  c.code.includes(countrySearchQuery)
+                )
+                .map((country, index) => {
+                  const restriction = countryRestrictions.find(r => r.marketId === selectedRestrictionMarket)
+                  const isSelected = restriction?.restrictedCountries.includes(country.code) || false
+                  
+                  return (
+                    <div 
+                      key={`${country.code}-${country.name}-${index}`}
+                      className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                        isSelected
+                          ? "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+                          : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      }`}
+                      onClick={() => {
+                        setCountryRestrictions(prev => {
+                          const existing = prev.find(r => r.marketId === selectedRestrictionMarket)
+                          if (existing) {
+                            return prev.map(r => {
+                              if (r.marketId === selectedRestrictionMarket) {
+                                const hasCode = r.restrictedCountries.includes(country.code)
+                                return {
+                                  ...r,
+                                  restrictedCountries: hasCode 
+                                    ? r.restrictedCountries.filter(c => c !== country.code)
+                                    : [...r.restrictedCountries, country.code]
+                                }
+                              }
+                              return r
+                            })
+                          }
+                          return prev
+                        })
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{country.flag}</span>
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-white">{country.name}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{country.code}</p>
+                        </div>
+                      </div>
+                      {isSelected && (
+                        <Check className="w-5 h-5 text-red-500" />
+                      )}
+                    </div>
+                  )
+                })}
+            </div>
+
+            <Button 
+              className="w-full bg-custom-green hover:bg-custom-green-dark text-white"
+              onClick={() => setShowCountrySelectSheet(false)}
+            >
+              完成选择
+            </Button>
           </div>
         </SheetContent>
       </Sheet>
