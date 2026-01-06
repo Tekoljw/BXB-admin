@@ -351,9 +351,15 @@ export default function SpotMarketMakerPage() {
                     {formatDisplayTime(maker.effectiveStartTime)} - {formatDisplayTime(maker.effectiveEndTime)}
                   </td>
                   <td className="px-4 py-4 text-sm">
-                    <span className={`${maker.enabled ? "text-green-600" : "text-gray-500"}`}>
-                      {maker.enabled ? "是" : "否"}
-                    </span>
+                    <Switch 
+                      checked={maker.enabled}
+                      onCheckedChange={(checked) => {
+                        setMarketMakers(prev => prev.map(m => 
+                          m.id === maker.id ? { ...m, enabled: checked } : m
+                        ))
+                        toast.success(checked ? "已启用" : "已禁用")
+                      }}
+                    />
                   </td>
                   <td className="px-4 py-4">
                     <Button 
