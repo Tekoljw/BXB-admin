@@ -1,7 +1,9 @@
 "use client"
 
 import React, { useState, useMemo, useEffect } from "react"
-import { Plus, RotateCcw, Download, TrendingUp, Info, Clock, History, Calendar, X } from "lucide-react"
+import { Plus, RotateCcw, Download, TrendingUp, Info, Clock, History, Calendar as CalendarIcon, X, CalendarDays } from "lucide-react"
+import { format } from "date-fns"
+import { zhCN } from "date-fns/locale"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DataTotal } from "@/components/data-total"
@@ -28,6 +30,8 @@ import {
 } from "@/components/ui/sheet"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
 import { toast } from "sonner"
 
 interface SpotMarket {
@@ -755,16 +759,35 @@ export default function SpotMarketManagementPage() {
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1">
                             <Label className="text-xs text-gray-500">日期</Label>
-                            <Input 
-                              type="date" 
-                              value={newScheduleDateTime ? newScheduleDateTime.split("T")[0] : ""} 
-                              onChange={(e) => {
-                                const time = newScheduleDateTime ? newScheduleDateTime.split("T")[1] || "09:00" : "09:00"
-                                setNewScheduleDateTime(`${e.target.value}T${time}`)
-                              }} 
-                              min={new Date().toISOString().slice(0, 10)}
-                              className="w-full"
-                            />
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full justify-start text-left font-normal"
+                                >
+                                  <CalendarDays className="mr-2 h-4 w-4" />
+                                  {newScheduleDateTime 
+                                    ? format(new Date(newScheduleDateTime.split("T")[0]), "yyyy年MM月dd日", { locale: zhCN })
+                                    : "选择日期"
+                                  }
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar
+                                  mode="single"
+                                  selected={newScheduleDateTime ? new Date(newScheduleDateTime.split("T")[0]) : undefined}
+                                  onSelect={(date) => {
+                                    if (date) {
+                                      const dateStr = format(date, "yyyy-MM-dd")
+                                      const time = newScheduleDateTime ? newScheduleDateTime.split("T")[1] || "09:00" : "09:00"
+                                      setNewScheduleDateTime(`${dateStr}T${time}`)
+                                    }
+                                  }}
+                                  disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                                  locale={zhCN}
+                                />
+                              </PopoverContent>
+                            </Popover>
                           </div>
                           <div className="space-y-1">
                             <Label className="text-xs text-gray-500">时间</Label>
