@@ -99,11 +99,10 @@ export default function SpotMarketManagementPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditSheet, setShowEditSheet] = useState(false)
-  const [showPlanSheet, setShowPlanSheet] = useState(false)
-  const [showHistorySheet, setShowHistorySheet] = useState(false)
+  const [showPlanDialog, setShowPlanDialog] = useState(false)
+  const [planTab, setPlanTab] = useState("create")
   const [schedules, setSchedules] = useState<MarketSchedule[]>([])
-  const [newScheduleDate, setNewScheduleDate] = useState("")
-  const [newScheduleTime, setNewScheduleTime] = useState("")
+  const [newScheduleDateTime, setNewScheduleDateTime] = useState("")
   const [countdown, setCountdown] = useState("")
   const [selectedMarket, setSelectedMarket] = useState<SpotMarket | null>(null)
   const [editingMarket, setEditingMarket] = useState<Partial<SpotMarket>>({})
@@ -224,9 +223,9 @@ export default function SpotMarketManagementPage() {
   const handleOpenPlan = (market: SpotMarket) => {
     setSelectedMarket(market)
     setEditingMarket({ ...market })
-    setNewScheduleDate("")
-    setNewScheduleTime("")
-    setShowPlanSheet(true)
+    setNewScheduleDateTime("")
+    setPlanTab("create")
+    setShowPlanDialog(true)
   }
 
   const pendingSchedule = useMemo(() => {
@@ -267,11 +266,11 @@ export default function SpotMarketManagementPage() {
   }, [pendingSchedule])
 
   const handleCreateSchedule = () => {
-    if (!selectedMarket || !newScheduleDate || !newScheduleTime) {
+    if (!selectedMarket || !newScheduleDateTime) {
       toast.error("请选择计划执行时间")
       return
     }
-    const scheduledAt = new Date(`${newScheduleDate}T${newScheduleTime}`)
+    const scheduledAt = new Date(newScheduleDateTime)
     if (scheduledAt <= new Date()) {
       toast.error("计划时间必须晚于当前时间")
       return
@@ -286,8 +285,7 @@ export default function SpotMarketManagementPage() {
       status: "pending"
     }
     setSchedules(prev => [...prev, newSchedule])
-    setNewScheduleDate("")
-    setNewScheduleTime("")
+    setNewScheduleDateTime("")
     toast.success("计划已创建", { description: `${action === "open" ? "开盘" : "停盘"}计划将于 ${scheduledAt.toLocaleString()} 执行` })
   }
 
@@ -657,15 +655,13 @@ export default function SpotMarketManagementPage() {
         </SheetContent>
       </Sheet>
 
-      <Sheet open={showPlanSheet} onOpenChange={setShowPlanSheet}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>
-              {selectedMarket?.tradingStatus === "open" ? "配置停盘计划" : "配置开盘计划"}
-            </SheetTitle>
-          </SheetHeader>
+      <Dialog open={showPlanDialog} onOpenChange={setShowPlanDialog}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>开盘计划</DialogTitle>
+          </DialogHeader>
           {selectedMarket && (
-            <div className="mt-6 space-y-4">
+            <div className="space-y-4">
               <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">市场</span>
@@ -683,144 +679,119 @@ export default function SpotMarketManagementPage() {
                 </div>
               </div>
 
-              {pendingSchedule ? (
-                <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Clock className="w-4 h-4 text-amber-600" />
-                    <span className="font-medium text-amber-800 dark:text-amber-300">等待执行的计划</span>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">计划类型</span>
-                      <span className={pendingSchedule.action === "open" ? "text-green-600" : "text-red-600"}>
-                        {pendingSchedule.action === "open" ? "开盘" : "停盘"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">执行时间</span>
-                      <span>{pendingSchedule.scheduledAt.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">倒计时</span>
-                      <span className="font-mono text-lg font-bold text-amber-600">{countdown}</span>
-                    </div>
-                  </div>
-                  <Button variant="outline" className="w-full mt-4 text-red-600 border-red-200 hover:bg-red-50" onClick={handleCancelSchedule}>
-                    <X className="w-4 h-4 mr-2" />
-                    取消计划
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Calendar className="w-4 h-4 text-custom-green" />
-                      <span className="font-medium">
-                        创建{selectedMarket.tradingStatus === "open" ? "停盘" : "开盘"}计划
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label className="text-xs text-gray-500">日期</Label>
-                        <Input type="date" value={newScheduleDate} onChange={(e) => setNewScheduleDate(e.target.value)} className="mt-1" />
-                      </div>
-                      <div>
-                        <Label className="text-xs text-gray-500">时间</Label>
-                        <Input type="time" value={newScheduleTime} onChange={(e) => setNewScheduleTime(e.target.value)} className="mt-1" />
-                      </div>
-                    </div>
-                    <Button className="w-full mt-4 bg-custom-green hover:bg-custom-green-dark text-white" onClick={handleCreateSchedule}>
-                      创建计划
-                    </Button>
-                  </div>
+              <Tabs value={planTab} onValueChange={setPlanTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="create">创建计划</TabsTrigger>
+                  <TabsTrigger value="history">查看历史</TabsTrigger>
+                </TabsList>
 
-                  {marketHistory.length > 0 && (
-                    <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                      <p className="text-sm text-green-700 dark:text-green-300">
-                        最近计划已执行，可以创建新的计划
-                      </p>
+                <TabsContent value="create" className="mt-4 space-y-4">
+                  {pendingSchedule ? (
+                    <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Clock className="w-4 h-4 text-amber-600" />
+                        <span className="font-medium text-amber-800 dark:text-amber-300">等待执行的计划</span>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600 dark:text-gray-400">计划类型</span>
+                          <span className={pendingSchedule.action === "open" ? "text-green-600" : "text-red-600"}>
+                            {pendingSchedule.action === "open" ? "开盘" : "停盘"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600 dark:text-gray-400">执行时间</span>
+                          <span>{pendingSchedule.scheduledAt.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600 dark:text-gray-400">倒计时</span>
+                          <span className="font-mono text-lg font-bold text-amber-600">{countdown}</span>
+                        </div>
+                      </div>
+                      <Button variant="outline" className="w-full mt-4 text-red-600 border-red-200 hover:bg-red-50 dark:border-red-800 dark:hover:bg-red-900/20" onClick={handleCancelSchedule}>
+                        <X className="w-4 h-4 mr-2" />
+                        取消计划
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Calendar className="w-4 h-4 text-custom-green" />
+                          <span className="font-medium">
+                            创建{selectedMarket.tradingStatus === "open" ? "停盘" : "开盘"}计划
+                          </span>
+                        </div>
+                        <div>
+                          <Label className="text-sm text-gray-600 dark:text-gray-400">选择执行时间</Label>
+                          <Input 
+                            type="datetime-local" 
+                            value={newScheduleDateTime} 
+                            onChange={(e) => setNewScheduleDateTime(e.target.value)} 
+                            className="mt-2 w-full"
+                            min={new Date().toISOString().slice(0, 16)}
+                          />
+                        </div>
+                        <Button className="w-full mt-4 bg-custom-green hover:bg-custom-green-dark text-white" onClick={handleCreateSchedule}>
+                          创建计划
+                        </Button>
+                      </div>
                     </div>
                   )}
-                </div>
-              )}
+                </TabsContent>
 
-              <Button variant="outline" className="w-full" onClick={() => setShowHistorySheet(true)}>
-                <History className="w-4 h-4 mr-2" />
-                查看历史记录
-              </Button>
-
-              <Button variant="outline" className="w-full" onClick={() => setShowPlanSheet(false)}>
-                关闭
-              </Button>
-            </div>
-          )}
-        </SheetContent>
-      </Sheet>
-
-      <Sheet open={showHistorySheet} onOpenChange={setShowHistorySheet}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>计划历史记录</SheetTitle>
-          </SheetHeader>
-          {selectedMarket && (
-            <div className="mt-6 space-y-3">
-              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                <p className="text-sm text-gray-600 dark:text-gray-400">市场：<span className="font-medium text-gray-900 dark:text-white">{selectedMarket.name}</span></p>
-              </div>
-              
-              {marketHistory.length === 0 ? (
-                <div className="text-center py-8">
-                  <History className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-                  <p className="text-gray-500 dark:text-gray-400">暂无历史记录</p>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {marketHistory.map((schedule) => (
-                    <div key={schedule.id} className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                          schedule.action === "open" 
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                            : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                        }`}>
-                          {schedule.action === "open" ? "开盘" : "停盘"}
-                        </span>
-                        <span className={`text-xs px-2 py-0.5 rounded ${
-                          schedule.status === "executed" 
-                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
-                            : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
-                        }`}>
-                          {schedule.status === "executed" ? "已执行" : "已取消"}
-                        </span>
-                      </div>
-                      <div className="text-xs text-gray-500 space-y-1">
-                        <div className="flex justify-between">
-                          <span>计划时间</span>
-                          <span>{schedule.scheduledAt.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>创建时间</span>
-                          <span>{schedule.createdAt.toLocaleString()}</span>
-                        </div>
-                        {schedule.executedAt && (
-                          <div className="flex justify-between">
-                            <span>执行时间</span>
-                            <span>{schedule.executedAt.toLocaleString()}</span>
-                          </div>
-                        )}
-                      </div>
+                <TabsContent value="history" className="mt-4">
+                  {marketHistory.length === 0 ? (
+                    <div className="text-center py-8">
+                      <History className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+                      <p className="text-gray-500 dark:text-gray-400">暂无历史记录</p>
                     </div>
-                  ))}
-                </div>
-              )}
-
-              <Button variant="outline" className="w-full" onClick={() => setShowHistorySheet(false)}>
-                返回
-              </Button>
+                  ) : (
+                    <div className="space-y-2 max-h-80 overflow-y-auto">
+                      {marketHistory.map((schedule) => (
+                        <div key={schedule.id} className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                              schedule.action === "open" 
+                                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                                : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                            }`}>
+                              {schedule.action === "open" ? "开盘" : "停盘"}
+                            </span>
+                            <span className={`text-xs px-2 py-0.5 rounded ${
+                              schedule.status === "executed" 
+                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                                : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                            }`}>
+                              {schedule.status === "executed" ? "已执行" : "已取消"}
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-500 space-y-1">
+                            <div className="flex justify-between">
+                              <span>计划时间</span>
+                              <span>{schedule.scheduledAt.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>创建时间</span>
+                              <span>{schedule.createdAt.toLocaleString()}</span>
+                            </div>
+                            {schedule.executedAt && (
+                              <div className="flex justify-between">
+                                <span>执行时间</span>
+                                <span>{schedule.executedAt.toLocaleString()}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </TabsContent>
+              </Tabs>
             </div>
           )}
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
